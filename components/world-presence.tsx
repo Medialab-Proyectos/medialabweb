@@ -1,0 +1,98 @@
+"use client"
+
+import { useState } from "react"
+import dynamic from "next/dynamic"
+import { useLanguage } from "@/lib/language-context"
+
+// Load the map only on the client — react-simple-maps uses d3-geo which requires DOM
+const WorldMap = dynamic(
+  () => import("./world-map-client").then((m) => m.WorldMap),
+  {
+    ssr: false,
+    loading: () => (
+      <div
+        className="w-full rounded-2xl border border-white/10 flex items-center justify-center"
+        style={{ background: "#0a1628", aspectRatio: "16/7" }}
+      >
+        <div className="flex flex-col items-center gap-3 text-white/40">
+          <div className="w-8 h-8 rounded-full border-2 border-white/20 border-t-[#E8751A] animate-spin" />
+          <span className="text-xs">Cargando mapa...</span>
+        </div>
+      </div>
+    ),
+  }
+)
+
+const stats = [
+  { value: "9",   labelEs: "Países",    labelEn: "Countries" },
+  { value: "15",  labelEs: "Ciudades",  labelEn: "Cities"    },
+  { value: "+20", labelEs: "Clientes",  labelEn: "Clients"   },
+  { value: "+50", labelEs: "Proyectos", labelEn: "Projects"  },
+]
+
+export function WorldPresence() {
+  const [tooltip, setTooltip] = useState<{ name: string; country: string } | null>(null)
+  const { t } = useLanguage()
+
+  return (
+    <section
+      id="presence"
+      className="relative py-20 md:py-32 px-6 overflow-hidden"
+      aria-labelledby="presence-heading"
+      style={{ background: "var(--surface-dark)" }}
+    >
+      <div className="max-w-6xl mx-auto flex flex-col gap-12">
+
+        {/* Header */}
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+          <div className="flex flex-col gap-3">
+            <span className="text-xs font-semibold tracking-widest uppercase" style={{ color: "var(--magenta)" }}>
+              {t("Presencia Global", "Global Presence")}
+            </span>
+            <h2
+              id="presence-heading"
+              className="font-display font-bold text-3xl md:text-4xl lg:text-5xl text-white text-balance leading-tight"
+            >
+              {t("Donde hemos trabajado", "Where we have worked")}
+            </h2>
+            <p className="text-base text-white/55 leading-relaxed max-w-lg">
+              {t(
+                "Casa Matriz en Bogotá, Colombia — con proyectos en 9 países y 15 ciudades alrededor del mundo.",
+                "Headquartered in Bogotá, Colombia — with projects across 9 countries and 15 cities worldwide."
+              )}
+            </p>
+          </div>
+          <a
+            href="#contact"
+            className="shrink-0 inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-sm text-white transition-all active:scale-95 hover:brightness-110"
+            style={{ background: "var(--magenta)" }}
+          >
+            {t("Nuestro Portafolio", "Our Portfolio")}
+          </a>
+        </div>
+
+        {/* Interactive map — client-only */}
+        <WorldMap tooltip={tooltip} setTooltip={setTooltip} />
+
+        {/* Stats row */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {stats.map((s) => (
+            <div
+              key={s.value}
+              className="flex flex-col items-center gap-2 py-6 rounded-xl border border-white/10"
+              style={{ background: "rgba(255,255,255,0.03)" }}
+            >
+              <span className="font-display font-bold text-3xl md:text-4xl" style={{ color: "var(--magenta)" }}>
+                {s.value}
+              </span>
+              <span className="text-sm font-medium text-white/60">
+                {t(s.labelEs, s.labelEn)}
+              </span>
+            </div>
+          ))}
+        </div>
+
+      </div>
+    </section>
+  )
+}
