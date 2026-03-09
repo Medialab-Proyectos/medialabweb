@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { ArrowRight, X } from "lucide-react"
+import { BookingModal } from "./booking-modal"
 
 export function StickyCTA() {
   const [visible, setVisible] = useState(false)
@@ -28,13 +29,15 @@ export function StickyCTA() {
           <p className="text-xs opacity-70">Agenda una llamada gratuita</p>
         </div>
         <div className="flex items-center gap-2">
-          <Link
-            href="#contact"
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold bg-[var(--magenta)] text-white hover:brightness-110 transition-all active:scale-95"
-          >
-            Hablemos
-            <ArrowRight size={14} />
-          </Link>
+          <BookingModal>
+            <button
+              type="button"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold bg-[var(--magenta)] text-white hover:brightness-110 transition-all active:scale-95"
+            >
+              Hablemos
+              <ArrowRight size={14} />
+            </button>
+          </BookingModal>
           <button
             onClick={() => setDismissed(true)}
             className="p-1.5 rounded-full hover:bg-background/10 transition-colors"

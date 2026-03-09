@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import { ArrowRight, CheckCircle2 } from "lucide-react"
+import { BookingModal } from "./booking-modal"
 
 interface MidCTAProps {
   headline?: string
@@ -44,13 +45,15 @@ export function MidCTA({
             <h3 className="font-display font-bold text-xl text-foreground">{headline}</h3>
             <p className="text-sm text-muted-foreground">{subheadline}</p>
           </div>
-          <Link
-            href="#contact"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-sm bg-foreground text-background hover:bg-[var(--magenta)] hover:text-white transition-all duration-200 active:scale-95 shrink-0"
-          >
-            {buttonText}
-            <ArrowRight size={14} />
-          </Link>
+          <BookingModal>
+            <button
+              type="button"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-sm bg-foreground text-background hover:bg-[var(--magenta)] hover:text-white transition-all duration-200 active:scale-95 shrink-0"
+            >
+              {buttonText}
+              <ArrowRight size={14} />
+            </button>
+          </BookingModal>
         </div>
       </div>
     )
@@ -84,13 +87,15 @@ export function MidCTA({
             </span>
           </div>
         </div>
-        <Link
-          href="#contact"
-          className="group inline-flex items-center gap-2 px-8 py-4 rounded-full font-semibold text-sm bg-[var(--magenta)] text-white hover:brightness-110 transition-all duration-200 active:scale-95 shadow-lg shadow-[var(--magenta)]/25 animate-pulse-glow"
-        >
-          {buttonText}
-          <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-        </Link>
+        <BookingModal>
+          <button
+            type="button"
+            className="group inline-flex items-center gap-2 px-8 py-4 rounded-full font-semibold text-sm bg-[var(--magenta)] text-white hover:brightness-110 transition-all duration-200 active:scale-95 shadow-lg shadow-[var(--magenta)]/25 animate-pulse-glow"
+          >
+            {buttonText}
+            <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+          </button>
+        </BookingModal>
       </div>
     </div>
   )

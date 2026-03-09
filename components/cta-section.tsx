@@ -1,12 +1,15 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { ArrowRight, MessageCircle, Clock, CheckCircle2, Shield, Zap } from "lucide-react"
+import { ArrowRight, MessageCircle, Clock, CheckCircle2, Shield, Zap, Calendar } from "lucide-react"
 import Link from "next/link"
+import { useLanguage } from "@/lib/language-context"
+import { BookingModal } from "./booking-modal"
 
 export function CTASection() {
   const ref = useRef<HTMLDivElement>(null)
   const [visible, setVisible] = useState(false)
+  const { t } = useLanguage()
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -82,13 +85,11 @@ export function CTASection() {
             </div>
 
             <div className="flex flex-col sm:flex-row items-center gap-4 pt-2">
-              <Link
-                href="mailto:hello@medialabingenieria.com"
-                className="group inline-flex items-center gap-2 px-8 py-4 rounded-full font-semibold text-sm bg-[var(--magenta)] text-white hover:brightness-110 transition-all duration-200 active:scale-95 shadow-lg shadow-[var(--magenta)]/25"
-              >
-                Agenda tu llamada gratuita
-                <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-              </Link>
+              <BookingModal>
+                <button type="button" className="group flex-1 flex items-center justify-center gap-2 py-4 rounded-xl font-bold text-[15px] bg-[var(--magenta)] text-white transition-all hover:brightness-110 active:scale-95 shadow-lg shadow-[var(--magenta)]/25">
+                  {t("Agenda tu llamada gratuita", "Book your free call")} <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                </button>
+              </BookingModal>
               <Link
                 href="https://wa.me/1234567890"
                 target="_blank"

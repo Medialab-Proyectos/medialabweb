@@ -2,8 +2,9 @@
 
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
-import { ArrowRight, Sparkles } from "lucide-react"
+import { Play, ArrowRight, Sparkles, ShieldCheck, Zap, LineChart, MessageCircle } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
+import { BookingModal } from "./booking-modal"
 
 export function HeroSection() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -142,14 +143,16 @@ export function HeroSection() {
           style={{ transitionDelay: "300ms" }}
         >
           <div className="flex flex-col sm:flex-row items-center gap-4">
-            <Link
-              href="#contact"
-              className="group inline-flex items-center gap-2 px-7 py-3.5 rounded-full font-semibold text-sm text-white transition-all duration-200 active:scale-95 shadow-lg"
-              style={{ background: "#E8751A", boxShadow: "0 8px 30px rgba(232,117,26,0.35)" }}
-            >
-              {t("Agenda una llamada gratuita", "Book a free call")}
-              <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-            </Link>
+            <BookingModal>
+              <button
+                type="button"
+                className="group inline-flex items-center gap-2 px-7 py-3.5 rounded-full font-semibold text-sm text-white transition-all duration-200 active:scale-95 shadow-lg"
+                style={{ background: "#E8751A", boxShadow: "0 8px 30px rgba(232,117,26,0.35)" }}
+              >
+                {t("Agenda una llamada gratuita", "Book a free call")}
+                <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+              </button>
+            </BookingModal>
             <Link
               href="#uxbox"
               className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full font-semibold text-sm border border-white/20 text-white hover:bg-white/10 transition-all duration-200 active:scale-95"
@@ -163,22 +166,7 @@ export function HeroSection() {
           </p>
         </div>
 
-        {/* Stats strip */}
-        <div
-          className={`flex flex-wrap justify-center gap-8 mt-4 pt-8 border-t border-white/10 w-full max-w-2xl transition-all duration-700 ${ready ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
-          style={{ transitionDelay: "400ms" }}
-        >
-          {[
-            { val: "50+", label: t("Proyectos", "Projects") },
-            { val: "9",   label: t("Países", "Countries") },
-            { val: "15",  label: t("Ciudades", "Cities") },
-          ].map(({ val, label }) => (
-            <div key={label} className="flex flex-col items-center gap-0.5">
-              <span className="font-display font-bold text-xl text-white">{val}</span>
-              <span className="text-xs text-white/40 uppercase tracking-widest">{label}</span>
-            </div>
-          ))}
-        </div>
+
       </div>
 
       {/* Scroll indicator */}
