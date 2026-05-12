@@ -1,13 +1,15 @@
 # MediaLab Ingeniería
 
 **Sitio web:** https://medialabingenieria.com
-**Descripción:** Agencia especializada en diseño UX, Inteligencia Artificial (IA) y Diseño Conductual (Behavioral Design).
+**Descripción:** Agencia especializada en diseño UX/UI, Inteligencia Artificial (IA), SEO técnico, Diseño Conductual (Behavioral Design), CRO y desarrollo de productos digitales B2B/B2C.
 
-MediaLab Ingeniería diseña productos digitales extraordinarios optimizando los flujos de interacción, mejorando la usabilidad y aplicando principios científicos de comportamiento humano. Ayudamos a empresas e innovadores a crear soluciones tecnológicas de alto impacto.
+MediaLab Ingeniería diseña productos digitales humanos, indexables y medibles. Optimizamos flujos de interacción, arquitectura de información, performance, contenido de intención de búsqueda y principios científicos de comportamiento humano para que empresas B2B y marcas B2C sean encontradas, entendidas y elegidas.
 
 ## Nuestros Servicios Core
 - **UX Research & Estrategia:** Insights conductuales profundos para entender la psicología del usuario.
 - **Diseño Conductual:** Aplicación del comportamiento humano para crear hábitos digitales y retención.
+- **SEO Técnico y Arquitectura de Contenido:** Estructura semántica, datos enriquecidos, performance y contenido orientado a intención de búsqueda.
+- **CRO y Experiencia Emocional:** Optimización de journeys, confianza, llamados a la acción y microcopy para aumentar conversión.
 - **AI-Assisted Discovery:** Integración de herramientas de IA para sintetizar requisitos y diseñar MVPs en tiempo récord (48-72h).
 - **Desarrollo de Software:** Ingeniería a medida, construcción de MVPs, plataformas web y móviles escalables.
 

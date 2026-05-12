@@ -8,42 +8,42 @@ const reasons = [
     icon: Brain,
     title: "Psicología del consumidor (B2C & B2B)",
     description:
-      "Entendemos la psicología humana y la toma de decisiones — diseñamos experiencias digitales que influyen en el comportamiento y conectan emocionalmente con tus clientes B2C y aliados B2B.",
+      "Entendemos cómo piensan, sienten y deciden tus usuarios. Aplicamos ciencia del comportamiento para diseñar experiencias que conectan emocionalmente y generan acción.",
     color: "var(--magenta)",
   },
   {
     icon: Zap,
     title: "Discovery de producto con IA",
     description:
-      "Nuestra plataforma UXBox usa IA para comprimir meses de definición de producto en días — con mayor precisión.",
+      "UXBox comprime meses de definición en días. Nuestra IA analiza tu idea y genera una propuesta estructurada con requisitos, estrategia UX y conceptos de diseño.",
     color: "var(--cyan)",
   },
   {
     icon: Clock,
     title: "Desarrollo de producto rápido",
     description:
-      "Nos movemos rápido sin tomar atajos — procesos lean y ágiles que te mantienen avanzando de la idea al lanzamiento.",
+      "De la idea al MVP en semanas, no meses. Procesos ágiles, validación continua y un equipo multidisciplinario que entiende tanto el negocio como la tecnología.",
     color: "var(--orange)",
   },
   {
     icon: Heart,
     title: "Experiencias digitales de alto engagement",
     description:
-      "Diseñamos productos B2C a los que los usuarios vuelven y flujos B2B que aumentan la productividad — porque un gran diseño UX no solo es funcional, es genuinamente disfrutable.",
+      "Diseñamos para que los usuarios regresen. Combinamos UX emocional, micro-interacciones y personalización para crear productos B2C memorables y plataformas B2B eficientes.",
     color: "var(--magenta)",
   },
   {
     icon: Server,
     title: "Arquitecturas escalables",
     description:
-      "Cada producto que construimos está diseñado para crecer — stacks tecnológicos modernos y limpios que escalan con tu negocio.",
+      "Construimos sobre React, Next.js, Node.js e infraestructura cloud. Código limpio, arquitectura modular y rendimiento optimizado para crecer con tu negocio.",
     color: "var(--cyan)",
   },
   {
     icon: Lightbulb,
     title: "Innovación centrada en el humano",
     description:
-      "Mantenemos a las personas reales en el centro de cada decisión — combinando datos, empatía y creatividad para resolver problemas difíciles.",
+      "La tecnología al servicio de las personas, no al revés. Cada decisión de diseño y desarrollo pasa por un filtro: ¿mejora la vida del usuario?",
     color: "var(--orange)",
   },
 ]

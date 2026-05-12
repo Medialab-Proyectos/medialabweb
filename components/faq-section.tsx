@@ -35,14 +35,14 @@ const faqs = [
       "Absolutamente. Muchos clientes B2B nos integran como su equipo dedicado de diseño y desarrollo. Trabajamos junto a tus equipos internos u operamos de forma independiente. Es ideal para startups sin capacidad de diseño interna y para corporaciones que necesitan escalar su equipo digital rápidamente.",
   },
   {
-    question: "¿Cómo garantizan que la experiencia conecte emocionalmente con mis usuarios?",
+    question: "¿Cómo garantizan que la experiencia conecte emocionalmente con los usuarios?",
     answer:
-      "Aplicamos principios de diseño conductual y psicología del consumidor en cada proyecto. Realizamos investigación de usuarios reales, mapeo de emociones (emotion mapping), pruebas de usabilidad y análisis de microinteracciones para asegurar que cada touchpoint genere confianza, satisfacción y engagement genuino.",
+      "Aplicamos psicología del consumidor y diseño conductual en cada proyecto. Investigamos cómo piensan, sienten y deciden tus usuarios para diseñar experiencias que generen conexión emocional real — no solo flujos funcionales. Esto aplica tanto para productos B2C que buscan engagement como para plataformas B2B que necesitan eficiencia y satisfacción.",
   },
   {
     question: "¿Qué diferencia a MediaLab de otras agencias UX?",
     answer:
-      "Tres cosas nos hacen únicos: (1) Nuestra plataforma UXBox con IA que acelera el discovery 10x, (2) Nuestro enfoque en diseño conductual basado en psicología real del consumidor, y (3) Nuestra capacidad end-to-end de llevar un producto desde la idea hasta producción — todo bajo un mismo equipo.",
+      "Tres diferenciadores: (1) UXBox — nuestra IA que comprime el discovery de producto 10x, (2) Enfoque en psicología del consumidor — no solo diseñamos interfaces bonitas, diseñamos para el comportamiento humano, y (3) Capacidad end-to-end — desde la investigación hasta el desarrollo de software, entregamos productos listos para el mercado.",
   },
 ]
 

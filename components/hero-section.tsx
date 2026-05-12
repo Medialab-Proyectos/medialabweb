@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
-import { Play, ArrowRight, Sparkles, ShieldCheck, Zap, LineChart, MessageCircle } from "lucide-react"
+import { ArrowRight, Sparkles } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 import { BookingModal } from "./booking-modal"
 
@@ -99,7 +99,7 @@ export function HeroSection() {
       />
 
       {/* Content */}
-      <div className="relative z-10 max-w-5xl mx-auto px-6 text-center flex flex-col items-center gap-8 pt-20">
+      <div className="relative z-10 max-w-5xl mx-auto px-6 text-center flex flex-col items-center gap-8 pt-20 pb-28">
         {/* Badge with social proof */}
         <div
           className={`inline-flex items-center gap-3 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm text-sm font-medium text-white/70 transition-all duration-700 ${ready ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
@@ -110,9 +110,15 @@ export function HeroSection() {
             {t("UX · IA · Diseño Conductual", "UX · AI · Behavioral Design")}
           </span>
           <span className="w-px h-4 bg-white/20" aria-hidden="true" />
-          <span className="text-xs font-semibold" style={{ color: "var(--cyan)" }}>
-            {t("4.9/5 Satisfacción", "4.9/5 Satisfaction")}
-          </span>
+          <a
+            href="https://a.co/d/069qLWdY"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs font-semibold hover:underline transition-colors"
+            style={{ color: "var(--cyan)" }}
+          >
+            {t("Creadores de la metodología Zero UI", "Creators of the Zero UI methodology")}
+          </a>
         </div>
 
         {/* Headline */}
@@ -134,8 +140,8 @@ export function HeroSection() {
           style={{ transitionDelay: "200ms" }}
         >
           {t(
-            "Combinamos diseño UX de clase mundial, inteligencia artificial y psicología del consumidor para crear experiencias digitales inolvidables para B2B y B2C.",
-            "We combine world-class UX design, artificial intelligence, and consumer psychology to create unforgettable digital experiences for B2B and B2C."
+            "Combinamos diseño UX, inteligencia artificial, SEO técnico y psicología del consumidor para crear experiencias digitales B2B y B2C que posicionan, conectan y convierten.",
+            "We combine UX design, artificial intelligence, technical SEO, and consumer psychology to create B2B and B2C digital experiences that rank, connect, and convert."
           )}
         </p>
 
@@ -147,11 +153,10 @@ export function HeroSection() {
             <BookingModal>
               <button
                 type="button"
-                className="group inline-flex items-center gap-2 px-7 py-3.5 rounded-full font-semibold text-sm text-white transition-all duration-200 active:scale-95 shadow-lg"
+                className="inline-flex items-center justify-center gap-3 px-10 py-4 rounded-full font-semibold text-[15px] text-white transition-colors duration-200 active:scale-95 shadow-lg hover:brightness-110"
                 style={{ background: "#E8751A", boxShadow: "0 8px 30px rgba(232,117,26,0.35)" }}
               >
                 {t("Agenda una llamada gratuita", "Book a free call")}
-                <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
               </button>
             </BookingModal>
             <Link
@@ -171,7 +176,7 @@ export function HeroSection() {
       </div>
 
       {/* Scroll indicator */}
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/25 animate-bounce-slow">
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/25 animate-bounce-slow">
         <span className="text-xs tracking-widest uppercase">{t("Explorar", "Explore")}</span>
         <div className="w-px h-10 bg-gradient-to-b from-white/25 to-transparent" />
       </div>

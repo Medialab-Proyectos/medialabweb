@@ -530,8 +530,8 @@ export function UXBoxForm() {
               {t("¿Quieres hablar con un humano?", "Want to talk to a human?")}
             </span>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 text-sm">
-              <a href="https://wa.me/573054009505" className="flex items-center gap-2 text-foreground hover:text-[var(--magenta)] transition-colors font-medium hover:bg-secondary/50 px-4 py-2 rounded-full border border-transparent hover:border-border">
-                <MessageCircle size={18} className="text-[#25D366]" /> +57 3054009505
+              <a href="https://wa.me/573054009505" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-foreground hover:text-[var(--magenta)] transition-colors font-medium hover:bg-secondary/50 px-4 py-2 rounded-full border border-transparent hover:border-border">
+                <MessageCircle size={18} className="text-[#25D366]" /> WhatsApp
               </a>
               <div className="hidden sm:block w-1.5 h-1.5 rounded-full bg-border" />
               <div className="flex items-center gap-2">

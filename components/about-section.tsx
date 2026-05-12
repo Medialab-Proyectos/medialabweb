@@ -33,7 +33,7 @@ export function AboutSection() {
             Sobre Nosotros
           </span>
           <h2 className="font-display font-bold text-3xl md:text-4xl lg:text-5xl leading-tight text-foreground text-balance">
-            Diseñamos experiencias digitales que{" "}
+            Productos digitales que{" "}
             <span
               className="bg-clip-text text-transparent"
               style={{ backgroundImage: "linear-gradient(90deg, var(--magenta), var(--cyan))" }}
@@ -42,16 +42,16 @@ export function AboutSection() {
             </span>
           </h2>
           <p className="text-base text-muted-foreground leading-relaxed">
-            MediaLab Ingeniería es una agencia de diseño UX/UI y desarrollo de software especializada en comportamiento humano.
-            Nuestro trabajo combina investigación de usuarios, estrategia de producto, inteligencia artificial y psicología
-            para crear soluciones empresariales (B2B) eficientes y apps de consumo (B2C) emocionalmente memorables.
+            MediaLab Ingeniería combina diseño UX, inteligencia artificial, SEO técnico y psicología del consumidor
+            para crear experiencias digitales que posicionan, conectan emocionalmente y convierten.
           </p>
           <p className="text-base text-muted-foreground leading-relaxed">
-            Nos enfocamos en optimizar la experiencia del cliente (CX), aumentar las tasas de conversión (CRO) y diseñar ecosistemas que
-            unan objetivos de marketing, tecnología avanzada y satisfacción emocional del usuario final.
+            Trabajamos con empresas B2B que necesitan plataformas eficientes y con marcas B2C que buscan
+            experiencias memorables. Desde el discovery hasta el lanzamiento, entregamos productos digitales
+            medibles y centrados en el ser humano.
           </p>
           <p className="text-base font-medium text-foreground leading-relaxed">
-            Nuestra misión es simple: transformar ideas en productos digitales que generen impacto medible.
+            Emocional. Eficiente. Escalable.
           </p>
           <Link
             href="#contact"
@@ -71,24 +71,24 @@ export function AboutSection() {
             style={{ background: "linear-gradient(135deg, var(--magenta), oklch(0.4 0.25 300))" }}>
             <span className="text-3xl font-display font-bold">UX + IA</span>
             <p className="text-sm text-white/80 leading-relaxed">
-              Donde el diseño centrado en el humano se encuentra con la tecnología inteligente.
+              Diseño centrado en el ser humano potenciado por inteligencia artificial.
             </p>
           </div>
           <div className="rounded-2xl p-5 bg-[var(--surface-dark)] text-white flex flex-col gap-2">
             <span className="text-2xl font-display font-bold" style={{ color: "var(--cyan)" }}>Research</span>
-            <p className="text-xs text-white/60 leading-relaxed">Insights conductuales profundos</p>
+            <p className="text-xs text-white/60 leading-relaxed">Datos que inspiran diseño</p>
           </div>
           <div className="rounded-2xl p-5 flex flex-col gap-2"
             style={{ background: "linear-gradient(135deg, var(--orange), oklch(0.65 0.2 60))" }}>
             <span className="text-2xl font-display font-bold text-white">Impacto</span>
-            <p className="text-xs text-white/80 leading-relaxed">Valor de negocio medible</p>
+            <p className="text-xs text-white/80 leading-relaxed">Resultados medibles</p>
           </div>
           <div className="col-span-2 rounded-2xl p-5 border border-border bg-card flex flex-col gap-2">
             <span className="text-lg font-display font-semibold text-foreground">
               Emocional. Eficiente. Escalable.
             </span>
             <p className="text-sm text-muted-foreground">
-              Software B2B que fluye y experiencias B2C que enamoran al usuario.
+              Productos digitales B2B y B2C que conectan con las personas y generan resultados de negocio.
             </p>
           </div>
         </div>

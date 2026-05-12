@@ -5,6 +5,7 @@ import { ClientLogos } from "@/components/client-logos"
 import { TrustMetrics } from "@/components/trust-metrics"
 import { AboutSection } from "@/components/about-section"
 import { ServicesSection } from "@/components/services-section"
+import { ExperienceDesignSection } from "@/components/experience-design-section"
 import { UXBoxForm } from "@/components/uxbox-form"
 import { IndustriesSection } from "@/components/industries-section"
 import { WorldPresence } from "@/components/world-presence"
@@ -57,6 +58,9 @@ export default function Home() {
       {/* — VALUE PROPOSITION — */}
       <ServicesSection />
 
+      {/* — EXPERIENCE STRATEGY — */}
+      <ExperienceDesignSection />
+
       {/* — METHODOLOGY (transparencia) — */}
       <MethodSection />
 
@@ -99,4 +103,3 @@ export default function Home() {
     </main>
   )
 }
-

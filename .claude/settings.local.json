@@ -3,7 +3,11 @@
     "allow": [
       "Bash(wc -l \"/c/Users/coben/OneDrive/Desktop/MediLab/Version 1/components\"/*.tsx)",
       "Bash(grep -l \"href=\" \"/c/Users/coben/OneDrive/Desktop/MediLab/Version 1/components\"/*.tsx)",
-      "Bash(npx next:*)"
+      "Bash(npx next:*)",
+      "Bash(npm list:*)",
+      "Bash(which pdftotext:*)",
+      "Bash(python3 -c \"import PyPDF2\")",
+      "Bash(pdftotext \"C:\\\\Users\\\\coben\\\\OneDrive\\\\Desktop\\\\MediLab\\\\Version 1\\\\public\\\\images\\\\bienvenidos-al-zero-ui-STANDARD.pdf\" -)"
     ]
   }
 }

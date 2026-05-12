@@ -109,8 +109,12 @@ export function MethodSection() {
           </p>
         </div>
 
-        {/* Desktop: Step cards grid */}
-        <div className="hidden md:grid grid-cols-5 gap-3">
+        {/* Desktop: Step tabs */}
+        <div
+          className="hidden md:grid grid-cols-5 gap-2 rounded-xl border border-border bg-background p-2"
+          role="tablist"
+          aria-label="Pasos de la metodología MediaLab"
+        >
           {steps.map((step, i) => {
             const Icon = step.icon
             const isActive = i === activeStep
@@ -118,58 +122,73 @@ export function MethodSection() {
               <button
                 key={step.number}
                 onClick={() => setActiveStep(i)}
-                className={`group relative flex flex-col gap-4 p-5 rounded-2xl border text-left transition-all duration-300 cursor-pointer overflow-hidden
+                className={`group relative flex min-h-[124px] flex-col gap-3 rounded-lg border px-4 py-3 text-left transition-all duration-300 cursor-pointer overflow-hidden
                   ${isActive
-                    ? "border-transparent shadow-xl bg-card"
-                    : "border-border bg-background hover:border-transparent hover:shadow-lg hover:bg-card"
+                    ? "border-transparent bg-card shadow-lg"
+                    : "border-transparent bg-transparent hover:bg-card/70"
                   }
                   ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
                 style={{ transitionDelay: `${i * 80}ms` }}
+                role="tab"
                 aria-pressed={isActive}
+                aria-selected={isActive}
+                aria-controls="method-active-panel"
               >
-                {/* Gradient top bar */}
-                <div className="absolute top-0 left-0 right-0 h-0.5 transition-opacity duration-300"
-                  style={{ background: step.gradient, opacity: isActive ? 1 : 0 }} />
+                <div
+                  className="absolute inset-x-0 top-0 h-1 transition-opacity duration-300"
+                  style={{ background: step.gradient, opacity: isActive ? 1 : 0 }}
+                  aria-hidden="true"
+                />
 
-                {/* Icon */}
-                <div className="w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-300"
-                  style={{
-                    background: isActive ? step.color : `${step.color}18`,
-                    boxShadow: isActive ? `0 6px 20px ${step.color}40` : "none",
-                  }}>
-                  <Icon size={19} style={{ color: isActive ? "white" : step.color }} />
+                <div className="flex items-center gap-3">
+                  <div
+                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md transition-all duration-300"
+                    style={{
+                      background: isActive ? step.color : `${step.color}18`,
+                      boxShadow: isActive ? `0 8px 24px ${step.color}35` : "none",
+                    }}
+                  >
+                    <Icon size={18} style={{ color: isActive ? "white" : step.color }} />
+                  </div>
+                  <div className="min-w-0">
+                    <span className="block text-[10px] font-bold uppercase tracking-widest" style={{ color: step.color }}>
+                      {step.number}
+                    </span>
+                    <span className="block truncate text-sm font-semibold text-foreground">{step.label}</span>
+                  </div>
                 </div>
 
-                {/* Number label */}
-                <span className="text-[10px] font-bold tracking-widest uppercase" style={{ color: step.color }}>
-                  {step.number}
-                </span>
+                <p className="line-clamp-2 text-xs leading-relaxed text-muted-foreground">
+                  {step.title}
+                </p>
 
-                {/* Step name */}
-                <span className="font-semibold text-sm text-foreground leading-tight">{step.label}</span>
-
-                {/* Stat badge */}
-                <div className="mt-auto">
-                  <span className="font-display font-bold text-lg" style={{ color: step.color }}>{step.stat}</span>
-                  <p className="text-[10px] text-muted-foreground leading-tight">{step.statLabel}</p>
+                <div className="mt-auto flex items-end justify-between gap-2">
+                  <div>
+                    <span className="font-display text-lg font-bold" style={{ color: step.color }}>{step.stat}</span>
+                    <p className="text-[10px] leading-tight text-muted-foreground">{step.statLabel}</p>
+                  </div>
+                  <ChevronRight
+                    size={15}
+                    className={`transition-all duration-300 ${isActive ? "translate-x-0 opacity-100" : "-translate-x-1 opacity-0"}`}
+                    style={{ color: step.color }}
+                    aria-hidden="true"
+                  />
                 </div>
-
-                {/* Active arrow */}
-                {isActive && (
-                  <ChevronRight size={14} className="absolute right-3 top-1/2 -translate-y-1/2"
-                    style={{ color: step.color }} />
-                )}
               </button>
             )
           })}
         </div>
 
         {/* Active step detail panel */}
-        <div className={`hidden md:flex gap-8 p-0 rounded-3xl border overflow-hidden transition-all duration-500 ${visible ? "opacity-100" : "opacity-0"}`}
-          style={{ background: "var(--card)", borderColor: `${activeData.color}30` }}>
+        <div
+          id="method-active-panel"
+          role="tabpanel"
+          className={`hidden md:grid grid-cols-[0.95fr_1.05fr] rounded-xl border overflow-hidden transition-all duration-500 ${visible ? "opacity-100" : "opacity-0"}`}
+          style={{ background: "var(--card)", borderColor: `${activeData.color}35` }}
+        >
 
           {/* Left: visual image */}
-          <div className="relative w-1/2 min-h-[320px] shrink-0">
+          <div className="relative min-h-[300px]">
             <div className="absolute inset-0 bg-black/20 z-10" />
             <Image src={activeData.image} alt={activeData.title} fill className="object-cover" sizes="50vw" />
             <div className="absolute inset-0 z-20 flex flex-col justify-end p-8" style={{ background: "linear-gradient(to top, rgba(0,0,0,0.8), transparent)" }}>
@@ -181,12 +200,40 @@ export function MethodSection() {
           </div>
 
           {/* Right: content */}
-          <div className="flex flex-col justify-center gap-4 py-10 pr-10 w-1/2">
-            <span className="text-xs font-semibold tracking-widest uppercase inline-flex items-center gap-2" style={{ color: activeData.color }}>
+          <div className="relative flex flex-col justify-center gap-5 p-8 lg:p-10">
+            <div
+              className="absolute inset-y-8 left-0 w-1 rounded-r-full"
+              style={{ background: activeData.gradient }}
+              aria-hidden="true"
+            />
+            <div className="flex items-center gap-3">
+              <div
+                className="flex h-12 w-12 items-center justify-center rounded-md"
+                style={{ background: activeData.color }}
+              >
+                <ActiveIcon size={21} className="text-white" />
+              </div>
+              <span className="text-xs font-semibold tracking-widest uppercase" style={{ color: activeData.color }}>
+                Paso {activeData.number} · {activeData.label}
+              </span>
+            </div>
+            <span className="sr-only" style={{ color: activeData.color }}>
               <ActiveIcon size={16} /> Paso {activeData.number} — {activeData.label}
             </span>
-            <h3 className="font-display font-bold text-3xl text-foreground text-balance leading-tight">{activeData.title}</h3>
-            <p className="text-muted-foreground leading-relaxed text-base">{activeData.description}</p>
+            <h3 className="font-display text-3xl font-bold leading-tight text-foreground text-balance">{activeData.title}</h3>
+            <p className="text-base leading-relaxed text-muted-foreground">{activeData.description}</p>
+            <div className="grid grid-cols-2 gap-3 pt-2">
+              <div className="rounded-lg border border-border bg-background p-4">
+                <span className="block text-xs font-semibold uppercase tracking-widest text-muted-foreground">Resultado</span>
+                <span className="mt-2 block font-display text-2xl font-bold" style={{ color: activeData.color }}>
+                  {activeData.stat}
+                </span>
+              </div>
+              <div className="rounded-lg border border-border bg-background p-4">
+                <span className="block text-xs font-semibold uppercase tracking-widest text-muted-foreground">Foco</span>
+                <span className="mt-2 block text-sm font-semibold text-foreground">{activeData.statLabel}</span>
+              </div>
+            </div>
           </div>
         </div>
 

@@ -10,15 +10,15 @@ const services = [
     color: "var(--magenta)",
     gradient: "linear-gradient(135deg, var(--magenta), oklch(0.45 0.24 300))",
     items: [
-      "Investigación UX",
-      "Diseño Conductual",
-      "Estrategia de Producto",
-      "Pruebas de Usabilidad",
-      "Diseño de Interacción",
-      "Sistemas de Diseño",
+      "Investigación de usuarios B2B y B2C",
+      "Diseño de interacción y experiencia",
+      "Diseño conductual y psicología del consumidor",
+      "Arquitectura de información",
+      "Sistemas de diseño escalables",
+      "Optimización de conversión (CRO)",
     ],
     description:
-      "Estudiamos cómo las personas piensan, deciden y actúan. Diseñamos experiencias digitales B2C que enamoran al consumidor final y plataformas B2B que optimizan procesos complejos sin fricción.",
+      "Investigamos, diseñamos y validamos experiencias digitales que conectan emocionalmente con los usuarios B2C y resuelven problemas reales para equipos B2B — siempre centrados en el ser humano.",
   },
   {
     icon: Brain,
@@ -26,14 +26,14 @@ const services = [
     color: "var(--cyan)",
     gradient: "linear-gradient(135deg, var(--cyan), oklch(0.55 0.18 220))",
     items: [
-      "Discovery de producto asistido por IA",
-      "Generación rápida de requisitos",
-      "Validación de producto",
-      "Análisis de oportunidades",
+      "Discovery de producto acelerado con IA",
+      "Validación rápida de ideas y conceptos",
+      "Generación inteligente de requisitos",
+      "Análisis competitivo automatizado",
       "Definición ágil de producto",
     ],
     description:
-      "Aprovecha nuestra IA para definir productos que alineen los objetivos comerciales (B2B) con las necesidades del cliente (B2C), comprimiendo meses de discovery en días con resultados accionables.",
+      "Comprimimos meses de discovery en días con nuestra plataforma UXBox. Inteligencia artificial que entiende tu negocio y genera propuestas de producto estructuradas y accionables.",
   },
   {
     icon: Code2,
@@ -41,15 +41,15 @@ const services = [
     color: "var(--orange)",
     gradient: "linear-gradient(135deg, var(--orange), oklch(0.65 0.2 60))",
     items: [
-      "Plataformas web",
-      "Productos digitales",
+      "Plataformas web B2B y dashboards",
+      "Apps móviles y experiencias B2C",
       "MVPs para startups",
-      "Plataformas empresariales",
-      "Arquitecturas escalables",
+      "Arquitecturas escalables en la nube",
+      "Integraciones con IA y APIs",
     ],
     description:
-      "Del concepto a producción. Construimos ecosistemas digitales B2B escalables y apps B2C de alto rendimiento usando React, Node.js y arquitecturas cloud modernas.",
-    tech: ["React", "Node.js", "PHP", "Cloud", "Next.js"],
+      "Del concepto al producto lanzado. Construimos plataformas B2B, apps B2C y MVPs con código limpio, arquitectura escalable y un enfoque obsesivo en la experiencia del usuario.",
+    tech: ["React", "Next.js", "Node.js", "Cloud", "IA"],
   },
 ]
 

@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { ArrowRight, MessageCircle, Clock, CheckCircle2, Shield, Zap, Calendar } from "lucide-react"
+import { ArrowRight, MessageCircle, Clock, CheckCircle2, Shield, Zap } from "lucide-react"
 import Link from "next/link"
 import { useLanguage } from "@/lib/language-context"
 import { BookingModal } from "./booking-modal"
@@ -91,7 +91,7 @@ export function CTASection() {
                 </button>
               </BookingModal>
               <Link
-                href="https://wa.me/573001234567"
+                href="https://wa.me/573054009505"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full font-semibold text-sm border border-white/20 text-white hover:bg-white/10 transition-all duration-200 active:scale-95"

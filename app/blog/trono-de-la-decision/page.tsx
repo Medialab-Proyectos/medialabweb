@@ -1,0 +1,123 @@
+import type { Metadata } from "next"
+import Image from "next/image"
+import Link from "next/link"
+import { ArrowLeft, Clock, Calendar } from "lucide-react"
+
+export const metadata: Metadata = {
+  title: "El Trono de la Decisión: IA, Autonomía Humana y el Futuro del Diseño Ético | MediaLab",
+  description: "En la era de los agentes de IA, el mayor riesgo no es la privacidad — es la infantilización del usuario. Descubre el Agentic Experience Design (AXD).",
+  openGraph: {
+    title: "El Trono de la Decisión — MediaLab Ingeniería",
+    description: "Un sistema bien diseñado no decide por ti. Te ayuda a decidir mejor. La ética del diseño en la era de la IA.",
+    images: ["/images/blog-zero-ui-decision.png"],
+  },
+}
+
+export default function BlogTronoDecisionPage() {
+  return (
+    <main className="min-h-screen bg-background">
+      {/* Hero */}
+      <div className="relative w-full h-[420px] md:h-[520px] overflow-hidden">
+        <Image src="/images/blog-zero-ui-decision.png" alt="IA, autonomía humana y diseño ético" fill className="object-cover" priority />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+        <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-12 max-w-4xl mx-auto">
+          <div className="flex items-center gap-2 mb-4">
+            <span className="inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider text-white w-fit" style={{ background: "var(--magenta, #E8751A)" }}>
+              IA y Ética
+            </span>
+          </div>
+          <h1 className="font-display font-bold text-3xl md:text-4xl lg:text-5xl text-white leading-tight text-balance">
+            El Trono de la Decisión: IA, Autonomía Humana y el Futuro del Diseño Ético
+          </h1>
+          <div className="flex items-center gap-4 mt-4 text-white/60 text-sm">
+            <span className="flex items-center gap-1"><Calendar size={13} /> Mayo 2026</span>
+            <span className="flex items-center gap-1"><Clock size={13} /> 9 min de lectura</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Back link */}
+      <div className="max-w-3xl mx-auto px-6 pt-8">
+        <Link href="/#blog" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+          <ArrowLeft size={14} /> Volver al blog
+        </Link>
+      </div>
+
+      {/* Article body */}
+      <article className="max-w-3xl mx-auto px-6 py-12 md:py-16">
+        <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed mb-12 font-medium">
+          Estamos en el epicentro de la era del <strong className="font-semibold text-foreground">Agentic Experience Design (AXD)</strong> — un paradigma donde
+          la IA deja de ser reactiva para convertirse en un agente proactivo que actúa en nombre del usuario.
+          La mayor preocupación ética no es la privacidad: es la <em className="italic text-foreground">integridad de la voluntad humana</em>.
+        </p>
+
+        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">El Riesgo Silencioso: La Infantilización del Usuario</h2>
+        <p className="text-lg text-muted-foreground leading-relaxed mb-6">
+          Si la tecnología comienza a decidirlo todo por nosotros — desde qué noticias consumir hasta cómo gestionar nuestras finanzas — corremos el riesgo de perder nuestra <strong className="font-semibold text-foreground">agencia</strong>: esa capacidad única de los seres humanos para actuar con intención y propósito.
+        </p>
+        <p className="text-lg text-muted-foreground leading-relaxed mb-6">
+          El AXD promete una experiencia sin fricciones, un mundo donde las tareas comunes son reemplazadas por interacciones fluidas con los datos. Pero esta comodidad tiene un precio oculto si no se diseña con una conciencia ética rigurosa.
+        </p>
+
+        <blockquote className="border-l-4 pl-6 py-2 my-10 text-xl font-medium text-foreground italic" style={{ borderColor: "var(--orange, #E8751A)" }}>
+          &ldquo;Un sistema bien diseñado no decide por ti. Te ayuda a decidir mejor.&rdquo;
+        </blockquote>
+
+        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">El Dilema Silencioso del UX Moderno</h2>
+        <p className="text-lg text-muted-foreground leading-relaxed mb-6">
+          Existe una verdad incómoda: muchos de los productos digitales más exitosos han alcanzado su estatus precisamente porque han logrado <strong className="font-semibold text-foreground">erosionar la autonomía del usuario</strong>. Durante años, el diseño persuasivo fue celebrado: menos fricción, decisiones más rápidas, tasas de conversión más altas.
+        </p>
+        <p className="text-lg text-muted-foreground leading-relaxed mb-6">
+          Sin embargo, este enfoque esconde una tensión profunda: cuando un sistema decide &ldquo;demasiado bien&rdquo;, el ser humano deja de decidir. El CXD surge como un acto de rebelión ética frente a esta tendencia.
+        </p>
+
+        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">El Ethos Estoico Aplicado al Diseño Digital</h2>
+        <p className="text-lg text-muted-foreground leading-relaxed mb-6">
+          El estoicismo nos enseña una lección fundamental para la era digital: debemos distinguir claramente entre lo que está bajo nuestro control y lo que no. En el diseño de productos, esto se traduce en un imperativo técnico:
+        </p>
+        <ul className="list-disc pl-6 space-y-3 text-lg text-muted-foreground mb-8">
+          <li><strong className="font-semibold text-foreground">Crear sistemas que fortalezcan el control interno del usuario</strong> en lugar de generar dependencia debilitante</li>
+          <li><strong className="font-semibold text-foreground">Rechazar los dark patterns</strong> — esos trucos de diseño desde suscripciones imposibles de cancelar hasta notificaciones que disparan impulsos adictivos</li>
+          <li><strong className="font-semibold text-foreground">Mejorar la capacidad de decisión del ser humano</strong>, no anularla</li>
+          <li>Preguntarse: <em className="italic">&ldquo;¿Qué tipo de relación de control estamos construyendo entre el humano y la máquina?&rdquo;</em></li>
+        </ul>
+
+        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">La IA como Guardiana, No como Dictadora</h2>
+        <p className="text-lg text-muted-foreground leading-relaxed mb-6">
+          En el marco del diseño consciente, la IA deja de ser un motor de engagement para convertirse en un <strong className="font-semibold text-foreground">mediador ético</strong> entre la intención y la acción. Una IA ética:
+        </p>
+        <ul className="list-disc pl-6 space-y-3 text-lg text-muted-foreground mb-8">
+          <li>Detecta señales de fatiga o saturación emocional</li>
+          <li>Ajusta el ritmo y tono de la interfaz según la claridad mental del usuario</li>
+          <li>Ofrece opciones reales, no la ilusión de opciones</li>
+          <li>Sugiere pausas antes de decisiones impulsivas</li>
+        </ul>
+
+        <div className="my-12 h-px w-full bg-border" />
+
+        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">Conclusión: De la Persuasión a la Conciencia</h2>
+        <p className="text-lg text-muted-foreground leading-relaxed mb-6">
+          El futuro del diseño digital no está en quién logra más clics, sino en quién construye sistemas que fortalezcan la agencia humana. En un mundo donde la IA puede simularnos, el verdadero diferencial será quién entienda mejor al ser humano que la tecnología está afectando.
+        </p>
+        <p className="text-sm text-muted-foreground/60 mt-8 italic">
+          — Por MediaLab Ingeniería.
+        </p>
+      </article>
+
+      {/* CTA footer */}
+      <div className="max-w-3xl mx-auto px-6 pb-20">
+        <div className="rounded-2xl border border-border p-8 flex flex-col md:flex-row items-center gap-6 bg-card">
+          <div className="flex-1">
+            <h3 className="font-display font-bold text-xl text-foreground mb-2">¿Tu IA fortalece o debilita a tus usuarios?</h3>
+            <p className="text-sm text-muted-foreground">Te ayudamos a diseñar sistemas de IA éticos que generen confianza y lealtad genuina.</p>
+          </div>
+          <Link href="/#contact"
+            className="shrink-0 inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm text-white"
+            style={{ background: "linear-gradient(90deg, #E8751A, #c65a10)" }}>
+            Consulta gratuita →
+          </Link>
+        </div>
+      </div>
+    </main>
+  )
+}

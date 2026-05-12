@@ -19,18 +19,24 @@ const poppins = Poppins({
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://medialabingenieria.com'),
-  title: 'MediaLab Ingeniería — Agencia experta en Diseño UX/UI, IA y Psicología del Consumidor',
+  title: {
+    default: 'MediaLab Ingeniería | Diseño UX/UI, IA, SEO y productos digitales B2B/B2C',
+    template: '%s | MediaLab Ingeniería',
+  },
   description:
-    'Transformamos ideas en productos digitales que tus usuarios amarán (B2C) y que impulsarán el crecimiento de tu empresa (B2B). MediaLab Ingeniería es tu agencia aliada de innovación y diseño UX.',
+    'Agencia de diseño UX/UI, IA, SEO técnico y desarrollo de productos digitales para empresas B2B y marcas B2C. Creamos experiencias humanas, indexables y medibles.',
   generator: 'Next.js',
   applicationName: 'MediaLab',
+  category: 'Design, Software, Artificial Intelligence, SEO',
+  classification: 'UX/UI design agency, product design, software development, technical SEO',
   referrer: 'origin-when-cross-origin',
   keywords: [
     'agencia diseño UX/UI B2B B2C', 'diseño de productos con IA', 'diseño conductual', 
     'desarrollo de productos digitales', 'UXBox discovery', 'agencia UX Bogotá Colombia',
     'diseño de experiencias de usuario', 'desarrollo de software a medida', 
     'consultoría de innovación digital', 'MVP para startups', 'diseño para fintech',
-    'experiencia del cliente CX', 'aumento de conversión CRO'
+    'experiencia del cliente CX', 'aumento de conversión CRO', 'SEO técnico para productos digitales',
+    'diseño emocional B2C', 'experiencia B2B', 'rediseño UX para conversión'
   ],
   authors: [{ name: 'MediaLab Ingeniería', url: 'https://medialabingenieria.com' }],
   creator: 'MediaLab Ingeniería',
@@ -47,16 +53,16 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: 'MediaLab Ingeniería — Creamos productos digitales que conectan y convierten',
+    title: 'MediaLab Ingeniería | Productos digitales que posicionan, conectan y convierten',
     description:
-      'Transformamos ideas en productos digitales exitosos. Conectamos emocionalmente con tus usuarios y resolvemos los retos complejos de tu negocio mediante UX, IA y diseño conductual.',
+      'Diseño UX/UI, IA, SEO técnico y desarrollo de software para experiencias B2B y B2C humanas, indexables y orientadas a conversión.',
     url: 'https://medialabingenieria.com',
     siteName: 'MediaLab Ingeniería',
     locale: 'es_CO',
     type: 'website',
     images: [
       {
-        url: '/images/og-image.jpg',
+        url: '/images/ux-research.jpg',
         width: 1200,
         height: 630,
         alt: 'MediaLab Ingeniería — Agencia de UX, IA y Diseño Conductual',
@@ -65,10 +71,10 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'MediaLab Ingeniería — Innovación en UX e Inteligencia Artificial',
-    description: 'Creamos productos digitales B2B y B2C que tus usuarios amarán y tu negocio necesita. Descubre el poder del diseño centrado en el ser humano.',
+    title: 'MediaLab Ingeniería | UX, IA, SEO y productos digitales',
+    description: 'Creamos experiencias B2B y B2C que posicionan, conectan emocionalmente y convierten con diseño centrado en el ser humano.',
     creator: '@MediaLabIng',
-    images: ['/images/og-image.jpg'],
+    images: ['/images/ux-research.jpg'],
   },
   robots: {
     index: true,
@@ -117,6 +123,69 @@ export default function RootLayout({
                 'https://x.com/MediaLabIng',
                 'https://www.instagram.com/medialabingenieria',
                 'https://github.com/medialabingenieria',
+              ],
+            }),
+          }}
+        />
+        {/* WebSite Schema */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'WebSite',
+              name: 'MediaLab Ingeniería',
+              url: 'https://medialabingenieria.com',
+              inLanguage: 'es-CO',
+              description:
+                'Sitio oficial de MediaLab Ingeniería, agencia de diseño UX/UI, IA, SEO técnico y desarrollo de productos digitales B2B y B2C.',
+              publisher: {
+                '@type': 'Organization',
+                name: 'MediaLab Ingeniería',
+                url: 'https://medialabingenieria.com',
+              },
+              potentialAction: {
+                '@type': 'CommunicateAction',
+                target: 'https://medialabingenieria.com/#contact',
+                name: 'Agendar llamada de discovery',
+              },
+            }),
+          }}
+        />
+        {/* ProfessionalService Schema */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'ProfessionalService',
+              name: 'MediaLab Ingeniería',
+              url: 'https://medialabingenieria.com',
+              image: 'https://medialabingenieria.com/images/ux-research.jpg',
+              logo: 'https://medialabingenieria.com/logo.svg',
+              description:
+                'Agencia especializada en diseño UX/UI, IA, SEO técnico, CRO, diseño conductual y desarrollo de software para productos digitales B2B y B2C.',
+              areaServed: ['Colombia', 'Latinoamérica', 'United States', 'Worldwide'],
+              serviceType: [
+                'Diseño UX/UI',
+                'SEO técnico',
+                'Diseño de producto digital',
+                'Desarrollo de software a medida',
+                'Discovery de producto con IA',
+                'CRO y optimización de conversión',
+              ],
+              audience: [
+                { '@type': 'BusinessAudience', audienceType: 'Empresas B2B' },
+                { '@type': 'Audience', audienceType: 'Marcas B2C y startups' },
+              ],
+              knowsAbout: [
+                'User Experience',
+                'Technical SEO',
+                'Artificial Intelligence',
+                'Behavioral Design',
+                'Conversion Rate Optimization',
+                'B2B SaaS',
+                'B2C Applications',
               ],
             }),
           }}
@@ -215,10 +284,10 @@ export default function RootLayout({
                 },
                 {
                   '@type': 'Question',
-                  name: '¿Cómo garantizan que la experiencia conecte emocionalmente con mis usuarios?',
+                  name: '¿Cómo garantizan que la experiencia conecte emocionalmente con los usuarios?',
                   acceptedAnswer: {
                     '@type': 'Answer',
-                    text: 'Aplicamos principios de diseño conductual y psicología del consumidor en cada proyecto. Realizamos investigación de usuarios reales, mapeo de emociones (emotion mapping), pruebas de usabilidad y análisis de microinteracciones para asegurar que cada touchpoint genere confianza, satisfacción y engagement genuino.',
+                    text: 'Aplicamos psicología del consumidor y diseño conductual en cada proyecto. Investigamos cómo piensan, sienten y deciden tus usuarios para diseñar experiencias que generen conexión emocional real — no solo flujos funcionales. Esto aplica tanto para productos B2C que buscan engagement como para plataformas B2B que necesitan eficiencia y satisfacción.',
                   },
                 },
                 {
@@ -226,9 +295,40 @@ export default function RootLayout({
                   name: '¿Qué diferencia a MediaLab de otras agencias UX?',
                   acceptedAnswer: {
                     '@type': 'Answer',
-                    text: 'Tres cosas nos hacen únicos: (1) Nuestra plataforma UXBox con IA que acelera el discovery 10x, (2) Nuestro enfoque en diseño conductual basado en psicología real del consumidor, y (3) Nuestra capacidad end-to-end de llevar un producto desde la idea hasta producción — todo bajo un mismo equipo.',
+                    text: 'Tres diferenciadores: (1) UXBox — nuestra IA que comprime el discovery de producto 10x, (2) Enfoque en psicología del consumidor — no solo diseñamos interfaces bonitas, diseñamos para el comportamiento humano, y (3) Capacidad end-to-end — desde la investigación hasta el desarrollo de software, entregamos productos listos para el mercado.',
                   },
                 },
+              ],
+            }),
+          }}
+        />
+        {/* Book Schema for authority */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'Book',
+              name: 'Bienvenidos al Zero UI',
+              subtitle: 'Diseño de experiencia consciente en la era de la inteligencia artificial',
+              author: {
+                '@type': 'Person',
+                name: 'Christian Benavides',
+                url: 'https://medialabingenieria.com',
+              },
+              publisher: {
+                '@type': 'Organization',
+                name: 'MediaLab Ingeniería',
+              },
+              datePublished: '2026-01',
+              inLanguage: 'es',
+              url: 'https://www.zeroui.me/',
+              about: [
+                'Diseño de Experiencia Consciente',
+                'Zero UI',
+                'Neurociencia del diseño',
+                'IA Adaptativa',
+                'Estoicismo digital',
               ],
             }),
           }}

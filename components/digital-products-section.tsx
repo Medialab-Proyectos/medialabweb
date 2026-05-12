@@ -14,7 +14,7 @@ const products = [
     gradient: "linear-gradient(135deg, var(--magenta), oklch(0.45 0.24 300))",
     tags: ["FinTech B2C", "Diseño Conductual", "Mobile"],
     status: "En Desarrollo",
-    image: "/images/sindeudas-mockup.jpg",
+    image: "/images/sindeudas (1).png",
   },
   {
     name: "Electrolineras",
@@ -25,7 +25,7 @@ const products = [
     gradient: "linear-gradient(135deg, var(--cyan), oklch(0.55 0.18 220))",
     tags: ["Movilidad", "B2B + B2C", "Sostenibilidad"],
     status: "En Desarrollo",
-    image: "/images/electrolineras-mockup.jpg",
+    image: "/images/eletro.png",
   },
 ]
 

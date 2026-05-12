@@ -2,13 +2,13 @@ const items = [
   "Investigación UX",
   "Diseño Conductual",
   "Descubrimiento con IA",
-  "Estrategia de Producto",
-  "Diseño de Interacción",
-  "Sistemas de Diseño",
-  "Pruebas de Usabilidad",
-  "Desarrollo a Medida",
-  "MVPs para Startups",
-  "Plataformas Empresariales",
+  "Desarrollo de Software",
+  "SEO Técnico",
+  "Psicología del Consumidor",
+  "Productos B2B",
+  "Experiencias B2C",
+  "Optimización CRO",
+  "Diseño Emocional",
 ]
 
 export function MarqueeTicker() {
