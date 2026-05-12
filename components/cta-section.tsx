@@ -53,19 +53,19 @@ export function CTASection() {
             {/* Urgency badge */}
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--magenta)]/20 border border-[var(--magenta)]/30 text-sm">
               <Clock size={14} className="text-[var(--magenta)]" />
-              <span className="text-white/90 font-medium">Disponibilidad limitada Q1 2026</span>
+              <span className="text-white/90 font-medium">Disponibilidad limitada Q3 2026</span>
             </div>
 
             <h2
               id="cta-heading"
               className="font-display font-bold text-3xl md:text-5xl leading-tight text-white text-balance"
             >
-              Comienza tu transformación hoy
+              Lleva tu negocio B2B y experiencia B2C al siguiente nivel
             </h2>
 
             <p className="text-base text-white/70 leading-relaxed text-pretty">
               Agenda una llamada de discovery gratuita de 30 minutos. Analizaremos los desafíos de tu producto
-              y te mostraremos exactamente cómo podemos ayudarte — sin compromiso.
+              y te mostraremos exactamente cómo podemos ayudarte a enamorar a tus usuarios y escalar tus ventas — sin compromiso.
             </p>
 
             {/* Value props */}
@@ -91,7 +91,7 @@ export function CTASection() {
                 </button>
               </BookingModal>
               <Link
-                href="https://wa.me/1234567890"
+                href="https://wa.me/573001234567"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full font-semibold text-sm border border-white/20 text-white hover:bg-white/10 transition-all duration-200 active:scale-95"
@@ -118,7 +118,7 @@ export function CTASection() {
                 ))}
               </div>
               <p className="text-xs text-white/50">
-                <span className="text-white font-medium">+40 empresas</span> han comenzado su camino con nosotros
+                <span className="text-white font-medium">+40 empresas corporativas y startups</span> han comenzado su camino B2B/B2C con nosotros
               </p>
             </div>
           </div>

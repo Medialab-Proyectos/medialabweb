@@ -6,7 +6,7 @@ import { Star, Quote } from "lucide-react"
 const testimonials = [
   {
     quote:
-      "MediaLab transformó nuestro proceso de discovery de producto. Lo que antes tomaba 3 meses ahora toma 3 semanas — con mejores resultados.",
+      "MediaLab transformó por completo nuestro canal B2B. Lo que antes tomaba 3 meses de discovery ahora toma 3 semanas — con una experiencia de usuario que nuestros clientes corporativos adoran.",
     author: "María Rodríguez",
     role: "CPO",
     company: "Startup FinTech",
@@ -15,7 +15,7 @@ const testimonials = [
   },
   {
     quote:
-      "Su expertise en diseño conductual nos ayudó a aumentar la activación de usuarios en 40%. El ROI fue inmediato y medible.",
+      "Su expertise en psicología del consumidor nos ayudó a aumentar la activación de usuarios B2C en 40%. La conexión emocional que lograron en el onboarding fue clave.",
     author: "Carlos Méndez",
     role: "Head of Product",
     company: "Enterprise SaaS",
@@ -24,7 +24,7 @@ const testimonials = [
   },
   {
     quote:
-      "UXBox nos dio la claridad que nunca habíamos tenido. Pasamos de ideas vagas a un roadmap de producto validado en días.",
+      "UXBox nos dio la claridad que nunca habíamos tenido para nuestro producto B2C. Pasamos de ideas vagas a un roadmap de producto validado con usuarios reales en días.",
     author: "Ana Torres",
     role: "Founder & CEO",
     company: "HealthTech Venture",
@@ -64,10 +64,10 @@ export function TestimonialsSection() {
             id="testimonials-heading"
             className="font-display font-bold text-3xl md:text-4xl lg:text-5xl leading-tight text-foreground text-balance"
           >
-            La confianza de líderes de producto
+            Historias reales de transformación B2B y B2C
           </h2>
           <p className="text-base text-muted-foreground leading-relaxed">
-            Escucha a los equipos que transformaron sus productos digitales con MediaLab.
+            Líderes de producto que confiaron en MediaLab para crear experiencias digitales que conectan emocionalmente con sus usuarios y generan resultados comerciales medibles.
           </p>
         </div>
 

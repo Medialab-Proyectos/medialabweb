@@ -14,13 +14,13 @@ export async function POST(req: Request) {
     // Generate a 4-digit PIN
     const pin = Math.floor(1000 + Math.random() * 9000).toString()
 
-    console.log(`Sending OPT ${pin} to ${email}`)
+    // PIN is sent via email — do not log in production
 
     // Only send if API key exists, otherwise we'll just return it so it works in demo mode (dev) 
     // or log it. But we actually have an API key configured (we assume so).
     if (process.env.RESEND_API_KEY) {
       const data = await resend.emails.send({
-        from: "MediaLab <onboarding@resend.dev>", // Usar el default de resend para testing o tunombre@dominio.com
+        from: process.env.FROM_EMAIL || "MediaLab <onboarding@resend.dev>",
         to: email,
         subject: "Tu PIN de acceso - MediaLab UXBox",
         html: `
@@ -39,7 +39,7 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: data.error.message }, { status: 500 })
       }
     } else {
-      console.warn("No RESEND_API_KEY provided, skipping email send. Use PIN:", pin)
+      // No RESEND_API_KEY — skipping email send (dev mode)
     }
 
     // In a real app we'd save this to a DB or cache with an expiration.

@@ -53,12 +53,12 @@ export function WorldPresence() {
               id="presence-heading"
               className="font-display font-bold text-3xl md:text-4xl lg:text-5xl text-white text-balance leading-tight"
             >
-              {t("Donde hemos trabajado", "Where we have worked")}
+              {t("Alcance global para clientes B2B y B2C", "Global reach for B2B and B2C clients")}
             </h2>
             <p className="text-base text-white/55 leading-relaxed max-w-lg">
               {t(
-                "Casa Matriz en Bogotá, Colombia — con proyectos en 9 países y 15 ciudades alrededor del mundo.",
-                "Headquartered in Bogotá, Colombia — with projects across 9 countries and 15 cities worldwide."
+                "Casa Matriz en Bogotá, Colombia — con proyectos B2B enterprise y productos B2C en 9 países y 15 ciudades alrededor del mundo.",
+                "Headquartered in Bogotá, Colombia — with B2B enterprise projects and B2C products across 9 countries and 15 cities worldwide."
               )}
             </p>
           </div>

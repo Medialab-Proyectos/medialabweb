@@ -93,11 +93,11 @@ export function IndustriesSection() {
             id="industries-heading"
             className="font-display font-bold text-3xl md:text-4xl leading-tight text-foreground text-balance"
           >
-            Trabajamos en industrias que moldean el futuro
+            Impulsamos la transformación B2B y el alcance B2C en múltiples industrias
           </h2>
           <p className="text-base text-muted-foreground leading-relaxed">
-            Desde fintech hasta soluciones ambientales — nuestro equipo multidisciplinario lleva
-            diseño centrado en el humano a los sectores que más importan.
+            Desde plataformas B2B corporativas hasta apps de consumo masivo B2C — nuestro equipo multidisciplinario lleva
+            estrategias de diseño centrado en el humano (Human-Centered Design) a los sectores más competitivos del mercado.
           </p>
         </div>
 

@@ -92,7 +92,7 @@ export function BlogSection() {
               {t("Blog", "Blog")}
             </span>
             <h2 id="blog-heading" className="font-display font-bold text-3xl md:text-4xl text-foreground text-balance leading-tight">
-              {t("Ideas y perspectivas", "Ideas & perspectives")}
+              {t("Ideas sobre diseño UX, IA y experiencias B2B/B2C", "Ideas on UX design, AI and B2B/B2C experiences")}
             </h2>
           </div>
           <a href="/blog" className="group inline-flex items-center gap-2 text-sm font-semibold shrink-0"

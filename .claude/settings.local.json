@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(wc -l \"/c/Users/coben/OneDrive/Desktop/MediLab/Version 1/components\"/*.tsx)",
+      "Bash(grep -l \"href=\" \"/c/Users/coben/OneDrive/Desktop/MediLab/Version 1/components\"/*.tsx)",
+      "Bash(npx next:*)"
+    ]
+  }
+}

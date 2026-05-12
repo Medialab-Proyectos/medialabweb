@@ -49,7 +49,7 @@ export function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-16 md:h-20">
         {/* Logo */}
-        <Link href="#" className="flex items-center gap-2 group" aria-label="MediaLab Ingeniería home">
+        <Link href="/" className="flex items-center gap-2 group" aria-label="MediaLab Ingeniería home">
           <Image
             src="/logo.svg"
             alt="MediaLab Ingeniería"

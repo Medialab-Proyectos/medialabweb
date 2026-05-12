@@ -37,10 +37,10 @@ const navColumns = [
 ]
 
 const socials = [
-  { icon: Linkedin, label: "LinkedIn", href: "#" },
-  { icon: Twitter, label: "Twitter / X", href: "#" },
-  { icon: Instagram, label: "Instagram", href: "#" },
-  { icon: Github, label: "GitHub", href: "#" },
+  { icon: Linkedin, label: "LinkedIn", href: "https://www.linkedin.com/company/medialab-ingenieria" },
+  { icon: Twitter, label: "Twitter / X", href: "https://x.com/MediaLabIng" },
+  { icon: Instagram, label: "Instagram", href: "https://www.instagram.com/medialabingenieria" },
+  { icon: Github, label: "GitHub", href: "https://github.com/medialabingenieria" },
 ]
 
 export function Footer() {
@@ -54,12 +54,12 @@ export function Footer() {
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-10">
           {/* Brand */}
           <div className="col-span-2 sm:col-span-3 lg:col-span-1 flex flex-col gap-4">
-            <Link href="#" className="inline-flex items-center gap-2" aria-label="MediaLab Ingeniería home">
+            <Link href="/" className="inline-flex items-center gap-2" aria-label="MediaLab Ingeniería home">
               <span className="inline-block w-7 h-7 rounded-sm" style={{ background: "var(--magenta)" }} />
               <span className="font-display font-bold text-lg text-white">MediaLab</span>
             </Link>
             <p className="text-sm text-white/50 leading-relaxed max-w-xs">
-              Agencia de diseño UX, IA y diseño conductual que crea productos digitales con impacto medible.
+              Agencia de diseño UX/UI, inteligencia artificial y psicología del consumidor. Creamos productos digitales B2B y B2C con impacto emocional y resultados comerciales medibles.
             </p>
             <div className="flex items-center gap-3 mt-2">
               {socials.map((s) => {
@@ -68,7 +68,9 @@ export function Footer() {
                   <a
                     key={s.label}
                     href={s.href}
-                    aria-label={s.label}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Visitar ${s.label}`}
                     className="w-8 h-8 rounded-lg flex items-center justify-center bg-white/5 border border-white/10 text-white/50 hover:bg-[var(--magenta)] hover:text-white hover:border-[var(--magenta)] transition-all duration-200"
                   >
                     <Icon size={15} />
@@ -80,7 +82,7 @@ export function Footer() {
 
           {/* Nav columns */}
           {navColumns.map((col) => (
-            <div key={col.title} className="flex flex-col gap-4">
+            <nav key={col.title} className="flex flex-col gap-4" aria-label={col.title}>
               <span className="text-xs font-semibold uppercase tracking-widest text-white/40">
                 {col.title}
               </span>
@@ -96,7 +98,7 @@ export function Footer() {
                   </li>
                 ))}
               </ul>
-            </div>
+            </nav>
           ))}
         </div>
 
@@ -104,8 +106,8 @@ export function Footer() {
         <div className="border-t border-white/10 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-white/30">
           <p>© {new Date().getFullYear()} MediaLab Ingeniería. Todos los derechos reservados.</p>
           <div className="flex items-center gap-6">
-            <a href="#" className="hover:text-white/60 transition-colors">Política de Privacidad</a>
-            <a href="#" className="hover:text-white/60 transition-colors">Términos de Servicio</a>
+            <a href="/politica-de-privacidad" className="hover:text-white/60 transition-colors">Política de Privacidad</a>
+            <a href="/terminos-de-servicio" className="hover:text-white/60 transition-colors">Términos de Servicio</a>
           </div>
         </div>
       </div>

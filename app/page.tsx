@@ -20,35 +20,80 @@ import { SocialProofBar } from "@/components/social-proof-bar"
 import { StickyCTA } from "@/components/sticky-cta"
 import { MidCTA } from "@/components/mid-cta"
 
+/**
+ * Information Architecture Flow (2026 UX Best Practices):
+ *
+ * 1. AWARENESS  — Hero + Marquee: captura inmediata, propuesta de valor clara
+ * 2. TRUST      — Client Logos + Metrics: prueba social temprana (reduce bounce)
+ * 3. IDENTITY   — About: quiénes somos, diferencial humano
+ * 4. VALUE      — Services: qué hacemos (responde "¿cómo me ayuda?")
+ * 5. METHOD     — Methodology: cómo lo hacemos (transparencia = confianza)
+ * 6. PROOF      — Testimonials: validación de terceros
+ * 7. MID-CTA    — Primera conversión suave tras construir confianza
+ * 8. ACTIVATE   — UXBox Form: herramienta interactiva (engagement alto)
+ * 9. CONTEXT    — Industries + World Presence: relevancia sectorial + alcance
+ * 10. SHOWCASE  — Digital Products: portafolio tangible
+ * 11. REINFORCE — Why Us: refuerzo de diferenciadores
+ * 12. EDUCATE   — Blog: contenido de valor (SEO + autoridad)
+ * 13. RESOLVE   — FAQ: elimina objeciones finales
+ * 14. CONVERT   — CTA final: cierre con urgencia y claridad
+ */
 export default function Home() {
   return (
-    <main>
+    <main id="main-content">
       <Navbar />
+
+      {/* — AWARENESS — */}
       <HeroSection />
       <MarqueeTicker />
+
+      {/* — TRUST — */}
       <ClientLogos />
       <TrustMetrics />
+
+      {/* — IDENTITY — */}
       <AboutSection />
+
+      {/* — VALUE PROPOSITION — */}
       <ServicesSection />
-      {/* UXBox Discovery Form */}
-      <UXBoxForm />
-      <IndustriesSection />
-      {/* World Presence Map */}
-      <WorldPresence />
+
+      {/* — METHODOLOGY (transparencia) — */}
       <MethodSection />
+
+      {/* — SOCIAL PROOF — */}
       <TestimonialsSection />
-      {/* Second conversion point after social proof */}
+
+      {/* — MID-FUNNEL CONVERSION — */}
       <MidCTA
-        headline="Únete a más de 40 empresas que aceleraron su producto"
-        subheadline="Desde startups hasta enterprise — te ayudamos a lanzar más rápido y con confianza."
+        headline="Únete a más de 40 empresas que transformaron sus canales B2B y B2C"
+        subheadline="Desde startups ágiles hasta líderes enterprise — te ayudamos a conectar con tus usuarios y escalar tus ventas."
       />
+
+      {/* — INTERACTIVE ENGAGEMENT — */}
+      <UXBoxForm />
+
+      {/* — CONTEXTUAL RELEVANCE — */}
+      <IndustriesSection />
+      <WorldPresence />
+
+      {/* — PORTFOLIO — */}
       <DigitalProductsSection />
+
+      {/* — REINFORCEMENT — */}
       <WhyUsSection />
-      <FAQSection />
+
+      {/* — CONTENT & AUTHORITY — */}
       <BlogSection />
+
+      {/* — OBJECTION HANDLING — */}
+      <FAQSection />
+
+      {/* — FINAL CONVERSION — */}
       <CTASection />
+
       <Footer />
-      {/* Conversion-focused components */}
+
+      {/* Engagement overlays */}
       <SocialProofBar />
       <StickyCTA />
     </main>

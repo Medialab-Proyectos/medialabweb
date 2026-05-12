@@ -3,8 +3,8 @@ import { Resend } from "resend"
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
-const ADMIN_EMAIL = "co.benavides86@gmail.com"
-const FROM_EMAIL = "MediaLab <onboarding@resend.dev>"
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "co.benavides86@gmail.com"
+const FROM_EMAIL = process.env.FROM_EMAIL || "MediaLab <onboarding@resend.dev>"
 
 export async function POST(req: NextRequest) {
   try {

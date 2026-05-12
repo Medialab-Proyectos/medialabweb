@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+import Image from "next/image"
 import { Search, Compass, PenTool, Terminal, BarChart3, ChevronRight } from "lucide-react"
 
 const steps = [
@@ -8,7 +9,7 @@ const steps = [
     number: "01",
     label: "Discovery",
     title: "Definición asistida por IA",
-    description: "Usamos herramientas inteligentes para definir la oportunidad de tu producto y requisitos clave.",
+    description: "Usamos inteligencia artificial para definir la oportunidad de tu producto, alinear objetivos B2B con necesidades B2C y generar requisitos clave en horas.",
     icon: Search,
     color: "var(--magenta)",
     gradient: "linear-gradient(135deg, #E8751A 0%, #c65a10 100%)",
@@ -19,8 +20,8 @@ const steps = [
   {
     number: "02",
     label: "Estrategia UX",
-    title: "Diseño centrado en el humano",
-    description: "Investigamos profundamente a tus usuarios para traducir los insights en estrategia clara.",
+    title: "Diseño centrado en el ser humano",
+    description: "Investigamos a fondo a tus usuarios B2C y stakeholders B2B para traducir insights emocionales y funcionales en una estrategia UX ganadora.",
     icon: Compass,
     color: "var(--cyan)",
     gradient: "linear-gradient(135deg, #2AABB3 0%, #1d8a91 100%)",
@@ -31,8 +32,8 @@ const steps = [
   {
     number: "03",
     label: "Diseño",
-    title: "Arquitectura de experiencia",
-    description: "Diseñamos cada interacción creando interfaces intuitivas y visualmente atractivas.",
+    title: "Arquitectura de experiencia emocional",
+    description: "Diseñamos cada interacción para generar conexión emocional con el usuario final y eficiencia operativa para el negocio.",
     icon: PenTool,
     color: "var(--orange)",
     gradient: "linear-gradient(135deg, #E8751A 0%, #d4851f 100%)",
@@ -43,8 +44,8 @@ const steps = [
   {
     number: "04",
     label: "Desarrollo",
-    title: "Tecnología escalable",
-    description: "Construimos tu producto con código limpio, arquitectura performante e integraciones.",
+    title: "Tecnología escalable B2B & B2C",
+    description: "Construimos tu producto con código limpio, arquitectura performante y APIs robustas que sirven tanto a plataformas enterprise como a apps de consumo.",
     icon: Terminal,
     color: "var(--magenta)",
     gradient: "linear-gradient(135deg, #E8751A 0%, #c65a10 100%)",
@@ -54,9 +55,9 @@ const steps = [
   },
   {
     number: "05",
-    label: "Optimización",
-    title: "Mejora continua",
-    description: "Analizamos y optimizamos usando datos reales para impulsar mejoras medibles.",
+    label: "Optimización CRO",
+    title: "Mejora continua de conversión",
+    description: "Analizamos el comportamiento real de tus usuarios y optimizamos cada touchpoint para maximizar conversión, retención y satisfacción emocional.",
     icon: BarChart3,
     color: "var(--cyan)",
     gradient: "linear-gradient(135deg, #2AABB3 0%, #1d8a91 100%)",
@@ -100,11 +101,11 @@ export function MethodSection() {
             id="method-heading"
             className="font-display font-bold text-3xl md:text-4xl lg:text-5xl leading-tight text-foreground text-balance"
           >
-            De la idea al producto digital
+            De la idea al producto digital que enamora
           </h2>
           <p className="text-base text-muted-foreground leading-relaxed">
-            Un proceso probado de cinco pasos que lleva tu concepto desde la idea inicial hasta un
-            producto digital lanzado y optimizado — con claridad y confianza en cada etapa.
+            Un proceso probado de cinco pasos que transforma tu concepto en un producto digital exitoso —
+            optimizado para conectar emocionalmente con usuarios B2C y resolver necesidades complejas B2B.
           </p>
         </div>
 
@@ -170,7 +171,7 @@ export function MethodSection() {
           {/* Left: visual image */}
           <div className="relative w-1/2 min-h-[320px] shrink-0">
             <div className="absolute inset-0 bg-black/20 z-10" />
-            <img src={activeData.image} alt={activeData.title} className="absolute inset-0 w-full h-full object-cover" />
+            <Image src={activeData.image} alt={activeData.title} fill className="object-cover" sizes="50vw" />
             <div className="absolute inset-0 z-20 flex flex-col justify-end p-8" style={{ background: "linear-gradient(to top, rgba(0,0,0,0.8), transparent)" }}>
               <div className="font-display font-bold text-5xl text-white mb-2">
                 {activeData.stat}
@@ -203,7 +204,7 @@ export function MethodSection() {
                 
                 {/* Background image for mobile card */}
                 <div className="absolute inset-0 z-0">
-                  <img src={step.image} alt={step.title} className="w-full h-full object-cover opacity-15" />
+                  <Image src={step.image} alt={step.title} fill className="object-cover opacity-15" sizes="100vw" />
                   <div className="absolute inset-0 bg-card/90" />
                 </div>
 

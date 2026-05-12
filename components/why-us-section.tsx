@@ -6,9 +6,9 @@ import { Brain, Zap, Clock, Heart, Server, Lightbulb } from "lucide-react"
 const reasons = [
   {
     icon: Brain,
-    title: "Expertise en diseño conductual",
+    title: "Psicología del consumidor (B2C & B2B)",
     description:
-      "Entendemos la psicología humana y la toma de decisiones — diseñamos experiencias digitales que influyen en el comportamiento de manera significativa.",
+      "Entendemos la psicología humana y la toma de decisiones — diseñamos experiencias digitales que influyen en el comportamiento y conectan emocionalmente con tus clientes B2C y aliados B2B.",
     color: "var(--magenta)",
   },
   {
@@ -29,7 +29,7 @@ const reasons = [
     icon: Heart,
     title: "Experiencias digitales de alto engagement",
     description:
-      "Diseñamos productos a los que los usuarios vuelven — porque un gran UX no solo es funcional, es genuinamente disfrutable.",
+      "Diseñamos productos B2C a los que los usuarios vuelven y flujos B2B que aumentan la productividad — porque un gran diseño UX no solo es funcional, es genuinamente disfrutable.",
     color: "var(--magenta)",
   },
   {
@@ -88,7 +88,7 @@ export function WhyUsSection() {
             id="why-us-heading"
             className="font-display font-bold text-3xl md:text-4xl lg:text-5xl leading-tight text-white text-balance"
           >
-            Por qué las empresas eligen MediaLab
+            Por qué las empresas B2B y marcas B2C eligen MediaLab
           </h2>
           <p className="text-base text-white/60 leading-relaxed">
             Traemos una combinación única de profundidad en investigación, capacidad de IA y excelencia en diseño

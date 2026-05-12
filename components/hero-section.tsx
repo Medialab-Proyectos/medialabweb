@@ -120,11 +120,12 @@ export function HeroSection() {
           className={`font-display font-bold text-4xl sm:text-5xl md:text-6xl lg:text-[4.5rem] leading-[1.07] text-balance text-white transition-all duration-700 ${ready ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
           style={{ transitionDelay: "100ms" }}
         >
-          {t("Diseñamos", "We design")}{" "}
+          {t("Diseñamos productos que", "We design products that")}{" "}
           <span className="bg-clip-text text-transparent" style={{ backgroundImage: "linear-gradient(90deg, #E8751A, #2AABB3)" }}>
-            {t("experiencias digitales inteligentes", "intelligent digital experiences")}
+            {t("tus usuarios amarán", "your users will love")}
           </span>{" "}
-          {t("para el futuro.", "for the future.")}
+          <br className="hidden md:block" />
+          {t("y tu negocio necesita.", "and your business needs.")}
         </h1>
 
         {/* Subheadline */}
@@ -133,8 +134,8 @@ export function HeroSection() {
           style={{ transitionDelay: "200ms" }}
         >
           {t(
-            "Combinamos UX, inteligencia artificial y diseño conductual para crear productos digitales que enganchan usuarios y generan valor real.",
-            "We combine UX, artificial intelligence and behavioral design to build digital products that engage users and generate real value."
+            "Combinamos diseño UX de clase mundial, inteligencia artificial y psicología del consumidor para crear experiencias digitales inolvidables para B2B y B2C.",
+            "We combine world-class UX design, artificial intelligence, and consumer psychology to create unforgettable digital experiences for B2B and B2C."
           )}
         </p>
 

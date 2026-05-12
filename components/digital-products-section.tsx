@@ -7,23 +7,23 @@ import Image from "next/image"
 const products = [
   {
     name: "SinDeudas",
-    tagline: "Plataforma de Finanzas Conductuales",
+    tagline: "Plataforma B2C de Finanzas Conductuales",
     description:
-      "Una plataforma de finanzas conductuales diseñada para ayudar a las personas a retomar el control de sus finanzas mediante guía emocional, estrategias inteligentes y herramientas digitales.",
+      "Una experiencia B2C diseñada para conectar emocionalmente con personas en situación de deuda. Combina guía emocional, psicología del consumidor y herramientas digitales inteligentes para transformar la relación del usuario con sus finanzas.",
     color: "var(--magenta)",
     gradient: "linear-gradient(135deg, var(--magenta), oklch(0.45 0.24 300))",
-    tags: ["FinTech", "Diseño Conductual", "Mobile"],
+    tags: ["FinTech B2C", "Diseño Conductual", "Mobile"],
     status: "En Desarrollo",
     image: "/images/sindeudas-mockup.jpg",
   },
   {
     name: "Electrolineras",
-    tagline: "App de Red de Carga para Vehículos Eléctricos",
+    tagline: "App B2C/B2B para Red de Carga Eléctrica",
     description:
-      "Una aplicación de movilidad diseñada para ayudar a conductores a localizar estaciones de carga para vehículos eléctricos de forma rápida y eficiente.",
+      "Una aplicación de movilidad sustentable que conecta conductores B2C con estaciones de carga y ofrece a operadores B2B un dashboard de gestión en tiempo real.",
     color: "var(--cyan)",
     gradient: "linear-gradient(135deg, var(--cyan), oklch(0.55 0.18 220))",
-    tags: ["Movilidad", "Mapas", "Sostenibilidad"],
+    tags: ["Movilidad", "B2B + B2C", "Sostenibilidad"],
     status: "En Desarrollo",
     image: "/images/electrolineras-mockup.jpg",
   },
@@ -59,11 +59,11 @@ export function DigitalProductsSection() {
             id="products-heading"
             className="font-display font-bold text-3xl md:text-4xl lg:text-5xl leading-tight text-foreground text-balance"
           >
-            Productos creados por MediaLab
+            Productos propios que demuestran nuestra filosofía
           </h2>
           <p className="text-base text-muted-foreground leading-relaxed">
-            No solo construimos para clientes — también creamos los nuestros. Estos productos reflejan
-            nuestra filosofía: diseño que cambia comportamiento y genera impacto real.
+            No solo construimos para clientes — también creamos productos propios B2B y B2C. Cada uno refleja
+            nuestra filosofía: diseño conductual que conecta emocionalmente y genera impacto comercial real.
           </p>
         </div>
 

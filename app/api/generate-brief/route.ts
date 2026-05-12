@@ -52,7 +52,7 @@ Formato de respuesta JSON:
     const parsed = JSON.parse(content)
     return NextResponse.json(parsed)
   } catch (err) {
-    console.error("Error generating brief:", err)
+    // Error generating brief — logged server-side only
     return NextResponse.json({ error: "Error interno del servidor" }, { status: 500 })
   }
 }

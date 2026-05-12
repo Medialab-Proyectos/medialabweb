@@ -5,34 +5,44 @@ import { Plus, Minus } from "lucide-react"
 
 const faqs = [
   {
-    question: "¿Qué es UXBox?",
+    question: "¿Qué es UXBox y cómo ayuda a mi negocio?",
     answer:
-      "UXBox es nuestra plataforma inteligente de descubrimiento de producto. Usa inteligencia artificial para analizar tu idea y generar una propuesta de producto estructurada — incluyendo requisitos, enfoques de UX y conceptos de diseño iniciales — en días en lugar de meses.",
+      "UXBox es nuestra plataforma inteligente de descubrimiento de producto potenciada por IA. Analiza tu idea y genera una propuesta de producto estructurada — incluyendo requisitos, estrategia UX y conceptos de diseño — en días en lugar de meses. Ideal tanto para líderes B2B que necesitan validar rápidamente como para fundadores B2C que quieren llegar antes al mercado.",
   },
   {
     question: "¿Cuánto tiempo toma el discovery de producto?",
     answer:
-      "Con UXBox, el discovery de producto puede completarse en tan solo 3-5 días. Los procesos de discovery tradicionales pueden tomar semanas o meses. Nuestro enfoque acelerado por IA comprime ese tiempo dramáticamente mientras mantiene la profundidad y calidad.",
+      "Con UXBox, el discovery de producto puede completarse en tan solo 3-5 días. Los procesos tradicionales toman semanas o meses. Nuestro enfoque acelerado por IA comprime ese tiempo dramáticamente, permitiendo a equipos B2B y B2C tomar decisiones informadas más rápido.",
   },
   {
-    question: "¿Con qué industrias trabajan?",
+    question: "¿Con qué industrias y modelos de negocio trabajan?",
     answer:
-      "Trabajamos en Fintech, Banca, Movilidad, Startups, Educación, E-commerce, Soluciones Ambientales y Plataformas Digitales. Nuestro enfoque centrado en el humano es aplicable a cualquier industria donde la experiencia de usuario y la innovación digital sean prioridades.",
+      "Trabajamos con empresas B2B (SaaS, plataformas enterprise, fintech corporativa) y marcas B2C (e-commerce, apps de consumo, movilidad). Nuestras industrias incluyen Fintech, Banca, Movilidad, Startups, Educación, E-commerce, Sostenibilidad y Plataformas Digitales.",
   },
   {
     question: "¿Construyen plataformas digitales completas?",
     answer:
-      "Sí. Ofrecemos servicios de principio a fin desde discovery y diseño UX hasta desarrollo de software a medida. Construimos plataformas web, MVPs para startups, plataformas empresariales y productos digitales escalables usando React, Node.js, PHP e infraestructura cloud.",
+      "Sí. Ofrecemos servicios end-to-end desde discovery y diseño UX/UI hasta desarrollo de software a medida. Construimos dashboards B2B, apps móviles B2C, MVPs para startups y plataformas empresariales escalables usando React, Next.js, Node.js e infraestructura cloud.",
   },
   {
-    question: "¿Cómo inicio un proyecto?",
+    question: "¿Cómo inicio un proyecto con MediaLab?",
     answer:
-      "La forma más fácil es hacer clic en \"Iniciar proyecto\" y contarnos sobre tu idea. También puedes usar UXBox para enviar un brief de proyecto estructurado. Nuestro equipo te contactará en 24 horas para agendar una llamada de discovery.",
+      "La forma más fácil es hacer clic en \"Agenda tu llamada gratuita\" y contarnos sobre tu idea. También puedes usar UXBox para enviar un brief estructurado. Nuestro equipo te contactará en 24 horas para una sesión de discovery gratuita — sin compromiso.",
   },
   {
     question: "¿Puedo contratar a MediaLab como equipo de producto externo?",
     answer:
-      "Absolutamente. Muchos de nuestros clientes nos integran como su equipo dedicado de diseño y desarrollo de producto. Trabajamos junto a tus equipos internos u operamos de forma independiente, según tus necesidades. Esto es ideal para startups y organizaciones sin capacidad de diseño interna.",
+      "Absolutamente. Muchos clientes B2B nos integran como su equipo dedicado de diseño y desarrollo. Trabajamos junto a tus equipos internos u operamos de forma independiente. Es ideal para startups sin capacidad de diseño interna y para corporaciones que necesitan escalar su equipo digital rápidamente.",
+  },
+  {
+    question: "¿Cómo garantizan que la experiencia conecte emocionalmente con mis usuarios?",
+    answer:
+      "Aplicamos principios de diseño conductual y psicología del consumidor en cada proyecto. Realizamos investigación de usuarios reales, mapeo de emociones (emotion mapping), pruebas de usabilidad y análisis de microinteracciones para asegurar que cada touchpoint genere confianza, satisfacción y engagement genuino.",
+  },
+  {
+    question: "¿Qué diferencia a MediaLab de otras agencias UX?",
+    answer:
+      "Tres cosas nos hacen únicos: (1) Nuestra plataforma UXBox con IA que acelera el discovery 10x, (2) Nuestro enfoque en diseño conductual basado en psicología real del consumidor, y (3) Nuestra capacidad end-to-end de llevar un producto desde la idea hasta producción — todo bajo un mismo equipo.",
   },
 ]
 
@@ -65,10 +75,10 @@ export function FAQSection() {
             id="faq-heading"
             className="font-display font-bold text-3xl md:text-4xl leading-tight text-foreground text-balance"
           >
-            Preguntas frecuentes
+            Preguntas frecuentes sobre diseño UX, IA y productos digitales
           </h2>
           <p className="text-base text-muted-foreground leading-relaxed max-w-xl mx-auto">
-            Todo lo que necesitas saber sobre trabajar con MediaLab Ingeniería.
+            Todo lo que necesitas saber sobre cómo MediaLab Ingeniería puede transformar tu experiencia digital B2B o B2C.
           </p>
         </div>
 

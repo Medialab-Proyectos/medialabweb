@@ -18,7 +18,7 @@ const services = [
       "Sistemas de Diseño",
     ],
     description:
-      "Estudiamos cómo las personas piensan, deciden y actúan — luego diseñamos experiencias digitales intuitivas, atractivas y sin fricción.",
+      "Estudiamos cómo las personas piensan, deciden y actúan. Diseñamos experiencias digitales B2C que enamoran al consumidor final y plataformas B2B que optimizan procesos complejos sin fricción.",
   },
   {
     icon: Brain,
@@ -33,7 +33,7 @@ const services = [
       "Definición ágil de producto",
     ],
     description:
-      "Aprovecha la IA para comprimir meses de definición de producto en días — con resultados estructurados, validados y accionables.",
+      "Aprovecha nuestra IA para definir productos que alineen los objetivos comerciales (B2B) con las necesidades del cliente (B2C), comprimiendo meses de discovery en días con resultados accionables.",
   },
   {
     icon: Code2,
@@ -48,7 +48,7 @@ const services = [
       "Arquitecturas escalables",
     ],
     description:
-      "Del concepto a producción — construimos productos digitales escalables y de alto rendimiento usando React, Node.js, PHP e infraestructura cloud moderna.",
+      "Del concepto a producción. Construimos ecosistemas digitales B2B escalables y apps B2C de alto rendimiento usando React, Node.js y arquitecturas cloud modernas.",
     tech: ["React", "Node.js", "PHP", "Cloud", "Next.js"],
   },
 ]
@@ -165,8 +165,8 @@ export function ServicesSection() {
             Diseño de productos digitales de principio a fin
           </h2>
           <p className="text-base text-muted-foreground leading-relaxed">
-            Desde la investigación hasta el lanzamiento — combinamos ciencia del comportamiento, IA e ingeniería
-            de clase mundial para entregar productos digitales que los usuarios aman y los negocios necesitan.
+            Desde la investigación hasta el lanzamiento — combinamos ciencia del comportamiento, Inteligencia Artificial e ingeniería
+            de clase mundial para entregar productos digitales B2B y B2C que conectan emocionalmente con los usuarios e impulsan resultados comerciales.
           </p>
         </div>
 

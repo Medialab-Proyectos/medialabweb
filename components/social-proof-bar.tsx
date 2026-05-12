@@ -37,7 +37,7 @@ export function SocialProofBar() {
 
   return (
     <div
-      className="fixed bottom-6 left-6 z-40 animate-slide-up"
+      className="fixed bottom-6 left-6 z-40 animate-slide-up hidden md:block"
       role="status"
       aria-live="polite"
     >

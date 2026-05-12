@@ -33,22 +33,22 @@ export function AboutSection() {
             Sobre Nosotros
           </span>
           <h2 className="font-display font-bold text-3xl md:text-4xl lg:text-5xl leading-tight text-foreground text-balance">
-            Diseñamos experiencias que{" "}
+            Diseñamos experiencias digitales que{" "}
             <span
               className="bg-clip-text text-transparent"
               style={{ backgroundImage: "linear-gradient(90deg, var(--magenta), var(--cyan))" }}
             >
-              transforman industrias
+              transforman negocios B2B y conectan con B2C
             </span>
           </h2>
           <p className="text-base text-muted-foreground leading-relaxed">
-            MediaLab Ingeniería es una agencia de diseño de experiencias digitales especializada en comportamiento humano.
-            Nuestro trabajo combina investigación UX, estrategia de producto, inteligencia artificial y diseño conductual
-            para crear soluciones digitales innovadoras, escalables y significativas.
+            MediaLab Ingeniería es una agencia de diseño UX/UI y desarrollo de software especializada en comportamiento humano.
+            Nuestro trabajo combina investigación de usuarios, estrategia de producto, inteligencia artificial y psicología
+            para crear soluciones empresariales (B2B) eficientes y apps de consumo (B2C) emocionalmente memorables.
           </p>
           <p className="text-base text-muted-foreground leading-relaxed">
-            Nos enfocamos en optimizar flujos de interacción, mejorar la usabilidad y diseñar sistemas que
-            conecten marketing, tecnología y satisfacción del usuario.
+            Nos enfocamos en optimizar la experiencia del cliente (CX), aumentar las tasas de conversión (CRO) y diseñar ecosistemas que
+            unan objetivos de marketing, tecnología avanzada y satisfacción emocional del usuario final.
           </p>
           <p className="text-base font-medium text-foreground leading-relaxed">
             Nuestra misión es simple: transformar ideas en productos digitales que generen impacto medible.
@@ -85,10 +85,10 @@ export function AboutSection() {
           </div>
           <div className="col-span-2 rounded-2xl p-5 border border-border bg-card flex flex-col gap-2">
             <span className="text-lg font-display font-semibold text-foreground">
-              Humano. Escalable. Innovador.
+              Emocional. Eficiente. Escalable.
             </span>
             <p className="text-sm text-muted-foreground">
-              Productos digitales que enganchan usuarios y crecen con tu negocio.
+              Software B2B que fluye y experiencias B2C que enamoran al usuario.
             </p>
           </div>
         </div>
