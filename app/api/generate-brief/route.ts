@@ -1,11 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
 
-function getOpenAIClient() {
-  if (!process.env.OPENAI_API_KEY) return null
-  const OpenAI = require("openai").default
-  return new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
-}
-
 function generateSimulatedBrief(idea: string, industry: string, referenceUrls: string, existingBrand: string) {
   const industryText = industry || "tecnología"
   const brief = `El proyecto propuesto aborda una necesidad creciente en el sector de ${industryText}: ${idea}. En un mercado donde los usuarios esperan experiencias digitales fluidas, intuitivas y personalizadas, esta solución se posiciona como un diferenciador clave para conectar con el público objetivo de manera significativa y generar valor comercial sostenible.
@@ -29,13 +23,14 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Se requiere una idea" }, { status: 400 })
     }
 
-    const openai = getOpenAIClient()
-
     // Si no hay API key, usar simulación inteligente
-    if (!openai) {
+    if (!process.env.OPENAI_API_KEY) {
       const simulated = generateSimulatedBrief(idea, industry, referenceUrls, existingBrand)
       return NextResponse.json(simulated)
     }
+
+    const OpenAI = (await import("openai")).default
+    const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
     const prompt = `Eres un experto en product discovery y UX strategy. A continuación recibirás la información de un cliente potencial de MediaLab Ingeniería (agencia de UX, IA y diseño conductual).
 

@@ -1,7 +1,4 @@
 import { NextRequest, NextResponse } from "next/server"
-import { Resend } from "resend"
-
-const resend = new Resend(process.env.RESEND_API_KEY)
 
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "co.benavides86@gmail.com"
 const FROM_EMAIL = process.env.FROM_EMAIL || "MediaLab <onboarding@resend.dev>"
@@ -39,7 +36,7 @@ export async function POST(req: NextRequest) {
 <body>
 <div class="container">
   <div class="header">
-    <h1>🚀 Nuevo Lead — UXBox Discovery</h1>
+    <h1>Nuevo Lead — UXBox Discovery</h1>
     <p>Un prospecto ha enviado su idea de proyecto</p>
   </div>
   <div class="body">
@@ -59,10 +56,10 @@ export async function POST(req: NextRequest) {
     ${existingBrand ? `<div class="field"><label>Marca / Página Web Existente</label><p>${existingBrand}</p></div>` : ""}
 
     <div class="brief-section">
-      <h2>📋 Brief Formal Generado por IA</h2>
+      <h2>Brief Formal Generado por IA</h2>
       ${brief.split("\n\n").map((p: string) => `<p>${p}</p>`).join("")}
       <div class="prototype">
-        <h3>🎨 Prototipo Sugerido</h3>
+        <h3>Prototipo Sugerido</h3>
         <p>${prototype}</p>
       </div>
     </div>
@@ -103,53 +100,60 @@ export async function POST(req: NextRequest) {
 <div class="container">
   <div class="header">
     <div class="logo">Media<span>Lab</span></div>
-    <h1>¡Tu idea está en buenas manos! 🎯</h1>
+    <h1>Tu idea esta en buenas manos</h1>
     <p>Hemos recibido tu proyecto y estamos muy emocionados de conocerte</p>
   </div>
   <div class="body">
     <div class="highlight">
-      <p>Hola,<br><br>Recibimos la descripción de tu idea y estamos <strong>muy felices de atenderte</strong>. En un plazo de <strong>24 horas</strong> uno de nuestros especialistas se pondrá en contacto contigo para dar inicio a tu proceso de discovery.</p>
+      <p>Hola,<br><br>Recibimos la descripcion de tu idea y estamos <strong>muy felices de atenderte</strong>. En un plazo de <strong>24 horas</strong> uno de nuestros especialistas se pondra en contacto contigo para dar inicio a tu proceso de discovery.</p>
     </div>
 
-    <p style="font-size: 14px; color: #555; margin: 0 0 16px; font-weight: 600;">¿Qué pasa ahora?</p>
+    <p style="font-size: 14px; color: #555; margin: 0 0 16px; font-weight: 600;">Que pasa ahora?</p>
     <div class="steps">
       <div class="step">
         <div class="step-num">1</div>
-        <div class="step-text"><strong>Revisión de tu idea</strong> — Nuestro equipo analiza tu proyecto y prepara las preguntas clave para la sesión.</div>
+        <div class="step-text"><strong>Revision de tu idea</strong> — Nuestro equipo analiza tu proyecto y prepara las preguntas clave para la sesion.</div>
       </div>
       <div class="step">
         <div class="step-num">2</div>
-        <div class="step-text"><strong>Llamada de discovery</strong> — Una reunión de 30 minutos para entender a fondo tu visión y contexto.</div>
+        <div class="step-text"><strong>Llamada de discovery</strong> — Una reunion de 30 minutos para entender a fondo tu vision y contexto.</div>
       </div>
       <div class="step">
         <div class="step-num">3</div>
-        <div class="step-text"><strong>Propuesta formal</strong> — Te enviamos un roadmap y propuesta económica personalizada en 48h.</div>
+        <div class="step-text"><strong>Propuesta formal</strong> — Te enviamos un roadmap y propuesta economica personalizada en 48h.</div>
       </div>
     </div>
 
     <div class="contact">
-      <p>¿Tienes urgencia? Escríbenos por WhatsApp<br>
+      <p>Tienes urgencia? Escribenos por WhatsApp<br>
       <a href="https://wa.me/573054009505">+57 305 400 9505</a></p>
     </div>
   </div>
   <div class="footer">
-    MediaLab Ingeniería · Bogotá, Colombia · <a href="https://medialab.com.co" style="color: #E8751A;">medialab.com.co</a>
+    MediaLab Ingenieria · Bogota, Colombia · <a href="https://medialab.com.co" style="color: #E8751A;">medialab.com.co</a>
   </div>
 </div>
 </body></html>`
+
+    if (!process.env.RESEND_API_KEY) {
+      return NextResponse.json({ success: true, adminSent: false, leadSent: false, demo: true })
+    }
+
+    const { Resend } = await import("resend")
+    const resend = new Resend(process.env.RESEND_API_KEY)
 
     // Send both emails
     const [adminResult, leadResult] = await Promise.allSettled([
       resend.emails.send({
         from: FROM_EMAIL,
         to: [ADMIN_EMAIL],
-        subject: `🚀 Nuevo Lead UXBox — ${industry || "Sin industria"} — ${email}`,
+        subject: `Nuevo Lead UXBox — ${industry || "Sin industria"} — ${email}`,
         html: adminEmailHtml,
       }),
       resend.emails.send({
         from: FROM_EMAIL,
         to: [email],
-        subject: "Tu idea llegó a MediaLab — Te contactamos en 24h 🚀",
+        subject: "Tu idea llego a MediaLab — Te contactamos en 24h",
         html: leadEmailHtml,
       }),
     ])
@@ -157,12 +161,8 @@ export async function POST(req: NextRequest) {
     const adminOk = adminResult.status === "fulfilled"
     const leadOk = leadResult.status === "fulfilled"
 
-    if (!adminOk) console.error("Admin email failed:", adminResult.reason)
-    if (!leadOk) console.error("Lead email failed:", leadResult.reason)
-
     return NextResponse.json({ success: true, adminSent: adminOk, leadSent: leadOk })
   } catch (err) {
-    console.error("Send email error:", err)
     return NextResponse.json({ error: "Error enviando emails" }, { status: 500 })
   }
 }
