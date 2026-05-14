@@ -33,6 +33,20 @@ import { CourseCta } from "@/components/curso/course-cta"
  * 12. RESOLVE    → FAQ: objection handling — remove friction
  * 13. CONVERT    → CTA: epic final — urgency + clarity
  */
+
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Aprende IA para Diseño y Producto | Curso MediaLab',
+  description: 'Curso de 12 fases para diseñadores, developers y startups. Aprende a usar IA como copiloto estratégico con la metodología que logra 90% de productividad con 10% de esfuerzo. Solo 30 cupos.',
+  openGraph: {
+    title: 'Aprende IA para Diseño y Producto | MediaLab Ingeniería',
+    description: 'Curso de 12 fases para diseñadores, developers y startups. Aprende a investigar, diseñar, construir y validar productos donde tú decides y la IA ejecuta.',
+    url: '/curso',
+    type: 'website',
+  },
+}
+
 export default function CursoPage() {
   return (
     <main id="main-content" className="overflow-x-hidden">
@@ -50,11 +64,11 @@ export default function CursoPage() {
 
       {/* 4. MICRO-CTA — soft commitment after emotional sections */}
       <CourseMidCta
-        headline="¿Te suena familiar?"
-        subtext="No estás solo. Diseñamos esta metodología exactamente para esto."
-        ctaText="Ver cómo lo resolvemos →"
-        ctaHref="#diferencia"
-        variant="subtle"
+        headline="Si te identificaste con algo de esto, no es casualidad."
+        subtext="Diseñamos esta metodología para personas como tú."
+        ctaText="Registrarme al curso →"
+        ctaHref="#reservar"
+        variant="primary"
       />
 
       {/* 5. CONTRAST — loss aversion */}
@@ -65,9 +79,9 @@ export default function CursoPage() {
 
       {/* 7. MICRO-CTA — commitment escalation */}
       <CourseMidCta
-        headline="12 fases. Un sistema completo."
-        subtext="¿Quieres ver exactamente qué aprenderás en cada módulo?"
-        ctaText="Explorar el programa completo →"
+        headline="Cada fase existe por una razón."
+        subtext="¿Quieres ver qué vas a poder hacer después de cada módulo?"
+        ctaText="Ver el programa →"
         ctaHref="#programa"
         variant="subtle"
       />

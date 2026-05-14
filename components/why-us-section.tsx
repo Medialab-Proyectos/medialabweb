@@ -6,44 +6,44 @@ import { Brain, Zap, Clock, Heart, Server, Lightbulb } from "lucide-react"
 const reasons = [
   {
     icon: Brain,
-    title: "Psicología del consumidor (B2C & B2B)",
+    title: "Diseñamos para cómo tu usuario piensa, no para cómo tú crees que piensa",
     description:
-      "Entendemos cómo piensan, sienten y deciden tus usuarios. Aplicamos ciencia del comportamiento para diseñar experiencias que conectan emocionalmente y generan acción.",
+      "La mayoría de las agencias diseñan sobre suposiciones. Nosotros investigamos miedos, motivaciones y puntos de fricción reales antes de abrir Figma.",
     color: "var(--magenta)",
   },
   {
     icon: Zap,
-    title: "Discovery de producto con IA",
+    title: "Tu idea, clara y accionable en días (no meses)",
     description:
-      "UXBox comprime meses de definición en días. Nuestra IA analiza tu idea y genera una propuesta estructurada con requisitos, estrategia UX y conceptos de diseño.",
+      "UXBox comprimió meses de discovery en días para 40+ equipos. Le cuentas tu idea y nuestra IA te devuelve un roadmap real: requisitos, estrategia y diseño.",
     color: "var(--cyan)",
   },
   {
     icon: Clock,
-    title: "Desarrollo de producto rápido",
+    title: "Del concepto al MVP en semanas, no en trimestres",
     description:
-      "De la idea al MVP en semanas, no meses. Procesos ágiles, validación continua y un equipo multidisciplinario que entiende tanto el negocio como la tecnología.",
+      "Porque cada semana que tu producto no está en manos de usuarios reales es una semana de feedback perdido. Nos movemos rápido sin sacrificar calidad.",
     color: "var(--orange)",
   },
   {
     icon: Heart,
-    title: "Experiencias digitales de alto engagement",
+    title: "Productos que la gente quiere volver a usar",
     description:
-      "Diseñamos para que los usuarios regresen. Combinamos UX emocional, micro-interacciones y personalización para crear productos B2C memorables y plataformas B2B eficientes.",
+      "La retención no se logra con notificaciones push. Se logra cuando la experiencia se siente tan bien que el usuario regresa por decisión propia.",
     color: "var(--magenta)",
   },
   {
     icon: Server,
-    title: "Arquitecturas escalables",
+    title: "Tecnología que crece contigo, no en tu contra",
     description:
-      "Construimos sobre React, Next.js, Node.js e infraestructura cloud. Código limpio, arquitectura modular y rendimiento optimizado para crecer con tu negocio.",
+      "React, Next.js, Node.js, Cloud. Código modular que tu equipo puede mantener. Nada de deuda técnica escondida ni arquitecturas que colapsen al escalar.",
     color: "var(--cyan)",
   },
   {
     icon: Lightbulb,
-    title: "Innovación centrada en el humano",
+    title: "Cada decisión pasa por un filtro: ¿mejora la vida del usuario?",
     description:
-      "La tecnología al servicio de las personas, no al revés. Cada decisión de diseño y desarrollo pasa por un filtro: ¿mejora la vida del usuario?",
+      "No nos enamoramos de la tecnología. Nos enamoramos de resolver problemas reales. Si una funcionalidad no mejora la experiencia humana, no la construimos.",
     color: "var(--orange)",
   },
 ]
@@ -82,17 +82,17 @@ export function WhyUsSection() {
         {/* Header */}
         <div className="flex flex-col gap-4 items-center text-center max-w-2xl mx-auto">
           <span className="text-xs font-semibold tracking-widest uppercase text-[var(--magenta)]">
-            Por Qué MediaLab
+            Lo que nos hace diferentes
           </span>
           <h2
             id="why-us-heading"
             className="font-display font-bold text-3xl md:text-4xl lg:text-5xl leading-tight text-white text-balance"
           >
-            Por qué las empresas B2B y marcas B2C eligen MediaLab
+            No somos la única opción. Somos la que entiende a tus usuarios.
           </h2>
           <p className="text-base text-white/60 leading-relaxed">
-            Traemos una combinación única de profundidad en investigación, capacidad de IA y excelencia en diseño
-            que transforma ideas ambiciosas en productos digitales listos para el mercado.
+            Hay muchas agencias que diseñan bonito. Pocas que investigan antes de diseñar. 
+            Y casi ninguna que combina psicología del consumidor, IA y desarrollo en un solo equipo.
           </p>
         </div>
 

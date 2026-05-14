@@ -58,16 +58,16 @@ export function TestimonialsSection() {
         {/* Header */}
         <div className="flex flex-col gap-4 items-center text-center max-w-2xl mx-auto">
           <span className="text-xs font-semibold tracking-widest uppercase text-[var(--magenta)]">
-            Casos de Éxito
+            Lo que dicen quienes ya lo vivieron
           </span>
           <h2
             id="testimonials-heading"
             className="font-display font-bold text-3xl md:text-4xl lg:text-5xl leading-tight text-foreground text-balance"
           >
-            Historias reales de transformación B2B y B2C
+            No te lo contamos nosotros. Te lo cuentan ellos.
           </h2>
           <p className="text-base text-muted-foreground leading-relaxed">
-            Líderes de producto que confiaron en MediaLab para crear experiencias digitales que conectan emocionalmente con sus usuarios y generan resultados comerciales medibles.
+            Líderes de producto que llegaron con un problema real y se fueron con un producto que sus usuarios aman. Estas son sus palabras, no las nuestras.
           </p>
         </div>
 
@@ -138,17 +138,17 @@ export function TestimonialsSection() {
         <div className="flex flex-wrap items-center justify-center gap-8 pt-8 border-t border-border">
           <div className="flex flex-col items-center gap-1">
             <span className="font-display font-bold text-2xl text-foreground">4.9/5</span>
-            <span className="text-xs text-muted-foreground">Satisfacción del cliente</span>
+            <span className="text-xs text-muted-foreground">Nos recomiendan a otros</span>
           </div>
           <div className="w-px h-10 bg-border hidden sm:block" />
           <div className="flex flex-col items-center gap-1">
             <span className="font-display font-bold text-2xl text-foreground">100%</span>
-            <span className="text-xs text-muted-foreground">Proyectos entregados a tiempo</span>
+            <span className="text-xs text-muted-foreground">Entregado cuando lo prometimos</span>
           </div>
           <div className="w-px h-10 bg-border hidden sm:block" />
           <div className="flex flex-col items-center gap-1">
             <span className="font-display font-bold text-2xl text-foreground">85%</span>
-            <span className="text-xs text-muted-foreground">Clientes repiten</span>
+            <span className="text-xs text-muted-foreground">Vuelven con un nuevo proyecto</span>
           </div>
         </div>
       </div>

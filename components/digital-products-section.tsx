@@ -53,17 +53,17 @@ export function DigitalProductsSection() {
         {/* Header */}
         <div className="flex flex-col gap-4 max-w-2xl">
           <span className="text-xs font-semibold tracking-widest uppercase text-[var(--magenta)]">
-            Productos Digitales
+            Nuestros propios productos
           </span>
           <h2
             id="products-heading"
             className="font-display font-bold text-3xl md:text-4xl lg:text-5xl leading-tight text-foreground text-balance"
           >
-            Productos propios que demuestran nuestra filosofía
+            No solo diseñamos para otros. También ponemos nuestra propia piel en el juego.
           </h2>
           <p className="text-base text-muted-foreground leading-relaxed">
-            No solo construimos para clientes — también creamos productos propios B2B y B2C. Cada uno refleja
-            nuestra filosofía: diseño conductual que conecta emocionalmente y genera impacto comercial real.
+            Construimos productos propios porque creemos que la mejor forma de demostrar lo que hacemos
+            es vivirlo. Cada uno aplica los mismos principios que usamos con nuestros clientes.
           </p>
         </div>
 

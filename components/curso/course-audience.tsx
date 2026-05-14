@@ -5,14 +5,14 @@ import { motion, useInView } from "framer-motion"
 import { Palette, Monitor, Code2, RocketIcon, User, Users, Frown, Sparkles } from "lucide-react"
 
 const profiles = [
-  { icon: Palette, title: "UX/UI Designers", desc: "Que quieren integrar IA sin perder su ojo de diseño ni su proceso creativo." },
-  { icon: Monitor, title: "Product Designers", desc: "Que necesitan construir productos completos donde la IA es parte de la experiencia." },
-  { icon: Code2, title: "Developers", desc: "Que diseñan interfaces y quieren hacerlo con más criterio visual y estratégico." },
-  { icon: RocketIcon, title: "Startups", desc: "Que quieren lanzar productos potenciados por IA de forma rápida pero con profundidad." },
-  { icon: User, title: "Freelancers", desc: "Que necesitan diferenciarse en un mercado cada vez más saturado de IA genérica." },
-  { icon: Users, title: "Equipos de Innovación", desc: "Que buscan una metodología compartida para integrar IA en sus procesos de diseño." },
-  { icon: Frown, title: "Diseñadores frustrados con IA", desc: "Que aprendieron herramientas pero siguen sin saber cómo aplicarlas con criterio." },
-  { icon: Sparkles, title: "Creativos que quieren diferenciarse", desc: "Que saben que el futuro es con IA, pero quieren seguir siendo únicos." },
+  { icon: Palette, title: "UX/UI Designers", desc: "Quieres usar IA sin que tus diseños pierdan alma. Aquí aprendes a amplificar tu criterio, no a reemplazarlo." },
+  { icon: Monitor, title: "Product Designers", desc: "Necesitas construir productos completos donde la IA potencia — no complica — la experiencia del usuario." },
+  { icon: Code2, title: "Developers", desc: "Diseñas interfaces pero te falta criterio visual estratégico. Aquí conectas código con pensamiento de producto." },
+  { icon: RocketIcon, title: "Startups", desc: "Necesitas lanzar rápido pero con profundidad. Aprende a validar antes de construir y a construir sin deuda de diseño." },
+  { icon: User, title: "Freelancers", desc: "Tus clientes ya usan ChatGPT. ¿Cómo te diferencias? Con criterio, frameworks y resultados que la IA sola no da." },
+  { icon: Users, title: "Equipos de Innovación", desc: "Necesitan una metodología compartida para que todo el equipo hable el mismo idioma de IA + diseño." },
+  { icon: Frown, title: "Frustrados con la IA", desc: "Hiciste 3 cursos de prompts y sigues sin saber construir un producto. Esto resuelve eso." },
+  { icon: Sparkles, title: "Creativos que quieren ser únicos", desc: "Sabes que el futuro es con IA. Pero te rehusas a ser uno más. Aquí aprendes a ser tú, amplificado." },
 ]
 
 export function CourseAudience() {
@@ -29,13 +29,13 @@ export function CourseAudience() {
           className="text-center mb-10 md:mb-14"
         >
           <span className="inline-block text-xs tracking-[0.2em] uppercase mb-4 font-display" style={{ color: 'var(--magenta)' }}>
-            ¿Para quién es?
+            ¿Esto es para ti?
           </span>
           <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-[var(--surface-dark-fg)] tracking-tight leading-tight mb-6 font-display">
-            ¿Te identificas?
+            Si algo de esto te suena, sí.
           </h2>
           <p className="max-w-2xl mx-auto text-lg text-white/50">
-            Esta metodología fue diseñada para quienes quieren evolucionar con la IA, no ser reemplazados por ella.
+            No importa si llevas 1 año o 10. Si quieres evolucionar con la IA en vez de correr detrás de ella, esta metodología fue diseñada para ti.
           </p>
         </motion.div>
 

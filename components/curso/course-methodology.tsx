@@ -3,6 +3,7 @@
 import { useRef, useState } from "react"
 import { motion, useInView, AnimatePresence } from "framer-motion"
 import { Search, Target, MessageSquare, Lightbulb, Users, Layers, Cpu, Eye, Filter, Rocket, LayoutGrid, Diamond } from "lucide-react"
+import Image from "next/image"
 
 const stages = [
   { label: "Discovery", color: "cyan" },
@@ -20,7 +21,7 @@ const phases = [
   { id: 6, stage: 1, icon: Layers, name: "Experience Refinement", subtitle: "Refinamiento de la experiencia", description: "Iteras con criterio: cada cambio tiene una razón emocional, funcional y estratégica.", outputs: ["Prototipo refinado", "Flujos optimizados", "Sistema de interacciones"], tools: ["Figma", "Framer", "Cursor"] },
   { id: 7, stage: 2, icon: Cpu, name: "Product Logic", subtitle: "Lógica de producto", description: "Conectas diseño con negocio. Cada decisión de UX resuelve un objetivo medible. La IA ejecuta — tú defines la lógica.", outputs: ["Árbol de decisiones", "Flujos de negocio", "Especificaciones técnicas"], tools: ["Claude", "Cursor", "Lovable"] },
   { id: 8, stage: 2, icon: Eye, name: "Human Evaluation", subtitle: "Evaluación humana del output", description: "Revisas todo lo que la IA generó con un framework de evaluación. Identificas lo que vale, lo que sobra y lo que falta.", outputs: ["Scorecards de evaluación", "Análisis de calidad", "Reporte de criterio"], tools: ["Figma", "Claude", "Notion"] },
-  { id: 9, stage: 2, icon: Filter, name: "Strategic Filtering", subtitle: "Filtrado estratégico · Método 90-10", description: "Aplicas la Metodología 90-10: 90% pensamiento humano, 10% ejecución IA. Filtras lo genérico y amplificas lo único.", outputs: ["Framework 90-10", "Criterios de filtrado", "Propuesta diferencial"], tools: ["Claude", "Figma", "FigJam"] },
+  { id: 9, stage: 2, icon: Filter, name: "Strategic Filtering", subtitle: "Filtrado estratégico · Método 90-10", description: "Aplicas la Metodología 90-10: logras el 90% de productividad con el 10% de esfuerzo. Automatizas lo repetitivo y te enfocas en lo único.", outputs: ["Framework 90-10", "Criterios de filtrado", "Propuesta diferencial"], tools: ["Claude", "Figma", "FigJam"] },
   { id: 10, stage: 3, icon: Rocket, name: "MVP Building", subtitle: "Construcción del MVP", description: "Construyes un producto funcional usando IA como copiloto de desarrollo. Velocidad con profundidad.", outputs: ["MVP funcional", "Sistema de componentes", "Documentación técnica"], tools: ["Cursor", "v0", "Lovable"] },
   { id: 11, stage: 3, icon: LayoutGrid, name: "UX Systems", subtitle: "Sistemas de diseño UX", description: "Diseñas sistemas escalables que mantienen coherencia cuando la IA genera componentes.", outputs: ["Design system", "Tokens", "Guía de componentes"], tools: ["Figma", "Storybook", "Framer"] },
   { id: 12, stage: 3, icon: Diamond, name: "Final Product Thinking", subtitle: "Pensamiento de producto final", description: "Integras todo: estrategia, diseño, validación y construcción. Tu producto final es humano, diferencial y potenciado por IA.", outputs: ["Producto final", "Caso de estudio", "Portfolio piece"], tools: ["All tools", "Presentación"] },
@@ -51,14 +52,30 @@ export function CourseMethodology() {
           className="text-center mb-8"
         >
           <span className="inline-block text-xs tracking-[0.2em] uppercase mb-4 font-display" style={{ color: 'var(--cyan)' }}>
-            La metodología
+            El sistema que te faltaba
           </span>
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[var(--surface-dark-fg)] tracking-tight leading-snug mb-5 font-display">
-            12 fases. Un sistema. <span className="bg-gradient-to-r from-[var(--cyan)] to-[var(--magenta)] bg-clip-text text-transparent">Tu evolución.</span>
+            12 fases. Un camino claro. <span className="bg-gradient-to-r from-[var(--cyan)] to-[var(--magenta)] bg-clip-text text-transparent">De la confusión al producto real.</span>
           </h2>
           <p className="max-w-2xl mx-auto text-lg text-white/50">
-            De la investigación al producto final. Un journey que conecta IA con pensamiento humano en cada paso.
+            No es un curso de herramientas. Es un journey de transformación donde aprendes a pensar, decidir y construir con IA en cada paso.
           </p>
+        </motion.div>
+
+        {/* Workshop image */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={inView ? { opacity: 1, scale: 1 } : {}}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="relative w-full h-40 md:h-56 rounded-2xl overflow-hidden mb-8 border border-white/[0.04]"
+        >
+          <Image
+            src="/images/curso/methodology-workshop.png"
+            alt="Workshop de metodología IA en acción"
+            fill
+            className="object-cover opacity-50"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[var(--surface-dark)] via-transparent to-[var(--surface-dark)]/60" />
         </motion.div>
 
         {/* Stage pills */}

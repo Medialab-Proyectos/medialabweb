@@ -107,7 +107,7 @@ export function HeroSection() {
         >
           <span className="flex items-center gap-2">
             <Sparkles size={14} style={{ color: "var(--magenta)" }} />
-            {t("UX · IA · Diseño Conductual", "UX · AI · Behavioral Design")}
+            {t("40+ productos que conectan y convierten", "40+ products that connect & convert")}
           </span>
           <span className="w-px h-4 bg-white/20" aria-hidden="true" />
           <a
@@ -117,7 +117,7 @@ export function HeroSection() {
             className="text-xs font-semibold hover:underline transition-colors"
             style={{ color: "var(--cyan)" }}
           >
-            {t("Creadores de la metodología Zero UI", "Creators of the Zero UI methodology")}
+            {t("Autores de 'Bienvenidos al Zero UI' →", "Authors of 'Welcome to Zero UI' →")}
           </a>
         </div>
 
@@ -156,19 +156,19 @@ export function HeroSection() {
                 className="inline-flex items-center justify-center gap-3 px-10 py-4 rounded-full font-semibold text-[15px] text-white transition-colors duration-200 active:scale-95 shadow-lg hover:brightness-110"
                 style={{ background: "#E8751A", boxShadow: "0 8px 30px rgba(232,117,26,0.35)" }}
               >
-                {t("Agenda una llamada gratuita", "Book a free call")}
+                {t("Quiero transformar mi producto", "I want to transform my product")}
               </button>
             </BookingModal>
             <Link
               href="#uxbox"
               className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full font-semibold text-sm border border-white/20 text-white hover:bg-white/10 transition-all duration-200 active:scale-95"
             >
-              {t("Conoce UXBox", "Discover UXBox")}
+              {t("Probar UXBox gratis →", "Try UXBox free →")}
             </Link>
           </div>
           <p className="text-xs text-white/40 flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-green-400" />
-            {t("Sin compromiso · Respuesta en 24h", "No commitment · Response in 24h")}
+            <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+            {t("30 min gratis · Sin compromiso · Respuesta en 24h", "30 min free · No commitment · Response in 24h")}
           </p>
         </div>
 

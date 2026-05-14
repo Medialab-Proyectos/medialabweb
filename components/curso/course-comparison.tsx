@@ -5,22 +5,22 @@ import { motion, useInView } from "framer-motion"
 import { X, Check } from "lucide-react"
 
 const traditional = [
-  "Enseñan herramientas",
-  "Enseñan prompts",
-  "Enseñan outputs",
-  "Enseñan hacks",
-  "Copiar y pegar resultados",
-  "Productividad sin dirección",
+  "Te enseñan qué botones apretar",
+  "Te dan plantillas de prompts que caducan en semanas",
+  "Te muestran outputs impresionantes sin contexto",
+  "Te venden productividad sin propósito",
+  "Copias y pegas sin entender por qué funciona",
+  "Terminas más rápido, pero sin más valor",
 ]
 
 const medialab = [
-  "Enseña criterio",
-  "Enseña frameworks estratégicos",
-  "Enseña pensamiento de producto",
-  "Enseña validación humana",
-  "Enseña experiencia + IA aplicada",
-  "Enseña sistemas de diseño inteligente",
-  "Enseña IA en proyectos reales",
+  "Aprendes a decidir qué vale la pena construir",
+  "Desarrollas frameworks de pensamiento que no caducan",
+  "Construyes productos reales con impacto medible",
+  "Validas con usuarios antes de enamorarte de una idea",
+  "Integras IA en tu proceso sin perder tu identidad",
+  "Diseñas sistemas escalables, no pantallas sueltas",
+  "Sales con un proyecto en tu portafolio que demuestra todo",
 ]
 
 export function CourseComparison() {
@@ -42,12 +42,12 @@ export function CourseComparison() {
           className="text-center mb-10 md:mb-14"
         >
           <span className="inline-block text-xs tracking-[0.2em] uppercase mb-4 font-display" style={{ color: 'var(--magenta)' }}>
-            La diferencia
+            Por qué esto es diferente
           </span>
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[var(--surface-dark-fg)] tracking-tight leading-snug font-display">
-            ¿Por qué la mayoría de cursos de IA fallan?
+            La mayoría de cursos de IA te enseñan herramientas. Nosotros te enseñamos a pensar.
           </h2>
-          <p className="text-sm md:text-base text-white/40 mt-4 max-w-xl mx-auto">La diferencia entre aprender herramientas y aprender a pensar con ellas.</p>
+          <p className="text-sm md:text-base text-white/40 mt-4 max-w-xl mx-auto">La diferencia entre saber usar una herramienta y saber qué construir con ella.</p>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
@@ -83,7 +83,7 @@ export function CourseComparison() {
               </ul>
               <div className="mt-8 p-4 rounded-xl bg-red-500/[0.04] border border-red-500/[0.06]">
                 <p className="text-sm text-white/40 italic">
-                  &ldquo;Aprendes herramientas, pero no sabes cuándo ni por qué usarlas.&rdquo;
+                  &ldquo;Sabía usar 10 herramientas de IA. Pero no sabía cuándo ni por qué elegir ninguna.&rdquo;
                 </p>
               </div>
             </div>
@@ -121,11 +121,6 @@ export function CourseComparison() {
                   </motion.li>
                 ))}
               </ul>
-              <div className="mt-8 p-4 rounded-xl bg-[var(--magenta)]/[0.06] border border-[var(--magenta)]/[0.1]">
-                <p className="text-sm font-medium" style={{ color: 'var(--magenta)' }}>
-                  Metodología 90-10: 90% pensamiento estratégico, 10% generación con IA.
-                </p>
-              </div>
             </div>
           </motion.div>
         </div>

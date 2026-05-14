@@ -6,23 +6,23 @@ import { Microscope, Brain, Code2, ChevronRight } from "lucide-react"
 const services = [
   {
     icon: Microscope,
-    title: "UX y Diseño Conductual",
+    title: "Experiencias que tus usuarios recordarán",
     color: "var(--magenta)",
     gradient: "linear-gradient(135deg, var(--magenta), oklch(0.45 0.24 300))",
     items: [
-      "Investigación de usuarios B2B y B2C",
-      "Diseño de interacción y experiencia",
-      "Diseño conductual y psicología del consumidor",
-      "Arquitectura de información",
-      "Sistemas de diseño escalables",
+      "Investigación profunda de usuarios B2B y B2C",
+      "Diseño de interacción y experiencia emocional",
+      "Psicología del consumidor aplicada al diseño",
+      "Arquitectura de información intuitiva",
+      "Sistemas de diseño que escalan contigo",
       "Optimización de conversión (CRO)",
     ],
     description:
-      "Investigamos, diseñamos y validamos experiencias digitales que conectan emocionalmente con los usuarios B2C y resuelven problemas reales para equipos B2B — siempre centrados en el ser humano.",
+      "Tus usuarios no navegan flujos — navegan estados emocionales. Investigamos cómo piensan, qué sienten y qué los frena. Luego diseñamos experiencias que los hacen sentir seguros, comprendidos y listos para actuar.",
   },
   {
     icon: Brain,
-    title: "Descubrimiento con IA",
+    title: "De idea vaga a producto claro en días",
     color: "var(--cyan)",
     gradient: "linear-gradient(135deg, var(--cyan), oklch(0.55 0.18 220))",
     items: [
@@ -33,22 +33,22 @@ const services = [
       "Definición ágil de producto",
     ],
     description:
-      "Comprimimos meses de discovery en días con nuestra plataforma UXBox. Inteligencia artificial que entiende tu negocio y genera propuestas de producto estructuradas y accionables.",
+      "¿Cuántas semanas llevas definiendo tu producto? UXBox comprime meses de discovery en días. Le cuentas tu idea, y nuestra IA genera una propuesta estructurada con requisitos, estrategia y conceptos de diseño.",
   },
   {
     icon: Code2,
-    title: "Desarrollo de Software a Medida",
+    title: "Código que tus usuarios nunca notarán (y eso es bueno)",
     color: "var(--orange)",
     gradient: "linear-gradient(135deg, var(--orange), oklch(0.65 0.2 60))",
     items: [
       "Plataformas web B2B y dashboards",
       "Apps móviles y experiencias B2C",
-      "MVPs para startups",
+      "MVPs listos para validar en semanas",
       "Arquitecturas escalables en la nube",
       "Integraciones con IA y APIs",
     ],
     description:
-      "Del concepto al producto lanzado. Construimos plataformas B2B, apps B2C y MVPs con código limpio, arquitectura escalable y un enfoque obsesivo en la experiencia del usuario.",
+      "El mejor software es el que se siente invisible. Construimos productos con código limpio, arquitectura que crece contigo y un enfoque obsesivo en que cada interacción se sienta natural.",
     tech: ["React", "Next.js", "Node.js", "Cloud", "IA"],
   },
 ]
@@ -156,17 +156,17 @@ export function ServicesSection() {
         {/* Header */}
         <div className="flex flex-col gap-4 max-w-2xl">
           <span className="text-xs font-semibold tracking-widest uppercase text-[var(--magenta)]">
-            Qué Hacemos
+            Cómo te ayudamos
           </span>
           <h2
             id="services-heading"
             className="font-display font-bold text-3xl md:text-4xl lg:text-5xl leading-tight text-foreground text-balance"
           >
-            Diseño de productos digitales de principio a fin
+            Tu producto necesita más que código bonito. Necesita entender a las personas.
           </h2>
           <p className="text-base text-muted-foreground leading-relaxed">
-            Desde la investigación hasta el lanzamiento — combinamos ciencia del comportamiento, Inteligencia Artificial e ingeniería
-            de clase mundial para entregar productos digitales B2B y B2C que conectan emocionalmente con los usuarios e impulsan resultados comerciales.
+            La mayoría de los productos fallan porque se saltan un paso: investigar qué necesitan sentir las personas que los van a usar.
+            Nosotros empezamos por ahí — y luego diseñamos, construimos y optimizamos sin perder esa conexión humana.
           </p>
         </div>
 

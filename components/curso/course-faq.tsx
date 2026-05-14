@@ -5,16 +5,16 @@ import { motion, useInView, AnimatePresence } from "framer-motion"
 import { ChevronDown } from "lucide-react"
 
 const faqs = [
-  { q: "¿Necesito saber programar para tomar este curso?", a: "No. La metodología está diseñada para diseñadores, UX/UI y creativos. Usarás herramientas de IA que no requieren código. Si eres developer, tendrás módulos específicos para aprovechar tu background técnico." },
-  { q: "¿Qué diferencia esto de un curso de ChatGPT o prompts?", a: "Los cursos de prompts te enseñan a escribir instrucciones. Nosotros te enseñamos a pensar estratégicamente: cuándo usar IA, cuándo no, cómo evaluar lo que genera y cómo construir productos reales. Es la diferencia entre usar una herramienta y tener un sistema." },
-  { q: "¿Cómo funciona la metodología 90-10?", a: "90% pensamiento humano estratégico (criterio, evaluación, decisión, experiencia) y 10% ejecución con IA (generación, prototipado, iteración). La IA amplifica tu criterio — no lo reemplaza." },
-  { q: "¿Cuánto dura el curso y qué formato tiene?", a: "El curso se desarrolla en cohortes de 8 semanas con sesiones en vivo, workshops prácticos, mentoría grupal y acceso a la comunidad privada. Cada semana combina teoría, práctica y aplicación a proyectos reales." },
-  { q: "¿Qué incluye exactamente mi acceso?", a: "Acceso completo a las 12 fases de la metodología, workshops en vivo, mentoría, comunidad privada, acceso guiado a herramientas premium (ChatGPT Plus, Claude, Figma AI, Cursor, etc.), plantillas, frameworks y tu certificación al completar." },
-  { q: "¿Hay comunidad o soporte después del curso?", a: "Sí. Acceso de por vida a la comunidad privada de alumni, actualizaciones de la metodología, recursos nuevos y networking con profesionales que comparten tu visión del diseño con IA." },
-  { q: "¿Los cupos son realmente limitados?", a: "Sí. Cada cohorte tiene un máximo de 30 personas para garantizar atención personalizada, feedback de calidad y una experiencia de aprendizaje genuinamente transformadora." },
-  { q: "¿Cuándo empieza la próxima cohorte?", a: "Las fechas de la Cohorte 01 se anunciarán próximamente. Puedes unirte a la waitlist ahora para asegurar acceso anticipado y precio preferencial de fundadores." },
-  { q: "¿Habrá validación universitaria?", a: "Estamos en proceso activo de validación con instituciones educativas. Los participantes de las primeras cohortes recibirán la certificación actualizada cuando se complete este proceso." },
-  { q: "¿Esto funciona para freelancers o solo para equipos?", a: "Para ambos. Freelancers aprenderán a diferenciarse y cobrar más por servicios con criterio IA. Equipos obtendrán una metodología compartida para integrar IA de forma coherente en sus procesos." },
+  { q: "¿Necesito saber programar?", a: "No. La metodología funciona para diseñadores y creativos que nunca han tocado código. Si eres developer, aún mejor — hay módulos que conectan tu background técnico con pensamiento de producto." },
+  { q: "¿En qué se diferencia esto de un curso de prompts de YouTube?", a: "Un curso de prompts te enseña a escribir instrucciones. Aquí aprendes a pensar: cuándo usar IA, cuándo no, cómo evaluar lo que genera y cómo construir un producto real con ello. Es la diferencia entre tener una herramienta y tener un sistema." },
+  { q: "¿Qué es la metodología 90-10 exactamente?", a: "Lograr el 90% de productividad con apenas el 10% de esfuerzo. Usando IA como copiloto estratégico, aprendes a automatizar lo repetitivo y enfocarte en lo que realmente importa: criterio, evaluación y decisión. Tú piensas, la IA ejecuta." },
+  { q: "¿Cuánto tiempo tengo que dedicarle por semana?", a: "8 semanas. Cada semana combina una sesión en vivo, workshop práctico y aplicación a tu proyecto real. Calcula unas 6-8 horas semanales entre sesiones y práctica." },
+  { q: "¿Qué incluye exactamente mi acceso?", a: "Las 12 fases de la metodología, workshops en vivo, mentoría grupal, comunidad privada de por vida, acceso a herramientas premium (ChatGPT Plus, Claude, Figma AI, Cursor), plantillas, frameworks y certificación al completar." },
+  { q: "¿Y si no me gusta o no es lo que esperaba?", a: "Si después de la primera semana sientes que no es para ti, te devolvemos el dinero. Sin preguntas. Creemos tanto en esto que preferimos que pruebes sin riesgo." },
+  { q: "¿Los 30 cupos son realmente limitados?", a: "Sí. Mantenemos grupos pequeños para dar feedback personalizado y crear una experiencia de aprendizaje real — no un webinar de 500 personas donde nadie te conoce." },
+  { q: "¿Cuándo empieza la próxima cohorte?", a: "Las fechas de la Cohorte 01 se anuncian pronto. Únete a la waitlist para acceso anticipado y precio de fundadores. Los primeros 30 tienen descuento." },
+  { q: "¿Va a tener validación universitaria?", a: "Estamos en proceso activo con instituciones educativas. Los participantes de las primeras cohortes recibirán la certificación actualizada cuando se complete." },
+  { q: "¿Funciona para freelancers o solo para equipos?", a: "Para ambos. Freelancers aprenden a diferenciarse y cobrar más por servicios con criterio IA. Equipos obtienen un lenguaje común para integrar IA de forma coherente." },
 ]
 
 export function CourseFaq() {
@@ -30,9 +30,9 @@ export function CourseFaq() {
 
       <div ref={ref} className="relative z-10 max-w-3xl mx-auto px-6 lg:px-8">
         <motion.div initial={{ opacity: 0, y: 30 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.7 }} className="text-center mb-10 md:mb-14">
-          <span className="inline-block text-xs tracking-[0.2em] uppercase text-white/40 mb-4 font-display">Preguntas frecuentes</span>
+          <span className="inline-block text-xs tracking-[0.2em] uppercase text-white/40 mb-4 font-display">Antes de decidir, resuelve tus dudas</span>
           <h2 className="text-2xl md:text-3xl font-bold text-[var(--surface-dark-fg)] tracking-tight leading-snug font-display">
-            Todo lo que necesitas saber.
+            Las preguntas que te harías antes de dar el paso.
           </h2>
         </motion.div>
 

@@ -30,34 +30,33 @@ export function AboutSection() {
           className={`flex flex-col gap-6 transition-all duration-700 ${visible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-8"}`}
         >
           <span className="text-xs font-semibold tracking-widest uppercase text-[var(--magenta)]">
-            Sobre Nosotros
+            Quiénes diseñan tu próximo producto
           </span>
           <h2 className="font-display font-bold text-3xl md:text-4xl lg:text-5xl leading-tight text-foreground text-balance">
-            Productos digitales que{" "}
+            No construimos interfaces.{" "}
             <span
               className="bg-clip-text text-transparent"
               style={{ backgroundImage: "linear-gradient(90deg, var(--magenta), var(--cyan))" }}
             >
-              transforman negocios B2B y conectan con B2C
+              Construimos la relación entre tu producto y las personas que lo usan.
             </span>
           </h2>
           <p className="text-base text-muted-foreground leading-relaxed">
-            MediaLab Ingeniería combina diseño UX, inteligencia artificial, SEO técnico y psicología del consumidor
-            para crear experiencias digitales que posicionan, conectan emocionalmente y convierten.
+            Nacimos de una frustración: ver productos con potencial enorme fracasar porque nadie investigó qué necesitaban sentir sus usuarios. 
+            Desde entonces, cada proyecto empieza con una pregunta: ¿qué emoción debe provocar esta experiencia?
           </p>
           <p className="text-base text-muted-foreground leading-relaxed">
-            Trabajamos con empresas B2B que necesitan plataformas eficientes y con marcas B2C que buscan
-            experiencias memorables. Desde el discovery hasta el lanzamiento, entregamos productos digitales
-            medibles y centrados en el ser humano.
+            Combinamos psicología del consumidor, inteligencia artificial y diseño UX para que cada decisión
+            de producto esté basada en datos reales — no en suposiciones. El resultado: productos que la gente quiere usar y negocios que crecen.
           </p>
           <p className="text-base font-medium text-foreground leading-relaxed">
-            Emocional. Eficiente. Escalable.
+            Emocional. Medible. Humano.
           </p>
           <Link
             href="#contact"
             className="group inline-flex items-center gap-2 text-sm font-semibold text-[var(--magenta)] hover:gap-3 transition-all duration-200 w-fit"
           >
-            Iniciar proyecto
+            Cuéntanos tu desafío →
             <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
@@ -71,24 +70,24 @@ export function AboutSection() {
             style={{ background: "linear-gradient(135deg, var(--magenta), oklch(0.4 0.25 300))" }}>
             <span className="text-3xl font-display font-bold">UX + IA</span>
             <p className="text-sm text-white/80 leading-relaxed">
-              Diseño centrado en el ser humano potenciado por inteligencia artificial.
+              Entendemos cómo piensan tus usuarios. La IA nos ayuda a hacerlo en días, no meses.
             </p>
           </div>
           <div className="rounded-2xl p-5 bg-[var(--surface-dark)] text-white flex flex-col gap-2">
-            <span className="text-2xl font-display font-bold" style={{ color: "var(--cyan)" }}>Research</span>
-            <p className="text-xs text-white/60 leading-relaxed">Datos que inspiran diseño</p>
+            <span className="text-2xl font-display font-bold" style={{ color: "var(--cyan)" }}>Evidencia</span>
+            <p className="text-xs text-white/60 leading-relaxed">Cada decisión respaldada por datos reales</p>
           </div>
           <div className="rounded-2xl p-5 flex flex-col gap-2"
             style={{ background: "linear-gradient(135deg, var(--orange), oklch(0.65 0.2 60))" }}>
             <span className="text-2xl font-display font-bold text-white">Impacto</span>
-            <p className="text-xs text-white/80 leading-relaxed">Resultados medibles</p>
+            <p className="text-xs text-white/80 leading-relaxed">Resultados que puedes medir desde el día uno</p>
           </div>
           <div className="col-span-2 rounded-2xl p-5 border border-border bg-card flex flex-col gap-2">
             <span className="text-lg font-display font-semibold text-foreground">
-              Emocional. Eficiente. Escalable.
+              Emocional. Medible. Humano.
             </span>
             <p className="text-sm text-muted-foreground">
-              Productos digitales B2B y B2C que conectan con las personas y generan resultados de negocio.
+              Productos que las personas quieren usar — y negocios que crecen gracias a eso.
             </p>
           </div>
         </div>

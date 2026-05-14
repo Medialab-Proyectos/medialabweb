@@ -4,10 +4,10 @@ import { useEffect, useState } from "react"
 import { CheckCircle2 } from "lucide-react"
 
 const recentActivities = [
-  { company: "Startup fintech", action: "completó sprint de discovery", time: "hace 2 horas" },
-  { company: "Cliente enterprise", action: "lanzó nueva plataforma", time: "ayer" },
-  { company: "Empresa de salud", action: "inició auditoría UX", time: "hace 2 días" },
-  { company: "Marca de retail", action: "desplegó app móvil", time: "hace 3 días" },
+  { company: "Startup fintech", action: "lanzó MVP en 4 semanas", time: "hace 2 horas" },
+  { company: "Plataforma enterprise", action: "aumentó conversión 38%", time: "ayer" },
+  { company: "Empresa de salud", action: "rediseñó onboarding con +52% activación", time: "hace 2 días" },
+  { company: "Marca de e-commerce", action: "redujo abandono de carrito 27%", time: "hace 3 días" },
 ]
 
 export function SocialProofBar() {

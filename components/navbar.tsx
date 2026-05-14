@@ -10,6 +10,7 @@ import { useLanguage } from "@/lib/language-context"
 const navLinks = {
   es: [
     { label: "Servicios", href: "#services" },
+    { label: "Curso UX + IA", href: "/curso", highlight: true },
     { label: "UXBox", href: "#uxbox" },
     { label: "Metodología", href: "#method" },
     { label: "Productos", href: "#products" },
@@ -17,6 +18,7 @@ const navLinks = {
   ],
   en: [
     { label: "Services", href: "#services" },
+    { label: "Learn AI", href: "/curso", highlight: true },
     { label: "UXBox", href: "#uxbox" },
     { label: "Methodology", href: "#method" },
     { label: "Products", href: "#products" },
@@ -66,11 +68,19 @@ export function Navbar() {
             <Link
               key={link.href}
               href={link.href}
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors relative after:absolute after:bottom-[-3px] after:left-0 after:w-0 after:h-px after:bg-[var(--magenta)] hover:after:w-full after:transition-all after:duration-300"
+              className={`text-sm font-medium transition-colors relative after:absolute after:bottom-[-3px] after:left-0 after:w-0 after:h-px after:bg-[var(--magenta)] hover:after:w-full after:transition-all after:duration-300 ${
+                (link as any).highlight
+                  ? "text-[var(--magenta)] font-semibold hover:text-[var(--magenta)]"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
             >
+              {(link as any).highlight && (
+                <span className="absolute -top-1 -right-1.5 w-1.5 h-1.5 rounded-full bg-[var(--magenta)] animate-pulse" />
+              )}
               {link.label}
             </Link>
           ))}
+
         </nav>
 
         {/* Right actions */}

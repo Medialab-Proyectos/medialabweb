@@ -18,9 +18,9 @@ const poppins = Poppins({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://medialabingenieria.com'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://medialab.design'),
   title: {
-    default: 'MediaLab Ingeniería | Diseño UX/UI, IA, SEO y productos digitales B2B/B2C',
+    default: 'MediaLab Ingeniería | Diseño UX/UI, IA y Productos Digitales',
     template: '%s | MediaLab Ingeniería',
   },
   description:
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     'experiencia del cliente CX', 'aumento de conversión CRO', 'SEO técnico para productos digitales',
     'diseño emocional B2C', 'experiencia B2B', 'rediseño UX para conversión'
   ],
-  authors: [{ name: 'MediaLab Ingeniería', url: 'https://medialabingenieria.com' }],
+  authors: [{ name: 'MediaLab Ingeniería', url: 'https://medialab.design' }],
   creator: 'MediaLab Ingeniería',
   publisher: 'MediaLab Ingeniería',
   formatDetection: {
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
     title: 'MediaLab Ingeniería | Productos digitales que posicionan, conectan y convierten',
     description:
       'Diseño UX/UI, IA, SEO técnico y desarrollo de software para experiencias B2B y B2C humanas, indexables y orientadas a conversión.',
-    url: 'https://medialabingenieria.com',
+    url: 'https://medialab.design',
     siteName: 'MediaLab Ingeniería',
     locale: 'es_CO',
     type: 'website',
@@ -75,6 +75,11 @@ export const metadata: Metadata = {
     description: 'Creamos experiencias B2B y B2C que posicionan, conectan emocionalmente y convierten con diseño centrado en el ser humano.',
     creator: '@MediaLabIng',
     images: ['/images/ux-research.jpg'],
+  },
+  icons: {
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
+    apple: '/favicon.ico',
   },
   robots: {
     index: true,
@@ -108,8 +113,8 @@ export default function RootLayout({
               name: 'MediaLab Ingeniería',
               description:
                 'Agencia experta en diseño UX/UI, inteligencia artificial y psicología del consumidor. Creamos productos digitales B2B y B2C que conectan emocionalmente con los usuarios y generan resultados comerciales medibles.',
-              url: 'https://medialabingenieria.com',
-              logo: 'https://medialabingenieria.com/logo.svg',
+              url: 'https://medialab.design',
+              logo: 'https://medialab.design/logo.svg',
               foundingDate: '2020',
               areaServed: 'Worldwide',
               knowsAbout: ['UX Design', 'UI Design', 'Artificial Intelligence', 'Behavioral Design', 'Consumer Psychology', 'B2B Software', 'B2C Applications', 'Product Discovery', 'CRO'],
@@ -135,18 +140,18 @@ export default function RootLayout({
               '@context': 'https://schema.org',
               '@type': 'WebSite',
               name: 'MediaLab Ingeniería',
-              url: 'https://medialabingenieria.com',
+              url: 'https://medialab.design',
               inLanguage: 'es-CO',
               description:
                 'Sitio oficial de MediaLab Ingeniería, agencia de diseño UX/UI, IA, SEO técnico y desarrollo de productos digitales B2B y B2C.',
               publisher: {
                 '@type': 'Organization',
                 name: 'MediaLab Ingeniería',
-                url: 'https://medialabingenieria.com',
+                url: 'https://medialab.design',
               },
               potentialAction: {
                 '@type': 'CommunicateAction',
-                target: 'https://medialabingenieria.com/#contact',
+                target: 'https://medialab.design/#contact',
                 name: 'Agendar llamada de discovery',
               },
             }),
@@ -160,9 +165,9 @@ export default function RootLayout({
               '@context': 'https://schema.org',
               '@type': 'ProfessionalService',
               name: 'MediaLab Ingeniería',
-              url: 'https://medialabingenieria.com',
-              image: 'https://medialabingenieria.com/images/ux-research.jpg',
-              logo: 'https://medialabingenieria.com/logo.svg',
+              url: 'https://medialab.design',
+              image: 'https://medialab.design/images/ux-research.jpg',
+              logo: 'https://medialab.design/logo.svg',
               description:
                 'Agencia especializada en diseño UX/UI, IA, SEO técnico, CRO, diseño conductual y desarrollo de software para productos digitales B2B y B2C.',
               areaServed: ['Colombia', 'Latinoamérica', 'United States', 'Worldwide'],
@@ -201,7 +206,7 @@ export default function RootLayout({
               provider: {
                 '@type': 'Organization',
                 name: 'MediaLab Ingeniería',
-                url: 'https://medialabingenieria.com',
+                url: 'https://medialab.design',
               },
               areaServed: 'Worldwide',
               description: 'Servicios de diseño UX/UI, inteligencia artificial y desarrollo de software a medida para empresas B2B y marcas B2C. Incluye discovery de producto con IA (UXBox), diseño conductual, arquitectura de experiencia emocional y optimización CRO.',
@@ -225,11 +230,11 @@ export default function RootLayout({
               '@context': 'https://schema.org',
               '@type': 'BreadcrumbList',
               itemListElement: [
-                { '@type': 'ListItem', position: 1, name: 'Inicio', item: 'https://medialabingenieria.com' },
-                { '@type': 'ListItem', position: 2, name: 'Servicios', item: 'https://medialabingenieria.com/#services' },
-                { '@type': 'ListItem', position: 3, name: 'Metodología', item: 'https://medialabingenieria.com/#method' },
-                { '@type': 'ListItem', position: 4, name: 'Industrias', item: 'https://medialabingenieria.com/#industries' },
-                { '@type': 'ListItem', position: 5, name: 'Contacto', item: 'https://medialabingenieria.com/#contact' },
+                { '@type': 'ListItem', position: 1, name: 'Inicio', item: 'https://medialab.design' },
+                { '@type': 'ListItem', position: 2, name: 'Servicios', item: 'https://medialab.design/#services' },
+                { '@type': 'ListItem', position: 3, name: 'Metodología', item: 'https://medialab.design/#method' },
+                { '@type': 'ListItem', position: 4, name: 'Industrias', item: 'https://medialab.design/#industries' },
+                { '@type': 'ListItem', position: 5, name: 'Contacto', item: 'https://medialab.design/#contact' },
               ],
             }),
           }}
@@ -314,7 +319,7 @@ export default function RootLayout({
               author: {
                 '@type': 'Person',
                 name: 'Christian Benavides',
-                url: 'https://medialabingenieria.com',
+                url: 'https://medialab.design',
               },
               publisher: {
                 '@type': 'Organization',

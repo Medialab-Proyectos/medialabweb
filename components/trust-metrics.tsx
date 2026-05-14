@@ -4,10 +4,10 @@ import { useEffect, useRef, useState } from "react"
 import { Layers, Globe, MapPin, Clock, Users } from "lucide-react"
 
 const metrics = [
-  { value: 40, suffix: "+", label: "Proyectos B2B & B2C Entregados", icon: Layers },
-  { value: 98, suffix: "%", label: "Satisfacción del Cliente", icon: Users },
-  { value: 7, suffix: "", label: "Países Atendidos", icon: Globe },
-  { value: 75, suffix: "%", label: "Más Rápido al Mercado", icon: Clock },
+  { value: 40, suffix: "+", label: "Productos que la gente ama usar", icon: Layers },
+  { value: 98, suffix: "%", label: "De clientes que volverían a trabajar con nosotros", icon: Users },
+  { value: 7, suffix: "", label: "Países donde nuestro diseño impacta", icon: Globe },
+  { value: 75, suffix: "%", label: "Más rápido que el discovery tradicional", icon: Clock },
 ]
 
 function useCountUp(target: number, duration = 1800, active: boolean) {
@@ -83,7 +83,7 @@ export function TrustMetrics() {
     >
       <div className="max-w-6xl mx-auto">
         <p className="text-center text-xs font-semibold tracking-widest uppercase text-muted-foreground mb-12">
-          La confianza de corporaciones B2B y marcas B2C innovadoras
+          Resultados reales de equipos que dejaron de adivinar y empezaron a diseñar con evidencia
         </p>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {metrics.map((m) => (

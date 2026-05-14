@@ -60,12 +60,12 @@ export function CTASection() {
               id="cta-heading"
               className="font-display font-bold text-3xl md:text-5xl leading-tight text-white text-balance"
             >
-              Lleva tu negocio B2B y experiencia B2C al siguiente nivel
+              Tu producto merece usuarios que lo amen. Nosotros te ayudamos a lograrlo.
             </h2>
 
             <p className="text-base text-white/70 leading-relaxed text-pretty">
-              Agenda una llamada de discovery gratuita de 30 minutos. Analizaremos los desafíos de tu producto
-              y te mostraremos exactamente cómo podemos ayudarte a enamorar a tus usuarios y escalar tus ventas — sin compromiso.
+              30 minutos. Sin compromiso. Te escuchamos, entendemos tu desafío y te mostramos exactamente
+              cómo podríamos resolverlo juntos. Si no encajamos, te lo decimos con honestidad.
             </p>
 
             {/* Value props */}
@@ -87,7 +87,7 @@ export function CTASection() {
             <div className="flex flex-col sm:flex-row items-center gap-4 pt-2">
               <BookingModal>
                 <button type="button" className="group flex-1 flex items-center justify-center gap-2 py-4 rounded-xl font-bold text-[15px] bg-[var(--magenta)] text-white transition-all hover:brightness-110 active:scale-95 shadow-lg shadow-[var(--magenta)]/25">
-                  {t("Agenda tu llamada gratuita", "Book your free call")} <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                  {t("Quiero transformar mi producto", "I want to transform my product")} <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                 </button>
               </BookingModal>
               <Link
@@ -118,7 +118,7 @@ export function CTASection() {
                 ))}
               </div>
               <p className="text-xs text-white/50">
-                <span className="text-white font-medium">+40 empresas corporativas y startups</span> han comenzado su camino B2B/B2C con nosotros
+                <span className="text-white font-medium">40+ equipos</span> ya transformaron su producto con nosotros. El próximo podría ser el tuyo.
               </p>
             </div>
           </div>

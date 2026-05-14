@@ -25,8 +25,8 @@ export function StickyCTA() {
     <div className="fixed bottom-0 left-0 right-0 z-50 p-4 pointer-events-none md:hidden">
       <div className="relative flex items-center justify-between gap-4 px-4 py-3 rounded-2xl bg-foreground text-background shadow-2xl pointer-events-auto">
         <div className="flex flex-col gap-0.5">
-          <p className="text-sm font-semibold">¿Listo para empezar?</p>
-          <p className="text-xs opacity-70">Agenda una llamada gratuita</p>
+          <p className="text-sm font-semibold">¿Necesitas claridad sobre tu producto?</p>
+          <p className="text-xs opacity-70">30 min gratis · Sin compromiso</p>
         </div>
         <div className="flex items-center gap-2">
           <BookingModal>
@@ -34,7 +34,7 @@ export function StickyCTA() {
               type="button"
               className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold bg-[var(--magenta)] text-white hover:brightness-110 transition-all active:scale-95"
             >
-              Hablemos
+              Reservar 30 min
               <ArrowRight size={14} />
             </button>
           </BookingModal>

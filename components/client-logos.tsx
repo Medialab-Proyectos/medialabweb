@@ -40,7 +40,7 @@ export function ClientLogos() {
     >
       <div className="max-w-6xl mx-auto flex flex-col gap-10">
         <p className="text-center text-xs font-semibold tracking-widest uppercase text-muted-foreground">
-          La confianza de equipos innovadores en todo el mundo
+          Equipos que dejaron de adivinar y empezaron a diseñar con evidencia
         </p>
 
         <div

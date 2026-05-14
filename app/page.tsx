@@ -20,6 +20,7 @@ import { Footer } from "@/components/footer"
 import { SocialProofBar } from "@/components/social-proof-bar"
 import { StickyCTA } from "@/components/sticky-cta"
 import { MidCTA } from "@/components/mid-cta"
+import { CoursePromoSection } from "@/components/course-promo-section"
 
 /**
  * Information Architecture Flow (2026 UX Best Practices):
@@ -31,11 +32,12 @@ import { MidCTA } from "@/components/mid-cta"
  * 5. METHOD     — Methodology: cómo lo hacemos (transparencia = confianza)
  * 6. PROOF      — Testimonials: validación de terceros
  * 7. MID-CTA    — Primera conversión suave tras construir confianza
+ * 7.5 EDUCATE   — Course Promo: formación profesional IA (segundo embudo)
  * 8. ACTIVATE   — UXBox Form: herramienta interactiva (engagement alto)
  * 9. CONTEXT    — Industries + World Presence: relevancia sectorial + alcance
  * 10. SHOWCASE  — Digital Products: portafolio tangible
  * 11. REINFORCE — Why Us: refuerzo de diferenciadores
- * 12. EDUCATE   — Blog: contenido de valor (SEO + autoridad)
+ * 12. CONTENT   — Blog: contenido de valor (SEO + autoridad)
  * 13. RESOLVE   — FAQ: elimina objeciones finales
  * 14. CONVERT   — CTA final: cierre con urgencia y claridad
  */
@@ -69,9 +71,12 @@ export default function Home() {
 
       {/* — MID-FUNNEL CONVERSION — */}
       <MidCTA
-        headline="Únete a más de 40 empresas que transformaron sus canales B2B y B2C"
-        subheadline="Desde startups ágiles hasta líderes enterprise — te ayudamos a conectar con tus usuarios y escalar tus ventas."
+        headline="Cada sprint sin investigación de usuarios es inversión que no regresa"
+        subheadline="Ya viste cómo trabajamos. Ahora imagina eso aplicado a tu producto. 40+ equipos ya dieron el paso — ¿y tú?"
       />
+
+      {/* — EDUCATION & TRAINING — */}
+      <CoursePromoSection />
 
       {/* — INTERACTIVE ENGAGEMENT — */}
       <UXBoxForm />

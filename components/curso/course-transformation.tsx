@@ -3,21 +3,22 @@
 import { useRef } from "react"
 import { motion, useInView } from "framer-motion"
 import { ArrowRight } from "lucide-react"
+import Image from "next/image"
 
 const before = [
-  { label: "Lento", desc: "Procesos manuales interminables" },
-  { label: "Saturado", desc: "Demasiadas herramientas, poco criterio" },
-  { label: "Confundido", desc: "Sin saber qué aprender primero" },
-  { label: "Genérico", desc: "Diseños que se ven iguales a todos" },
-  { label: "Reemplazable", desc: "Miedo constante al futuro" },
+  { label: "Abrumado", desc: "15 herramientas nuevas cada mes y ninguna dirección clara" },
+  { label: "Genérico", desc: "Tus diseños se ven iguales a los de cualquier prompt de ChatGPT" },
+  { label: "Inseguro", desc: "No sabes si lo que genera la IA es bueno o solo rápido" },
+  { label: "Dependiente", desc: "Sin IA no avanzas, con IA no decides" },
+  { label: "Ansioso", desc: "La sensación constante de que alguien te va a reemplazar" },
 ]
 
 const after = [
-  { label: "Estratégico", desc: "Cada decisión tiene propósito" },
-  { label: "Rápido con criterio", desc: "Velocidad + profundidad" },
-  { label: "Relevante", desc: "Habilidades a prueba de futuro" },
-  { label: "Diferencial", desc: "Tu firma humana amplificada" },
-  { label: "AI-Native", desc: "La IA como extensión natural" },
+  { label: "Con criterio", desc: "Sabes exactamente cuándo usar IA y cuándo confiar en ti" },
+  { label: "Diferencial", desc: "Tu firma humana amplifica lo que la IA genera" },
+  { label: "Seguro", desc: "Tienes un framework para evaluar, filtrar y decidir" },
+  { label: "Estratégico", desc: "Cada decisión de diseño responde a un por qué real" },
+  { label: "A prueba de futuro", desc: "Habilidades que no caducan cuando sale la próxima herramienta" },
 ]
 
 export function CourseTransformation() {
@@ -45,6 +46,22 @@ export function CourseTransformation() {
           </h2>
         </motion.div>
 
+        {/* Emotional image */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={inView ? { opacity: 1, scale: 1 } : {}}
+          transition={{ duration: 0.8, delay: 0.15 }}
+          className="relative w-full h-48 md:h-64 rounded-2xl overflow-hidden mb-10 md:mb-14 border border-white/[0.04]"
+        >
+          <Image
+            src="/images/curso/transformation.png"
+            alt="De la confusión a la claridad"
+            fill
+            className="object-cover opacity-60"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-red-900/30 via-transparent to-[var(--cyan)]/20" />
+        </motion.div>
+
         <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-6 md:gap-4 items-start">
           {/* Before */}
           <motion.div initial={{ opacity: 0, x: -30 }} animate={inView ? { opacity: 1, x: 0 } : {}} transition={{ delay: 0.2, duration: 0.6 }}>
@@ -65,15 +82,15 @@ export function CourseTransformation() {
           {/* Arrow */}
           <div className="hidden md:flex items-center justify-center pt-12">
             <motion.div initial={{ opacity: 0, scale: 0.5 }} animate={inView ? { opacity: 1, scale: 1 } : {}} transition={{ delay: 0.5, duration: 0.5 }}
-              className="w-12 h-12 rounded-full border flex items-center justify-center"
-              style={{ background: 'linear-gradient(135deg, var(--cyan), var(--magenta))', opacity: 0.2, borderColor: 'var(--cyan)' }}>
+              className="w-12 h-12 rounded-full border-2 flex items-center justify-center"
+              style={{ borderColor: 'var(--cyan)', background: 'rgba(42,171,179,0.15)' }}>
               <ArrowRight className="w-5 h-5" style={{ color: 'var(--cyan)' }} />
             </motion.div>
           </div>
           <div className="flex md:hidden items-center justify-center">
             <motion.div initial={{ opacity: 0 }} animate={inView ? { opacity: 1 } : {}} transition={{ delay: 0.5 }}
-              className="w-10 h-10 rounded-full border flex items-center justify-center rotate-90"
-              style={{ borderColor: 'var(--cyan)', background: 'var(--cyan)', opacity: 0.15 }}>
+              className="w-10 h-10 rounded-full border-2 flex items-center justify-center rotate-90"
+              style={{ borderColor: 'var(--cyan)', background: 'rgba(42,171,179,0.15)' }}>
               <ArrowRight className="w-4 h-4" style={{ color: 'var(--cyan)' }} />
             </motion.div>
           </div>

@@ -5,12 +5,12 @@ import { motion, useInView } from "framer-motion"
 import { GraduationCap, BookOpen, Brain, Shield, HeartHandshake, Microscope } from "lucide-react"
 
 const items = [
-  { icon: GraduationCap, title: "Futura validación universitaria", desc: "Trabajamos activamente con instituciones educativas para que la certificación tenga peso académico real." },
-  { icon: BookOpen, title: "Metodología propietaria", desc: "Desarrollada por MediaLab tras años de investigación en UX, IA y diseño conductual aplicado a productos reales." },
-  { icon: Microscope, title: "Investigación MediaLab", desc: "Basada en datos reales de proyectos con más de 40 empresas en múltiples industrias." },
-  { icon: HeartHandshake, title: "Enfoque humano", desc: "La tecnología como herramienta, el criterio como diferencial. Siempre diseño centrado en personas." },
-  { icon: Shield, title: "IA ética", desc: "Enseñamos a usar IA con responsabilidad, transparencia y enfoque en el impacto humano real." },
-  { icon: Brain, title: "Pensamiento crítico", desc: "El skill más valioso del futuro: saber qué hacer con lo que la IA genera. Evaluar, filtrar, decidir." },
+  { icon: GraduationCap, title: "Camino a validación universitaria", desc: "Trabajamos con instituciones educativas para que tu certificación tenga peso académico real. No es solo un PDF bonito." },
+  { icon: BookOpen, title: "Creada desde la práctica, no desde la teoría", desc: "Esta metodología nació de años de proyectos reales con 40+ empresas. No es un framework inventado para un curso." },
+  { icon: Microscope, title: "Respaldada por datos reales", desc: "Cada fase fue probada y refinada con equipos reales en múltiples industrias. Sabemos qué funciona porque lo medimos." },
+  { icon: HeartHandshake, title: "Personas primero, siempre", desc: "La tecnología es la herramienta. Tú eres el diferencial. Cada módulo refuerza tu criterio humano, no lo sustituye." },
+  { icon: Shield, title: "IA con responsabilidad", desc: "Aprendes a usar IA con transparencia y ética. Porque el impacto de lo que diseñas afecta a personas reales." },
+  { icon: Brain, title: "Lo que la IA nunca podrá hacer por ti", desc: "Evaluar, filtrar, decidir. Ese es el skill que este curso desarrolla. Y es el que te hará irreemplazable." },
 ]
 
 export function CourseValidation() {
@@ -26,10 +26,10 @@ export function CourseValidation() {
       <div ref={ref} className="relative z-10 max-w-5xl mx-auto px-6 lg:px-8">
         <motion.div initial={{ opacity: 0, y: 30 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.7 }} className="text-center mb-10 md:mb-14">
           <span className="inline-block text-xs tracking-[0.2em] uppercase mb-4 font-display" style={{ color: 'var(--cyan)' }}>
-            Validación & Futuro
+            Por qué puedes confiar en esto
           </span>
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[var(--surface-dark-fg)] tracking-tight leading-snug mb-5 font-display">
-            Esto no es otro curso. <span className="text-white/40">Es una inversión en tu futuro.</span>
+            No es otro curso más. <span className="text-white/40">Y así es como lo respaldamos.</span>
           </h2>
         </motion.div>
 

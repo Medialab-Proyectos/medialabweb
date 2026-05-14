@@ -8,62 +8,62 @@ const steps = [
   {
     number: "01",
     label: "Discovery",
-    title: "Definición asistida por IA",
-    description: "Usamos inteligencia artificial para definir la oportunidad de tu producto, alinear objetivos B2B con necesidades B2C y generar requisitos clave en horas.",
+    title: "Claridad total sobre tu producto en menos de 48 horas",
+    description: "Antes de diseñar un solo pixel, necesitamos entender qué problema resuelves y para quién. Nuestra IA analiza tu idea y genera un mapa claro: oportunidad, requisitos y estrategia. Sin adivinar.",
     icon: Search,
     color: "var(--magenta)",
     gradient: "linear-gradient(135deg, #E8751A 0%, #c65a10 100%)",
     image: "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=800&auto=format&fit=crop",
     stat: "< 48h",
-    statLabel: "para tener claridad",
+    statLabel: "de incertidumbre a claridad",
   },
   {
     number: "02",
     label: "Estrategia UX",
-    title: "Diseño centrado en el ser humano",
-    description: "Investigamos a fondo a tus usuarios B2C y stakeholders B2B para traducir insights emocionales y funcionales en una estrategia UX ganadora.",
+    title: "Entender cómo piensa y siente tu usuario",
+    description: "Investigamos a las personas que van a usar tu producto — no en abstracto, sino sus miedos, motivaciones y puntos de fricción reales. Cada decisión de diseño nace de ahí.",
     icon: Compass,
     color: "var(--cyan)",
     gradient: "linear-gradient(135deg, #2AABB3 0%, #1d8a91 100%)",
     image: "https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?q=80&w=800&auto=format&fit=crop",
     stat: "100%",
-    statLabel: "basado en datos",
+    statLabel: "decisiones basadas en evidencia",
   },
   {
     number: "03",
     label: "Diseño",
-    title: "Arquitectura de experiencia emocional",
-    description: "Diseñamos cada interacción para generar conexión emocional con el usuario final y eficiencia operativa para el negocio.",
+    title: "Cada pantalla diseñada para que tu usuario sienta confianza",
+    description: "No decoramos interfaces — arquitectamos experiencias emocionales. Cada interacción, cada transición, cada palabra está pensada para que el usuario se sienta seguro y quiera seguir.",
     icon: PenTool,
     color: "var(--orange)",
     gradient: "linear-gradient(135deg, #E8751A 0%, #d4851f 100%)",
     image: "https://images.unsplash.com/photo-1561070791-2526d30994b5?q=80&w=800&auto=format&fit=crop",
     stat: "3×",
-    statLabel: "más retención",
+    statLabel: "más usuarios que regresan",
   },
   {
     number: "04",
     label: "Desarrollo",
-    title: "Tecnología escalable B2B & B2C",
-    description: "Construimos tu producto con código limpio, arquitectura performante y APIs robustas que sirven tanto a plataformas enterprise como a apps de consumo.",
+    title: "Un producto que funciona tan bien como se ve",
+    description: "Código limpio, arquitectura que escala y rendimiento que tus usuarios notan (aunque no lo sepan). Construimos para que tu producto crezca contigo, no en tu contra.",
     icon: Terminal,
     color: "var(--magenta)",
     gradient: "linear-gradient(135deg, #E8751A 0%, #c65a10 100%)",
     image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=800&auto=format&fit=crop",
     stat: "0",
-    statLabel: "deuda técnica",
+    statLabel: "deuda técnica heredada",
   },
   {
     number: "05",
     label: "Optimización CRO",
-    title: "Mejora continua de conversión",
-    description: "Analizamos el comportamiento real de tus usuarios y optimizamos cada touchpoint para maximizar conversión, retención y satisfacción emocional.",
+    title: "Convertir más sin gastar más en tráfico",
+    description: "Tu producto ya tiene visitantes. Nosotros analizamos dónde se pierden y optimizamos cada punto de contacto para que más personas hagan lo que tú necesitas que hagan.",
     icon: BarChart3,
     color: "var(--cyan)",
     gradient: "linear-gradient(135deg, #2AABB3 0%, #1d8a91 100%)",
     image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop",
     stat: "+40%",
-    statLabel: "conversión mejorada",
+    statLabel: "más conversión promedio",
   },
 ]
 
@@ -95,17 +95,17 @@ export function MethodSection() {
         {/* Header */}
         <div className="flex flex-col gap-4 max-w-2xl">
           <span className="text-xs font-semibold tracking-widest uppercase text-[var(--magenta)]">
-            Nuestra Metodología
+            Así funciona
           </span>
           <h2
             id="method-heading"
             className="font-display font-bold text-3xl md:text-4xl lg:text-5xl leading-tight text-foreground text-balance"
           >
-            De la idea al producto digital que enamora
+            5 pasos para pasar de “tengo una idea” a “mis usuarios lo aman”
           </h2>
           <p className="text-base text-muted-foreground leading-relaxed">
-            Un proceso probado de cinco pasos que transforma tu concepto en un producto digital exitoso —
-            optimizado para conectar emocionalmente con usuarios B2C y resolver necesidades complejas B2B.
+            No improvisamos. Cada proyecto sigue un proceso probado que elimina suposiciones y garantiza
+            que tu producto conecte con las personas desde el primer día. Así es como lo hacemos:
           </p>
         </div>
 

@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Linkedin, Twitter, Instagram, Github } from "lucide-react"
+import { Linkedin, Twitter, Instagram } from "lucide-react"
 
 const navColumns = [
   {
@@ -30,6 +30,7 @@ const navColumns = [
     title: "Recursos",
     links: [
       { label: "Blog", href: "#blog" },
+      { label: "Curso UX + IA", href: "/curso" },
       { label: "FAQ", href: "#faq" },
       { label: "Contacto", href: "#contact" },
     ],
@@ -38,9 +39,8 @@ const navColumns = [
 
 const socials = [
   { icon: Linkedin, label: "LinkedIn", href: "https://www.linkedin.com/company/medialab-ingenieria" },
-  { icon: Twitter, label: "Twitter / X", href: "https://x.com/MediaLabIng" },
+  { icon: Twitter, label: "X", href: "https://x.com/MediaLabIng" },
   { icon: Instagram, label: "Instagram", href: "https://www.instagram.com/medialabingenieria" },
-  { icon: Github, label: "GitHub", href: "https://github.com/medialabingenieria" },
 ]
 
 export function Footer() {
@@ -59,7 +59,7 @@ export function Footer() {
               <span className="font-display font-bold text-lg text-white">MediaLab</span>
             </Link>
             <p className="text-sm text-white/50 leading-relaxed max-w-xs">
-              Agencia de diseño UX/UI, inteligencia artificial y psicología del consumidor. Creamos productos digitales B2B y B2C con impacto emocional y resultados comerciales medibles.
+              Investigamos cómo piensan tus usuarios, diseñamos lo que necesitan sentir y construimos el producto que tu negocio necesita. Sin suposiciones. Con datos.
             </p>
             <div className="flex items-center gap-3 mt-2">
               {socials.map((s) => {

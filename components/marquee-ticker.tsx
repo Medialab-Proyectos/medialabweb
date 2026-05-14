@@ -1,14 +1,14 @@
 const items = [
-  "Investigación UX",
-  "Diseño Conductual",
-  "Descubrimiento con IA",
-  "Desarrollo de Software",
-  "SEO Técnico",
-  "Psicología del Consumidor",
-  "Productos B2B",
-  "Experiencias B2C",
-  "Optimización CRO",
+  "Investigación de Usuarios",
   "Diseño Emocional",
+  "IA aplicada al Producto",
+  "Código que Escala",
+  "SEO que Posiciona",
+  "Psicología del Consumidor",
+  "Experiencias B2B",
+  "Productos B2C",
+  "Conversión Medible",
+  "Criterio Humano",
 ]
 
 export function MarqueeTicker() {

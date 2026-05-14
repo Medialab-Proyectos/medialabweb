@@ -4,42 +4,42 @@ import Link from "next/link"
 const audiences = [
   {
     icon: Building2,
-    label: "Para equipos B2B",
-    title: "Plataformas que reducen fricción operativa",
+    label: "Si tu producto es B2B",
+    title: "Tus equipos pierden horas en flujos que deberían ser simples",
     description:
-      "Convertimos procesos complejos en flujos claros para ventas, soporte, operaciones y clientes corporativos. Menos entrenamiento, menos errores y más adopción interna.",
-    proof: "SaaS, dashboards, portales enterprise y herramientas internas",
+      "Convertimos procesos internos complejos en experiencias claras que tu equipo adopta sin capacitación. Menos fricción operativa, menos tickets de soporte, más productividad real.",
+    proof: "SaaS · Dashboards · Portales enterprise · Herramientas internas",
   },
   {
     icon: HeartHandshake,
-    label: "Para marcas B2C",
-    title: "Experiencias que se sienten confiables desde el primer toque",
+    label: "Si tu producto es B2C",
+    title: "Tus usuarios se van antes de entender lo que ofreces",
     description:
-      "Diseñamos productos de consumo con claridad emocional: onboarding amable, microcopy humano, decisiones simples y momentos que invitan a volver.",
-    proof: "Apps, e-commerce, fintech, educación, movilidad y comunidades",
+      "Diseñamos para que las personas sientan confianza desde el primer toque: onboarding que no abruma, microcopy que resuelve dudas y momentos que invitan a quedarse.",
+    proof: "Apps · E-commerce · Fintech · Educación · Movilidad",
   },
 ]
 
 const pillars = [
   {
     icon: SearchCheck,
-    title: "Intención de búsqueda",
-    description: "Arquitectura de contenido para posicionar servicios, industrias, problemas y casos de uso reales.",
+    title: "Te encuentran",
+    description: "Arquitectura de contenido para que Google entienda qué haces, para quién y por qué importa.",
   },
   {
     icon: UsersRound,
-    title: "Mapa emocional",
-    description: "Identificamos dudas, motivaciones y puntos de ansiedad antes de diseñar cada pantalla clave.",
+    title: "Te entienden",
+    description: "Mapeamos las dudas, motivaciones y ansiedades de tu usuario antes de diseñar una sola pantalla.",
   },
   {
     icon: LineChart,
-    title: "Conversión medible",
-    description: "Optimizamos llamados a la acción, jerarquía visual y confianza para mover usuarios hacia una decisión.",
+    title: "Te eligen",
+    description: "Optimizamos cada punto de decisión para que la confianza supere las objeciones y el usuario actúe.",
   },
   {
     icon: ShieldCheck,
-    title: "Confianza técnica",
-    description: "Unimos performance, accesibilidad, SEO técnico y arquitectura escalable para crecer con el producto.",
+    title: "Se quedan",
+    description: "Performance, accesibilidad y arquitectura técnica que hacen que la experiencia escale sin romperse.",
   },
 ]
 
@@ -54,19 +54,19 @@ export function ExperienceDesignSection() {
         <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
           <div className="flex max-w-3xl flex-col gap-4">
             <span className="text-xs font-semibold uppercase tracking-widest text-[var(--magenta)]">
-              Experiencia, SEO y crecimiento
+              El problema que casi nadie resuelve bien
             </span>
             <h2
               id="experience-design-heading"
               className="font-display text-3xl font-bold leading-tight text-foreground text-balance md:text-4xl lg:text-5xl"
             >
-              Diseño de experiencia para ser encontrado, entendido y elegido
+              Tu producto puede verse increíble y aun así perder usuarios. Aquí está la solución.
             </h2>
           </div>
           <p className="text-base leading-relaxed text-muted-foreground">
-            Una página no indexa ni convierte solo por verse bien. Necesita hablar el lenguaje de quien busca una
-            solución, responder objeciones con honestidad y hacer que cada interacción se sienta segura, rápida y
-            humana. Ese es el puente que construimos entre SEO, UX, IA, producto y ventas.
+            Una interfaz bonita no indexa en Google, no resuelve objeciones y no convierte visitantes en clientes.
+            Lo que sí funciona es diseñar desde la intención de búsqueda del usuario, responder sus miedos con honestidad
+            y hacer que cada interacción se sienta segura. Ese es el puente que construimos.
           </p>
         </div>
 
@@ -113,14 +113,14 @@ export function ExperienceDesignSection() {
 
         <div className="flex flex-col items-start justify-between gap-5 border-t border-border pt-8 md:flex-row md:items-center">
           <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground">
-            Ideal para empresas que necesitan mejorar posicionamiento orgánico, activar demanda B2B, aumentar
-            conversión B2C o rediseñar un producto digital sin perder la voz humana de la marca.
+            ¿Tu producto necesita posicionarse mejor en Google, activar más demanda o rediseñar su experiencia 
+            sin perder la voz humana de tu marca? Hablemos.
           </p>
           <Link
             href="#contact"
             className="inline-flex items-center gap-2 rounded-md bg-foreground px-5 py-3 text-sm font-semibold text-background transition hover:bg-[var(--magenta)] hover:text-white"
           >
-            Diseñar mi experiencia
+            Quiero mejorar mi experiencia →
             <ArrowRight size={16} />
           </Link>
         </div>

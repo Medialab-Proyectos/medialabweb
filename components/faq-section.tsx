@@ -5,44 +5,44 @@ import { Plus, Minus } from "lucide-react"
 
 const faqs = [
   {
-    question: "¿Qué es UXBox y cómo ayuda a mi negocio?",
+    question: "¿Qué es UXBox y por qué debería importarme?",
     answer:
-      "UXBox es nuestra plataforma inteligente de descubrimiento de producto potenciada por IA. Analiza tu idea y genera una propuesta de producto estructurada — incluyendo requisitos, estrategia UX y conceptos de diseño — en días en lugar de meses. Ideal tanto para líderes B2B que necesitan validar rápidamente como para fundadores B2C que quieren llegar antes al mercado.",
+      "UXBox es nuestra herramienta de IA que toma tu idea de producto y genera una propuesta estructurada — con requisitos, estrategia UX y conceptos de diseño — en días en lugar de meses. Si alguna vez sentiste que tu equipo lleva semanas definiendo sin avanzar, esto es para ti.",
   },
   {
-    question: "¿Cuánto tiempo toma el discovery de producto?",
+    question: "¿Cuánto tiempo toma empezar a ver resultados reales?",
     answer:
-      "Con UXBox, el discovery de producto puede completarse en tan solo 3-5 días. Los procesos tradicionales toman semanas o meses. Nuestro enfoque acelerado por IA comprime ese tiempo dramáticamente, permitiendo a equipos B2B y B2C tomar decisiones informadas más rápido.",
+      "Con UXBox, puedes tener claridad sobre tu producto en 3-5 días. Un primer prototipo validado, en 2-4 semanas. No te vamos a decir que todo toma meses — porque no tiene por qué.",
   },
   {
-    question: "¿Con qué industrias y modelos de negocio trabajan?",
+    question: "¿Trabajan con empresas de mi industria?",
     answer:
-      "Trabajamos con empresas B2B (SaaS, plataformas enterprise, fintech corporativa) y marcas B2C (e-commerce, apps de consumo, movilidad). Nuestras industrias incluyen Fintech, Banca, Movilidad, Startups, Educación, E-commerce, Sostenibilidad y Plataformas Digitales.",
+      "Trabajamos con equipos en Fintech, Banca, Movilidad, Startups, Educación, E-commerce, Sostenibilidad y Plataformas Digitales. Si tu producto tiene usuarios — humanos que necesitan sentir confianza — podemos ayudarte.",
   },
   {
-    question: "¿Construyen plataformas digitales completas?",
+    question: "¿Pueden construir mi producto completo o solo diseñan?",
     answer:
-      "Sí. Ofrecemos servicios end-to-end desde discovery y diseño UX/UI hasta desarrollo de software a medida. Construimos dashboards B2B, apps móviles B2C, MVPs para startups y plataformas empresariales escalables usando React, Next.js, Node.js e infraestructura cloud.",
+      "Ambas. Hacemos todo el camino: investigación, diseño UX/UI y desarrollo de software a medida. Si solo necesitas diseño o solo desarrollo, también funciona. Nos adaptamos a lo que tu equipo necesite.",
   },
   {
-    question: "¿Cómo inicio un proyecto con MediaLab?",
+    question: "¿Cómo empiezo si todavía no tengo claro lo que necesito?",
     answer:
-      "La forma más fácil es hacer clic en \"Agenda tu llamada gratuita\" y contarnos sobre tu idea. También puedes usar UXBox para enviar un brief estructurado. Nuestro equipo te contactará en 24 horas para una sesión de discovery gratuita — sin compromiso.",
+      "Ese es justo el punto de partida perfecto. Haz clic en 'Quiero transformar mi producto' y te contactaremos en 24h para una sesión de discovery gratuita de 30 minutos. Saldrás con más claridad de la que tienes ahora. Sin compromiso.",
   },
   {
-    question: "¿Puedo contratar a MediaLab como equipo de producto externo?",
+    question: "¿Puedo integrarlos como parte de mi equipo?",
     answer:
-      "Absolutamente. Muchos clientes B2B nos integran como su equipo dedicado de diseño y desarrollo. Trabajamos junto a tus equipos internos u operamos de forma independiente. Es ideal para startups sin capacidad de diseño interna y para corporaciones que necesitan escalar su equipo digital rápidamente.",
+      "Sí, muchos de nuestros clientes nos integran como su equipo de producto externo. Trabajamos dentro de tus sprints, con tus herramientas y junto a tus desarrolladores. Es como tener un equipo senior de UX + Desarrollo sin el costo de contratación.",
   },
   {
-    question: "¿Cómo garantizan que la experiencia conecte emocionalmente con los usuarios?",
+    question: "¿Cómo sé que no van a diseñar algo bonito que nadie use?",
     answer:
-      "Aplicamos psicología del consumidor y diseño conductual en cada proyecto. Investigamos cómo piensan, sienten y deciden tus usuarios para diseñar experiencias que generen conexión emocional real — no solo flujos funcionales. Esto aplica tanto para productos B2C que buscan engagement como para plataformas B2B que necesitan eficiencia y satisfacción.",
+      "Porque empezamos investigando a tus usuarios, no dibujando pantallas. Cada decisión de diseño está respaldada por datos de comportamiento real. Diseñamos para que funcione primero — y que se vea increíble después.",
   },
   {
-    question: "¿Qué diferencia a MediaLab de otras agencias UX?",
+    question: "¿Qué los hace diferentes de otras agencias UX?",
     answer:
-      "Tres diferenciadores: (1) UXBox — nuestra IA que comprime el discovery de producto 10x, (2) Enfoque en psicología del consumidor — no solo diseñamos interfaces bonitas, diseñamos para el comportamiento humano, y (3) Capacidad end-to-end — desde la investigación hasta el desarrollo de software, entregamos productos listos para el mercado.",
+      "Tres cosas: (1) UXBox — IA que comprime tu discovery 10x, (2) investigamos cómo piensan tus usuarios antes de diseñar, y (3) hacemos todo end-to-end: investigación, diseño y desarrollo. No pasamos el trabajo a un tercero.",
   },
 ]
 
@@ -70,15 +70,15 @@ export function FAQSection() {
       <div className="max-w-4xl mx-auto flex flex-col gap-12">
         {/* Header */}
         <div className="flex flex-col gap-4 text-center">
-          <span className="text-xs font-semibold tracking-widest uppercase text-[var(--magenta)]">Preguntas Frecuentes</span>
+          <span className="text-xs font-semibold tracking-widest uppercase text-[var(--magenta)]">Antes de decidir, resuelve tus dudas</span>
           <h2
             id="faq-heading"
             className="font-display font-bold text-3xl md:text-4xl leading-tight text-foreground text-balance"
           >
-            Preguntas frecuentes sobre diseño UX, IA y productos digitales
+            Todo lo que querías preguntar (y algunas cosas que no sabías que necesitabas saber)
           </h2>
           <p className="text-base text-muted-foreground leading-relaxed max-w-xl mx-auto">
-            Todo lo que necesitas saber sobre cómo MediaLab Ingeniería puede transformar tu experiencia digital B2B o B2C.
+            Si tu pregunta no está aquí, escríbenos. Respondemos en menos de 24 horas.
           </p>
         </div>
 

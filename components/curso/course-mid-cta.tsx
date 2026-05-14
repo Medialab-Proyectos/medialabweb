@@ -16,30 +16,26 @@ export function CourseMidCta({ headline, subtext, ctaText, ctaHref, variant = "s
   const inView = useInView(ref, { once: true, margin: "-60px" })
 
   return (
-    <div ref={ref} className="py-16 md:py-20 bg-[var(--surface-dark)]">
+    <div ref={ref} className="py-8 md:py-10 bg-[var(--surface-dark)]">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.5 }}
         className="max-w-3xl mx-auto px-6 lg:px-8 text-center"
       >
-        <div className={`p-8 md:p-10 rounded-2xl border ${
+        <div className={`p-6 md:p-8 rounded-2xl border ${
           variant === "primary"
             ? "border-[var(--magenta)]/[0.12] bg-[var(--magenta)]/[0.03]"
-            : "border-white/[0.04] bg-white/[0.015]"
+            : "border-white/[0.06] bg-white/[0.02]"
         }`}>
           <p className="text-lg md:text-xl font-medium text-[var(--surface-dark-fg)] mb-2 font-display">
             {headline}
           </p>
-          <p className="text-sm text-white/40 mb-6 max-w-md mx-auto">{subtext}</p>
+          <p className="text-sm text-white/40 mb-5 max-w-md mx-auto">{subtext}</p>
           <a
             href={ctaHref}
-            className={`inline-flex px-6 py-3 text-sm font-semibold rounded-full transition-all duration-300 hover:scale-[1.03] ${
-              variant === "primary"
-                ? "text-white hover:shadow-lg"
-                : "text-white/80 border border-white/[0.1] hover:border-white/[0.2] hover:bg-white/[0.03]"
-            }`}
-            style={variant === "primary" ? { background: 'var(--magenta)' } : undefined}
+            className="inline-flex px-6 py-3 text-sm font-semibold text-white rounded-full transition-all duration-300 hover:scale-[1.03] hover:shadow-lg"
+            style={{ background: variant === "primary" ? 'var(--magenta)' : 'var(--cyan)' }}
           >
             {ctaText}
           </a>

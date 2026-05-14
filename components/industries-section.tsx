@@ -10,56 +10,56 @@ const industries = [
     icon: CreditCard,
     color: "var(--magenta)",
     image: "/images/industry_fintech.jpg",
-    description: "Diseño de apps financieras que generan confianza",
+    description: "Apps financieras donde la confianza se siente, no se explica",
   },
   {
     label: "Banca",
     icon: Landmark,
     color: "var(--cyan)",
     image: "/images/industry_banca.jpg",
-    description: "Experiencias bancarias modernas y accesibles",
+    description: "Experiencias bancarias que eliminan la ansiedad del usuario",
   },
   {
     label: "Movilidad",
     icon: Car,
     color: "var(--orange)",
     image: "/images/industry_movilidad.jpg",
-    description: "Interfaces para el futuro del transporte urbano",
+    description: "Interfaces que hacen que moverte sea simple y seguro",
   },
   {
     label: "Startups",
     icon: Rocket,
     color: "var(--magenta)",
     image: "/images/industry_startups.jpg",
-    description: "De cero a producto validado en tiempo récord",
+    description: "De idea a producto validado antes de que se acabe la pista",
   },
   {
     label: "Educación",
     icon: GraduationCap,
     color: "var(--cyan)",
     image: "/images/industry_educacion.jpg",
-    description: "Plataformas de aprendizaje que retienen y motivan",
+    description: "Plataformas donde aprender se siente natural, no forzado",
   },
   {
     label: "E-commerce",
     icon: ShoppingCart,
     color: "var(--orange)",
     image: "/images/industry_ecommerce.jpg",
-    description: "Flujos de compra que convierten y fidelizan",
+    description: "Experiencias de compra que convierten visitantes en clientes fieles",
   },
   {
     label: "Medio Ambiente",
     icon: Leaf,
     color: "var(--cyan)",
     image: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=600&q=80&fit=crop",
-    description: "Tecnología digital al servicio del planeta",
+    description: "Tecnología que hace visible el impacto positivo",
   },
   {
     label: "Plataformas Digitales",
     icon: LayoutGrid,
     color: "var(--magenta)",
     image: "https://images.unsplash.com/photo-1551434678-e076c223a692?w=600&q=80&fit=crop",
-    description: "Sistemas complejos con experiencia simple",
+    description: "Sistemas complejos que se sienten simples desde el primer clic",
   },
 ]
 
@@ -87,17 +87,17 @@ export function IndustriesSection() {
         {/* Header */}
         <div className="flex flex-col gap-4 items-center text-center max-w-2xl mx-auto">
           <span className="text-xs font-semibold tracking-widest uppercase text-[var(--magenta)]">
-            Industrias
+            Donde ya impactamos
           </span>
           <h2
             id="industries-heading"
             className="font-display font-bold text-3xl md:text-4xl leading-tight text-foreground text-balance"
           >
-            Impulsamos la transformación B2B y el alcance B2C en múltiples industrias
+            Cada industria tiene sus propios miedos y motivaciones. Nosotros los entendemos.
           </h2>
           <p className="text-base text-muted-foreground leading-relaxed">
-            Desde plataformas B2B corporativas hasta apps de consumo masivo B2C — nuestro equipo multidisciplinario lleva
-            estrategias de diseño centrado en el humano (Human-Centered Design) a los sectores más competitivos del mercado.
+            No aplicamos la misma receta a todos los sectores. Investigamos las emociones específicas
+            de tus usuarios — y diseñamos experiencias que hablan su idioma.
           </p>
         </div>
 
