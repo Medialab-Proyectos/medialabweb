@@ -34,10 +34,10 @@ export function CourseTestimonials() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {testimonials.map((t, i) => (
             <motion.div key={i} initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ delay: 0.1 + i * 0.08, duration: 0.5 }} className="group">
-              <div className="relative p-6 md:p-8 rounded-2xl border border-foreground/[0.04] bg-foreground/[0.02] hover:border-[var(--magenta)]/[0.1] hover:bg-foreground/[0.03] transition-all duration-500 h-full flex flex-col">
+              <div className="relative p-6 md:p-8 rounded-2xl border border-foreground/[0.1] bg-foreground/[0.03] hover:border-[var(--magenta)]/[0.1] hover:bg-foreground/[0.03] transition-all duration-500 h-full flex flex-col">
                 <Quote className="w-5 h-5 mb-4" style={{ color: 'var(--magenta)', opacity: 0.3 }} />
                 <p className="text-base text-foreground/70 leading-relaxed mb-6 flex-1">&ldquo;{t.text}&rdquo;</p>
-                <div className="pt-4 border-t border-foreground/[0.04]">
+                <div className="pt-4 border-t border-foreground/[0.1]">
                   <p className="text-sm font-medium text-[var(--surface-dark-fg)]">{t.name}</p>
                   <p className="text-xs text-foreground/40">{t.role}</p>
                   <span className="inline-block mt-2 px-2.5 py-1 rounded-full text-[10px] font-semibold border border-[var(--cyan)]/20 bg-[var(--cyan)]/[0.06]" style={{ color: 'var(--cyan)' }}>

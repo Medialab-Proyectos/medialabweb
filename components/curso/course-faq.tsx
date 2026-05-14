@@ -44,7 +44,7 @@ export function CourseFaq() {
                 <button
                   onClick={() => setOpenIndex(isOpen ? null : i)}
                   className={`w-full text-left p-5 md:p-6 rounded-xl border transition-all duration-300 ${
-                    isOpen ? 'border-[var(--magenta)]/[0.15] bg-[var(--magenta)]/[0.03]' : 'border-foreground/[0.04] bg-foreground/[0.02] hover:border-foreground/[0.08]'
+                    isOpen ? 'border-[var(--magenta)]/[0.15] bg-[var(--magenta)]/[0.03]' : 'border-foreground/[0.1] bg-foreground/[0.03] hover:border-foreground/20'
                   }`}
                 >
                   <div className="flex items-start justify-between gap-4">

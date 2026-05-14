@@ -21,7 +21,7 @@
   --secondary: oklch(0.94 0 0);
   --secondary-foreground: oklch(0.08 0 0);
   --muted: oklch(0.94 0 0);
-  --muted-foreground: oklch(0.45 0 0);
+  --muted-foreground: oklch(0.38 0 0);
   --accent: #E8751A;
   --accent-foreground: oklch(0.99 0 0);
   --destructive: oklch(0.577 0.245 27.325);
@@ -31,10 +31,12 @@
   --ring: #E8751A;
   --radius: 0.5rem;
 
-  /* Section backgrounds — adapt to theme */
-  --surface-dark: oklch(0.98 0 0);
-  --surface-dark-foreground: oklch(0.08 0 0);
-  --surface-mid: oklch(0.95 0 0);
+  /* Section backgrounds — ALWAYS dark for impact (hero, course hero, etc.)
+     keeps brand consistency across light/dark themes and prevents
+     hardcoded text-white from disappearing on light backgrounds */
+  --surface-dark: oklch(0.05 0 0);
+  --surface-dark-foreground: oklch(0.97 0 0);
+  --surface-mid: oklch(0.1 0 0);
 
   --chart-1: #E8751A;
   --chart-2: #2AABB3;
@@ -55,7 +57,7 @@
   --secondary: oklch(0.18 0 0);
   --secondary-foreground: oklch(0.97 0 0);
   --muted: oklch(0.18 0 0);
-  --muted-foreground: oklch(0.6 0 0);
+  --muted-foreground: oklch(0.72 0 0);
   --accent: #E8751A;
   --accent-foreground: oklch(0.99 0 0);
   --destructive: oklch(0.396 0.141 25.723);

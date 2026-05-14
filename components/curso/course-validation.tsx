@@ -41,7 +41,7 @@ export function CourseValidation() {
             const Icon = item.icon
             return (
               <motion.div key={i} initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ delay: 0.1 + i * 0.08, duration: 0.5 }} className="group">
-                <div className="p-6 md:p-8 rounded-2xl border border-foreground/[0.04] bg-foreground/[0.02] hover:border-[var(--cyan)]/[0.1] hover:bg-foreground/[0.03] transition-all duration-500 h-full">
+                <div className="p-6 md:p-8 rounded-2xl border border-foreground/[0.1] bg-foreground/[0.03] hover:border-[var(--cyan)]/[0.1] hover:bg-foreground/[0.03] transition-all duration-500 h-full">
                   <Icon className="w-6 h-6 mb-4" style={{ color: 'var(--cyan)', opacity: 0.6 }} />
                   <h3 className="text-lg font-semibold text-[var(--surface-dark-fg)] mb-2">{item.title}</h3>
                   <p className="text-sm text-foreground/40 leading-relaxed">{item.desc}</p>

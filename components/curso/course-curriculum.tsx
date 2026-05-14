@@ -60,7 +60,7 @@ export function CourseCurriculum() {
                 transition={{ delay: 0.1 + i * 0.05, duration: 0.5 }}
                 className="group"
               >
-                <div className="relative p-6 rounded-2xl border border-foreground/[0.04] bg-foreground/[0.02] hover:border-[var(--cyan)]/[0.15] hover:bg-[var(--cyan)]/[0.03] transition-all duration-500 h-full">
+                <div className="relative p-6 rounded-2xl border border-foreground/[0.1] bg-foreground/[0.03] hover:border-[var(--cyan)]/[0.15] hover:bg-[var(--cyan)]/[0.03] transition-all duration-500 h-full">
                   <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-[var(--cyan)]/[0.05] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                   <div className="relative z-10">
                     <div className="flex items-center gap-3 mb-4">

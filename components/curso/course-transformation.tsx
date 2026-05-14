@@ -54,7 +54,7 @@ export function CourseTransformation() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={inView ? { opacity: 1, scale: 1 } : {}}
           transition={{ duration: 0.8, delay: 0.15 }}
-          className="relative w-full h-48 md:h-64 rounded-2xl overflow-hidden mb-10 md:mb-14 border border-foreground/[0.04]"
+          className="relative w-full h-48 md:h-64 rounded-2xl overflow-hidden mb-10 md:mb-14 border border-foreground/[0.1]"
         >
           <Image
             src="/images/curso/transformation.png"

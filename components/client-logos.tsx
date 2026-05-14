@@ -83,22 +83,23 @@ export function ClientLogos() {
         /* Light mode: logos are nearly white → invert + grayscale = dark gray */
         .client-logo {
           filter: grayscale(1) invert(1) brightness(0.55);
-          opacity: 0.7;
+          opacity: 0.78;
           transition: opacity 0.25s ease, filter 0.25s ease;
         }
         .client-logo:hover {
-          filter: grayscale(1) invert(1) brightness(0.35);
+          filter: grayscale(1) invert(1) brightness(0.3);
           opacity: 1;
         }
 
-        /* Dark mode: logos are nearly white → grayscale + dim = visible gray on dark bg */
+        /* Dark mode: logos are nearly white → push to near-white so brands like
+           Kupi / Vinnove are clearly readable on the dark background */
         .dark .client-logo {
-          filter: grayscale(1) brightness(0.85);
-          opacity: 0.65;
+          filter: grayscale(1) brightness(1.6) contrast(1.05);
+          opacity: 0.85;
         }
         .dark .client-logo:hover {
-          filter: grayscale(1) brightness(1.1);
-          opacity: 0.9;
+          filter: grayscale(1) brightness(2) contrast(1.1);
+          opacity: 1;
         }
       `}</style>
     </section>

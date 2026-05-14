@@ -67,7 +67,7 @@ export function CourseMethodology() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={inView ? { opacity: 1, scale: 1 } : {}}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="relative w-full h-40 md:h-56 rounded-2xl overflow-hidden mb-8 border border-foreground/[0.04]"
+          className="relative w-full h-40 md:h-56 rounded-2xl overflow-hidden mb-8 border border-foreground/[0.1]"
         >
           <Image
             src="/images/curso/methodology-workshop.png"
@@ -125,7 +125,7 @@ export function CourseMethodology() {
                   <div className={`${isLeft ? 'md:pr-12 md:text-right' : 'md:col-start-2 md:pl-12 md:text-left'} md:direction-ltr`}>
                     <button onClick={() => setActivePhase(isActive ? null : i)} className="w-full text-left group">
                       <div className={`p-6 md:p-8 rounded-2xl border transition-all duration-500 ${
-                        isActive ? `${s.border} ${s.bg} shadow-xl` : 'border-foreground/[0.04] bg-foreground/[0.02] hover:border-foreground/[0.08] hover:bg-foreground/[0.03]'
+                        isActive ? `${s.border} ${s.bg} shadow-xl` : 'border-foreground/[0.1] bg-foreground/[0.03] hover:border-foreground/20 hover:bg-foreground/[0.05]'
                       }`}>
                         <div className={`flex items-center gap-3 mb-3 ${isLeft ? 'md:flex-row-reverse' : ''}`}>
                           <div className={`w-8 h-8 rounded-lg ${s.bg} flex items-center justify-center shrink-0`}>

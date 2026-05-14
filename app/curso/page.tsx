@@ -14,6 +14,7 @@ import { CourseValidation } from "@/components/curso/course-validation"
 import { CourseFaq } from "@/components/curso/course-faq"
 import { CourseCta } from "@/components/curso/course-cta"
 import { CourseCommunity } from "@/components/curso/course-community"
+import { CourseStickyCTA } from "@/components/curso/course-sticky-cta"
 
 /**
  * Landing Page — Metodología IA by MediaLab
@@ -109,6 +110,9 @@ export default function CursoPage() {
       <CourseCta />
 
       <Footer />
+
+      {/* Mobile sticky inscription CTA */}
+      <CourseStickyCTA />
     </main>
   )
 }

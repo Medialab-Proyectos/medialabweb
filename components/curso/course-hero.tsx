@@ -121,45 +121,54 @@ export function CourseHero() {
               </span>
             </motion.h1>
 
-            {/* Value prop with target profiles */}
-            <motion.p variants={fadeUp} className="text-base md:text-lg text-foreground/50 leading-relaxed mb-4 max-w-lg">
-              12 fases para diseñadores, developers y startups. Al terminar, te conviertes en un profesional que sabe investigar, diseñar, construir y validar productos donde tú decides y la IA ejecuta.
+            {/* Value prop — short, direct */}
+            <motion.p variants={fadeUp} className="text-base md:text-lg text-[var(--surface-dark-fg)]/75 leading-relaxed mb-6 max-w-lg">
+              12 fases para que <span className="text-[var(--surface-dark-fg)] font-medium">tú dirijas</span> y la IA ejecute. Aprende a investigar, diseñar y validar productos reales.
             </motion.p>
-            <motion.div variants={fadeUp} className="flex flex-col gap-2 mb-8">
-              <p className="text-[11px] tracking-[0.12em] uppercase text-foreground/30 font-medium">En esto te conviertes:</p>
-              <div className="flex flex-wrap gap-2">
-                <span className="px-3.5 py-1.5 rounded-full border border-[var(--cyan)]/20 bg-[var(--cyan)]/[0.05] text-xs font-semibold" style={{ color: 'var(--cyan)' }}>
-                  Behavioral AI Experience Designer
-                </span>
-                <span className="px-3.5 py-1.5 rounded-full border border-[var(--magenta)]/20 bg-[var(--magenta)]/[0.05] text-xs font-semibold" style={{ color: 'var(--magenta)' }}>
-                  UX Prompt Designer
-                </span>
-              </div>
-            </motion.div>
 
-            {/* CTAs */}
-            <motion.div variants={fadeUp} className="flex flex-col sm:flex-row items-start gap-3 mb-10">
-              <a href="#registro" className="px-7 py-3.5 text-sm font-semibold text-white rounded-full transition-all duration-300 hover:scale-[1.03] hover:shadow-lg" style={{ background: 'var(--magenta)' }}>
+            {/* CTAs — prominent, above the fold */}
+            <motion.div variants={fadeUp} className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mb-3">
+              <a
+                href="#registro"
+                className="inline-flex items-center justify-center gap-2 px-7 py-4 text-sm font-semibold text-white rounded-full transition-all duration-300 hover:scale-[1.03] active:scale-95 shadow-[0_10px_32px_-8px_rgba(232,117,26,0.65)]"
+                style={{ background: 'var(--magenta)' }}
+              >
                 Registrarme al curso →
               </a>
-              <a href="https://wa.me/573054009505?text=Hola%2C%20quiero%20información%20sobre%20el%20curso%20Behavioral%20AI%20Experience%20Design" target="_blank" rel="noopener noreferrer" className="px-7 py-3.5 text-sm font-medium text-white rounded-full transition-all duration-300 hover:scale-[1.03] hover:shadow-lg" style={{ background: 'var(--cyan)' }}>
+              <a
+                href="https://wa.me/573054009505?text=Hola%2C%20quiero%20información%20sobre%20el%20curso%20Behavioral%20AI%20Experience%20Design"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 px-7 py-4 text-sm font-semibold rounded-full transition-all duration-300 hover:scale-[1.03] active:scale-95 border border-[var(--cyan)]/40 text-[var(--cyan)] hover:bg-[var(--cyan)]/10"
+              >
                 Hablar con un asesor
               </a>
             </motion.div>
 
-            <motion.p variants={fadeUp} className="text-xs text-foreground/30 -mt-6 mb-4 flex items-center gap-2">
+            <motion.p variants={fadeUp} className="text-xs text-[var(--surface-dark-fg)]/55 mb-7 flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-              Precio de lanzamiento · Garantía de devolución la primera semana
+              Precio de lanzamiento · Garantía la primera semana
             </motion.p>
 
+            {/* Role pills — moved below CTAs so they don't push buttons down */}
+            <motion.div variants={fadeUp} className="flex flex-wrap items-center gap-2 mb-7">
+              <span className="text-[10px] tracking-[0.12em] uppercase text-[var(--surface-dark-fg)]/40 font-medium mr-1">Te conviertes en:</span>
+              <span className="px-3 py-1 rounded-full border border-[var(--cyan)]/25 bg-[var(--cyan)]/[0.06] text-[11px] font-semibold" style={{ color: 'var(--cyan)' }}>
+                Behavioral AI Experience Designer
+              </span>
+              <span className="px-3 py-1 rounded-full border border-[var(--magenta)]/25 bg-[var(--magenta)]/[0.06] text-[11px] font-semibold" style={{ color: 'var(--magenta)' }}>
+                UX Prompt Designer
+              </span>
+            </motion.div>
+
             {/* Trust badges */}
-            <motion.div variants={fadeUp} className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6 pt-6 border-t border-foreground/[0.04]">
+            <motion.div variants={fadeUp} className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6 pt-5 border-t border-[var(--surface-dark-fg)]/[0.08]">
               {trustBadges.map((badge, i) => {
                 const Icon = badge.icon
                 return (
                   <div key={i} className="flex items-center gap-2">
-                    <Icon className="w-3.5 h-3.5 text-foreground/20" />
-                    <span className="text-xs text-foreground/35">{badge.text}</span>
+                    <Icon className="w-3.5 h-3.5 text-[var(--surface-dark-fg)]/45" />
+                    <span className="text-xs text-[var(--surface-dark-fg)]/55">{badge.text}</span>
                   </div>
                 )
               })}

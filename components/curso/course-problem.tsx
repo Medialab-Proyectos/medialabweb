@@ -17,32 +17,29 @@ export function CourseProblem() {
   const inView = useInView(ref, { once: true, margin: "-80px" })
 
   return (
-    <section id="problema" className="relative py-24 md:py-32 bg-[var(--surface-dark)] overflow-hidden">
+    <section id="problema" className="relative py-16 md:py-20 bg-[var(--surface-dark)] overflow-hidden">
       <div className="absolute inset-0">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-red-900/[0.02] rounded-full blur-[180px]" />
       </div>
 
       <div ref={ref} className="relative z-10 max-w-5xl mx-auto px-6 lg:px-8">
-        {/* Section header — short */}
+        {/* Section header — tighter, more emotional */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-12"
+          className="text-center mb-8 md:mb-10"
         >
-          <span className="inline-block text-[11px] tracking-[0.2em] uppercase text-red-400/60 mb-3 font-display">
-            Lo que nadie dice en voz alta
+          <span className="inline-block text-[11px] tracking-[0.2em] uppercase text-red-400/70 mb-3 font-display">
+            Honesto: nos pasó a todos
           </span>
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[var(--surface-dark-fg)] tracking-tight leading-snug font-display">
-            ¿Cuántas de estas frases has pensado esta semana?
+          <h2 className="text-2xl md:text-3xl lg:text-[2.25rem] font-bold text-[var(--surface-dark-fg)] tracking-tight leading-tight font-display">
+            Si alguna de estas te suena,<br className="hidden sm:inline"/> este curso es para ti.
           </h2>
-          <p className="text-sm md:text-base text-foreground/40 mt-4 max-w-xl mx-auto">
-            Si reconoces al menos una, no estás solo. Y este curso fue diseñado exactamente para eso.
-          </p>
         </motion.div>
 
         {/* Cards grid — compact */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
           {quotes.map((quote, i) => (
             <motion.div
               key={i}
@@ -51,12 +48,12 @@ export function CourseProblem() {
               transition={{ duration: 0.5, delay: 0.1 + i * 0.07 }}
               className="group"
             >
-              <div className="p-5 rounded-xl border border-foreground/[0.04] bg-foreground/[0.02] hover:border-red-500/[0.1] hover:bg-red-500/[0.02] transition-all duration-400 h-full flex flex-col">
-                <span className="text-xl text-red-400/20 font-serif leading-none mb-2">&ldquo;</span>
-                <p className="text-sm md:text-base text-foreground/65 leading-relaxed flex-1 group-hover:text-foreground/80 transition-colors duration-300">
+              <div className="p-4 md:p-5 rounded-xl border border-[var(--surface-dark-fg)]/[0.08] bg-[var(--surface-dark-fg)]/[0.03] hover:border-red-500/25 hover:bg-red-500/[0.04] transition-all duration-400 h-full flex flex-col">
+                <span className="text-xl text-red-400/35 font-serif leading-none mb-1.5">&ldquo;</span>
+                <p className="text-sm md:text-[15px] text-[var(--surface-dark-fg)]/80 leading-relaxed flex-1 group-hover:text-[var(--surface-dark-fg)] transition-colors duration-300">
                   {quote.text}
                 </p>
-                <p className="text-[11px] text-foreground/25 mt-3 pt-3 border-t border-foreground/[0.03]">{quote.context}</p>
+                <p className="text-[11px] text-[var(--surface-dark-fg)]/40 mt-2.5 pt-2.5 border-t border-[var(--surface-dark-fg)]/[0.06]">{quote.context}</p>
               </div>
             </motion.div>
           ))}

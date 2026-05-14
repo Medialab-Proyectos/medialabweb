@@ -53,7 +53,7 @@ export function CourseAudience() {
                 transition={{ delay: 0.1 + i * 0.07, duration: 0.5 }}
                 className="group"
               >
-                <div className="p-6 rounded-2xl border border-foreground/[0.04] bg-foreground/[0.02] hover:border-[var(--magenta)]/[0.15] hover:bg-[var(--magenta)]/[0.03] transition-all duration-500 h-full text-center">
+                <div className="p-6 rounded-2xl border border-foreground/[0.1] bg-foreground/[0.03] hover:border-[var(--magenta)]/[0.15] hover:bg-[var(--magenta)]/[0.03] transition-all duration-500 h-full text-center">
                   <div className="w-14 h-14 rounded-2xl bg-foreground/[0.03] group-hover:bg-[var(--magenta)]/10 mx-auto flex items-center justify-center mb-4 transition-colors duration-500">
                     <Icon className="w-6 h-6 text-foreground/30 group-hover:text-[var(--magenta)] transition-colors duration-500" />
                   </div>
