@@ -150,8 +150,8 @@ export function CourseHero() {
               Precio de lanzamiento · Garantía la primera semana
             </motion.p>
 
-            {/* Role pills — moved below CTAs so they don't push buttons down */}
-            <motion.div variants={fadeUp} className="flex flex-wrap items-center gap-2 mb-7">
+            {/* Role pills — hidden on mobile (don't add value, take space). Show from sm: up */}
+            <motion.div variants={fadeUp} className="hidden sm:flex flex-wrap items-center gap-2 mb-7">
               <span className="text-[10px] tracking-[0.12em] uppercase text-[var(--surface-dark-fg)]/40 font-medium mr-1">Te conviertes en:</span>
               <span className="px-3 py-1 rounded-full border border-[var(--cyan)]/25 bg-[var(--cyan)]/[0.06] text-[11px] font-semibold" style={{ color: 'var(--cyan)' }}>
                 Behavioral AI Experience Designer
@@ -161,8 +161,8 @@ export function CourseHero() {
               </span>
             </motion.div>
 
-            {/* Trust badges */}
-            <motion.div variants={fadeUp} className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6 pt-5 border-t border-[var(--surface-dark-fg)]/[0.08]">
+            {/* Trust badges — hidden on mobile (cohort badge + micro-trust already cover trust) */}
+            <motion.div variants={fadeUp} className="hidden sm:flex flex-col sm:flex-row items-start gap-4 sm:gap-6 pt-5 border-t border-[var(--surface-dark-fg)]/[0.08]">
               {trustBadges.map((badge, i) => {
                 const Icon = badge.icon
                 return (

@@ -38,8 +38,31 @@ export function CourseProblem() {
           </h2>
         </motion.div>
 
-        {/* Cards grid — compact */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
+        {/* Mobile: bare list of voices — like reading real testimonials, no heavy cards */}
+        <div className="sm:hidden divide-y divide-[var(--surface-dark-fg)]/[0.08] border-y border-[var(--surface-dark-fg)]/[0.08]">
+          {quotes.map((quote, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 10 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.4, delay: 0.08 + i * 0.06 }}
+              className="py-4 flex gap-3"
+            >
+              <span className="text-red-400/45 font-serif text-2xl leading-none shrink-0 mt-0.5" aria-hidden="true">&ldquo;</span>
+              <div className="flex-1 min-w-0">
+                <p className="text-[15px] text-[var(--surface-dark-fg)]/85 leading-snug italic">
+                  {quote.text}
+                </p>
+                <p className="text-[11px] text-[var(--surface-dark-fg)]/45 mt-1.5">
+                  — {quote.context}
+                </p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Desktop: grid of cards — keeps visual rhythm on larger screens */}
+        <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
           {quotes.map((quote, i) => (
             <motion.div
               key={i}
@@ -50,7 +73,7 @@ export function CourseProblem() {
             >
               <div className="p-4 md:p-5 rounded-xl border border-[var(--surface-dark-fg)]/[0.08] bg-[var(--surface-dark-fg)]/[0.03] hover:border-red-500/25 hover:bg-red-500/[0.04] transition-all duration-400 h-full flex flex-col">
                 <span className="text-xl text-red-400/35 font-serif leading-none mb-1.5">&ldquo;</span>
-                <p className="text-sm md:text-[15px] text-[var(--surface-dark-fg)]/80 leading-relaxed flex-1 group-hover:text-[var(--surface-dark-fg)] transition-colors duration-300">
+                <p className="text-[15px] text-[var(--surface-dark-fg)]/80 leading-relaxed flex-1 group-hover:text-[var(--surface-dark-fg)] transition-colors duration-300">
                   {quote.text}
                 </p>
                 <p className="text-[11px] text-[var(--surface-dark-fg)]/40 mt-2.5 pt-2.5 border-t border-[var(--surface-dark-fg)]/[0.06]">{quote.context}</p>
