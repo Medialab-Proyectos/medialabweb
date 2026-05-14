@@ -36,12 +36,12 @@ export function CourseTools() {
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
           {tools.map((tool, i) => (
             <motion.div key={i} initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ delay: 0.1 + i * 0.08, duration: 0.5 }} className="group">
-              <div className="p-5 md:p-6 rounded-2xl border border-white/[0.04] bg-white/[0.02] hover:border-[var(--cyan)]/[0.15] hover:bg-[var(--cyan)]/[0.03] transition-all duration-500 h-full text-center">
-                <div className="w-14 h-14 mx-auto mb-4 rounded-2xl bg-white/[0.05] group-hover:bg-white/[0.08] flex items-center justify-center transition-all duration-300 group-hover:scale-110">
+              <div className="p-5 md:p-6 rounded-2xl border border-foreground/[0.04] bg-foreground/[0.02] hover:border-[var(--cyan)]/[0.15] hover:bg-[var(--cyan)]/[0.03] transition-all duration-500 h-full text-center">
+                <div className="w-14 h-14 mx-auto mb-4 rounded-2xl bg-foreground/[0.05] group-hover:bg-foreground/[0.08] flex items-center justify-center transition-all duration-300 group-hover:scale-110">
                   <Image src={tool.logo} alt={tool.name} width={tool.w} height={tool.h} className="opacity-80 group-hover:opacity-100 transition-opacity duration-300 object-contain" />
                 </div>
                 <h3 className="text-sm md:text-base font-semibold text-[var(--surface-dark-fg)] mb-1">{tool.name}</h3>
-                <p className="text-[11px] text-white/40">{tool.category}</p>
+                <p className="text-[11px] text-foreground/40">{tool.category}</p>
               </div>
             </motion.div>
           ))}

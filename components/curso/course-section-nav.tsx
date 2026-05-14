@@ -96,8 +96,7 @@ export function CourseSectionNav() {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: -60, opacity: 0 }}
           transition={{ duration: 0.3 }}
-          className="fixed top-16 md:top-20 left-0 right-0 z-40 border-b border-white/[0.04] backdrop-blur-xl"
-          style={{ background: 'rgba(10,10,14,0.92)' }}
+          className="fixed top-16 md:top-20 left-0 right-0 z-40 border-b border-foreground/[0.04] backdrop-blur-xl bg-background/90"
         >
           <div className="max-w-7xl mx-auto px-4">
             <div className="flex items-center gap-1 overflow-x-auto no-scrollbar py-2.5">
@@ -108,8 +107,8 @@ export function CourseSectionNav() {
                   onClick={(e) => handleClick(e, section.id)}
                   className={`px-3 py-1.5 rounded-full text-[11px] font-medium whitespace-nowrap transition-all duration-300 ${
                     active === section.id
-                      ? "text-white bg-white/[0.1]"
-                      : "text-white/35 hover:text-white/60 hover:bg-white/[0.03]"
+                      ? "text-[var(--surface-dark-fg)] bg-foreground/[0.1]"
+                      : "text-foreground/35 hover:text-foreground/60 hover:bg-foreground/[0.03]"
                   }`}
                 >
                   {section.label}

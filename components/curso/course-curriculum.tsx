@@ -28,7 +28,7 @@ export function CourseCurriculum() {
   return (
     <section id="programa" className="relative py-20 md:py-28 bg-[var(--surface-mid)] overflow-hidden">
       <div className="absolute inset-0">
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-foreground/[0.06] to-transparent" />
       </div>
 
       <div ref={ref} className="relative z-10 max-w-6xl mx-auto px-6 lg:px-8">
@@ -44,7 +44,7 @@ export function CourseCurriculum() {
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[var(--surface-dark-fg)] tracking-tight leading-snug mb-5 font-display">
             14 módulos que transforman cómo piensas, diseñas y construyes
           </h2>
-          <p className="max-w-2xl mx-auto text-lg text-white/50">
+          <p className="max-w-2xl mx-auto text-lg text-foreground/50">
             Cada módulo resuelve un problema real. Cuando termines, no solo sabrás más — sabrás hacer más.
           </p>
         </motion.div>
@@ -60,14 +60,17 @@ export function CourseCurriculum() {
                 transition={{ delay: 0.1 + i * 0.05, duration: 0.5 }}
                 className="group"
               >
-                <div className="relative p-6 rounded-2xl border border-white/[0.04] bg-white/[0.02] hover:border-[var(--cyan)]/[0.15] hover:bg-[var(--cyan)]/[0.03] transition-all duration-500 h-full">
+                <div className="relative p-6 rounded-2xl border border-foreground/[0.04] bg-foreground/[0.02] hover:border-[var(--cyan)]/[0.15] hover:bg-[var(--cyan)]/[0.03] transition-all duration-500 h-full">
                   <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-[var(--cyan)]/[0.05] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                   <div className="relative z-10">
-                    <div className="w-10 h-10 rounded-xl bg-white/[0.04] group-hover:bg-[var(--cyan)]/10 flex items-center justify-center mb-4 transition-colors duration-500">
-                      <Icon className="w-5 h-5 text-white/30 group-hover:text-[var(--cyan)] transition-colors duration-500" />
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-10 h-10 rounded-xl bg-foreground/[0.04] group-hover:bg-[var(--cyan)]/10 flex items-center justify-center transition-colors duration-500">
+                        <Icon className="w-5 h-5 text-foreground/30 group-hover:text-[var(--cyan)] transition-colors duration-500" />
+                      </div>
+                      <span className="text-[10px] font-mono text-foreground/20 group-hover:text-[var(--cyan)]/50 transition-colors duration-500">{String(i + 1).padStart(2, '0')}</span>
                     </div>
                     <h3 className="text-base font-semibold text-[var(--surface-dark-fg)] mb-2">{topic.title}</h3>
-                    <p className="text-sm text-white/40 leading-relaxed group-hover:text-white/50 transition-colors duration-300">{topic.desc}</p>
+                    <p className="text-sm text-foreground/40 leading-relaxed group-hover:text-foreground/50 transition-colors duration-300">{topic.desc}</p>
                   </div>
                 </div>
               </motion.div>

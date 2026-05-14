@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
-import { ArrowRight, Sparkles } from "lucide-react"
+import { ArrowRight, Sparkles, Package } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 import { BookingModal } from "./booking-modal"
 
@@ -31,10 +31,10 @@ export function HeroSection() {
     window.addEventListener("resize", resize)
 
     const blobs = [
-      { x: 0.15, y: 0.25, r: 0.5, color: "rgba(232,117,26,0.22)", dx: 0.00018, dy: 0.00012 },
-      { x: 0.8, y: 0.55, r: 0.45, color: "rgba(42,171,179,0.18)", dx: -0.00012, dy: 0.00015 },
-      { x: 0.5, y: 0.85, r: 0.4, color: "rgba(232,117,26,0.14)", dx: 0.0001, dy: -0.00018 },
-      { x: 0.65, y: 0.15, r: 0.3, color: "rgba(42,171,179,0.1)", dx: -0.00008, dy: 0.0001 },
+      { x: 0.15, y: 0.25, r: 0.5, color: "rgba(232,117,26,0.22)", dx: 0.00005, dy: 0.00003 },
+      { x: 0.8, y: 0.55, r: 0.45, color: "rgba(42,171,179,0.18)", dx: -0.00003, dy: 0.00004 },
+      { x: 0.5, y: 0.85, r: 0.4, color: "rgba(232,117,26,0.14)", dx: 0.00003, dy: -0.00005 },
+      { x: 0.65, y: 0.15, r: 0.3, color: "rgba(42,171,179,0.1)", dx: -0.00002, dy: 0.00003 },
     ]
 
     const draw = () => {
@@ -43,8 +43,8 @@ export function HeroSection() {
       frame += 1
 
       blobs.forEach((b) => {
-        const cx = (b.x + Math.sin(frame * b.dx * 1000) * 0.18) * w
-        const cy = (b.y + Math.cos(frame * b.dy * 1000) * 0.14) * h
+        const cx = (b.x + Math.sin(frame * b.dx * 1000) * 0.08) * w
+        const cy = (b.y + Math.cos(frame * b.dy * 1000) * 0.06) * h
         const radius = b.r * Math.min(w, h)
         const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius)
         grad.addColorStop(0, b.color)
@@ -126,12 +126,10 @@ export function HeroSection() {
           className={`font-display font-bold text-4xl sm:text-5xl md:text-6xl lg:text-[4.5rem] leading-[1.07] text-balance text-white transition-all duration-700 ${ready ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
           style={{ transitionDelay: "100ms" }}
         >
-          {t("Diseñamos productos que", "We design products that")}{" "}
+          {t("Tu producto merece", "Your product deserves")}{" "}
           <span className="bg-clip-text text-transparent" style={{ backgroundImage: "linear-gradient(90deg, #E8751A, #2AABB3)" }}>
-            {t("tus usuarios amarán", "your users will love")}
-          </span>{" "}
-          <br className="hidden md:block" />
-          {t("y tu negocio necesita.", "and your business needs.")}
+            {t("usuarios que lo amen.", "users who love it.")}
+          </span>
         </h1>
 
         {/* Subheadline */}
@@ -140,8 +138,8 @@ export function HeroSection() {
           style={{ transitionDelay: "200ms" }}
         >
           {t(
-            "Combinamos diseño UX, inteligencia artificial, SEO técnico y psicología del consumidor para crear experiencias digitales B2B y B2C que posicionan, conectan y convierten.",
-            "We combine UX design, artificial intelligence, technical SEO, and consumer psychology to create B2B and B2C digital experiences that rank, connect, and convert."
+            "Diseño UX + IA + psicología del consumidor. Creamos experiencias digitales que posicionan, conectan y convierten.",
+            "UX design + AI + consumer psychology. We create digital experiences that rank, connect, and convert."
           )}
         </p>
 
@@ -163,6 +161,7 @@ export function HeroSection() {
               href="#uxbox"
               className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full font-semibold text-sm border border-white/20 text-white hover:bg-white/10 transition-all duration-200 active:scale-95"
             >
+              <Package size={16} />
               {t("Probar UXBox gratis →", "Try UXBox free →")}
             </Link>
           </div>

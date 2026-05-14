@@ -25,14 +25,14 @@ export function CourseFaq() {
   return (
     <section id="faq" className="relative py-20 md:py-28 bg-[var(--surface-mid)] overflow-hidden">
       <div className="absolute inset-0">
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-foreground/[0.06] to-transparent" />
       </div>
 
       <div ref={ref} className="relative z-10 max-w-3xl mx-auto px-6 lg:px-8">
         <motion.div initial={{ opacity: 0, y: 30 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.7 }} className="text-center mb-10 md:mb-14">
-          <span className="inline-block text-xs tracking-[0.2em] uppercase text-white/40 mb-4 font-display">Antes de decidir, resuelve tus dudas</span>
+          <span className="inline-block text-xs tracking-[0.2em] uppercase text-foreground/40 mb-4 font-display">Preguntas frecuentes</span>
           <h2 className="text-2xl md:text-3xl font-bold text-[var(--surface-dark-fg)] tracking-tight leading-snug font-display">
-            Las preguntas que te harías antes de dar el paso.
+            Esto es lo que preguntan los profesionales que terminan inscribiéndose.
           </h2>
         </motion.div>
 
@@ -44,17 +44,17 @@ export function CourseFaq() {
                 <button
                   onClick={() => setOpenIndex(isOpen ? null : i)}
                   className={`w-full text-left p-5 md:p-6 rounded-xl border transition-all duration-300 ${
-                    isOpen ? 'border-[var(--magenta)]/[0.15] bg-[var(--magenta)]/[0.03]' : 'border-white/[0.04] bg-white/[0.02] hover:border-white/[0.08]'
+                    isOpen ? 'border-[var(--magenta)]/[0.15] bg-[var(--magenta)]/[0.03]' : 'border-foreground/[0.04] bg-foreground/[0.02] hover:border-foreground/[0.08]'
                   }`}
                 >
                   <div className="flex items-start justify-between gap-4">
-                    <span className={`text-base font-medium transition-colors duration-300 ${isOpen ? 'text-[var(--surface-dark-fg)]' : 'text-white/70'}`}>{faq.q}</span>
+                    <span className={`text-base font-medium transition-colors duration-300 ${isOpen ? 'text-[var(--surface-dark-fg)]' : 'text-foreground/70'}`}>{faq.q}</span>
                     <ChevronDown className={`w-5 h-5 shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} style={{ color: isOpen ? 'var(--magenta)' : 'rgba(255,255,255,0.3)' }} />
                   </div>
                   <AnimatePresence>
                     {isOpen && (
                       <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} transition={{ duration: 0.3 }} className="overflow-hidden">
-                        <p className="mt-4 text-sm text-white/50 leading-relaxed">{faq.a}</p>
+                        <p className="mt-4 text-sm text-foreground/50 leading-relaxed">{faq.a}</p>
                       </motion.div>
                     )}
                   </AnimatePresence>

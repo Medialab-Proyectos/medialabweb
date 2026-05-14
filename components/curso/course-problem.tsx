@@ -34,8 +34,11 @@ export function CourseProblem() {
             Lo que nadie dice en voz alta
           </span>
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[var(--surface-dark-fg)] tracking-tight leading-snug font-display">
-            Si alguna te tocó, este curso existe por ti.
+            ¿Cuántas de estas frases has pensado esta semana?
           </h2>
+          <p className="text-sm md:text-base text-foreground/40 mt-4 max-w-xl mx-auto">
+            Si reconoces al menos una, no estás solo. Y este curso fue diseñado exactamente para eso.
+          </p>
         </motion.div>
 
         {/* Cards grid — compact */}
@@ -48,12 +51,12 @@ export function CourseProblem() {
               transition={{ duration: 0.5, delay: 0.1 + i * 0.07 }}
               className="group"
             >
-              <div className="p-5 rounded-xl border border-white/[0.04] bg-white/[0.02] hover:border-red-500/[0.1] hover:bg-red-500/[0.02] transition-all duration-400 h-full flex flex-col">
+              <div className="p-5 rounded-xl border border-foreground/[0.04] bg-foreground/[0.02] hover:border-red-500/[0.1] hover:bg-red-500/[0.02] transition-all duration-400 h-full flex flex-col">
                 <span className="text-xl text-red-400/20 font-serif leading-none mb-2">&ldquo;</span>
-                <p className="text-sm md:text-base text-white/65 leading-relaxed flex-1 group-hover:text-white/80 transition-colors duration-300">
+                <p className="text-sm md:text-base text-foreground/65 leading-relaxed flex-1 group-hover:text-foreground/80 transition-colors duration-300">
                   {quote.text}
                 </p>
-                <p className="text-[11px] text-white/25 mt-3 pt-3 border-t border-white/[0.03]">{quote.context}</p>
+                <p className="text-[11px] text-foreground/25 mt-3 pt-3 border-t border-foreground/[0.03]">{quote.context}</p>
               </div>
             </motion.div>
           ))}

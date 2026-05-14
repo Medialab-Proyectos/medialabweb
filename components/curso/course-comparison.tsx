@@ -30,8 +30,8 @@ export function CourseComparison() {
   return (
     <section id="diferencia" className="relative py-20 md:py-28 bg-[var(--surface-mid)] overflow-hidden">
       <div className="absolute inset-0">
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
-        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-foreground/[0.06] to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-foreground/[0.06] to-transparent" />
       </div>
 
       <div ref={ref} className="relative z-10 max-w-6xl mx-auto px-6 lg:px-8">
@@ -47,7 +47,7 @@ export function CourseComparison() {
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[var(--surface-dark-fg)] tracking-tight leading-snug font-display">
             La mayoría de cursos de IA te enseñan herramientas. Nosotros te enseñamos a pensar.
           </h2>
-          <p className="text-sm md:text-base text-white/40 mt-4 max-w-xl mx-auto">La diferencia entre saber usar una herramienta y saber qué construir con ella.</p>
+          <p className="text-sm md:text-base text-foreground/40 mt-4 max-w-xl mx-auto">La diferencia entre saber usar una herramienta y saber qué construir con ella.</p>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
@@ -64,7 +64,7 @@ export function CourseComparison() {
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-[var(--surface-dark-fg)]">Cursos tradicionales</h3>
-                  <p className="text-xs text-white/40">Lo que encuentras en todos lados</p>
+                  <p className="text-xs text-foreground/40">Lo que encuentras en todos lados</p>
                 </div>
               </div>
               <ul className="space-y-4">
@@ -77,13 +77,19 @@ export function CourseComparison() {
                     className="flex items-start gap-3"
                   >
                     <X className="w-4 h-4 text-red-400/60 mt-0.5 shrink-0" />
-                    <span className="text-white/50 text-sm md:text-base">{item}</span>
+                    <span className="text-foreground/50 text-sm md:text-base">{item}</span>
                   </motion.li>
                 ))}
               </ul>
               <div className="mt-8 p-4 rounded-xl bg-red-500/[0.04] border border-red-500/[0.06]">
-                <p className="text-sm text-white/40 italic">
+                <p className="text-sm text-foreground/40 italic">
                   &ldquo;Sabía usar 10 herramientas de IA. Pero no sabía cuándo ni por qué elegir ninguna.&rdquo;
+                </p>
+              </div>
+              <div className="mt-4 p-4 rounded-xl bg-red-500/[0.03] border border-red-500/[0.04]">
+                <p className="text-[11px] uppercase tracking-wider text-red-400/50 mb-1 font-medium">El costo de no actuar</p>
+                <p className="text-sm text-foreground/45">
+                  Cada mes que pasa, más profesionales dominan IA con criterio. La brecha entre quienes saben usar IA y quienes saben pensar con IA se agranda.
                 </p>
               </div>
             </div>
@@ -117,7 +123,7 @@ export function CourseComparison() {
                     className="flex items-start gap-3"
                   >
                     <Check className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--cyan)' }} />
-                    <span className="text-white/80 text-sm md:text-base">{item}</span>
+                    <span className="text-foreground/80 text-sm md:text-base">{item}</span>
                   </motion.li>
                 ))}
               </ul>

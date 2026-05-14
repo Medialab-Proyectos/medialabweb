@@ -30,24 +30,22 @@ export function AboutSection() {
           className={`flex flex-col gap-6 transition-all duration-700 ${visible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-8"}`}
         >
           <span className="text-xs font-semibold tracking-widest uppercase text-[var(--magenta)]">
-            Quiénes diseñan tu próximo producto
+            Tu producto tiene un problema
           </span>
           <h2 className="font-display font-bold text-3xl md:text-4xl lg:text-5xl leading-tight text-foreground text-balance">
-            No construimos interfaces.{" "}
+            Tus usuarios abandonan{" "}
             <span
               className="bg-clip-text text-transparent"
               style={{ backgroundImage: "linear-gradient(90deg, var(--magenta), var(--cyan))" }}
             >
-              Construimos la relación entre tu producto y las personas que lo usan.
+              porque tu producto no los entiende.
             </span>
           </h2>
           <p className="text-base text-muted-foreground leading-relaxed">
-            Nacimos de una frustración: ver productos con potencial enorme fracasar porque nadie investigó qué necesitaban sentir sus usuarios. 
-            Desde entonces, cada proyecto empieza con una pregunta: ¿qué emoción debe provocar esta experiencia?
+            Sabes que tu producto tiene potencial. Pero algo no conecta: los usuarios llegan y se van, las conversiones no suben, el equipo diseña sin datos reales. El problema no es tu idea — es que nadie investigó qué necesitan sentir tus usuarios.
           </p>
           <p className="text-base text-muted-foreground leading-relaxed">
-            Combinamos psicología del consumidor, inteligencia artificial y diseño UX para que cada decisión
-            de producto esté basada en datos reales — no en suposiciones. El resultado: productos que la gente quiere usar y negocios que crecen.
+            Nosotros empezamos por ahí. Combinamos psicología del consumidor, IA y diseño UX para que cada decisión de tu producto esté respaldada por evidencia real. El resultado: productos que la gente quiere usar y negocios que crecen.
           </p>
           <p className="text-base font-medium text-foreground leading-relaxed">
             Emocional. Medible. Humano.

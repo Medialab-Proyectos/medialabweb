@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 import { Linkedin, Twitter, Instagram } from "lucide-react"
 
 const navColumns = [
@@ -13,6 +14,7 @@ const navColumns = [
   {
     title: "Productos",
     links: [
+      { label: "Portafolio", href: "/portafolio" },
       { label: "UXBox", href: "#uxbox" },
       { label: "SinDeudas", href: "#products" },
       { label: "Electrolineras", href: "#products" },
@@ -55,8 +57,7 @@ export function Footer() {
           {/* Brand */}
           <div className="col-span-2 sm:col-span-3 lg:col-span-1 flex flex-col gap-4">
             <Link href="/" className="inline-flex items-center gap-2" aria-label="MediaLab Ingeniería home">
-              <span className="inline-block w-7 h-7 rounded-sm" style={{ background: "var(--magenta)" }} />
-              <span className="font-display font-bold text-lg text-white">MediaLab</span>
+              <Image src="/logo.svg" alt="MediaLab Ingeniería" width={140} height={32} className="h-8 w-auto" />
             </Link>
             <p className="text-sm text-white/50 leading-relaxed max-w-xs">
               Investigamos cómo piensan tus usuarios, diseñamos lo que necesitan sentir y construimos el producto que tu negocio necesita. Sin suposiciones. Con datos.

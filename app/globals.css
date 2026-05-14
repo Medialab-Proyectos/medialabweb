@@ -31,10 +31,10 @@
   --ring: #E8751A;
   --radius: 0.5rem;
 
-  /* Section backgrounds */
-  --surface-dark: oklch(0.08 0 0);
-  --surface-dark-foreground: oklch(0.97 0 0);
-  --surface-mid: oklch(0.11 0 0);
+  /* Section backgrounds — adapt to theme */
+  --surface-dark: oklch(0.98 0 0);
+  --surface-dark-foreground: oklch(0.08 0 0);
+  --surface-mid: oklch(0.95 0 0);
 
   --chart-1: #E8751A;
   --chart-2: #2AABB3;

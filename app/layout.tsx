@@ -103,6 +103,7 @@ export default function RootLayout({
     <html lang="es" suppressHydrationWarning>
       <head>
         <link rel="alternate" type="text/markdown" href="/llms.txt" title="MediaLab (llms.txt)" />
+        <link rel="alternate" type="text/markdown" href="/llms-full.txt" title="MediaLab (llms-full.txt)" />
         {/* Organization Schema */}
         <script
           type="application/ld+json"

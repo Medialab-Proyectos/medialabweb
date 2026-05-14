@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
+import { usePathname } from "next/navigation"
 import { Menu, X, Moon, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
 import { useLanguage } from "@/lib/language-context"
@@ -10,18 +11,18 @@ import { useLanguage } from "@/lib/language-context"
 const navLinks = {
   es: [
     { label: "Servicios", href: "#services" },
+    { label: "Portafolio", href: "/portafolio" },
     { label: "Curso UX + IA", href: "/curso", highlight: true },
     { label: "UXBox", href: "#uxbox" },
     { label: "Metodología", href: "#method" },
-    { label: "Productos", href: "#products" },
     { label: "Blog", href: "#blog" },
   ],
   en: [
     { label: "Services", href: "#services" },
+    { label: "Portfolio", href: "/portafolio" },
     { label: "Learn AI", href: "/curso", highlight: true },
     { label: "UXBox", href: "#uxbox" },
     { label: "Methodology", href: "#method" },
-    { label: "Products", href: "#products" },
     { label: "Blog", href: "#blog" },
   ],
 }
@@ -32,6 +33,8 @@ export function Navbar() {
   const [mounted, setMounted] = useState(false)
   const { theme, setTheme } = useTheme()
   const { lang, setLang } = useLanguage()
+  const pathname = usePathname()
+  const isCurso = pathname === "/curso"
   const currentLinks = navLinks[lang]
 
   useEffect(() => {
@@ -123,10 +126,13 @@ export function Navbar() {
             </button>
           )}
           <Link
-            href="#contact"
+            href={isCurso ? "#registro" : "#contact"}
             className="px-5 py-2.5 rounded-full text-sm font-semibold bg-foreground text-background hover:bg-[var(--magenta)] hover:text-white transition-all duration-200 active:scale-95"
           >
-            {lang === "es" ? "Iniciar proyecto" : "Start project"}
+            {isCurso
+              ? (lang === "es" ? "Registrarme al curso" : "Register for course")
+              : (lang === "es" ? "Iniciar proyecto" : "Start project")
+            }
           </Link>
         </div>
 
@@ -192,11 +198,14 @@ export function Navbar() {
             </div>
           )}
           <Link
-            href="#contact"
+            href={isCurso ? "#registro" : "#contact"}
             onClick={() => setMobileOpen(false)}
             className="mt-2 px-5 py-3 rounded-full text-sm font-semibold bg-foreground text-background text-center hover:bg-[var(--magenta)] hover:text-white transition-all duration-200"
           >
-            {lang === "es" ? "Iniciar proyecto" : "Start project"}
+            {isCurso
+              ? (lang === "es" ? "Registrarme al curso" : "Register for course")
+              : (lang === "es" ? "Iniciar proyecto" : "Start project")
+            }
           </Link>
         </div>
       )}

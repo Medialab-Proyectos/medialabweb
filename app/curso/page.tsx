@@ -13,6 +13,7 @@ import { CourseTools } from "@/components/curso/course-tools"
 import { CourseValidation } from "@/components/curso/course-validation"
 import { CourseFaq } from "@/components/curso/course-faq"
 import { CourseCta } from "@/components/curso/course-cta"
+import { CourseCommunity } from "@/components/curso/course-community"
 
 /**
  * Landing Page — Metodología IA by MediaLab
@@ -37,11 +38,11 @@ import { CourseCta } from "@/components/curso/course-cta"
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Aprende IA para Diseño y Producto | Curso MediaLab',
-  description: 'Curso de 12 fases para diseñadores, developers y startups. Aprende a usar IA como copiloto estratégico con la metodología que logra 90% de productividad con 10% de esfuerzo. Solo 30 cupos.',
+  title: 'Behavioral AI Experience Design — UX Prompt Design | Curso MediaLab',
+  description: 'Curso premium de 8 semanas: 14 modulos, 12 fases. Aprende a usar IA como copiloto estrategico para disenar, investigar y construir productos digitales. Solo 30 cupos por cohorte. $995 USD.',
   openGraph: {
-    title: 'Aprende IA para Diseño y Producto | MediaLab Ingeniería',
-    description: 'Curso de 12 fases para diseñadores, developers y startups. Aprende a investigar, diseñar, construir y validar productos donde tú decides y la IA ejecuta.',
+    title: 'Behavioral AI Experience Design — UX Prompt Design | MediaLab',
+    description: 'Curso premium de 8 semanas para disenadores, developers y startups. Domina la IA sin perder tu criterio humano. 14 modulos, certificacion profesional.',
     url: '/curso',
     type: 'website',
   },
@@ -67,7 +68,7 @@ export default function CursoPage() {
         headline="Si te identificaste con algo de esto, no es casualidad."
         subtext="Diseñamos esta metodología para personas como tú."
         ctaText="Registrarme al curso →"
-        ctaHref="#reservar"
+        ctaHref="#registro"
         variant="primary"
       />
 
@@ -101,7 +102,10 @@ export default function CursoPage() {
       {/* 12. RESOLVE — friction removal */}
       <CourseFaq />
 
-      {/* 13. CONVERT — final conversion */}
+      {/* 13. COMMUNITY — continuous UX collaboration */}
+      <CourseCommunity />
+
+      {/* 14. CONVERT + REGISTER — final conversion with registration form */}
       <CourseCta />
 
       <Footer />

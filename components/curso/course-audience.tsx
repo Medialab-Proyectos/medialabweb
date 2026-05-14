@@ -34,8 +34,11 @@ export function CourseAudience() {
           <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-[var(--surface-dark-fg)] tracking-tight leading-tight mb-6 font-display">
             Si algo de esto te suena, sí.
           </h2>
-          <p className="max-w-2xl mx-auto text-lg text-white/50">
+          <p className="max-w-2xl mx-auto text-lg text-foreground/50">
             No importa si llevas 1 año o 10. Si quieres evolucionar con la IA en vez de correr detrás de ella, esta metodología fue diseñada para ti.
+          </p>
+          <p className="text-sm text-foreground/30 mt-3">
+            Toca el perfil que más te represente. Si dudas entre dos, es buena señal.
           </p>
         </motion.div>
 
@@ -50,12 +53,12 @@ export function CourseAudience() {
                 transition={{ delay: 0.1 + i * 0.07, duration: 0.5 }}
                 className="group"
               >
-                <div className="p-6 rounded-2xl border border-white/[0.04] bg-white/[0.02] hover:border-[var(--magenta)]/[0.15] hover:bg-[var(--magenta)]/[0.03] transition-all duration-500 h-full text-center">
-                  <div className="w-14 h-14 rounded-2xl bg-white/[0.03] group-hover:bg-[var(--magenta)]/10 mx-auto flex items-center justify-center mb-4 transition-colors duration-500">
-                    <Icon className="w-6 h-6 text-white/30 group-hover:text-[var(--magenta)] transition-colors duration-500" />
+                <div className="p-6 rounded-2xl border border-foreground/[0.04] bg-foreground/[0.02] hover:border-[var(--magenta)]/[0.15] hover:bg-[var(--magenta)]/[0.03] transition-all duration-500 h-full text-center">
+                  <div className="w-14 h-14 rounded-2xl bg-foreground/[0.03] group-hover:bg-[var(--magenta)]/10 mx-auto flex items-center justify-center mb-4 transition-colors duration-500">
+                    <Icon className="w-6 h-6 text-foreground/30 group-hover:text-[var(--magenta)] transition-colors duration-500" />
                   </div>
                   <h3 className="text-base font-semibold text-[var(--surface-dark-fg)] mb-2">{profile.title}</h3>
-                  <p className="text-sm text-white/40 leading-relaxed">{profile.desc}</p>
+                  <p className="text-sm text-foreground/40 leading-relaxed">{profile.desc}</p>
                 </div>
               </motion.div>
             )

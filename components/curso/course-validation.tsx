@@ -20,7 +20,7 @@ export function CourseValidation() {
   return (
     <section className="relative py-20 md:py-28 bg-[var(--surface-mid)] overflow-hidden">
       <div className="absolute inset-0">
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-foreground/[0.06] to-transparent" />
       </div>
 
       <div ref={ref} className="relative z-10 max-w-5xl mx-auto px-6 lg:px-8">
@@ -29,7 +29,10 @@ export function CourseValidation() {
             Por qué puedes confiar en esto
           </span>
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[var(--surface-dark-fg)] tracking-tight leading-snug mb-5 font-display">
-            No es otro curso más. <span className="text-white/40">Y así es como lo respaldamos.</span>
+            No es otro curso más.{" "}
+            <span className="bg-gradient-to-r from-[var(--cyan)] to-[var(--magenta)] bg-clip-text text-transparent">
+              Y así es como lo respaldamos.
+            </span>
           </h2>
         </motion.div>
 
@@ -38,10 +41,10 @@ export function CourseValidation() {
             const Icon = item.icon
             return (
               <motion.div key={i} initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ delay: 0.1 + i * 0.08, duration: 0.5 }} className="group">
-                <div className="p-6 md:p-8 rounded-2xl border border-white/[0.04] bg-white/[0.02] hover:border-[var(--cyan)]/[0.1] hover:bg-white/[0.03] transition-all duration-500 h-full">
+                <div className="p-6 md:p-8 rounded-2xl border border-foreground/[0.04] bg-foreground/[0.02] hover:border-[var(--cyan)]/[0.1] hover:bg-foreground/[0.03] transition-all duration-500 h-full">
                   <Icon className="w-6 h-6 mb-4" style={{ color: 'var(--cyan)', opacity: 0.6 }} />
                   <h3 className="text-lg font-semibold text-[var(--surface-dark-fg)] mb-2">{item.title}</h3>
-                  <p className="text-sm text-white/40 leading-relaxed">{item.desc}</p>
+                  <p className="text-sm text-foreground/40 leading-relaxed">{item.desc}</p>
                 </div>
               </motion.div>
             )

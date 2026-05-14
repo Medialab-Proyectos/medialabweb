@@ -25,16 +25,16 @@ function OrbitalGraphic() {
   return (
     <div className="relative w-[320px] h-[320px] md:w-[400px] md:h-[400px] mx-auto">
       {/* Phase labels on edges */}
-      <span className="absolute -top-7 left-1/2 -translate-x-1/2 text-[9px] tracking-[0.18em] uppercase text-white/20 font-medium">Discovery</span>
-      <span className="absolute top-1/2 -right-12 md:-right-14 -translate-y-1/2 text-[9px] tracking-[0.18em] uppercase text-white/20 font-medium rotate-90">Design</span>
-      <span className="absolute -bottom-7 left-1/2 -translate-x-1/2 text-[9px] tracking-[0.18em] uppercase text-white/20 font-medium">Build</span>
-      <span className="absolute top-1/2 -left-12 md:-left-14 -translate-y-1/2 text-[9px] tracking-[0.18em] uppercase text-white/20 font-medium -rotate-90">Validate</span>
+      <span className="absolute -top-7 left-1/2 -translate-x-1/2 text-[9px] tracking-[0.18em] uppercase text-foreground/20 font-medium">Discovery</span>
+      <span className="absolute top-1/2 -right-12 md:-right-14 -translate-y-1/2 text-[9px] tracking-[0.18em] uppercase text-foreground/20 font-medium rotate-90">Design</span>
+      <span className="absolute -bottom-7 left-1/2 -translate-x-1/2 text-[9px] tracking-[0.18em] uppercase text-foreground/20 font-medium">Build</span>
+      <span className="absolute top-1/2 -left-12 md:-left-14 -translate-y-1/2 text-[9px] tracking-[0.18em] uppercase text-foreground/20 font-medium -rotate-90">Validate</span>
 
       {/* Outer ring */}
       <motion.div
         animate={{ rotate: 360 }}
-        transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-        className="absolute inset-0 rounded-full border border-white/[0.06]"
+        transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
+        className="absolute inset-0 rounded-full border border-foreground/[0.06]"
       >
         <motion.div animate={{ opacity: [0.5, 1, 0.5] }} transition={{ duration: 2, repeat: Infinity }}
           className="absolute -top-2 left-1/2 -translate-x-1/2 w-3.5 h-3.5 rounded-full"
@@ -47,8 +47,8 @@ function OrbitalGraphic() {
       {/* Inner ring */}
       <motion.div
         animate={{ rotate: -360 }}
-        transition={{ duration: 16, repeat: Infinity, ease: "linear" }}
-        className="absolute inset-14 md:inset-[4.5rem] rounded-full border border-white/[0.08]"
+        transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
+        className="absolute inset-14 md:inset-[4.5rem] rounded-full border border-foreground/[0.08]"
       >
         <motion.div animate={{ opacity: [0.5, 1, 0.5] }} transition={{ duration: 2.5, repeat: Infinity }}
           className="absolute top-1/2 -right-1.5 -translate-y-1/2 w-3 h-3 rounded-full"
@@ -61,11 +61,11 @@ function OrbitalGraphic() {
       {/* Center — result text (well inside inner ring) */}
       <div className="absolute inset-[5rem] md:inset-[6.5rem] flex items-center justify-center">
         <div className="text-center">
-          <p className="text-[9px] tracking-[0.2em] uppercase text-white/25 mb-2">Lo que lograrás</p>
+          <p className="text-[9px] tracking-[0.2em] uppercase text-foreground/25 mb-2">Lo que lograrás</p>
           <p className="text-3xl md:text-4xl font-bold font-display leading-none" style={{ color: 'var(--cyan)' }}>90%</p>
-          <p className="text-[11px] text-white/40 mb-2">productividad</p>
+          <p className="text-[11px] text-foreground/40 mb-2">productividad</p>
           <p className="text-3xl md:text-4xl font-bold font-display leading-none" style={{ color: 'var(--magenta)' }}>10%</p>
-          <p className="text-[11px] text-white/40">esfuerzo</p>
+          <p className="text-[11px] text-foreground/40">esfuerzo</p>
         </div>
       </div>
 
@@ -91,7 +91,7 @@ export function CourseHero() {
       {/* Background image */}
       <div className="absolute inset-0">
         <Image src="/images/curso/hero-team.png" alt="" fill className="object-cover opacity-[0.12]" priority />
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, rgba(10,10,14,0.95) 0%, rgba(10,10,14,0.75) 50%, rgba(10,10,14,1) 100%)' }} />
+        <div className="absolute inset-0 bg-gradient-to-b from-[var(--surface-dark)]/95 via-[var(--surface-dark)]/75 to-[var(--surface-dark)]" />
       </div>
       {/* Background effects */}
       <div className="absolute inset-0">
@@ -109,7 +109,7 @@ export function CourseHero() {
                 <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: 'var(--magenta)' }} />
                 <span className="text-[11px] tracking-[0.12em] uppercase font-medium" style={{ color: 'var(--magenta)' }}>Cohorte 01 · Solo 30 cupos</span>
               </div>
-              <span className="text-[11px] text-white/30 hidden sm:inline">by MediaLab Ingeniería</span>
+              <span className="text-[11px] text-foreground/30 hidden sm:inline">by MediaLab Ingeniería</span>
             </motion.div>
 
             {/* Headline */}
@@ -122,36 +122,44 @@ export function CourseHero() {
             </motion.h1>
 
             {/* Value prop with target profiles */}
-            <motion.p variants={fadeUp} className="text-base md:text-lg text-white/50 leading-relaxed mb-4 max-w-lg">
-              12 fases para diseñadores, developers y startups. Aprende a investigar, diseñar, construir y validar productos donde tú decides y la IA ejecuta.
+            <motion.p variants={fadeUp} className="text-base md:text-lg text-foreground/50 leading-relaxed mb-4 max-w-lg">
+              12 fases para diseñadores, developers y startups. Al terminar, te conviertes en un profesional que sabe investigar, diseñar, construir y validar productos donde tú decides y la IA ejecuta.
             </motion.p>
-            <motion.div variants={fadeUp} className="flex flex-wrap gap-2 mb-8">
-              <span className="px-3 py-1 rounded-full border border-[var(--cyan)]/20 bg-[var(--cyan)]/[0.05] text-[11px] font-medium" style={{ color: 'var(--cyan)' }}>
-                Behavioral AI Experience Design
-              </span>
-              <span className="px-3 py-1 rounded-full border border-[var(--magenta)]/20 bg-[var(--magenta)]/[0.05] text-[11px] font-medium" style={{ color: 'var(--magenta)' }}>
-                UX Prompt Design
-              </span>
+            <motion.div variants={fadeUp} className="flex flex-col gap-2 mb-8">
+              <p className="text-[11px] tracking-[0.12em] uppercase text-foreground/30 font-medium">En esto te conviertes:</p>
+              <div className="flex flex-wrap gap-2">
+                <span className="px-3.5 py-1.5 rounded-full border border-[var(--cyan)]/20 bg-[var(--cyan)]/[0.05] text-xs font-semibold" style={{ color: 'var(--cyan)' }}>
+                  Behavioral AI Experience Designer
+                </span>
+                <span className="px-3.5 py-1.5 rounded-full border border-[var(--magenta)]/20 bg-[var(--magenta)]/[0.05] text-xs font-semibold" style={{ color: 'var(--magenta)' }}>
+                  UX Prompt Designer
+                </span>
+              </div>
             </motion.div>
 
             {/* CTAs */}
             <motion.div variants={fadeUp} className="flex flex-col sm:flex-row items-start gap-3 mb-10">
-              <a href="#reservar" className="px-7 py-3.5 text-sm font-semibold text-white rounded-full transition-all duration-300 hover:scale-[1.03] hover:shadow-lg" style={{ background: 'var(--magenta)' }}>
+              <a href="#registro" className="px-7 py-3.5 text-sm font-semibold text-white rounded-full transition-all duration-300 hover:scale-[1.03] hover:shadow-lg" style={{ background: 'var(--magenta)' }}>
                 Registrarme al curso →
               </a>
-              <a href="#contacto" className="px-7 py-3.5 text-sm font-medium text-white rounded-full transition-all duration-300 hover:scale-[1.03] hover:shadow-lg" style={{ background: 'var(--cyan)' }}>
+              <a href="https://wa.me/573054009505?text=Hola%2C%20quiero%20información%20sobre%20el%20curso%20Behavioral%20AI%20Experience%20Design" target="_blank" rel="noopener noreferrer" className="px-7 py-3.5 text-sm font-medium text-white rounded-full transition-all duration-300 hover:scale-[1.03] hover:shadow-lg" style={{ background: 'var(--cyan)' }}>
                 Hablar con un asesor
               </a>
             </motion.div>
 
+            <motion.p variants={fadeUp} className="text-xs text-foreground/30 -mt-6 mb-4 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+              Precio de lanzamiento · Garantía de devolución la primera semana
+            </motion.p>
+
             {/* Trust badges */}
-            <motion.div variants={fadeUp} className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6 pt-6 border-t border-white/[0.04]">
+            <motion.div variants={fadeUp} className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6 pt-6 border-t border-foreground/[0.04]">
               {trustBadges.map((badge, i) => {
                 const Icon = badge.icon
                 return (
                   <div key={i} className="flex items-center gap-2">
-                    <Icon className="w-3.5 h-3.5 text-white/20" />
-                    <span className="text-xs text-white/35">{badge.text}</span>
+                    <Icon className="w-3.5 h-3.5 text-foreground/20" />
+                    <span className="text-xs text-foreground/35">{badge.text}</span>
                   </div>
                 )
               })}
@@ -172,7 +180,7 @@ export function CourseHero() {
 
       {/* Scroll indicator */}
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.5 }} className="absolute bottom-6 left-1/2 -translate-x-1/2">
-        <div className="w-5 h-7 rounded-full border border-white/15 flex justify-center pt-1">
+        <div className="w-5 h-7 rounded-full border border-foreground/15 flex justify-center pt-1">
           <motion.div animate={{ y: [0, 6, 0] }} transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }} className="w-0.5 h-1.5 rounded-full" style={{ background: 'var(--magenta)' }} />
         </div>
       </motion.div>

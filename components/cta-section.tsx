@@ -101,6 +101,17 @@ export function CTASection() {
               </Link>
             </div>
 
+            {/* Alternative CTA for reflective profiles */}
+            <p className="text-xs text-white/40 mt-1">
+              {t(
+                "¿Prefieres ver primero cómo trabajamos? ",
+                "Prefer to see how we work first? "
+              )}
+              <Link href="#cases" className="underline text-[var(--cyan)]/70 hover:text-[var(--cyan)] transition-colors">
+                {t("Ver casos de éxito →", "See case studies →")}
+              </Link>
+            </p>
+
             {/* Social proof */}
             <div className="flex items-center gap-3 pt-4 border-t border-white/10 mt-2">
               <div className="flex -space-x-2">

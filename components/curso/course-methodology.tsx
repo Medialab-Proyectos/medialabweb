@@ -57,7 +57,7 @@ export function CourseMethodology() {
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[var(--surface-dark-fg)] tracking-tight leading-snug mb-5 font-display">
             12 fases. Un camino claro. <span className="bg-gradient-to-r from-[var(--cyan)] to-[var(--magenta)] bg-clip-text text-transparent">De la confusión al producto real.</span>
           </h2>
-          <p className="max-w-2xl mx-auto text-lg text-white/50">
+          <p className="max-w-2xl mx-auto text-lg text-foreground/50">
             No es un curso de herramientas. Es un journey de transformación donde aprendes a pensar, decidir y construir con IA en cada paso.
           </p>
         </motion.div>
@@ -67,7 +67,7 @@ export function CourseMethodology() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={inView ? { opacity: 1, scale: 1 } : {}}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="relative w-full h-40 md:h-56 rounded-2xl overflow-hidden mb-8 border border-white/[0.04]"
+          className="relative w-full h-40 md:h-56 rounded-2xl overflow-hidden mb-8 border border-foreground/[0.04]"
         >
           <Image
             src="/images/curso/methodology-workshop.png"
@@ -119,13 +119,13 @@ export function CourseMethodology() {
                 >
                   {/* Node dot */}
                   <div className={`absolute left-4 md:left-1/2 top-6 w-5 h-5 rounded-full border-2 ${s.border} ${s.bg} md:-translate-x-1/2 z-10 transition-all duration-300 ${isActive ? 'scale-150 shadow-lg' : ''}`}>
-                    <div className={`absolute inset-1 rounded-full ${isActive ? s.dot : 'bg-white/20'} transition-colors duration-300`} />
+                    <div className={`absolute inset-1 rounded-full ${isActive ? s.dot : 'bg-foreground/20'} transition-colors duration-300`} />
                   </div>
 
                   <div className={`${isLeft ? 'md:pr-12 md:text-right' : 'md:col-start-2 md:pl-12 md:text-left'} md:direction-ltr`}>
                     <button onClick={() => setActivePhase(isActive ? null : i)} className="w-full text-left group">
                       <div className={`p-6 md:p-8 rounded-2xl border transition-all duration-500 ${
-                        isActive ? `${s.border} ${s.bg} shadow-xl` : 'border-white/[0.04] bg-white/[0.02] hover:border-white/[0.08] hover:bg-white/[0.03]'
+                        isActive ? `${s.border} ${s.bg} shadow-xl` : 'border-foreground/[0.04] bg-foreground/[0.02] hover:border-foreground/[0.08] hover:bg-foreground/[0.03]'
                       }`}>
                         <div className={`flex items-center gap-3 mb-3 ${isLeft ? 'md:flex-row-reverse' : ''}`}>
                           <div className={`w-8 h-8 rounded-lg ${s.bg} flex items-center justify-center shrink-0`}>
@@ -134,7 +134,7 @@ export function CourseMethodology() {
                           <span className={`text-xs font-mono ${s.text}`}>Fase {String(phase.id).padStart(2, '0')}</span>
                         </div>
                         <h3 className="text-xl font-bold text-[var(--surface-dark-fg)] mb-1">{phase.name}</h3>
-                        <p className="text-sm text-white/40 mb-3">{phase.subtitle}</p>
+                        <p className="text-sm text-foreground/40 mb-3">{phase.subtitle}</p>
 
                         <AnimatePresence>
                           {isActive && (
@@ -145,16 +145,16 @@ export function CourseMethodology() {
                               transition={{ duration: 0.3 }}
                               className="overflow-hidden"
                             >
-                              <p className="text-sm text-white/50 leading-relaxed mb-4 text-left">{phase.description}</p>
+                              <p className="text-sm text-foreground/50 leading-relaxed mb-4 text-left">{phase.description}</p>
                               <div className="grid grid-cols-2 gap-3 text-left">
                                 <div>
-                                  <p className="text-[10px] uppercase tracking-wider text-white/30 mb-2">Outputs</p>
+                                  <p className="text-[10px] uppercase tracking-wider text-foreground/30 mb-2">Outputs</p>
                                   {phase.outputs.map((o, j) => (
-                                    <p key={j} className="text-xs text-white/50 mb-1">→ {o}</p>
+                                    <p key={j} className="text-xs text-foreground/50 mb-1">→ {o}</p>
                                   ))}
                                 </div>
                                 <div>
-                                  <p className="text-[10px] uppercase tracking-wider text-white/30 mb-2">Herramientas</p>
+                                  <p className="text-[10px] uppercase tracking-wider text-foreground/30 mb-2">Herramientas</p>
                                   <div className="flex flex-wrap gap-1.5">
                                     {phase.tools.map((t, j) => (
                                       <span key={j} className={`px-2 py-0.5 text-[10px] rounded-full ${s.border} ${s.bg} ${s.text} border`}>

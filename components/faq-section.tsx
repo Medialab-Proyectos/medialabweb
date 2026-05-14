@@ -70,15 +70,15 @@ export function FAQSection() {
       <div className="max-w-4xl mx-auto flex flex-col gap-12">
         {/* Header */}
         <div className="flex flex-col gap-4 text-center">
-          <span className="text-xs font-semibold tracking-widest uppercase text-[var(--magenta)]">Antes de decidir, resuelve tus dudas</span>
+          <span className="text-xs font-semibold tracking-widest uppercase text-[var(--magenta)]">Preguntas frecuentes</span>
           <h2
             id="faq-heading"
             className="font-display font-bold text-3xl md:text-4xl leading-tight text-foreground text-balance"
           >
-            Todo lo que querías preguntar (y algunas cosas que no sabías que necesitabas saber)
+            Estas son las preguntas que nos hacen los equipos que terminan trabajando con nosotros
           </h2>
           <p className="text-base text-muted-foreground leading-relaxed max-w-xl mx-auto">
-            Si tu pregunta no está aquí, escríbenos. Respondemos en menos de 24 horas.
+            Si la tuya no está aquí, escríbenos. Respondemos en menos de 24 horas.
           </p>
         </div>
 

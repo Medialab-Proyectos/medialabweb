@@ -26,12 +26,13 @@ export function CourseMidCta({ headline, subtext, ctaText, ctaHref, variant = "s
         <div className={`p-6 md:p-8 rounded-2xl border ${
           variant === "primary"
             ? "border-[var(--magenta)]/[0.12] bg-[var(--magenta)]/[0.03]"
-            : "border-white/[0.06] bg-white/[0.02]"
+            : "border-foreground/[0.06] bg-foreground/[0.02]"
         }`}>
           <p className="text-lg md:text-xl font-medium text-[var(--surface-dark-fg)] mb-2 font-display">
             {headline}
           </p>
-          <p className="text-sm text-white/40 mb-5 max-w-md mx-auto">{subtext}</p>
+          <p className="text-sm text-foreground/40 mb-4 max-w-md mx-auto">{subtext}</p>
+          <p className="text-[11px] text-foreground/25 mb-5">Solo 30 cupos · Precio de lanzamiento $995 USD</p>
           <a
             href={ctaHref}
             className="inline-flex px-6 py-3 text-sm font-semibold text-white rounded-full transition-all duration-300 hover:scale-[1.03] hover:shadow-lg"

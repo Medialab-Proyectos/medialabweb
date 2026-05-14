@@ -14,10 +14,10 @@ const before = [
 ]
 
 const after = [
-  { label: "Con criterio", desc: "Sabes exactamente cuándo usar IA y cuándo confiar en ti" },
-  { label: "Diferencial", desc: "Tu firma humana amplifica lo que la IA genera" },
-  { label: "Seguro", desc: "Tienes un framework para evaluar, filtrar y decidir" },
-  { label: "Estratégico", desc: "Cada decisión de diseño responde a un por qué real" },
+  { label: "Behavioral AI Experience Designer", desc: "Diseñas experiencias donde la IA potencia la conexión humana, no la reemplaza" },
+  { label: "UX Prompt Designer", desc: "Creas sistemas de prompts estratégicos que resuelven problemas reales de producto" },
+  { label: "Estratégico", desc: "Cada decisión de diseño responde a un por qué conductual y un objetivo medible" },
+  { label: "Diferencial", desc: "Tu firma humana amplifica lo que la IA genera — tu criterio es tu ventaja competitiva" },
   { label: "A prueba de futuro", desc: "Habilidades que no caducan cuando sale la próxima herramienta" },
 ]
 
@@ -28,7 +28,7 @@ export function CourseTransformation() {
   return (
     <section id="transformacion" className="relative py-20 md:py-28 bg-[var(--surface-mid)] overflow-hidden">
       <div className="absolute inset-0">
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-foreground/[0.06] to-transparent" />
       </div>
 
       <div ref={ref} className="relative z-10 max-w-5xl mx-auto px-6 lg:px-8">
@@ -39,10 +39,13 @@ export function CourseTransformation() {
           className="text-center mb-10 md:mb-14"
         >
           <span className="inline-block text-xs tracking-[0.2em] uppercase mb-4 font-display" style={{ color: 'var(--cyan)' }}>
-            Transformación
+            En esto te conviertes
           </span>
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[var(--surface-dark-fg)] tracking-tight leading-snug font-display">
-            De donde estás, <span className="bg-gradient-to-r from-[var(--cyan)] to-[var(--magenta)] bg-clip-text text-transparent">a donde podrías estar.</span>
+            Entras como profesional curioso.{" "}
+            <span className="bg-gradient-to-r from-[var(--cyan)] to-[var(--magenta)] bg-clip-text text-transparent">
+              Sales como Behavioral AI Experience Designer.
+            </span>
           </h2>
         </motion.div>
 
@@ -51,7 +54,7 @@ export function CourseTransformation() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={inView ? { opacity: 1, scale: 1 } : {}}
           transition={{ duration: 0.8, delay: 0.15 }}
-          className="relative w-full h-48 md:h-64 rounded-2xl overflow-hidden mb-10 md:mb-14 border border-white/[0.04]"
+          className="relative w-full h-48 md:h-64 rounded-2xl overflow-hidden mb-10 md:mb-14 border border-foreground/[0.04]"
         >
           <Image
             src="/images/curso/transformation.png"
@@ -72,8 +75,8 @@ export function CourseTransformation() {
               {before.map((item, i) => (
                 <motion.div key={i} initial={{ opacity: 0, x: -15 }} animate={inView ? { opacity: 1, x: 0 } : {}} transition={{ delay: 0.3 + i * 0.08 }}
                   className="p-4 rounded-xl border border-red-500/[0.06] bg-red-500/[0.02]">
-                  <p className="text-base font-medium text-white/70">{item.label}</p>
-                  <p className="text-sm text-white/30">{item.desc}</p>
+                  <p className="text-base font-medium text-foreground/70">{item.label}</p>
+                  <p className="text-sm text-foreground/30">{item.desc}</p>
                 </motion.div>
               ))}
             </div>
@@ -98,14 +101,14 @@ export function CourseTransformation() {
           {/* After */}
           <motion.div initial={{ opacity: 0, x: 30 }} animate={inView ? { opacity: 1, x: 0 } : {}} transition={{ delay: 0.4, duration: 0.6 }}>
             <div className="text-center md:text-left mb-6">
-              <span className="text-sm font-medium tracking-wider uppercase font-display" style={{ color: 'var(--cyan)' }}>Después</span>
+              <span className="text-sm font-medium tracking-wider uppercase font-display" style={{ color: 'var(--cyan)' }}>En esto te conviertes</span>
             </div>
             <div className="space-y-3">
               {after.map((item, i) => (
                 <motion.div key={i} initial={{ opacity: 0, x: 15 }} animate={inView ? { opacity: 1, x: 0 } : {}} transition={{ delay: 0.5 + i * 0.08 }}
                   className="p-4 rounded-xl border border-[var(--cyan)]/[0.08] bg-[var(--cyan)]/[0.02]">
                   <p className="text-base font-medium text-[var(--surface-dark-fg)]">{item.label}</p>
-                  <p className="text-sm text-white/40">{item.desc}</p>
+                  <p className="text-sm text-foreground/40">{item.desc}</p>
                 </motion.div>
               ))}
             </div>
