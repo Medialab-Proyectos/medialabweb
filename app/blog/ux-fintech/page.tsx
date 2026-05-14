@@ -4,13 +4,55 @@ import Link from "next/link"
 import { ArrowLeft, Clock, Calendar } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "Diseñando para la Confianza: UX y Comportamiento Financiero | MediaLab",
-  description: "Los principios de diseño que hacen que las personas se sientan seguras tomando decisiones financieras digitalmente.",
+  title: "Diseñando para la Confianza: UX y Comportamiento Financiero",
+  description:
+    "Los principios de diseño UX que hacen que las personas se sientan seguras tomando decisiones financieras digitalmente. Estrategias para fintech y banca.",
+  alternates: { canonical: "/blog/ux-fintech" },
+  openGraph: {
+    type: "article",
+    url: "/blog/ux-fintech",
+    publishedTime: "2026-03-15T08:00:00-05:00",
+    modifiedTime: "2026-05-14T08:00:00-05:00",
+    authors: ["Christian Benavides"],
+    images: [{ url: "/images/blog-fintech.jpg", width: 1200, height: 630, alt: "UX en Fintech" }],
+  },
+  twitter: { card: "summary_large_image", images: ["/images/blog-fintech.jpg"] },
+}
+
+const articleSchema = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: "UX en Fintech: Diseñar para la Confianza",
+  description: "Estrategias UX para productos fintech que construyen confianza desde el primer contacto.",
+  image: ["https://medialab.design/images/blog-fintech.jpg"],
+  datePublished: "2026-03-15T08:00:00-05:00",
+  dateModified: "2026-05-14T08:00:00-05:00",
+  author: { "@type": "Person", name: "Christian Benavides", url: "https://www.zeroui.me/" },
+  publisher: {
+    "@type": "Organization",
+    name: "MediaLab Ingeniería",
+    logo: { "@type": "ImageObject", url: "https://medialab.design/logo.svg" },
+  },
+  mainEntityOfPage: { "@type": "WebPage", "@id": "https://medialab.design/blog/ux-fintech" },
+  inLanguage: "es",
+  articleSection: "Fintech",
+}
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Inicio", item: "https://medialab.design" },
+    { "@type": "ListItem", position: 2, name: "Blog", item: "https://medialab.design/blog" },
+    { "@type": "ListItem", position: 3, name: "UX en Fintech", item: "https://medialab.design/blog/ux-fintech" },
+  ],
 }
 
 export default function BlogUXFintechPage() {
   return (
     <main className="min-h-screen bg-background">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <div className="relative w-full h-[420px] md:h-[520px] overflow-hidden">
         <Image src="/images/blog-fintech.jpg" alt="UX en Fintech" fill className="object-cover" priority />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />

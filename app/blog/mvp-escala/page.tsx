@@ -4,13 +4,55 @@ import Link from "next/link"
 import { ArrowLeft, Clock, Calendar } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "De MVP a Escala: Decisiones de Arquitectura que Importan | MediaLab",
-  description: "Las decisiones técnicas que tomes en el MVP definirán qué tan rápido puedes crecer.",
+  title: "De MVP a Escala: Decisiones de Arquitectura que Importan",
+  description:
+    "Las decisiones técnicas que tomes en el MVP definirán qué tan rápido puedes crecer. Cómo diseñar un MVP listo para escalar sin deuda técnica.",
+  alternates: { canonical: "/blog/mvp-escala" },
+  openGraph: {
+    type: "article",
+    url: "/blog/mvp-escala",
+    publishedTime: "2026-03-25T08:00:00-05:00",
+    modifiedTime: "2026-05-14T08:00:00-05:00",
+    authors: ["Christian Benavides"],
+    images: [{ url: "/images/blog-mvp.jpg", width: 1200, height: 630, alt: "De MVP a Escala" }],
+  },
+  twitter: { card: "summary_large_image", images: ["/images/blog-mvp.jpg"] },
+}
+
+const articleSchema = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: "Del MVP a la Escala: Decisiones de Arquitectura que Importan",
+  description: "Cómo diseñar un MVP que esté preparado para escalar sin acumular deuda técnica.",
+  image: ["https://medialab.design/images/blog-mvp.jpg"],
+  datePublished: "2026-03-25T08:00:00-05:00",
+  dateModified: "2026-05-14T08:00:00-05:00",
+  author: { "@type": "Person", name: "Christian Benavides", url: "https://www.zeroui.me/" },
+  publisher: {
+    "@type": "Organization",
+    name: "MediaLab Ingeniería",
+    logo: { "@type": "ImageObject", url: "https://medialab.design/logo.svg" },
+  },
+  mainEntityOfPage: { "@type": "WebPage", "@id": "https://medialab.design/blog/mvp-escala" },
+  inLanguage: "es",
+  articleSection: "Startups",
+}
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Inicio", item: "https://medialab.design" },
+    { "@type": "ListItem", position: 2, name: "Blog", item: "https://medialab.design/blog" },
+    { "@type": "ListItem", position: 3, name: "MVP a Escala", item: "https://medialab.design/blog/mvp-escala" },
+  ],
 }
 
 export default function BlogMVPEscalaPage() {
   return (
     <main className="min-h-screen bg-background">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <div className="relative w-full h-[420px] md:h-[520px] overflow-hidden">
         <Image src="/images/blog-mvp.jpg" alt="De MVP a Escala" fill className="object-cover" priority />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />

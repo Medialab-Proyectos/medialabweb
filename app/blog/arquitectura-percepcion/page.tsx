@@ -4,18 +4,88 @@ import Link from "next/link"
 import { ArrowLeft, Clock, Calendar } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "La Arquitectura de la Percepción: Por Qué Tus Usuarios No Navegan Flujos, Sino Estados Emocionales | MediaLab",
-  description: "Los usuarios no abandonan productos por falta de lógica sino por fricciones emocionales invisibles. Descubre el Diseño de Experiencia Consciente (CXD) de MediaLab.",
+  title: "La Arquitectura de la Percepción: Por Qué Tus Usuarios No Navegan Flujos, Sino Estados Emocionales",
+  description:
+    "Los usuarios no abandonan productos por falta de lógica sino por fricciones emocionales invisibles. Descubre el Diseño de Experiencia Consciente (CXD) de MediaLab.",
+  alternates: { canonical: "/blog/arquitectura-percepcion" },
   openGraph: {
     title: "La Arquitectura de la Percepción — MediaLab Ingeniería",
-    description: "Los usuarios transitan estados emocionales, no flujos lógicos. Aprende a diseñar desde la percepción consciente.",
+    description:
+      "Los usuarios transitan estados emocionales, no flujos lógicos. Aprende a diseñar desde la percepción consciente.",
+    type: "article",
+    url: "/blog/arquitectura-percepcion",
+    publishedTime: "2026-05-01T08:00:00-05:00",
+    modifiedTime: "2026-05-14T08:00:00-05:00",
+    authors: ["Christian Benavides"],
+    tags: ["UX", "Diseño Consciente", "Percepción", "CXD"],
+    images: [
+      { url: "/images/blog-zero-ui-percepcion.png", width: 1200, height: 630, alt: "Arquitectura de la percepción" },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "La Arquitectura de la Percepción",
+    description: "4 estados críticos para diseñar experiencias conscientes.",
     images: ["/images/blog-zero-ui-percepcion.png"],
   },
+}
+
+const articleSchema = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline:
+    "La Arquitectura de la Percepción: Por Qué Tus Usuarios No Navegan Flujos, Sino Estados Emocionales",
+  description:
+    "Los usuarios no abandonan productos por falta de lógica sino por fricciones emocionales invisibles. Descubre el Diseño de Experiencia Consciente (CXD).",
+  image: ["https://medialab.design/images/blog-zero-ui-percepcion.png"],
+  datePublished: "2026-05-01T08:00:00-05:00",
+  dateModified: "2026-05-14T08:00:00-05:00",
+  author: {
+    "@type": "Person",
+    name: "Christian Benavides",
+    url: "https://www.zeroui.me/",
+  },
+  publisher: {
+    "@type": "Organization",
+    name: "MediaLab Ingeniería",
+    logo: { "@type": "ImageObject", url: "https://medialab.design/logo.svg" },
+  },
+  mainEntityOfPage: {
+    "@type": "WebPage",
+    "@id": "https://medialab.design/blog/arquitectura-percepcion",
+  },
+  inLanguage: "es",
+  keywords: "UX, percepción, CXD, diseño consciente, estados emocionales, Zero UI",
+  articleSection: "Diseño UX",
+  wordCount: 1800,
+}
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Inicio", item: "https://medialab.design" },
+    { "@type": "ListItem", position: 2, name: "Blog", item: "https://medialab.design/blog" },
+    {
+      "@type": "ListItem",
+      position: 3,
+      name: "Arquitectura de la Percepción",
+      item: "https://medialab.design/blog/arquitectura-percepcion",
+    },
+  ],
 }
 
 export default function BlogArquitecturaPercepcionPage() {
   return (
     <main className="min-h-screen bg-background">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       {/* Hero */}
       <div className="relative w-full h-[420px] md:h-[520px] overflow-hidden">
         <Image src="https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=1200&auto=format&fit=crop" alt="Equipo de diseño UX analizando estados emocionales del usuario" fill className="object-cover" priority unoptimized />

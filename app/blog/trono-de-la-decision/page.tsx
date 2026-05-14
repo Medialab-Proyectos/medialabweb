@@ -4,18 +4,63 @@ import Link from "next/link"
 import { ArrowLeft, Clock, Calendar } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "El Trono de la Decisión: IA, Autonomía Humana y el Futuro del Diseño Ético | MediaLab",
-  description: "En la era de los agentes de IA, el mayor riesgo no es la privacidad — es la infantilización del usuario. Descubre el Agentic Experience Design (AXD).",
+  title: "El Trono de la Decisión: IA, Autonomía Humana y el Futuro del Diseño Ético",
+  description:
+    "En la era de los agentes de IA, el mayor riesgo no es la privacidad — es la infantilización del usuario. Descubre el Agentic Experience Design (AXD).",
+  alternates: { canonical: "/blog/trono-de-la-decision" },
   openGraph: {
     title: "El Trono de la Decisión — MediaLab Ingeniería",
-    description: "Un sistema bien diseñado no decide por ti. Te ayuda a decidir mejor. La ética del diseño en la era de la IA.",
+    description: "La ética del diseño en la era de la IA.",
+    type: "article",
+    url: "/blog/trono-de-la-decision",
+    publishedTime: "2026-05-08T08:00:00-05:00",
+    modifiedTime: "2026-05-14T08:00:00-05:00",
+    authors: ["Christian Benavides"],
+    images: [{ url: "/images/blog-zero-ui-decision.png", width: 1200, height: 630, alt: "El Trono de la Decisión" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "El Trono de la Decisión",
+    description: "IA, autonomía y diseño ético.",
     images: ["/images/blog-zero-ui-decision.png"],
   },
+}
+
+const articleSchema = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: "El Trono de la Decisión: IA, Autonomía Humana y Diseño Ético",
+  description:
+    "En la era de los agentes de IA, el mayor riesgo no es la privacidad — es la infantilización del usuario.",
+  image: ["https://medialab.design/images/blog-zero-ui-decision.png"],
+  datePublished: "2026-05-08T08:00:00-05:00",
+  dateModified: "2026-05-14T08:00:00-05:00",
+  author: { "@type": "Person", name: "Christian Benavides", url: "https://www.zeroui.me/" },
+  publisher: {
+    "@type": "Organization",
+    name: "MediaLab Ingeniería",
+    logo: { "@type": "ImageObject", url: "https://medialab.design/logo.svg" },
+  },
+  mainEntityOfPage: { "@type": "WebPage", "@id": "https://medialab.design/blog/trono-de-la-decision" },
+  inLanguage: "es",
+  articleSection: "IA y Ética",
+}
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Inicio", item: "https://medialab.design" },
+    { "@type": "ListItem", position: 2, name: "Blog", item: "https://medialab.design/blog" },
+    { "@type": "ListItem", position: 3, name: "El Trono de la Decisión", item: "https://medialab.design/blog/trono-de-la-decision" },
+  ],
 }
 
 export default function BlogTronoDecisionPage() {
   return (
     <main className="min-h-screen bg-background">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       {/* Hero */}
       <div className="relative w-full h-[420px] md:h-[520px] overflow-hidden">
         <Image src="/images/blog-zero-ui-decision.png" alt="IA, autonomía humana y diseño ético" fill className="object-cover" priority />

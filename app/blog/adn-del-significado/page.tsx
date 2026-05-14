@@ -4,18 +4,64 @@ import Link from "next/link"
 import { ArrowLeft, Clock, Calendar } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "El ADN del Significado: Por Qué la Motivación No Basta para Retener Usuarios | MediaLab",
-  description: "La motivación inicia la acción, pero el significado sostiene el hábito. Descubre cómo el diseño con propósito crea productos digitales que los usuarios aman.",
+  title: "El ADN del Significado: Por Qué la Motivación No Basta para Retener Usuarios",
+  description:
+    "La motivación inicia la acción, pero el significado sostiene el hábito. Descubre cómo el diseño con propósito crea productos digitales que los usuarios aman.",
+  alternates: { canonical: "/blog/adn-del-significado" },
   openGraph: {
     title: "El ADN del Significado — MediaLab Ingeniería",
-    description: "La motivación inicia la acción, pero el significado sostiene el hábito. Diseño noético para productos que trascienden.",
+    description:
+      "La motivación inicia la acción, pero el significado sostiene el hábito. Diseño noético para productos que trascienden.",
+    type: "article",
+    url: "/blog/adn-del-significado",
+    publishedTime: "2026-05-05T08:00:00-05:00",
+    modifiedTime: "2026-05-14T08:00:00-05:00",
+    authors: ["Christian Benavides"],
+    images: [{ url: "/images/blog-zero-ui-significado.png", width: 1200, height: 630, alt: "El ADN del Significado" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "El ADN del Significado",
+    description: "Diseño noético: 4 patrones para productos que retienen por propósito.",
     images: ["/images/blog-zero-ui-significado.png"],
   },
+}
+
+const articleSchema = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: "El ADN del Significado: Por Qué la Motivación No Basta para Retener Usuarios",
+  description:
+    "La motivación inicia la acción, pero el significado sostiene el hábito. 4 patrones de diseño noético para productos que trascienden.",
+  image: ["https://medialab.design/images/blog-zero-ui-significado.png"],
+  datePublished: "2026-05-05T08:00:00-05:00",
+  dateModified: "2026-05-14T08:00:00-05:00",
+  author: { "@type": "Person", name: "Christian Benavides", url: "https://www.zeroui.me/" },
+  publisher: {
+    "@type": "Organization",
+    name: "MediaLab Ingeniería",
+    logo: { "@type": "ImageObject", url: "https://medialab.design/logo.svg" },
+  },
+  mainEntityOfPage: { "@type": "WebPage", "@id": "https://medialab.design/blog/adn-del-significado" },
+  inLanguage: "es",
+  articleSection: "Producto",
+}
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Inicio", item: "https://medialab.design" },
+    { "@type": "ListItem", position: 2, name: "Blog", item: "https://medialab.design/blog" },
+    { "@type": "ListItem", position: 3, name: "El ADN del Significado", item: "https://medialab.design/blog/adn-del-significado" },
+  ],
 }
 
 export default function BlogAdnSignificadoPage() {
   return (
     <main className="min-h-screen bg-background">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       {/* Hero */}
       <div className="relative w-full h-[420px] md:h-[520px] overflow-hidden">
         <Image src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1200&auto=format&fit=crop" alt="Equipo colaborando en el propósito y significado de un producto digital" fill className="object-cover" priority unoptimized />

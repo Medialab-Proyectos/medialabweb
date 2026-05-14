@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Lato, Poppins } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { ThemeProvider } from '@/components/theme-provider'
@@ -17,28 +17,41 @@ const poppins = Poppins({
   variable: '--font-poppins',
 })
 
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#0a0a0a' },
+  ],
+  colorScheme: 'dark light',
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+}
+
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://medialab.design'),
   title: {
-    default: 'MediaLab Ingeniería | Diseño UX/UI, IA y Productos Digitales',
+    default: 'MediaLab Ingeniería | Agencia UX/UI, IA y Productos Digitales en 2026',
     template: '%s | MediaLab Ingeniería',
   },
   description:
-    'Agencia de diseño UX/UI, IA, SEO técnico y desarrollo de productos digitales para empresas B2B y marcas B2C. Creamos experiencias humanas, indexables y medibles.',
+    'Agencia de diseño UX/UI con IA, SEO técnico, CRO y desarrollo de productos digitales para empresas B2B y marcas B2C. Investigamos, diseñamos y construimos experiencias humanas, indexables y medibles desde Bogotá para el mundo.',
   generator: 'Next.js',
-  applicationName: 'MediaLab',
+  applicationName: 'MediaLab Ingeniería',
   category: 'Design, Software, Artificial Intelligence, SEO',
-  classification: 'UX/UI design agency, product design, software development, technical SEO',
+  classification: 'UX/UI design agency, product design, software development, technical SEO, AEO/GEO',
   referrer: 'origin-when-cross-origin',
   keywords: [
-    'agencia diseño UX/UI B2B B2C', 'diseño de productos con IA', 'diseño conductual', 
-    'desarrollo de productos digitales', 'UXBox discovery', 'agencia UX Bogotá Colombia',
-    'diseño de experiencias de usuario', 'desarrollo de software a medida', 
-    'consultoría de innovación digital', 'MVP para startups', 'diseño para fintech',
-    'experiencia del cliente CX', 'aumento de conversión CRO', 'SEO técnico para productos digitales',
-    'diseño emocional B2C', 'experiencia B2B', 'rediseño UX para conversión'
+    'agencia UX UI Colombia', 'diseño de productos con IA 2026', 'diseño conductual',
+    'agencia de diseño UX Bogotá', 'desarrollo de productos digitales B2B B2C',
+    'UXBox discovery con IA', 'consultoría de innovación digital',
+    'MVP para startups', 'diseño UX para fintech', 'CRO optimización de conversión',
+    'SEO técnico para SaaS', 'diseño emocional B2C', 'experiencia B2B',
+    'AEO answer engine optimization', 'GEO generative engine optimization',
+    'curso UX con inteligencia artificial', 'Behavioral AI Experience Design',
+    'Zero UI Christian Benavides',
   ],
-  authors: [{ name: 'MediaLab Ingeniería', url: 'https://medialab.design' }],
+  authors: [{ name: 'Christian Benavides', url: 'https://medialab.design' }],
   creator: 'MediaLab Ingeniería',
   publisher: 'MediaLab Ingeniería',
   formatDetection: {
@@ -50,6 +63,18 @@ export const metadata: Metadata = {
     canonical: '/',
     languages: {
       'es-CO': '/',
+      'es': '/',
+      'en': '/?lang=en',
+      'x-default': '/',
+    },
+    types: {
+      'application/rss+xml': '/feed.xml',
+    },
+  },
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+    other: {
+      'msvalidate.01': process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION || '',
     },
   },
   openGraph: {
@@ -59,6 +84,7 @@ export const metadata: Metadata = {
     url: 'https://medialab.design',
     siteName: 'MediaLab Ingeniería',
     locale: 'es_CO',
+    alternateLocale: ['en_US'],
     type: 'website',
     images: [
       {
@@ -66,21 +92,29 @@ export const metadata: Metadata = {
         width: 1200,
         height: 630,
         alt: 'MediaLab Ingeniería — Agencia de UX, IA y Diseño Conductual',
+        type: 'image/jpeg',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
+    site: '@MediaLabIng',
+    creator: '@MediaLabIng',
     title: 'MediaLab Ingeniería | UX, IA, SEO y productos digitales',
     description: 'Creamos experiencias B2B y B2C que posicionan, conectan emocionalmente y convierten con diseño centrado en el ser humano.',
-    creator: '@MediaLabIng',
     images: ['/images/ux-research.jpg'],
   },
   icons: {
-    icon: '/favicon.ico',
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/icon.svg', type: 'image/svg+xml' },
+      { url: '/icon-light-32x32.png', sizes: '32x32', type: 'image/png', media: '(prefers-color-scheme: light)' },
+      { url: '/icon-dark-32x32.png', sizes: '32x32', type: 'image/png', media: '(prefers-color-scheme: dark)' },
+    ],
     shortcut: '/favicon.ico',
-    apple: '/favicon.ico',
+    apple: [{ url: '/apple-icon.png', sizes: '180x180', type: 'image/png' }],
   },
+  manifest: '/manifest.webmanifest',
   robots: {
     index: true,
     follow: true,
@@ -117,18 +151,56 @@ export default function RootLayout({
               url: 'https://medialab.design',
               logo: 'https://medialab.design/logo.svg',
               foundingDate: '2020',
-              areaServed: 'Worldwide',
-              knowsAbout: ['UX Design', 'UI Design', 'Artificial Intelligence', 'Behavioral Design', 'Consumer Psychology', 'B2B Software', 'B2C Applications', 'Product Discovery', 'CRO'],
-              contactPoint: {
-                '@type': 'ContactPoint',
-                contactType: 'sales',
-                availableLanguage: ['Spanish', 'English'],
+              founder: {
+                '@type': 'Person',
+                name: 'Christian Benavides',
+                jobTitle: 'CEO & Founder',
+                sameAs: 'https://www.zeroui.me/',
               },
+              address: {
+                '@type': 'PostalAddress',
+                addressLocality: 'Bogotá',
+                addressRegion: 'Cundinamarca',
+                addressCountry: 'CO',
+              },
+              areaServed: ['CO', 'MX', 'AR', 'CL', 'PE', 'EC', 'US', 'ES'],
+              knowsAbout: [
+                'UX Design',
+                'UI Design',
+                'Artificial Intelligence',
+                'Behavioral Design',
+                'Consumer Psychology',
+                'B2B SaaS',
+                'B2C Applications',
+                'Product Discovery',
+                'CRO',
+                'Technical SEO',
+                'Answer Engine Optimization',
+                'Generative Engine Optimization',
+                'Zero UI',
+              ],
+              contactPoint: [
+                {
+                  '@type': 'ContactPoint',
+                  contactType: 'sales',
+                  email: 'info@medialab.design',
+                  telephone: '+57-305-400-9505',
+                  availableLanguage: ['Spanish', 'English'],
+                  areaServed: ['CO', 'MX', 'US', 'ES'],
+                },
+                {
+                  '@type': 'ContactPoint',
+                  contactType: 'customer support',
+                  email: 'info@medialab.design',
+                  availableLanguage: ['Spanish', 'English'],
+                },
+              ],
               sameAs: [
                 'https://www.linkedin.com/company/medialab-ingenieria',
                 'https://x.com/MediaLabIng',
                 'https://www.instagram.com/medialabingenieria',
                 'https://github.com/medialabingenieria',
+                'https://www.zeroui.me/',
               ],
             }),
           }}
@@ -240,7 +312,7 @@ export default function RootLayout({
             }),
           }}
         />
-        {/* FAQ Schema */}
+        {/* FAQ Schema — sincronizado con components/faq-section.tsx */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -250,58 +322,66 @@ export default function RootLayout({
               mainEntity: [
                 {
                   '@type': 'Question',
-                  name: '¿Qué es UXBox y cómo ayuda a mi negocio?',
+                  name: '¿Qué es UXBox y por qué debería importarme?',
                   acceptedAnswer: {
                     '@type': 'Answer',
-                    text: 'UXBox es nuestra plataforma inteligente de descubrimiento de producto potenciada por IA. Analiza tu idea y genera una propuesta de producto estructurada — incluyendo requisitos, estrategia UX y conceptos de diseño — en días en lugar de meses. Ideal tanto para líderes B2B que necesitan validar rápidamente como para fundadores B2C que quieren llegar antes al mercado.',
+                    text: 'UXBox es nuestra herramienta de IA que toma tu idea de producto y genera una propuesta estructurada — con requisitos, estrategia UX y conceptos de diseño — en días en lugar de meses. Si alguna vez sentiste que tu equipo lleva semanas definiendo sin avanzar, esto es para ti.',
                   },
                 },
                 {
                   '@type': 'Question',
-                  name: '¿Cuánto tiempo toma el discovery de producto?',
+                  name: '¿Cuánto tiempo toma empezar a ver resultados reales?',
                   acceptedAnswer: {
                     '@type': 'Answer',
-                    text: 'Con UXBox, el discovery de producto puede completarse en tan solo 3-5 días. Los procesos tradicionales toman semanas o meses. Nuestro enfoque acelerado por IA comprime ese tiempo dramáticamente, permitiendo a equipos B2B y B2C tomar decisiones informadas más rápido.',
+                    text: 'Con UXBox, puedes tener claridad sobre tu producto en 3-5 días. Un primer prototipo validado, en 2-4 semanas. No te vamos a decir que todo toma meses — porque no tiene por qué.',
                   },
                 },
                 {
                   '@type': 'Question',
-                  name: '¿Con qué industrias y modelos de negocio trabajan?',
+                  name: '¿Trabajan con empresas de mi industria?',
                   acceptedAnswer: {
                     '@type': 'Answer',
-                    text: 'Trabajamos con empresas B2B (SaaS, plataformas enterprise, fintech corporativa) y marcas B2C (e-commerce, apps de consumo, movilidad). Nuestras industrias incluyen Fintech, Banca, Movilidad, Startups, Educación, E-commerce, Sostenibilidad y Plataformas Digitales.',
+                    text: 'Trabajamos con equipos en Fintech, Banca, Movilidad, Startups, Educación, E-commerce, Sostenibilidad y Plataformas Digitales. Si tu producto tiene usuarios — humanos que necesitan sentir confianza — podemos ayudarte.',
                   },
                 },
                 {
                   '@type': 'Question',
-                  name: '¿Construyen plataformas digitales completas?',
+                  name: '¿Pueden construir mi producto completo o solo diseñan?',
                   acceptedAnswer: {
                     '@type': 'Answer',
-                    text: 'Sí. Ofrecemos servicios end-to-end desde discovery y diseño UX/UI hasta desarrollo de software a medida. Construimos dashboards B2B, apps móviles B2C, MVPs para startups y plataformas empresariales escalables usando React, Next.js, Node.js e infraestructura cloud.',
+                    text: 'Ambas. Hacemos todo el camino: investigación, diseño UX/UI y desarrollo de software a medida. Si solo necesitas diseño o solo desarrollo, también funciona. Nos adaptamos a lo que tu equipo necesite.',
                   },
                 },
                 {
                   '@type': 'Question',
-                  name: '¿Cómo inicio un proyecto con MediaLab?',
+                  name: '¿Cómo empiezo si todavía no tengo claro lo que necesito?',
                   acceptedAnswer: {
                     '@type': 'Answer',
-                    text: 'La forma más fácil es hacer clic en "Agenda tu llamada gratuita" y contarnos sobre tu idea. También puedes usar UXBox para enviar un brief estructurado. Nuestro equipo te contactará en 24 horas para una sesión de discovery gratuita — sin compromiso.',
+                    text: 'Ese es justo el punto de partida perfecto. Haz clic en "Quiero transformar mi producto" y te contactaremos en 24h para una sesión de discovery gratuita de 30 minutos. Saldrás con más claridad de la que tienes ahora. Sin compromiso.',
                   },
                 },
                 {
                   '@type': 'Question',
-                  name: '¿Cómo garantizan que la experiencia conecte emocionalmente con los usuarios?',
+                  name: '¿Puedo integrarlos como parte de mi equipo?',
                   acceptedAnswer: {
                     '@type': 'Answer',
-                    text: 'Aplicamos psicología del consumidor y diseño conductual en cada proyecto. Investigamos cómo piensan, sienten y deciden tus usuarios para diseñar experiencias que generen conexión emocional real — no solo flujos funcionales. Esto aplica tanto para productos B2C que buscan engagement como para plataformas B2B que necesitan eficiencia y satisfacción.',
+                    text: 'Sí, muchos de nuestros clientes nos integran como su equipo de producto externo. Trabajamos dentro de tus sprints, con tus herramientas y junto a tus desarrolladores. Es como tener un equipo senior de UX + Desarrollo sin el costo de contratación.',
                   },
                 },
                 {
                   '@type': 'Question',
-                  name: '¿Qué diferencia a MediaLab de otras agencias UX?',
+                  name: '¿Cómo sé que no van a diseñar algo bonito que nadie use?',
                   acceptedAnswer: {
                     '@type': 'Answer',
-                    text: 'Tres diferenciadores: (1) UXBox — nuestra IA que comprime el discovery de producto 10x, (2) Enfoque en psicología del consumidor — no solo diseñamos interfaces bonitas, diseñamos para el comportamiento humano, y (3) Capacidad end-to-end — desde la investigación hasta el desarrollo de software, entregamos productos listos para el mercado.',
+                    text: 'Porque empezamos investigando a tus usuarios, no dibujando pantallas. Cada decisión de diseño está respaldada por datos de comportamiento real. Diseñamos para que funcione primero — y que se vea increíble después.',
+                  },
+                },
+                {
+                  '@type': 'Question',
+                  name: '¿Qué los hace diferentes de otras agencias UX?',
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: 'Tres cosas: (1) UXBox — IA que comprime tu discovery 10x, (2) investigamos cómo piensan tus usuarios antes de diseñar, y (3) hacemos todo end-to-end: investigación, diseño y desarrollo. No pasamos el trabajo a un tercero.',
                   },
                 },
               ],

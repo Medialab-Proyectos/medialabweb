@@ -4,18 +4,62 @@ import Link from "next/link"
 import { ArrowLeft, Clock, Calendar } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "Influencia sin Erosión: Cómo Diseñar Comportamiento Sostenible sin Manipular | MediaLab",
-  description: "El comportamiento sostenido no nace de la presión. Nace de una conciencia respetada. Descubre las 4 capas de la acción y el caso del botón de $300 millones.",
+  title: "Influencia sin Erosión: Cómo Diseñar Comportamiento Sostenible sin Manipular",
+  description:
+    "El comportamiento sostenido no nace de la presión. Nace de una conciencia respetada. Descubre las 4 capas de la acción y el caso del botón de $300 millones.",
+  alternates: { canonical: "/blog/influencia-sin-erosion" },
   openGraph: {
     title: "Influencia sin Erosión — MediaLab Ingeniería",
-    description: "El diseño conductual consciente no fuerza el comportamiento; lo hace emerger. 5 patrones para influir sin erosionar.",
+    description: "5 patrones para influir sin erosionar.",
+    type: "article",
+    url: "/blog/influencia-sin-erosion",
+    publishedTime: "2026-05-10T08:00:00-05:00",
+    modifiedTime: "2026-05-14T08:00:00-05:00",
+    authors: ["Christian Benavides"],
+    images: [{ url: "/images/blog-zero-ui-influencia.png", width: 1200, height: 630, alt: "Influencia sin Erosión" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Influencia sin Erosión",
+    description: "Diseño conductual sostenible sin manipular.",
     images: ["/images/blog-zero-ui-influencia.png"],
   },
+}
+
+const articleSchema = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: "Influencia sin Erosión: Diseño de Comportamiento Sostenible sin Manipular",
+  description: "Las 4 capas de la acción y el caso del botón de $300 millones.",
+  image: ["https://medialab.design/images/blog-zero-ui-influencia.png"],
+  datePublished: "2026-05-10T08:00:00-05:00",
+  dateModified: "2026-05-14T08:00:00-05:00",
+  author: { "@type": "Person", name: "Christian Benavides", url: "https://www.zeroui.me/" },
+  publisher: {
+    "@type": "Organization",
+    name: "MediaLab Ingeniería",
+    logo: { "@type": "ImageObject", url: "https://medialab.design/logo.svg" },
+  },
+  mainEntityOfPage: { "@type": "WebPage", "@id": "https://medialab.design/blog/influencia-sin-erosion" },
+  inLanguage: "es",
+  articleSection: "Diseño Conductual",
+}
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Inicio", item: "https://medialab.design" },
+    { "@type": "ListItem", position: 2, name: "Blog", item: "https://medialab.design/blog" },
+    { "@type": "ListItem", position: 3, name: "Influencia sin Erosión", item: "https://medialab.design/blog/influencia-sin-erosion" },
+  ],
 }
 
 export default function BlogInfluenciaSinErosionPage() {
   return (
     <main className="min-h-screen bg-background">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       {/* Hero */}
       <div className="relative w-full h-[420px] md:h-[520px] overflow-hidden">
         <Image src="https://images.unsplash.com/photo-1573497620053-ea5300f94f21?q=80&w=1200&auto=format&fit=crop" alt="Investigadora UX en sesión de usabilidad con usuario" fill className="object-cover" priority unoptimized />

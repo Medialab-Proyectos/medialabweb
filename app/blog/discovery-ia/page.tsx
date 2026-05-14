@@ -4,13 +4,55 @@ import Link from "next/link"
 import { ArrowLeft, Clock, Calendar } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "Discovery con IA: El Fin de los Workshops Interminables | MediaLab",
-  description: "Cómo las herramientas inteligentes están reemplazando semanas de sesiones con stakeholders.",
+  title: "Discovery con IA: El Fin de los Workshops Interminables",
+  description:
+    "Cómo las herramientas inteligentes están reemplazando semanas de sesiones con stakeholders y comprimiendo el discovery de producto a días.",
+  alternates: { canonical: "/blog/discovery-ia" },
+  openGraph: {
+    type: "article",
+    url: "/blog/discovery-ia",
+    publishedTime: "2026-04-20T08:00:00-05:00",
+    modifiedTime: "2026-05-14T08:00:00-05:00",
+    authors: ["Christian Benavides"],
+    images: [{ url: "/images/blog-ai.jpg", width: 1200, height: 630, alt: "Discovery con IA" }],
+  },
+  twitter: { card: "summary_large_image", images: ["/images/blog-ai.jpg"] },
+}
+
+const articleSchema = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: "Discovery con IA: El Fin de los Workshops Interminables",
+  description: "Cómo la IA reduce el discovery de producto de semanas a días.",
+  image: ["https://medialab.design/images/blog-ai.jpg"],
+  datePublished: "2026-04-20T08:00:00-05:00",
+  dateModified: "2026-05-14T08:00:00-05:00",
+  author: { "@type": "Person", name: "Christian Benavides", url: "https://www.zeroui.me/" },
+  publisher: {
+    "@type": "Organization",
+    name: "MediaLab Ingeniería",
+    logo: { "@type": "ImageObject", url: "https://medialab.design/logo.svg" },
+  },
+  mainEntityOfPage: { "@type": "WebPage", "@id": "https://medialab.design/blog/discovery-ia" },
+  inLanguage: "es",
+  articleSection: "IA",
+}
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Inicio", item: "https://medialab.design" },
+    { "@type": "ListItem", position: 2, name: "Blog", item: "https://medialab.design/blog" },
+    { "@type": "ListItem", position: 3, name: "Discovery con IA", item: "https://medialab.design/blog/discovery-ia" },
+  ],
 }
 
 export default function BlogDiscoveryIAPage() {
   return (
     <main className="min-h-screen bg-background">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <div className="relative w-full h-[420px] md:h-[520px] overflow-hidden">
         <Image src="/images/blog-ai.jpg" alt="Discovery con IA" fill className="object-cover" priority />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />

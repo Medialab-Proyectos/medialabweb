@@ -4,13 +4,55 @@ import Link from "next/link"
 import { ArrowLeft, Clock, Calendar } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "La Psicología Oculta Detrás de la Adopción de Productos Digitales | MediaLab",
-  description: "Por qué algunos productos se convierten en hábito y otros son abandonados — lo que la ciencia del comportamiento nos dice sobre la diferencia.",
+  title: "La Psicología Oculta Detrás de la Adopción de Productos Digitales",
+  description:
+    "Por qué algunos productos se convierten en hábito y otros son abandonados — lo que la ciencia del comportamiento nos dice sobre la diferencia.",
+  alternates: { canonical: "/blog/psicologia-adopcion" },
+  openGraph: {
+    type: "article",
+    url: "/blog/psicologia-adopcion",
+    publishedTime: "2026-04-15T08:00:00-05:00",
+    modifiedTime: "2026-05-14T08:00:00-05:00",
+    authors: ["Christian Benavides"],
+    images: [{ url: "/images/blog-behavioral.jpg", width: 1200, height: 630, alt: "Psicología de la adopción digital" }],
+  },
+  twitter: { card: "summary_large_image", images: ["/images/blog-behavioral.jpg"] },
+}
+
+const articleSchema = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: "La Psicología Oculta Detrás de la Adopción de Productos Digitales",
+  description: "Cómo aplicar psicología del consumidor para acelerar la adopción de productos B2B y B2C.",
+  image: ["https://medialab.design/images/blog-behavioral.jpg"],
+  datePublished: "2026-04-15T08:00:00-05:00",
+  dateModified: "2026-05-14T08:00:00-05:00",
+  author: { "@type": "Person", name: "Christian Benavides", url: "https://www.zeroui.me/" },
+  publisher: {
+    "@type": "Organization",
+    name: "MediaLab Ingeniería",
+    logo: { "@type": "ImageObject", url: "https://medialab.design/logo.svg" },
+  },
+  mainEntityOfPage: { "@type": "WebPage", "@id": "https://medialab.design/blog/psicologia-adopcion" },
+  inLanguage: "es",
+  articleSection: "UX",
+}
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Inicio", item: "https://medialab.design" },
+    { "@type": "ListItem", position: 2, name: "Blog", item: "https://medialab.design/blog" },
+    { "@type": "ListItem", position: 3, name: "Psicología de la Adopción", item: "https://medialab.design/blog/psicologia-adopcion" },
+  ],
 }
 
 export default function BlogPsicologiaAdopcionPage() {
   return (
     <main className="min-h-screen bg-background">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       {/* Hero */}
       <div className="relative w-full h-[420px] md:h-[520px] overflow-hidden">
         <Image src="/images/blog-behavioral.jpg" alt="Psicología de adopción digital" fill className="object-cover" priority />
