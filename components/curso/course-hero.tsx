@@ -4,6 +4,7 @@ import { useRef } from "react"
 import { motion, useScroll, useTransform } from "framer-motion"
 import { Users, Star, BookOpen } from "lucide-react"
 import Image from "next/image"
+import { useLanguage } from "@/lib/language-context"
 
 const stagger = {
   hidden: {},
@@ -14,14 +15,9 @@ const fadeUp = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.25, 0.4, 0.25, 1] as const } },
 }
 
-const trustBadges = [
-  { icon: Users, text: "40+ productos reales construidos" },
-  { icon: Star, text: "Metodología 90-10 validada" },
-  { icon: BookOpen, text: "Autores de 'Bienvenidos al Zero UI'" },
-]
-
 /* Orbital animation — 2 rings + phase labels on edges */
 function OrbitalGraphic() {
+  const { t } = useLanguage()
   return (
     <div className="relative w-[320px] h-[320px] md:w-[400px] md:h-[400px] mx-auto">
       {/* Phase labels on edges */}
@@ -61,11 +57,11 @@ function OrbitalGraphic() {
       {/* Center — result text (well inside inner ring) */}
       <div className="absolute inset-[5rem] md:inset-[6.5rem] flex items-center justify-center">
         <div className="text-center">
-          <p className="text-[9px] tracking-[0.2em] uppercase text-foreground/25 mb-2">Lo que lograrás</p>
+          <p className="text-[9px] tracking-[0.2em] uppercase text-foreground/25 mb-2">{t("Lo que lograrás", "What you'll achieve")}</p>
           <p className="text-3xl md:text-4xl font-bold font-display leading-none" style={{ color: 'var(--cyan)' }}>90%</p>
-          <p className="text-[11px] text-foreground/40 mb-2">productividad</p>
+          <p className="text-[11px] text-foreground/40 mb-2">{t("productividad", "productivity")}</p>
           <p className="text-3xl md:text-4xl font-bold font-display leading-none" style={{ color: 'var(--magenta)' }}>10%</p>
-          <p className="text-[11px] text-foreground/40">esfuerzo</p>
+          <p className="text-[11px] text-foreground/40">{t("esfuerzo", "effort")}</p>
         </div>
       </div>
 
@@ -85,6 +81,13 @@ export function CourseHero() {
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] })
   const opacity = useTransform(scrollYProgress, [0, 0.7], [1, 0])
   const y = useTransform(scrollYProgress, [0, 0.7], [0, 80])
+  const { t } = useLanguage()
+
+  const trustBadges = [
+    { icon: Users, text: t("40+ productos reales construidos", "40+ real products built") },
+    { icon: Star, text: t("Metodología 90-10 validada", "Validated 90-10 methodology") },
+    { icon: BookOpen, text: t("Autores de 'Bienvenidos al Zero UI'", "Authors of 'Welcome to Zero UI'") },
+  ]
 
   return (
     <section ref={ref} className="relative min-h-[90vh] md:min-h-screen flex items-center overflow-hidden bg-[var(--surface-dark)]">
@@ -107,23 +110,28 @@ export function CourseHero() {
             <motion.div variants={fadeUp} className="flex items-center gap-3 mb-8">
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[var(--magenta)]/20 bg-[var(--magenta)]/[0.06]">
                 <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: 'var(--magenta)' }} />
-                <span className="text-[11px] tracking-[0.12em] uppercase font-medium" style={{ color: 'var(--magenta)' }}>Cohorte 01 · Solo 30 cupos</span>
+                <span className="text-[11px] tracking-[0.12em] uppercase font-medium" style={{ color: 'var(--magenta)' }}>{t("Cohorte 01 · Solo 30 cupos", "Cohort 01 · Only 30 seats")}</span>
               </div>
               <span className="text-[11px] text-foreground/30 hidden sm:inline">by MediaLab Ingeniería</span>
             </motion.div>
 
             {/* Headline */}
             <motion.h1 variants={fadeUp} className="text-3xl sm:text-4xl md:text-[2.75rem] lg:text-5xl font-bold tracking-tight leading-[1.12] text-[var(--surface-dark-fg)] mb-5 font-display">
-              No necesitas más herramientas.
+              {t("No necesitas más herramientas.", "You don't need more tools.")}
               <br />
               <span className="bg-gradient-to-r from-[var(--magenta)] to-[var(--cyan)] bg-clip-text text-transparent">
-                Necesitas saber qué hacer con lo que generan.
+                {t(
+                  "Necesitas saber qué hacer con lo que generan.",
+                  "You need to know what to do with what they generate."
+                )}
               </span>
             </motion.h1>
 
             {/* Value prop — short, direct */}
             <motion.p variants={fadeUp} className="text-base md:text-lg text-[var(--surface-dark-fg)]/75 leading-relaxed mb-6 max-w-lg">
-              12 fases para que <span className="text-[var(--surface-dark-fg)] font-medium">tú dirijas</span> y la IA ejecute. Aprende a investigar, diseñar y validar productos reales.
+              {t("12 fases para que ", "12 phases so that ")}
+              <span className="text-[var(--surface-dark-fg)] font-medium">{t("tú dirijas", "you direct")}</span>
+              {t(" y la IA ejecute. Aprende a investigar, diseñar y validar productos reales.", " and AI executes. Learn to research, design, and validate real products.")}
             </motion.p>
 
             {/* CTAs — prominent, above the fold */}
@@ -133,7 +141,7 @@ export function CourseHero() {
                 className="inline-flex items-center justify-center gap-2 px-7 py-4 text-sm font-semibold text-white rounded-full transition-all duration-300 hover:scale-[1.03] active:scale-95 shadow-[0_10px_32px_-8px_rgba(232,117,26,0.65)]"
                 style={{ background: 'var(--magenta)' }}
               >
-                Registrarme al curso →
+                {t("Registrarme al curso →", "Register for the course →")}
               </a>
               <a
                 href="https://wa.me/573054009505?text=Hola%2C%20quiero%20información%20sobre%20el%20curso%20Behavioral%20AI%20Experience%20Design"
@@ -141,18 +149,21 @@ export function CourseHero() {
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 px-7 py-4 text-sm font-semibold rounded-full transition-all duration-300 hover:scale-[1.03] active:scale-95 border border-[var(--cyan)]/40 text-[var(--cyan)] hover:bg-[var(--cyan)]/10"
               >
-                Hablar con un asesor
+                {t("Hablar con un asesor", "Talk to an advisor")}
               </a>
             </motion.div>
 
             <motion.p variants={fadeUp} className="text-xs text-[var(--surface-dark-fg)]/55 mb-7 flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-              Precio de lanzamiento · Garantía la primera semana
+              {t(
+                "Precio de lanzamiento · Garantía la primera semana",
+                "Launch price · First-week guarantee"
+              )}
             </motion.p>
 
-            {/* Role pills — hidden on mobile (don't add value, take space). Show from sm: up */}
+            {/* Role pills — hidden on mobile */}
             <motion.div variants={fadeUp} className="hidden sm:flex flex-wrap items-center gap-2 mb-7">
-              <span className="text-[10px] tracking-[0.12em] uppercase text-[var(--surface-dark-fg)]/40 font-medium mr-1">Te conviertes en:</span>
+              <span className="text-[10px] tracking-[0.12em] uppercase text-[var(--surface-dark-fg)]/40 font-medium mr-1">{t("Te conviertes en:", "You become:")}</span>
               <span className="px-3 py-1 rounded-full border border-[var(--cyan)]/25 bg-[var(--cyan)]/[0.06] text-[11px] font-semibold" style={{ color: 'var(--cyan)' }}>
                 Behavioral AI Experience Designer
               </span>
@@ -161,7 +172,7 @@ export function CourseHero() {
               </span>
             </motion.div>
 
-            {/* Trust badges — hidden on mobile (cohort badge + micro-trust already cover trust) */}
+            {/* Trust badges — hidden on mobile */}
             <motion.div variants={fadeUp} className="hidden sm:flex flex-col sm:flex-row items-start gap-4 sm:gap-6 pt-5 border-t border-[var(--surface-dark-fg)]/[0.08]">
               {trustBadges.map((badge, i) => {
                 const Icon = badge.icon

@@ -2,23 +2,25 @@
 
 import { useState, useEffect, useCallback, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-
-const sections = [
-  { id: "problema", label: "El Problema" },
-  { id: "diferencia", label: "La Diferencia" },
-  { id: "metodologia", label: "Metodología" },
-  { id: "programa", label: "Programa" },
-  { id: "transformacion", label: "Resultado" },
-  { id: "herramientas", label: "Herramientas" },
-  { id: "testimonios", label: "Testimonios" },
-  { id: "faq", label: "FAQ" },
-  { id: "reservar", label: "Reservar" },
-]
+import { useLanguage } from "@/lib/language-context"
 
 export function CourseSectionNav() {
   const [active, setActive] = useState("")
   const [visible, setVisible] = useState(false)
   const sectionRefs = useRef<Map<string, IntersectionObserverEntry>>(new Map())
+  const { t } = useLanguage()
+
+  const sections = [
+    { id: "problema", label: t("El Problema", "The Problem") },
+    { id: "diferencia", label: t("La Diferencia", "The Difference") },
+    { id: "metodologia", label: t("Metodología", "Methodology") },
+    { id: "programa", label: t("Programa", "Program") },
+    { id: "transformacion", label: t("Resultado", "Outcome") },
+    { id: "herramientas", label: t("Herramientas", "Tools") },
+    { id: "testimonios", label: t("Testimonios", "Testimonials") },
+    { id: "faq", label: "FAQ" },
+    { id: "reservar", label: t("Reservar", "Reserve") },
+  ]
 
   useEffect(() => {
     const handleScroll = () => {
@@ -107,7 +109,7 @@ export function CourseSectionNav() {
                   onClick={(e) => handleClick(e, section.id)}
                   className={`px-3 py-1.5 rounded-full text-[11px] font-medium whitespace-nowrap transition-all duration-300 ${
                     active === section.id
-                      ? "text-[var(--surface-dark-fg)] bg-foreground/[0.1]"
+                      ? "text-foreground bg-foreground/[0.1]"
                       : "text-foreground/35 hover:text-foreground/60 hover:bg-foreground/[0.03]"
                   }`}
                 >

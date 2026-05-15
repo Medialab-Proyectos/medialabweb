@@ -67,8 +67,11 @@ export default function CursoPage() {
       {/* 4. MICRO-CTA — soft commitment after emotional sections */}
       <CourseMidCta
         headline="Si te identificaste con algo de esto, no es casualidad."
+        headlineEn="If any of this resonated, it's not a coincidence."
         subtext="Diseñamos esta metodología para personas como tú."
+        subtextEn="We designed this methodology for people like you."
         ctaText="Registrarme al curso →"
+        ctaTextEn="Register for the course →"
         ctaHref="#registro"
         variant="primary"
       />
@@ -82,8 +85,11 @@ export default function CursoPage() {
       {/* 7. MICRO-CTA — commitment escalation */}
       <CourseMidCta
         headline="Cada fase existe por una razón."
+        headlineEn="Every phase exists for a reason."
         subtext="¿Quieres ver qué vas a poder hacer después de cada módulo?"
+        subtextEn="Want to see what you'll be able to do after each module?"
         ctaText="Ver el programa →"
+        ctaTextEn="See the program →"
         ctaHref="#programa"
         variant="subtle"
       />

@@ -1,7 +1,12 @@
 import type { Metadata } from "next"
 import Image from "next/image"
-import Link from "next/link"
-import { ArrowLeft, Clock, Calendar } from "lucide-react"
+import {
+  BlogChromeBackLink,
+  BlogChromeMeta,
+  BlogChromeEnNotice,
+  BlogChromeAuthorLine,
+  BlogChromeCTA,
+} from "@/components/blog/blog-chrome"
 
 export const metadata: Metadata = {
   title: "El ADN del Significado: Por Qué la Motivación No Basta para Retener Usuarios",
@@ -75,18 +80,14 @@ export default function BlogAdnSignificadoPage() {
           <h1 className="font-display font-bold text-3xl md:text-4xl lg:text-5xl text-white leading-tight text-balance">
             El ADN del Significado: Por Qué la Motivación No Basta para Retener Usuarios
           </h1>
-          <div className="flex items-center gap-4 mt-4 text-white/60 text-sm">
-            <span className="flex items-center gap-1"><Calendar size={13} /> Mayo 2026</span>
-            <span className="flex items-center gap-1"><Clock size={13} /> 7 min de lectura</span>
-          </div>
+          <BlogChromeMeta dateEs="Mayo 2026" dateEn="May 2026" readMin={7} />
         </div>
       </div>
 
       {/* Back link */}
       <div className="max-w-3xl mx-auto px-6 pt-8">
-        <Link href="/#blog" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
-          <ArrowLeft size={14} /> Volver al blog
-        </Link>
+        <BlogChromeBackLink />
+        <BlogChromeEnNotice />
       </div>
 
       {/* Article body */}
@@ -143,24 +144,20 @@ export default function BlogAdnSignificadoPage() {
         <p className="text-lg text-muted-foreground leading-relaxed mb-6">
           La noética explica por qué algunos productos permanecen y otros mueren. El significado sostiene lo que la motivación no puede. Tu producto debe diseñar identidad, propósito y narrativa — y la IA permite personalizar el sentido, no solo la acción.
         </p>
-        <p className="text-sm text-muted-foreground/60 mt-8 italic">
-          — Por MediaLab Ingeniería.
-        </p>
+        <BlogChromeAuthorLine />
       </article>
 
       {/* CTA footer */}
       <div className="max-w-3xl mx-auto px-6 pb-20">
-        <div className="rounded-2xl border border-border p-8 flex flex-col md:flex-row items-center gap-6 bg-card">
-          <div className="flex-1">
-            <h3 className="font-display font-bold text-xl text-foreground mb-2">¿Tu producto genera significado o solo engagement?</h3>
-            <p className="text-sm text-muted-foreground">Descubre cómo implementar diseño noético en tu producto B2B o B2C. Hablemos.</p>
-          </div>
-          <Link href="/#contact"
-            className="shrink-0 inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm text-white"
-            style={{ background: "linear-gradient(90deg, #2AABB3, #1d8a91)" }}>
-            Agendar llamada →
-          </Link>
-        </div>
+        <BlogChromeCTA
+          headlineEs="¿Tu producto genera significado o solo engagement?"
+          headlineEn="Does your product create meaning, or just engagement?"
+          subEs="Descubre cómo implementar diseño noético en tu producto B2B o B2C. Hablemos."
+          subEn="Learn how to implement noetic design in your B2B or B2C product. Let's talk."
+          ctaEs="Agendar llamada"
+          ctaEn="Book a call"
+          gradient="linear-gradient(90deg, #2AABB3, #1d8a91)"
+        />
       </div>
     </main>
   )

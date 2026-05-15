@@ -1,17 +1,23 @@
-const items = [
-  "Investigación de Usuarios",
-  "Diseño Emocional",
-  "IA aplicada al Producto",
-  "Código que Escala",
-  "SEO que Posiciona",
-  "Psicología del Consumidor",
-  "Experiencias B2B",
-  "Productos B2C",
-  "Conversión Medible",
-  "Criterio Humano",
-]
+"use client"
+
+import { useLanguage } from "@/lib/language-context"
 
 export function MarqueeTicker() {
+  const { t } = useLanguage()
+
+  const items = [
+    t("Investigación de Usuarios", "User Research"),
+    t("Diseño Emocional", "Emotional Design"),
+    t("IA aplicada al Producto", "AI Applied to Product"),
+    t("Código que Escala", "Code that Scales"),
+    t("SEO que Posiciona", "SEO that Ranks"),
+    t("Psicología del Consumidor", "Consumer Psychology"),
+    t("Experiencias B2B", "B2B Experiences"),
+    t("Productos B2C", "B2C Products"),
+    t("Conversión Medible", "Measurable Conversion"),
+    t("Criterio Humano", "Human Judgment"),
+  ]
+
   // Duplicate items to create seamless loop
   const doubled = [...items, ...items]
 

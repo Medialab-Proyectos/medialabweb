@@ -2,55 +2,12 @@
 
 import { useEffect, useRef, useState } from "react"
 import { Brain, Zap, Clock, Heart, Server, Lightbulb } from "lucide-react"
-
-const reasons = [
-  {
-    icon: Brain,
-    title: "Diseñamos para cómo tu usuario piensa, no para cómo tú crees que piensa",
-    description:
-      "La mayoría de las agencias diseñan sobre suposiciones. Nosotros investigamos miedos, motivaciones y puntos de fricción reales antes de abrir Figma.",
-    color: "var(--magenta)",
-  },
-  {
-    icon: Zap,
-    title: "Tu idea, clara y accionable en días (no meses)",
-    description:
-      "UXBox comprimió meses de discovery en días para 40+ equipos. Le cuentas tu idea y nuestra IA te devuelve un roadmap real: requisitos, estrategia y diseño.",
-    color: "var(--cyan)",
-  },
-  {
-    icon: Clock,
-    title: "Del concepto al MVP en semanas, no en trimestres",
-    description:
-      "Porque cada semana que tu producto no está en manos de usuarios reales es una semana de feedback perdido. Nos movemos rápido sin sacrificar calidad.",
-    color: "var(--orange)",
-  },
-  {
-    icon: Heart,
-    title: "Productos que la gente quiere volver a usar",
-    description:
-      "La retención no se logra con notificaciones push. Se logra cuando la experiencia se siente tan bien que el usuario regresa por decisión propia.",
-    color: "var(--magenta)",
-  },
-  {
-    icon: Server,
-    title: "Tecnología que crece contigo, no en tu contra",
-    description:
-      "React, Next.js, Node.js, Cloud. Código modular que tu equipo puede mantener. Nada de deuda técnica escondida ni arquitecturas que colapsen al escalar.",
-    color: "var(--cyan)",
-  },
-  {
-    icon: Lightbulb,
-    title: "Cada decisión pasa por un filtro: ¿mejora la vida del usuario?",
-    description:
-      "No nos enamoramos de la tecnología. Nos enamoramos de resolver problemas reales. Si una funcionalidad no mejora la experiencia humana, no la construimos.",
-    color: "var(--orange)",
-  },
-]
+import { useLanguage } from "@/lib/language-context"
 
 export function WhyUsSection() {
   const ref = useRef<HTMLDivElement>(null)
   const [visible, setVisible] = useState(false)
+  const { t } = useLanguage()
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -60,6 +17,81 @@ export function WhyUsSection() {
     if (ref.current) observer.observe(ref.current)
     return () => observer.disconnect()
   }, [])
+
+  const reasons = [
+    {
+      icon: Brain,
+      title: t(
+        "Diseñamos para cómo tu usuario piensa, no para cómo tú crees que piensa",
+        "We design for how your user thinks — not how you assume they think"
+      ),
+      description: t(
+        "La mayoría de las agencias diseñan sobre suposiciones. Nosotros investigamos miedos, motivaciones y puntos de fricción reales antes de abrir Figma.",
+        "Most agencies design on assumptions. We research real fears, motivations, and friction points before we open Figma."
+      ),
+      color: "var(--magenta)",
+    },
+    {
+      icon: Zap,
+      title: t(
+        "Tu idea, clara y accionable en días (no meses)",
+        "Your idea, clear and actionable in days (not months)"
+      ),
+      description: t(
+        "UXBox comprimió meses de discovery en días para 40+ equipos. Le cuentas tu idea y nuestra IA te devuelve un roadmap real: requisitos, estrategia y diseño.",
+        "UXBox compressed months of discovery into days for 40+ teams. You tell it your idea and our AI returns a real roadmap: requirements, strategy, and design."
+      ),
+      color: "var(--cyan)",
+    },
+    {
+      icon: Clock,
+      title: t(
+        "Del concepto al MVP en semanas, no en trimestres",
+        "From concept to MVP in weeks, not quarters"
+      ),
+      description: t(
+        "Porque cada semana que tu producto no está en manos de usuarios reales es una semana de feedback perdido. Nos movemos rápido sin sacrificar calidad.",
+        "Because every week your product isn't in real users' hands is a week of feedback lost. We move fast without sacrificing quality."
+      ),
+      color: "var(--orange)",
+    },
+    {
+      icon: Heart,
+      title: t(
+        "Productos que la gente quiere volver a usar",
+        "Products people want to come back to"
+      ),
+      description: t(
+        "La retención no se logra con notificaciones push. Se logra cuando la experiencia se siente tan bien que el usuario regresa por decisión propia.",
+        "Retention isn't won with push notifications. It's won when the experience feels so good the user returns on their own."
+      ),
+      color: "var(--magenta)",
+    },
+    {
+      icon: Server,
+      title: t(
+        "Tecnología que crece contigo, no en tu contra",
+        "Technology that grows with you, not against you"
+      ),
+      description: t(
+        "React, Next.js, Node.js, Cloud. Código modular que tu equipo puede mantener. Nada de deuda técnica escondida ni arquitecturas que colapsen al escalar.",
+        "React, Next.js, Node.js, Cloud. Modular code your team can maintain. No hidden technical debt or architectures that collapse at scale."
+      ),
+      color: "var(--cyan)",
+    },
+    {
+      icon: Lightbulb,
+      title: t(
+        "Cada decisión pasa por un filtro: ¿mejora la vida del usuario?",
+        "Every decision passes one filter: does it improve the user's life?"
+      ),
+      description: t(
+        "No nos enamoramos de la tecnología. Nos enamoramos de resolver problemas reales. Si una funcionalidad no mejora la experiencia humana, no la construimos.",
+        "We don't fall in love with technology. We fall in love with solving real problems. If a feature doesn't improve the human experience, we don't build it."
+      ),
+      color: "var(--orange)",
+    },
+  ]
 
   return (
     <section
@@ -82,17 +114,22 @@ export function WhyUsSection() {
         {/* Header */}
         <div className="flex flex-col gap-4 items-center text-center max-w-2xl mx-auto">
           <span className="text-xs font-semibold tracking-widest uppercase text-[var(--magenta)]">
-            Lo que nos hace diferentes
+            {t("Lo que nos hace diferentes", "What makes us different")}
           </span>
           <h2
             id="why-us-heading"
             className="font-display font-bold text-3xl md:text-4xl lg:text-5xl leading-tight text-white text-balance"
           >
-            No somos la única opción. Somos la que entiende a tus usuarios.
+            {t(
+              "No somos la única opción. Somos la que entiende a tus usuarios.",
+              "We're not your only option. We're the one that understands your users."
+            )}
           </h2>
           <p className="text-base text-white/60 leading-relaxed">
-            Hay muchas agencias que diseñan bonito. Pocas que investigan antes de diseñar. 
-            Y casi ninguna que combina psicología del consumidor, IA y desarrollo en un solo equipo.
+            {t(
+              "Hay muchas agencias que diseñan bonito. Pocas que investigan antes de diseñar. Y casi ninguna que combina psicología del consumidor, IA y desarrollo en un solo equipo.",
+              "Plenty of agencies design beautifully. Few research before they design. And almost none combine consumer psychology, AI, and development in a single team."
+            )}
           </p>
         </div>
 

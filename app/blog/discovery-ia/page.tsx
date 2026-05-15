@@ -1,7 +1,11 @@
 import type { Metadata } from "next"
 import Image from "next/image"
-import Link from "next/link"
-import { ArrowLeft, Clock, Calendar } from "lucide-react"
+import {
+  BlogChromeBackLink,
+  BlogChromeMeta,
+  BlogChromeEnNotice,
+  BlogChromeCTA,
+} from "@/components/blog/blog-chrome"
 
 export const metadata: Metadata = {
   title: "Discovery con IA: El Fin de los Workshops Interminables",
@@ -63,17 +67,13 @@ export default function BlogDiscoveryIAPage() {
           <h1 className="font-display font-bold text-3xl md:text-4xl lg:text-5xl text-white leading-tight text-balance">
             Discovery con IA: El Fin de los Workshops Interminables
           </h1>
-          <div className="flex items-center gap-4 mt-4 text-white/60 text-sm">
-            <span className="flex items-center gap-1"><Calendar size={13} /> Ene 2025</span>
-            <span className="flex items-center gap-1"><Clock size={13} /> 4 min de lectura</span>
-          </div>
+          <BlogChromeMeta dateEs="Ene 2025" dateEn="Jan 2025" readMin={4} />
         </div>
       </div>
 
       <div className="max-w-3xl mx-auto px-6 pt-8">
-        <Link href="/#blog" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
-          <ArrowLeft size={14} /> Volver al blog
-        </Link>
+        <BlogChromeBackLink />
+        <BlogChromeEnNotice />
       </div>
 
       <article className="max-w-3xl mx-auto px-6 py-12 md:py-16">
@@ -123,15 +123,16 @@ export default function BlogDiscoveryIAPage() {
       </article>
 
       <div className="max-w-3xl mx-auto px-6 pb-20">
-        <div className="rounded-2xl border border-border p-8 flex flex-col md:flex-row items-center gap-6 bg-card">
-          <div className="flex-1">
-            <h3 className="font-display font-bold text-xl text-foreground mb-2">¿Quieres hacer discovery en 48h?</h3>
-            <p className="text-sm text-muted-foreground">Nuestro proceso UXBox combina IA y metodología UX para darte claridad en tiempo récord.</p>
-          </div>
-          <Link href="/#uxbox" className="shrink-0 inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm text-white" style={{ background: "linear-gradient(90deg, #E8751A, #c65a10)" }}>
-            Comenzar Discovery →
-          </Link>
-        </div>
+        <BlogChromeCTA
+          headlineEs="¿Quieres hacer discovery en 48h?"
+          headlineEn="Want to run discovery in 48h?"
+          subEs="Nuestro proceso UXBox combina IA y metodología UX para darte claridad en tiempo récord."
+          subEn="Our UXBox process combines AI and UX methodology to give you clarity in record time."
+          ctaEs="Comenzar Discovery"
+          ctaEn="Start Discovery"
+          href="/#uxbox"
+          gradient="linear-gradient(90deg, #E8751A, #c65a10)"
+        />
       </div>
     </main>
   )

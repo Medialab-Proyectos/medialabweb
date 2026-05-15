@@ -1,14 +1,8 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { Layers, Globe, MapPin, Clock, Users } from "lucide-react"
-
-const metrics = [
-  { value: 40, suffix: "+", label: "Productos que la gente ama usar", icon: Layers },
-  { value: 98, suffix: "%", label: "De clientes que volverían a trabajar con nosotros", icon: Users },
-  { value: 7, suffix: "", label: "Países donde nuestro diseño impacta", icon: Globe },
-  { value: 75, suffix: "%", label: "Más rápido que el discovery tradicional", icon: Clock },
-]
+import { Layers, Globe, Clock, Users } from "lucide-react"
+import { useLanguage } from "@/lib/language-context"
 
 function useCountUp(target: number, duration = 1800, active: boolean) {
   const [count, setCount] = useState(0)
@@ -65,6 +59,7 @@ function MetricCard({
 export function TrustMetrics() {
   const ref = useRef<HTMLDivElement>(null)
   const [active, setActive] = useState(false)
+  const { t } = useLanguage()
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -75,6 +70,13 @@ export function TrustMetrics() {
     return () => observer.disconnect()
   }, [])
 
+  const metrics = [
+    { value: 40, suffix: "+", label: t("Productos que la gente ama usar", "Products people love to use"), icon: Layers },
+    { value: 98, suffix: "%", label: t("De clientes que volverían a trabajar con nosotros", "Of clients who would work with us again"), icon: Users },
+    { value: 7, suffix: "", label: t("Países donde nuestro diseño impacta", "Countries where our design has impact"), icon: Globe },
+    { value: 75, suffix: "%", label: t("Más rápido que el discovery tradicional", "Faster than traditional discovery"), icon: Clock },
+  ]
+
   return (
     <section
       ref={ref}
@@ -83,7 +85,10 @@ export function TrustMetrics() {
     >
       <div className="max-w-6xl mx-auto">
         <p className="text-center text-xs font-semibold tracking-widest uppercase text-muted-foreground mb-12">
-          Resultados reales de equipos que dejaron de adivinar y empezaron a diseñar con evidencia
+          {t(
+            "Resultados reales de equipos que dejaron de adivinar y empezaron a diseñar con evidencia",
+            "Real results from teams that stopped guessing and started designing with evidence"
+          )}
         </p>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {metrics.map((m) => (

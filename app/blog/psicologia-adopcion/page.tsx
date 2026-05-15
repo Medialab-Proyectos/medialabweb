@@ -1,7 +1,11 @@
 import type { Metadata } from "next"
 import Image from "next/image"
-import Link from "next/link"
-import { ArrowLeft, Clock, Calendar } from "lucide-react"
+import {
+  BlogChromeBackLink,
+  BlogChromeMeta,
+  BlogChromeEnNotice,
+  BlogChromeCTA,
+} from "@/components/blog/blog-chrome"
 
 export const metadata: Metadata = {
   title: "La Psicología Oculta Detrás de la Adopción de Productos Digitales",
@@ -64,18 +68,14 @@ export default function BlogPsicologiaAdopcionPage() {
           <h1 className="font-display font-bold text-3xl md:text-4xl lg:text-5xl text-white leading-tight text-balance">
             La Psicología Oculta Detrás de la Adopción de Productos Digitales
           </h1>
-          <div className="flex items-center gap-4 mt-4 text-white/60 text-sm">
-            <span className="flex items-center gap-1"><Calendar size={13} /> Feb 2025</span>
-            <span className="flex items-center gap-1"><Clock size={13} /> 5 min de lectura</span>
-          </div>
+          <BlogChromeMeta dateEs="Feb 2025" dateEn="Feb 2025" readMin={5} />
         </div>
       </div>
 
       {/* Back link */}
       <div className="max-w-3xl mx-auto px-6 pt-8">
-        <Link href="/#blog" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
-          <ArrowLeft size={14} /> Volver al blog
-        </Link>
+        <BlogChromeBackLink />
+        <BlogChromeEnNotice />
       </div>
 
       {/* Article body */}
@@ -131,17 +131,16 @@ export default function BlogPsicologiaAdopcionPage() {
 
       {/* CTA footer */}
       <div className="max-w-3xl mx-auto px-6 pb-20">
-        <div className="rounded-2xl border border-border p-8 flex flex-col md:flex-row items-center gap-6 bg-card">
-          <div className="flex-1">
-            <h3 className="font-display font-bold text-xl text-foreground mb-2">¿Tu producto tiene problemas de retención?</h3>
-            <p className="text-sm text-muted-foreground">Conversemos. Hacemos un diagnóstico de comportamiento de usuarios en 48 horas.</p>
-          </div>
-          <Link href="/#uxbox"
-            className="shrink-0 inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm text-white"
-            style={{ background: "linear-gradient(90deg, #E8751A, #c65a10)" }}>
-            Comenzar Discovery →
-          </Link>
-        </div>
+        <BlogChromeCTA
+          headlineEs="¿Tu producto tiene problemas de retención?"
+          headlineEn="Is your product struggling with retention?"
+          subEs="Conversemos. Hacemos un diagnóstico de comportamiento de usuarios en 48 horas."
+          subEn="Let's talk. We deliver a user behavior diagnostic in 48 hours."
+          ctaEs="Comenzar Discovery"
+          ctaEn="Start Discovery"
+          href="/#uxbox"
+          gradient="linear-gradient(90deg, #E8751A, #c65a10)"
+        />
       </div>
     </main>
   )

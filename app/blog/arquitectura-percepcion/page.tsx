@@ -1,7 +1,12 @@
 import type { Metadata } from "next"
 import Image from "next/image"
-import Link from "next/link"
-import { ArrowLeft, Clock, Calendar } from "lucide-react"
+import {
+  BlogChromeBackLink,
+  BlogChromeMeta,
+  BlogChromeEnNotice,
+  BlogChromeAuthorLine,
+  BlogChromeCTA,
+} from "@/components/blog/blog-chrome"
 
 export const metadata: Metadata = {
   title: "La Arquitectura de la Percepción: Por Qué Tus Usuarios No Navegan Flujos, Sino Estados Emocionales",
@@ -99,18 +104,14 @@ export default function BlogArquitecturaPercepcionPage() {
           <h1 className="font-display font-bold text-3xl md:text-4xl lg:text-5xl text-white leading-tight text-balance">
             La Arquitectura de la Percepción: Por Qué Tus Usuarios No Navegan Flujos, Sino Estados Emocionales
           </h1>
-          <div className="flex items-center gap-4 mt-4 text-white/60 text-sm">
-            <span className="flex items-center gap-1"><Calendar size={13} /> Mayo 2026</span>
-            <span className="flex items-center gap-1"><Clock size={13} /> 8 min de lectura</span>
-          </div>
+          <BlogChromeMeta dateEs="Mayo 2026" dateEn="May 2026" readMin={8} />
         </div>
       </div>
 
       {/* Back link */}
       <div className="max-w-3xl mx-auto px-6 pt-8">
-        <Link href="/#blog" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
-          <ArrowLeft size={14} /> Volver al blog
-        </Link>
+        <BlogChromeBackLink />
+        <BlogChromeEnNotice />
       </div>
 
       {/* Article body */}
@@ -168,24 +169,20 @@ export default function BlogArquitecturaPercepcionPage() {
         <p className="text-lg text-muted-foreground leading-relaxed mb-6">
           La pregunta fundamental del CXD no es <em className="italic">&ldquo;¿qué debe hacer el usuario?&rdquo;</em>, sino <em className="italic text-foreground">&ldquo;¿desde qué estado mental está intentando hacerlo?&rdquo;</em>. Cuando diseñamos desde la percepción consciente, no solo creamos productos más usables — creamos experiencias que respetan la humanidad de quien las usa.
         </p>
-        <p className="text-sm text-muted-foreground/60 mt-8 italic">
-          — Por MediaLab Ingeniería.
-        </p>
+        <BlogChromeAuthorLine />
       </article>
 
       {/* CTA footer */}
       <div className="max-w-3xl mx-auto px-6 pb-20">
-        <div className="rounded-2xl border border-border p-8 flex flex-col md:flex-row items-center gap-6 bg-card">
-          <div className="flex-1">
-            <h3 className="font-display font-bold text-xl text-foreground mb-2">¿Quieres diseñar desde la percepción consciente?</h3>
-            <p className="text-sm text-muted-foreground">Descubre cómo aplicamos el CXD en productos B2B y B2C reales. Agenda una llamada gratuita.</p>
-          </div>
-          <Link href="/#contact"
-            className="shrink-0 inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm text-white"
-            style={{ background: "linear-gradient(90deg, #E8751A, #c65a10)" }}>
-            Agendar llamada →
-          </Link>
-        </div>
+        <BlogChromeCTA
+          headlineEs="¿Quieres diseñar desde la percepción consciente?"
+          headlineEn="Want to design from conscious perception?"
+          subEs="Descubre cómo aplicamos el CXD en productos B2B y B2C reales. Agenda una llamada gratuita."
+          subEn="Discover how we apply CXD in real B2B and B2C products. Book a free call."
+          ctaEs="Agendar llamada"
+          ctaEn="Book a call"
+          gradient="linear-gradient(90deg, #E8751A, #c65a10)"
+        />
       </div>
     </main>
   )

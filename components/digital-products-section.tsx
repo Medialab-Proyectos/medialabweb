@@ -3,35 +3,12 @@
 import { useEffect, useRef, useState } from "react"
 import { ArrowUpRight, Clock } from "lucide-react"
 import Image from "next/image"
-
-const products = [
-  {
-    name: "SinDeudas",
-    tagline: "Plataforma B2C de Finanzas Conductuales",
-    description:
-      "Una experiencia B2C diseñada para conectar emocionalmente con personas en situación de deuda. Combina guía emocional, psicología del consumidor y herramientas digitales inteligentes para transformar la relación del usuario con sus finanzas.",
-    color: "var(--magenta)",
-    gradient: "linear-gradient(135deg, var(--magenta), oklch(0.45 0.24 300))",
-    tags: ["FinTech B2C", "Diseño Conductual", "Mobile"],
-    status: "En Desarrollo",
-    image: "/images/sindeudas (1).png",
-  },
-  {
-    name: "Electrolineras",
-    tagline: "App B2C/B2B para Red de Carga Eléctrica",
-    description:
-      "Una aplicación de movilidad sustentable que conecta conductores B2C con estaciones de carga y ofrece a operadores B2B un dashboard de gestión en tiempo real.",
-    color: "var(--cyan)",
-    gradient: "linear-gradient(135deg, var(--cyan), oklch(0.55 0.18 220))",
-    tags: ["Movilidad", "B2B + B2C", "Sostenibilidad"],
-    status: "En Desarrollo",
-    image: "/images/eletro.png",
-  },
-]
+import { useLanguage } from "@/lib/language-context"
 
 export function DigitalProductsSection() {
   const ref = useRef<HTMLDivElement>(null)
   const [visible, setVisible] = useState(false)
+  const { t } = useLanguage()
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -41,6 +18,41 @@ export function DigitalProductsSection() {
     if (ref.current) observer.observe(ref.current)
     return () => observer.disconnect()
   }, [])
+
+  const products = [
+    {
+      name: "SinDeudas",
+      tagline: t(
+        "Plataforma B2C de Finanzas Conductuales",
+        "B2C Behavioral Finance Platform"
+      ),
+      description: t(
+        "Una experiencia B2C diseñada para conectar emocionalmente con personas en situación de deuda. Combina guía emocional, psicología del consumidor y herramientas digitales inteligentes para transformar la relación del usuario con sus finanzas.",
+        "A B2C experience designed to emotionally connect with people in debt. It combines emotional guidance, consumer psychology, and intelligent digital tools to transform the user's relationship with their finances."
+      ),
+      color: "var(--magenta)",
+      gradient: "linear-gradient(135deg, var(--magenta), oklch(0.45 0.24 300))",
+      tags: [t("FinTech B2C", "B2C FinTech"), t("Diseño Conductual", "Behavioral Design"), "Mobile"],
+      status: t("En Desarrollo", "In Development"),
+      image: "/images/sindeudas (1).png",
+    },
+    {
+      name: "Electrolineras",
+      tagline: t(
+        "App B2C/B2B para Red de Carga Eléctrica",
+        "B2C/B2B App for Electric Charging Network"
+      ),
+      description: t(
+        "Una aplicación de movilidad sustentable que conecta conductores B2C con estaciones de carga y ofrece a operadores B2B un dashboard de gestión en tiempo real.",
+        "A sustainable mobility app that connects B2C drivers with charging stations and offers B2B operators a real-time management dashboard."
+      ),
+      color: "var(--cyan)",
+      gradient: "linear-gradient(135deg, var(--cyan), oklch(0.55 0.18 220))",
+      tags: [t("Movilidad", "Mobility"), "B2B + B2C", t("Sostenibilidad", "Sustainability")],
+      status: t("En Desarrollo", "In Development"),
+      image: "/images/eletro.png",
+    },
+  ]
 
   return (
     <section
@@ -53,17 +65,22 @@ export function DigitalProductsSection() {
         {/* Header */}
         <div className="flex flex-col gap-4 max-w-2xl">
           <span className="text-xs font-semibold tracking-widest uppercase text-[var(--magenta)]">
-            Nuestros propios productos
+            {t("Nuestros propios productos", "Our own products")}
           </span>
           <h2
             id="products-heading"
             className="font-display font-bold text-3xl md:text-4xl lg:text-5xl leading-tight text-foreground text-balance"
           >
-            No solo diseñamos para otros. También ponemos nuestra propia piel en el juego.
+            {t(
+              "No solo diseñamos para otros. También ponemos nuestra propia piel en el juego.",
+              "We don't just design for others. We also put our own skin in the game."
+            )}
           </h2>
           <p className="text-base text-muted-foreground leading-relaxed">
-            Construimos productos propios porque creemos que la mejor forma de demostrar lo que hacemos
-            es vivirlo. Cada uno aplica los mismos principios que usamos con nuestros clientes.
+            {t(
+              "Construimos productos propios porque creemos que la mejor forma de demostrar lo que hacemos es vivirlo. Cada uno aplica los mismos principios que usamos con nuestros clientes.",
+              "We build our own products because we believe the best way to demonstrate what we do is to live it. Each one applies the same principles we use with our clients."
+            )}
           </p>
         </div>
 

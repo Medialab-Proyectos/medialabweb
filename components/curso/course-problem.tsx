@@ -2,19 +2,57 @@
 
 import { useRef } from "react"
 import { motion, useInView } from "framer-motion"
-
-const quotes = [
-  { text: "Mis clientes me piden que haga en 2 días lo que antes tomaba 2 semanas.", context: "Diseñador UI · 4 años exp." },
-  { text: "Todos los proyectos de mi portafolio se ven iguales a los de ChatGPT.", context: "UX Designer · Agencia" },
-  { text: "Aprendí 15 herramientas y sigo sin construir un producto real.", context: "Freelancer UX/UI" },
-  { text: "Genero más rápido, pero mis diseños se sienten vacíos.", context: "Developer frontend" },
-  { text: "Me contrataron como diseñador, pero ahora soy el 'experto en IA'.", context: "Product Designer · Startup" },
-  { text: "Cada semana hay una herramienta nueva y nunca voy a alcanzar.", context: "Diseñador en transición" },
-]
+import { useLanguage } from "@/lib/language-context"
 
 export function CourseProblem() {
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, margin: "-80px" })
+  const { t } = useLanguage()
+
+  const quotes = [
+    {
+      text: t(
+        "Mis clientes me piden que haga en 2 días lo que antes tomaba 2 semanas.",
+        "My clients ask me to do in 2 days what used to take 2 weeks."
+      ),
+      context: t("Diseñador UI · 4 años exp.", "UI Designer · 4 yrs exp."),
+    },
+    {
+      text: t(
+        "Todos los proyectos de mi portafolio se ven iguales a los de ChatGPT.",
+        "All the projects in my portfolio look the same as ChatGPT's."
+      ),
+      context: t("UX Designer · Agencia", "UX Designer · Agency"),
+    },
+    {
+      text: t(
+        "Aprendí 15 herramientas y sigo sin construir un producto real.",
+        "I've learned 15 tools and still haven't built a real product."
+      ),
+      context: t("Freelancer UX/UI", "Freelance UX/UI"),
+    },
+    {
+      text: t(
+        "Genero más rápido, pero mis diseños se sienten vacíos.",
+        "I generate faster, but my designs feel empty."
+      ),
+      context: t("Developer frontend", "Frontend developer"),
+    },
+    {
+      text: t(
+        "Me contrataron como diseñador, pero ahora soy el 'experto en IA'.",
+        "They hired me as a designer, but now I'm the 'AI expert'."
+      ),
+      context: t("Product Designer · Startup", "Product Designer · Startup"),
+    },
+    {
+      text: t(
+        "Cada semana hay una herramienta nueva y nunca voy a alcanzar.",
+        "Every week there's a new tool — I'll never catch up."
+      ),
+      context: t("Diseñador en transición", "Designer in transition"),
+    },
+  ]
 
   return (
     <section id="problema" className="relative py-16 md:py-20 bg-[var(--surface-dark)] overflow-hidden">
@@ -31,14 +69,16 @@ export function CourseProblem() {
           className="text-center mb-8 md:mb-10"
         >
           <span className="inline-block text-[11px] tracking-[0.2em] uppercase text-red-400/70 mb-3 font-display">
-            Honesto: nos pasó a todos
+            {t("Honesto: nos pasó a todos", "Honest: it happened to all of us")}
           </span>
           <h2 className="text-2xl md:text-3xl lg:text-[2.25rem] font-bold text-[var(--surface-dark-fg)] tracking-tight leading-tight font-display">
-            Si alguna de estas te suena,<br className="hidden sm:inline"/> este curso es para ti.
+            {t("Si alguna de estas te suena,", "If any of these sounds familiar,")}
+            <br className="hidden sm:inline"/>
+            {t(" este curso es para ti.", " this course is for you.")}
           </h2>
         </motion.div>
 
-        {/* Mobile: bare list of voices — like reading real testimonials, no heavy cards */}
+        {/* Mobile: bare list */}
         <div className="sm:hidden divide-y divide-[var(--surface-dark-fg)]/[0.08] border-y border-[var(--surface-dark-fg)]/[0.08]">
           {quotes.map((quote, i) => (
             <motion.div
@@ -61,7 +101,7 @@ export function CourseProblem() {
           ))}
         </div>
 
-        {/* Desktop: grid of cards — keeps visual rhythm on larger screens */}
+        {/* Desktop: grid */}
         <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
           {quotes.map((quote, i) => (
             <motion.div

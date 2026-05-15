@@ -3,11 +3,13 @@
 import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
 import { ArrowDown, Sparkles } from "lucide-react"
+import { useLanguage } from "@/lib/language-context"
 
 export function PortfolioHero() {
   const [visible, setVisible] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const { t } = useLanguage()
 
   useEffect(() => {
     const t = setTimeout(() => setVisible(true), 100)
@@ -98,22 +100,26 @@ export function PortfolioHero() {
         {/* Badge */}
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[var(--magenta)]/30 bg-[var(--magenta)]/10 text-sm">
           <Sparkles size={14} className="text-[var(--magenta)]" />
-          <span className="text-[var(--magenta)] font-semibold">40+ productos entregados</span>
+          <span className="text-[var(--magenta)] font-semibold">{t("40+ productos entregados", "40+ products delivered")}</span>
         </div>
 
         <h1 className="font-display font-bold text-4xl md:text-6xl lg:text-7xl leading-[1.1] text-foreground text-balance">
-          Estos productos{" "}
+          {t("Estos productos", "These products")}{" "}
           <span className="bg-gradient-to-r from-[var(--magenta)] to-[var(--cyan)] bg-clip-text text-transparent">
-            ya están generando resultados.
+            {t("ya están generando resultados.", "are already driving results.")}
           </span>
         </h1>
 
         <p className="text-lg md:text-xl text-muted-foreground max-w-2xl leading-relaxed">
-          No son mockups. Son productos en producción con usuarios reales y <strong className="text-foreground">métricas que lo demuestran</strong>.
+          {t(
+            "No son mockups. Son productos en producción con usuarios reales y ",
+            "These aren't mockups. They are products in production with real users and "
+          )}
+          <strong className="text-foreground">{t("métricas que lo demuestran", "metrics that prove it")}</strong>.
         </p>
 
         <a href="#cases" className="group mt-4 flex flex-col items-center gap-2 text-muted-foreground hover:text-[var(--magenta)] transition-colors">
-          <span className="text-sm font-medium">Ver casos de éxito</span>
+          <span className="text-sm font-medium">{t("Ver casos de éxito", "View case studies")}</span>
           <ArrowDown size={20} className="animate-bounce-slow" />
         </a>
       </div>

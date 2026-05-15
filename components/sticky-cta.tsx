@@ -3,9 +3,11 @@
 import { useState, useEffect } from "react"
 import { ArrowRight } from "lucide-react"
 import { BookingModal } from "./booking-modal"
+import { useLanguage } from "@/lib/language-context"
 
 export function StickyCTA() {
   const [visible, setVisible] = useState(false)
+  const { t } = useLanguage()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -29,7 +31,7 @@ export function StickyCTA() {
             type="button"
             className="flex items-center justify-center gap-2 w-full h-12 rounded-full bg-[var(--magenta)] text-white text-[15px] font-semibold shadow-[0_10px_28px_-8px_rgba(232,117,26,0.55)] active:scale-[0.98] transition-transform"
           >
-            Agenda 30 min gratis
+            {t("Agenda 30 min gratis", "Book 30 min free")}
             <ArrowRight size={16} />
           </button>
         </BookingModal>

@@ -4,26 +4,28 @@ import { useRef } from "react"
 import { motion, useInView } from "framer-motion"
 import { ArrowRight } from "lucide-react"
 import Image from "next/image"
-
-const before = [
-  { label: "Abrumado", desc: "15 herramientas nuevas cada mes y ninguna dirección clara" },
-  { label: "Genérico", desc: "Tus diseños se ven iguales a los de cualquier prompt de ChatGPT" },
-  { label: "Inseguro", desc: "No sabes si lo que genera la IA es bueno o solo rápido" },
-  { label: "Dependiente", desc: "Sin IA no avanzas, con IA no decides" },
-  { label: "Ansioso", desc: "La sensación constante de que alguien te va a reemplazar" },
-]
-
-const after = [
-  { label: "Behavioral AI Experience Designer", desc: "Diseñas experiencias donde la IA potencia la conexión humana, no la reemplaza" },
-  { label: "UX Prompt Designer", desc: "Creas sistemas de prompts estratégicos que resuelven problemas reales de producto" },
-  { label: "Estratégico", desc: "Cada decisión de diseño responde a un por qué conductual y un objetivo medible" },
-  { label: "Diferencial", desc: "Tu firma humana amplifica lo que la IA genera — tu criterio es tu ventaja competitiva" },
-  { label: "A prueba de futuro", desc: "Habilidades que no caducan cuando sale la próxima herramienta" },
-]
+import { useLanguage } from "@/lib/language-context"
 
 export function CourseTransformation() {
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, margin: "-80px" })
+  const { t } = useLanguage()
+
+  const before = [
+    { label: t("Abrumado", "Overwhelmed"), desc: t("15 herramientas nuevas cada mes y ninguna dirección clara", "15 new tools every month and no clear direction") },
+    { label: t("Genérico", "Generic"), desc: t("Tus diseños se ven iguales a los de cualquier prompt de ChatGPT", "Your designs look like any ChatGPT prompt's output") },
+    { label: t("Inseguro", "Unsure"), desc: t("No sabes si lo que genera la IA es bueno o solo rápido", "You don't know whether what AI generates is good or just fast") },
+    { label: t("Dependiente", "Dependent"), desc: t("Sin IA no avanzas, con IA no decides", "Without AI you can't move forward; with AI you can't decide") },
+    { label: t("Ansioso", "Anxious"), desc: t("La sensación constante de que alguien te va a reemplazar", "The constant feeling that someone is about to replace you") },
+  ]
+
+  const after = [
+    { label: t("Behavioral AI Experience Designer", "Behavioral AI Experience Designer"), desc: t("Diseñas experiencias donde la IA potencia la conexión humana, no la reemplaza", "You design experiences where AI amplifies human connection — it doesn't replace it") },
+    { label: t("UX Prompt Designer", "UX Prompt Designer"), desc: t("Creas sistemas de prompts estratégicos que resuelven problemas reales de producto", "You create strategic prompt systems that solve real product problems") },
+    { label: t("Estratégico", "Strategic"), desc: t("Cada decisión de diseño responde a un por qué conductual y un objetivo medible", "Every design decision answers a behavioral 'why' and a measurable goal") },
+    { label: t("Diferencial", "Differentiated"), desc: t("Tu firma humana amplifica lo que la IA genera — tu criterio es tu ventaja competitiva", "Your human signature amplifies what AI generates — your judgment is your competitive edge") },
+    { label: t("A prueba de futuro", "Future-proof"), desc: t("Habilidades que no caducan cuando sale la próxima herramienta", "Skills that don't expire when the next tool drops") },
+  ]
 
   return (
     <section id="transformacion" className="relative py-20 md:py-28 bg-[var(--surface-mid)] overflow-hidden">
@@ -39,12 +41,12 @@ export function CourseTransformation() {
           className="text-center mb-10 md:mb-14"
         >
           <span className="inline-block text-xs tracking-[0.2em] uppercase mb-4 font-display" style={{ color: 'var(--cyan)' }}>
-            En esto te conviertes
+            {t("En esto te conviertes", "This is who you become")}
           </span>
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[var(--surface-dark-fg)] tracking-tight leading-snug font-display">
-            Entras como profesional curioso.{" "}
+            {t("Entras como profesional curioso.", "You enter as a curious professional.")}{" "}
             <span className="bg-gradient-to-r from-[var(--cyan)] to-[var(--magenta)] bg-clip-text text-transparent">
-              Sales como Behavioral AI Experience Designer.
+              {t("Sales como Behavioral AI Experience Designer.", "You leave as a Behavioral AI Experience Designer.")}
             </span>
           </h2>
         </motion.div>
@@ -58,7 +60,7 @@ export function CourseTransformation() {
         >
           <Image
             src="/images/curso/transformation.png"
-            alt="De la confusión a la claridad"
+            alt={t("De la confusión a la claridad", "From confusion to clarity")}
             fill
             className="object-cover opacity-60"
           />
@@ -69,7 +71,7 @@ export function CourseTransformation() {
           {/* Before */}
           <motion.div initial={{ opacity: 0, x: -30 }} animate={inView ? { opacity: 1, x: 0 } : {}} transition={{ delay: 0.2, duration: 0.6 }}>
             <div className="text-center md:text-left mb-6">
-              <span className="text-sm font-medium text-red-400/80 tracking-wider uppercase font-display">Antes</span>
+              <span className="text-sm font-medium text-red-400/80 tracking-wider uppercase font-display">{t("Antes", "Before")}</span>
             </div>
             <div className="space-y-3">
               {before.map((item, i) => (
@@ -101,7 +103,7 @@ export function CourseTransformation() {
           {/* After */}
           <motion.div initial={{ opacity: 0, x: 30 }} animate={inView ? { opacity: 1, x: 0 } : {}} transition={{ delay: 0.4, duration: 0.6 }}>
             <div className="text-center md:text-left mb-6">
-              <span className="text-sm font-medium tracking-wider uppercase font-display" style={{ color: 'var(--cyan)' }}>En esto te conviertes</span>
+              <span className="text-sm font-medium tracking-wider uppercase font-display" style={{ color: 'var(--cyan)' }}>{t("En esto te conviertes", "This is who you become")}</span>
             </div>
             <div className="space-y-3">
               {after.map((item, i) => (

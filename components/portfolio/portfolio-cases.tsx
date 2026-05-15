@@ -2,102 +2,29 @@
 
 import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
-import { ArrowUpRight, TrendingUp, Users, Clock, Target, Zap, BarChart3, Package } from "lucide-react"
+import { TrendingUp, Users, Clock, Target, Zap, BarChart3, Package } from "lucide-react"
+import { useLanguage } from "@/lib/language-context"
 
-type Category = "todos" | "uxbox" | "ux-ui" | "ia" | "desarrollo"
+type Category = "todos" | "web-design" | "mobile-app" | "ia" | "branding"
 
-const categories: { id: Category; label: string }[] = [
-  { id: "todos", label: "Todos" },
-  { id: "uxbox", label: "UXBox" },
-  { id: "ux-ui", label: "UX/UI" },
-  { id: "ia", label: "IA" },
-  { id: "desarrollo", label: "Desarrollo" },
-]
+type CaseItem = {
+  id: string
+  title: string
+  client: string
+  industry: string
+  image: string
+  color: string
+  gradient: string
+  challenge: string
+  solution: string
+  results: { icon: React.ElementType; value: string; label: string }[]
+  tags: string[]
+  categories: Category[]
+  usedUxbox: boolean
+  testimonial: { quote: string; author: string; role: string }
+}
 
-const cases = [
-  {
-    id: "fintech-b2c",
-    title: "Plataforma de Finanzas Conductuales",
-    client: "Startup FinTech B2C",
-    industry: "FinTech",
-    image: "/images/case-fintech.png",
-    color: "var(--magenta)",
-    gradient: "linear-gradient(135deg, #E8751A, #c65a10)",
-    challenge: "Los usuarios abandonaban el onboarding al 65%. La app no conectaba emocionalmente con personas en situación de deuda — generaba culpa en lugar de motivación.",
-    solution: "Rediseñamos la experiencia completa aplicando psicología conductual. Creamos un onboarding empático con micro-recompensas, gamificación emocional y un sistema de metas visuales que celebra el progreso.",
-    results: [
-      { icon: TrendingUp, value: "+180%", label: "Retención a 30 días" },
-      { icon: Users, value: "65→12%", label: "Abandono en onboarding" },
-      { icon: Clock, value: "6 sem", label: "Tiempo de entrega" },
-    ],
-    tags: ["UX Research", "Diseño Conductual", "Mobile App", "IA"],
-    categories: ["ux-ui", "ia"] as Category[],
-    usedUxbox: false,
-    testimonial: { quote: "MediaLab transformó nuestro producto. Pasamos de una app que la gente desinstalaba a una que recomiendan a sus amigos.", author: "María R.", role: "CPO" },
-  },
-  {
-    id: "saas-b2b",
-    title: "Dashboard Enterprise para Gestión de Activos",
-    client: "Enterprise SaaS B2B",
-    industry: "Banca & Finanzas",
-    image: "/images/case-saas.png",
-    color: "var(--cyan)",
-    gradient: "linear-gradient(135deg, #2AABB3, #1d8a91)",
-    challenge: "Un dashboard B2B con +200 funciones que nadie encontraba. Los usuarios corporativos tardaban 3 semanas en ser productivos. El churn estaba en 22% anual.",
-    solution: "Simplificamos la arquitectura de información usando card sorting con 40 usuarios reales. Implementamos roles contextuales, búsqueda inteligente y un sistema de onboarding progresivo.",
-    results: [
-      { icon: Target, value: "-60%", label: "Tiempo de aprendizaje" },
-      { icon: TrendingUp, value: "22→8%", label: "Churn anual" },
-      { icon: BarChart3, value: "+40%", label: "Activación de features" },
-    ],
-    tags: ["UX Enterprise", "Design System", "Dashboard", "B2B"],
-    categories: ["ux-ui", "desarrollo"] as Category[],
-    usedUxbox: false,
-    testimonial: { quote: "Su expertise en psicología del consumidor nos ayudó a aumentar la activación de usuarios B2C en 40%.", author: "Carlos M.", role: "Head of Product" },
-  },
-  {
-    id: "movilidad-b2b2c",
-    title: "Red de Carga Eléctrica — App + Dashboard",
-    client: "Movilidad Sustentable",
-    industry: "Movilidad",
-    image: "/images/case-mobility.png",
-    color: "var(--orange)",
-    gradient: "linear-gradient(135deg, #E8751A, #d4851f)",
-    challenge: "Dos audiencias opuestas: conductores B2C que necesitan encontrar estaciones rápido, y operadores B2B que necesitan monitorear su red en tiempo real.",
-    solution: "Usamos UXBox para comprimir el discovery de dos audiencias opuestas en 5 días. Diseñamos dos experiencias conectadas: una app B2C con UX tipo Google Maps optimizada para urgencia, y un dashboard B2B con alertas inteligentes y analítica predictiva.",
-    results: [
-      { icon: Zap, value: "4.8★", label: "Rating en App Store" },
-      { icon: Users, value: "+320%", label: "Usuarios activos mensuales" },
-      { icon: Clock, value: "8 sem", label: "De idea a producción" },
-    ],
-    tags: ["UXBox", "Mobile App", "Dashboard B2B", "Maps"],
-    categories: ["uxbox", "ux-ui", "desarrollo"] as Category[],
-    usedUxbox: true,
-    testimonial: { quote: "UXBox nos dio la claridad que nunca habíamos tenido. Pasamos de ideas vagas a un roadmap validado en días.", author: "Ana T.", role: "Founder & CEO" },
-  },
-  {
-    id: "ecommerce-b2c",
-    title: "Rediseño de E-commerce con IA Conversacional",
-    client: "Marca de Retail B2C",
-    industry: "E-commerce",
-    image: "/images/case-ecommerce.png",
-    color: "var(--magenta)",
-    gradient: "linear-gradient(135deg, #E8751A, oklch(0.45 0.24 300))",
-    challenge: "Tasa de conversión del 1.2% en un e-commerce con +5,000 SKUs. Los usuarios se perdían en el catálogo y abandonaban el carrito al 78%.",
-    solution: "UXBox identificó los 3 puntos de fricción principales en 48 horas. Integramos un asistente de IA conversacional, rediseñamos el flujo de checkout en 3 pasos, y creamos un sistema de recomendación visual basado en comportamiento de navegación.",
-    results: [
-      { icon: TrendingUp, value: "1.2→3.8%", label: "Conversión" },
-      { icon: Target, value: "-45%", label: "Abandono de carrito" },
-      { icon: BarChart3, value: "+62%", label: "Ticket promedio" },
-    ],
-    tags: ["UXBox", "IA Conversacional", "CRO", "E-commerce"],
-    categories: ["uxbox", "ia", "desarrollo"] as Category[],
-    usedUxbox: true,
-    testimonial: { quote: "El asistente IA que diseñaron aumentó nuestro ticket promedio en 62%. Los clientes sienten que la tienda los entiende.", author: "Laura S.", role: "CMO" },
-  },
-]
-
-function CaseCard({ c, i, visible }: { c: typeof cases[0]; i: number; visible: boolean }) {
+function CaseCard({ c, i, visible, labels }: { c: CaseItem; i: number; visible: boolean; labels: { challenge: string; solution: string } }) {
   const [hovered, setHovered] = useState(false)
 
   return (
@@ -135,11 +62,11 @@ function CaseCard({ c, i, visible }: { c: typeof cases[0]; i: number; visible: b
         {/* Challenge & Solution */}
         <div className="flex flex-col gap-4">
           <div>
-            <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1 block">El reto</span>
+            <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1 block">{labels.challenge}</span>
             <p className="text-sm text-muted-foreground leading-relaxed">{c.challenge}</p>
           </div>
           <div>
-            <span className="text-xs font-bold uppercase tracking-wider mb-1 block" style={{ color: c.color }}>Nuestra solución</span>
+            <span className="text-xs font-bold uppercase tracking-wider mb-1 block" style={{ color: c.color }}>{labels.solution}</span>
             <p className="text-sm text-foreground/80 leading-relaxed">{c.solution}</p>
           </div>
         </div>
@@ -184,6 +111,7 @@ export function PortfolioCases() {
   const ref = useRef<HTMLDivElement>(null)
   const [visible, setVisible] = useState(false)
   const [filter, setFilter] = useState<Category>("todos")
+  const { t } = useLanguage()
 
   useEffect(() => {
     const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setVisible(true) }, { threshold: 0.05 })
@@ -191,20 +119,234 @@ export function PortfolioCases() {
     return () => obs.disconnect()
   }, [])
 
+  const categories: { id: Category; label: string }[] = [
+    { id: "todos", label: t("Todos", "All") },
+    { id: "web-design", label: t("Web Design", "Web Design") },
+    { id: "mobile-app", label: t("Mobile Apps", "Mobile Apps") },
+    { id: "ia", label: t("IA & Data", "AI & Data") },
+    { id: "branding", label: t("Branding", "Branding") },
+  ]
+
+  const cases: CaseItem[] = [
+    {
+      id: "pepsico",
+      title: t("Plataforma de Capacitación Interactiva", "Interactive Training Platform"),
+      client: "Pepsico",
+      industry: t("FMCG / Enterprise", "FMCG / Enterprise"),
+      image: "/images/case-fintech.png",
+      color: "var(--cyan)",
+      gradient: "linear-gradient(135deg, #004B93, #0066CC)",
+      challenge: t(
+        "Pepsico necesitaba una solución avanzada para capacitar a su fuerza de ventas a gran escala, con seguimiento de progreso y evaluación de desempeño en tiempo real.",
+        "Pepsico needed an advanced solution to train its sales force at scale, with progress tracking and real-time performance evaluation."
+      ),
+      solution: t(
+        "Desarrollamos una aplicación interactiva con videos educativos, juegos y un sistema de tracking que monitorea los materiales vistos y evalúa el rendimiento de los usuarios. La plataforma soporta múltiples roles — asesores y participantes — con herramientas específicas para gestionar el aprendizaje.",
+        "We built an interactive application with educational videos, games, and a tracking system that monitors viewed material and evaluates user performance. The platform supports multiple roles — advisors and participants — with dedicated tools to manage learning."
+      ),
+      results: [
+        { icon: Users, value: "+500", label: t("Usuarios capacitados", "Users trained") },
+        { icon: TrendingUp, value: "+85%", label: t("Tasa de completación", "Completion rate") },
+        { icon: Clock, value: t("12 sem", "12 wks"), label: t("Tiempo de entrega", "Delivery time") },
+      ],
+      tags: ["UX Research", "Prototype", "User Testing", "Development"],
+      categories: ["mobile-app"],
+      usedUxbox: false,
+      testimonial: {
+        quote: t(
+          "MediaLab entendió nuestras necesidades de capacitación y entregó una plataforma que superó nuestras expectativas en adopción.",
+          "MediaLab understood our training needs and delivered a platform that exceeded our adoption expectations."
+        ),
+        author: t("Equipo Pepsico", "Pepsico Team"),
+        role: t("Training Division", "Training Division"),
+      },
+    },
+    {
+      id: "montaner",
+      title: t("Presencia Digital Multi-plataforma", "Multi-Platform Digital Presence"),
+      client: "Ricardo Montaner",
+      industry: t("Entretenimiento", "Entertainment"),
+      image: "/images/case-saas.png",
+      color: "var(--magenta)",
+      gradient: "linear-gradient(135deg, #8B1A4A, #C62E65)",
+      challenge: t(
+        "Crear una presencia digital cohesiva para Ricardo Montaner a través de múltiples plataformas, con un sitio web visualmente impactante e innovador que refleje la esencia del artista.",
+        "Build a cohesive digital presence for Ricardo Montaner across multiple platforms, with a visually striking and innovative website that captures the artist's essence."
+      ),
+      solution: t(
+        "Diseñamos un sitio web visualmente impresionante para exhibir su discografía con una experiencia de usuario intuitiva y atractiva. Además, creamos el sitio web oficial del artista, alineado con su imagen para crear una plataforma visualmente cautivadora que garantiza navegación fluida y participación activa.",
+        "We designed a stunning website to showcase his discography with an intuitive, engaging user experience. We also created the artist's official site, aligned with his brand image to deliver a visually captivating platform that ensures smooth navigation and active engagement."
+      ),
+      results: [
+        { icon: Zap, value: t("Premium", "Premium"), label: t("Experiencia visual", "Visual experience") },
+        { icon: Users, value: "Multi", label: t("Plataformas conectadas", "Connected platforms") },
+        { icon: Target, value: "100%", label: t("Alineación de marca", "Brand alignment") },
+      ],
+      tags: ["Web Design", "UX/UI", "Prototype", "Development"],
+      categories: ["web-design"],
+      usedUxbox: false,
+      testimonial: {
+        quote: t(
+          "El equipo de MediaLab capturó perfectamente la esencia artística y la transformó en una experiencia digital inolvidable.",
+          "The MediaLab team perfectly captured the artistic essence and turned it into an unforgettable digital experience."
+        ),
+        author: t("Equipo Montaner", "Montaner Team"),
+        role: "Management",
+      },
+    },
+    {
+      id: "bellanova",
+      title: t("Experiencia Digital de Lujo para Clínica Estética", "Luxury Digital Experience for Aesthetic Clinic"),
+      client: "Bellanova Clinic",
+      industry: t("Salud & Belleza", "Health & Beauty"),
+      image: "/images/case-mobility.png",
+      color: "var(--orange)",
+      gradient: "linear-gradient(135deg, #C8956C, #A67548)",
+      challenge: t(
+        "Bellanova Clinic necesitaba una experiencia digital que reflejara la excelencia y exclusividad de sus servicios estéticos, generando confianza inmediata en pacientes potenciales.",
+        "Bellanova Clinic needed a digital experience that reflected the excellence and exclusivity of its aesthetic services, generating immediate trust with prospective patients."
+      ),
+      solution: t(
+        "Creamos una experiencia digital lujosa con un diseño web intuitivo y elegante que destaca la amplia gama de servicios. El diseño refuerza la presencia online de la clínica y construye confianza con los pacientes a través de cada punto de contacto.",
+        "We crafted a luxury digital experience with an intuitive, elegant web design that highlights the wide range of services. The design reinforces the clinic's online presence and builds trust with patients at every touchpoint."
+      ),
+      results: [
+        { icon: TrendingUp, value: "+200%", label: t("Tráfico orgánico", "Organic traffic") },
+        { icon: Target, value: t("Premium", "Premium"), label: t("Percepción de marca", "Brand perception") },
+        { icon: Clock, value: t("8 sem", "8 wks"), label: t("Tiempo de entrega", "Delivery time") },
+      ],
+      tags: ["Web Design", "Prototype", "User Testing", "Development"],
+      categories: ["web-design", "branding"],
+      usedUxbox: false,
+      testimonial: {
+        quote: t(
+          "El sitio web que creó MediaLab transmite exactamente la elegancia y confianza que nuestra clínica representa.",
+          "The website MediaLab built conveys exactly the elegance and trust our clinic represents."
+        ),
+        author: "Bellanova",
+        role: t("Dirección", "Direction"),
+      },
+    },
+    {
+      id: "spectrum",
+      title: t("Transformación Digital Integral", "End-to-End Digital Transformation"),
+      client: "Spectrum Aesthetics",
+      industry: t("Cirugía Plástica", "Plastic Surgery"),
+      image: "/images/case-ecommerce.png",
+      color: "var(--cyan)",
+      gradient: "linear-gradient(135deg, #2AABB3, #1d8a91)",
+      challenge: t(
+        "Spectrum Aesthetics, clínica de cirugía plástica en Miami, necesitaba alcanzar mejor a su audiencia objetivo. Su imagen requería una renovación completa: sitio web, SEO y contenido en redes sociales.",
+        "Spectrum Aesthetics, a Miami plastic surgery clinic, needed to better reach its target audience. Their image required a full refresh: website, SEO, and social media content."
+      ),
+      solution: t(
+        "Ejecutamos un proyecto integral: renovamos la imagen de marca, rediseñamos el sitio web para mejor funcionalidad, optimizamos el SEO para mayor visibilidad en buscadores, y ajustamos el contenido en redes sociales para atraer a los clientes correctos.",
+        "We executed an integrated project: refreshed the brand image, redesigned the website for better functionality, optimized SEO for higher search visibility, and tuned social media content to attract the right clients."
+      ),
+      results: [
+        { icon: TrendingUp, value: "+150%", label: t("Visibilidad SEO", "SEO visibility") },
+        { icon: Users, value: "+90%", label: t("Engagement social", "Social engagement") },
+        { icon: BarChart3, value: "+120%", label: t("Leads calificados", "Qualified leads") },
+      ],
+      tags: ["Branding", "Web Design", "SEO", "Social Media"],
+      categories: ["web-design", "branding"],
+      usedUxbox: false,
+      testimonial: {
+        quote: t(
+          "MediaLab no solo rediseñó nuestro sitio — transformó completamente cómo nos ve nuestra audiencia ideal.",
+          "MediaLab didn't just redesign our site — they completely transformed how our ideal audience sees us."
+        ),
+        author: "Spectrum",
+        role: "Miami, FL",
+      },
+    },
+    {
+      id: "ginseng",
+      title: t("Análisis de Reportes Médicos con Machine Learning", "Medical Report Analysis with Machine Learning"),
+      client: "Ginseng",
+      industry: t("HealthTech & IA", "HealthTech & AI"),
+      image: "/images/case-fintech.png",
+      color: "var(--magenta)",
+      gradient: "linear-gradient(135deg, #6B21A8, #9333EA)",
+      challenge: t(
+        "Se requería una aplicación especializada para el análisis integral de reportes médicos, con enfoque en evaluaciones de cobertura para casos relacionados con cáncer.",
+        "A specialized application was needed for comprehensive medical report analysis, focused on coverage evaluations for cancer-related cases."
+      ),
+      solution: t(
+        "Desarrollamos una aplicación especializada integrando Machine Learning para potenciar las capacidades analíticas. El sistema procesa y analiza reportes médicos complejos, proporcionando evaluaciones de cobertura precisas y accionables para casos oncológicos.",
+        "We built a specialized application integrating Machine Learning to amplify analytical capabilities. The system processes and analyzes complex medical reports, delivering precise and actionable coverage evaluations for oncology cases."
+      ),
+      results: [
+        { icon: Zap, value: "ML", label: t("Machine Learning integrado", "Machine Learning integrated") },
+        { icon: Target, value: "95%+", label: t("Precisión de análisis", "Analysis accuracy") },
+        { icon: Clock, value: "10x", label: t("Más rápido que manual", "Faster than manual") },
+      ],
+      tags: ["Machine Learning", "Prototype", "User Testing", "IA"],
+      categories: ["ia", "mobile-app"],
+      usedUxbox: false,
+      testimonial: {
+        quote: t(
+          "La integración de ML que implementó MediaLab revolucionó nuestro proceso de análisis de reportes médicos.",
+          "The ML integration MediaLab implemented revolutionized our medical report analysis process."
+        ),
+        author: "Ginseng",
+        role: "CTO",
+      },
+    },
+    {
+      id: "fusapp",
+      title: t("App de Gestión de Riesgos Industriales", "Industrial Risk Management App"),
+      client: "FusApp",
+      industry: t("Industria & Seguridad", "Industry & Safety"),
+      image: "/images/case-saas.png",
+      color: "var(--orange)",
+      gradient: "linear-gradient(135deg, #DC2626, #EF4444)",
+      challenge: t(
+        "El sector industrial necesitaba una herramienta móvil para optimizar la gestión de riesgos, capacitación del personal y generación de cotizaciones dentro del sistema eléctrico.",
+        "The industrial sector needed a mobile tool to optimize risk management, staff training, and quote generation within the electrical system."
+      ),
+      solution: t(
+        "Desarrollamos una aplicación móvil completa que permite crear tareas dentro del sistema eléctrico, capacitar al personal con módulos interactivos, y generar cotizaciones para productos o servicios. Todo integrado en un flujo de trabajo eficiente y seguro.",
+        "We built a full mobile application that lets users create tasks within the electrical system, train staff with interactive modules, and generate quotes for products or services. Everything integrated into an efficient, secure workflow."
+      ),
+      results: [
+        { icon: TrendingUp, value: "+70%", label: t("Eficiencia operativa", "Operational efficiency") },
+        { icon: Users, value: t("Multi-rol", "Multi-role"), label: t("Gestión de usuarios", "User management") },
+        { icon: BarChart3, value: "360°", label: t("Gestión integral", "Integrated management") },
+      ],
+      tags: ["Mobile App", "UX Research", "Development", "User Testing"],
+      categories: ["mobile-app"],
+      usedUxbox: false,
+      testimonial: {
+        quote: t(
+          "FusApp transformó nuestra gestión de riesgos de un proceso manual a un sistema digital eficiente y confiable.",
+          "FusApp transformed our risk management from a manual process to an efficient, reliable digital system."
+        ),
+        author: "FusApp",
+        role: t("Director de Operaciones", "Operations Director"),
+      },
+    },
+  ]
+
   const filtered = filter === "todos"
     ? cases
     : cases.filter((c) => c.categories.includes(filter))
+
+  const cardLabels = {
+    challenge: t("El reto", "The challenge"),
+    solution: t("Nuestra solución", "Our solution"),
+  }
 
   return (
     <section id="cases" ref={ref} className="py-24 px-6 bg-background" aria-labelledby="cases-heading">
       <div className="max-w-7xl mx-auto flex flex-col gap-14">
         <div className="flex flex-col gap-4 max-w-2xl">
-          <span className="text-xs font-semibold tracking-widest uppercase text-[var(--magenta)]">Casos de éxito</span>
+          <span className="text-xs font-semibold tracking-widest uppercase text-[var(--magenta)]">{t("Casos de éxito", "Case studies")}</span>
           <h2 id="cases-heading" className="font-display font-bold text-3xl md:text-4xl lg:text-5xl leading-tight text-foreground text-balance">
-            Cada proyecto tiene una historia. Estas son las que más nos enorgullecen.
+            {t("Cada proyecto tiene una historia. Estas son las que más nos enorgullecen.", "Every project has a story. These are the ones we're proudest of.")}
           </h2>
           <p className="text-base text-muted-foreground leading-relaxed">
-            Productos reales en producción, con usuarios reales y resultados medibles.
+            {t("Productos reales en producción, con usuarios reales y resultados medibles.", "Real products in production, with real users and measurable results.")}
           </p>
         </div>
 
@@ -220,16 +362,15 @@ export function PortfolioCases() {
                   : "border-border bg-card text-muted-foreground hover:border-[var(--magenta)]/20 hover:text-foreground"
               }`}
             >
-              {cat.id === "uxbox" && <Package size={12} className="inline mr-1.5 -mt-0.5" />}
               {cat.label}
             </button>
           ))}
         </div>
 
         <div className="flex flex-col gap-8">
-          {filtered.map((c, i) => <CaseCard key={c.id} c={c} i={i} visible={visible} />)}
+          {filtered.map((c, i) => <CaseCard key={c.id} c={c} i={i} visible={visible} labels={cardLabels} />)}
           {filtered.length === 0 && (
-            <p className="text-center text-muted-foreground py-12">No hay casos en esta categoría aún.</p>
+            <p className="text-center text-muted-foreground py-12">{t("No hay casos en esta categoría aún.", "No case studies in this category yet.")}</p>
           )}
         </div>
       </div>

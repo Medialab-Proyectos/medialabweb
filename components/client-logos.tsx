@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
+import { useLanguage } from "@/lib/language-context"
 
 const logos = [
   { id: 1, src: "/images/1.svg", alt: "Brand 1" },
@@ -20,6 +21,7 @@ const logos = [
 export function ClientLogos() {
   const ref = useRef<HTMLDivElement>(null)
   const [visible, setVisible] = useState(false)
+  const { t } = useLanguage()
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -36,11 +38,14 @@ export function ClientLogos() {
     <section
       ref={ref}
       className="py-14 px-6 bg-background border-b border-border"
-      aria-label="La confianza de empresas líderes"
+      aria-label={t("La confianza de empresas líderes", "Trusted by leading companies")}
     >
       <div className="max-w-6xl mx-auto flex flex-col gap-10">
         <p className="text-center text-xs font-semibold tracking-widest uppercase text-muted-foreground">
-          Equipos que dejaron de adivinar y empezaron a diseñar con evidencia
+          {t(
+            "Equipos que dejaron de adivinar y empezaron a diseñar con evidencia",
+            "Teams that stopped guessing and started designing with evidence"
+          )}
         </p>
 
         <div

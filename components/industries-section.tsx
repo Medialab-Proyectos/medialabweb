@@ -3,69 +3,12 @@
 import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
 import { CreditCard, Landmark, Car, Rocket, GraduationCap, ShoppingCart, Leaf, LayoutGrid } from "lucide-react"
-
-const industries = [
-  {
-    label: "Fintech",
-    icon: CreditCard,
-    color: "var(--magenta)",
-    image: "/images/industry_fintech.jpg",
-    description: "Apps financieras donde la confianza se siente, no se explica",
-  },
-  {
-    label: "Banca",
-    icon: Landmark,
-    color: "var(--cyan)",
-    image: "/images/industry_banca.jpg",
-    description: "Experiencias bancarias que eliminan la ansiedad del usuario",
-  },
-  {
-    label: "Movilidad",
-    icon: Car,
-    color: "var(--orange)",
-    image: "/images/industry_movilidad.jpg",
-    description: "Interfaces que hacen que moverte sea simple y seguro",
-  },
-  {
-    label: "Startups",
-    icon: Rocket,
-    color: "var(--magenta)",
-    image: "/images/industry_startups.jpg",
-    description: "De idea a producto validado antes de que se acabe la pista",
-  },
-  {
-    label: "Educación",
-    icon: GraduationCap,
-    color: "var(--cyan)",
-    image: "/images/industry_educacion.jpg",
-    description: "Plataformas donde aprender se siente natural, no forzado",
-  },
-  {
-    label: "E-commerce",
-    icon: ShoppingCart,
-    color: "var(--orange)",
-    image: "/images/industry_ecommerce.jpg",
-    description: "Experiencias de compra que convierten visitantes en clientes fieles",
-  },
-  {
-    label: "Medio Ambiente",
-    icon: Leaf,
-    color: "var(--cyan)",
-    image: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=600&q=80&fit=crop",
-    description: "Tecnología que hace visible el impacto positivo",
-  },
-  {
-    label: "Plataformas Digitales",
-    icon: LayoutGrid,
-    color: "var(--magenta)",
-    image: "https://images.unsplash.com/photo-1551434678-e076c223a692?w=600&q=80&fit=crop",
-    description: "Sistemas complejos que se sienten simples desde el primer clic",
-  },
-]
+import { useLanguage } from "@/lib/language-context"
 
 export function IndustriesSection() {
   const ref = useRef<HTMLDivElement>(null)
   const [visible, setVisible] = useState(false)
+  const { t } = useLanguage()
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -75,6 +18,89 @@ export function IndustriesSection() {
     if (ref.current) observer.observe(ref.current)
     return () => observer.disconnect()
   }, [])
+
+  const industries = [
+    {
+      label: t("Fintech", "Fintech"),
+      icon: CreditCard,
+      color: "var(--magenta)",
+      image: "/images/industry_fintech.jpg",
+      description: t(
+        "Apps financieras donde la confianza se siente, no se explica",
+        "Financial apps where trust is felt, not explained"
+      ),
+    },
+    {
+      label: t("Banca", "Banking"),
+      icon: Landmark,
+      color: "var(--cyan)",
+      image: "/images/industry_banca.jpg",
+      description: t(
+        "Experiencias bancarias que eliminan la ansiedad del usuario",
+        "Banking experiences that remove user anxiety"
+      ),
+    },
+    {
+      label: t("Movilidad", "Mobility"),
+      icon: Car,
+      color: "var(--orange)",
+      image: "/images/industry_movilidad.jpg",
+      description: t(
+        "Interfaces que hacen que moverte sea simple y seguro",
+        "Interfaces that make moving around simple and safe"
+      ),
+    },
+    {
+      label: t("Startups", "Startups"),
+      icon: Rocket,
+      color: "var(--magenta)",
+      image: "/images/industry_startups.jpg",
+      description: t(
+        "De idea a producto validado antes de que se acabe la pista",
+        "From idea to validated product before the runway runs out"
+      ),
+    },
+    {
+      label: t("Educación", "Education"),
+      icon: GraduationCap,
+      color: "var(--cyan)",
+      image: "/images/industry_educacion.jpg",
+      description: t(
+        "Plataformas donde aprender se siente natural, no forzado",
+        "Platforms where learning feels natural, not forced"
+      ),
+    },
+    {
+      label: t("E-commerce", "E-commerce"),
+      icon: ShoppingCart,
+      color: "var(--orange)",
+      image: "/images/industry_ecommerce.jpg",
+      description: t(
+        "Experiencias de compra que convierten visitantes en clientes fieles",
+        "Shopping experiences that turn visitors into loyal customers"
+      ),
+    },
+    {
+      label: t("Medio Ambiente", "Environment"),
+      icon: Leaf,
+      color: "var(--cyan)",
+      image: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=600&q=80&fit=crop",
+      description: t(
+        "Tecnología que hace visible el impacto positivo",
+        "Technology that makes positive impact visible"
+      ),
+    },
+    {
+      label: t("Plataformas Digitales", "Digital Platforms"),
+      icon: LayoutGrid,
+      color: "var(--magenta)",
+      image: "https://images.unsplash.com/photo-1551434678-e076c223a692?w=600&q=80&fit=crop",
+      description: t(
+        "Sistemas complejos que se sienten simples desde el primer clic",
+        "Complex systems that feel simple from the first click"
+      ),
+    },
+  ]
 
   return (
     <section
@@ -87,17 +113,22 @@ export function IndustriesSection() {
         {/* Header */}
         <div className="flex flex-col gap-4 items-center text-center max-w-2xl mx-auto">
           <span className="text-xs font-semibold tracking-widest uppercase text-[var(--magenta)]">
-            Donde ya impactamos
+            {t("Donde ya impactamos", "Where we already make impact")}
           </span>
           <h2
             id="industries-heading"
             className="font-display font-bold text-3xl md:text-4xl leading-tight text-foreground text-balance"
           >
-            Cada industria tiene sus propios miedos y motivaciones. Nosotros los entendemos.
+            {t(
+              "Cada industria tiene sus propios miedos y motivaciones. Nosotros los entendemos.",
+              "Every industry has its own fears and motivations. We understand them."
+            )}
           </h2>
           <p className="text-base text-muted-foreground leading-relaxed">
-            No aplicamos la misma receta a todos los sectores. Investigamos las emociones específicas
-            de tus usuarios — y diseñamos experiencias que hablan su idioma.
+            {t(
+              "No aplicamos la misma receta a todos los sectores. Investigamos las emociones específicas de tus usuarios — y diseñamos experiencias que hablan su idioma.",
+              "We don't apply the same recipe to every sector. We research the specific emotions of your users — and design experiences that speak their language."
+            )}
           </p>
         </div>
 
@@ -120,7 +151,7 @@ export function IndustriesSection() {
                 <div className="relative w-full h-44 overflow-hidden">
                   <Image
                     src={industry.image}
-                    alt={`Industria ${industry.label}`}
+                    alt={`${t("Industria", "Industry")} ${industry.label}`}
                     fill
                     className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
                     sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"

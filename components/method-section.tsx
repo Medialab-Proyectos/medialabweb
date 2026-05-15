@@ -3,74 +3,13 @@
 import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
 import { Search, Compass, PenTool, Terminal, BarChart3, ChevronRight } from "lucide-react"
-
-const steps = [
-  {
-    number: "01",
-    label: "Discovery",
-    title: "Claridad total sobre tu producto en menos de 48 horas",
-    description: "Antes de diseñar un solo pixel, necesitamos entender qué problema resuelves y para quién. Nuestra IA analiza tu idea y genera un mapa claro: oportunidad, requisitos y estrategia. Sin adivinar.",
-    icon: Search,
-    color: "var(--magenta)",
-    gradient: "linear-gradient(135deg, #E8751A 0%, #c65a10 100%)",
-    image: "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=800&auto=format&fit=crop",
-    stat: "< 48h",
-    statLabel: "de incertidumbre a claridad",
-  },
-  {
-    number: "02",
-    label: "Estrategia UX",
-    title: "Entender cómo piensa y siente tu usuario",
-    description: "Investigamos a las personas que van a usar tu producto — no en abstracto, sino sus miedos, motivaciones y puntos de fricción reales. Cada decisión de diseño nace de ahí.",
-    icon: Compass,
-    color: "var(--cyan)",
-    gradient: "linear-gradient(135deg, #2AABB3 0%, #1d8a91 100%)",
-    image: "https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?q=80&w=800&auto=format&fit=crop",
-    stat: "100%",
-    statLabel: "decisiones basadas en evidencia",
-  },
-  {
-    number: "03",
-    label: "Diseño",
-    title: "Cada pantalla diseñada para que tu usuario sienta confianza",
-    description: "No decoramos interfaces — arquitectamos experiencias emocionales. Cada interacción, cada transición, cada palabra está pensada para que el usuario se sienta seguro y quiera seguir.",
-    icon: PenTool,
-    color: "var(--orange)",
-    gradient: "linear-gradient(135deg, #E8751A 0%, #d4851f 100%)",
-    image: "https://images.unsplash.com/photo-1561070791-2526d30994b5?q=80&w=800&auto=format&fit=crop",
-    stat: "3×",
-    statLabel: "más usuarios que regresan",
-  },
-  {
-    number: "04",
-    label: "Desarrollo",
-    title: "Un producto que funciona tan bien como se ve",
-    description: "Código limpio, arquitectura que escala y rendimiento que tus usuarios notan (aunque no lo sepan). Construimos para que tu producto crezca contigo, no en tu contra.",
-    icon: Terminal,
-    color: "var(--magenta)",
-    gradient: "linear-gradient(135deg, #E8751A 0%, #c65a10 100%)",
-    image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=800&auto=format&fit=crop",
-    stat: "0",
-    statLabel: "deuda técnica heredada",
-  },
-  {
-    number: "05",
-    label: "Optimización CRO",
-    title: "Convertir más sin gastar más en tráfico",
-    description: "Tu producto ya tiene visitantes. Nosotros analizamos dónde se pierden y optimizamos cada punto de contacto para que más personas hagan lo que tú necesitas que hagan.",
-    icon: BarChart3,
-    color: "var(--cyan)",
-    gradient: "linear-gradient(135deg, #2AABB3 0%, #1d8a91 100%)",
-    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop",
-    stat: "+40%",
-    statLabel: "más conversión promedio",
-  },
-]
+import { useLanguage } from "@/lib/language-context"
 
 export function MethodSection() {
   const ref = useRef<HTMLDivElement>(null)
   const [visible, setVisible] = useState(false)
   const [activeStep, setActiveStep] = useState(0)
+  const { t } = useLanguage()
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -80,6 +19,99 @@ export function MethodSection() {
     if (ref.current) observer.observe(ref.current)
     return () => observer.disconnect()
   }, [])
+
+  const steps = [
+    {
+      number: "01",
+      label: t("Discovery", "Discovery"),
+      title: t(
+        "Claridad total sobre tu producto en menos de 48 horas",
+        "Total clarity about your product in under 48 hours"
+      ),
+      description: t(
+        "Antes de diseñar un solo pixel, necesitamos entender qué problema resuelves y para quién. Nuestra IA analiza tu idea y genera un mapa claro: oportunidad, requisitos y estrategia. Sin adivinar.",
+        "Before designing a single pixel, we need to understand what problem you solve and for whom. Our AI analyzes your idea and generates a clear map: opportunity, requirements, and strategy. No guesswork."
+      ),
+      icon: Search,
+      color: "var(--magenta)",
+      gradient: "linear-gradient(135deg, #E8751A 0%, #c65a10 100%)",
+      image: "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=800&auto=format&fit=crop",
+      stat: "< 48h",
+      statLabel: t("de incertidumbre a claridad", "from uncertainty to clarity"),
+    },
+    {
+      number: "02",
+      label: t("Estrategia UX", "UX Strategy"),
+      title: t(
+        "Entender cómo piensa y siente tu usuario",
+        "Understand how your user thinks and feels"
+      ),
+      description: t(
+        "Investigamos a las personas que van a usar tu producto — no en abstracto, sino sus miedos, motivaciones y puntos de fricción reales. Cada decisión de diseño nace de ahí.",
+        "We research the people who will use your product — not in the abstract, but their real fears, motivations, and friction points. Every design decision starts there."
+      ),
+      icon: Compass,
+      color: "var(--cyan)",
+      gradient: "linear-gradient(135deg, #2AABB3 0%, #1d8a91 100%)",
+      image: "https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?q=80&w=800&auto=format&fit=crop",
+      stat: "100%",
+      statLabel: t("decisiones basadas en evidencia", "decisions based on evidence"),
+    },
+    {
+      number: "03",
+      label: t("Diseño", "Design"),
+      title: t(
+        "Cada pantalla diseñada para que tu usuario sienta confianza",
+        "Every screen designed so your user feels confident"
+      ),
+      description: t(
+        "No decoramos interfaces — arquitectamos experiencias emocionales. Cada interacción, cada transición, cada palabra está pensada para que el usuario se sienta seguro y quiera seguir.",
+        "We don't decorate interfaces — we architect emotional experiences. Every interaction, every transition, every word is crafted so the user feels safe and wants to continue."
+      ),
+      icon: PenTool,
+      color: "var(--orange)",
+      gradient: "linear-gradient(135deg, #E8751A 0%, #d4851f 100%)",
+      image: "https://images.unsplash.com/photo-1561070791-2526d30994b5?q=80&w=800&auto=format&fit=crop",
+      stat: "3×",
+      statLabel: t("más usuarios que regresan", "more users who return"),
+    },
+    {
+      number: "04",
+      label: t("Desarrollo", "Development"),
+      title: t(
+        "Un producto que funciona tan bien como se ve",
+        "A product that works as well as it looks"
+      ),
+      description: t(
+        "Código limpio, arquitectura que escala y rendimiento que tus usuarios notan (aunque no lo sepan). Construimos para que tu producto crezca contigo, no en tu contra.",
+        "Clean code, architecture that scales, and performance your users notice (even if they don't realize it). We build so your product grows with you, not against you."
+      ),
+      icon: Terminal,
+      color: "var(--magenta)",
+      gradient: "linear-gradient(135deg, #E8751A 0%, #c65a10 100%)",
+      image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=800&auto=format&fit=crop",
+      stat: "0",
+      statLabel: t("deuda técnica heredada", "inherited technical debt"),
+    },
+    {
+      number: "05",
+      label: t("Optimización CRO", "CRO Optimization"),
+      title: t(
+        "Convertir más sin gastar más en tráfico",
+        "Convert more without spending more on traffic"
+      ),
+      description: t(
+        "Tu producto ya tiene visitantes. Nosotros analizamos dónde se pierden y optimizamos cada punto de contacto para que más personas hagan lo que tú necesitas que hagan.",
+        "Your product already has visitors. We analyze where they drop off and optimize every touchpoint so more people do what you need them to do."
+      ),
+      icon: BarChart3,
+      color: "var(--cyan)",
+      gradient: "linear-gradient(135deg, #2AABB3 0%, #1d8a91 100%)",
+      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop",
+      stat: "+40%",
+      statLabel: t("más conversión promedio", "average conversion lift"),
+    },
+  ]
 
   const activeData = steps[activeStep]
   const ActiveIcon = activeData.icon
@@ -95,17 +127,22 @@ export function MethodSection() {
         {/* Header */}
         <div className="flex flex-col gap-4 max-w-2xl">
           <span className="text-xs font-semibold tracking-widest uppercase text-[var(--magenta)]">
-            Así funciona
+            {t("Así funciona", "How it works")}
           </span>
           <h2
             id="method-heading"
             className="font-display font-bold text-3xl md:text-4xl lg:text-5xl leading-tight text-foreground text-balance"
           >
-            5 pasos para pasar de “tengo una idea” a “mis usuarios lo aman”
+            {t(
+              "5 pasos para pasar de “tengo una idea” a “mis usuarios lo aman”",
+              "5 steps to go from “I have an idea” to “my users love it”"
+            )}
           </h2>
           <p className="text-base text-muted-foreground leading-relaxed">
-            No improvisamos. Cada proyecto sigue un proceso probado que elimina suposiciones y garantiza
-            que tu producto conecte con las personas desde el primer día. Así es como lo hacemos:
+            {t(
+              "No improvisamos. Cada proyecto sigue un proceso probado que elimina suposiciones y garantiza que tu producto conecte con las personas desde el primer día. Así es como lo hacemos:",
+              "We don't improvise. Every project follows a proven process that removes assumptions and ensures your product connects with people from day one. Here's how we do it:"
+            )}
           </p>
         </div>
 
@@ -113,7 +150,7 @@ export function MethodSection() {
         <div
           className="hidden md:grid grid-cols-5 gap-2 rounded-xl border border-border bg-background p-2"
           role="tablist"
-          aria-label="Pasos de la metodología MediaLab"
+          aria-label={t("Pasos de la metodología MediaLab", "MediaLab methodology steps")}
         >
           {steps.map((step, i) => {
             const Icon = step.icon
@@ -214,23 +251,23 @@ export function MethodSection() {
                 <ActiveIcon size={21} className="text-white" />
               </div>
               <span className="text-xs font-semibold tracking-widest uppercase" style={{ color: activeData.color }}>
-                Paso {activeData.number} · {activeData.label}
+                {t("Paso", "Step")} {activeData.number} · {activeData.label}
               </span>
             </div>
             <span className="sr-only" style={{ color: activeData.color }}>
-              <ActiveIcon size={16} /> Paso {activeData.number} — {activeData.label}
+              <ActiveIcon size={16} /> {t("Paso", "Step")} {activeData.number} — {activeData.label}
             </span>
             <h3 className="font-display text-3xl font-bold leading-tight text-foreground text-balance">{activeData.title}</h3>
             <p className="text-base leading-relaxed text-muted-foreground">{activeData.description}</p>
             <div className="grid grid-cols-2 gap-3 pt-2">
               <div className="rounded-lg border border-border bg-background p-4">
-                <span className="block text-xs font-semibold uppercase tracking-widest text-muted-foreground">Resultado</span>
+                <span className="block text-xs font-semibold uppercase tracking-widest text-muted-foreground">{t("Resultado", "Result")}</span>
                 <span className="mt-2 block font-display text-2xl font-bold" style={{ color: activeData.color }}>
                   {activeData.stat}
                 </span>
               </div>
               <div className="rounded-lg border border-border bg-background p-4">
-                <span className="block text-xs font-semibold uppercase tracking-widest text-muted-foreground">Foco</span>
+                <span className="block text-xs font-semibold uppercase tracking-widest text-muted-foreground">{t("Foco", "Focus")}</span>
                 <span className="mt-2 block text-sm font-semibold text-foreground">{activeData.statLabel}</span>
               </div>
             </div>
@@ -248,7 +285,7 @@ export function MethodSection() {
                 style={{ transitionDelay: `${i * 80}ms` }}
               >
                 <div className="absolute top-0 left-0 bottom-0 w-1 rounded-l-2xl z-20" style={{ background: step.gradient }} />
-                
+
                 {/* Background image for mobile card */}
                 <div className="absolute inset-0 z-0">
                   <Image src={step.image} alt={step.title} fill className="object-cover opacity-15" sizes="100vw" />

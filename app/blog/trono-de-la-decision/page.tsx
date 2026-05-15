@@ -1,7 +1,12 @@
 import type { Metadata } from "next"
 import Image from "next/image"
-import Link from "next/link"
-import { ArrowLeft, Clock, Calendar } from "lucide-react"
+import {
+  BlogChromeBackLink,
+  BlogChromeMeta,
+  BlogChromeEnNotice,
+  BlogChromeAuthorLine,
+  BlogChromeCTA,
+} from "@/components/blog/blog-chrome"
 
 export const metadata: Metadata = {
   title: "El Trono de la Decisión: IA, Autonomía Humana y el Futuro del Diseño Ético",
@@ -74,18 +79,14 @@ export default function BlogTronoDecisionPage() {
           <h1 className="font-display font-bold text-3xl md:text-4xl lg:text-5xl text-white leading-tight text-balance">
             El Trono de la Decisión: IA, Autonomía Humana y el Futuro del Diseño Ético
           </h1>
-          <div className="flex items-center gap-4 mt-4 text-white/60 text-sm">
-            <span className="flex items-center gap-1"><Calendar size={13} /> Mayo 2026</span>
-            <span className="flex items-center gap-1"><Clock size={13} /> 9 min de lectura</span>
-          </div>
+          <BlogChromeMeta dateEs="Mayo 2026" dateEn="May 2026" readMin={9} />
         </div>
       </div>
 
       {/* Back link */}
       <div className="max-w-3xl mx-auto px-6 pt-8">
-        <Link href="/#blog" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
-          <ArrowLeft size={14} /> Volver al blog
-        </Link>
+        <BlogChromeBackLink />
+        <BlogChromeEnNotice />
       </div>
 
       {/* Article body */}
@@ -144,24 +145,20 @@ export default function BlogTronoDecisionPage() {
         <p className="text-lg text-muted-foreground leading-relaxed mb-6">
           El futuro del diseño digital no está en quién logra más clics, sino en quién construye sistemas que fortalezcan la agencia humana. En un mundo donde la IA puede simularnos, el verdadero diferencial será quién entienda mejor al ser humano que la tecnología está afectando.
         </p>
-        <p className="text-sm text-muted-foreground/60 mt-8 italic">
-          — Por MediaLab Ingeniería.
-        </p>
+        <BlogChromeAuthorLine />
       </article>
 
       {/* CTA footer */}
       <div className="max-w-3xl mx-auto px-6 pb-20">
-        <div className="rounded-2xl border border-border p-8 flex flex-col md:flex-row items-center gap-6 bg-card">
-          <div className="flex-1">
-            <h3 className="font-display font-bold text-xl text-foreground mb-2">¿Tu IA fortalece o debilita a tus usuarios?</h3>
-            <p className="text-sm text-muted-foreground">Te ayudamos a diseñar sistemas de IA éticos que generen confianza y lealtad genuina.</p>
-          </div>
-          <Link href="/#contact"
-            className="shrink-0 inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm text-white"
-            style={{ background: "linear-gradient(90deg, #E8751A, #c65a10)" }}>
-            Consulta gratuita →
-          </Link>
-        </div>
+        <BlogChromeCTA
+          headlineEs="¿Tu IA fortalece o debilita a tus usuarios?"
+          headlineEn="Is your AI empowering or weakening your users?"
+          subEs="Te ayudamos a diseñar sistemas de IA éticos que generen confianza y lealtad genuina."
+          subEn="We help you design ethical AI systems that build genuine trust and loyalty."
+          ctaEs="Consulta gratuita"
+          ctaEn="Free consultation"
+          gradient="linear-gradient(90deg, #E8751A, #c65a10)"
+        />
       </div>
     </main>
   )

@@ -2,40 +2,12 @@
 
 import { useEffect, useRef, useState } from "react"
 import { Star, Quote } from "lucide-react"
-
-const testimonials = [
-  {
-    quote:
-      "MediaLab transformó por completo nuestro canal B2B. Lo que antes tomaba 3 meses de discovery ahora toma 3 semanas — con una experiencia de usuario que nuestros clientes corporativos adoran.",
-    author: "María Rodríguez",
-    role: "CPO",
-    company: "Startup FinTech",
-    metric: "75% más rápido al mercado",
-    avatar: "MR",
-  },
-  {
-    quote:
-      "Su expertise en psicología del consumidor nos ayudó a aumentar la activación de usuarios B2C en 40%. La conexión emocional que lograron en el onboarding fue clave.",
-    author: "Carlos Méndez",
-    role: "Head of Product",
-    company: "Enterprise SaaS",
-    metric: "40% más activación",
-    avatar: "CM",
-  },
-  {
-    quote:
-      "UXBox nos dio la claridad que nunca habíamos tenido para nuestro producto B2C. Pasamos de ideas vagas a un roadmap de producto validado con usuarios reales en días.",
-    author: "Ana Torres",
-    role: "Founder & CEO",
-    company: "HealthTech Venture",
-    metric: "10x validación más rápida",
-    avatar: "AT",
-  },
-]
+import { useLanguage } from "@/lib/language-context"
 
 export function TestimonialsSection() {
   const ref = useRef<HTMLDivElement>(null)
   const [visible, setVisible] = useState(false)
+  const { t } = useLanguage()
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -48,6 +20,42 @@ export function TestimonialsSection() {
     return () => observer.disconnect()
   }, [])
 
+  const testimonials = [
+    {
+      quote: t(
+        "MediaLab transformó por completo nuestro canal B2B. Lo que antes tomaba 3 meses de discovery ahora toma 3 semanas — con una experiencia de usuario que nuestros clientes corporativos adoran.",
+        "MediaLab completely transformed our B2B channel. What used to take 3 months of discovery now takes 3 weeks — with a user experience our enterprise clients love."
+      ),
+      author: "María Rodríguez",
+      role: "CPO",
+      company: t("Startup FinTech", "FinTech Startup"),
+      metric: t("75% más rápido al mercado", "75% faster to market"),
+      avatar: "MR",
+    },
+    {
+      quote: t(
+        "Su expertise en psicología del consumidor nos ayudó a aumentar la activación de usuarios B2C en 40%. La conexión emocional que lograron en el onboarding fue clave.",
+        "Their expertise in consumer psychology helped us increase B2C user activation by 40%. The emotional connection they achieved in onboarding was key."
+      ),
+      author: "Carlos Méndez",
+      role: t("Head of Product", "Head of Product"),
+      company: "Enterprise SaaS",
+      metric: t("40% más activación", "40% more activation"),
+      avatar: "CM",
+    },
+    {
+      quote: t(
+        "UXBox nos dio la claridad que nunca habíamos tenido para nuestro producto B2C. Pasamos de ideas vagas a un roadmap de producto validado con usuarios reales en días.",
+        "UXBox gave us a clarity we'd never had for our B2C product. We went from vague ideas to a roadmap validated with real users in days."
+      ),
+      author: "Ana Torres",
+      role: "Founder & CEO",
+      company: "HealthTech Venture",
+      metric: t("10x validación más rápida", "10x faster validation"),
+      avatar: "AT",
+    },
+  ]
+
   return (
     <section
       ref={ref}
@@ -58,24 +66,30 @@ export function TestimonialsSection() {
         {/* Header */}
         <div className="flex flex-col gap-4 items-center text-center max-w-2xl mx-auto">
           <span className="text-xs font-semibold tracking-widest uppercase text-[var(--magenta)]">
-            Lo que dicen quienes ya lo vivieron
+            {t("Lo que dicen quienes ya lo vivieron", "What those who lived it say")}
           </span>
           <h2
             id="testimonials-heading"
             className="font-display font-bold text-3xl md:text-4xl lg:text-5xl leading-tight text-foreground text-balance"
           >
-            No te lo contamos nosotros. Te lo cuentan ellos.
+            {t(
+              "No te lo contamos nosotros. Te lo cuentan ellos.",
+              "We don't tell you. They tell you."
+            )}
           </h2>
           <p className="text-base text-muted-foreground leading-relaxed">
-            Líderes de producto que llegaron con un problema real y se fueron con un producto que sus usuarios aman. Estas son sus palabras, no las nuestras.
+            {t(
+              "Líderes de producto que llegaron con un problema real y se fueron con un producto que sus usuarios aman. Estas son sus palabras, no las nuestras.",
+              "Product leaders who came with a real problem and left with a product their users love. These are their words, not ours."
+            )}
           </p>
         </div>
 
         {/* Testimonial cards */}
         <div className="grid md:grid-cols-3 gap-6">
-          {testimonials.map((t, i) => (
+          {testimonials.map((item, i) => (
             <div
-              key={t.author}
+              key={item.author}
               className={`relative flex flex-col gap-6 p-8 rounded-3xl border border-border bg-card transition-all duration-700 hover:border-[var(--magenta)]/30 hover:shadow-xl ${
                 visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
               }`}
@@ -101,7 +115,7 @@ export function TestimonialsSection() {
 
               {/* Quote */}
               <p className="text-base text-foreground leading-relaxed flex-1">
-                &ldquo;{t.quote}&rdquo;
+                &ldquo;{item.quote}&rdquo;
               </p>
 
               {/* Metric badge */}
@@ -112,7 +126,7 @@ export function TestimonialsSection() {
                   color: "white",
                 }}
               >
-                {t.metric}
+                {item.metric}
               </div>
 
               {/* Author */}
@@ -121,12 +135,12 @@ export function TestimonialsSection() {
                   className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white shrink-0"
                   style={{ background: "linear-gradient(135deg, var(--magenta), var(--orange))" }}
                 >
-                  {t.avatar}
+                  {item.avatar}
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-sm font-semibold text-foreground">{t.author}</span>
+                  <span className="text-sm font-semibold text-foreground">{item.author}</span>
                   <span className="text-xs text-muted-foreground">
-                    {t.role}, {t.company}
+                    {item.role}, {item.company}
                   </span>
                 </div>
               </div>
@@ -138,17 +152,17 @@ export function TestimonialsSection() {
         <div className="flex flex-wrap items-center justify-center gap-8 pt-8 border-t border-border">
           <div className="flex flex-col items-center gap-1">
             <span className="font-display font-bold text-2xl text-foreground">4.9/5</span>
-            <span className="text-xs text-muted-foreground">Nos recomiendan a otros</span>
+            <span className="text-xs text-muted-foreground">{t("Nos recomiendan a otros", "They recommend us to others")}</span>
           </div>
           <div className="w-px h-10 bg-border hidden sm:block" />
           <div className="flex flex-col items-center gap-1">
             <span className="font-display font-bold text-2xl text-foreground">100%</span>
-            <span className="text-xs text-muted-foreground">Entregado cuando lo prometimos</span>
+            <span className="text-xs text-muted-foreground">{t("Entregado cuando lo prometimos", "Delivered when we promised")}</span>
           </div>
           <div className="w-px h-10 bg-border hidden sm:block" />
           <div className="flex flex-col items-center gap-1">
             <span className="font-display font-bold text-2xl text-foreground">85%</span>
-            <span className="text-xs text-muted-foreground">Vuelven con un nuevo proyecto</span>
+            <span className="text-xs text-muted-foreground">{t("Vuelven con un nuevo proyecto", "Return with a new project")}</span>
           </div>
         </div>
       </div>

@@ -1,7 +1,12 @@
 import type { Metadata } from "next"
 import Image from "next/image"
-import Link from "next/link"
-import { ArrowLeft, Clock, Calendar } from "lucide-react"
+import {
+  BlogChromeBackLink,
+  BlogChromeMeta,
+  BlogChromeEnNotice,
+  BlogChromeAuthorLine,
+  BlogChromeCTA,
+} from "@/components/blog/blog-chrome"
 
 export const metadata: Metadata = {
   title: "Influencia sin Erosión: Cómo Diseñar Comportamiento Sostenible sin Manipular",
@@ -73,18 +78,14 @@ export default function BlogInfluenciaSinErosionPage() {
           <h1 className="font-display font-bold text-3xl md:text-4xl lg:text-5xl text-white leading-tight text-balance">
             Influencia sin Erosión: Cómo Diseñar Comportamiento Sostenible sin Manipular al Usuario
           </h1>
-          <div className="flex items-center gap-4 mt-4 text-white/60 text-sm">
-            <span className="flex items-center gap-1"><Calendar size={13} /> Mayo 2026</span>
-            <span className="flex items-center gap-1"><Clock size={13} /> 10 min de lectura</span>
-          </div>
+          <BlogChromeMeta dateEs="Mayo 2026" dateEn="May 2026" readMin={10} />
         </div>
       </div>
 
       {/* Back link */}
       <div className="max-w-3xl mx-auto px-6 pt-8">
-        <Link href="/#blog" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
-          <ArrowLeft size={14} /> Volver al blog
-        </Link>
+        <BlogChromeBackLink />
+        <BlogChromeEnNotice />
       </div>
 
       {/* Article body */}
@@ -165,24 +166,20 @@ export default function BlogInfluenciaSinErosionPage() {
         <p className="text-lg text-muted-foreground leading-relaxed mb-6">
           El comportamiento sostenido no nace de la presión. Nace de una conciencia que se siente respetada. En esta nueva era, la IA deja de ser una herramienta para maximizar clics y se convierte en un mediador ético entre la intención y la acción del usuario.
         </p>
-        <p className="text-sm text-muted-foreground/60 mt-8 italic">
-          — Por MediaLab Ingeniería.
-        </p>
+        <BlogChromeAuthorLine />
       </article>
 
       {/* CTA footer */}
       <div className="max-w-3xl mx-auto px-6 pb-20">
-        <div className="rounded-2xl border border-border p-8 flex flex-col md:flex-row items-center gap-6 bg-card">
-          <div className="flex-1">
-            <h3 className="font-display font-bold text-xl text-foreground mb-2">¿Quieres influir sin erosionar a tus usuarios?</h3>
-            <p className="text-sm text-muted-foreground">Implementamos diseño conductual consciente en plataformas B2B y apps B2C. Hablemos de tu producto.</p>
-          </div>
-          <Link href="/#contact"
-            className="shrink-0 inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm text-white"
-            style={{ background: "linear-gradient(90deg, #2AABB3, #1d8a91)" }}>
-            Agendar llamada →
-          </Link>
-        </div>
+        <BlogChromeCTA
+          headlineEs="¿Quieres influir sin erosionar a tus usuarios?"
+          headlineEn="Want to influence without eroding your users?"
+          subEs="Implementamos diseño conductual consciente en plataformas B2B y apps B2C. Hablemos de tu producto."
+          subEn="We implement conscious behavioral design in B2B platforms and B2C apps. Let's talk about your product."
+          ctaEs="Agendar llamada"
+          ctaEn="Book a call"
+          gradient="linear-gradient(90deg, #2AABB3, #1d8a91)"
+        />
       </div>
     </main>
   )

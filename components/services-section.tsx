@@ -2,14 +2,16 @@
 
 import { useEffect, useRef, useState } from "react"
 import { Microscope, Brain, Code2, ChevronRight } from "lucide-react"
+import { useLanguage } from "@/lib/language-context"
 
 const services = [
   {
     icon: Microscope,
-    title: "Experiencias que tus usuarios recordarán",
+    titleEs: "Experiencias que tus usuarios recordarán",
+    titleEn: "Experiences your users will remember",
     color: "var(--magenta)",
     gradient: "linear-gradient(135deg, var(--magenta), oklch(0.45 0.24 300))",
-    items: [
+    itemsEs: [
       "Investigación profunda de usuarios B2B y B2C",
       "Diseño de interacción y experiencia emocional",
       "Psicología del consumidor aplicada al diseño",
@@ -17,39 +19,69 @@ const services = [
       "Sistemas de diseño que escalan contigo",
       "Optimización de conversión (CRO)",
     ],
-    description:
+    itemsEn: [
+      "Deep B2B and B2C user research",
+      "Interaction and emotional experience design",
+      "Consumer psychology applied to design",
+      "Intuitive information architecture",
+      "Design systems that scale with you",
+      "Conversion rate optimization (CRO)",
+    ],
+    descriptionEs:
       "Tus usuarios no navegan flujos — navegan estados emocionales. Investigamos cómo piensan, qué sienten y qué los frena. Luego diseñamos experiencias que los hacen sentir seguros, comprendidos y listos para actuar.",
+    descriptionEn:
+      "Your users don't navigate flows — they navigate emotional states. We research how they think, what they feel, and what holds them back. Then we design experiences that make them feel safe, understood, and ready to act.",
   },
   {
     icon: Brain,
-    title: "De idea vaga a producto claro en días",
+    titleEs: "De idea vaga a producto claro en días",
+    titleEn: "From vague idea to clear product in days",
     color: "var(--cyan)",
     gradient: "linear-gradient(135deg, var(--cyan), oklch(0.55 0.18 220))",
-    items: [
+    itemsEs: [
       "Discovery de producto acelerado con IA",
       "Validación rápida de ideas y conceptos",
       "Generación inteligente de requisitos",
       "Análisis competitivo automatizado",
       "Definición ágil de producto",
     ],
-    description:
+    itemsEn: [
+      "AI-accelerated product discovery",
+      "Rapid idea and concept validation",
+      "Intelligent requirements generation",
+      "Automated competitive analysis",
+      "Agile product definition",
+    ],
+    descriptionEs:
       "¿Cuántas semanas llevas definiendo tu producto? UXBox comprime meses de discovery en días. Le cuentas tu idea, y nuestra IA genera una propuesta estructurada con requisitos, estrategia y conceptos de diseño.",
+    descriptionEn:
+      "How many weeks have you spent defining your product? UXBox compresses months of discovery into days. You describe your idea, and our AI generates a structured proposal with requirements, strategy, and design concepts.",
   },
   {
     icon: Code2,
-    title: "Código que tus usuarios nunca notarán (y eso es bueno)",
+    titleEs: "Código que tus usuarios nunca notarán (y eso es bueno)",
+    titleEn: "Code your users will never notice (and that's good)",
     color: "var(--orange)",
     gradient: "linear-gradient(135deg, var(--orange), oklch(0.65 0.2 60))",
-    items: [
+    itemsEs: [
       "Plataformas web B2B y dashboards",
       "Apps móviles y experiencias B2C",
       "MVPs listos para validar en semanas",
       "Arquitecturas escalables en la nube",
       "Integraciones con IA y APIs",
     ],
-    description:
+    itemsEn: [
+      "B2B web platforms and dashboards",
+      "Mobile apps and B2C experiences",
+      "MVPs ready to validate in weeks",
+      "Scalable cloud architectures",
+      "AI and API integrations",
+    ],
+    descriptionEs:
       "El mejor software es el que se siente invisible. Construimos productos con código limpio, arquitectura que crece contigo y un enfoque obsesivo en que cada interacción se sienta natural.",
-    tech: ["React", "Next.js", "Node.js", "Cloud", "IA"],
+    descriptionEn:
+      "The best software feels invisible. We build products with clean code, architecture that scales with you, and an obsessive focus on making every interaction feel natural.",
+    tech: ["React", "Next.js", "Node.js", "Cloud", "AI"],
   },
 ]
 
@@ -63,7 +95,11 @@ function ServiceCard({
   visible: boolean
 }) {
   const [hovered, setHovered] = useState(false)
+  const { lang } = useLanguage()
   const Icon = service.icon
+  const title = lang === "es" ? service.titleEs : service.titleEn
+  const description = lang === "es" ? service.descriptionEs : service.descriptionEn
+  const items = lang === "es" ? service.itemsEs : service.itemsEn
 
   return (
     <div
@@ -96,18 +132,14 @@ function ServiceCard({
       </div>
 
       {/* Title */}
-      <h3 className="font-display font-bold text-xl text-foreground">
-        {service.title}
-      </h3>
+      <h3 className="font-display font-bold text-xl text-foreground">{title}</h3>
 
       {/* Description */}
-      <p className="text-sm text-muted-foreground leading-relaxed">
-        {service.description}
-      </p>
+      <p className="text-sm text-muted-foreground leading-relaxed">{description}</p>
 
       {/* Items */}
-      <ul className="flex flex-col gap-2" aria-label={`${service.title} services`}>
-        {service.items.map((item) => (
+      <ul className="flex flex-col gap-2" aria-label={`${title} services`}>
+        {items.map((item) => (
           <li key={item} className="flex items-center gap-2 text-sm text-foreground/80">
             <ChevronRight size={14} style={{ color: service.color }} className="shrink-0" />
             {item}
@@ -135,6 +167,7 @@ function ServiceCard({
 export function ServicesSection() {
   const ref = useRef<HTMLDivElement>(null)
   const [visible, setVisible] = useState(false)
+  const { t } = useLanguage()
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -156,24 +189,29 @@ export function ServicesSection() {
         {/* Header */}
         <div className="flex flex-col gap-4 max-w-2xl">
           <span className="text-xs font-semibold tracking-widest uppercase text-[var(--magenta)]">
-            Cómo te ayudamos
+            {t("Cómo te ayudamos", "How we help you")}
           </span>
           <h2
             id="services-heading"
             className="font-display font-bold text-3xl md:text-4xl lg:text-5xl leading-tight text-foreground text-balance"
           >
-            Tu producto necesita más que código bonito. Necesita entender a las personas.
+            {t(
+              "Tu producto necesita más que código bonito. Necesita entender a las personas.",
+              "Your product needs more than beautiful code. It needs to understand people."
+            )}
           </h2>
           <p className="text-base text-muted-foreground leading-relaxed">
-            La mayoría de los productos fallan porque se saltan un paso: investigar qué necesitan sentir las personas que los van a usar.
-            Nosotros empezamos por ahí — y luego diseñamos, construimos y optimizamos sin perder esa conexión humana.
+            {t(
+              "La mayoría de los productos fallan porque se saltan un paso: investigar qué necesitan sentir las personas que los van a usar. Nosotros empezamos por ahí — y luego diseñamos, construimos y optimizamos sin perder esa conexión humana.",
+              "Most products fail because they skip one step: researching what the people who'll use them need to feel. That's where we start — then we design, build, and optimize without losing that human connection."
+            )}
           </p>
         </div>
 
         {/* Cards */}
         <div className="grid md:grid-cols-3 gap-6">
           {services.map((service, i) => (
-            <ServiceCard key={service.title} service={service} index={i} visible={visible} />
+            <ServiceCard key={service.titleEs} service={service} index={i} visible={visible} />
           ))}
         </div>
       </div>

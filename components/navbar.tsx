@@ -37,6 +37,19 @@ export function Navbar() {
   const isCurso = pathname === "/curso"
   const currentLinks = navLinks[lang]
 
+  // Pages whose top is a hardcoded dark hero (var(--surface-dark)). When the
+  // navbar is transparent (pre-scroll), text-foreground is dark in light mode
+  // and would disappear on those dark heroes — so override to light colors.
+  const isDarkHero = pathname === "/" || pathname === "/curso"
+  const overDarkHero = !scrolled && isDarkHero
+  const linkIdle = overDarkHero
+    ? "text-white/70 hover:text-white"
+    : "text-muted-foreground hover:text-foreground"
+  const iconBtn = overDarkHero
+    ? "text-white/70 hover:text-white border-white/20 hover:border-white/40"
+    : "text-muted-foreground hover:text-foreground hover:border-foreground/30"
+  const switcherBorder = overDarkHero ? "border-white/20" : "border-border"
+
   useEffect(() => {
     setMounted(true)
     const handleScroll = () => setScrolled(window.scrollY > 40)
@@ -74,7 +87,7 @@ export function Navbar() {
               className={`text-sm font-medium transition-colors relative after:absolute after:bottom-[-3px] after:left-0 after:w-0 after:h-px after:bg-[var(--magenta)] hover:after:w-full after:transition-all after:duration-300 ${
                 (link as any).highlight
                   ? "text-[var(--magenta)] font-semibold hover:text-[var(--magenta)]"
-                  : "text-muted-foreground hover:text-foreground"
+                  : linkIdle
               }`}
             >
               {(link as any).highlight && (
@@ -90,13 +103,13 @@ export function Navbar() {
         <div className="hidden md:flex items-center gap-3">
           {/* Language switcher */}
           {mounted && (
-            <div className="flex items-center border border-border rounded-full p-0.5 gap-0.5">
+            <div className={`flex items-center border ${switcherBorder} rounded-full p-0.5 gap-0.5`}>
               <button
                 onClick={() => setLang("es")}
                 className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
                   lang === "es"
                     ? "bg-[var(--magenta)] text-white"
-                    : "text-muted-foreground hover:text-foreground"
+                    : linkIdle
                 }`}
                 aria-label="Switch to Spanish"
               >
@@ -107,7 +120,7 @@ export function Navbar() {
                 className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
                   lang === "en"
                     ? "bg-[var(--magenta)] text-white"
-                    : "text-muted-foreground hover:text-foreground"
+                    : linkIdle
                 }`}
                 aria-label="Switch to English"
               >
@@ -119,7 +132,7 @@ export function Navbar() {
           {mounted && (
             <button
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="w-9 h-9 rounded-full flex items-center justify-center border border-border text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-all duration-200"
+              className={`w-9 h-9 rounded-full flex items-center justify-center border transition-all duration-200 ${iconBtn}`}
               aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
             >
               {theme === "dark" ? <Sun size={15} /> : <Moon size={15} />}
@@ -141,14 +154,14 @@ export function Navbar() {
           {mounted && (
             <button
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="w-9 h-9 rounded-full flex items-center justify-center border border-border text-muted-foreground"
+              className={`w-9 h-9 rounded-full flex items-center justify-center border transition-all duration-200 ${iconBtn}`}
               aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
             >
               {theme === "dark" ? <Sun size={15} /> : <Moon size={15} />}
             </button>
           )}
           <button
-            className="p-2 text-foreground"
+            className={`p-2 transition-colors ${overDarkHero ? "text-white" : "text-foreground"}`}
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
             aria-expanded={mobileOpen}

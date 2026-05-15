@@ -3,21 +3,23 @@
 import { useRef } from "react"
 import { motion, useInView } from "framer-motion"
 import { Palette, Monitor, Code2, RocketIcon, User, Users, Frown, Sparkles } from "lucide-react"
-
-const profiles = [
-  { icon: Palette, title: "UX/UI Designers", desc: "Quieres usar IA sin que tus diseños pierdan alma. Aquí aprendes a amplificar tu criterio, no a reemplazarlo." },
-  { icon: Monitor, title: "Product Designers", desc: "Necesitas construir productos completos donde la IA potencia — no complica — la experiencia del usuario." },
-  { icon: Code2, title: "Developers", desc: "Diseñas interfaces pero te falta criterio visual estratégico. Aquí conectas código con pensamiento de producto." },
-  { icon: RocketIcon, title: "Startups", desc: "Necesitas lanzar rápido pero con profundidad. Aprende a validar antes de construir y a construir sin deuda de diseño." },
-  { icon: User, title: "Freelancers", desc: "Tus clientes ya usan ChatGPT. ¿Cómo te diferencias? Con criterio, frameworks y resultados que la IA sola no da." },
-  { icon: Users, title: "Equipos de Innovación", desc: "Necesitan una metodología compartida para que todo el equipo hable el mismo idioma de IA + diseño." },
-  { icon: Frown, title: "Frustrados con la IA", desc: "Hiciste 3 cursos de prompts y sigues sin saber construir un producto. Esto resuelve eso." },
-  { icon: Sparkles, title: "Creativos que quieren ser únicos", desc: "Sabes que el futuro es con IA. Pero te rehusas a ser uno más. Aquí aprendes a ser tú, amplificado." },
-]
+import { useLanguage } from "@/lib/language-context"
 
 export function CourseAudience() {
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, margin: "-80px" })
+  const { t } = useLanguage()
+
+  const profiles = [
+    { icon: Palette, title: t("UX/UI Designers", "UX/UI Designers"), desc: t("Quieres usar IA sin que tus diseños pierdan alma. Aquí aprendes a amplificar tu criterio, no a reemplazarlo.", "You want to use AI without your designs losing their soul. Here you learn to amplify your judgment, not replace it.") },
+    { icon: Monitor, title: t("Product Designers", "Product Designers"), desc: t("Necesitas construir productos completos donde la IA potencia — no complica — la experiencia del usuario.", "You need to build complete products where AI enhances — not complicates — the user experience.") },
+    { icon: Code2, title: t("Developers", "Developers"), desc: t("Diseñas interfaces pero te falta criterio visual estratégico. Aquí conectas código con pensamiento de producto.", "You design interfaces but lack strategic visual judgment. Here you connect code with product thinking.") },
+    { icon: RocketIcon, title: t("Startups", "Startups"), desc: t("Necesitas lanzar rápido pero con profundidad. Aprende a validar antes de construir y a construir sin deuda de diseño.", "You need to ship fast but with depth. Learn to validate before building and to build without design debt.") },
+    { icon: User, title: t("Freelancers", "Freelancers"), desc: t("Tus clientes ya usan ChatGPT. ¿Cómo te diferencias? Con criterio, frameworks y resultados que la IA sola no da.", "Your clients already use ChatGPT. How do you stand out? With judgment, frameworks, and results AI alone can't deliver.") },
+    { icon: Users, title: t("Equipos de Innovación", "Innovation Teams"), desc: t("Necesitan una metodología compartida para que todo el equipo hable el mismo idioma de IA + diseño.", "You need a shared methodology so the whole team speaks the same AI + design language.") },
+    { icon: Frown, title: t("Frustrados con la IA", "Frustrated with AI"), desc: t("Hiciste 3 cursos de prompts y sigues sin saber construir un producto. Esto resuelve eso.", "You took 3 prompt courses and still can't build a product. This fixes that.") },
+    { icon: Sparkles, title: t("Creativos que quieren ser únicos", "Creatives who want to be unique"), desc: t("Sabes que el futuro es con IA. Pero te rehusas a ser uno más. Aquí aprendes a ser tú, amplificado.", "You know the future is with AI. But you refuse to be just another one. Here you learn to be yourself, amplified.") },
+  ]
 
   return (
     <section className="relative py-20 md:py-28 bg-[var(--surface-dark)] overflow-hidden">
@@ -29,16 +31,19 @@ export function CourseAudience() {
           className="text-center mb-10 md:mb-14"
         >
           <span className="inline-block text-xs tracking-[0.2em] uppercase mb-4 font-display" style={{ color: 'var(--magenta)' }}>
-            ¿Esto es para ti?
+            {t("¿Esto es para ti?", "Is this for you?")}
           </span>
           <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-[var(--surface-dark-fg)] tracking-tight leading-tight mb-6 font-display">
-            Si algo de esto te suena, sí.
+            {t("Si algo de esto te suena, sí.", "If any of this sounds familiar, yes.")}
           </h2>
           <p className="max-w-2xl mx-auto text-lg text-foreground/50">
-            No importa si llevas 1 año o 10. Si quieres evolucionar con la IA en vez de correr detrás de ella, esta metodología fue diseñada para ti.
+            {t(
+              "No importa si llevas 1 año o 10. Si quieres evolucionar con la IA en vez de correr detrás de ella, esta metodología fue diseñada para ti.",
+              "It doesn't matter if you have 1 year or 10. If you want to evolve with AI instead of chasing it, this methodology was designed for you."
+            )}
           </p>
           <p className="text-sm text-foreground/30 mt-3">
-            Toca el perfil que más te represente. Si dudas entre dos, es buena señal.
+            {t("Toca el perfil que más te represente. Si dudas entre dos, es buena señal.", "Tap the profile that represents you best. If you're torn between two, that's a good sign.")}
           </p>
         </motion.div>
 

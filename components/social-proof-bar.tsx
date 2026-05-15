@@ -2,17 +2,35 @@
 
 import { useEffect, useState } from "react"
 import { CheckCircle2 } from "lucide-react"
-
-const recentActivities = [
-  { company: "Startup fintech", action: "nos contactó con una idea sin validar", time: "Semana 1" },
-  { company: "Startup fintech", action: "validó su propuesta con UXBox en 3 días", time: "Semana 1" },
-  { company: "Startup fintech", action: "lanzó MVP diseñado con usuarios reales", time: "Semana 4" },
-  { company: "Startup fintech", action: "aumentó conversión 38% tras lanzamiento", time: "Mes 2" },
-]
+import { useLanguage } from "@/lib/language-context"
 
 export function SocialProofBar() {
   const [current, setCurrent] = useState(0)
   const [show, setShow] = useState(false)
+  const { t } = useLanguage()
+
+  const recentActivities = [
+    {
+      company: t("Startup fintech", "Fintech startup"),
+      action: t("nos contactó con una idea sin validar", "contacted us with an unvalidated idea"),
+      time: t("Semana 1", "Week 1"),
+    },
+    {
+      company: t("Startup fintech", "Fintech startup"),
+      action: t("validó su propuesta con UXBox en 3 días", "validated its proposal with UXBox in 3 days"),
+      time: t("Semana 1", "Week 1"),
+    },
+    {
+      company: t("Startup fintech", "Fintech startup"),
+      action: t("lanzó MVP diseñado con usuarios reales", "launched MVP designed with real users"),
+      time: t("Semana 4", "Week 4"),
+    },
+    {
+      company: t("Startup fintech", "Fintech startup"),
+      action: t("aumentó conversión 38% tras lanzamiento", "increased conversion 38% after launch"),
+      time: t("Mes 2", "Month 2"),
+    },
+  ]
 
   useEffect(() => {
     // Show after scroll
@@ -29,7 +47,7 @@ export function SocialProofBar() {
       setCurrent((prev) => (prev + 1) % recentActivities.length)
     }, 4000)
     return () => clearInterval(interval)
-  }, [show])
+  }, [show, recentActivities.length])
 
   if (!show) return null
 

@@ -3,27 +3,29 @@
 import { useRef } from "react"
 import { motion, useInView } from "framer-motion"
 import { Brain, Zap, BarChart3, Microscope, Blocks, Bot, Shield, Layout, Sparkles, Heart, Lightbulb, GitBranch, Box, Layers } from "lucide-react"
-
-const topics = [
-  { icon: Brain, title: "IA para UX/UI", desc: "Integra IA en cada etapa de tu proceso de diseño — sin que tu trabajo pierda identidad ni profundidad." },
-  { icon: Zap, title: "Prompt Frameworks", desc: "Deja de copiar plantillas. Aprende a diseñar sistemas de prompts que resuelven TU problema específico." },
-  { icon: GitBranch, title: "AI-First Workflows", desc: "Construye flujos de trabajo donde la IA potencia tu proceso creativo, no lo interrumpe." },
-  { icon: BarChart3, title: "Diseño Estratégico", desc: "Cada pantalla, cada interacción responde a un objetivo medible. Diseño con propósito, no decoración." },
-  { icon: Microscope, title: "UX + Comportamiento", desc: "Entiende cómo piensan y deciden tus usuarios para diseñar experiencias que se sienten inevitables." },
-  { icon: Bot, title: "IA para Research", desc: "Investiga en horas lo que antes tomaba semanas — sin perder la profundidad ni la empatía humana." },
-  { icon: Blocks, title: "AI Prototyping", desc: "Prototipa ideas en minutos. Pero con criterio: sabes qué probar, por qué y cómo evaluar el resultado." },
-  { icon: Layout, title: "AI Systems", desc: "Diseña sistemas que escalan: componentes, tokens y patrones generados con intención, no al azar." },
-  { icon: Shield, title: "Validación Humana", desc: "El framework para separar lo bueno de lo genérico en todo lo que la IA genera. Tu filtro estratégico." },
-  { icon: Layers, title: "Arquitectura de Experiencia", desc: "Estructura experiencias completas: flujos, estados emocionales, edge cases y microinteracciones." },
-  { icon: Heart, title: "Diseño Emocional", desc: "Crea productos que las personas sienten, no solo usan. Donde la conexión emocional impulsa la retención." },
-  { icon: Lightbulb, title: "IA + Startups", desc: "Lanza productos potenciados por IA sin sacrificar calidad ni experiencia. Velocidad con profundidad." },
-  { icon: Sparkles, title: "Diseño Diferencial", desc: "Aprende a crear lo que la IA no puede generar sola: experiencias con identidad única y criterio humano." },
-  { icon: Box, title: "Product Thinking", desc: "Piensa como un líder de producto: sistemas, métricas, usuarios y negocio — todo conectado." },
-]
+import { useLanguage } from "@/lib/language-context"
 
 export function CourseCurriculum() {
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, margin: "-80px" })
+  const { t } = useLanguage()
+
+  const topics = [
+    { icon: Brain, title: t("IA para UX/UI", "AI for UX/UI"), desc: t("Integra IA en cada etapa de tu proceso de diseño — sin que tu trabajo pierda identidad ni profundidad.", "Integrate AI into every stage of your design process — without your work losing identity or depth.") },
+    { icon: Zap, title: t("Prompt Frameworks", "Prompt Frameworks"), desc: t("Deja de copiar plantillas. Aprende a diseñar sistemas de prompts que resuelven TU problema específico.", "Stop copying templates. Learn to design prompt systems that solve YOUR specific problem.") },
+    { icon: GitBranch, title: t("AI-First Workflows", "AI-First Workflows"), desc: t("Construye flujos de trabajo donde la IA potencia tu proceso creativo, no lo interrumpe.", "Build workflows where AI boosts your creative process — not interrupts it.") },
+    { icon: BarChart3, title: t("Diseño Estratégico", "Strategic Design"), desc: t("Cada pantalla, cada interacción responde a un objetivo medible. Diseño con propósito, no decoración.", "Every screen, every interaction answers a measurable goal. Design with purpose, not decoration.") },
+    { icon: Microscope, title: t("UX + Comportamiento", "UX + Behavior"), desc: t("Entiende cómo piensan y deciden tus usuarios para diseñar experiencias que se sienten inevitables.", "Understand how your users think and decide so you can design experiences that feel inevitable.") },
+    { icon: Bot, title: t("IA para Research", "AI for Research"), desc: t("Investiga en horas lo que antes tomaba semanas — sin perder la profundidad ni la empatía humana.", "Research in hours what used to take weeks — without losing depth or human empathy.") },
+    { icon: Blocks, title: t("AI Prototyping", "AI Prototyping"), desc: t("Prototipa ideas en minutos. Pero con criterio: sabes qué probar, por qué y cómo evaluar el resultado.", "Prototype ideas in minutes — with judgment: you know what to test, why, and how to evaluate the result.") },
+    { icon: Layout, title: t("AI Systems", "AI Systems"), desc: t("Diseña sistemas que escalan: componentes, tokens y patrones generados con intención, no al azar.", "Design systems that scale: components, tokens, and patterns generated with intent, not at random.") },
+    { icon: Shield, title: t("Validación Humana", "Human Validation"), desc: t("El framework para separar lo bueno de lo genérico en todo lo que la IA genera. Tu filtro estratégico.", "The framework to separate the good from the generic in everything AI generates. Your strategic filter.") },
+    { icon: Layers, title: t("Arquitectura de Experiencia", "Experience Architecture"), desc: t("Estructura experiencias completas: flujos, estados emocionales, edge cases y microinteracciones.", "Structure full experiences: flows, emotional states, edge cases, and microinteractions.") },
+    { icon: Heart, title: t("Diseño Emocional", "Emotional Design"), desc: t("Crea productos que las personas sienten, no solo usan. Donde la conexión emocional impulsa la retención.", "Create products people feel — not just use. Where emotional connection drives retention.") },
+    { icon: Lightbulb, title: t("IA + Startups", "AI + Startups"), desc: t("Lanza productos potenciados por IA sin sacrificar calidad ni experiencia. Velocidad con profundidad.", "Launch AI-powered products without sacrificing quality or experience. Speed with depth.") },
+    { icon: Sparkles, title: t("Diseño Diferencial", "Differential Design"), desc: t("Aprende a crear lo que la IA no puede generar sola: experiencias con identidad única y criterio humano.", "Learn to create what AI can't generate alone: experiences with unique identity and human judgment.") },
+    { icon: Box, title: t("Product Thinking", "Product Thinking"), desc: t("Piensa como un líder de producto: sistemas, métricas, usuarios y negocio — todo conectado.", "Think like a product leader: systems, metrics, users, and business — all connected.") },
+  ]
 
   return (
     <section id="programa" className="relative py-20 md:py-28 bg-[var(--surface-mid)] overflow-hidden">
@@ -39,13 +41,19 @@ export function CourseCurriculum() {
           className="text-center mb-10 md:mb-14"
         >
           <span className="inline-block text-xs tracking-[0.2em] uppercase mb-4 font-display" style={{ color: 'var(--cyan)' }}>
-            Lo que sabrás hacer
+            {t("Lo que sabrás hacer", "What you'll know how to do")}
           </span>
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[var(--surface-dark-fg)] tracking-tight leading-snug mb-5 font-display">
-            14 módulos que transforman cómo piensas, diseñas y construyes
+            {t(
+              "14 módulos que transforman cómo piensas, diseñas y construyes",
+              "14 modules that transform how you think, design, and build"
+            )}
           </h2>
           <p className="max-w-2xl mx-auto text-lg text-foreground/50">
-            Cada módulo resuelve un problema real. Cuando termines, no solo sabrás más — sabrás hacer más.
+            {t(
+              "Cada módulo resuelve un problema real. Cuando termines, no solo sabrás más — sabrás hacer más.",
+              "Every module solves a real problem. When you finish, you won't just know more — you'll be able to do more."
+            )}
           </p>
         </motion.div>
 
