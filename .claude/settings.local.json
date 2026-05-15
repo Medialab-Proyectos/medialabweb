@@ -18,7 +18,8 @@
       "Bash(curl -s -o /dev/null -w \"/manifest.webmanifest %{http_code}\\\\n\" http://localhost:3000/manifest.webmanifest)",
       "Bash(curl -s -o /dev/null -w \"/blog %{http_code}\\\\n\" http://localhost:3000/blog)",
       "PowerShell($urls = \"/\", \"/sitemap.xml\", \"/robots.txt\", \"/manifest.webmanifest\", \"/blog\", \"/blog/arquitectura-percepcion\", \"/blog/adn-del-significado\", \"/blog/trono-de-la-decision\", \"/blog/influencia-sin-erosion\", \"/blog/psicologia-adopcion\", \"/blog/discovery-ia\", \"/blog/ux-fintech\", \"/blog/mvp-escala\", \"/portafolio\", \"/curso\", \"/llms.txt\", \"/llms-full.txt\"; foreach \\($u in $urls\\) { try { $r = Invoke-WebRequest -Uri \"http://localhost:3000$u\" -UseBasicParsing -TimeoutSec 30; Write-Output \"$\\($r.StatusCode\\)  $u\" } catch { Write-Output \"ERR   $u  $\\($_.Exception.Message\\)\" } })",
-      "PowerShell(Write-Output \"=== sitemap.xml ===\"; \\(Invoke-WebRequest -Uri \"http://localhost:3000/sitemap.xml\" -UseBasicParsing\\).Content | Select-String -Pattern \"<loc>\" | ForEach-Object { $_.Line.Trim\\(\\) }; Write-Output \"\"; Write-Output \"=== robots.txt ===\"; \\(Invoke-WebRequest -Uri \"http://localhost:3000/robots.txt\" -UseBasicParsing\\).Content)"
+      "PowerShell(Write-Output \"=== sitemap.xml ===\"; \\(Invoke-WebRequest -Uri \"http://localhost:3000/sitemap.xml\" -UseBasicParsing\\).Content | Select-String -Pattern \"<loc>\" | ForEach-Object { $_.Line.Trim\\(\\) }; Write-Output \"\"; Write-Output \"=== robots.txt ===\"; \\(Invoke-WebRequest -Uri \"http://localhost:3000/robots.txt\" -UseBasicParsing\\).Content)",
+      "Bash(npx tsc:*)"
     ]
   }
 }

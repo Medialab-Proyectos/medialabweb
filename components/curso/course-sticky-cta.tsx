@@ -2,9 +2,11 @@
 
 import { useState, useEffect } from "react"
 import { ArrowRight } from "lucide-react"
+import { useLanguage } from "@/lib/language-context"
 
 export function CourseStickyCTA() {
   const [visible, setVisible] = useState(false)
+  const { t } = useLanguage()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -37,7 +39,7 @@ export function CourseStickyCTA() {
           onClick={handleClick}
           className="flex items-center justify-center gap-2 w-full h-12 rounded-full bg-[var(--magenta)] text-white text-[15px] font-semibold shadow-[0_10px_28px_-8px_rgba(232,117,26,0.55)] active:scale-[0.98] transition-transform"
         >
-          Inscribirme al curso
+          {t("Inscribirme al curso", "Enroll in the course")}
           <ArrowRight size={16} />
         </a>
       </div>

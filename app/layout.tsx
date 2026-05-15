@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     'MVP para startups', 'diseño UX para fintech', 'CRO optimización de conversión',
     'SEO técnico para SaaS', 'diseño emocional B2C', 'experiencia B2B',
     'AEO answer engine optimization', 'GEO generative engine optimization',
-    'curso UX con inteligencia artificial', 'Behavioral AI Experience Design',
+    'curso UX con inteligencia artificial', 'AI Experience Architect',
     'Zero UI Christian Benavides',
   ],
   authors: [{ name: 'Christian Benavides', url: 'https://medialab.design' }],

@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
 <body>
 <div class="container">
   <div class="header">
-    <h1>Nueva Inscripcion — Curso Behavioral AI Experience Design</h1>
+    <h1>Nueva Inscripcion — Curso AI Experience Architect</h1>
     <p>Un nuevo estudiante quiere registrarse al curso</p>
   </div>
   <div class="body">
@@ -92,11 +92,11 @@ export async function POST(req: NextRequest) {
   <div class="header">
     <div class="logo">Media<span>Lab</span></div>
     <h1>Tu registro ha sido recibido</h1>
-    <p>Behavioral AI Experience Design &mdash; UX Prompt Design</p>
+    <p>AI Experience Architect &mdash; UX Prompt Design</p>
   </div>
   <div class="body">
     <div class="highlight">
-      <p>Hola <strong>${name}</strong>,<br><br>Hemos recibido tu registro para el curso <strong>Behavioral AI Experience Design</strong>. Nuestro equipo revisara tu perfil y te contactara en las proximas <strong>48 horas</strong> con los detalles de inscripcion, metodos de pago y fecha de inicio.</p>
+      <p>Hola <strong>${name}</strong>,<br><br>Hemos recibido tu registro para el curso <strong>AI Experience Architect</strong>. Nuestro equipo revisara tu perfil y te contactara en las proximas <strong>48 horas</strong> con los detalles de inscripcion, metodos de pago y fecha de inicio.</p>
     </div>
 
     <div class="info-box">
@@ -136,7 +136,7 @@ export async function POST(req: NextRequest) {
       resend.emails.send({
         from: FROM_EMAIL,
         to: [email],
-        subject: "Registro recibido — Behavioral AI Experience Design | MediaLab",
+        subject: "Registro recibido — AI Experience Architect | MediaLab",
         html: studentHtml,
       }),
     ])

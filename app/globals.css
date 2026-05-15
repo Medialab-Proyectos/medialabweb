@@ -31,9 +31,7 @@
   --ring: #E8751A;
   --radius: 0.5rem;
 
-  /* Section backgrounds — ALWAYS dark for impact (hero, course hero, etc.)
-     keeps brand consistency across light/dark themes and prevents
-     hardcoded text-white from disappearing on light backgrounds */
+  /* Section backgrounds — always dark (footer, marquee, etc.) */
   --surface-dark: oklch(0.05 0 0);
   --surface-dark-foreground: oklch(0.97 0 0);
   --surface-mid: oklch(0.1 0 0);

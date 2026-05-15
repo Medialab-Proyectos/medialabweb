@@ -34,7 +34,7 @@ export function CourseCta() {
 
             <p className="max-w-xl text-lg text-foreground/50 leading-relaxed mb-8">
               {t("30 cupos. 8 semanas. Al terminar, eres un", "30 spots. 8 weeks. When you finish, you're a")}{" "}
-              <span className="text-[var(--cyan)] font-medium">Behavioral AI Experience Designer</span>{" "}
+              <span className="text-[var(--cyan)] font-medium">AI Experience Architect</span>{" "}
               {t("y", "and")}{" "}
               <span className="text-[var(--magenta)] font-medium">UX Prompt Designer</span>.
             </p>
@@ -52,8 +52,8 @@ export function CourseCta() {
             {/* WhatsApp link */}
             <a
               href={t(
-                "https://wa.me/573054009505?text=Hola%2C%20quiero%20información%20sobre%20el%20curso%20Behavioral%20AI%20Experience%20Design",
-                "https://wa.me/573054009505?text=Hi%2C%20I%20want%20info%20about%20the%20Behavioral%20AI%20Experience%20Design%20course"
+                "https://wa.me/573054009505?text=Hola%2C%20quiero%20información%20sobre%20el%20curso%20AI%20Experience%20Architect",
+                "https://wa.me/573054009505?text=Hi%2C%20I%20want%20info%20about%20the%20AI%20Experience%20Architect%20course"
               )}
               target="_blank"
               rel="noopener noreferrer"

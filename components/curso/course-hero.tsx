@@ -21,16 +21,16 @@ function OrbitalGraphic() {
   return (
     <div className="relative w-[320px] h-[320px] md:w-[400px] md:h-[400px] mx-auto">
       {/* Phase labels on edges */}
-      <span className="absolute -top-7 left-1/2 -translate-x-1/2 text-[9px] tracking-[0.18em] uppercase text-foreground/20 font-medium">Discovery</span>
-      <span className="absolute top-1/2 -right-12 md:-right-14 -translate-y-1/2 text-[9px] tracking-[0.18em] uppercase text-foreground/20 font-medium rotate-90">Design</span>
-      <span className="absolute -bottom-7 left-1/2 -translate-x-1/2 text-[9px] tracking-[0.18em] uppercase text-foreground/20 font-medium">Build</span>
-      <span className="absolute top-1/2 -left-12 md:-left-14 -translate-y-1/2 text-[9px] tracking-[0.18em] uppercase text-foreground/20 font-medium -rotate-90">Validate</span>
+      <span className="absolute -top-7 left-1/2 -translate-x-1/2 text-[9px] tracking-[0.18em] uppercase text-white/20 font-medium">Discovery</span>
+      <span className="absolute top-1/2 -right-12 md:-right-14 -translate-y-1/2 text-[9px] tracking-[0.18em] uppercase text-white/20 font-medium rotate-90">Design</span>
+      <span className="absolute -bottom-7 left-1/2 -translate-x-1/2 text-[9px] tracking-[0.18em] uppercase text-white/20 font-medium">Build</span>
+      <span className="absolute top-1/2 -left-12 md:-left-14 -translate-y-1/2 text-[9px] tracking-[0.18em] uppercase text-white/20 font-medium -rotate-90">Validate</span>
 
       {/* Outer ring */}
       <motion.div
         animate={{ rotate: 360 }}
         transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
-        className="absolute inset-0 rounded-full border border-foreground/[0.06]"
+        className="absolute inset-0 rounded-full border border-white/[0.06]"
       >
         <motion.div animate={{ opacity: [0.5, 1, 0.5] }} transition={{ duration: 2, repeat: Infinity }}
           className="absolute -top-2 left-1/2 -translate-x-1/2 w-3.5 h-3.5 rounded-full"
@@ -44,7 +44,7 @@ function OrbitalGraphic() {
       <motion.div
         animate={{ rotate: -360 }}
         transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
-        className="absolute inset-14 md:inset-[4.5rem] rounded-full border border-foreground/[0.08]"
+        className="absolute inset-14 md:inset-[4.5rem] rounded-full border border-white/[0.08]"
       >
         <motion.div animate={{ opacity: [0.5, 1, 0.5] }} transition={{ duration: 2.5, repeat: Infinity }}
           className="absolute top-1/2 -right-1.5 -translate-y-1/2 w-3 h-3 rounded-full"
@@ -57,11 +57,11 @@ function OrbitalGraphic() {
       {/* Center — result text (well inside inner ring) */}
       <div className="absolute inset-[5rem] md:inset-[6.5rem] flex items-center justify-center">
         <div className="text-center">
-          <p className="text-[9px] tracking-[0.2em] uppercase text-foreground/25 mb-2">{t("Lo que lograrás", "What you'll achieve")}</p>
+          <p className="text-[9px] tracking-[0.2em] uppercase text-white/25 mb-2">{t("Lo que lograrás", "What you'll achieve")}</p>
           <p className="text-3xl md:text-4xl font-bold font-display leading-none" style={{ color: 'var(--cyan)' }}>90%</p>
-          <p className="text-[11px] text-foreground/40 mb-2">{t("productividad", "productivity")}</p>
+          <p className="text-[11px] text-white/40 mb-2">{t("productividad", "productivity")}</p>
           <p className="text-3xl md:text-4xl font-bold font-display leading-none" style={{ color: 'var(--magenta)' }}>10%</p>
-          <p className="text-[11px] text-foreground/40">{t("esfuerzo", "effort")}</p>
+          <p className="text-[11px] text-white/40">{t("esfuerzo", "effort")}</p>
         </div>
       </div>
 
@@ -90,11 +90,11 @@ export function CourseHero() {
   ]
 
   return (
-    <section ref={ref} className="relative min-h-[90vh] md:min-h-screen flex items-center overflow-hidden bg-background">
+    <section ref={ref} className="relative min-h-[90vh] md:min-h-screen flex items-center overflow-hidden bg-[var(--surface-dark)] text-[var(--surface-dark-fg)]">
       {/* Background image */}
       <div className="absolute inset-0">
-        <Image src="/images/curso/hero-team.png" alt="" fill className="object-cover opacity-[0.12]" priority />
-        <div className="absolute inset-0 bg-gradient-to-b from-[var(--background)]/95 via-[var(--background)]/75 to-[var(--background)]" />
+        <Image src="/images/curso/hero-team.png" alt="" fill className="object-cover opacity-[0.22]" priority />
+        <div className="absolute inset-0 bg-gradient-to-b from-[var(--surface-dark)]/80 via-[var(--surface-dark)]/60 to-[var(--surface-dark)]/95" />
       </div>
       {/* Background effects */}
       <div className="absolute inset-0">
@@ -106,17 +106,17 @@ export function CourseHero() {
         <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-10 md:gap-16 items-center">
           {/* Left — Text */}
           <motion.div variants={stagger} initial="hidden" animate="visible">
-            {/* Eyebrow */}
+            {/* Eyebrow — course name */}
             <motion.div variants={fadeUp} className="flex items-center gap-3 mb-8">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[var(--magenta)]/20 bg-[var(--magenta)]/[0.06]">
-                <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: 'var(--magenta)' }} />
-                <span className="text-[11px] tracking-[0.12em] uppercase font-medium" style={{ color: 'var(--magenta)' }}>{t("Cohorte 01 · Solo 30 cupos", "Cohort 01 · Only 30 seats")}</span>
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[var(--cyan)]/20 bg-[var(--cyan)]/[0.06]">
+                <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: 'var(--cyan)' }} />
+                <span className="text-[11px] tracking-[0.12em] uppercase font-medium" style={{ color: 'var(--cyan)' }}>{t("Curso · Arquitecto de Experiencia IA", "Course · AI Experience Architect")}</span>
               </div>
-              <span className="text-[11px] text-foreground/30 hidden sm:inline">by MediaLab Ingeniería</span>
+              <span className="text-[11px] text-white/30 hidden sm:inline">by MediaLab Ingeniería</span>
             </motion.div>
 
             {/* Headline */}
-            <motion.h1 variants={fadeUp} className="text-3xl sm:text-4xl md:text-[2.75rem] lg:text-5xl font-bold tracking-tight leading-[1.12] text-foreground mb-5 font-display">
+            <motion.h1 variants={fadeUp} className="text-3xl sm:text-4xl md:text-[2.75rem] lg:text-5xl font-bold tracking-tight leading-[1.12] text-white mb-5 font-display">
               {t("No necesitas más herramientas.", "You don't need more tools.")}
               <br />
               <span className="bg-gradient-to-r from-[var(--magenta)] to-[var(--cyan)] bg-clip-text text-transparent">
@@ -128,9 +128,9 @@ export function CourseHero() {
             </motion.h1>
 
             {/* Value prop — short, direct */}
-            <motion.p variants={fadeUp} className="text-base md:text-lg text-foreground/75 leading-relaxed mb-6 max-w-lg">
-              {t("12 fases para que ", "12 phases so that ")}
-              <span className="text-foreground font-medium">{t("tú dirijas", "you direct")}</span>
+            <motion.p variants={fadeUp} className="text-base md:text-lg text-white/75 leading-relaxed mb-6 max-w-lg">
+              {t("9 módulos para que ", "9 modules so that ")}
+              <span className="text-white font-medium">{t("tú dirijas", "you direct")}</span>
               {t(" y la IA ejecute. Aprende a investigar, diseñar y validar productos reales.", " and AI executes. Learn to research, design, and validate real products.")}
             </motion.p>
 
@@ -144,7 +144,7 @@ export function CourseHero() {
                 {t("Registrarme al curso →", "Register for the course →")}
               </a>
               <a
-                href="https://wa.me/573054009505?text=Hola%2C%20quiero%20información%20sobre%20el%20curso%20Behavioral%20AI%20Experience%20Design"
+                href="https://wa.me/573054009505?text=Hola%2C%20quiero%20información%20sobre%20el%20curso%20AI%20Experience%20Architect"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 px-7 py-4 text-sm font-semibold rounded-full transition-all duration-300 hover:scale-[1.03] active:scale-95 border border-[var(--cyan)]/40 text-[var(--cyan)] hover:bg-[var(--cyan)]/10"
@@ -153,19 +153,22 @@ export function CourseHero() {
               </a>
             </motion.div>
 
-            <motion.p variants={fadeUp} className="text-xs text-foreground/55 mb-7 flex items-center gap-2">
+            <motion.p variants={fadeUp} className="text-xs text-white/55 mb-2 flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
               {t(
                 "Precio de lanzamiento · Garantía la primera semana",
                 "Launch price · First-week guarantee"
               )}
             </motion.p>
+            <motion.p variants={fadeUp} className="text-[11px] text-white/30 mb-7">
+              {t("Cohorte 01 · Solo 30 cupos", "Cohort 01 · Only 30 seats")}
+            </motion.p>
 
             {/* Role pills — hidden on mobile */}
             <motion.div variants={fadeUp} className="hidden sm:flex flex-wrap items-center gap-2 mb-7">
-              <span className="text-[10px] tracking-[0.12em] uppercase text-foreground/40 font-medium mr-1">{t("Te conviertes en:", "You become:")}</span>
+              <span className="text-[10px] tracking-[0.12em] uppercase text-white/40 font-medium mr-1">{t("Te conviertes en:", "You become:")}</span>
               <span className="px-3 py-1 rounded-full border border-[var(--cyan)]/25 bg-[var(--cyan)]/[0.06] text-[11px] font-semibold" style={{ color: 'var(--cyan)' }}>
-                Behavioral AI Experience Designer
+                AI Experience Architect
               </span>
               <span className="px-3 py-1 rounded-full border border-[var(--magenta)]/25 bg-[var(--magenta)]/[0.06] text-[11px] font-semibold" style={{ color: 'var(--magenta)' }}>
                 UX Prompt Designer
@@ -173,13 +176,13 @@ export function CourseHero() {
             </motion.div>
 
             {/* Trust badges — hidden on mobile */}
-            <motion.div variants={fadeUp} className="hidden sm:flex flex-col sm:flex-row items-start gap-4 sm:gap-6 pt-5 border-t border-foreground/[0.08]">
+            <motion.div variants={fadeUp} className="hidden sm:flex flex-col sm:flex-row items-start gap-4 sm:gap-6 pt-5 border-t border-white/[0.08]">
               {trustBadges.map((badge, i) => {
                 const Icon = badge.icon
                 return (
                   <div key={i} className="flex items-center gap-2">
-                    <Icon className="w-3.5 h-3.5 text-foreground/45" />
-                    <span className="text-xs text-foreground/55">{badge.text}</span>
+                    <Icon className="w-3.5 h-3.5 text-white/45" />
+                    <span className="text-xs text-white/55">{badge.text}</span>
                   </div>
                 )
               })}
@@ -200,7 +203,7 @@ export function CourseHero() {
 
       {/* Scroll indicator */}
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.5 }} className="absolute bottom-6 left-1/2 -translate-x-1/2">
-        <div className="w-5 h-7 rounded-full border border-foreground/15 flex justify-center pt-1">
+        <div className="w-5 h-7 rounded-full border border-white/15 flex justify-center pt-1">
           <motion.div animate={{ y: [0, 6, 0] }} transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }} className="w-0.5 h-1.5 rounded-full" style={{ background: 'var(--magenta)' }} />
         </div>
       </motion.div>

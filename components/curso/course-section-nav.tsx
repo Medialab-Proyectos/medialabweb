@@ -19,7 +19,7 @@ export function CourseSectionNav() {
     { id: "herramientas", label: t("Herramientas", "Tools") },
     { id: "testimonios", label: t("Testimonios", "Testimonials") },
     { id: "faq", label: "FAQ" },
-    { id: "reservar", label: t("Reservar", "Reserve") },
+    { id: "registro", label: t("Reservar", "Reserve") },
   ]
 
   useEffect(() => {

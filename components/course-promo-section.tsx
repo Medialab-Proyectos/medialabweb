@@ -16,8 +16,8 @@ import {
 const highlights = [
   {
     icon: Layers,
-    titleEs: "12 fases metodológicas",
-    titleEn: "12 methodological phases",
+    titleEs: "9 módulos metodológicos",
+    titleEn: "9 methodological modules",
     descEs: "Un sistema completo para integrar IA en tu flujo de diseño y desarrollo — paso a paso.",
     descEn: "A complete system to integrate AI into your design and dev workflow — step by step.",
   },
@@ -113,8 +113,8 @@ export function CoursePromoSection() {
             {/* Subtext */}
             <p className="text-base md:text-lg text-white/50 leading-relaxed max-w-xl">
               {t(
-                "Nuestra metodología de 12 fases para diseñadores UX/UI, developers y startups que quieren usar IA como copiloto estratégico — no como reemplazo.",
-                "Our 12-phase methodology for UX/UI designers, developers, and startups that want to use AI as a strategic copilot — not a replacement."
+                "Nuestra metodología de 9 módulos para diseñadores UX/UI, developers y startups que quieren usar IA como copiloto estratégico — no como reemplazo.",
+                "Our 9-module methodology for UX/UI designers, developers, and startups that want to use AI as a strategic copilot — not a replacement."
               )}
             </p>
 

@@ -26,9 +26,9 @@ import { CourseStickyCTA } from "@/components/curso/course-sticky-cta"
  * 3. PROOF       → Testimonials: social proof EARLY (trust before explaining)
  * 4. MICRO-CTA   → Soft commitment — "¿Te identificas?"
  * 5. CONTRAST    → Comparison: traditional vs MediaLab — loss aversion
- * 6. SYSTEM      → Methodology: 12-phase system — authority + competence
+ * 6. SYSTEM      → Methodology: 9-module system — authority + competence
  * 7. MICRO-CTA   → Commitment escalation — "¿Quieres ver el programa?"
- * 8. VALUE       → Curriculum: 14 modules — tangible value
+ * 8. VALUE       → Curriculum: 9 modules — tangible value
  * 9. VISION      → Transformation: before vs after — aspirational identity
  * 10. ENABLEMENT → Tools: premium stack — value stacking
  * 11. TRUST      → Validation: academic + ethical — credibility

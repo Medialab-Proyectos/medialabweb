@@ -1,0 +1,282 @@
+Curso
+AI Experience Architect
+Diseño de Experiencias Inteligentes impulsadas por IA
+Metodología MediaLab
+
+Este curso transforma el framework de 9 etapas en una ruta de aprendizaje práctica y estratégica para diseñadores, UX researchers, developers, startups y equipos digitales que quieren construir productos impulsados por inteligencia artificial con enfoque humano, conductual y ético.
+
+El objetivo no es solo enseñar herramientas de IA, sino enseñar cómo construir aplicaciones completas mediante ciclos de evaluación continua, refinamiento automático y diseño centrado en comportamiento humano.
+
+ESTRUCTURA GENERAL DEL CURSO
+BLOQUE 1
+Diseño Funcional
+(Módulos 1 al 5)
+
+En este bloque el estudiante aprende a construir aplicaciones funcionales, comprensibles, accesibles y cognitivamente optimizadas usando IA como copiloto de diseño.
+
+BLOQUE 2
+Diseño para Masas
+(Módulos 6 al 9)
+
+En este bloque el estudiante aprende cómo diseñar productos para engagement, hábitos digitales, adopción masiva y diseño ético consciente.
+
+MÓDULO 1
+Investigación profunda impulsada por IA
+Objetivo
+
+Aprender a convertir una idea o problema en una base estratégica de experiencia digital usando IA.
+
+Qué aprenderán
+Cómo investigar ideas de negocio con IA
+Cómo detectar dolores reales de usuarios
+Cómo construir hipótesis UX
+Investigación contextual
+Behavioral UX básico
+Cómo usar ChatGPT para análisis profundo
+Cómo estructurar prompts de investigación
+Herramientas
+ChatGPT
+Claude
+Perplexity
+Reddit Research
+Quora Research
+Proyecto del módulo
+
+Crear el primer documento estratégico y conceptual de una aplicación impulsada por IA.
+
+MÓDULO 2
+Refinamiento investigativo y prototipado inteligente
+Objetivo
+
+Aprender a refinar aplicaciones usando investigación aplicada y simulaciones humanas.
+
+Qué aprenderán
+Protopersonas
+Personas IA
+Journey Maps
+Mapas de empatía
+Entrevistas asistidas por IA
+UXPilot
+Sistemas de diseño iniciales
+Arquitectura UX básica
+Herramientas
+UXPilot
+Figma
+Claude
+ChatGPT
+Proyecto del módulo
+
+Generar una primera versión refinada de la aplicación con flujos y pantallas iniciales.
+
+MÓDULO 3
+Auditoría técnica y recorridos cognitivos
+Objetivo
+
+Aprender cómo la IA puede detectar problemas técnicos y cognitivos antes de pruebas reales.
+
+Qué aprenderán
+ISO 9240
+WCAG 2.2
+Leyes UX
+Ergonomía digital
+Patrones UI
+Recorridos cognitivos
+Auditorías automáticas con IA
+Herramientas
+ChatGPT
+Claude
+Lighthouse
+Accessibility Tools
+Proyecto del módulo
+
+Realizar una auditoría técnica completa sobre la aplicación creada.
+
+MÓDULO 4
+Psicología visual y análisis cognitivo
+Objetivo
+
+Aprender cómo el diseño afecta la percepción y carga mental del usuario.
+
+Qué aprenderán
+GOMS
+KLM
+Peso visual
+Jerarquía visual
+Diseño psicológico
+Percepción cognitiva
+Optimización visual
+Herramientas
+Figma
+ChatGPT
+Claude
+IA de análisis visual
+Proyecto del módulo
+
+Optimizar la interfaz de la aplicación reduciendo carga cognitiva.
+
+MÓDULO 5
+Consolidación UX y adaptación al mercado
+Objetivo
+
+Aprender cómo convertir una app funcional en un producto listo para mercado.
+
+Qué aprenderán
+Teoría de Garrett
+Análisis de grafos
+Flujos huérfanos
+Microcopy UX
+Arquitectura avanzada
+Sistemas de diseño escalables
+Escalabilidad UX
+Herramientas
+Figma
+FigJam
+Claude
+ChatGPT
+Proyecto del módulo
+
+Construir la versión funcional madura de la aplicación.
+
+FIN DEL BLOQUE 1
+DISEÑO FUNCIONAL
+
+El estudiante ya es capaz de construir aplicaciones funcionales impulsadas por IA.
+
+MÓDULO 6
+Diseño conductual y economía del comportamiento
+Objetivo
+
+Aprender a diseñar experiencias para comportamiento humano y adopción masiva.
+
+Qué aprenderán
+Nudges
+Richard Thaler
+Cass Sunstein
+Sesgos cognitivos
+Framing
+Scarcity Effect
+Behavioral Design
+Persuasión ética
+Herramientas
+Claude
+ChatGPT
+IA Conductual
+Proyecto del módulo
+
+Rediseñar la aplicación usando principios de comportamiento humano.
+
+MÓDULO 7
+Engagement y formación de hábitos digitales
+Objetivo
+
+Aprender cómo diseñar productos que generen repetición y permanencia.
+
+Qué aprenderán
+Modelo Fogg
+Hooked Model
+Engagement loops
+Retención
+Motivación
+Trigger systems
+Gamificación útil
+Herramientas
+Figma
+IA de análisis conductual
+Claude
+ChatGPT
+Proyecto del módulo
+
+Optimizar la app para engagement y retención.
+
+MÓDULO 8
+Validación con usuarios reales y diseño ético
+Objetivo
+
+Aprender cómo validar aplicaciones maduras en contextos reales.
+
+Qué aprenderán
+SUS
+NPS
+CSAT
+Evaluaciones reales
+Diseño consciente
+Diseño ético
+Zero UI
+Tristan Harris
+Herramientas
+Maze
+Figma
+ChatGPT
+Plataformas de testing
+Proyecto del módulo
+
+Realizar pruebas reales sobre la aplicación y documentar hallazgos.
+
+MÓDULO 9
+Última frontera: IA adaptativa y diseño consciente
+Objetivo
+
+Aprender cómo construir experiencias digitales evolutivas y éticas.
+
+Qué aprenderán
+Diseño consciente
+IA adaptativa
+UX evolutivo
+Sistemas vivos
+Human-centered AI
+Ética digital avanzada
+Futuro del diseño UX + IA
+Herramientas
+Claude
+GPT
+Automatizaciones IA
+Sistemas adaptativos
+Proyecto del módulo
+
+Construir una experiencia final preparada para evolucionar continuamente mediante IA.
+
+PROYECTO FINAL DEL CURSO
+
+Cada estudiante desarrollará una aplicación impulsada por IA atravesando las 9 cajas del framework.
+
+El resultado final será:
+
+Una app funcional
+Una app evaluada técnicamente
+Una app refinada cognitivamente
+Una app optimizada para comportamiento humano
+Una app validada éticamente
+Una app preparada para mercado real
+PERFIL DEL ESTUDIANTE
+
+Este curso está diseñado para:
+
+Diseñadores UX/UI
+UX Researchers
+Product Designers
+Developers
+Startups
+Product Managers
+Equipos digitales
+Personas preocupadas por el impacto de la IA en el diseño
+DIFERENCIAL DEL CURSO
+
+Este curso no enseña únicamente prompts o herramientas.
+
+Enseña:
+
+Cómo pensar productos impulsados por IA
+Cómo usar IA como copiloto de diseño
+Cómo construir experiencias humanas en la era de automatización
+Cómo diseñar productos éticos y escalables
+Cómo transformar UX tradicional en UX evolutivo impulsado por IA
+RESULTADO FINAL DEL ESTUDIANTE
+
+Al finalizar, el estudiante será capaz de:
+
+Diseñar aplicaciones completas usando IA
+Refinar experiencias mediante auditorías automáticas
+Aplicar comportamiento humano en UX
+Diseñar para masas
+Construir productos éticos y conscientes
+Crear sistemas digitales evolutivos preparados para el futuro de la IA y la experiencia humana.

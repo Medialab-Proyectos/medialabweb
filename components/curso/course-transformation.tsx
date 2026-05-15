@@ -20,7 +20,7 @@ export function CourseTransformation() {
   ]
 
   const after = [
-    { label: t("Behavioral AI Experience Designer", "Behavioral AI Experience Designer"), desc: t("Diseñas experiencias donde la IA potencia la conexión humana, no la reemplaza", "You design experiences where AI amplifies human connection — it doesn't replace it") },
+    { label: t("AI Experience Architect", "AI Experience Architect"), desc: t("Diseñas experiencias donde la IA potencia la conexión humana, no la reemplaza", "You design experiences where AI amplifies human connection — it doesn't replace it") },
     { label: t("UX Prompt Designer", "UX Prompt Designer"), desc: t("Creas sistemas de prompts estratégicos que resuelven problemas reales de producto", "You create strategic prompt systems that solve real product problems") },
     { label: t("Estratégico", "Strategic"), desc: t("Cada decisión de diseño responde a un por qué conductual y un objetivo medible", "Every design decision answers a behavioral 'why' and a measurable goal") },
     { label: t("Diferencial", "Differentiated"), desc: t("Tu firma humana amplifica lo que la IA genera — tu criterio es tu ventaja competitiva", "Your human signature amplifies what AI generates — your judgment is your competitive edge") },
@@ -46,7 +46,7 @@ export function CourseTransformation() {
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground tracking-tight leading-snug font-display">
             {t("Entras como profesional curioso.", "You enter as a curious professional.")}{" "}
             <span className="bg-gradient-to-r from-[var(--cyan)] to-[var(--magenta)] bg-clip-text text-transparent">
-              {t("Sales como Behavioral AI Experience Designer.", "You leave as a Behavioral AI Experience Designer.")}
+              {t("Sales como AI Experience Architect.", "You leave as a AI Experience Architect.")}
             </span>
           </h2>
         </motion.div>

@@ -31,9 +31,9 @@ MediaLab Ingeniería diseña productos digitales humanos, indexables y medibles.
 
 UXBox es la plataforma inteligente de descubrimiento de producto de MediaLab. Analiza ideas de negocio y genera arquitectura de información, especificaciones funcionales y wireframes iniciales en 3-5 días. Prueba gratuita: https://medialab.design/#uxbox
 
-## Curso: Behavioral AI Experience Design — UX Prompt Design
+## Curso: AI Experience Architect — UX Prompt Design
 
-Curso premium de 8 semanas para diseñadores, developers, product managers y founders. Metodología de 12 fases / 14 módulos. Solo 30 cupos por cohorte. Precio de lanzamiento: USD 995 (regular USD 1,500). Instructor: Christian Benavides.
+Curso premium de 8 semanas para diseñadores, developers, product managers y founders. Metodología de 9 módulos en 2 bloques. Solo 30 cupos por cohorte. Precio de lanzamiento: USD 995 (regular USD 1,500). Instructor: Christian Benavides.
 
 Más información: https://medialab.design/curso
 

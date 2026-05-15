@@ -1,11 +1,11 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Behavioral AI Experience Design — Curso UX Prompt Design | MediaLab',
+  title: 'AI Experience Architect — Curso UX Prompt Design | MediaLab',
   description:
-    'Curso premium de 8 semanas: Behavioral AI Experience Design y UX Prompt Design. Aprende a usar IA como copiloto estrategico para disenar, investigar y construir productos digitales. Solo 30 cupos. Por MediaLab Ingenieria.',
+    'Curso premium de 8 semanas: AI Experience Architect y UX Prompt Design. Aprende a usar IA como copiloto estrategico para disenar, investigar y construir productos digitales. Solo 30 cupos. Por MediaLab Ingenieria.',
   keywords: [
-    'curso IA para disenadores', 'Behavioral AI Experience Design', 'UX Prompt Design',
+    'curso IA para disenadores', 'AI Experience Architect', 'UX Prompt Design',
     'curso UX con inteligencia artificial', 'diseno con IA', 'IA para UX/UI',
     'curso premium IA', 'pensamiento estrategico IA', 'IA y diseno humano',
     'frameworks IA', 'producto digital con IA', 'curso diseno conductual',
@@ -21,9 +21,9 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: 'Behavioral AI Experience Design — Curso UX Prompt Design',
+    title: 'AI Experience Architect — Curso UX Prompt Design',
     description:
-      'Curso premium de MediaLab: 8 semanas para dominar IA como copiloto estrategico en diseno UX/UI. 14 modulos, 30 cupos, certificacion profesional.',
+      'Curso premium de MediaLab: 8 semanas para dominar IA como copiloto estrategico en diseno UX/UI. 9 modulos, 30 cupos, certificacion profesional.',
     type: 'website',
     locale: 'es_CO',
     url: '/curso',
@@ -32,13 +32,13 @@ export const metadata: Metadata = {
         url: '/images/curso/hero-designer.png',
         width: 1200,
         height: 630,
-        alt: 'Behavioral AI Experience Design — Curso MediaLab Ingenieria',
+        alt: 'AI Experience Architect — Curso MediaLab Ingenieria',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Behavioral AI Experience Design — MediaLab',
+    title: 'AI Experience Architect — MediaLab',
     description: 'Curso de 8 semanas: aprende a usar IA para disenar productos con criterio humano. Solo 30 cupos.',
     images: ['/images/curso/hero-designer.png'],
   },
@@ -58,7 +58,7 @@ export default function CursoLayout({
           __html: JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'Course',
-            name: 'Behavioral AI Experience Design — UX Prompt Design',
+            name: 'AI Experience Architect — UX Prompt Design',
             description:
               'Curso premium de 8 semanas para disenadores, developers y startups. Aprende a usar IA como copiloto estrategico con la metodologia que logra 90% de productividad con 10% de esfuerzo.',
             provider: {
@@ -70,7 +70,7 @@ export default function CursoLayout({
             url: 'https://medialab.design/curso',
             educationalLevel: 'Intermediate',
             coursePrerequisites: 'Experiencia basica en diseno UX/UI o desarrollo de producto',
-            numberOfCredits: '14 modulos',
+            numberOfCredits: '9 modulos',
             hasCourseInstance: {
               '@type': 'CourseInstance',
               courseMode: 'Online',

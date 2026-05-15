@@ -5,25 +5,8 @@ import { Send, Loader2, CheckCircle, User, Mail, Briefcase, Sparkles, MessageSqu
 import { motion } from "framer-motion"
 import { useLanguage } from "@/lib/language-context"
 
-const roles = [
-  "Diseñador/a UX/UI",
-  "Product Designer",
-  "Developer / Ingeniero",
-  "Product Manager",
-  "Founder / CEO",
-  "Estudiante",
-  "Otro",
-]
-
-const experienceLevels = [
-  "Nunca he usado IA profesionalmente",
-  "He experimentado con ChatGPT / Claude",
-  "Uso IA regularmente en mi trabajo",
-  "Integro IA en flujos de producto",
-]
-
 export function CourseRegisterForm() {
-  const { localized } = useLanguage()
+  const { t, localized } = useLanguage()
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [role, setRole] = useState("")
@@ -33,17 +16,34 @@ export function CourseRegisterForm() {
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState("")
 
+  const roles = [
+    t("Diseñador/a UX/UI", "UX/UI Designer"),
+    "Product Designer",
+    t("Developer / Ingeniero", "Developer / Engineer"),
+    "Product Manager",
+    "Founder / CEO",
+    t("Estudiante", "Student"),
+    t("Otro", "Other"),
+  ]
+
+  const experienceLevels = [
+    t("Nunca he usado IA profesionalmente", "I've never used AI professionally"),
+    t("He experimentado con ChatGPT / Claude", "I've experimented with ChatGPT / Claude"),
+    t("Uso IA regularmente en mi trabajo", "I use AI regularly in my work"),
+    t("Integro IA en flujos de producto", "I integrate AI into product workflows"),
+  ]
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
 
     if (!name.trim() || !email.trim()) {
-      setError("Nombre y email son obligatorios.")
+      setError(t("Nombre y email son obligatorios.", "Name and email are required."))
       return
     }
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setError("Ingresa un email válido.")
+      setError(t("Ingresa un email válido.", "Enter a valid email."))
       return
     }
 
@@ -58,10 +58,10 @@ export function CourseRegisterForm() {
       if (res.ok && data.success) {
         setSubmitted(true)
       } else {
-        setError(data.error || "Error al enviar. Intenta de nuevo.")
+        setError(data.error || t("Error al enviar. Intenta de nuevo.", "Error submitting. Try again."))
       }
     } catch {
-      setError("Error de conexión. Intenta de nuevo.")
+      setError(t("Error de conexión. Intenta de nuevo.", "Connection error. Try again."))
     } finally {
       setLoading(false)
     }
@@ -75,13 +75,13 @@ export function CourseRegisterForm() {
           <CheckCircle size={28} className="text-white" />
         </div>
         <h3 className="text-xl font-bold text-foreground mb-3 font-display">
-          ¡Registro recibido!
+          {t("¡Registro recibido!", "Registration received!")}
         </h3>
         <p className="text-foreground/50 text-sm leading-relaxed mb-3">
-          Gracias, <span className="text-foreground font-medium">{name}</span>. Te contactaremos en las próximas 48 horas con los detalles de inscripción.
+          {t("Gracias, ", "Thanks, ")}<span className="text-foreground font-medium">{name}</span>{t(". Te contactaremos en las próximas 48 horas con los detalles de inscripción.", ". We'll contact you within 48 hours with enrollment details.")}
         </p>
         <p className="text-xs text-foreground/30">
-          Revisa tu bandeja de entrada y spam por el email de confirmación.
+          {t("Revisa tu bandeja de entrada y spam por el email de confirmación.", "Check your inbox and spam folder for the confirmation email.")}
         </p>
       </motion.div>
     )
@@ -89,22 +89,22 @@ export function CourseRegisterForm() {
 
   return (
     <div className="p-6 md:p-8 rounded-2xl border border-foreground/[0.08] bg-foreground/[0.03] backdrop-blur-sm">
-      <h3 className="text-lg font-bold text-foreground mb-1 font-display">Reserva tu lugar</h3>
-      <p className="text-xs text-foreground/40 mb-6">Completa el formulario y te contactaremos con los detalles.</p>
+      <h3 className="text-lg font-bold text-foreground mb-1 font-display">{t("Reserva tu lugar", "Reserve your spot")}</h3>
+      <p className="text-xs text-foreground/40 mb-6">{t("Completa el formulario y te contactaremos con los detalles.", "Fill out the form and we'll contact you with the details.")}</p>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Name */}
         <div className="space-y-1.5">
           <label htmlFor="course-name" className="flex items-center gap-1.5 text-xs font-medium text-foreground/60">
             <User size={12} style={{ color: 'var(--magenta)' }} />
-            Nombre completo <span className="text-[var(--magenta)]">*</span>
+            {t("Nombre completo", "Full name")} <span className="text-[var(--magenta)]">*</span>
           </label>
           <input
             id="course-name"
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="Tu nombre completo"
+            placeholder={t("Tu nombre completo", "Your full name")}
             required
             className="w-full px-3.5 py-3 rounded-xl bg-foreground/[0.05] border border-foreground/[0.08] text-foreground placeholder:text-foreground/25 focus:outline-none focus:border-[var(--magenta)]/40 focus:bg-foreground/[0.07] transition-all duration-200 text-sm"
           />
@@ -121,7 +121,7 @@ export function CourseRegisterForm() {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="tu@email.com"
+            placeholder={t("tu@email.com", "your@email.com")}
             required
             className="w-full px-3.5 py-3 rounded-xl bg-foreground/[0.05] border border-foreground/[0.08] text-foreground placeholder:text-foreground/25 focus:outline-none focus:border-[var(--magenta)]/40 focus:bg-foreground/[0.07] transition-all duration-200 text-sm"
           />
@@ -131,7 +131,7 @@ export function CourseRegisterForm() {
         <div className="space-y-1.5">
           <label htmlFor="course-role" className="flex items-center gap-1.5 text-xs font-medium text-foreground/60">
             <Briefcase size={12} style={{ color: 'var(--cyan)' }} />
-            Rol profesional
+            {t("Rol profesional", "Professional role")}
           </label>
           <select
             id="course-role"
@@ -139,7 +139,7 @@ export function CourseRegisterForm() {
             onChange={(e) => setRole(e.target.value)}
             className="w-full px-3.5 py-3 rounded-xl bg-foreground/[0.05] border border-foreground/[0.08] text-foreground focus:outline-none focus:border-[var(--cyan)]/40 focus:bg-foreground/[0.07] transition-all duration-200 text-sm appearance-none cursor-pointer"
           >
-            <option value="" className="bg-background">Selecciona tu rol</option>
+            <option value="" className="bg-background">{t("Selecciona tu rol", "Select your role")}</option>
             {roles.map((r) => (
               <option key={r} value={r} className="bg-background">{r}</option>
             ))}
@@ -150,7 +150,7 @@ export function CourseRegisterForm() {
         <div className="space-y-1.5">
           <label htmlFor="course-experience" className="flex items-center gap-1.5 text-xs font-medium text-foreground/60">
             <Sparkles size={12} style={{ color: 'var(--cyan)' }} />
-            Experiencia con IA
+            {t("Experiencia con IA", "AI experience")}
           </label>
           <select
             id="course-experience"
@@ -158,7 +158,7 @@ export function CourseRegisterForm() {
             onChange={(e) => setExperience(e.target.value)}
             className="w-full px-3.5 py-3 rounded-xl bg-foreground/[0.05] border border-foreground/[0.08] text-foreground focus:outline-none focus:border-[var(--cyan)]/40 focus:bg-foreground/[0.07] transition-all duration-200 text-sm appearance-none cursor-pointer"
           >
-            <option value="" className="bg-background">Selecciona tu nivel</option>
+            <option value="" className="bg-background">{t("Selecciona tu nivel", "Select your level")}</option>
             {experienceLevels.map((l) => (
               <option key={l} value={l} className="bg-background">{l}</option>
             ))}
@@ -169,13 +169,13 @@ export function CourseRegisterForm() {
         <div className="space-y-1.5">
           <label htmlFor="course-motivation" className="flex items-center gap-1.5 text-xs font-medium text-foreground/60">
             <MessageSquare size={12} style={{ color: 'var(--magenta)' }} />
-            ¿Qué te motiva? <span className="text-foreground/30 text-xs">(opcional)</span>
+            {t("¿Qué te motiva?", "What motivates you?")} <span className="text-foreground/30 text-xs">{t("(opcional)", "(optional)")}</span>
           </label>
           <textarea
             id="course-motivation"
             value={motivation}
             onChange={(e) => setMotivation(e.target.value)}
-            placeholder="Cuéntanos brevemente..."
+            placeholder={t("Cuéntanos brevemente...", "Tell us briefly...")}
             rows={2}
             className="w-full px-3.5 py-3 rounded-xl bg-foreground/[0.05] border border-foreground/[0.08] text-foreground placeholder:text-foreground/25 focus:outline-none focus:border-[var(--magenta)]/40 focus:bg-foreground/[0.07] transition-all duration-200 text-sm resize-none"
           />
@@ -198,19 +198,19 @@ export function CourseRegisterForm() {
           {loading ? (
             <>
               <Loader2 size={16} className="animate-spin" />
-              Enviando...
+              {t("Enviando...", "Sending...")}
             </>
           ) : (
             <>
               <Send size={16} />
-              Registrarme al curso
+              {t("Registrarme al curso", "Register for the course")}
             </>
           )}
         </button>
 
         <p className="text-[10px] text-foreground/20 text-center leading-relaxed">
-          Al registrarte aceptas nuestra{" "}
-          <a href={localized("/politica-de-privacidad")} className="underline hover:text-foreground/40 transition-colors">política de privacidad</a>.
+          {t("Al registrarte aceptas nuestra ", "By registering you accept our ")}
+          <a href={localized("/politica-de-privacidad")} className="underline hover:text-foreground/40 transition-colors">{t("política de privacidad", "privacy policy")}</a>.
         </p>
       </form>
     </div>

@@ -2,15 +2,13 @@
 
 import { useRef, useState } from "react"
 import { motion, useInView, AnimatePresence } from "framer-motion"
-import { Search, Target, MessageSquare, Lightbulb, Users, Layers, Cpu, Eye, Filter, Rocket, LayoutGrid, Diamond } from "lucide-react"
+import { Search, Layers, ShieldCheck, Brain, Rocket, Users, Repeat, ClipboardCheck, Sparkles } from "lucide-react"
 import Image from "next/image"
 import { useLanguage } from "@/lib/language-context"
 
 const stageStyles: Record<string, { border: string; bg: string; text: string; dot: string }> = {
   cyan:    { border: "border-[var(--cyan)]/20", bg: "bg-[var(--cyan)]/[0.06]", text: "text-[var(--cyan)]", dot: "bg-[var(--cyan)]" },
   magenta: { border: "border-[var(--magenta)]/20", bg: "bg-[var(--magenta)]/[0.06]", text: "text-[var(--magenta)]", dot: "bg-[var(--magenta)]" },
-  amber:   { border: "border-amber-500/20", bg: "bg-amber-500/[0.06]", text: "text-amber-400", dot: "bg-amber-400" },
-  violet:  { border: "border-violet-500/20", bg: "bg-violet-500/[0.06]", text: "text-violet-400", dot: "bg-violet-400" },
 }
 
 export function CourseMethodology() {
@@ -20,25 +18,146 @@ export function CourseMethodology() {
   const { t } = useLanguage()
 
   const stages = [
-    { label: t("Discovery", "Discovery"), color: "cyan" },
-    { label: t("Creación", "Creation"), color: "magenta" },
-    { label: t("Validación", "Validation"), color: "amber" },
-    { label: t("Entrega", "Delivery"), color: "violet" },
+    { label: t("Diseño Funcional", "Functional Design"), color: "cyan" },
+    { label: t("Diseño para Masas", "Design for Masses"), color: "magenta" },
   ]
 
   const phases = [
-    { id: 1, stage: 0, icon: Search, name: t("Discovery", "Discovery"), subtitle: t("Entendimiento profundo", "Deep understanding"), description: t("Investigación del problema, contexto del usuario y oportunidades de diseño. Defines el terreno antes de generar nada.", "Problem research, user context, and design opportunities. You define the terrain before generating anything."), outputs: [t("Mapa de contexto", "Context map"), t("User insights", "User insights"), t("Brief estratégico", "Strategic brief")], tools: ["ChatGPT", "Claude", "Miro"] },
-    { id: 2, stage: 0, icon: Target, name: t("Problem Framing", "Problem Framing"), subtitle: t("Definición estructurada", "Structured definition"), description: t("Transformas la complejidad en un reto de diseño accionable. El criterio humano define qué vale la pena resolver.", "You turn complexity into an actionable design challenge. Human judgment defines what's worth solving."), outputs: [t("Problem statement", "Problem statement"), t("Hipótesis de diseño", "Design hypotheses"), t("Criterios de éxito", "Success criteria")], tools: ["Figma", "Claude", "FigJam"] },
-    { id: 3, stage: 0, icon: MessageSquare, name: t("Prompt Systems", "Prompt Systems"), subtitle: t("Diseño de sistemas de prompts", "Prompt system design"), description: t("Diseñas sistemas de prompts estratégicos — no copias plantillas. Cada prompt responde a un objetivo de diseño claro.", "You design strategic prompt systems — not copy templates. Every prompt serves a clear design goal."), outputs: [t("Framework de prompts", "Prompt framework"), t("Librería de contextos", "Context library"), t("Cadenas de iteración", "Iteration chains")], tools: ["ChatGPT", "Claude", "Cursor"] },
-    { id: 4, stage: 1, icon: Lightbulb, name: t("AI Ideation", "AI Ideation"), subtitle: t("Generación de opciones con IA", "Option generation with AI"), description: t("La IA genera decenas de posibilidades en minutos. Tú aprendes a evaluar cuáles tienen sentido real para el usuario.", "AI generates dozens of possibilities in minutes. You learn to evaluate which ones make real sense for the user."), outputs: [t("Opciones de diseño", "Design options"), t("Variantes de concepto", "Concept variants"), t("Divergencia controlada", "Controlled divergence")], tools: ["Midjourney", "v0", "Figma AI"] },
-    { id: 5, stage: 1, icon: Users, name: t("User Validation", "User Validation"), subtitle: t("Validación con usuarios reales", "Validation with real users"), description: t("Antes de enamorarte de una idea, la enfrentas a usuarios reales. La IA genera — tú decides con evidencia.", "Before falling in love with an idea, you confront it with real users. AI generates — you decide with evidence."), outputs: [t("Feedback cualitativo", "Qualitative feedback"), t("Mapa de validación", "Validation map"), t("Decisiones documentadas", "Documented decisions")], tools: ["Figma", "Maze", "Loom"] },
-    { id: 6, stage: 1, icon: Layers, name: t("Experience Refinement", "Experience Refinement"), subtitle: t("Refinamiento de la experiencia", "Experience refinement"), description: t("Iteras con criterio: cada cambio tiene una razón emocional, funcional y estratégica.", "You iterate with judgment: every change has an emotional, functional, and strategic reason."), outputs: [t("Prototipo refinado", "Refined prototype"), t("Flujos optimizados", "Optimized flows"), t("Sistema de interacciones", "Interaction system")], tools: ["Figma", "Framer", "Cursor"] },
-    { id: 7, stage: 2, icon: Cpu, name: t("Product Logic", "Product Logic"), subtitle: t("Lógica de producto", "Product logic"), description: t("Conectas diseño con negocio. Cada decisión de UX resuelve un objetivo medible. La IA ejecuta — tú defines la lógica.", "You connect design with business. Every UX decision solves a measurable goal. AI executes — you define the logic."), outputs: [t("Árbol de decisiones", "Decision tree"), t("Flujos de negocio", "Business flows"), t("Especificaciones técnicas", "Technical specs")], tools: ["Claude", "Cursor", "Lovable"] },
-    { id: 8, stage: 2, icon: Eye, name: t("Human Evaluation", "Human Evaluation"), subtitle: t("Evaluación humana del output", "Human evaluation of output"), description: t("Revisas todo lo que la IA generó con un framework de evaluación. Identificas lo que vale, lo que sobra y lo que falta.", "You review everything AI generated with an evaluation framework. You identify what's worth keeping, what's noise, and what's missing."), outputs: [t("Scorecards de evaluación", "Evaluation scorecards"), t("Análisis de calidad", "Quality analysis"), t("Reporte de criterio", "Judgment report")], tools: ["Figma", "Claude", "Notion"] },
-    { id: 9, stage: 2, icon: Filter, name: t("Strategic Filtering", "Strategic Filtering"), subtitle: t("Filtrado estratégico · Método 90-10", "Strategic filtering · 90-10 Method"), description: t("Aplicas la Metodología 90-10: logras el 90% de productividad con el 10% de esfuerzo. Automatizas lo repetitivo y te enfocas en lo único.", "You apply the 90-10 Methodology: you reach 90% productivity with 10% effort. You automate the repetitive and focus on the unique."), outputs: [t("Framework 90-10", "90-10 framework"), t("Criterios de filtrado", "Filtering criteria"), t("Propuesta diferencial", "Differential proposal")], tools: ["Claude", "Figma", "FigJam"] },
-    { id: 10, stage: 3, icon: Rocket, name: t("MVP Building", "MVP Building"), subtitle: t("Construcción del MVP", "MVP construction"), description: t("Construyes un producto funcional usando IA como copiloto de desarrollo. Velocidad con profundidad.", "You build a functional product using AI as a development copilot. Speed with depth."), outputs: [t("MVP funcional", "Functional MVP"), t("Sistema de componentes", "Component system"), t("Documentación técnica", "Technical documentation")], tools: ["Cursor", "v0", "Lovable"] },
-    { id: 11, stage: 3, icon: LayoutGrid, name: t("UX Systems", "UX Systems"), subtitle: t("Sistemas de diseño UX", "UX design systems"), description: t("Diseñas sistemas escalables que mantienen coherencia cuando la IA genera componentes.", "You design scalable systems that maintain coherence when AI generates components."), outputs: [t("Design system", "Design system"), t("Tokens", "Tokens"), t("Guía de componentes", "Component guide")], tools: ["Figma", "Storybook", "Framer"] },
-    { id: 12, stage: 3, icon: Diamond, name: t("Final Product Thinking", "Final Product Thinking"), subtitle: t("Pensamiento de producto final", "Final product thinking"), description: t("Integras todo: estrategia, diseño, validación y construcción. Tu producto final es humano, diferencial y potenciado por IA.", "You integrate everything: strategy, design, validation, and construction. Your final product is human, differentiated, and AI-powered."), outputs: [t("Producto final", "Final product"), t("Caso de estudio", "Case study"), t("Portfolio piece", "Portfolio piece")], tools: ["All tools", t("Presentación", "Presentation")] },
+    {
+      id: 1, stage: 0, icon: Search,
+      name: t("Investigación profunda con IA", "Deep AI-powered research"),
+      subtitle: t("De la idea a la estrategia", "From idea to strategy"),
+      description: t(
+        "Aprendes a convertir una idea o problema en una base estratégica de experiencia digital usando IA. Investigas dolores reales, construyes hipótesis UX y estructuras prompts de investigación accionables.",
+        "You learn to turn an idea or problem into a strategic digital experience foundation using AI. You research real pain points, build UX hypotheses, and structure actionable research prompts."
+      ),
+      outputs: [
+        t("Documento estratégico", "Strategic document"),
+        t("Hipótesis UX", "UX hypotheses"),
+        t("Análisis de dolores reales", "Real pain point analysis"),
+      ],
+      tools: ["ChatGPT", "Claude", "Perplexity"],
+    },
+    {
+      id: 2, stage: 0, icon: Layers,
+      name: t("Prototipado inteligente", "Intelligent prototyping"),
+      subtitle: t("Del insight al primer diseño", "From insight to first design"),
+      description: t(
+        "Refinas aplicaciones usando investigación aplicada y simulaciones humanas. Creas protopersonas, journey maps, entrevistas simuladas con IA y sistemas de diseño iniciales.",
+        "You refine applications using applied research and human simulations. You create proto-personas, journey maps, AI-simulated interviews, and initial design systems."
+      ),
+      outputs: [
+        t("Protopersonas y personas IA", "Proto-personas and AI personas"),
+        t("Flujos navegables", "Navigable flows"),
+        t("Arquitectura UX base", "Base UX architecture"),
+      ],
+      tools: ["UXPilot", "Figma", "Claude"],
+    },
+    {
+      id: 3, stage: 0, icon: ShieldCheck,
+      name: t("Auditoría técnica y cognitiva", "Technical & cognitive audit"),
+      subtitle: t("Encuentra problemas antes que tus usuarios", "Find problems before your users do"),
+      description: t(
+        "La IA detecta problemas técnicos y cognitivos antes de pruebas reales. Aplicas ISO 9241, WCAG 2.2, recorridos cognitivos y auditorías automáticas.",
+        "AI detects technical and cognitive problems before real testing. You apply ISO 9241, WCAG 2.2, cognitive walkthroughs, and automated audits."
+      ),
+      outputs: [
+        t("Auditoría completa", "Complete audit"),
+        t("Hallazgos priorizados", "Prioritized findings"),
+        t("Recorridos cognitivos", "Cognitive walkthroughs"),
+      ],
+      tools: ["Lighthouse", "Claude", "ChatGPT"],
+    },
+    {
+      id: 4, stage: 0, icon: Brain,
+      name: t("Psicología visual y análisis cognitivo", "Visual psychology & cognitive analysis"),
+      subtitle: t("Diseña para el cerebro, no para el ojo", "Design for the brain, not the eye"),
+      description: t(
+        "Aprendes cómo el diseño afecta la percepción y carga mental del usuario. Aplicas modelos GOMS, KLM, peso visual, jerarquía y diseño psicológico.",
+        "You learn how design affects user perception and mental load. You apply GOMS and KLM models, visual weight, hierarchy, and psychological design."
+      ),
+      outputs: [
+        t("Interfaz optimizada", "Optimized interface"),
+        t("Carga cognitiva reducida", "Reduced cognitive load"),
+        t("Análisis de percepción", "Perception analysis"),
+      ],
+      tools: ["Figma", "Claude", "ChatGPT"],
+    },
+    {
+      id: 5, stage: 0, icon: Rocket,
+      name: t("Consolidación UX y mercado", "UX consolidation & market readiness"),
+      subtitle: t("De app funcional a producto real", "From functional app to real product"),
+      description: t(
+        "Conviertes una app funcional en un producto listo para mercado. Aplicas la Teoría de Garrett, análisis de grafos, microcopy UX y sistemas de diseño escalables.",
+        "You turn a functional app into a market-ready product. You apply Garrett's theory, graph analysis, UX microcopy, and scalable design systems."
+      ),
+      outputs: [
+        t("Versión funcional madura", "Mature functional version"),
+        t("Sistemas escalables", "Scalable systems"),
+        t("Microcopy UX", "UX microcopy"),
+      ],
+      tools: ["Figma", "FigJam", "Claude"],
+    },
+    {
+      id: 6, stage: 1, icon: Users,
+      name: t("Diseño conductual", "Behavioral design"),
+      subtitle: t("Haz que la gente actúe", "Make people act"),
+      description: t(
+        "Diseñas experiencias para comportamiento humano y adopción masiva. Aplicas nudges, sesgos cognitivos (Thaler & Sunstein), framing, scarcity y persuasión ética.",
+        "You design experiences for human behavior and mass adoption. You apply nudges, cognitive biases (Thaler & Sunstein), framing, scarcity, and ethical persuasion."
+      ),
+      outputs: [
+        t("Rediseño conductual", "Behavioral redesign"),
+        t("Mapa de sesgos aplicados", "Applied bias map"),
+        t("Persuasión ética", "Ethical persuasion"),
+      ],
+      tools: ["Claude", "ChatGPT"],
+    },
+    {
+      id: 7, stage: 1, icon: Repeat,
+      name: t("Engagement y hábitos digitales", "Engagement & digital habits"),
+      subtitle: t("Productos que generan repetición", "Products that generate repetition"),
+      description: t(
+        "Diseñas productos que generan repetición y permanencia. Aplicas el Modelo Fogg, Hooked Model de Nir Eyal, engagement loops y gamificación útil.",
+        "You design products that generate repetition and permanence. You apply the Fogg Model, Nir Eyal's Hook Model, engagement loops, and useful gamification."
+      ),
+      outputs: [
+        t("Loops de hábito", "Habit loops"),
+        t("Sistema de retención", "Retention system"),
+        t("Triggers contextuales", "Contextual triggers"),
+      ],
+      tools: ["Figma", "Claude", "ChatGPT"],
+    },
+    {
+      id: 8, stage: 1, icon: ClipboardCheck,
+      name: t("Validación real y diseño ético", "Real validation & ethical design"),
+      subtitle: t("Feedback real, no suposiciones", "Real feedback, not assumptions"),
+      description: t(
+        "Validas aplicaciones maduras en contextos reales. Aplicas métricas SUS, NPS, CSAT, diseño consciente (Tristan Harris) y principios de Zero UI.",
+        "You validate mature applications in real contexts. You apply SUS, NPS, CSAT metrics, conscious design (Tristan Harris), and Zero UI principles."
+      ),
+      outputs: [
+        t("Resultados de pruebas reales", "Real test results"),
+        t("Plan de iteración", "Iteration plan"),
+        t("Framework ético", "Ethical framework"),
+      ],
+      tools: ["Maze", "Figma", "ChatGPT"],
+    },
+    {
+      id: 9, stage: 1, icon: Sparkles,
+      name: t("IA adaptativa y diseño consciente", "Adaptive AI & conscious design"),
+      subtitle: t("Productos que evolucionan solos", "Products that evolve on their own"),
+      description: t(
+        "Construyes experiencias digitales evolutivas y éticas. Aplicas IA adaptativa, UX evolutivo, sistemas vivos y human-centered AI a escala.",
+        "You build evolutionary and ethical digital experiences. You apply adaptive AI, evolutionary UX, living systems, and human-centered AI at scale."
+      ),
+      outputs: [
+        t("Experiencia evolutiva", "Evolutionary experience"),
+        t("Sistema adaptativo", "Adaptive system"),
+        t("Producto final ético", "Ethical final product"),
+      ],
+      tools: ["Claude", "GPT", t("Automatizaciones IA", "AI Automations")],
+    },
   ]
 
   return (
@@ -57,7 +176,7 @@ export function CourseMethodology() {
             {t("El sistema que te faltaba", "The system you were missing")}
           </span>
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground tracking-tight leading-snug mb-5 font-display">
-            {t("12 fases. Un camino claro. ", "12 phases. One clear path. ")}
+            {t("9 módulos. 2 bloques. ", "9 modules. 2 blocks. ")}
             <span className="bg-gradient-to-r from-[var(--cyan)] to-[var(--magenta)] bg-clip-text text-transparent">
               {t("De la confusión al producto real.", "From confusion to real product.")}
             </span>
@@ -96,9 +215,11 @@ export function CourseMethodology() {
           {stages.map((stage, i) => {
             const s = stageStyles[stage.color]
             return (
-              <div key={i} className={`px-4 py-2 rounded-full ${s.border} ${s.bg} border`}>
+              <div key={i} className={`px-4 py-2 rounded-full ${s.border} ${s.bg} border whitespace-nowrap`}>
                 <span className={`text-xs font-medium ${s.text} tracking-wide`}>
-                  {String(i + 1).padStart(2, '0')} — {stage.label}
+                  <span className="hidden sm:inline">{t("Bloque", "Block")} {String(i + 1).padStart(2, '0')} — </span>
+                  <span className="sm:hidden">{t("B", "B")}{i + 1} · </span>
+                  {stage.label}
                 </span>
               </div>
             )
@@ -107,7 +228,7 @@ export function CourseMethodology() {
 
         {/* Timeline */}
         <div className="relative">
-          <div className="absolute left-6 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-[var(--cyan)]/20 via-[var(--magenta)]/20 to-violet-500/20 md:-translate-x-px" />
+          <div className="absolute left-6 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-[var(--cyan)]/20 via-[var(--magenta)]/20 to-[var(--magenta)]/10 md:-translate-x-px" />
 
           <div className="space-y-6 md:space-y-12">
             {phases.map((phase, i) => {
@@ -139,7 +260,7 @@ export function CourseMethodology() {
                           <div className={`w-8 h-8 rounded-lg ${s.bg} flex items-center justify-center shrink-0`}>
                             <Icon className={`w-4 h-4 ${s.text}`} />
                           </div>
-                          <span className={`text-xs font-mono ${s.text}`}>{t("Fase", "Phase")} {String(phase.id).padStart(2, '0')}</span>
+                          <span className={`text-xs font-mono ${s.text}`}>{t("Módulo", "Module")} {String(phase.id).padStart(2, '0')}</span>
                         </div>
                         <h3 className="text-xl font-bold text-foreground mb-1">{phase.name}</h3>
                         <p className="text-sm text-foreground/40 mb-3">{phase.subtitle}</p>
@@ -156,7 +277,7 @@ export function CourseMethodology() {
                               <p className="text-sm text-foreground/50 leading-relaxed mb-4 text-left">{phase.description}</p>
                               <div className="grid grid-cols-2 gap-3 text-left">
                                 <div>
-                                  <p className="text-[10px] uppercase tracking-wider text-foreground/30 mb-2">Outputs</p>
+                                  <p className="text-[10px] uppercase tracking-wider text-foreground/30 mb-2">{t("Resultados", "Outcomes")}</p>
                                   {phase.outputs.map((o, j) => (
                                     <p key={j} className="text-xs text-foreground/50 mb-1">→ {o}</p>
                                   ))}
@@ -186,6 +307,9 @@ export function CourseMethodology() {
               )
             })}
           </div>
+
+          {/* Checkpoint between blocks — visual separator in timeline */}
+          {/* Already handled by color transition in the timeline line */}
         </div>
       </div>
     </section>
