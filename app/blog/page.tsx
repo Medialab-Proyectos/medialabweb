@@ -5,7 +5,14 @@ export const metadata: Metadata = {
   title: "Blog de UX, IA y Producto Digital",
   description:
     "Ideas sobre diseño UX, inteligencia artificial, psicología del consumidor y productos digitales B2B/B2C por MediaLab Ingeniería. Lecturas para fundadores, diseñadores y product managers.",
-  alternates: { canonical: "/blog" },
+  alternates: {
+    canonical: "/blog",
+    languages: {
+      es: "/blog",
+      en: "/en/blog",
+      "x-default": "/blog",
+    },
+  },
   openGraph: {
     title: "Blog MediaLab — UX, IA y Producto Digital",
     description: "Artículos firmados sobre diseño consciente, IA aplicada al producto y comportamiento humano.",

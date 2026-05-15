@@ -22,7 +22,7 @@ export function CourseAudience() {
   ]
 
   return (
-    <section className="relative py-20 md:py-28 bg-[var(--surface-dark)] overflow-hidden">
+    <section className="relative py-20 md:py-28 bg-background overflow-hidden">
       <div ref={ref} className="relative z-10 max-w-6xl mx-auto px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -33,7 +33,7 @@ export function CourseAudience() {
           <span className="inline-block text-xs tracking-[0.2em] uppercase mb-4 font-display" style={{ color: 'var(--magenta)' }}>
             {t("¿Esto es para ti?", "Is this for you?")}
           </span>
-          <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-[var(--surface-dark-fg)] tracking-tight leading-tight mb-6 font-display">
+          <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-foreground tracking-tight leading-tight mb-6 font-display">
             {t("Si algo de esto te suena, sí.", "If any of this sounds familiar, yes.")}
           </h2>
           <p className="max-w-2xl mx-auto text-lg text-foreground/50">
@@ -62,7 +62,7 @@ export function CourseAudience() {
                   <div className="w-14 h-14 rounded-2xl bg-foreground/[0.03] group-hover:bg-[var(--magenta)]/10 mx-auto flex items-center justify-center mb-4 transition-colors duration-500">
                     <Icon className="w-6 h-6 text-foreground/30 group-hover:text-[var(--magenta)] transition-colors duration-500" />
                   </div>
-                  <h3 className="text-base font-semibold text-[var(--surface-dark-fg)] mb-2">{profile.title}</h3>
+                  <h3 className="text-base font-semibold text-foreground mb-2">{profile.title}</h3>
                   <p className="text-sm text-foreground/40 leading-relaxed">{profile.desc}</p>
                 </div>
               </motion.div>

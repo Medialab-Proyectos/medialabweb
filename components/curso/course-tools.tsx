@@ -19,7 +19,7 @@ export function CourseTools() {
   ]
 
   return (
-    <section id="herramientas" className="relative py-20 md:py-28 bg-[var(--surface-dark)] overflow-hidden">
+    <section id="herramientas" className="relative py-20 md:py-28 bg-background overflow-hidden">
       <div ref={ref} className="relative z-10 max-w-5xl mx-auto px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -30,7 +30,7 @@ export function CourseTools() {
           <span className="inline-block text-xs tracking-[0.2em] uppercase mb-4 font-display" style={{ color: 'var(--cyan)' }}>
             {t("Las herramientas que usarás", "The tools you'll use")}
           </span>
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[var(--surface-dark-fg)] tracking-tight leading-snug mb-5 font-display">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground tracking-tight leading-snug mb-5 font-display">
             {t(
               "No te damos una lista. Te enseñamos cuándo y por qué usar cada una.",
               "We don't give you a list. We teach you when and why to use each one."
@@ -41,12 +41,12 @@ export function CourseTools() {
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
           {tools.map((tool, i) => (
             <motion.div key={i} initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ delay: 0.1 + i * 0.08, duration: 0.5 }} className="group">
-              <div className="p-5 md:p-6 rounded-2xl border border-[var(--surface-dark-fg)]/[0.1] bg-[var(--surface-dark-fg)]/[0.04] hover:border-[var(--cyan)]/30 hover:bg-[var(--cyan)]/[0.05] transition-all duration-500 h-full text-center">
+              <div className="p-5 md:p-6 rounded-2xl border border-foreground/[0.1] bg-foreground/[0.04] hover:border-[var(--cyan)]/30 hover:bg-[var(--cyan)]/[0.05] transition-all duration-500 h-full text-center">
                 <div className="w-14 h-14 mx-auto mb-4 rounded-2xl bg-white shadow-[0_4px_14px_-6px_rgba(0,0,0,0.35)] flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:shadow-[0_8px_22px_-6px_rgba(42,171,179,0.35)]">
                   <Image src={tool.logo} alt={tool.name} width={tool.w} height={tool.h} className="object-contain" />
                 </div>
-                <h3 className="text-sm md:text-base font-semibold text-[var(--surface-dark-fg)] mb-1">{tool.name}</h3>
-                <p className="text-[11px] text-[var(--surface-dark-fg)]/55">{tool.category}</p>
+                <h3 className="text-sm md:text-base font-semibold text-foreground mb-1">{tool.name}</h3>
+                <p className="text-[11px] text-foreground/55">{tool.category}</p>
               </div>
             </motion.div>
           ))}

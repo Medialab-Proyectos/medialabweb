@@ -62,7 +62,7 @@ export function CourseCommunity() {
   ]
 
   return (
-    <section className="relative py-24 md:py-32 bg-[var(--surface-dark)] overflow-hidden">
+    <section className="relative py-24 md:py-32 bg-background overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0">
         <div className="absolute top-1/2 left-1/3 w-[600px] h-[600px] bg-[var(--cyan)]/[0.04] rounded-full blur-[200px]" />
@@ -81,7 +81,7 @@ export function CourseCommunity() {
                 </span>
               </div>
             </div>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[var(--surface-dark-fg)] tracking-tight leading-[1.15] mb-5 font-display">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground tracking-tight leading-[1.15] mb-5 font-display">
               {t("No terminas el curso.", "You don't finish the course.")}{" "}
               <span className="bg-gradient-to-r from-[var(--cyan)] to-[var(--magenta)] bg-clip-text text-transparent">
                 {t("Entras a una comunidad.", "You join a community.")}
@@ -116,7 +116,7 @@ export function CourseCommunity() {
                   <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-4 border border-foreground/[0.08] bg-foreground/[0.03] group-hover:border-[var(--cyan)]/30 transition-colors duration-300">
                     <Icon size={18} className="text-foreground/50 group-hover:text-[var(--cyan)] transition-colors duration-300" />
                   </div>
-                  <h3 className="text-sm font-semibold text-[var(--surface-dark-fg)] mb-2">{feature.title}</h3>
+                  <h3 className="text-sm font-semibold text-foreground mb-2">{feature.title}</h3>
                   <p className="text-xs text-foreground/45 leading-relaxed">{feature.description}</p>
                 </motion.div>
               )
@@ -126,7 +126,7 @@ export function CourseCommunity() {
           {/* Bottom highlight */}
           <motion.div initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ delay: 0.7, duration: 0.5 }}
             className="mt-12 p-6 md:p-8 rounded-2xl border border-[var(--cyan)]/[0.12] bg-[var(--cyan)]/[0.03] text-center">
-            <p className="text-lg md:text-xl font-medium text-[var(--surface-dark-fg)] mb-2 font-display">
+            <p className="text-lg md:text-xl font-medium text-foreground mb-2 font-display">
               {t("La IA evoluciona cada semana. Tu comunidad también.", "AI evolves every week. So does your community.")}
             </p>
             <p className="text-sm text-foreground/40 max-w-lg mx-auto">

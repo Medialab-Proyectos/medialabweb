@@ -12,7 +12,7 @@ export function CourseCta() {
   const { t } = useLanguage()
 
   return (
-    <section id="registro" className="relative py-24 md:py-32 bg-[var(--surface-dark)] overflow-hidden">
+    <section id="registro" className="relative py-24 md:py-32 bg-background overflow-hidden">
       {/* Background effects */}
       <div className="absolute inset-0">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] bg-[var(--magenta)]/[0.04] rounded-full blur-[200px]" />
@@ -24,7 +24,7 @@ export function CourseCta() {
           {/* Left — CTA content */}
           <motion.div initial={{ opacity: 0, y: 40 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.8 }}>
             {/* Headline */}
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-[var(--surface-dark-fg)] tracking-tight leading-[1.15] mb-6 font-display">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-foreground tracking-tight leading-[1.15] mb-6 font-display">
               {t("La IA no va a esperar a que estés listo.", "AI isn't going to wait until you're ready.")}
               <br />
               <span className="bg-gradient-to-r from-[var(--magenta)] via-[var(--cyan)] to-[var(--magenta)] bg-clip-text text-transparent">

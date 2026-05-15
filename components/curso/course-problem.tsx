@@ -55,7 +55,7 @@ export function CourseProblem() {
   ]
 
   return (
-    <section id="problema" className="relative py-16 md:py-20 bg-[var(--surface-dark)] overflow-hidden">
+    <section id="problema" className="relative py-16 md:py-20 bg-background overflow-hidden">
       <div className="absolute inset-0">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-red-900/[0.02] rounded-full blur-[180px]" />
       </div>
@@ -71,7 +71,7 @@ export function CourseProblem() {
           <span className="inline-block text-[11px] tracking-[0.2em] uppercase text-red-400/70 mb-3 font-display">
             {t("Honesto: nos pasó a todos", "Honest: it happened to all of us")}
           </span>
-          <h2 className="text-2xl md:text-3xl lg:text-[2.25rem] font-bold text-[var(--surface-dark-fg)] tracking-tight leading-tight font-display">
+          <h2 className="text-2xl md:text-3xl lg:text-[2.25rem] font-bold text-foreground tracking-tight leading-tight font-display">
             {t("Si alguna de estas te suena,", "If any of these sounds familiar,")}
             <br className="hidden sm:inline"/>
             {t(" este curso es para ti.", " this course is for you.")}
@@ -79,7 +79,7 @@ export function CourseProblem() {
         </motion.div>
 
         {/* Mobile: bare list */}
-        <div className="sm:hidden divide-y divide-[var(--surface-dark-fg)]/[0.08] border-y border-[var(--surface-dark-fg)]/[0.08]">
+        <div className="sm:hidden divide-y divide-foreground/[0.08] border-y border-foreground/[0.08]">
           {quotes.map((quote, i) => (
             <motion.div
               key={i}
@@ -90,10 +90,10 @@ export function CourseProblem() {
             >
               <span className="text-red-400/45 font-serif text-2xl leading-none shrink-0 mt-0.5" aria-hidden="true">&ldquo;</span>
               <div className="flex-1 min-w-0">
-                <p className="text-[15px] text-[var(--surface-dark-fg)]/85 leading-snug italic">
+                <p className="text-[15px] text-foreground/85 leading-snug italic">
                   {quote.text}
                 </p>
-                <p className="text-[11px] text-[var(--surface-dark-fg)]/45 mt-1.5">
+                <p className="text-[11px] text-foreground/45 mt-1.5">
                   — {quote.context}
                 </p>
               </div>
@@ -111,12 +111,12 @@ export function CourseProblem() {
               transition={{ duration: 0.5, delay: 0.1 + i * 0.07 }}
               className="group"
             >
-              <div className="p-4 md:p-5 rounded-xl border border-[var(--surface-dark-fg)]/[0.08] bg-[var(--surface-dark-fg)]/[0.03] hover:border-red-500/25 hover:bg-red-500/[0.04] transition-all duration-400 h-full flex flex-col">
+              <div className="p-4 md:p-5 rounded-xl border border-foreground/[0.08] bg-foreground/[0.03] hover:border-red-500/25 hover:bg-red-500/[0.04] transition-all duration-400 h-full flex flex-col">
                 <span className="text-xl text-red-400/35 font-serif leading-none mb-1.5">&ldquo;</span>
-                <p className="text-[15px] text-[var(--surface-dark-fg)]/80 leading-relaxed flex-1 group-hover:text-[var(--surface-dark-fg)] transition-colors duration-300">
+                <p className="text-[15px] text-foreground/80 leading-relaxed flex-1 group-hover:text-foreground transition-colors duration-300">
                   {quote.text}
                 </p>
-                <p className="text-[11px] text-[var(--surface-dark-fg)]/40 mt-2.5 pt-2.5 border-t border-[var(--surface-dark-fg)]/[0.06]">{quote.context}</p>
+                <p className="text-[11px] text-foreground/40 mt-2.5 pt-2.5 border-t border-foreground/[0.06]">{quote.context}</p>
               </div>
             </motion.div>
           ))}

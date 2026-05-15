@@ -68,7 +68,7 @@ export function CourseTestimonials() {
   ]
 
   return (
-    <section id="testimonios" className="relative py-20 md:py-28 bg-[var(--surface-dark)] overflow-hidden">
+    <section id="testimonios" className="relative py-20 md:py-28 bg-background overflow-hidden">
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[var(--magenta)]/[0.02] rounded-full blur-[200px]" />
 
       <div ref={ref} className="relative z-10 max-w-6xl mx-auto px-6 lg:px-8">
@@ -76,7 +76,7 @@ export function CourseTestimonials() {
           <span className="inline-block text-xs tracking-[0.2em] uppercase mb-4 font-display" style={{ color: 'var(--magenta)' }}>
             {t("Lo que dicen quienes ya lo vivieron", "What those who lived it say")}
           </span>
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[var(--surface-dark-fg)] tracking-tight leading-snug mb-5 font-display">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground tracking-tight leading-snug mb-5 font-display">
             {t(
               "No te lo contamos nosotros. Te lo cuentan ellos.",
               "We don't tell you. They tell you."
@@ -91,7 +91,7 @@ export function CourseTestimonials() {
                 <Quote className="w-5 h-5 mb-4" style={{ color: 'var(--magenta)', opacity: 0.3 }} />
                 <p className="text-base text-foreground/70 leading-relaxed mb-6 flex-1">&ldquo;{item.text}&rdquo;</p>
                 <div className="pt-4 border-t border-foreground/[0.1]">
-                  <p className="text-sm font-medium text-[var(--surface-dark-fg)]">{item.name}</p>
+                  <p className="text-sm font-medium text-foreground">{item.name}</p>
                   <p className="text-xs text-foreground/40">{item.role}</p>
                   <span className="inline-block mt-2 px-2.5 py-1 rounded-full text-[10px] font-semibold border border-[var(--cyan)]/20 bg-[var(--cyan)]/[0.06]" style={{ color: 'var(--cyan)' }}>
                     {item.result}

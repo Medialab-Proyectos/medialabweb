@@ -17,7 +17,7 @@ type Article = {
 }
 
 export function BlogIndexContent() {
-  const { t } = useLanguage()
+  const { t, localized } = useLanguage()
 
   const articles: Article[] = [
     {
@@ -142,7 +142,7 @@ export function BlogIndexContent() {
     <main className="min-h-screen bg-background text-foreground">
       <div className="max-w-7xl mx-auto px-6 py-24">
         <Link
-          href="/"
+          href={localized("/")}
           className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-10"
         >
           <ArrowLeft size={14} />
@@ -168,7 +168,7 @@ export function BlogIndexContent() {
           {articles.map((article) => (
             <Link
               key={article.slug}
-              href={`/blog/${article.slug}`}
+              href={localized(`/blog/${article.slug}`)}
               className="group flex flex-col rounded-2xl border border-border bg-card overflow-hidden hover:shadow-xl hover:border-transparent transition-all duration-300"
             >
               <div className="relative w-full h-48 overflow-hidden">

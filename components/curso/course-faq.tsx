@@ -25,7 +25,7 @@ export function CourseFaq() {
   ]
 
   return (
-    <section id="faq" className="relative py-20 md:py-28 bg-[var(--surface-mid)] overflow-hidden">
+    <section id="faq" className="relative py-20 md:py-28 bg-secondary/40 overflow-hidden">
       <div className="absolute inset-0">
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-foreground/[0.06] to-transparent" />
       </div>
@@ -33,7 +33,7 @@ export function CourseFaq() {
       <div ref={ref} className="relative z-10 max-w-3xl mx-auto px-6 lg:px-8">
         <motion.div initial={{ opacity: 0, y: 30 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.7 }} className="text-center mb-10 md:mb-14">
           <span className="inline-block text-xs tracking-[0.2em] uppercase text-foreground/40 mb-4 font-display">{t("Preguntas frecuentes", "Frequently asked questions")}</span>
-          <h2 className="text-2xl md:text-3xl font-bold text-[var(--surface-dark-fg)] tracking-tight leading-snug font-display">
+          <h2 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight leading-snug font-display">
             {t(
               "Esto es lo que preguntan los profesionales que terminan inscribiéndose.",
               "This is what the professionals who end up enrolling ask."
@@ -53,7 +53,7 @@ export function CourseFaq() {
                   }`}
                 >
                   <div className="flex items-start justify-between gap-4">
-                    <span className={`text-base font-medium transition-colors duration-300 ${isOpen ? 'text-[var(--surface-dark-fg)]' : 'text-foreground/70'}`}>{faq.q}</span>
+                    <span className={`text-base font-medium transition-colors duration-300 ${isOpen ? 'text-foreground' : 'text-foreground/70'}`}>{faq.q}</span>
                     <ChevronDown className={`w-5 h-5 shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} style={{ color: isOpen ? 'var(--magenta)' : 'rgba(255,255,255,0.3)' }} />
                   </div>
                   <AnimatePresence>

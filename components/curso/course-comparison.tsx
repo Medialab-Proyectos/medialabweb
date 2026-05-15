@@ -60,7 +60,7 @@ export function CourseComparison() {
   ]
 
   return (
-    <section id="diferencia" className="relative py-20 md:py-28 bg-[var(--surface-mid)] overflow-hidden">
+    <section id="diferencia" className="relative py-20 md:py-28 bg-secondary/40 overflow-hidden">
       <div className="absolute inset-0">
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-foreground/[0.06] to-transparent" />
         <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-foreground/[0.06] to-transparent" />
@@ -76,7 +76,7 @@ export function CourseComparison() {
           <span className="inline-block text-xs tracking-[0.2em] uppercase mb-4 font-display" style={{ color: 'var(--magenta)' }}>
             {t("Por qué esto es diferente", "Why this is different")}
           </span>
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[var(--surface-dark-fg)] tracking-tight leading-snug font-display">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground tracking-tight leading-snug font-display">
             {t(
               "La mayoría de cursos de IA te enseñan herramientas. Nosotros te enseñamos a pensar.",
               "Most AI courses teach you tools. We teach you to think."
@@ -103,7 +103,7 @@ export function CourseComparison() {
                   <X className="w-5 h-5 text-red-400" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-[var(--surface-dark-fg)]">{t("Cursos tradicionales", "Traditional courses")}</h3>
+                  <h3 className="text-lg font-semibold text-foreground">{t("Cursos tradicionales", "Traditional courses")}</h3>
                   <p className="text-xs text-foreground/40">{t("Lo que encuentras en todos lados", "What you find everywhere")}</p>
                 </div>
               </div>
@@ -155,7 +155,7 @@ export function CourseComparison() {
                   <Check className="w-5 h-5 text-[var(--cyan)]" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-[var(--surface-dark-fg)]">{t("Metodología MediaLab", "MediaLab methodology")}</h3>
+                  <h3 className="text-lg font-semibold text-foreground">{t("Metodología MediaLab", "MediaLab methodology")}</h3>
                   <p className="text-xs" style={{ color: 'var(--cyan)' }}>{t("Lo que realmente necesitas", "What you actually need")}</p>
                 </div>
               </div>

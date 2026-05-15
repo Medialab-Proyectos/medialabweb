@@ -11,7 +11,14 @@ export const metadata: Metadata = {
   title: "Diseñando para la Confianza: UX y Comportamiento Financiero",
   description:
     "Los principios de diseño UX que hacen que las personas se sientan seguras tomando decisiones financieras digitalmente. Estrategias para fintech y banca.",
-  alternates: { canonical: "/blog/ux-fintech" },
+  alternates: {
+    canonical: "/blog/ux-fintech",
+    languages: {
+      es: "/blog/ux-fintech",
+      en: "/en/blog/ux-fintech",
+      "x-default": "/blog/ux-fintech",
+    },
+  },
   openGraph: {
     type: "article",
     url: "/blog/ux-fintech",
@@ -134,9 +141,8 @@ export default function BlogUXFintechPage() {
           headlineEn="Building a financial product?"
           subEs="Nuestro equipo tiene experiencia comprobada en UX para fintech. Conversemos."
           subEn="Our team has proven UX experience in fintech. Let's talk."
-          ctaEs="Comenzar Discovery"
-          ctaEn="Start Discovery"
-          href="/#uxbox"
+          ctaEs="Agendar llamada"
+          ctaEn="Book a call"
           gradient="linear-gradient(90deg, #E8751A, #c65a10)"
         />
       </div>

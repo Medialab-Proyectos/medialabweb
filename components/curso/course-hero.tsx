@@ -90,11 +90,11 @@ export function CourseHero() {
   ]
 
   return (
-    <section ref={ref} className="relative min-h-[90vh] md:min-h-screen flex items-center overflow-hidden bg-[var(--surface-dark)]">
+    <section ref={ref} className="relative min-h-[90vh] md:min-h-screen flex items-center overflow-hidden bg-background">
       {/* Background image */}
       <div className="absolute inset-0">
         <Image src="/images/curso/hero-team.png" alt="" fill className="object-cover opacity-[0.12]" priority />
-        <div className="absolute inset-0 bg-gradient-to-b from-[var(--surface-dark)]/95 via-[var(--surface-dark)]/75 to-[var(--surface-dark)]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[var(--background)]/95 via-[var(--background)]/75 to-[var(--background)]" />
       </div>
       {/* Background effects */}
       <div className="absolute inset-0">
@@ -116,7 +116,7 @@ export function CourseHero() {
             </motion.div>
 
             {/* Headline */}
-            <motion.h1 variants={fadeUp} className="text-3xl sm:text-4xl md:text-[2.75rem] lg:text-5xl font-bold tracking-tight leading-[1.12] text-[var(--surface-dark-fg)] mb-5 font-display">
+            <motion.h1 variants={fadeUp} className="text-3xl sm:text-4xl md:text-[2.75rem] lg:text-5xl font-bold tracking-tight leading-[1.12] text-foreground mb-5 font-display">
               {t("No necesitas más herramientas.", "You don't need more tools.")}
               <br />
               <span className="bg-gradient-to-r from-[var(--magenta)] to-[var(--cyan)] bg-clip-text text-transparent">
@@ -128,9 +128,9 @@ export function CourseHero() {
             </motion.h1>
 
             {/* Value prop — short, direct */}
-            <motion.p variants={fadeUp} className="text-base md:text-lg text-[var(--surface-dark-fg)]/75 leading-relaxed mb-6 max-w-lg">
+            <motion.p variants={fadeUp} className="text-base md:text-lg text-foreground/75 leading-relaxed mb-6 max-w-lg">
               {t("12 fases para que ", "12 phases so that ")}
-              <span className="text-[var(--surface-dark-fg)] font-medium">{t("tú dirijas", "you direct")}</span>
+              <span className="text-foreground font-medium">{t("tú dirijas", "you direct")}</span>
               {t(" y la IA ejecute. Aprende a investigar, diseñar y validar productos reales.", " and AI executes. Learn to research, design, and validate real products.")}
             </motion.p>
 
@@ -153,7 +153,7 @@ export function CourseHero() {
               </a>
             </motion.div>
 
-            <motion.p variants={fadeUp} className="text-xs text-[var(--surface-dark-fg)]/55 mb-7 flex items-center gap-2">
+            <motion.p variants={fadeUp} className="text-xs text-foreground/55 mb-7 flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
               {t(
                 "Precio de lanzamiento · Garantía la primera semana",
@@ -163,7 +163,7 @@ export function CourseHero() {
 
             {/* Role pills — hidden on mobile */}
             <motion.div variants={fadeUp} className="hidden sm:flex flex-wrap items-center gap-2 mb-7">
-              <span className="text-[10px] tracking-[0.12em] uppercase text-[var(--surface-dark-fg)]/40 font-medium mr-1">{t("Te conviertes en:", "You become:")}</span>
+              <span className="text-[10px] tracking-[0.12em] uppercase text-foreground/40 font-medium mr-1">{t("Te conviertes en:", "You become:")}</span>
               <span className="px-3 py-1 rounded-full border border-[var(--cyan)]/25 bg-[var(--cyan)]/[0.06] text-[11px] font-semibold" style={{ color: 'var(--cyan)' }}>
                 Behavioral AI Experience Designer
               </span>
@@ -173,13 +173,13 @@ export function CourseHero() {
             </motion.div>
 
             {/* Trust badges — hidden on mobile */}
-            <motion.div variants={fadeUp} className="hidden sm:flex flex-col sm:flex-row items-start gap-4 sm:gap-6 pt-5 border-t border-[var(--surface-dark-fg)]/[0.08]">
+            <motion.div variants={fadeUp} className="hidden sm:flex flex-col sm:flex-row items-start gap-4 sm:gap-6 pt-5 border-t border-foreground/[0.08]">
               {trustBadges.map((badge, i) => {
                 const Icon = badge.icon
                 return (
                   <div key={i} className="flex items-center gap-2">
-                    <Icon className="w-3.5 h-3.5 text-[var(--surface-dark-fg)]/45" />
-                    <span className="text-xs text-[var(--surface-dark-fg)]/55">{badge.text}</span>
+                    <Icon className="w-3.5 h-3.5 text-foreground/45" />
+                    <span className="text-xs text-foreground/55">{badge.text}</span>
                   </div>
                 )
               })}

@@ -42,7 +42,7 @@ export function CourseMethodology() {
   ]
 
   return (
-    <section id="metodologia" className="relative py-20 md:py-28 bg-[var(--surface-dark)] overflow-hidden">
+    <section id="metodologia" className="relative py-20 md:py-28 bg-background overflow-hidden">
       <div className="absolute top-1/3 left-1/4 w-[600px] h-[600px] bg-[var(--cyan)]/[0.03] rounded-full blur-[200px]" />
       <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-[var(--magenta)]/[0.03] rounded-full blur-[180px]" />
 
@@ -56,7 +56,7 @@ export function CourseMethodology() {
           <span className="inline-block text-xs tracking-[0.2em] uppercase mb-4 font-display" style={{ color: 'var(--cyan)' }}>
             {t("El sistema que te faltaba", "The system you were missing")}
           </span>
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[var(--surface-dark-fg)] tracking-tight leading-snug mb-5 font-display">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground tracking-tight leading-snug mb-5 font-display">
             {t("12 fases. Un camino claro. ", "12 phases. One clear path. ")}
             <span className="bg-gradient-to-r from-[var(--cyan)] to-[var(--magenta)] bg-clip-text text-transparent">
               {t("De la confusión al producto real.", "From confusion to real product.")}
@@ -83,7 +83,7 @@ export function CourseMethodology() {
             fill
             className="object-cover opacity-50"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[var(--surface-dark)] via-transparent to-[var(--surface-dark)]/60" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[var(--background)] via-transparent to-[var(--background)]/60" />
         </motion.div>
 
         {/* Stage pills */}
@@ -141,7 +141,7 @@ export function CourseMethodology() {
                           </div>
                           <span className={`text-xs font-mono ${s.text}`}>{t("Fase", "Phase")} {String(phase.id).padStart(2, '0')}</span>
                         </div>
-                        <h3 className="text-xl font-bold text-[var(--surface-dark-fg)] mb-1">{phase.name}</h3>
+                        <h3 className="text-xl font-bold text-foreground mb-1">{phase.name}</h3>
                         <p className="text-sm text-foreground/40 mb-3">{phase.subtitle}</p>
 
                         <AnimatePresence>

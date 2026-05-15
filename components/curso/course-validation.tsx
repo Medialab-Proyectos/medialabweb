@@ -20,7 +20,7 @@ export function CourseValidation() {
   ]
 
   return (
-    <section className="relative py-20 md:py-28 bg-[var(--surface-mid)] overflow-hidden">
+    <section className="relative py-20 md:py-28 bg-secondary/40 overflow-hidden">
       <div className="absolute inset-0">
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-foreground/[0.06] to-transparent" />
       </div>
@@ -30,7 +30,7 @@ export function CourseValidation() {
           <span className="inline-block text-xs tracking-[0.2em] uppercase mb-4 font-display" style={{ color: 'var(--cyan)' }}>
             {t("Por qué puedes confiar en esto", "Why you can trust this")}
           </span>
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[var(--surface-dark-fg)] tracking-tight leading-snug mb-5 font-display">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground tracking-tight leading-snug mb-5 font-display">
             {t("No es otro curso más.", "It's not just another course.")}{" "}
             <span className="bg-gradient-to-r from-[var(--cyan)] to-[var(--magenta)] bg-clip-text text-transparent">
               {t("Y así es como lo respaldamos.", "And this is how we back it up.")}
@@ -45,7 +45,7 @@ export function CourseValidation() {
               <motion.div key={i} initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ delay: 0.1 + i * 0.08, duration: 0.5 }} className="group">
                 <div className="p-6 md:p-8 rounded-2xl border border-foreground/[0.1] bg-foreground/[0.03] hover:border-[var(--cyan)]/[0.1] hover:bg-foreground/[0.03] transition-all duration-500 h-full">
                   <Icon className="w-6 h-6 mb-4" style={{ color: 'var(--cyan)', opacity: 0.6 }} />
-                  <h3 className="text-lg font-semibold text-[var(--surface-dark-fg)] mb-2">{item.title}</h3>
+                  <h3 className="text-lg font-semibold text-foreground mb-2">{item.title}</h3>
                   <p className="text-sm text-foreground/40 leading-relaxed">{item.desc}</p>
                 </div>
               </motion.div>

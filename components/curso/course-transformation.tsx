@@ -28,7 +28,7 @@ export function CourseTransformation() {
   ]
 
   return (
-    <section id="transformacion" className="relative py-20 md:py-28 bg-[var(--surface-mid)] overflow-hidden">
+    <section id="transformacion" className="relative py-20 md:py-28 bg-secondary/40 overflow-hidden">
       <div className="absolute inset-0">
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-foreground/[0.06] to-transparent" />
       </div>
@@ -43,7 +43,7 @@ export function CourseTransformation() {
           <span className="inline-block text-xs tracking-[0.2em] uppercase mb-4 font-display" style={{ color: 'var(--cyan)' }}>
             {t("En esto te conviertes", "This is who you become")}
           </span>
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[var(--surface-dark-fg)] tracking-tight leading-snug font-display">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground tracking-tight leading-snug font-display">
             {t("Entras como profesional curioso.", "You enter as a curious professional.")}{" "}
             <span className="bg-gradient-to-r from-[var(--cyan)] to-[var(--magenta)] bg-clip-text text-transparent">
               {t("Sales como Behavioral AI Experience Designer.", "You leave as a Behavioral AI Experience Designer.")}
@@ -109,7 +109,7 @@ export function CourseTransformation() {
               {after.map((item, i) => (
                 <motion.div key={i} initial={{ opacity: 0, x: 15 }} animate={inView ? { opacity: 1, x: 0 } : {}} transition={{ delay: 0.5 + i * 0.08 }}
                   className="p-4 rounded-xl border border-[var(--cyan)]/[0.08] bg-[var(--cyan)]/[0.02]">
-                  <p className="text-base font-medium text-[var(--surface-dark-fg)]">{item.label}</p>
+                  <p className="text-base font-medium text-foreground">{item.label}</p>
                   <p className="text-sm text-foreground/40">{item.desc}</p>
                 </motion.div>
               ))}

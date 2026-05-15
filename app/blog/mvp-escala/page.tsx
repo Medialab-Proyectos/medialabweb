@@ -11,7 +11,14 @@ export const metadata: Metadata = {
   title: "De MVP a Escala: Decisiones de Arquitectura que Importan",
   description:
     "Las decisiones técnicas que tomes en el MVP definirán qué tan rápido puedes crecer. Cómo diseñar un MVP listo para escalar sin deuda técnica.",
-  alternates: { canonical: "/blog/mvp-escala" },
+  alternates: {
+    canonical: "/blog/mvp-escala",
+    languages: {
+      es: "/blog/mvp-escala",
+      en: "/en/blog/mvp-escala",
+      "x-default": "/blog/mvp-escala",
+    },
+  },
   openGraph: {
     type: "article",
     url: "/blog/mvp-escala",
@@ -136,9 +143,8 @@ export default function BlogMVPEscalaPage() {
           headlineEn="Building your MVP?"
           subEs="Ayudamos a equipos a tomar las decisiones técnicas y de UX correctas desde el inicio."
           subEn="We help teams make the right technical and UX decisions from day one."
-          ctaEs="Comenzar Discovery"
-          ctaEn="Start Discovery"
-          href="/#uxbox"
+          ctaEs="Agendar llamada"
+          ctaEn="Book a call"
           gradient="linear-gradient(90deg, #E8751A, #c65a10)"
         />
       </div>

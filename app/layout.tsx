@@ -64,11 +64,8 @@ export const metadata: Metadata = {
     languages: {
       'es-CO': '/',
       'es': '/',
-      'en': '/?lang=en',
+      'en': '/en',
       'x-default': '/',
-    },
-    types: {
-      'application/rss+xml': '/feed.xml',
     },
   },
   verification: {

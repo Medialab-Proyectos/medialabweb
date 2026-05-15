@@ -36,19 +36,6 @@ import { CourseStickyCTA } from "@/components/curso/course-sticky-cta"
  * 13. CONVERT    → CTA: epic final — urgency + clarity
  */
 
-import type { Metadata } from 'next'
-
-export const metadata: Metadata = {
-  title: 'Behavioral AI Experience Design — UX Prompt Design | Curso MediaLab',
-  description: 'Curso premium de 8 semanas: 14 modulos, 12 fases. Aprende a usar IA como copiloto estrategico para disenar, investigar y construir productos digitales. Solo 30 cupos por cohorte. $995 USD.',
-  openGraph: {
-    title: 'Behavioral AI Experience Design — UX Prompt Design | MediaLab',
-    description: 'Curso premium de 8 semanas para disenadores, developers y startups. Domina la IA sin perder tu criterio humano. 14 modulos, certificacion profesional.',
-    url: '/curso',
-    type: 'website',
-  },
-}
-
 export default function CursoPage() {
   return (
     <main id="main-content" className="overflow-x-hidden">

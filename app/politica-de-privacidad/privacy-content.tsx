@@ -5,7 +5,7 @@ import { ArrowLeft } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 
 export function PrivacyContent() {
-  const { t } = useLanguage()
+  const { t, localized } = useLanguage()
 
   const sections = [
     {
@@ -49,7 +49,7 @@ export function PrivacyContent() {
     <main className="min-h-screen bg-background text-foreground">
       <div className="max-w-3xl mx-auto px-6 py-24">
         <Link
-          href="/"
+          href={localized("/")}
           className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-10"
         >
           <ArrowLeft size={14} />
@@ -82,7 +82,7 @@ export function PrivacyContent() {
                 "Si tienes preguntas sobre esta política de privacidad, puedes contactarnos a través de nuestro sitio web en ",
                 "If you have questions about this privacy policy, you can contact us through our website at "
               )}
-              <Link href="/#contact" className="text-[var(--magenta)] hover:underline">
+              <Link href={localized("/") + "#contact"} className="text-[var(--magenta)] hover:underline">
                 medialabingenieria.com
               </Link>.
             </p>

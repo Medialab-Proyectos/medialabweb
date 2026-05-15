@@ -11,7 +11,14 @@ export const metadata: Metadata = {
   title: "La Psicología Oculta Detrás de la Adopción de Productos Digitales",
   description:
     "Por qué algunos productos se convierten en hábito y otros son abandonados — lo que la ciencia del comportamiento nos dice sobre la diferencia.",
-  alternates: { canonical: "/blog/psicologia-adopcion" },
+  alternates: {
+    canonical: "/blog/psicologia-adopcion",
+    languages: {
+      es: "/blog/psicologia-adopcion",
+      en: "/en/blog/psicologia-adopcion",
+      "x-default": "/blog/psicologia-adopcion",
+    },
+  },
   openGraph: {
     type: "article",
     url: "/blog/psicologia-adopcion",
@@ -136,9 +143,8 @@ export default function BlogPsicologiaAdopcionPage() {
           headlineEn="Is your product struggling with retention?"
           subEs="Conversemos. Hacemos un diagnóstico de comportamiento de usuarios en 48 horas."
           subEn="Let's talk. We deliver a user behavior diagnostic in 48 hours."
-          ctaEs="Comenzar Discovery"
-          ctaEn="Start Discovery"
-          href="/#uxbox"
+          ctaEs="Agendar llamada"
+          ctaEn="Book a call"
           gradient="linear-gradient(90deg, #E8751A, #c65a10)"
         />
       </div>

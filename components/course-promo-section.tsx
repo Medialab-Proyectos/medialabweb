@@ -40,7 +40,7 @@ const highlights = [
 export function CoursePromoSection() {
   const ref = useRef<HTMLDivElement>(null)
   const [visible, setVisible] = useState(false)
-  const { t } = useLanguage()
+  const { t, localized } = useLanguage()
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -133,7 +133,7 @@ export function CoursePromoSection() {
             {/* CTA */}
             <div className="flex flex-col sm:flex-row items-start gap-3 pt-2">
               <Link
-                href="/curso"
+                href={localized("/curso")}
                 className="group inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-semibold text-white transition-all duration-300 hover:scale-[1.03] hover:shadow-lg active:scale-95"
                 style={{ background: "var(--magenta)" }}
               >
@@ -144,7 +144,7 @@ export function CoursePromoSection() {
                 />
               </Link>
               <Link
-                href="/curso#metodologia"
+                href={localized("/curso") + "#metodologia"}
                 className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-medium text-white/50 border border-white/[0.08] hover:border-white/[0.18] hover:text-white/75 hover:bg-white/[0.02] transition-all duration-300"
               >
                 {t("Ver metodología", "View methodology")}

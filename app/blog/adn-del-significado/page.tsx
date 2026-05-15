@@ -12,7 +12,14 @@ export const metadata: Metadata = {
   title: "El ADN del Significado: Por Qué la Motivación No Basta para Retener Usuarios",
   description:
     "La motivación inicia la acción, pero el significado sostiene el hábito. Descubre cómo el diseño con propósito crea productos digitales que los usuarios aman.",
-  alternates: { canonical: "/blog/adn-del-significado" },
+  alternates: {
+    canonical: "/blog/adn-del-significado",
+    languages: {
+      es: "/blog/adn-del-significado",
+      en: "/en/blog/adn-del-significado",
+      "x-default": "/blog/adn-del-significado",
+    },
+  },
   openGraph: {
     title: "El ADN del Significado — MediaLab Ingeniería",
     description:

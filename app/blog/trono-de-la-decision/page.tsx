@@ -12,7 +12,14 @@ export const metadata: Metadata = {
   title: "El Trono de la Decisión: IA, Autonomía Humana y el Futuro del Diseño Ético",
   description:
     "En la era de los agentes de IA, el mayor riesgo no es la privacidad — es la infantilización del usuario. Descubre el Agentic Experience Design (AXD).",
-  alternates: { canonical: "/blog/trono-de-la-decision" },
+  alternates: {
+    canonical: "/blog/trono-de-la-decision",
+    languages: {
+      es: "/blog/trono-de-la-decision",
+      en: "/en/blog/trono-de-la-decision",
+      "x-default": "/blog/trono-de-la-decision",
+    },
+  },
   openGraph: {
     title: "El Trono de la Decisión — MediaLab Ingeniería",
     description: "La ética del diseño en la era de la IA.",
@@ -155,8 +162,8 @@ export default function BlogTronoDecisionPage() {
           headlineEn="Is your AI empowering or weakening your users?"
           subEs="Te ayudamos a diseñar sistemas de IA éticos que generen confianza y lealtad genuina."
           subEn="We help you design ethical AI systems that build genuine trust and loyalty."
-          ctaEs="Consulta gratuita"
-          ctaEn="Free consultation"
+          ctaEs="Agendar llamada"
+          ctaEn="Book a call"
           gradient="linear-gradient(90deg, #E8751A, #c65a10)"
         />
       </div>

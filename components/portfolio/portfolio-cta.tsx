@@ -50,7 +50,7 @@ export function PortfolioCTA() {
 
             <div className="flex flex-col sm:flex-row items-center gap-4 pt-2">
               <BookingModal>
-                <button type="button" className="group flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-bold text-[15px] bg-[var(--magenta)] text-white transition-all hover:brightness-110 active:scale-95 shadow-lg shadow-[var(--magenta)]/25 animate-pulse-glow">
+                <button type="button" className="group flex items-center justify-center gap-2 px-8 py-4 rounded-full font-semibold text-[15px] bg-[var(--magenta)] text-white transition-all hover:brightness-110 active:scale-95 shadow-lg shadow-[var(--magenta)]/25 animate-pulse-glow">
                   {t("Quiero transformar mi producto", "I want to transform my product")} <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                 </button>
               </BookingModal>

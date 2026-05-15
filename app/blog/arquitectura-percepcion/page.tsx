@@ -12,7 +12,14 @@ export const metadata: Metadata = {
   title: "La Arquitectura de la Percepción: Por Qué Tus Usuarios No Navegan Flujos, Sino Estados Emocionales",
   description:
     "Los usuarios no abandonan productos por falta de lógica sino por fricciones emocionales invisibles. Descubre el Diseño de Experiencia Consciente (CXD) de MediaLab.",
-  alternates: { canonical: "/blog/arquitectura-percepcion" },
+  alternates: {
+    canonical: "/blog/arquitectura-percepcion",
+    languages: {
+      es: "/blog/arquitectura-percepcion",
+      en: "/en/blog/arquitectura-percepcion",
+      "x-default": "/blog/arquitectura-percepcion",
+    },
+  },
   openGraph: {
     title: "La Arquitectura de la Percepción — MediaLab Ingeniería",
     description:

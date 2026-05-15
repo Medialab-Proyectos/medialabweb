@@ -67,7 +67,7 @@ const articles = [
 export function BlogSection() {
   const ref = useRef<HTMLDivElement>(null)
   const [visible, setVisible] = useState(false)
-  const { t } = useLanguage()
+  const { t, localized } = useLanguage()
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -95,7 +95,7 @@ export function BlogSection() {
               {t("Ideas sobre diseño UX, IA y experiencias B2B/B2C", "Ideas on UX design, AI and B2B/B2C experiences")}
             </h2>
           </div>
-          <a href="/blog" className="group inline-flex items-center gap-2 text-sm font-semibold shrink-0"
+          <a href={localized("/blog")} className="group inline-flex items-center gap-2 text-sm font-semibold shrink-0"
             style={{ color: "var(--magenta)" }}>
             {t("Ver todos los artículos", "View all articles")}
             <ArrowRight size={15} className="group-hover:translate-x-1 transition-transform" />
@@ -106,7 +106,7 @@ export function BlogSection() {
         <div className={`grid lg:grid-cols-3 gap-6 transition-all duration-700 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
 
           {/* Featured article — tall card spanning 1 col on lg, full on mobile */}
-          <a href={`/blog/${featured.slug}`}
+          <a href={localized(`/blog/${featured.slug}`)}
             className="group lg:col-span-1 flex flex-col rounded-2xl border border-border bg-card overflow-hidden hover:shadow-xl hover:border-transparent transition-all duration-300">
             {/* Image */}
             <div className="relative w-full h-56 overflow-hidden shrink-0">
@@ -149,7 +149,7 @@ export function BlogSection() {
             {rest.map((article, i) => (
               <a
                 key={article.slug}
-                href={`/blog/${article.slug}`}
+                href={localized(`/blog/${article.slug}`)}
                 className="group flex gap-5 rounded-2xl border border-border bg-card overflow-hidden hover:shadow-xl hover:border-transparent transition-all duration-300 p-0"
                 style={{ transitionDelay: `${i * 60}ms` }}
               >

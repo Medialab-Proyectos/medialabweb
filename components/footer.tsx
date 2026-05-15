@@ -12,7 +12,7 @@ const socials = [
 ]
 
 export function Footer() {
-  const { t } = useLanguage()
+  const { t, localized } = useLanguage()
 
   const navColumns = [
     {
@@ -61,7 +61,7 @@ export function Footer() {
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-10">
           {/* Brand */}
           <div className="col-span-2 sm:col-span-3 lg:col-span-1 flex flex-col gap-4">
-            <Link href="/" className="inline-flex items-center gap-2" aria-label="MediaLab Ingeniería home">
+            <Link href={localized("/")} className="inline-flex items-center gap-2" aria-label="MediaLab Ingeniería home">
               <Image src="/logo.svg" alt="MediaLab Ingeniería" width={140} height={32} className="h-8 w-auto" />
             </Link>
             <p className="text-sm text-white/50 leading-relaxed max-w-xs">
@@ -99,7 +99,7 @@ export function Footer() {
                 {col.links.map((link) => (
                   <li key={link.label}>
                     <Link
-                      href={link.href}
+                      href={link.href.startsWith("#") ? link.href : localized(link.href)}
                       className="text-sm text-white/60 hover:text-white transition-colors duration-200"
                     >
                       {link.label}
@@ -118,12 +118,12 @@ export function Footer() {
             {t("Todos los derechos reservados.", "All rights reserved.")}
           </p>
           <div className="flex items-center gap-6">
-            <a href="/politica-de-privacidad" className="hover:text-white/60 transition-colors">
+            <Link href={localized("/politica-de-privacidad")} className="hover:text-white/60 transition-colors">
               {t("Política de Privacidad", "Privacy Policy")}
-            </a>
-            <a href="/terminos-de-servicio" className="hover:text-white/60 transition-colors">
+            </Link>
+            <Link href={localized("/terminos-de-servicio")} className="hover:text-white/60 transition-colors">
               {t("Términos de Servicio", "Terms of Service")}
-            </a>
+            </Link>
           </div>
         </div>
       </div>

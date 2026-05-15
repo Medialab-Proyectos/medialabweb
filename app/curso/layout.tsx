@@ -14,6 +14,11 @@ export const metadata: Metadata = {
   ],
   alternates: {
     canonical: '/curso',
+    languages: {
+      es: '/curso',
+      en: '/en/curso',
+      'x-default': '/curso',
+    },
   },
   openGraph: {
     title: 'Behavioral AI Experience Design — Curso UX Prompt Design',

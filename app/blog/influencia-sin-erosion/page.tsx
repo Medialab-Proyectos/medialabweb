@@ -12,7 +12,14 @@ export const metadata: Metadata = {
   title: "Influencia sin Erosión: Cómo Diseñar Comportamiento Sostenible sin Manipular",
   description:
     "El comportamiento sostenido no nace de la presión. Nace de una conciencia respetada. Descubre las 4 capas de la acción y el caso del botón de $300 millones.",
-  alternates: { canonical: "/blog/influencia-sin-erosion" },
+  alternates: {
+    canonical: "/blog/influencia-sin-erosion",
+    languages: {
+      es: "/blog/influencia-sin-erosion",
+      en: "/en/blog/influencia-sin-erosion",
+      "x-default": "/blog/influencia-sin-erosion",
+    },
+  },
   openGraph: {
     title: "Influencia sin Erosión — MediaLab Ingeniería",
     description: "5 patrones para influir sin erosionar.",

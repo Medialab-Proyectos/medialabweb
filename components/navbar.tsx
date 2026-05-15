@@ -32,15 +32,19 @@ export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
   const { theme, setTheme } = useTheme()
-  const { lang, setLang } = useLanguage()
+  const { lang, setLang, localized } = useLanguage()
   const pathname = usePathname()
-  const isCurso = pathname === "/curso"
+  const isCurso = pathname === "/curso" || pathname === "/en/curso"
   const currentLinks = navLinks[lang]
 
   // Pages whose top is a hardcoded dark hero (var(--surface-dark)). When the
   // navbar is transparent (pre-scroll), text-foreground is dark in light mode
   // and would disappear on those dark heroes — so override to light colors.
-  const isDarkHero = pathname === "/" || pathname === "/curso"
+  const isDarkHero =
+    pathname === "/" ||
+    pathname === "/en" ||
+    pathname === "/curso" ||
+    pathname === "/en/curso"
   const overDarkHero = !scrolled && isDarkHero
   const linkIdle = overDarkHero
     ? "text-white/70 hover:text-white"
@@ -67,7 +71,7 @@ export function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-16 md:h-20">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 group" aria-label="MediaLab Ingeniería home">
+        <Link href={localized("/")} className="flex items-center gap-2 group" aria-label="MediaLab Ingeniería home">
           <Image
             src="/logo.svg"
             alt="MediaLab Ingeniería"
@@ -83,7 +87,7 @@ export function Navbar() {
           {currentLinks.map((link) => (
             <Link
               key={link.href}
-              href={link.href}
+              href={link.href.startsWith("#") ? link.href : localized(link.href)}
               className={`text-sm font-medium transition-colors relative after:absolute after:bottom-[-3px] after:left-0 after:w-0 after:h-px after:bg-[var(--magenta)] hover:after:w-full after:transition-all after:duration-300 ${
                 (link as any).highlight
                   ? "text-[var(--magenta)] font-semibold hover:text-[var(--magenta)]"
@@ -177,7 +181,7 @@ export function Navbar() {
           {currentLinks.map((link) => (
             <Link
               key={link.href}
-              href={link.href}
+              href={link.href.startsWith("#") ? link.href : localized(link.href)}
               onClick={() => setMobileOpen(false)}
               className="text-base font-medium text-foreground py-2 border-b border-border last:border-0"
             >

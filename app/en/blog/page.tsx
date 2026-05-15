@@ -1,0 +1,69 @@
+import type { Metadata } from "next"
+import { BlogIndexContent } from "../../blog/blog-index-content"
+
+export const metadata: Metadata = {
+  title: "Blog on UX, AI, and Digital Product",
+  description:
+    "Ideas on UX design, artificial intelligence, consumer psychology, and B2B/B2C digital products by MediaLab Ingeniería. Reads for founders, designers, and product managers.",
+  alternates: {
+    canonical: "/en/blog",
+    languages: {
+      es: "/blog",
+      en: "/en/blog",
+      "x-default": "/blog",
+    },
+  },
+  openGraph: {
+    title: "MediaLab Blog — UX, AI, and Digital Product",
+    description: "Signed articles on conscious design, AI applied to product, and human behavior.",
+    type: "website",
+    locale: "en_US",
+    url: "/en/blog",
+  },
+}
+
+const blogListSchema = {
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  name: "MediaLab Ingeniería Blog",
+  url: "https://medialab.design/en/blog",
+  description: "Articles on UX, AI, and B2B/B2C digital product design.",
+  publisher: {
+    "@type": "Organization",
+    name: "MediaLab Ingeniería",
+    logo: { "@type": "ImageObject", url: "https://medialab.design/logo.svg" },
+  },
+  inLanguage: "en",
+}
+
+const articles = [
+  { slug: "arquitectura-percepcion", title: "The Architecture of Perception: Your Users Don't Navigate Flows, They Navigate Emotional States" },
+  { slug: "adn-del-significado", title: "The DNA of Meaning: Why Motivation Isn't Enough to Retain Users" },
+  { slug: "trono-de-la-decision", title: "The Throne of Decision: AI, Human Autonomy, and Ethical Design" },
+  { slug: "influencia-sin-erosion", title: "Influence Without Erosion: Sustainable Behavioral Design Without Manipulation" },
+  { slug: "psicologia-adopcion", title: "The Psychology of Digital Adoption" },
+  { slug: "discovery-ia", title: "Product Discovery with AI" },
+  { slug: "ux-fintech", title: "UX in Fintech: Designing for Trust" },
+  { slug: "mvp-escala", title: "From MVP to Scale" },
+]
+
+export default function BlogIndexEn() {
+  const itemListSchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    itemListElement: articles.map((a, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      url: `https://medialab.design/en/blog/${a.slug}`,
+      name: a.title,
+    })),
+  }
+
+  return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(blogListSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }} />
+      <BlogIndexContent />
+    </>
+  )
+}

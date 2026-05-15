@@ -13,6 +13,11 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: "/portafolio",
+    languages: {
+      es: "/portafolio",
+      en: "/en/portafolio",
+      "x-default": "/portafolio",
+    },
   },
 }
 

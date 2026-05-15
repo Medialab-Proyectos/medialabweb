@@ -11,7 +11,14 @@ export const metadata: Metadata = {
   title: "Discovery con IA: El Fin de los Workshops Interminables",
   description:
     "Cómo las herramientas inteligentes están reemplazando semanas de sesiones con stakeholders y comprimiendo el discovery de producto a días.",
-  alternates: { canonical: "/blog/discovery-ia" },
+  alternates: {
+    canonical: "/blog/discovery-ia",
+    languages: {
+      es: "/blog/discovery-ia",
+      en: "/en/blog/discovery-ia",
+      "x-default": "/blog/discovery-ia",
+    },
+  },
   openGraph: {
     type: "article",
     url: "/blog/discovery-ia",
@@ -128,9 +135,8 @@ export default function BlogDiscoveryIAPage() {
           headlineEn="Want to run discovery in 48h?"
           subEs="Nuestro proceso UXBox combina IA y metodología UX para darte claridad en tiempo récord."
           subEn="Our UXBox process combines AI and UX methodology to give you clarity in record time."
-          ctaEs="Comenzar Discovery"
-          ctaEn="Start Discovery"
-          href="/#uxbox"
+          ctaEs="Agendar llamada"
+          ctaEn="Book a call"
           gradient="linear-gradient(90deg, #E8751A, #c65a10)"
         />
       </div>

@@ -21,7 +21,7 @@ export function CourseMidCta({ headline, headlineEn, subtext, subtextEn, ctaText
   const { t } = useLanguage()
 
   return (
-    <div ref={ref} className="py-8 md:py-10 bg-[var(--surface-dark)]">
+    <div ref={ref} className="py-8 md:py-10 bg-background">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -33,7 +33,7 @@ export function CourseMidCta({ headline, headlineEn, subtext, subtextEn, ctaText
             ? "border-[var(--magenta)]/[0.12] bg-[var(--magenta)]/[0.03]"
             : "border-foreground/[0.06] bg-foreground/[0.02]"
         }`}>
-          <p className="text-lg md:text-xl font-medium text-[var(--surface-dark-fg)] mb-2 font-display">
+          <p className="text-lg md:text-xl font-medium text-foreground mb-2 font-display">
             {t(headline, headlineEn ?? headline)}
           </p>
           <p className="text-sm text-foreground/40 mb-4 max-w-md mx-auto">{t(subtext, subtextEn ?? subtext)}</p>

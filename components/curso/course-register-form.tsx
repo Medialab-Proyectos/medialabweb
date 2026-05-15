@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { Send, Loader2, CheckCircle, User, Mail, Briefcase, Sparkles, MessageSquare } from "lucide-react"
 import { motion } from "framer-motion"
+import { useLanguage } from "@/lib/language-context"
 
 const roles = [
   "Diseñador/a UX/UI",
@@ -22,6 +23,7 @@ const experienceLevels = [
 ]
 
 export function CourseRegisterForm() {
+  const { localized } = useLanguage()
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [role, setRole] = useState("")
@@ -72,11 +74,11 @@ export function CourseRegisterForm() {
         <div className="w-14 h-14 mx-auto mb-5 rounded-full flex items-center justify-center" style={{ background: 'var(--cyan)' }}>
           <CheckCircle size={28} className="text-white" />
         </div>
-        <h3 className="text-xl font-bold text-[var(--surface-dark-fg)] mb-3 font-display">
+        <h3 className="text-xl font-bold text-foreground mb-3 font-display">
           ¡Registro recibido!
         </h3>
         <p className="text-foreground/50 text-sm leading-relaxed mb-3">
-          Gracias, <span className="text-[var(--surface-dark-fg)] font-medium">{name}</span>. Te contactaremos en las próximas 48 horas con los detalles de inscripción.
+          Gracias, <span className="text-foreground font-medium">{name}</span>. Te contactaremos en las próximas 48 horas con los detalles de inscripción.
         </p>
         <p className="text-xs text-foreground/30">
           Revisa tu bandeja de entrada y spam por el email de confirmación.
@@ -87,7 +89,7 @@ export function CourseRegisterForm() {
 
   return (
     <div className="p-6 md:p-8 rounded-2xl border border-foreground/[0.08] bg-foreground/[0.03] backdrop-blur-sm">
-      <h3 className="text-lg font-bold text-[var(--surface-dark-fg)] mb-1 font-display">Reserva tu lugar</h3>
+      <h3 className="text-lg font-bold text-foreground mb-1 font-display">Reserva tu lugar</h3>
       <p className="text-xs text-foreground/40 mb-6">Completa el formulario y te contactaremos con los detalles.</p>
 
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -104,7 +106,7 @@ export function CourseRegisterForm() {
             onChange={(e) => setName(e.target.value)}
             placeholder="Tu nombre completo"
             required
-            className="w-full px-3.5 py-3 rounded-xl bg-foreground/[0.05] border border-foreground/[0.08] text-[var(--surface-dark-fg)] placeholder:text-foreground/25 focus:outline-none focus:border-[var(--magenta)]/40 focus:bg-foreground/[0.07] transition-all duration-200 text-sm"
+            className="w-full px-3.5 py-3 rounded-xl bg-foreground/[0.05] border border-foreground/[0.08] text-foreground placeholder:text-foreground/25 focus:outline-none focus:border-[var(--magenta)]/40 focus:bg-foreground/[0.07] transition-all duration-200 text-sm"
           />
         </div>
 
@@ -121,7 +123,7 @@ export function CourseRegisterForm() {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="tu@email.com"
             required
-            className="w-full px-3.5 py-3 rounded-xl bg-foreground/[0.05] border border-foreground/[0.08] text-[var(--surface-dark-fg)] placeholder:text-foreground/25 focus:outline-none focus:border-[var(--magenta)]/40 focus:bg-foreground/[0.07] transition-all duration-200 text-sm"
+            className="w-full px-3.5 py-3 rounded-xl bg-foreground/[0.05] border border-foreground/[0.08] text-foreground placeholder:text-foreground/25 focus:outline-none focus:border-[var(--magenta)]/40 focus:bg-foreground/[0.07] transition-all duration-200 text-sm"
           />
         </div>
 
@@ -135,7 +137,7 @@ export function CourseRegisterForm() {
             id="course-role"
             value={role}
             onChange={(e) => setRole(e.target.value)}
-            className="w-full px-3.5 py-3 rounded-xl bg-foreground/[0.05] border border-foreground/[0.08] text-[var(--surface-dark-fg)] focus:outline-none focus:border-[var(--cyan)]/40 focus:bg-foreground/[0.07] transition-all duration-200 text-sm appearance-none cursor-pointer"
+            className="w-full px-3.5 py-3 rounded-xl bg-foreground/[0.05] border border-foreground/[0.08] text-foreground focus:outline-none focus:border-[var(--cyan)]/40 focus:bg-foreground/[0.07] transition-all duration-200 text-sm appearance-none cursor-pointer"
           >
             <option value="" className="bg-background">Selecciona tu rol</option>
             {roles.map((r) => (
@@ -154,7 +156,7 @@ export function CourseRegisterForm() {
             id="course-experience"
             value={experience}
             onChange={(e) => setExperience(e.target.value)}
-            className="w-full px-3.5 py-3 rounded-xl bg-foreground/[0.05] border border-foreground/[0.08] text-[var(--surface-dark-fg)] focus:outline-none focus:border-[var(--cyan)]/40 focus:bg-foreground/[0.07] transition-all duration-200 text-sm appearance-none cursor-pointer"
+            className="w-full px-3.5 py-3 rounded-xl bg-foreground/[0.05] border border-foreground/[0.08] text-foreground focus:outline-none focus:border-[var(--cyan)]/40 focus:bg-foreground/[0.07] transition-all duration-200 text-sm appearance-none cursor-pointer"
           >
             <option value="" className="bg-background">Selecciona tu nivel</option>
             {experienceLevels.map((l) => (
@@ -175,7 +177,7 @@ export function CourseRegisterForm() {
             onChange={(e) => setMotivation(e.target.value)}
             placeholder="Cuéntanos brevemente..."
             rows={2}
-            className="w-full px-3.5 py-3 rounded-xl bg-foreground/[0.05] border border-foreground/[0.08] text-[var(--surface-dark-fg)] placeholder:text-foreground/25 focus:outline-none focus:border-[var(--magenta)]/40 focus:bg-foreground/[0.07] transition-all duration-200 text-sm resize-none"
+            className="w-full px-3.5 py-3 rounded-xl bg-foreground/[0.05] border border-foreground/[0.08] text-foreground placeholder:text-foreground/25 focus:outline-none focus:border-[var(--magenta)]/40 focus:bg-foreground/[0.07] transition-all duration-200 text-sm resize-none"
           />
         </div>
 
@@ -208,7 +210,7 @@ export function CourseRegisterForm() {
 
         <p className="text-[10px] text-foreground/20 text-center leading-relaxed">
           Al registrarte aceptas nuestra{" "}
-          <a href="/politica-de-privacidad" className="underline hover:text-foreground/40 transition-colors">política de privacidad</a>.
+          <a href={localized("/politica-de-privacidad")} className="underline hover:text-foreground/40 transition-colors">política de privacidad</a>.
         </p>
       </form>
     </div>

@@ -28,7 +28,7 @@ export function CourseCurriculum() {
   ]
 
   return (
-    <section id="programa" className="relative py-20 md:py-28 bg-[var(--surface-mid)] overflow-hidden">
+    <section id="programa" className="relative py-20 md:py-28 bg-secondary/40 overflow-hidden">
       <div className="absolute inset-0">
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-foreground/[0.06] to-transparent" />
       </div>
@@ -43,7 +43,7 @@ export function CourseCurriculum() {
           <span className="inline-block text-xs tracking-[0.2em] uppercase mb-4 font-display" style={{ color: 'var(--cyan)' }}>
             {t("Lo que sabrás hacer", "What you'll know how to do")}
           </span>
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[var(--surface-dark-fg)] tracking-tight leading-snug mb-5 font-display">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground tracking-tight leading-snug mb-5 font-display">
             {t(
               "14 módulos que transforman cómo piensas, diseñas y construyes",
               "14 modules that transform how you think, design, and build"
@@ -77,7 +77,7 @@ export function CourseCurriculum() {
                       </div>
                       <span className="text-[10px] font-mono text-foreground/20 group-hover:text-[var(--cyan)]/50 transition-colors duration-500">{String(i + 1).padStart(2, '0')}</span>
                     </div>
-                    <h3 className="text-base font-semibold text-[var(--surface-dark-fg)] mb-2">{topic.title}</h3>
+                    <h3 className="text-base font-semibold text-foreground mb-2">{topic.title}</h3>
                     <p className="text-sm text-foreground/40 leading-relaxed group-hover:text-foreground/50 transition-colors duration-300">{topic.desc}</p>
                   </div>
                 </div>

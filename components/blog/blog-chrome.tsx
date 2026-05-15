@@ -5,10 +5,10 @@ import { ArrowLeft, ArrowRight, Calendar, Clock, Globe } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 
 export function BlogChromeBackLink() {
-  const { t } = useLanguage()
+  const { t, localized } = useLanguage()
   return (
     <Link
-      href="/blog"
+      href={localized("/blog")}
       className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
     >
       <ArrowLeft size={14} /> {t("Volver al blog", "Back to blog")}
@@ -82,7 +82,7 @@ export function BlogChromeCTA({
   href?: string
   gradient?: string
 }) {
-  const { t } = useLanguage()
+  const { t, localized } = useLanguage()
   return (
     <div className="rounded-2xl border border-border p-8 flex flex-col md:flex-row items-center gap-6 bg-card">
       <div className="flex-1">
@@ -92,8 +92,8 @@ export function BlogChromeCTA({
         <p className="text-sm text-muted-foreground">{t(subEs, subEn)}</p>
       </div>
       <Link
-        href={href}
-        className="shrink-0 inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm text-white"
+        href={href.startsWith("#") || href.startsWith("http") ? href : localized(href)}
+        className="shrink-0 inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-sm text-white"
         style={{ background: gradient }}
       >
         {t(ctaEs, ctaEn)} <ArrowRight size={14} />
