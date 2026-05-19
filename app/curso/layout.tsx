@@ -1,16 +1,25 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'AI Experience Architect — Curso UX Prompt Design | MediaLab',
+  title: 'AI User Experience Architect — Arquitecto de Experiencia de Usuario con IA | MediaLab',
   description:
-    'Curso premium de 8 semanas: AI Experience Architect y UX Prompt Design. Aprende a usar IA como copiloto estrategico para disenar, investigar y construir productos digitales. Solo 30 cupos. Por MediaLab Ingenieria.',
+    'Programa Arquitecto de Experiencia de Usuario con IA. Estructuración estratégica de productos digitales funcionales mediante metodologías UX/UI, análisis conductual y validación continua. 9 módulos, 30 cupos, certificación profesional. Por MediaLab Ingeniería.',
   keywords: [
-    'curso IA para disenadores', 'AI Experience Architect', 'UX Prompt Design',
-    'curso UX con inteligencia artificial', 'diseno con IA', 'IA para UX/UI',
-    'curso premium IA', 'pensamiento estrategico IA', 'IA y diseno humano',
-    'frameworks IA', 'producto digital con IA', 'curso diseno conductual',
-    'prompt engineering para UX', 'curso MediaLab', 'IA generativa para disenadores',
-    'curso online IA diseno', 'formacion IA producto digital',
+    'AI User Experience Architect', 'Arquitecto de Experiencia de Usuario con IA',
+    'curso UX con inteligencia artificial', 'diseño de producto digital con IA',
+    'talento híbrido digital', 'product thinking con IA',
+    'UX para frontend backend', 'reducción de retrabajo UX',
+    'validación de producto digital', 'human-centered AI',
+    'digital architecture UX', 'diseño conductual con IA',
+    'curso universitario IA diseño', 'formación diseño experiencias',
+    'producto digital funcional', 'metodología UX UI',
+    'IA como copiloto estratégico', 'curso premium IA',
+    'UX Prompt Design', 'curso diseño conductual',
+    'prompt engineering para UX', 'curso MediaLab',
+    'IA generativa para diseñadores', 'curso online IA diseño',
+    'formación IA producto digital', 'diseño con IA Colombia',
+    'curso arquitecto experiencia usuario', 'AI assisted design',
+    'product design con inteligencia artificial',
   ],
   alternates: {
     canonical: '/curso',
@@ -21,9 +30,9 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: 'AI Experience Architect — Curso UX Prompt Design',
+    title: 'AI User Experience Architect — Arquitecto de Experiencia de Usuario con IA',
     description:
-      'Curso premium de MediaLab: 8 semanas para dominar IA como copiloto estrategico en diseno UX/UI. 9 modulos, 30 cupos, certificacion profesional.',
+      'Programa Arquitecto de Experiencia de Usuario con IA de MediaLab: 9 módulos para estructurar, validar y optimizar productos digitales funcionales. 30 cupos, certificación profesional.',
     type: 'website',
     locale: 'es_CO',
     url: '/curso',
@@ -32,14 +41,14 @@ export const metadata: Metadata = {
         url: '/images/curso/hero-designer.png',
         width: 1200,
         height: 630,
-        alt: 'AI Experience Architect — Curso MediaLab Ingenieria',
+        alt: 'AI Experience Architect — Programa MediaLab Ingeniería',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'AI Experience Architect — MediaLab',
-    description: 'Curso de 8 semanas: aprende a usar IA para disenar productos con criterio humano. Solo 30 cupos.',
+    title: 'AI User Experience Architect — MediaLab',
+    description: 'Programa de 9 módulos: estructura y valida productos digitales funcionales con IA. 30 cupos. Arquitecto de Experiencia de Usuario con IA.',
     images: ['/images/curso/hero-designer.png'],
   },
 }
@@ -58,19 +67,24 @@ export default function CursoLayout({
           __html: JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'Course',
-            name: 'AI Experience Architect — UX Prompt Design',
+            name: 'AI User Experience Architect — Arquitecto de Experiencia de Usuario con IA',
             description:
-              'Curso premium de 8 semanas para disenadores, developers y startups. Aprende a usar IA como copiloto estrategico con la metodologia que logra 90% de productividad con 10% de esfuerzo.',
+              'Programa especializado en diseño de experiencias digitales impulsadas por inteligencia artificial, orientado a la construcción estratégica de productos digitales funcionales mediante metodologías UX/UI, análisis conductual y procesos de validación continua. La metodología permite acelerar la conceptualización y estructuración de aplicaciones digitales, fortaleciendo la relación entre diseño, negocio y desarrollo tecnológico, sin reemplazar los procesos avanzados de ingeniería de software.',
             provider: {
               '@type': 'Organization',
-              name: 'MediaLab Ingenieria',
+              name: 'MediaLab Ingeniería',
               url: 'https://medialab.design',
               logo: 'https://medialab.design/logo.svg',
             },
             url: 'https://medialab.design/curso',
             educationalLevel: 'Intermediate',
-            coursePrerequisites: 'Experiencia basica en diseno UX/UI o desarrollo de producto',
-            numberOfCredits: '9 modulos',
+            coursePrerequisites: 'Profesionales de diseño, ingeniería, marketing, psicología, economía u otras disciplinas interesados en producto digital',
+            numberOfCredits: '9 módulos',
+            occupationalCategory: [
+              'AI User Experience Architect',
+              'UX Prompt Designer',
+              'Digital Product Strategist',
+            ],
             hasCourseInstance: {
               '@type': 'CourseInstance',
               courseMode: 'Online',
@@ -89,25 +103,99 @@ export default function CursoLayout({
                 jobTitle: 'CEO & Founder',
                 worksFor: {
                   '@type': 'Organization',
-                  name: 'MediaLab Ingenieria',
+                  name: 'MediaLab Ingeniería',
                 },
               },
             },
             teaches: [
+              'Arquitectura de experiencias digitales con IA',
+              'Estructuración y validación de productos digitales funcionales',
+              'Comunicación UX con equipos frontend y backend',
               'UX Prompt Design',
               'Behavioral AI Design',
-              'IA generativa para diseno de producto',
-              'Frameworks de decision con IA',
-              'Diseno conductual con inteligencia artificial',
+              'IA generativa para diseño de producto',
+              'Frameworks de decisión con IA',
+              'Diseño conductual con inteligencia artificial',
+              'Reducción de retrabajo en equipos técnicos',
+              'Validación de producto antes de desarrollo complejo',
             ],
             about: [
-              'Inteligencia Artificial para Diseno',
+              'Arquitectura de Experiencias Digitales',
+              'Inteligencia Artificial para Diseño de Producto',
               'UX/UI',
-              'Prompt Engineering',
-              'Diseno Conductual',
-              'Producto Digital',
+              'Product Thinking',
+              'Digital Architecture',
+              'UX Strategy',
+              'Human-Centered AI',
+              'Diseño Conductual',
+              'Validación de Producto Digital',
             ],
+            audience: {
+              '@type': 'EducationalAudience',
+              educationalRole: 'student',
+              audienceType: 'Diseñadores UX/UI, Product Designers, Developers, Startups, CEOs, Emprendedores, estudiantes de Diseño Gráfico, Multimedia, Ingeniería de Sistemas, Ingeniería Electrónica, Ingeniería Industrial, Artes, Diseño Industrial, Psicología, Marketing, Sociología, Periodismo, Economía',
+            },
             inLanguage: 'es',
+          }),
+        }}
+      />
+      {/* FAQPage Schema for course */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'FAQPage',
+            mainEntity: [
+              {
+                '@type': 'Question',
+                name: '¿El curso AI Experience Architect reemplaza al desarrollo de software?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'No. La metodología permite construir y validar productos digitales funcionales sin necesidad inmediata de desarrollo complejo, acelerando la toma de decisiones antes de inversión técnica avanzada. Cuando llegues a desarrollo, todo estará mejor preparado: menos retrabajo, mejores entregables, más claridad.',
+                },
+              },
+              {
+                '@type': 'Question',
+                name: '¿El programa sirve para carreras fuera de diseño?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'Sí. Es un puente entre Diseño, Producto, Tecnología, Innovación y Negocio. Sirve para 12+ carreras: Diseño Gráfico, Multimedia, Ingeniería de Sistemas, Ingeniería Electrónica, Ingeniería Industrial, Artes, Diseño Industrial, Psicología, Marketing, Sociología, Periodismo, Economía. Y para roles como CEOs, emprendedores y creadores de experiencias digitales.',
+                },
+              },
+              {
+                '@type': 'Question',
+                name: '¿Qué nivel de entregables tendré al finalizar?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'Productos digitales funcionales listos para evolucionar hacia desarrollo real. No pantallas sueltas: un producto completo con estrategia, arquitectura UX, validación conductual, auditoría técnica y pruebas con usuarios reales.',
+                },
+              },
+              {
+                '@type': 'Question',
+                name: '¿Necesito saber programar para tomar el curso?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'No. La metodología funciona para profesionales de cualquier carrera que nunca han tocado código. Si eres developer, aún mejor — hay módulos que conectan tu background técnico con pensamiento de producto y UX.',
+                },
+              },
+              {
+                '@type': 'Question',
+                name: '¿En qué se diferencia de un bootcamp de prompts?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'Un bootcamp de prompts te enseña a escribir instrucciones para ChatGPT. Aquí aprendes arquitectura de experiencias digitales: cuándo usar IA, cuándo no, cómo estructurar productos, cómo conectar UX con desarrollo, cómo validar antes de invertir. Es la diferencia entre tener una herramienta y tener un sistema de pensamiento.',
+                },
+              },
+              {
+                '@type': 'Question',
+                name: '¿Cuánto cuesta el programa AI Experience Architect?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'El precio de lanzamiento de la Cohorte 01 es $995 USD (precio regular $1,500 USD). Incluye 9 módulos, workshops en vivo, mentoría grupal, comunidad de por vida, herramientas premium y certificación. Garantía de devolución la primera semana.',
+                },
+              },
+            ],
           }),
         }}
       />

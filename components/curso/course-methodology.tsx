@@ -173,7 +173,7 @@ export function CourseMethodology() {
           className="text-center mb-8"
         >
           <span className="inline-block text-xs tracking-[0.2em] uppercase mb-4 font-display" style={{ color: 'var(--cyan)' }}>
-            {t("El sistema que te faltaba", "The system you were missing")}
+            {t("Una metodología, no un bootcamp", "A methodology, not a bootcamp")}
           </span>
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground tracking-tight leading-snug mb-5 font-display">
             {t("9 módulos. 2 bloques. ", "9 modules. 2 blocks. ")}
@@ -181,12 +181,23 @@ export function CourseMethodology() {
               {t("De la confusión al producto real.", "From confusion to real product.")}
             </span>
           </h2>
-          <p className="max-w-2xl mx-auto text-lg text-foreground/50">
+          <p className="max-w-2xl mx-auto text-lg text-foreground/50 mb-4">
             {t(
-              "No es un curso de herramientas. Es un journey de transformación donde aprendes a pensar, decidir y construir con IA en cada paso.",
-              "It's not a tool course. It's a transformation journey where you learn to think, decide, and build with AI at every step."
+              "Un puente entre Diseño, Producto, Tecnología, Innovación, Desarrollo y Negocio. Cada módulo produce entregables que reducen retrabajo en equipos técnicos.",
+              "A bridge between Design, Product, Technology, Innovation, Development, and Business. Each module produces deliverables that reduce rework for technical teams."
             )}
           </p>
+          <div className="flex flex-wrap justify-center gap-2 max-w-xl mx-auto">
+            {[
+              t("UX/UI", "UX/UI"), t("Product Design", "Product Design"), t("AI-assisted Design", "AI-assisted Design"),
+              t("Product Thinking", "Product Thinking"), t("Digital Architecture", "Digital Architecture"),
+              t("UX Strategy", "UX Strategy"), t("Human-Centered AI", "Human-Centered AI"),
+            ].map((tag, i) => (
+              <span key={i} className="px-2.5 py-1 rounded-full text-[10px] font-medium border curso-card text-foreground/50 dark:text-foreground/45">
+                {tag}
+              </span>
+            ))}
+          </div>
         </motion.div>
 
         {/* Workshop image */}
@@ -254,7 +265,7 @@ export function CourseMethodology() {
                   <div className={`${isLeft ? 'md:pr-12 md:text-right' : 'md:col-start-2 md:pl-12 md:text-left'} md:direction-ltr`}>
                     <button onClick={() => setActivePhase(isActive ? null : i)} className="w-full text-left group">
                       <div className={`p-6 md:p-8 rounded-2xl border transition-all duration-500 ${
-                        isActive ? `${s.border} ${s.bg} shadow-xl` : 'border-foreground/[0.1] bg-foreground/[0.03] hover:border-foreground/20 hover:bg-foreground/[0.05]'
+                        isActive ? `${s.border} ${s.bg} shadow-xl` : 'curso-card hover:border-foreground/20'
                       }`}>
                         <div className={`flex items-center gap-3 mb-3 ${isLeft ? 'md:flex-row-reverse' : ''}`}>
                           <div className={`w-8 h-8 rounded-lg ${s.bg} flex items-center justify-center shrink-0`}>

@@ -9,6 +9,7 @@ import { CourseMethodology } from "@/components/curso/course-methodology"
 import { CourseMidCta } from "@/components/curso/course-mid-cta"
 import { CourseCurriculum } from "@/components/curso/course-curriculum"
 import { CourseTransformation } from "@/components/curso/course-transformation"
+import { CourseAudience } from "@/components/curso/course-audience"
 import { CourseTools } from "@/components/curso/course-tools"
 import { CourseValidation } from "@/components/curso/course-validation"
 import { CourseFaq } from "@/components/curso/course-faq"
@@ -57,10 +58,11 @@ export default function CursoPage() {
         headlineEn="If any of this resonated, it's not a coincidence."
         subtext="Diseñamos esta metodología para personas como tú."
         subtextEn="We designed this methodology for people like you."
-        ctaText="Registrarme al curso →"
-        ctaTextEn="Register for the course →"
+        ctaText="Inscribirme →"
+        ctaTextEn="Enroll now →"
         ctaHref="#registro"
         variant="primary"
+        bgImage="/images/curso/midcta-identified.png"
       />
 
       {/* 5. CONTRAST — loss aversion */}
@@ -79,6 +81,7 @@ export default function CursoPage() {
         ctaTextEn="See the program →"
         ctaHref="#programa"
         variant="subtle"
+        bgImage="/images/curso/midcta-methodology.png"
       />
 
       {/* 8. VALUE */}
@@ -86,6 +89,9 @@ export default function CursoPage() {
 
       {/* 9. VISION — aspirational identity */}
       <CourseTransformation />
+
+      {/* 9.5 AUDIENCE — expanded target: hybrid talent, 12+ university programs */}
+      <CourseAudience />
 
       {/* 10. ENABLEMENT — value stacking */}
       <CourseTools />
@@ -98,6 +104,16 @@ export default function CursoPage() {
 
       {/* 13. COMMUNITY — continuous UX collaboration */}
       <CourseCommunity />
+
+      {/* 13.5. COMMUNITY CTA — no button, just statement */}
+      <CourseMidCta
+        headline="La IA evoluciona cada semana. Tu comunidad también."
+        headlineEn="AI evolves every week. So does your community."
+        subtext="Mientras otros profesionales se quedan solos después de un curso, tú tendrás un equipo permanente para navegar cada cambio en la industria."
+        subtextEn="While other professionals are on their own after a course, you'll have a permanent team to navigate every shift in the industry."
+        variant="primary"
+        bgImage="/images/curso/midcta-community.png"
+      />
 
       {/* 14. CONVERT + REGISTER — final conversion with registration form */}
       <CourseCta />

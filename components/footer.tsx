@@ -44,7 +44,7 @@ export function Footer() {
       title: t("Recursos", "Resources"),
       links: [
         { label: "Blog", href: "#blog" },
-        { label: t("Curso UX + IA", "UX + AI Course"), href: "/curso" },
+        { label: t("Educación", "Education"), href: "/curso" },
         { label: "FAQ", href: "#faq" },
         { label: t("Contacto", "Contact"), href: "#contact" },
       ],

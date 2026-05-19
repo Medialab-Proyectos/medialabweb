@@ -258,7 +258,7 @@ function ModuleCard({ mod, blockColor, index, inView, t }: {
       transition={{ delay: 0.1 + index * 0.06, duration: 0.5 }}
     >
       <div
-        className="relative rounded-2xl border border-foreground/[0.1] bg-foreground/[0.03] hover:border-foreground/20 transition-all duration-300 overflow-hidden cursor-pointer"
+        className="relative rounded-2xl border curso-card hover:border-foreground/20 transition-all duration-300 overflow-hidden cursor-pointer"
         onClick={() => setOpen(!open)}
       >
         <div className="p-5 sm:p-6 flex items-start gap-4">
@@ -308,13 +308,13 @@ function ModuleCard({ mod, blockColor, index, inView, t }: {
                     <p className="text-[10px] tracking-[0.15em] uppercase text-foreground/30 mb-2 font-medium">{t("Herramientas", "Tools")}</p>
                     <div className="flex flex-wrap gap-1.5">
                       {mod.tools.map((tool, i) => (
-                        <span key={i} className="px-2.5 py-1 rounded-full text-[10px] font-medium border border-foreground/[0.1] bg-foreground/[0.03] text-foreground/40">
+                        <span key={i} className="px-2.5 py-1 rounded-full text-[10px] font-medium border curso-card text-foreground/50 dark:text-foreground/45">
                           {tool}
                         </span>
                       ))}
                     </div>
                   </div>
-                  <div className="flex items-start gap-2 p-3 rounded-xl border border-foreground/[0.06] bg-foreground/[0.02]">
+                  <div className="flex items-start gap-2 p-3 rounded-xl border curso-card">
                     <span className="text-[10px] tracking-[0.15em] uppercase text-foreground/30 font-medium shrink-0 mt-0.5">{t("Entregable:", "Deliverable:")}</span>
                     <span className="text-sm text-foreground/50">{mod.deliverable}</span>
                   </div>

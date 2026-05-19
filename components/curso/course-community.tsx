@@ -15,48 +15,48 @@ export function CourseCommunity() {
       icon: MessageSquare,
       title: t("Discusiones semanales", "Weekly discussions"),
       description: t(
-        "Comparte tus proyectos, recibe feedback real de la comunidad y discute tendencias en IA + UX.",
-        "Share your projects, get real community feedback, and discuss trends in AI + UX."
+        "Comparte proyectos, recibe feedback real y discute tendencias IA + UX.",
+        "Share projects, get real feedback, and discuss AI + UX trends."
       ),
     },
     {
       icon: Lightbulb,
       title: t("Sesiones de co-creación", "Co-creation sessions"),
       description: t(
-        "Sesiones en vivo donde resolvemos retos de diseño reales usando IA como copiloto colaborativo.",
-        "Live sessions where we solve real design challenges using AI as a collaborative copilot."
+        "Retos de diseño reales resueltos en vivo con IA como copiloto.",
+        "Real design challenges solved live with AI as copilot."
       ),
     },
     {
       icon: Handshake,
       title: t("Red de colaboración", "Collaboration network"),
       description: t(
-        "Conecta con diseñadores, developers y product managers que comparten tu visión sobre IA y producto.",
-        "Connect with designers, developers, and product managers who share your vision on AI and product."
+        "Diseñadores, developers y PMs que comparten tu visión.",
+        "Designers, developers, and PMs who share your vision."
       ),
     },
     {
       icon: Zap,
       title: t("Recursos exclusivos", "Exclusive resources"),
       description: t(
-        "Acceso a prompts, frameworks, plantillas y herramientas actualizadas por la comunidad.",
-        "Access to prompts, frameworks, templates, and tools kept up-to-date by the community."
+        "Prompts, frameworks, plantillas actualizados por la comunidad.",
+        "Prompts, frameworks, templates updated by the community."
       ),
     },
     {
       icon: Globe,
       title: t("Eventos y speakers", "Events & speakers"),
       description: t(
-        "Invitados especiales de la industria comparten su experiencia aplicando IA en diseño de producto.",
-        "Special industry guests share their experience applying AI in product design."
+        "Invitados de la industria comparten IA aplicada a producto.",
+        "Industry guests share applied AI in product."
       ),
     },
     {
       icon: Users,
       title: t("Mentoría entre pares", "Peer mentorship"),
       description: t(
-        "Sistema de parejas de mentoría donde creces enseñando y aprendiendo de otros profesionales.",
-        "A pair-mentorship system where you grow by teaching and learning from other professionals."
+        "Creces enseñando y aprendiendo de otros profesionales.",
+        "Grow by teaching and learning from other professionals."
       ),
     },
   ]
@@ -111,31 +111,16 @@ export function CourseCommunity() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={inView ? { opacity: 1, y: 0 } : {}}
                   transition={{ delay: 0.15 + i * 0.08, duration: 0.5 }}
-                  className="group p-6 rounded-2xl border border-foreground/[0.06] bg-foreground/[0.02] hover:bg-foreground/[0.04] hover:border-foreground/[0.1] transition-all duration-300"
+                  className="group p-5 rounded-xl border curso-card hover:border-[var(--cyan)]/25 transition-all duration-300"
                 >
-                  <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-4 border border-foreground/[0.08] bg-foreground/[0.03] group-hover:border-[var(--cyan)]/30 transition-colors duration-300">
-                    <Icon size={18} className="text-foreground/50 group-hover:text-[var(--cyan)] transition-colors duration-300" />
-                  </div>
-                  <h3 className="text-sm font-semibold text-foreground mb-2">{feature.title}</h3>
-                  <p className="text-xs text-foreground/45 leading-relaxed">{feature.description}</p>
+                  <Icon size={16} className="text-foreground/40 group-hover:text-[var(--cyan)] transition-colors duration-300 mb-3" />
+                  <h3 className="text-sm font-semibold text-foreground mb-1">{feature.title}</h3>
+                  <p className="text-xs text-foreground/55 dark:text-foreground/40 leading-snug">{feature.description}</p>
                 </motion.div>
               )
             })}
           </div>
 
-          {/* Bottom highlight */}
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ delay: 0.7, duration: 0.5 }}
-            className="mt-12 p-6 md:p-8 rounded-2xl border border-[var(--cyan)]/[0.12] bg-[var(--cyan)]/[0.03] text-center">
-            <p className="text-lg md:text-xl font-medium text-foreground mb-2 font-display">
-              {t("La IA evoluciona cada semana. Tu comunidad también.", "AI evolves every week. So does your community.")}
-            </p>
-            <p className="text-sm text-foreground/40 max-w-lg mx-auto">
-              {t(
-                "Mientras otros profesionales se quedan solos después de un curso, tú tendrás un equipo permanente para navegar cada cambio en la industria.",
-                "While other professionals are on their own after a course, you'll have a permanent team to navigate every shift in the industry."
-              )}
-            </p>
-          </motion.div>
         </motion.div>
       </div>
     </section>

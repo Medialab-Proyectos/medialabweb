@@ -109,8 +109,8 @@ export function CourseSectionNav() {
                   onClick={(e) => handleClick(e, section.id)}
                   className={`px-3 py-1.5 rounded-full text-[11px] font-medium whitespace-nowrap transition-all duration-300 ${
                     active === section.id
-                      ? "text-foreground bg-foreground/[0.1]"
-                      : "text-foreground/35 hover:text-foreground/60 hover:bg-foreground/[0.03]"
+                      ? "text-foreground bg-foreground/[0.12] dark:bg-white/[0.12]"
+                      : "text-foreground/55 dark:text-foreground/50 hover:text-foreground/80 hover:bg-foreground/[0.06] dark:hover:bg-white/[0.06]"
                   }`}
                 >
                   {section.label}

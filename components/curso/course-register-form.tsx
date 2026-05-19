@@ -70,7 +70,7 @@ export function CourseRegisterForm() {
   if (submitted) {
     return (
       <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5 }}
-        className="p-8 rounded-2xl border border-[var(--cyan)]/20 bg-foreground/[0.03] text-center">
+        className="p-8 rounded-2xl border curso-card-highlight text-center">
         <div className="w-14 h-14 mx-auto mb-5 rounded-full flex items-center justify-center" style={{ background: 'var(--cyan)' }}>
           <CheckCircle size={28} className="text-white" />
         </div>
@@ -88,7 +88,7 @@ export function CourseRegisterForm() {
   }
 
   return (
-    <div className="p-6 md:p-8 rounded-2xl border border-foreground/[0.08] bg-foreground/[0.03] backdrop-blur-sm">
+    <div className="p-6 md:p-7 rounded-2xl border curso-card backdrop-blur-sm h-full flex flex-col">
       <h3 className="text-lg font-bold text-foreground mb-1 font-display">{t("Reserva tu lugar", "Reserve your spot")}</h3>
       <p className="text-xs text-foreground/40 mb-6">{t("Completa el formulario y te contactaremos con los detalles.", "Fill out the form and we'll contact you with the details.")}</p>
 

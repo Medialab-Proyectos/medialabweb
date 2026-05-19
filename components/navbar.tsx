@@ -1,10 +1,10 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
-import { Menu, X, Moon, Sun } from "lucide-react"
+import { Menu, X, Moon, Sun, AArrowUp, AArrowDown } from "lucide-react"
 import { useTheme } from "next-themes"
 import { useLanguage } from "@/lib/language-context"
 
@@ -12,7 +12,7 @@ const navLinks = {
   es: [
     { label: "Servicios", href: "#services" },
     { label: "Portafolio", href: "/portafolio" },
-    { label: "Curso UX + IA", href: "/curso", highlight: true },
+    { label: "Educación", href: "/curso", highlight: true },
     { label: "UXBox", href: "#uxbox" },
     { label: "Metodología", href: "#method" },
     { label: "Blog", href: "#blog" },
@@ -20,17 +20,21 @@ const navLinks = {
   en: [
     { label: "Services", href: "#services" },
     { label: "Portfolio", href: "/portafolio" },
-    { label: "Learn AI", href: "/curso", highlight: true },
+    { label: "Education", href: "/curso", highlight: true },
     { label: "UXBox", href: "#uxbox" },
     { label: "Methodology", href: "#method" },
     { label: "Blog", href: "#blog" },
   ],
 }
 
+const FONT_SIZES = [100, 112, 125] // percentage
+const FONT_LABELS = ["A", "A+", "A++"]
+
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const [fontIndex, setFontIndex] = useState(0)
   const { theme, setTheme } = useTheme()
   const { lang, setLang, localized } = useLanguage()
   const pathname = usePathname()
@@ -53,6 +57,12 @@ export function Navbar() {
     ? "text-white/70 hover:text-white border-white/20 hover:border-white/40"
     : "text-muted-foreground hover:text-foreground hover:border-foreground/30"
   const switcherBorder = overDarkHero ? "border-white/20" : "border-border"
+
+  const cycleFontSize = useCallback(() => {
+    const next = (fontIndex + 1) % FONT_SIZES.length
+    setFontIndex(next)
+    document.documentElement.style.fontSize = `${FONT_SIZES[next]}%`
+  }, [fontIndex])
 
   useEffect(() => {
     setMounted(true)
@@ -104,7 +114,7 @@ export function Navbar() {
         </nav>
 
         {/* Right actions */}
-        <div className="hidden md:flex items-center gap-3">
+        <div className="hidden md:flex items-center gap-2">
           {/* Language switcher */}
           {mounted && (
             <div className={`flex items-center border ${switcherBorder} rounded-full p-0.5 gap-0.5`}>
@@ -132,6 +142,17 @@ export function Navbar() {
               </button>
             </div>
           )}
+          {/* Font size toggle — accessibility */}
+          {mounted && (
+            <button
+              onClick={cycleFontSize}
+              className={`w-9 h-9 rounded-full flex items-center justify-center border transition-all duration-200 text-xs font-bold ${iconBtn}`}
+              aria-label={`Font size: ${FONT_LABELS[fontIndex]}. Click to increase.`}
+              title={lang === "es" ? "Cambiar tamaño de texto" : "Change text size"}
+            >
+              {FONT_LABELS[fontIndex]}
+            </button>
+          )}
           {/* Dark mode toggle */}
           {mounted && (
             <button
@@ -147,7 +168,7 @@ export function Navbar() {
             className="px-5 py-2.5 rounded-full text-sm font-semibold bg-foreground text-background hover:bg-[var(--magenta)] hover:text-white transition-all duration-200 active:scale-95"
           >
             {isCurso
-              ? (lang === "es" ? "Registrarme al curso" : "Register for course")
+              ? (lang === "es" ? "Inscribirme" : "Enroll now")
               : (lang === "es" ? "Iniciar proyecto" : "Start project")
             }
           </Link>
@@ -155,6 +176,16 @@ export function Navbar() {
 
         {/* Mobile actions */}
         <div className="md:hidden flex items-center gap-2">
+          {/* Font size — mobile */}
+          {mounted && (
+            <button
+              onClick={cycleFontSize}
+              className={`w-9 h-9 rounded-full flex items-center justify-center border transition-all duration-200 text-xs font-bold ${iconBtn}`}
+              aria-label={`Font size: ${FONT_LABELS[fontIndex]}`}
+            >
+              {FONT_LABELS[fontIndex]}
+            </button>
+          )}
           {mounted && (
             <button
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
@@ -220,7 +251,7 @@ export function Navbar() {
             className="mt-2 px-5 py-3 rounded-full text-sm font-semibold bg-foreground text-background text-center hover:bg-[var(--magenta)] hover:text-white transition-all duration-200"
           >
             {isCurso
-              ? (lang === "es" ? "Registrarme al curso" : "Register for course")
+              ? (lang === "es" ? "Inscribirme" : "Enroll now")
               : (lang === "es" ? "Iniciar proyecto" : "Start project")
             }
           </Link>

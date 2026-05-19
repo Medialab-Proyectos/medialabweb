@@ -206,3 +206,40 @@
 /* Hide scrollbar but keep scroll functionality */
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Course page — light mode card contrast fix */
+:root .curso-card {
+  background: oklch(0.96 0 0);
+  border-color: oklch(0.85 0 0);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+.dark .curso-card {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.15);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+:root .curso-card-highlight {
+  background: oklch(0.95 0.01 200);
+  border-color: oklch(0.80 0.04 200);
+  box-shadow: 0 1px 4px rgba(42,171,179,0.1);
+}
+.dark .curso-card-highlight {
+  background: rgba(42,171,179,0.08);
+  border-color: rgba(42,171,179,0.25);
+  box-shadow: 0 1px 4px rgba(42,171,179,0.08);
+}
+:root .curso-card-danger {
+  background: oklch(0.97 0.01 25);
+  border-color: oklch(0.88 0.03 25);
+}
+.dark .curso-card-danger {
+  background: rgba(239,68,68,0.04);
+  border-color: rgba(239,68,68,0.15);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+:root .curso-glow {
+  opacity: 0.12;
+}
+.dark .curso-glow {
+  opacity: 0.06;
+}

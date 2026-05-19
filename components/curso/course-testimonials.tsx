@@ -87,7 +87,7 @@ export function CourseTestimonials() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {testimonials.map((item, i) => (
             <motion.div key={i} initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ delay: 0.1 + i * 0.08, duration: 0.5 }} className="group">
-              <div className="relative p-6 md:p-8 rounded-2xl border border-foreground/[0.1] bg-foreground/[0.03] hover:border-[var(--magenta)]/[0.1] hover:bg-foreground/[0.03] transition-all duration-500 h-full flex flex-col">
+              <div className="relative p-6 md:p-8 rounded-2xl border curso-card hover:border-[var(--magenta)]/[0.1] transition-all duration-500 h-full flex flex-col">
                 <Quote className="w-5 h-5 mb-4" style={{ color: 'var(--magenta)', opacity: 0.3 }} />
                 <p className="text-base text-foreground/70 leading-relaxed mb-6 flex-1">&ldquo;{item.text}&rdquo;</p>
                 <div className="pt-4 border-t border-foreground/[0.1]">

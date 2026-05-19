@@ -2,6 +2,7 @@
 
 import { useRef } from "react"
 import { motion, useInView } from "framer-motion"
+import Image from "next/image"
 import { useLanguage } from "@/lib/language-context"
 
 interface CourseMidCtaProps {
@@ -9,48 +10,59 @@ interface CourseMidCtaProps {
   headlineEn?: string
   subtext: string
   subtextEn?: string
-  ctaText: string
+  ctaText?: string
   ctaTextEn?: string
-  ctaHref: string
+  ctaHref?: string
   variant?: "primary" | "subtle"
+  bgImage?: string
 }
 
-export function CourseMidCta({ headline, headlineEn, subtext, subtextEn, ctaText, ctaTextEn, ctaHref, variant = "subtle" }: CourseMidCtaProps) {
+export function CourseMidCta({ headline, headlineEn, subtext, subtextEn, ctaText, ctaTextEn, ctaHref, variant = "subtle", bgImage }: CourseMidCtaProps) {
   const ref = useRef<HTMLDivElement>(null)
-  const inView = useInView(ref, { once: true, margin: "-60px" })
+  const inView = useInView(ref, { once: true, margin: "-40px" })
   const { t } = useLanguage()
 
+  const isPrimary = variant === "primary"
+
   return (
-    <div ref={ref} className="py-8 md:py-10 bg-background">
+    <div ref={ref} className="relative overflow-hidden bg-[var(--surface-dark)] text-white -mt-px border-t border-b border-white/[0.05]">
+      {/* Background image — BRIGHTER visibility */}
+      {bgImage && (
+        <div className="absolute inset-0">
+          <Image src={bgImage} alt="" fill className="object-cover object-[center_15%] opacity-[0.65]" priority />
+          {/* Lighter overlay so the image pops much more */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-black/20 to-black/40" />
+        </div>
+      )}
+      {/* Glow accent */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] rounded-full blur-[100px]"
+          style={{ background: isPrimary ? 'rgba(232,117,26,0.25)' : 'rgba(42,171,179,0.20)' }}
+        />
+      </div>
+
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 12 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.5 }}
-        className="max-w-3xl mx-auto px-6 lg:px-8 text-center"
+        className="relative z-10 max-w-4xl mx-auto px-6 lg:px-8 py-10 md:py-14 text-center drop-shadow-md"
       >
-        <div className={`p-6 md:p-8 rounded-2xl border ${
-          variant === "primary"
-            ? "border-[var(--magenta)]/[0.12] bg-[var(--magenta)]/[0.03]"
-            : "border-foreground/[0.06] bg-foreground/[0.02]"
-        }`}>
-          <p className="text-lg md:text-xl font-medium text-foreground mb-2 font-display">
-            {t(headline, headlineEn ?? headline)}
-          </p>
-          <p className="text-sm text-foreground/40 mb-4 max-w-md mx-auto">{t(subtext, subtextEn ?? subtext)}</p>
-          <p className="text-[11px] text-foreground/25 mb-5">
-            {t(
-              "Solo 30 cupos · Precio de lanzamiento $995 USD",
-              "Only 30 seats · Launch price $995 USD"
-            )}
-          </p>
+        <p className="text-2xl md:text-3xl font-bold text-white mb-4 font-display">
+          {t(headline, headlineEn ?? headline)}
+        </p>
+        <p className="text-base md:text-lg text-white/90 mb-8 max-w-2xl mx-auto font-medium">
+          {t(subtext, subtextEn ?? subtext)}
+        </p>
+        {ctaText && ctaHref && (
           <a
             href={ctaHref}
-            className="inline-flex px-6 py-3 text-sm font-semibold text-white rounded-full transition-all duration-300 hover:scale-[1.03] hover:shadow-lg"
-            style={{ background: variant === "primary" ? 'var(--magenta)' : 'var(--cyan)' }}
+            className="inline-flex px-8 py-3.5 text-sm font-bold text-white rounded-full transition-all duration-300 hover:scale-[1.03] shadow-[0_4px_20px_rgba(0,0,0,0.5)]"
+            style={{ background: isPrimary ? 'var(--magenta)' : 'var(--cyan)' }}
           >
             {t(ctaText, ctaTextEn ?? ctaText)}
           </a>
-        </div>
+        )}
       </motion.div>
     </div>
   )

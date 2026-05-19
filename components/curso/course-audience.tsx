@@ -2,7 +2,11 @@
 
 import { useRef } from "react"
 import { motion, useInView } from "framer-motion"
-import { Palette, Monitor, Code2, RocketIcon, User, Users, Frown, Sparkles } from "lucide-react"
+import {
+  Palette, Monitor, Code2, RocketIcon, User, Users, Frown, Sparkles,
+  GraduationCap, Lightbulb, TrendingUp, Megaphone, Brain, PenTool,
+  BarChart3, Globe
+} from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 
 export function CourseAudience() {
@@ -11,43 +15,55 @@ export function CourseAudience() {
   const { t } = useLanguage()
 
   const profiles = [
-    { icon: Palette, title: t("UX/UI Designers", "UX/UI Designers"), desc: t("Quieres usar IA sin que tus diseños pierdan alma. Aquí aprendes a amplificar tu criterio, no a reemplazarlo.", "You want to use AI without your designs losing their soul. Here you learn to amplify your judgment, not replace it.") },
-    { icon: Monitor, title: t("Product Designers", "Product Designers"), desc: t("Necesitas construir productos completos donde la IA potencia — no complica — la experiencia del usuario.", "You need to build complete products where AI enhances — not complicates — the user experience.") },
-    { icon: Code2, title: t("Developers", "Developers"), desc: t("Diseñas interfaces pero te falta criterio visual estratégico. Aquí conectas código con pensamiento de producto.", "You design interfaces but lack strategic visual judgment. Here you connect code with product thinking.") },
-    { icon: RocketIcon, title: t("Startups", "Startups"), desc: t("Necesitas lanzar rápido pero con profundidad. Aprende a validar antes de construir y a construir sin deuda de diseño.", "You need to ship fast but with depth. Learn to validate before building and to build without design debt.") },
-    { icon: User, title: t("Freelancers", "Freelancers"), desc: t("Tus clientes ya usan ChatGPT. ¿Cómo te diferencias? Con criterio, frameworks y resultados que la IA sola no da.", "Your clients already use ChatGPT. How do you stand out? With judgment, frameworks, and results AI alone can't deliver.") },
-    { icon: Users, title: t("Equipos de Innovación", "Innovation Teams"), desc: t("Necesitan una metodología compartida para que todo el equipo hable el mismo idioma de IA + diseño.", "You need a shared methodology so the whole team speaks the same AI + design language.") },
-    { icon: Frown, title: t("Frustrados con la IA", "Frustrated with AI"), desc: t("Hiciste 3 cursos de prompts y sigues sin saber construir un producto. Esto resuelve eso.", "You took 3 prompt courses and still can't build a product. This fixes that.") },
-    { icon: Sparkles, title: t("Creativos que quieren ser únicos", "Creatives who want to be unique"), desc: t("Sabes que el futuro es con IA. Pero te rehusas a ser uno más. Aquí aprendes a ser tú, amplificado.", "You know the future is with AI. But you refuse to be just another one. Here you learn to be yourself, amplified.") },
+    { icon: Palette, title: t("UX/UI Designers", "UX/UI Designers"), desc: t("Amplifica tu criterio con IA sin perder alma.", "Amplify your judgment with AI without losing soul.") },
+    { icon: Monitor, title: t("Product Designers", "Product Designers"), desc: t("Construye productos completos, no solo pantallas.", "Build complete products, not just screens.") },
+    { icon: Code2, title: t("Developers", "Developers"), desc: t("Conecta código con pensamiento de producto y UX.", "Connect code with product thinking and UX.") },
+    { icon: RocketIcon, title: t("Startups y CEOs", "Startups & CEOs"), desc: t("Valida antes de invertir en desarrollo complejo.", "Validate before investing in complex development.") },
+    { icon: User, title: t("Freelancers", "Freelancers"), desc: t("Diferénciate con criterio, frameworks y productos reales.", "Stand out with judgment, frameworks, and real products.") },
+    { icon: Users, title: t("Emprendedores", "Entrepreneurs"), desc: t("Convierte tu idea en producto sin depender de código.", "Turn your idea into a product without depending on code.") },
+    { icon: Frown, title: t("Post-bootcamp", "Post-bootcamp"), desc: t("3 cursos de prompts y sigues sin construir un producto.", "3 prompt courses and you still can't build a product.") },
+    { icon: Sparkles, title: t("Entusiastas digitales", "Digital enthusiasts"), desc: t("Crea productos con propósito, no solo pantallas.", "Create products with purpose, not just screens.") },
+  ]
+
+  const universityPrograms = [
+    { icon: Palette, name: t("Diseño Gráfico", "Graphic Design") },
+    { icon: Monitor, name: t("Multimedia", "Multimedia") },
+    { icon: Code2, name: t("Ing. Sistemas", "Systems Eng.") },
+    { icon: Lightbulb, name: t("Ing. Electrónica", "Electronic Eng.") },
+    { icon: TrendingUp, name: t("Ing. Industrial", "Industrial Eng.") },
+    { icon: PenTool, name: t("Artes", "Arts") },
+    { icon: RocketIcon, name: t("Diseño Industrial", "Industrial Design") },
+    { icon: Brain, name: t("Psicología", "Psychology") },
+    { icon: Megaphone, name: t("Marketing", "Marketing") },
+    { icon: Users, name: t("Sociología", "Sociology") },
+    { icon: Globe, name: t("Periodismo", "Journalism") },
+    { icon: BarChart3, name: t("Economía", "Economics") },
   ]
 
   return (
-    <section className="relative py-20 md:py-28 bg-background overflow-hidden">
+    <section id="audiencia" className="relative py-20 md:py-28 bg-background overflow-hidden">
       <div ref={ref} className="relative z-10 max-w-6xl mx-auto px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7 }}
-          className="text-center mb-10 md:mb-14"
+          className="text-center mb-10"
         >
-          <span className="inline-block text-xs tracking-[0.2em] uppercase mb-4 font-display" style={{ color: 'var(--magenta)' }}>
-            {t("¿Esto es para ti?", "Is this for you?")}
+          <span className="inline-block text-xs tracking-[0.2em] uppercase mb-4 font-display font-medium" style={{ color: 'var(--magenta)' }}>
+            {t("Talento híbrido", "Hybrid talent")}
           </span>
-          <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-foreground tracking-tight leading-tight mb-6 font-display">
-            {t("Si algo de esto te suena, sí.", "If any of this sounds familiar, yes.")}
+          <h2 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight leading-tight mb-4 font-display">
+            {t("UX + IA + Producto + Negocio.", "UX + AI + Product + Business.")}
+            <br />
+            <span className="text-foreground/50">{t("Una nueva generación de profesionales.", "A new generation of professionals.")}</span>
           </h2>
-          <p className="max-w-2xl mx-auto text-lg text-foreground/50">
-            {t(
-              "No importa si llevas 1 año o 10. Si quieres evolucionar con la IA en vez de correr detrás de ella, esta metodología fue diseñada para ti.",
-              "It doesn't matter if you have 1 year or 10. If you want to evolve with AI instead of chasing it, this methodology was designed for you."
-            )}
-          </p>
-          <p className="text-sm text-foreground/30 mt-3">
-            {t("Toca el perfil que más te represente. Si dudas entre dos, es buena señal.", "Tap the profile that represents you best. If you're torn between two, that's a good sign.")}
+          <p className="text-sm text-foreground/60 dark:text-foreground/40">
+            {t("Toca el perfil que te represente. Si dudas entre dos, es buena señal.", "Tap the one that fits. If you're torn between two, good sign.")}
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Professional profiles */}
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-14">
           {profiles.map((profile, i) => {
             const Icon = profile.icon
             return (
@@ -55,20 +71,70 @@ export function CourseAudience() {
                 key={i}
                 initial={{ opacity: 0, y: 20 }}
                 animate={inView ? { opacity: 1, y: 0 } : {}}
-                transition={{ delay: 0.1 + i * 0.07, duration: 0.5 }}
+                transition={{ delay: 0.1 + i * 0.05, duration: 0.5 }}
                 className="group"
               >
-                <div className="p-6 rounded-2xl border border-foreground/[0.1] bg-foreground/[0.03] hover:border-[var(--magenta)]/[0.15] hover:bg-[var(--magenta)]/[0.03] transition-all duration-500 h-full text-center">
-                  <div className="w-14 h-14 rounded-2xl bg-foreground/[0.03] group-hover:bg-[var(--magenta)]/10 mx-auto flex items-center justify-center mb-4 transition-colors duration-500">
-                    <Icon className="w-6 h-6 text-foreground/30 group-hover:text-[var(--magenta)] transition-colors duration-500" />
-                  </div>
-                  <h3 className="text-base font-semibold text-foreground mb-2">{profile.title}</h3>
-                  <p className="text-sm text-foreground/40 leading-relaxed">{profile.desc}</p>
+                <div className="curso-card p-4 md:p-5 rounded-xl border hover:border-[var(--magenta)]/30 transition-all duration-300 h-full text-center">
+                  <Icon className="w-5 h-5 mx-auto mb-3 text-foreground/40 group-hover:text-[var(--magenta)] transition-colors duration-300" />
+                  <h3 className="text-sm font-semibold text-foreground mb-1">{profile.title}</h3>
+                  <p className="text-xs text-foreground/55 dark:text-foreground/40 leading-snug">{profile.desc}</p>
                 </div>
               </motion.div>
             )
           })}
         </div>
+
+        {/* University programs */}
+        <motion.div initial={{ opacity: 0, y: 30 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ delay: 0.5, duration: 0.6 }}>
+          <div className="text-center mb-6">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[var(--cyan)]/25 bg-[var(--cyan)]/[0.08] dark:bg-[var(--cyan)]/[0.06] mb-3">
+              <GraduationCap size={14} style={{ color: 'var(--cyan)' }} />
+              <span className="text-xs tracking-[0.12em] uppercase font-medium" style={{ color: 'var(--cyan)' }}>
+                {t("Universidades", "Universities")}
+              </span>
+            </div>
+            <h3 className="text-lg md:text-xl font-bold text-foreground mb-2 font-display">
+              {t("12+ carreras universitarias afines", "12+ related university programs")}
+            </h3>
+            <p className="text-xs text-foreground/50 max-w-md mx-auto">
+              {t("Complemento ideal para carreras que necesitan entender producto digital, UX e IA.", "Ideal complement for programs that need to understand digital product, UX, and AI.")}
+            </p>
+          </div>
+
+          <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-2">
+            {universityPrograms.map((program, i) => {
+              const Icon = program.icon
+              return (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={inView ? { opacity: 1, scale: 1 } : {}}
+                  transition={{ delay: 0.6 + i * 0.03, duration: 0.4 }}
+                  className="grupo curso-card p-3 rounded-lg border hover:border-[var(--cyan)]/25 transition-all duration-300 text-center"
+                >
+                  <Icon className="w-4 h-4 mx-auto mb-1.5 text-foreground/30" />
+                  <p className="text-[11px] text-foreground/60 dark:text-foreground/50 font-medium leading-tight">{program.name}</p>
+                </motion.div>
+              )
+            })}
+          </div>
+
+          {/* Institutional — high contrast solid background */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 0.8, duration: 0.5 }}
+            className="mt-10 p-8 md:p-10 rounded-2xl bg-gradient-to-br from-[var(--cyan)] to-[var(--magenta)] shadow-xl text-center"
+          >
+            <p className="text-sm md:text-base text-white/95 leading-relaxed max-w-3xl mx-auto drop-shadow-md">
+              <span className="font-bold text-white uppercase tracking-wider text-base md:text-lg block mb-2">{t("Arquitecto de Experiencia de Usuario con IA", "AI User Experience Architect")}</span>
+              {t(
+                "— programa orientado a la construcción estratégica de productos digitales funcionales mediante UX/UI, análisis conductual y validación continua, sin reemplazar procesos de ingeniería de software.",
+                "— a program oriented toward the strategic construction of functional digital products through UX/UI, behavioral analysis, and continuous validation, without replacing software engineering processes."
+              )}
+            </p>
+          </motion.div>
+        </motion.div>
       </div>
     </section>
   )
