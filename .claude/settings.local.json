@@ -23,7 +23,13 @@
       "Bash(magick identify:*)",
       "Bash(ffmpeg -version)",
       "Bash(pip show:*)",
-      "Bash(pip install:*)"
+      "Bash(pip install:*)",
+      "Bash(git fetch *)",
+      "Bash(git pull *)",
+      "Bash(git stash *)",
+      "Bash(git add *)",
+      "Bash(xxd public/favicon.ico)",
+      "Bash(xxd app/favicon.ico)"
     ]
   }
 }

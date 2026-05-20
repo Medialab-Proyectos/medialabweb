@@ -58,7 +58,7 @@ export function Footer() {
           {/* Brand */}
           <div className="col-span-2 sm:col-span-3 lg:col-span-1 flex flex-col gap-4">
             <Link href={localized("/")} className="inline-flex items-center gap-2" aria-label="MediaLab Ingeniería home">
-              <Image src="/logo.svg" alt="MediaLab Ingeniería" width={140} height={32} className="h-8 w-auto" />
+              <Image src="/logo.svg" alt="MediaLab Ingeniería" width={140} height={32} className="h-8 w-auto" unoptimized />
             </Link>
             <p className="text-sm text-white/65 leading-relaxed max-w-xs">
               {t(
