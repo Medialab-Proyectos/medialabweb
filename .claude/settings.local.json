@@ -29,7 +29,9 @@
       "Bash(git stash *)",
       "Bash(git add *)",
       "Bash(xxd public/favicon.ico)",
-      "Bash(xxd app/favicon.ico)"
+      "Bash(xxd app/favicon.ico)",
+      "Bash(git commit *)",
+      "Bash(git push *)"
     ]
   }
 }
