@@ -31,7 +31,12 @@
       "Bash(xxd public/favicon.ico)",
       "Bash(xxd app/favicon.ico)",
       "Bash(git commit *)",
-      "Bash(git push *)"
+      "Bash(git push *)",
+      "WebFetch(domain:medialab.design)",
+      "Bash(xargs wc:*)",
+      "Bash(grep -v \"^ui$\\\\|^blog\\\\|^curso\\\\|^portfolio\")",
+      "Bash(ls \"C:/Users/coben/OneDrive/Desktop/MediLab/Version 1/public/manifest\"*)",
+      "Bash(ls:*)"
     ]
   }
 }

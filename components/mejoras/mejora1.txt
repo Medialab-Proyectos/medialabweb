@@ -1,0 +1,111 @@
+Auditoría brutalmente honesta — medialab.design
+Voy directo al hueso. Hay cosas buenas (estrategia narrativa, voz emocional, intención clara) pero hay fallas estructurales graves que están sangrando conversión y credibilidad. Te las listo por severidad.
+
+🔴 NIVEL CRÍTICO (resuelve esta semana o pierdes leads)
+1. Los contadores muestran "0" — estás mostrando incompetencia técnica en una agencia de UX
+En home y portafolio salen literales: "0+ Products people love", "0% of clients who would work with us", "0 Countries", "0x ROI", "+0% SEO visibility". Esto pasa cuando los componentes animados (<CountUp />) se renderizan en SSR o cuando JS falla. Para un visitante esto significa una de dos cosas: no tienes resultados, o tu sitio está roto. Ambas matan la conversión. Una agencia de UX no puede tener bugs visibles en home. Es como un dentista con caries.
+2. Mezcla descontrolada de idiomas — rompe la confianza inmediatamente
+Estás en /en (versión inglés) y aparece de la nada:
+
+"¿Tu producto necesita posicionarse mejor en Google…? Hablemos."
+"Quiero mejorar mi experiencia →"
+"Disponibilidad limitada Q3 2026 — Tu producto merece usuarios que lo amen…"
+"Consulta gratuita · Respuesta en 24h · NDA disponible"
+
+Toda la sección de CTA final del home está en español dentro de la versión inglés. Un visitante anglo asume que abandonaste el sitio o que es un scam. Esto es el error #1 de localización en sitios bilingües. Solución: auditar cada string contra el archivo de traducciones (i18n) y bloquear deploy si hay claves faltantes.
+3. Enlaces de navegación rotos / inconsistentes
+
+En el header dice "Services / UXBox / Methodology / Blog" y todos apuntan a #services, #uxbox, #method, #blog — pero esos anchors no existen como sección con ese ID en home o están duplicados.
+En footer: "About Us → #about", "Industries → #industries", "FAQ → #faq", "Contact → #contact" — los IDs no son consistentes con las secciones reales del DOM.
+"SinDeudas → #products" y "Electrolineras → #products" apuntan al mismo ancla. Si un usuario quiere ver un producto específico, no llega.
+
+Esto rompe heurística #1 de Nielsen (visibilidad del estado del sistema) y la #4 (consistencia).
+4. Doble CTA primario en hero compitiendo entre sí
+"I want to transform my product" + "Try UXBox free →" + "Explore" en el mismo bloque. Ley de Hick: cada opción extra retrasa la decisión. Tienes 3 acciones primarias en el primer scroll. Define UNA jerarquía clara: primary (contact), secondary (UXBox), tertiary (scroll). Hoy las tres pelean por atención.
+
+🟠 NIVEL ALTO (mata conversión sin que te enteres)
+5. Testimonios sospechosos / no creíbles
+Los testimonios usan iniciales tipo "MR", "CM", "AT", "LS" sin foto real, sin LinkedIn, sin empresa nombrada ("FinTech Startup", "Enterprise SaaS", "HealthTech Venture", "Retail B2C"). Cualquier comprador B2B con experiencia los lee como inventados. Si son reales, necesitas:
+
+Nombre completo + cargo + empresa nombrable
+Foto real (LinkedIn screenshot vale)
+Link al perfil de LinkedIn del testimonio
+Idealmente video corto (15s)
+
+Sin esto, los testimonios restan credibilidad en vez de sumar. Y el caso de Pepsico se cita pero sin permitir verificación — si tienes el caso real, dale peso (logo verificado, link a press release, etc).
+6. Métricas infladas sin contexto que vuelven el copy increíble
+"+40% average conversion lift", "75% faster to market", "3x more users who return", "+62% average ticket", "10x faster validation", "+200% organic traffic", "+150% SEO visibility". Todas las cifras suenan a marketing copy genérico. Necesitas o:
+
+(a) un mini case study por número con metodología explicada,
+(b) bajar el tono ("nuestros clientes reportan mejoras de hasta…"),
+(c) eliminar las que no puedes defender.
+
+Un CPO B2B avezado descarta el sitio en 8 segundos cuando ve este patrón. Marcaste en memoria que prefieres "metrics labeled as approximate" — aquí no las estás etiquetando como tales.
+7. Logos de clientes anónimos (1.svg a 11.svg)
+"Brand 1, Brand 2…" hasta 11. Si tienes los logos, muéstralos con su nombre real. Si no tienes permiso de uso, no los pongas. Logos con alt text genérico = mentira evidente para Google y para el usuario.
+8. Imágenes de Unsplash genéricas en "metodología"
+Las 5 etapas del proceso (Discovery, UX Strategy, Design, Development, CRO) usan fotos stock de Unsplash (photo-1552664730…, photo-1581291518633…). Una agencia de diseño mostrando stock photography en su propia metodología es contradicción visceral con tu propuesta de valor. Diseña 5 ilustraciones propias o usa screenshots reales (anonimizados) de tus deliverables.
+9. Contenido duplicado masivo entre páginas
+
+Sección "What those who lived it say" aparece idéntica en home y portafolio (mismos 3 testimonios, mismo formato).
+"4.9/5 · 100% · 85%" también duplicado.
+"How it works" (los 5 pasos) está completo en home Y completo en portafolio.
+El bloque CTA final ("Tu producto merece usuarios que lo amen") aparece en home con un texto y en portafolio con otro casi idéntico.
+En el curso, la sección de testimonios "We don't tell you. They tell you." es la misma estructura del home pero con testimonios distintos.
+
+Esto te penaliza en SEO (Google detecta near-duplicate content), satura al usuario que navega entre páginas, y muestra falta de arquitectura de información.
+10. Carousel de testimonios DUPLICADO en la página del curso
+Los 8 testimonios de "tipos de profesionales" (Camila Restrepo, Andrés Mejía, etc.) aparecen dos veces seguidas en el DOM. Probablemente un bug del componente de marquee duplicado para crear efecto infinito sin CSS, pero se renderiza visible. Léelo tú mismo en la página: misma persona, mismo quote, dos veces.
+
+🟡 NIVEL MEDIO (UX, accesibilidad, ergonomía)
+11. Accesibilidad — varias fallas WCAG 2.2
+
+Botones de filtro de portafolio ("All / Web Design / Mobile Apps / AI & Data / Branding") sin estado activo visible ni aria-pressed.
+Iconos sociales en footer muestran la URL completa como texto del link (https://www.linkedin.com/company/medialab-ingenieria) en vez de "LinkedIn" — error de accesibilidad y estética.
+Avatares "JD, MR, AT" sin alt text descriptivo.
+Hero usa <h1> correctamente pero el resto del sitio abusa de <h2> para frases promocionales en vez de jerarquía semántica real.
+El acordeón de FAQ no muestra señal visual de expansión en la representación HTML — verifica que tenga aria-expanded.
+Anchor "Saltar al contenido principal" está en español en la versión inglés.
+
+12. Microcopy del formulario UXBox — fricción innecesaria
+
+"What is your work email?" + "Only 2 registrations allowed per email" — la restricción aparece sin contexto y genera ansiedad ("¿por qué 2? ¿qué pasa si quiero más?"). Esto rompe la ley de Tesler (complejidad expuesta al usuario sin necesidad).
+Un solo campo (email) pidiendo enviar idea + email después → ¿en qué momento se captura la idea? El flow no es claro.
+Falta indicación de qué pasa después de enviar (próximos pasos, tiempo de espera, formato del brief).
+
+13. Form del curso — falta validación visible y feedback
+Campos marcados con asterisco rojo pero sin texto de ayuda. "What motivates you? (optional)" sin contador de caracteres. Sin mensaje de éxito visible. Sin captcha visible — si tampoco hay protección backend, vas a recibir spam masivo.
+14. CTAs vacíos y huérfanos
+
+"Tell us your challenge →" → #contact (que en home apunta a una sección que mezcla idiomas).
+"I want to transform my product" aparece 6 veces en el home con tres destinos distintos (#contact, #cases, formulario UXBox). Ley de Jakob + heurística de consistencia: un CTA con el mismo texto debe llevar al mismo lugar siempre.
+"View case studies →" en home apunta a #cases (ancla) en vez de a /portafolio (página completa). El usuario se queda en home.
+
+15. Jerarquía de los pasos "How it works" — sobrediseñada
+Cada paso aparece 3 veces en el mismo bloque del home: una vez en preview compacto, otra como card con imagen, y otra como detalle expandido. Eso es 15 bloques visuales para 5 pasos. Sobrescritura visual = fatiga cognitiva. Consolida a 1 representación por paso.
+16. Precio del curso — anchor pricing mal ejecutado
+"$1,500 USD" tachado, "−34% Founders", "$995 USD", "$124/week", "Total value $2,400 · You pay $995". Mezclas 4 anclas de precio en 3 líneas. Es estándar el patrón de "valor percibido vs precio", pero aquí sumas:
+
+$300 portfolio + $200 community + $150 tools + $250 cert + $500 modules = $1,400 (no $2,400, hay un error matemático o falta romper el detalle).
+Verifica los números porque si un prospect avispado lo suma, pierdes credibilidad en el momento más importante: la decisión de compra.
+
+17. Mapa de "Global Presence" no carga
+"Cargando mapa…" se queda colgado. O lo arreglas o lo eliminas. Un mapa roto en la sección de "alcance global" comunica lo opuesto a lo que intentas comunicar.
+
+🟢 NIVEL BAJO (refinamiento)
+18. SEO técnico
+
+Meta keywords incluyen palabras en español en la versión /en (agencia UX UI Colombia, diseño de productos con IA 2026…). Google ignora keywords pero es señal de descuido. Limpia.
+meta-twitter:description está en español en la versión inglés.
+meta-og:image en home no está definido (solo en portafolio y curso). Hero card de redes sociales sale rota cuando comparten el home.
+Falta hreflang evidente entre /es y /en (no lo veo en el head).
+
+19. Patrones de venta inconsistentes
+
+"30 spots" + "Cohort 01" + "Limited availability Q3 2026" + "−34% Founders" → demasiados drivers de urgencia simultáneos. Cuando saturas urgencia, el usuario deja de creerla (efecto crying wolf).
+Elige UNO fuerte (cohorte limitada) y deja los otros como soporte sutil.
+
+20. Voz de marca: "no decoramos interfaces, arquitectamos experiencias emocionales"
+Frases tipo "users navigate emotional states, not flows", "code your users will never notice", "we don't fall in love with technology" — son buenas pero se repiten conceptualmente una y otra vez. Mismo mensaje en hero, sección de servicios, sección de diferenciación, blog feature, FAQ. Hay redundancia narrativa: el usuario entiende tu mensaje en la primera sección y luego ya no lee. Compacta y deja que la prueba (cases) cargue el resto.
+21. CLS / Performance
+Las imágenes de Unsplash llegan vía _next/image con w=3840&q=75 — estás pidiendo 3840px para mostrar miniaturas. Optimiza con sizes correctos en el <Image> de Next.js. Reduce LCP en home, te lo pagará SEO.

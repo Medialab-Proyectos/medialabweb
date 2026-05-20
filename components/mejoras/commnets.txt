@@ -1,0 +1,953 @@
+Archivo de audio 
+
+Untitled Project 4.m4a 
+
+ 
+
+Transcripción 
+
+00:00:00 Orador 1 
+
+Que me sugirió, digamos, para el MVP al cruzar los los gap cognitivos y los nodgets. 
+
+00:00:09 Orador 1 
+
+Entonces, pues salían como los siguientes cambios: primero, destacar la ley de Abías Data como para que el usuario se sintiera seguro de que de que esa información estaba segura. 
+
+00:00:19 Orador 1 
+
+Sí, luego voy a ir a intentar hacer hacerlo como en el proceso aquí. 
+
+00:00:29 Orador 1 
+
+Este de dejar por default el modo simple es algo que me pareció muy interesante, la justificación que tiene Cloud para esto. 
+
+00:00:37 Orador 1 
+
+Y es que dice, mira, es más fácil para un usuario que tiene conocimiento de productos digitales el iniciar en el modo simple y pasar al modo, digamos, avanzado. 
+
+00:00:48 Orador 1 
+
+Sí, que para un usuario que no tiene este conocimiento, el pasar del avanzado al simple. 
+
+00:00:55 Orador 1 
+
+Entonces, pues tiene bastante sentido. 
+
+00:00:57 Orador 1 
+
+Por lo tanto, pues dejar esa, digamos, de default está bien. 
+
+00:01:04 Orador 1 
+
+Luego, bueno, aquí al momento de crear peticiones me sugirió el colocar como ejemplos de casos, ojalá reales, sería lo ideal. 
+
+00:01:19 Orador 1 
+
+Pues como con respecto a los diferentes tipos de 
+
+00:01:23 Orador 1 
+
+De peticiones que se vayan a hacer. 
+
+00:01:26 Orador 1 
+
+Sí, entonces, cómo dejar una opinión más o menos, aunque igualmente pues se da la opción de empezar de cero. 
+
+00:01:34 Orador 1 
+
+Otra cosa es que deja por default también seleccionada, , digamos la que la más común, la petición que suele ser común. 
+
+00:01:42 Orador 1 
+
+No me convence mucho esta forma de decirlo, pero pues ya viéndolo como si tiene sentido y es algo personal mío que necesito resolver, parece como curioso, sí. 
+
+00:01:52 Orador 1 
+
+Y además, en lugar de poner solamente el tiempo en el que responde, también dice para qué fecha deberían responder, como cuál es el límite en el cual tienen que responder. 
+
+00:02:02 Orador 1 
+
+Eso también me parece muy importante, pues porque le da más facilidad al usuario de estar contando como cuando son 10, 15 días hábiles. 
+
+00:02:09 Orador 1 
+
+Sí, entonces pues eso me pareció bastante útil. 
+
+00:02:12 Orador 1 
+
+Luego aquí como hacer algo lo más sencillito, voy a poner aquí algunos datos. 
+
+00:02:32 Orador 1 
+
+Bueno, esto ya estaba, lo de ajustarlo, adjuntar evidencias, pero al momento de enviar la solicitud, vale, no me digas que no me digas. 
+
+00:02:48 Orador 1 
+
+Bueno, guardar los datos de quién se registra, todo súper bien y al momento de enviar la solicitud como tal da esto. 
+
+00:02:59 Orador 1 
+
+Y entonces lo primero es este mensaje que dice su primera petición. 
+
+00:03:04 Orador 1 
+
+Acaba de ejercer uno de los derechos más poderosos que tiene como ciudadano colombiano y asimismo el mensaje cambia dependiendo de si es la primera, si es entre la segunda o la tercera de presencia o de ahí de más. 
+
+00:03:16 Orador 1 
+
+Y además de eso, la parte de dejar por default los recordatorios activados para que el usuario pues pueda saber cuándo. 
+
+00:03:26 Orador 1 
+
+Pues cuando cuando le dan la información y no tener que acomodarlo de forma manual. 
+
+00:03:32 Orador 1 
+
+Esos son los cambios principales que me sugirió. 
+
+00:03:36 Orador 1 
+
+Creo que no me acuerdo. 
+
+00:03:37 Orador 1 
+
+Sí, creo que eran esos, nada más eran como 8 cambios. 
+
+00:03:44 Orador 1 
+
+Sí, señor. 
+
+00:03:56 Orador 1 
+
+En la parte de usabilidad me parece, pues me parece que sí me ha ayudado a ver cosas que francamente no hubiera podido ver, claro, teniendo en cuenta que las auditorías y eso las hemos basado, pues en principios, en teorías y en leyes como tal que ya están establecidas, pero estoy seguro de que hubiera tomado muchísimo más tiempo quizás ver algunas cosas que en una o 2 auditorías se fueron como puliendo. 
+
+00:04:24 Orador 1 
+
+Sigo peleando un poquito con la parte estética de la aplicación, pero más allá de no sé qué a nivel de usabilidad está bien. 
+
+00:04:37 Orador 1 
+
+Personalmente no me gusta cómo se ve. 
+
+00:04:39 Orador 1 
+
+Sí, no me gusta mucho la disposición. 
+
+00:04:43 Orador 1 
+
+Yo soy una persona que le gusta ver la menor cantidad de cosas posibles, pero justamente lo que creo que ya habíamos hablado antes, pues esto está enfocado en un público objetivo. 
+
+00:04:53 Orador 1 
+
+No me tiene que precisamente gustar a mí para que le funcione al usuario. 
+
+00:04:56 Orador 1 
+
+Entonces, pues soy consciente de ello, aunque sí me gustaría quizás darle un poco más de estética a la aplicación, así sea como entre las pequeñas cosas que sí se puedan cambiar sin alterar la accesibilidad y la usabilidad de la app. 
+
+00:05:44 Orador 1 
+
+Okay. 
+
+00:05:50 Orador 1 
+
+Okay. 
+
+00:05:51 Orador 1 
+
+Okay. 
+
+00:05:52 Orador 1 
+
+Listo. 
+
+00:06:01 Orador 1 
+
+Listo. 
+
+00:06:05 Orador 1 
+
+Vale. 
+
+00:06:32 Orador 1 
+
+Okay, okay, okay, listo, okay, que se puede cerrar, okay, I see. 
+
+00:07:37 Orador 1 
+
+Ok, ajá. 
+
+00:08:18 Orador 1 
+
+este? 
+
+00:08:20 Orador 1 
+
+ok ok listo listo listo listo sí señor listo gracias profe. 
+
+00:09:11 Orador 2 
+
+Listo profe ya texto en cuarto de pantalla 
+
+00:09:37 Orador 2 
+
+Listo profe, ya puedes ver mi pantalla. 
+
+00:09:43 Orador 2 
+
+Listo, pues es que ahorita siento que me desorganizo muy feo la app y son muchas cosas que hay que organizar, entonces no sé cómo hacer para que todo vuelva a la normalidad. 
+
+00:10:01 Orador 2 
+
+Primero podemos 
+
+00:10:11 Orador 2 
+
+Entonces el primero, dime. 
+
+00:10:23 Orador 2 
+
+¿En general o con los nodger? 
+
+00:10:28 Orador 2 
+
+Pues darle una facilidad a las personas que tienen como su jardín, tienen sus plantas y de cierta manera que se puedan como instruir un poco más 
+
+00:10:46 Orador 2 
+
+Y que puedan como adquirir todo con más facilidad, pues por eso he estado como la tienda, las guías y que de cierta manera como que no se desanimen al momento de seguir comprando plantas. 
+
+00:11:17 Orador 2 
+
+Sí, tal vez porque no tenía muy en claro en dónde ponerlos. 
+
+00:11:41 Orador 2 
+
+Sí, es que yo también, sí. 
+
+00:12:08 Orador 2 
+
+Pues el primero fue el de que las personas siguieran utilizando la app, es que no me acuerdo como se llama, este que en donde pues las personas puedan ver como su registro de los compromisos que ha tenido y pues generar más compromisos con respecto con la app. 
+
+00:12:30 Orador 2 
+
+Y pues este me lo agregó, pero o sea, se sale mucho de pues del diseño de Violeta, ¿no? 
+
+00:12:38 Orador 2 
+
+Eh también que eh me sugirió mucho como de que bueno de los compromisos de que eh se me volvió, espera, ah eh, ay, Dios Ah, de los compromisos y de que eh 
+
+00:13:07 Orador 2 
+
+de que se puede agregar, como puedes personalizar un poquito más este tipo, como de lo que quieren hacer en la app, a lo que quieren llegar, que me pareció súper chévere y pues lo agregué también, digamos, en el sentido de que pueden ver como el progreso que han tenido, pero con ese se me se me alborotó tan 
+
+00:13:37 Orador 2 
+
+Porque digamos acá digamos en este que son como los recordatorios, como de que alertas o que sugerencias, pues tiene el usuario. 
+
+00:13:50 Orador 2 
+
+Pero no sé, ahorita ahorita no entiendo, hay un inicio y hay un final, no lo he ordenado, no sé cómo organizarlo más, digamos en este me lo agregó y le estoy diciendo que me lo quite, pero no me lo quita. 
+
+00:14:06 Orador 2 
+
+Este, eh, también digamos que yo quería que funcionara el la flechita. 
+
+00:14:14 Orador 2 
+
+Ay, espera que sí se me olvidó. 
+
+00:14:18 Orador 2 
+
+Bueno, esto no carga, eh, la flechita de acá, eh, no me funcionó otra vez, o sea, me empezó a funcionar y luego cuando puse el nudget me dejó de funcionar, eh, es que ahorita viendo que está muy desorganizado. 
+
+00:14:40 Orador 2 
+
+Sí, sí, señor. 
+
+00:15:54 Orador 2 
+
+¿Y de no jets, qué más, perdón? 
+
+00:16:16 Orador 2 
+
+Listo. 
+
+00:17:46 Orador 2 
+
+Ok. 
+
+00:18:02 Orador 2 
+
+Bien amor, ya nos vamos del avión, ya estamos caminando aquí para la salida y ahí voy a mirar que corremos, si es un número o un taxi. 
+
+00:18:45 Orador 2 
+
+Ah, okay Porque bueno, mientras tanto es que también me gustaría agregar la parte donde pues es la parte social pero siento que acá ya no ya estoy por este sí Okay 
+
+00:19:53 Orador 2 
+
+Pues digamos, este lo lo puse porque creo que fue en las en la creo que fue Garret, bueno, cuando hice lo de la teoría de Garret, que me sugirió que pusiera una configuración que pusiera como un historial de compras y aquí en los Nudgets me dijo que pusiera un historial también de cuidados, entonces por eso aquí digamos en este usuario puede ver como en qué nivel está. 
+
+00:20:22 Orador 2 
+
+Y el historial y porque la gente también se queja mucho que en las aplicaciones como esta no hay un historial como de cuidados. 
+
+00:20:33 Orador 2 
+
+Entonces, aquí se lo agregué más que todo, no como para que pusieran una foto, sino que para que pudieran ver como lo que han hecho en la aplicación. 
+
+00:20:43 Orador 2 
+
+Digamos, en mis compras, acá pueden ver si pueden volver a comprar los productos que han que han puesto. 
+
+00:20:56 Orador 2 
+
+Y digamos aquí en configuración, si queremos los recordatorios, las notificaciones, pues digamos si cambia de ubicación para saber cómo que la app sepa cómo adecuarse a esto. 
+
+00:21:17 Orador 2 
+
+Bueno, este historial de cuidados y mis recordatorios creo que esto lo podría unir, pero. 
+
+00:21:24 Orador 2 
+
+Es más como para que la gente vea como en qué nivel van y que pues que va ganando a nivel que avanza la el los niveles, digamos el 10% de la tienda y de descuento en la tienda y así mientras va subiendo de nivel. 
+
+00:21:44 Orador 2 
+
+Entonces no sé si estaba pensando como en esta parte, pero no sé, creo que ya es mucho, no? 
+
+00:22:28 Orador 2 
+
+Antigra. 
+
+00:22:41 Orador 2 
+
+Listo. 
+
+00:22:50 Orador 2 
+
+Espera, mi internet como raro, molestando. 
+
+00:23:05 Orador 2 
+
+Uno. 
+
+00:23:07 Orador 2 
+
+Uno se. 
+
+00:23:20 Orador 2 
+
+Sí Ahí está ya Okay, ya la limpió mucho más Okay Sí, claro Este que este pues este sí me lo quitó de una vez Bueno 
+
+00:24:24 Orador 2 
+
+Ok, es que este es más como para recordar registrar la planta Esta digitando, este funciona, este funciona Sí Bueno, este sería el 
+
+00:25:20 Orador 2 
+
+A ver, el voto identificar. 
+
+00:26:25 Orador 2 
+
+Este no funciona el de volver, busco más o con esos mientras. 
+
+00:27:09 Orador 2 
+
+Sí, ya, ya les quiero esperar, ya comparto y listo. 
+
+00:29:00 Orador 2 
+
+Si voy, es que no, con esta cuenta no me no me deja, entonces no creo que me va a tocar usar la otra. 
+
+00:29:10 Orador 2 
+
+Es que esta es una cuenta institucional, entonces con esta cuenta yo tengo como ciertos beneficios, como en algunas días, pero bueno, ahorita lo intento. 
+
+00:29:38 Orador 2 
+
+Listo, ahora aquí Ah, sí, ya mucho mejor No sé si funciona este Bueno, si es escribo ¿A quién? 
+
+00:30:48 Orador 2 
+
+Listo. 
+
+00:31:01 Orador 2 
+
+Yo me voy a meter con otra cuenta y. 
+
+00:31:23 Orador 2 
+
+Ya listo, ya mejor espérame. 
+
+00:31:33 Orador 2 
+
+Voy a compartir. 
+
+00:34:14 Orador 1 
+
+Profe, perdón, es que creo que no estás grabando la clase. 
+
+00:35:04 Orador 3 
+
+Y hola. 
+
+00:35:09 Orador 3 
+
+Uy, ya es mi turno como de quinto en. 
+
+00:35:24 Orador 3 
+
+Y no, pues yo como tal era como para mostrar las las mejoras que hicieron aplicación. 
+
+00:35:31 Orador 3 
+
+Entonces los principales cambios que. 
+
+00:35:38 Orador 3 
+
+Fue en la. 
+
+00:35:39 Orador 3 
+
+Parte del inicio, afortunadamente la parte del panel que yo ya la había organizado, no la tocó mucho, solo temas como de cómo se dicen las cosas y ya, pero el resto está bien, como por ejemplo. 
+
+00:35:52 Orador 3 
+
+En cuanto a los gap cognitivos, aplicó uno que me gustó mucho, que. 
+
+00:35:59 Orador 3 
+
+Que decía que hacer que las pausas se presentan como ganancias y no como pérdidas de tiempo. 
+
+00:36:04 Orador 3 
+
+Entonces aquí cuando. 
+
+00:36:07 Orador 3 
+
+Entra, ya le aparece el aviso que dice que pues puede parar por ahora, que hacer las pausas es como parte del ritmo. 
+
+00:36:19 Orador 3 
+
+Y también otro que me pareció chévere que se aplicara fue como. 
+
+00:36:27 Orador 3 
+
+Que haya un tipo de perfiles, varios perfiles en la aplicación y que se le asigne al usuario de acuerdo al comportamiento que este vaya teniendo. 
+
+00:36:37 Orador 3 
+
+Entonces, por ejemplo, aquí lo agregó como tu perfil y constructor constante. 
+
+00:36:42 Orador 3 
+
+Sí, la idea es que haya al menos que unos 5 perfiles que se asigne como para generar un tipo de identidad con el usuario que la está manejando. 
+
+00:37:09 Orador 3 
+
+También se agregó una tarjeta de pronóstico de bienestar en la cual nos dice, pues lo que las pausas o los ejercicios hicieron. 
+
+00:37:20 Orador 3 
+
+El día de hoy que evitaron algún tipo de problema, algún tipo, no sé, fatiga mental de bloqueos y así por el estilo. 
+
+00:37:31 Orador 3 
+
+En el tema del panel también antes tenía todo esto aquí era rojo, generaba alerta y decía que podía generar algún tipo de culpa al usuario, entonces cambiándolo a verde, pues. 
+
+00:37:50 Orador 3 
+
+Ya nos da el aviso, pero no nos genera como ese tipo de alerta que puede ser contraproducente también. 
+
+00:38:58 Orador 3 
+
+Entonces, otra de los temas es que cuando digamos la persona estuvo trabajando mucho tiempo, también debería aparecer como un aviso tipo de estos que diga como un como que el sistema ya sugiere un respiro y que culpe más que todo al contexto y no al usuario. 
+
+00:39:25 Orador 3 
+
+Es como un sí. 
+
+00:39:27 Orador 3 
+
+Como para que el usuario no sienta culpas, también ya pasando arquitecturas de decisión, algo que también me parece interesante y es que cuando uno termine una sesión le aparezca una opción donde uno pueda reprogramar esa misma sesión al día siguiente, que para que el usuario no tenga que volver a hacer ese proceso. 
+
+00:39:53 Orador 3 
+
+Eso debería aparecer al finalizar esto tipo popup. 
+
+00:40:00 Orador 3 
+
+Otra de las opciones que me dio es como como avisarnos los días que la persona ha estado, estuvo activa con un mensaje anti frustración por si un día se perdió. 
+
+00:40:16 Orador 3 
+
+Por ejemplo, esta semana estuvo cuatro de 5 días 
+
+00:40:21 Orador 3 
+
+esta semana protegió 6 horas de 6 horas y 20 minutos del bienestar. 
+
+00:40:27 Orador 3 
+
+No hay ningún mensaje negativo allí tampoco. 
+
+00:40:30 Orador 3 
+
+Pero sí, gracias a ver el usuario, pues que sí se saltó un día como para cumplir. 
+
+00:40:39 Orador 3 
+
+Y también se agregó esta función en la parte del inicio porque está relacionada con lo que yo le mencioné de 
+
+00:40:46 Orador 3 
+
+De las sesiones que estaban previamente programadas, que uno le da clic acá y de una debería iniciar con la sesión. 
+
+00:40:55 Orador 3 
+
+Y eso y eso sería todos lo que yo pensé que sería lo mejor aplicarle a esto. 
+
+00:41:20 Orador 3 
+
+Pues yo creo que se ha aplicado primero muchísimo. 
+
+00:41:23 Orador 3 
+
+Ha cambiado mucho el flujo porque anteriormente tenía funciones regadas por todos lados, pero ahora las funciones están agrupadas en un solo punto para que el usuario tenga más accesibilidad, por así decirlo. 
+
+00:41:39 Orador 3 
+
+Por ese lado, pues ya no hay, no hay tanto desorden. 
+
+00:41:55 Orador 3 
+
+¿Cómo me repite, por favor? 
+
+00:42:02 Orador 3 
+
+La verdad que considero que mucho, pues es una cosa, es ya haber aplicado las ya haber como todas las funcionalidades aplicadas y otra cosa es como tener como imaginarlas, por así decirlo, pero entonces uno ya se va dando cuenta de lo importante que es que todo esté en su sitio, que todo esté en una posición que está. 
+
+00:42:26 Orador 3 
+
+que todo esté bien ubicado como para que funcione de mejor manera. 
+
+00:42:39 Orador 3 
+
+Por por Discord. 
+
+00:42:44 Orador 3 
+
+Sí, y este listo. 
+
+00:42:51 Orador 3 
+
+Sí, señor. 
+
+00:42:58 Orador 3 
+
+Ojalá. 
+
+00:42:58 Orador 3 
+
+Ojalá así sea. 
+
+00:43:08 Orador 3 
+
+De suscripción, como manejar planes Ah, OK, listo, sí, señor, me parece buena idea Listo, sí, señor. 
+
+00:43:33 Orador 4 
+
+Hola, profe Bien, profe, pues como te hice, te dije, yo no había hecho pues las auditorías por el tema de que pues de que estaba volviendo a hacer todo lo que tuve que volver a hacer 
+
+00:43:48 Orador 4 
+
+Entonces me gustaría mostrarte, pues el resultado de las auditorías, porque es que no quiero, o sea, no quiero primero como revisarlo, porque no quiero tocar nada. 
+
+00:43:59 Orador 4 
+
+Realmente dale, dale. 
+
+00:49:29 Orador 4 
+
+Ah, profe, sí te iba a mostrar, entonces te va a conseguir pantalla. 
+
+00:49:42 Orador 4 
+
+¿Estás viendo mi pantalla, profe? 
+
+00:49:49 Orador 4 
+
+Bueno, entonces, profe, hice primero la auditoría con los gaps cognitivos, entonces me aparecieron 5 sesgos de análisis que. 
+
+00:50:00 Orador 4 
+
+Pues como para mejorar el tema de. 
+
+00:50:04 Orador 4 
+
+El tema cognitivo de la aplicación. 
+
+00:50:07 Orador 4 
+
+Entonces me dijo que el primero es el victim effect que me lo dijo que en los avatares de parchate que estos avatares deberían tener usuarios reales. 
+
+00:50:21 Orador 4 
+
+Para que la gente, pues como que se sienta como que ah, bueno, esas personas iban a ir personas usuarios reales a este par a este parche. 
+
+00:50:32 Orador 4 
+
+Listo, ese es uno el otro 
+
+00:50:36 Orador 4 
+
+Es este discousing. 
+
+00:50:39 Orador 4 
+
+Que literalmente hice en el mapa de detalle. 
+
+00:50:43 Orador 4 
+
+Sí. 
+
+00:50:45 Orador 4 
+
+Espérate un momentico. 
+
+00:50:47 Orador 4 
+
+Dice en el mapa de detalle, revisar el tiempo de llegada, muestra el nombre a un lugar antes que la distancia. 
+
+00:50:57 Orador 4 
+
+En el home. 
+
+00:51:00 Orador 4 
+
+A ver con. 
+
+00:51:02 Orador 4 
+
+empieza 45 minutos de resultados tiempo de llegada como dato dominante en vivo café San Antonio cuatro es que cosas que que no entiendo como bien profe. 
+
+00:51:16 Orador 4 
+
+Sí, sí, sí. 
+
+00:51:20 Orador 4 
+
+Porque es que o sea, siento que o sea chévere, pero y siento que que no este me gustó mucho porque sí, sí es importante que pues las personas vean los usuarios reales. 
+
+00:51:32 Orador 4 
+
+Bueno, para mí Netflix, café San Antonio, se siente saturado en la aplicación en el en vivo. 
+
+00:51:45 Orador 4 
+
+Ay, no, profe, es que sí ves, esto me parece como muy. 
+
+00:52:00 Orador 4 
+
+OK, este me gustó porque en el perfil dice que pues literalmente cuando hice el otro, la otra auditoría me dice que los perfiles como que más están, pues dudosos, por así decirlo, es el del perfil y es el de el onboarding. 
+
+00:52:21 Orador 4 
+
+Entonces dice que en el perfil sería como importante que este historial pues te muestre como. 
+
+00:52:29 Orador 4 
+
+Dice en un panel de identidad, cómo es tu tipo, si eres tipo de café, cultura, lo que como tus gustos, como si un perfil más personalizado. 
+
+00:52:40 Orador 4 
+
+Esto me parece como interesante, porque sí, aquí falta como mucha mucha información. 
+
+00:52:49 Orador 4 
+
+Entonces me quedo con este y clases, Instain bytes. 
+
+00:52:55 Orador 4 
+
+A ver. 
+
+00:53:01 Orador 4 
+
+Lo mismo en el historial del perfil. 
+
+00:53:06 Orador 4 
+
+Bueno, todos estos tienen que ver con el perfil y estos, pues sí, sí me llamaron la atención. 
+
+00:53:12 Orador 4 
+
+Te voy a mostrar la otra auditoría que fue. 
+
+00:53:17 Orador 4 
+
+El de el de los nuggets, sí. 
+
+00:53:22 Orador 4 
+
+Y bueno. 
+
+00:53:23 Orador 4 
+
+El onboarding tiene como varios problemas. 
+
+00:53:27 Orador 4 
+
+Uno que más me llamó la atención. 
+
+00:53:31 Orador 4 
+
+Es que él es la idea social, porque bueno, dice que cómo te quieres sentir hoy, entonces estas estas cartas se adaptan, pues a, o sea, lo que te aparece en el home es lo que tú colocas en aquí en estas cartas, no digamos que tienes un parche tranquilo, entonces le das aquí a quién cómo te sientes? 
+
+00:53:52 Orador 4 
+
+Dice que esta pregunta es como un. 
+
+00:53:57 Orador 4 
+
+Como es como muy intimidante, sí, como que dice que el usuario puede ignorar responder, dice que no se siente como algo natural, sino como un interrogatorio. 
+
+00:54:10 Orador 4 
+
+Listo, entonces pues está como que la voy a quitar. 
+
+00:54:18 Orador 4 
+
+Y también en el perfil, mira. 
+
+00:54:24 Orador 4 
+
+Como que me salió muy rojito. 
+
+00:54:27 Orador 4 
+
+Entonces dice que no se puede editar las los mods que coloco aquí en el perfil del inboarding no se pueden editar, no hay preferencias activas. 
+
+00:54:40 Orador 4 
+
+También dice que en el historial muestra parches pasados, pero que no, o sea, no te muestre como en sí todos los parches a los que tú tú unices, o sea, no hay como una. 
+
+00:54:55 Orador 4 
+
+Sí, como un feedback, por así decirlo. 
+
+00:54:59 Orador 4 
+
+Y pues que también viene para completar el perfil no se puede colocar la foto del perfil ni como editar la bio. 
+
+00:55:07 Orador 4 
+
+Que esto, pues también es importante para para el usuario. 
+
+00:55:16 Orador 4 
+
+Y ya profe, o sea realmente como que de resto hay ahí no está mal, tan mal, tan, tan mal. 
+
+00:55:24 Orador 4 
+
+Este es también de de resultados, también lo lo voy a mejorar porque estas. 
+
+00:55:46 Orador 4 
+
+Sí. 
+
+00:55:57 Orador 4 
+
+OK. 
+
+00:55:59 Orador 1 
+
+Sí. 
+
+00:56:02 Orador 4 
+
+Sí, profe. 
+
+00:56:03 Orador 4 
+
+Esta esta es como como te digo, está la versión que había quedado después del análisis de Garrett, entonces sí, como que tiene cositas, pero estoy trabajando sobre esta, entonces las audi. 
+
+00:56:15 Orador 4 
+
+Las auditorías las estoy trabajando sobre esta y como te digo, estoy pues notando, pues que tiene esos errores poco a poco las estoy mejorando, pero pues te quería mostrar lo de la auditoría para saber que sí irme con lo que entiendo y no con un montón de cosas que idea. 
+
+00:56:40 Orador 4 
+
+Listo. 
+
+00:56:44 Orador 4 
+
+Y mira que me puse, pues también a hacerlo. 
+
+00:56:50 Orador 4 
+
+Aquí en el cómo se llama este profe, se me olvidó el nombre. 
+
+00:56:56 Orador 4 
+
+La aplicación que estábamos usando para la de María. 
+
+00:57:02 Orador 4 
+
+Sí, y pues nada, solamente le pedí como recomendaciones y me pareció chévere porque dice que implemente imágenes reales de los lugares con la guía. 
+
+00:57:16 Orador 4 
+
+También me recomienda que. 
+
+00:57:19 Orador 4 
+
+utilice como micro animaciones. 
+
+00:57:22 Orador 4 
+
+Sí, como que carga. 
+
+00:57:26 Orador 4 
+
+Transiciones entre las pantallas, indicadores numéricos. 
+
+00:57:31 Orador 4 
+
+Y también me hice que lo ponga en ***** pero no, no, no sé, profe, la verdad. 
+
+00:57:41 Orador 4 
+
+Sí, o sea que dice que espera que por decir Ah, mira. 
+
+00:57:46 Orador 4 
+
+Dark more completo. 
+
+00:57:51 Orador 4 
+
+Que tenga como una opción de poner la pantalla en ***** la paleta con el. 
+
+00:58:08 Orador 4 
+
+OK. 
+
+00:58:10 Orador 4 
+
+Y pues ya profe, o sea, realmente solamente por ahora va a aplicar lo de las auditorías que te que entendí y voy a ir mejorando, pues el tema de los espacios, el tema de las tarjetas y ya. 
+
+00:58:25 Orador 4 
+
+Listo, , pues profe, o sea, a mí me gusta porque, o sea, como te digo, yo soy muy visual, por eso me había puesto a expandirme más hacia lo visual, pero estructuralmente esto está muy bien, o sea, en flujo. 
+
+00:58:49 Orador 4 
+
+De hecho, cuando hice el análisis de Garret de nuevo, o sea, en flujo y en estructura está bien, en usabilidad está bien. 
+
+00:58:58 Orador 4 
+
+Entonces, pues sí, profe realmente a esta, pues esta versión solamente es irle aplicando lo de las auditorías, pues para ir viendo esas mejoras, por ejemplo, también en una me dice que estas cars cuando yo interactúo con la guía. 
+
+00:59:16 Orador 4 
+
+Que estas cars no estén aquí abajo, sino que aparezcan de una vez en la pantalla. 
+
+00:59:23 Orador 4 
+
+Son como ese tipo de cositas que hay que ir revisando, pero me gusta profe. 
+
+00:59:40 Orador 4 
+
+¿Me repites profe? 
+
+01:00:03 Orador 4 
+
+No profe, obviamente sí, o sea, sí es un apoyo, pero lo más importante es tú tener las bases, o sea, es muy importante tú saber qué estás haciendo, sí. 
+
+01:00:14 Orador 4 
+
+Como tener toda la estructura y el flujo que hemos estado utilizando, porque la IA es muy fácil que se pierda, o sea, que se pierda entre un montón de opciones, entre o sea, te genere tantas opciones que tú que te satures de información y termines haciendo hasta cosas de más que ni siquiera son prácticos para la usabilidad. 
+
+01:00:35 Orador 4 
+
+O sea, la IA te puede recomendar a ti, pero tú es tú eres el que tiene que tener el conocimiento para guiarla. 
+
+01:00:45 Orador 4 
+
+Sí, y siento que si bajo, pues todo lo que hemos hecho, todo el análisis, todas las estructuras, todos los, o sea, todo esto es importante porque si no lo tuviéramos, , créeme que estuviéramos súper perdidos todos. 
+
+01:01:07 Orador 4 
+
+Listo, profe, gracias a ti. 
+
+01:01:21 Orador 2 
+
+Profe, me tocó volverle a explicar que era lo que quería, porque aún así lo terminó y habían aún palabras que no reconocía y también en la parte de settings tampoco estaba abriendo, entonces quería también preguntarte si digamos, en caso tal de que se me acabe la sesión aquí, bueno, inicio con otro correo 
+
+01:01:50 Orador 2 
+
+¿Agrego la carpeta como tal en general o como en lockout y eso? 
+
+01:02:26 Orador 2 
+
+Listo, ya lo intento. 
+
+01:02:36 Orador 5 
+
+Buenas noches. 
+
+01:02:48 Orador 5 
+
+Pues la aplicación me hizo algunas mejor, me hizo algunas sugerencias dentro de los análisis. 
+
+01:02:58 Orador 5 
+
+Los primeros puntos me decía que estaba estaba bien, era con digamos que tenía muchos pasos técnicos y que era una un aplicativo muy profesional. 
+
+01:03:09 Orador 5 
+
+Eso pues decía ahí no, pero había unas cosas que sí me decía que. 
+
+01:03:17 Orador 5 
+
+por eso estoy como en una duda con respecto a lo que generó, él me dice más o menos que lo automatice todo, que se piense más en la persona que no sabe, pero entonces ahí estoy en la duda con respecto a que el aplicativo lo que yo le hablaba la otra vez que sea muy sea autónomo, de hecho aquí utiliza la palabra autónomo 
+
+01:03:46 Orador 5 
+
+y le haga todo a o que sea el aplicativo que yo deseaba que era una una herramienta de apoyo y sea como un aprendizaje, entonces no sabría decir si sería bueno o malo, igual si me transformó, no me utilizó un tipo de letra que pues la verdad no sé si es el que yo utilizaba o como no puede mirar. 
+
+01:04:47 Orador 5 
+
+Sí, realmente eso, pues saqué el login y pues lo que sí me parece que sí se debe incluir, que se estaba mencionando antes, que es como un acercamiento ya al usuario en donde el aplicativo se va a llamar Help 3D, pues es el nombre inicial, no sé si lo cambie, ¿no? 
+
+01:05:11 Orador 5 
+
+Y entonces le daba como la bienvenida de tu taller 3D, te está esperando. 
+
+01:05:16 Orador 5 
+
+Aquí no encontrarás tablas intermedias ni códigos de error, solo tu impresora y un copiloto, o sea, es perdón, el copiloto es que se llama que conoce cada material como la palma de tu mano. 
+
+01:05:26 Orador 5 
+
+Después obviamente aquí le va indicando lo que es el copiloto, que es un paso a paso sin adivinanzas, repuestos compatibles en Latam y el semáforo de qué es de seguridad. 
+
+01:05:37 Orador 5 
+
+No, entonces digamos que pues. 
+
+01:05:42 Orador 5 
+
+Y no me acuerdo, no. 
+
+01:05:44 Orador 5 
+
+Y esto es lo que no me gustó, pues lo simplificó demasiado. 
+
+01:05:48 Orador 5 
+
+Primero que lo puso ya también el fondo muy oscuro ya. 
+
+ 

@@ -1,0 +1,151 @@
+Auditoría SEO — medialab.design
+Lo voy a decir sin maquillaje: tu SEO está mal en los fundamentos. No es un problema de tácticas finas, es un problema de cimientos. Por orden de gravedad:
+
+🔴 BLOQUEADORES (esto es por qué Google no te conoce)
+1. No estás indexado o casi no lo estás
+Una búsqueda site:medialab.design no devuelve resultados propios. Los primeros 10 resultados son otras "medialabs": Medialab Matadero (Madrid), MIT Media Lab, medialab.co, medialab.io, medialab.com, medialab.website, medialab3dsolutions.com… Compites contra al menos 8 marcas homónimas en el primer SERP, y tú no apareces en ninguno. Esto significa una o varias cosas:
+
+Google no ha indexado bien tu sitio
+Tu autoridad de dominio es prácticamente cero
+Estás compitiendo por "MediaLab" cuando deberías competir por "MediaLab Ingeniería" o por servicios
+
+Acción urgente: Verificar en Google Search Console cuántas URLs están indexadas vs cuántas existen en sitemap. Si la brecha es grande, hay un problema técnico bloqueando crawling. Si están indexadas pero invisibles, es un problema de autoridad y de keywords.
+2. Canibalización de marca: pelea perdida
+"MediaLab" es un nombre con competencia internacional masiva: MIT Media Lab (autoridad enorme), Medialab Matadero (Madrid, institución pública), medialab.co, medialab.com, medialab.io. Vas a perder esa batalla por marca pura por años. Tu única salida es:
+
+Posicionarte como "MediaLab Ingeniería" (marca compuesta) en absolutamente todos los títulos, no como "MediaLab".
+Atacar keywords de servicio + ubicación ("agencia UX Bogotá", "diseño UX Colombia", "discovery con IA", "UX research Bogotá"), donde la competencia es alcanzable.
+Reforzar entidad en Wikipedia, Crunchbase, Clutch, GoodFirms, DesignRush, Behance, Dribbble — Google necesita ver tu marca correlacionada con la industria UX para diferenciarte del ruido.
+
+3. Estructura #anchor en navegación = invisibilidad para Google
+Esto es gravísimo. Tus enlaces principales en header y footer apuntan a #services, #uxbox, #method, #blog, #contact, #about, #industries, #faq, #products. Google no indexa anchors como páginas independientes. Resultado: tienes 5 páginas reales (/en, /portafolio, /curso, /blog, posts individuales) cuando deberías tener mínimo 15-20 (una por servicio, una por industria, una por producto propio). Estás malgastando el potencial de tu arquitectura.
+Lo que debería existir como páginas reales:
+
+/en/services/ux-design
+/en/services/ai-discovery
+/en/services/development
+/en/services/cro
+/en/services/technical-seo
+/en/industries/fintech, /en/industries/banking, /en/industries/mobility, etc. (8 industrias = 8 páginas)
+/en/products/uxbox, /en/products/sindeudas, /en/products/electrolineras
+/en/about, /en/methodology
+
+Cada una con su keyword principal, su intent, su schema, su contenido único. Esto solo ya duplica tu tráfico orgánico potencial.
+
+🟠 ALTO (errores técnicos visibles desde el HTML)
+4. Meta keywords en español en versión /en
+Tu <meta name="keywords"> en /en dice literalmente: "agencia UX UI Colombia, diseño de productos con IA 2026, diseño conductual, agencia de diseño UX Bogotá…". Google ignora meta keywords desde 2009, pero el problema no es eso — el problema es:
+
+Estás idénticamente la misma cadena en TODAS las páginas (/en, /portafolio, /curso, /blog/arquitectura-percepcion). Cero personalización por página.
+Estás mostrando descuido técnico que correlaciona con calidad general baja.
+meta-twitter:description también está en español en la versión inglés: "Creamos experiencias B2B y B2C que posicionan…".
+
+5. Falta hreflang (o está mal implementado)
+No veo declaraciones hreflang en el <head> de las páginas auditadas. Si tienes /es y /en, necesitas obligatoriamente:
+html<link rel="alternate" hreflang="es" href="https://medialab.design/es" />
+<link rel="alternate" hreflang="en" href="https://medialab.design/en" />
+<link rel="alternate" hreflang="x-default" href="https://medialab.design/" />
+Sin esto, Google sirve la versión equivocada por idioma o, peor, te penaliza por contenido duplicado entre idiomas.
+6. Contenido en español dentro de URLs /en
+El post /en/blog/arquitectura-percepcion tiene:
+
+Slug en español (arquitectura-percepcion debería ser architecture-of-perception).
+Cuerpo del artículo completo en español con una nota: "English version coming soon".
+<h1> en español: "La Arquitectura de la Percepción…".
+meta-description en inglés diciendo "Original article in Spanish" — esto es honesto pero deja a Google con señales contradictorias.
+
+Para Google esto es contenido en español servido bajo /en/ con title en inglés. Mismatch de idioma = pérdida de ranking en ambos mercados. O traduces, o sirves el post solo en /es/blog/arquitectura-percepcion y desde /en/blog lo ocultas hasta que esté traducido.
+7. Imágenes hotlink a Unsplash externo
+Las imágenes del blog y de la sección "metodología" en home vienen directamente desde images.unsplash.com/photo-XXXX. Esto te causa:
+
+CLS y LCP altos (Core Web Vitals te penalizan): cargas desde dominio externo sin control de cache, sin formato moderno (AVIF/WebP), sin lazy nativo controlado.
+Pérdida de señal SEO: las imágenes de tu sitio no viven en tu dominio, no acumulan autoridad para tu marca en Google Images, y no aportan a tu E-E-A-T.
+Riesgo de bloqueo: si Unsplash cambia política o el ID de la foto cambia, se rompe.
+
+Descarga, optimiza con next/image desde tu dominio, sirve AVIF, y dale alt descriptivo en el idioma correcto.
+8. Atributos alt rotos o ausentes
+
+![]( ... portfolio-hero.png ...) — alt vacío en hero principal del portafolio.
+![Industry Fintech](...) — alt útil pero genérico, mismo patrón en las 8 industrias sin keyword diferenciada.
+![Brand 1](...) a ![Brand 11](...) — alt genérico no descriptivo, perdiendo oportunidad de mencionar nombres de clientes reales (si tuvieras permiso).
+![](...) (alt vacío) en imágenes de testimonios y midcta del curso.
+
+9. Title tags duplicados / mal formados
+Tu home tiene este title:
+
+"MediaLab Ingeniería | UX/UI, AI & Digital Products Agency in 2026 | MediaLab Ingeniería"
+
+Repites "MediaLab Ingeniería" dos veces en el mismo title. El curso:
+
+"AI Experience Architect — UX Prompt Design Course | MediaLab | MediaLab Ingeniería"
+
+Tres marcas anidadas en un title. Google trunca a ~60 caracteres. Estás gastando esos caracteres en repetir tu marca en vez de en keywords. Estructura óptima: [Keyword principal] | [Beneficio o diferencial] | MediaLab Ingeniería y nada más.
+
+🟡 MEDIO (contenido y semántica)
+10. Jerarquía de encabezados rota
+Veo abuso de <h2> para frases promocionales en lugar de jerarquía semántica real. Ejemplo del home: "Your product has a problem", "How we help you", "The problem almost no one solves well", "How it works", "What those who lived it say", "What makes us different"… 8+ h2 sin <h3> intermedios ni estructura clara. Google lee esto como múltiples temas competing por relevancia, sin un tema dominante. Cada página debe tener UN tema principal claro en <h1> y <h2> y los demás como <h3>.
+11. Contenido near-duplicate entre páginas
+Esto ya te lo señalé en la auditoría general pero a nivel SEO es demoledor:
+
+Los 5 pasos de "How it works" están completos en home y en portafolio.
+Los testimonios (María Rodríguez, Carlos Méndez, Ana Torres) están duplicados literalmente.
+Las métricas "4.9/5 · 100% · 85%" están repetidas idénticas.
+
+Google detecta near-duplicate y elige una versión canónica. Si elige /portafolio como canonical de "how it works", tu home pierde relevancia por ese contenido. Decide una página dueña de cada bloque y desde las demás, linkea, no dupliques.
+12. Zero schema.org / structured data evidente
+No veo declaraciones JSON-LD en los <head> que auditaste. Para una agencia deberías tener mínimo:
+
+Organization (logo, sameAs a redes, founders)
+ProfessionalService o LocalBusiness (Bogotá, dirección, teléfono)
+Person para Christian Benavides (autor del libro y de los artículos)
+Course para el curso (con Offer, price, availability)
+Article con author, datePublished, dateModified en cada post
+FAQPage en home (tu FAQ es perfecto candidato — ganas rich snippet)
+BreadcrumbList
+
+Sin estos, estás regalando rich snippets a tus competidores. AEO y GEO (que tú mismo mencionas en tus keywords) dependen al 80% de schema bien estructurado. Es contradictorio que vendas SEO/AEO/GEO sin aplicarlo en casa.
+13. AEO/GEO: vendes el servicio, no lo aplicas
+Mencionas AEO (Answer Engine Optimization) y GEO (Generative Engine Optimization) como diferenciadores. Pero tu sitio:
+
+No tiene contenido en formato Q&A estructurado más allá del FAQ (que no tiene schema).
+No tiene <dl>, <dt>, <dd> ni TL;DR explícitos al inicio de los artículos.
+Los posts no responden preguntas directas tipo "¿Qué es CXD?" en el primer párrafo (el formato que ChatGPT y Perplexity extraen para citar).
+No hay autor visible con bio enlazada al post, lo cual Google y los LLMs usan para evaluar E-E-A-T y autoridad temática.
+
+Si vendes AEO/GEO, tu propio blog debe ser el caso de estudio público. Hoy no lo es.
+14. Slugs en español en versión inglés
+
+/en/portafolio (debería ser /en/portfolio)
+/en/curso (debería ser /en/course)
+/en/blog/arquitectura-percepcion (debería ser /en/blog/architecture-of-perception)
+/en/politica-de-privacidad (debería ser /en/privacy-policy)
+/en/terminos-de-servicio (debería ser /en/terms-of-service)
+
+Google usa el slug como señal débil pero real de tema y de idioma. Servir slugs en español en /en confunde al algoritmo y a los usuarios. Si haces el cambio, necesitas 301 redirects de las URLs viejas a las nuevas para no perder lo poco que tengas indexado.
+15. Internal linking pobre
+Casi todos los links internos del home van a anchors (#services, #contact). Apenas hay links a /portafolio, /curso, /blog. Los posts del blog tampoco enlazan entre sí (no veo "lecturas relacionadas"). El curso no enlaza a posts del blog que profundicen sus temas. Tu PageRank interno está estancado en home. Cada página debe linkear a 3-5 páginas internas relevantes con anchor text rico (no "click here", sino "metodología UX con IA" o "case studies fintech").
+
+🟢 BAJO (refinamientos pero importantes)
+16. Open Graph incompleto en home
+La home no tiene og:image definido (sí lo tiene /portafolio y /curso). Cuando alguien comparte el home en LinkedIn o WhatsApp, la card sale rota o vacía. Esto mata el CTR social y, por extensión, las señales de tráfico social que Google considera.
+17. meta-og:image apunta a ux-research.jpg en Twitter card de todas las páginas
+Todas las páginas (home, portafolio, curso, blog) tienen la misma twitter:image: https://medialab.design/images/ux-research.jpg. Cero personalización. Cada página debería tener su propia card social.
+18. Falta <link rel="prev"> / <link rel="next"> en blog paginado
+No pude validar paginación del blog, pero si tienes /blog/page/2, etc., necesitas semántica de paginación o usar noindex en las páginas paginadas.
+19. No hay sitemap.xml visible
+No pude validar la existencia de un sitemap. Si no existe o no está enviado a Search Console, los bots descubren tu sitio solo por crawling natural, que es lento y errático en sitios sin autoridad.
+20. Falta robots.txt validable
+Igual, no logré accederlo. Verifica que exista, que no esté bloqueando /en/ ni /_next/image, y que apunte al sitemap.
+21. Velocidad de carga / Core Web Vitals
+Tus imágenes vienen con parámetros _next/image?url=...&w=3840&q=75 — pides resoluciones de 3840px para mostrar miniaturas. Eso destroza LCP. Core Web Vitals son ranking factor confirmado por Google. Mide en PageSpeed Insights y arregla LCP, CLS e INP.
+
+📊 Diagnóstico ejecutivo
+Tu SEO técnico está aproximadamente en un 30/100:
+
+Lo básico de meta y canonical: presente pero con errores idiomáticos serios.
+Arquitectura de información: rota (todo vive en anchors).
+Schema: ausente.
+E-E-A-T: bajo (testimonios sin verificación, autores sin bio enlazada).
+Contenido: bueno en voz, débil en optimización on-page por keyword/intent.
+Autoridad de marca: cercana a cero contra competidores homónimos enormes.
+AEO/GEO: vendido pero no aplicado.

@@ -1,0 +1,188 @@
+Auditoría de visibilidad para LLMs — medialab.design
+Voy a serte brutalmente honesto: los LLMs no te conocen. Punto. Para Claude, ChatGPT, Perplexity, Gemini y Grok hoy MediaLab Ingeniería es invisible o, peor, confundido con otras marcas. Te explico por qué y cómo arreglarlo.
+
+🔴 EL DIAGNÓSTICO CENTRAL: NO EXISTES PARA LOS LLMs
+1. Confirmé que cuando pregunto por "MediaLab" los LLMs devuelven a tus competidores, no a ti
+La búsqueda devuelve: MIT Media Lab, Medialab Matadero (Madrid), medialab.co (workflows de video), medialab.io, medialab.com (Vastian, healthcare), medialab.website (Líbano), medialab3dsolutions.com, Medium Media Lab. Ocho marcas homónimas con autoridad enorme. Tú no apareces en ninguna respuesta.
+Más grave: cuando busqué "MediaLab Ingeniería" Bogotá UX agency (la búsqueda más específica posible), Google devuelve medialabingenieria.com (otro dominio tuyo o viejo, con texto Lorem ipsum sin limpiar), tu LinkedIn ("We cannot provide a description for this page"), un directorio (outreachdeskpro.com) y el Registro Único Empresarial. medialab.design no apareció en el SERP de tu propio nombre. Eso es lo que ven los crawlers de los LLMs: una marca fragmentada en al menos dos dominios, sin entidad consolidada.
+2. Tienes dos sitios compitiendo entre sí
+
+medialab.design (el nuevo, el que me pediste auditar)
+medialabingenieria.com (el viejo, indexado, con Lorem ipsum visible, contacto desactualizado: infomlabingenieria@gmail.com en vez de un correo profesional)
+
+Esto crea fragmentación de entidad para los LLMs. Cuando un modelo intenta construir tu "entity card" (la representación interna que tienen de tu marca), encuentra señales contradictorias: dos sitios, dos URLs, contenido viejo en uno y nuevo en otro. Resultado: el modelo no construye una representación confiable de ti.
+Acción inmediata: decide cuál es el dominio canónico (yo recomiendo medialab.design), pon 301 permanentes desde TODAS las URLs de medialabingenieria.com hacia las equivalentes en medialab.design, y actualiza LinkedIn, Instagram, Google Business Profile, directorios y firma de correo a un único dominio. Hasta que no consolides la entidad, ningún esfuerzo SEO/LLM va a rendir.
+
+🟠 PROBLEMAS ESTRUCTURALES DE INDEXACIÓN POR LLMs
+3. No tienes llms.txt ni llms-full.txt
+Verifiqué: tu sitio no expone un archivo /llms.txt en la raíz. Este es el estándar emergente (impulsado por Anthropic, Perplexity, Mintlify, y adoptado ya por miles de sitios) para decirle a los crawlers de LLMs qué páginas son las importantes, en qué orden leerlas, y qué contexto adicional necesitan.
+Para una agencia que vende AEO/GEO no tenerlo es una contradicción pública. Si un cliente pregunta a Perplexity "agencia UX con IA en Bogotá", tu falta de llms.txt te baja la probabilidad de ser citado.
+Tu llms.txt debería tener (mínimo):
+# MediaLab Ingeniería
+
+> UX/UI design agency from Bogotá, Colombia. Specialists in AI-powered discovery, behavioral design, and digital product development for B2B and B2C clients. Authors of 'Welcome to Zero UI'.
+
+## Core pages
+- [Services](https://medialab.design/en/services): UX, AI discovery, development, CRO
+- [Portfolio](https://medialab.design/en/portafolio): 40+ products in production
+- [AI UX Architect Course](https://medialab.design/en/curso): 8-week training
+- [UXBox](https://medialab.design/en/uxbox): AI discovery tool
+
+## Articles
+- [The Architecture of Perception](...)
+- [The DNA of Meaning](...)
+- [The Throne of Decision](...)
+
+## About
+Founded by Christian Benavides. Based in Bogotá, Colombia. Active in Fintech, Banking, Mobility, Education, E-commerce.
+Y un llms-full.txt con el contenido expandido de cada página clave para que los modelos lo ingieran directamente sin tener que parsear tu Next.js renderizado.
+4. Tu sitio es Next.js sin garantías de SSR completo para todos los bots
+Tu <meta name="generator"> dice "Next.js". Algunos crawlers de LLMs (especialmente los más antiguos: GPTBot v1, antiguas versiones de PerplexityBot) no ejecutan JavaScript bien. Si tu home depende de hidratación cliente para mostrar contenido crítico (los famosos "0+ products", "0% clients", etc. que aparecen sin animar), los LLMs leen literalmente "0" como tu métrica.
+Verifica esto YA: en terminal corre curl -A "GPTBot" https://medialab.design/en | grep "Products people". Si te devuelve "0+ Products" en plano sin hidratación, ese es exactamente el dato que entra a la memoria de ChatGPT cuando entrena o cuando consulta.
+5. robots.txt no permite (o no permite explícitamente) los bots de LLMs
+No pude acceder a tu robots.txt. Si no lo tienes o no permite explícitamente a estos user agents, los LLMs no te crawlearán:
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: Meta-ExternalAgent
+Allow: /
+
+Sitemap: https://medialab.design/sitemap.xml
+Sin esto explícito, varios bots (especialmente OpenAI's GPTBot por defecto desde 2024) respetan opt-in y no te indexan. Estás invisible por defecto.
+6. No tienes Schema.org / JSON-LD
+Esto te lo dije en la auditoría SEO pero a nivel LLM es doblemente crítico. Los LLMs modernos (especialmente Perplexity y Google AI Overviews) priorizan contenido con schema estructurado porque les da hechos verificables sin tener que interpretar prosa.
+Para tu caso necesitas mínimo:
+json{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "MediaLab Ingeniería",
+  "alternateName": "MediaLab Design",
+  "url": "https://medialab.design",
+  "logo": "https://medialab.design/logo.svg",
+  "description": "UX/UI design agency with AI, technical SEO, and digital product development for B2B and B2C companies.",
+  "founder": {
+    "@type": "Person",
+    "name": "Christian Benavides",
+    "jobTitle": "Founder & AI UX Architect",
+    "sameAs": [
+      "https://www.linkedin.com/in/christian-benavides-...",
+      "https://a.co/d/069qLWdY"
+    ]
+  },
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Bogotá",
+    "addressCountry": "CO"
+  },
+  "areaServed": ["CO", "MX", "US", "ES", "PE", "CL", "AR", "EC", "PA"],
+  "serviceType": ["UX/UI Design", "AI Discovery", "Software Development", "CRO", "Technical SEO"],
+  "sameAs": [
+    "https://www.linkedin.com/company/medialab-ingenieria",
+    "https://x.com/MediaLabIng",
+    "https://www.instagram.com/medialabingenieria"
+  ]
+}
+Más FAQPage (tienes FAQ pero sin schema), Course (tu curso), Article (cada post), Person (Christian con bio enlazada), Book (Welcome to Zero UI), Review (testimonios). Cada una de estas piezas estructuradas le da al LLM un hecho que puede citar sin riesgo. Hoy los LLMs no te citan porque no tienen hechos verificables sobre ti.
+
+🟠 PROBLEMAS DE CONTENIDO PARA EXTRACCIÓN POR LLMs
+7. Tus artículos no están en formato AEO/LLM-friendly
+Leí completo "La Arquitectura de la Percepción". Es un buen ensayo. Pero los LLMs no lo van a citar bien porque:
+
+No tiene TL;DR ni summary inicial. Los modelos extraen los primeros 200-400 tokens de un artículo como "respuesta resumen". Tú abres con prosa narrativa ("Hay productos digitales que son perfectos…"). Debería abrir con: "El Diseño de Experiencia Consciente (CXD) es una metodología que [definición de una frase]. Sus 4 principios son: 1, 2, 3, 4." Eso es lo que un LLM cita.
+Los conceptos clave no están en formato definicional. "CXD" aparece como sigla sin ser definido en formato extraíble. Un LLM busca patrones como "X es Y", "X se define como Y", "X consta de A, B, C". Tu prosa no los expone explícitamente.
+No hay autor con bio enlazada al post. No veo <author>, ni byline con foto + bio + LinkedIn. Para E-E-A-T (Experience, Expertise, Authoritativeness, Trustworthiness) y para que los LLMs te atribuyan citas, el autor debe ser una entidad rastreable. Hoy Christian Benavides solo aparece en <meta name="author"> que ningún LLM usa para citación.
+No hay datePublished ni dateModified visibles en el cuerpo del artículo (solo "May 2026" como texto suelto). Schema Article con datePublished y dateModified es lo que le dice a Perplexity "esto es reciente, cítalo".
+El artículo es bilingüe roto: title en inglés, h1 en español, cuerpo en español, disclaimer "English version coming soon". Para un LLM esto es señal de baja calidad editorial y reduce la probabilidad de cita.
+
+8. Falta el patrón de "afirmación citable"
+ChatGPT, Claude y Perplexity citan oraciones que tienen estructura de hecho declarativo + número o nombre propio. Ejemplos de lo que SÍ se cita:
+
+"MediaLab Ingeniería ha trabajado con más de 40 productos digitales en 9 países desde Bogotá, Colombia."
+"La metodología 90-10 de MediaLab consiste en [definición concreta]."
+"El curso AI User Experience Architect dura 8 semanas, tiene 9 módulos, y un precio de USD 995."
+
+Lo que NO se cita bien:
+
+"Tu producto deserves usuarios que lo amen." (eslogan, no hecho)
+"Diseñamos para cómo tu usuario piensa." (claim sin evidencia estructurada)
+"Products people want to come back to." (frase de marketing)
+
+Tu sitio está 70% marketing copy / 30% hechos citables. Para LLMs necesitas invertir la proporción al menos a 50/50: páginas con afirmaciones declarativas y datos concretos sobre tu empresa, equipo, metodología, casos.
+9. Falta una página "About" rica en entidad
+No tienes un /en/about o /en/company con:
+
+Año de fundación
+Fundadores con bios completas
+Tamaño del equipo
+Stack tecnológico oficial
+Industrias servidas (con listado citable)
+Cantidad de proyectos por año
+Clientes nombrados (los que tengan permiso)
+Premios, certificaciones, publicaciones
+
+Esta página es la principal fuente que los LLMs usan para construir la "entity card" de una empresa. Hoy no la tienes. Tu información dispersa entre LinkedIn, Instagram, el sitio viejo y el nuevo es lo que un LLM va a intentar reconciliar — y va a fallar.
+10. Cero presencia en fuentes que los LLMs sí leen mucho
+Los modelos se entrenan y/o consultan especialmente:
+
+Wikipedia → no tienes página (verificar si calificas para una)
+Crunchbase → no aparece
+Clutch / GoodFirms / DesignRush / The Manifest → no apareces, y son las plataformas que los LLMs citan cuando responden "¿qué agencias UX hay en Colombia?"
+Producthunt → tus productos propios (SinDeudas, Electrolineras) no parecen estar listados
+GitHub → si tienes repos públicos del equipo, no están vinculados al sitio
+Medium / Substack → los LLMs leen mucho Medium, podrías sindicar tu blog
+YouTube → cero presencia (los LLMs ahora ingieren transcripciones)
+
+Cada una de estas plataformas es una "fuente de verdad" para los LLMs. Si Clutch dice que MediaLab Ingeniería es una agencia UX en Bogotá con X reviews, ese hecho entra a la memoria de los modelos. Hoy esos hechos no existen públicamente.
+
+🟡 PROBLEMAS DE CITABILIDAD ESPECÍFICOS
+11. Tu libro "Welcome to Zero UI" es un activo desaprovechado
+Es tu mayor diferenciador para LLMs: autores publicados son entidades de alta confianza. Pero hoy:
+
+El link en el hero (https://a.co/d/069qLWdY) es un short URL de Amazon. Los LLMs no extraen títulos de short URLs.
+No hay schema Book con author, isbn, publisher, datePublished.
+No hay una página dedicada al libro en tu sitio con sinopsis, índice, citas extraíbles, reseñas.
+
+Acción: crea /en/book/welcome-to-zero-ui con TODO el meta del libro estructurado, links a Amazon (sin acortar), a Goodreads, a la página oficial del libro si existe, y a 3-5 conceptos clave del libro en formato Q&A extraíble.
+12. Tu curso compite contra Stanford, NN/G, Coursera, Designlab, Udemy
+Cuando comparé en búsqueda "AI User Experience Architect course", los resultados son: Designlab (4 semanas, autoridad alta), Stanford Online (autoridad máxima), NN/G (referente UX), Coursera, UCLA Extension, UX Design Institute, Udemy. Todos con autoridad muchísimo mayor que tu sitio.
+Tu nombre de curso "AI User Experience Architect" es genérico y compite imposible. Pero tu nombre interno "AI UX Architect" + "Zero UI Christian Benavides" + "UX Prompt Design" + "90-10 methodology" son posicionamientos diferenciables. Apuesta por términos únicos que no compitan con las universidades.
+13. UXBox: el nombre tampoco te ayuda
+"UXBox" es muy genérico. Hay productos con ese o similar nombre. Si quieres que un LLM lo asocie contigo necesitas:
+
+Una landing page dedicada con schema SoftwareApplication
+Un caso de uso documentado público
+Reviews verificables
+Y probablemente registrar UXBox® como marca o renombrar a algo más único
