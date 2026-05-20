@@ -49,10 +49,9 @@ export function CourseTransformation() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={inView ? { opacity: 1, scale: 1 } : {}}
           transition={{ duration: 0.8, delay: 0.15 }}
-          className="relative w-full h-40 md:h-56 rounded-2xl overflow-hidden mb-10 border border-foreground/[0.12] dark:border-foreground/[0.1]"
+          className="relative w-full h-48 md:h-72 lg:h-80 rounded-2xl overflow-hidden mb-10 border border-foreground/[0.12] dark:border-foreground/[0.1]"
         >
-          <Image src="/images/curso/transformation.png" alt="" fill className="object-cover opacity-70 dark:opacity-60" />
-          <div className="absolute inset-0 bg-gradient-to-r from-red-900/30 via-transparent to-[var(--cyan)]/25" />
+          <Image src="/images/curso/transformation.png" alt="" fill className="object-cover object-center opacity-90 dark:opacity-80" />
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-6 md:gap-4 items-start">

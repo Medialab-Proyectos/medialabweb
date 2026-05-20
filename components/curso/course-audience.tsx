@@ -124,14 +124,18 @@ export function CourseAudience() {
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.8, duration: 0.5 }}
-            className="mt-10 p-8 md:p-10 rounded-2xl bg-gradient-to-br from-[var(--cyan)] to-[var(--magenta)] shadow-xl text-center"
+            className="mt-10 p-8 md:p-10 rounded-2xl bg-[var(--surface-dark)] border border-[var(--cyan)]/20 shadow-xl text-center relative overflow-hidden"
           >
-            <p className="text-sm md:text-base text-white/95 leading-relaxed max-w-3xl mx-auto drop-shadow-md">
-              <span className="font-bold text-white uppercase tracking-wider text-base md:text-lg block mb-2">{t("Arquitecto de Experiencia de Usuario con IA", "AI User Experience Architect")}</span>
-              {t(
+            {/* Subtle glow accents */}
+            <div className="absolute top-0 left-1/4 w-[200px] h-[200px] bg-[var(--cyan)]/[0.06] rounded-full blur-[80px] pointer-events-none" />
+            <div className="absolute bottom-0 right-1/4 w-[200px] h-[200px] bg-[var(--magenta)]/[0.04] rounded-full blur-[80px] pointer-events-none" />
+            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--cyan)]/30 to-transparent" />
+            <p className="relative text-sm md:text-base text-white/80 leading-relaxed max-w-3xl mx-auto">
+              <span className="font-bold text-white uppercase tracking-wider text-base md:text-lg block mb-3" style={{ color: 'var(--cyan)' }}>{t("Arquitecto de Experiencia de Usuario con IA", "AI User Experience Architect")}</span>
+              <span className="text-white/60">{t(
                 "— programa orientado a la construcción estratégica de productos digitales funcionales mediante UX/UI, análisis conductual y validación continua, sin reemplazar procesos de ingeniería de software.",
                 "— a program oriented toward the strategic construction of functional digital products through UX/UI, behavioral analysis, and continuous validation, without replacing software engineering processes."
-              )}
+              )}</span>
             </p>
           </motion.div>
         </motion.div>

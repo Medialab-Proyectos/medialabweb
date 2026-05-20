@@ -26,14 +26,6 @@ export function CourseMidCta({ headline, headlineEn, subtext, subtextEn, ctaText
 
   return (
     <div ref={ref} className="relative overflow-hidden bg-[var(--surface-dark)] text-white -mt-px border-t border-b border-white/[0.05]">
-      {/* Background image — BRIGHTER visibility */}
-      {bgImage && (
-        <div className="absolute inset-0">
-          <Image src={bgImage} alt="" fill className="object-cover object-[center_15%] opacity-[0.65]" priority />
-          {/* Lighter overlay so the image pops much more */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-black/20 to-black/40" />
-        </div>
-      )}
       {/* Glow accent */}
       <div className="absolute inset-0 pointer-events-none">
         <div
@@ -46,23 +38,37 @@ export function CourseMidCta({ headline, headlineEn, subtext, subtextEn, ctaText
         initial={{ opacity: 0, y: 12 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.5 }}
-        className="relative z-10 max-w-4xl mx-auto px-6 lg:px-8 py-10 md:py-14 text-center drop-shadow-md"
+        className="relative z-10 max-w-5xl mx-auto px-6 lg:px-8 py-14 md:py-20"
       >
-        <p className="text-2xl md:text-3xl font-bold text-white mb-4 font-display">
-          {t(headline, headlineEn ?? headline)}
-        </p>
-        <p className="text-base md:text-lg text-white/90 mb-8 max-w-2xl mx-auto font-medium">
-          {t(subtext, subtextEn ?? subtext)}
-        </p>
-        {ctaText && ctaHref && (
-          <a
-            href={ctaHref}
-            className="inline-flex px-8 py-3.5 text-sm font-bold text-white rounded-full transition-all duration-300 hover:scale-[1.03] shadow-[0_4px_20px_rgba(0,0,0,0.5)]"
-            style={{ background: isPrimary ? 'var(--magenta)' : 'var(--cyan)' }}
+        {/* Framed image */}
+        {bgImage && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={inView ? { opacity: 1, scale: 1 } : {}}
+            transition={{ duration: 0.8, delay: 0.1 }}
+            className="relative w-full h-48 md:h-72 lg:h-80 rounded-2xl overflow-hidden mb-8 border border-white/[0.1]"
           >
-            {t(ctaText, ctaTextEn ?? ctaText)}
-          </a>
+            <Image src={bgImage} alt="" fill className="object-cover object-center" priority />
+          </motion.div>
         )}
+
+        <div className="text-center">
+          <p className="text-2xl md:text-3xl font-bold text-white mb-4 font-display">
+            {t(headline, headlineEn ?? headline)}
+          </p>
+          <p className="text-base md:text-lg text-white/90 mb-8 max-w-2xl mx-auto font-medium">
+            {t(subtext, subtextEn ?? subtext)}
+          </p>
+          {ctaText && ctaHref && (
+            <a
+              href={ctaHref}
+              className="inline-flex px-8 py-3.5 text-sm font-bold text-white rounded-full transition-all duration-300 hover:scale-[1.03] shadow-[0_4px_20px_rgba(0,0,0,0.5)]"
+              style={{ background: isPrimary ? 'var(--magenta)' : 'var(--cyan)' }}
+            >
+              {t(ctaText, ctaTextEn ?? ctaText)}
+            </a>
+          )}
+        </div>
       </motion.div>
     </div>
   )

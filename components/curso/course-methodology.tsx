@@ -205,15 +205,14 @@ export function CourseMethodology() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={inView ? { opacity: 1, scale: 1 } : {}}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="relative w-full h-40 md:h-56 rounded-2xl overflow-hidden mb-8 border border-foreground/[0.1]"
+          className="relative w-full h-48 md:h-72 lg:h-80 rounded-2xl overflow-hidden mb-8 border border-foreground/[0.1]"
         >
           <Image
             src="/images/curso/methodology-workshop.png"
             alt={t("Workshop de metodología IA en acción", "AI methodology workshop in action")}
             fill
-            className="object-cover opacity-50"
+            className="object-cover object-center opacity-90 brightness-110"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[var(--background)] via-transparent to-[var(--background)]/60" />
         </motion.div>
 
         {/* Stage pills */}
