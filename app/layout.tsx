@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { Lato, Poppins } from 'next/font/google'
 import Script from 'next/script'
 import { Analytics } from '@vercel/analytics/next'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 import { ThemeProvider } from '@/components/theme-provider'
 import { LanguageProvider } from '@/lib/language-context'
 import { SkipToContent } from '@/components/skip-to-content'
@@ -486,6 +487,7 @@ export default function RootLayout({
           </LanguageProvider>
         </ThemeProvider>
         <Analytics />
+        <SpeedInsights />
         <Script id="hotjar" strategy="afterInteractive">{`
           (function(h,o,t,j,a,r){
             h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
