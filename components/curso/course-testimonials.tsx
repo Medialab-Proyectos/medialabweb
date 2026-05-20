@@ -13,57 +13,57 @@ export function CourseTestimonials() {
   const testimonials = [
     {
       text: t(
-        "Volví a sentirme relevante. Dejé de competir con la IA y empecé a usarla como mi copiloto. Mis clientes notan la diferencia.",
-        "I feel relevant again. I stopped competing with AI and started using it as my copilot. My clients notice the difference."
+        "Me ayudó a ver cosas que francamente no hubiera podido ver solo. Lo que hubiera tomado muchísimo más tiempo, en una o dos auditorías se fue puliendo. Las bases teóricas y las leyes de UX hacen toda la diferencia.",
+        "It helped me see things I frankly couldn't have seen on my own. What would have taken much longer got refined in just one or two audits. The theoretical foundations and UX laws make all the difference."
       ),
-      name: "Camila Restrepo",
-      role: t("UX Designer · 6 años exp.", "UX Designer · 6 yrs exp."),
-      result: t("3 clientes nuevos en 2 meses", "3 new clients in 2 months"),
+      name: "Sebastián Vargas",
+      role: t("Desarrollador · App de Derechos Ciudadanos", "Developer · Civic Rights App"),
+      result: t("MVP validado con 8 mejoras clave", "MVP validated with 8 key improvements"),
     },
     {
       text: t(
-        "Pasé de copiar prompts a construir sistemas de diseño completos. La diferencia entre usar IA y pensar con IA es abismal.",
-        "I went from copying prompts to building complete design systems. The gap between using AI and thinking with AI is huge."
+        "Ha cambiado mucho el flujo de mi app. Antes tenía funciones regadas por todos lados, ahora están agrupadas en un solo punto. Uno se da cuenta de lo importante que es que todo esté en su sitio para que funcione.",
+        "It completely changed my app's flow. I used to have features scattered everywhere, now they're grouped in one place. You realize how important it is for everything to be where it belongs."
       ),
-      name: "Andrés Mejía",
-      role: t("Product Designer · Startup", "Product Designer · Startup"),
-      result: t("MVP lanzado en 4 semanas", "MVP launched in 4 weeks"),
+      name: "Mariana Castro",
+      role: t("Diseñadora · App de Bienestar Mental", "Designer · Mental Wellness App"),
+      result: t("Flujo reestructurado completo", "Fully restructured user flow"),
     },
     {
       text: t(
-        "La IA dejó de darme miedo. Ahora sé exactamente cuándo confiar en lo que genera y cuándo decidir yo. Eso vale oro.",
-        "AI stopped scaring me. Now I know exactly when to trust what it generates and when to decide myself. That's gold."
+        "La IA te puede recomendar, pero tú eres el que tiene que tener el conocimiento para guiarla. Sin todo el análisis y las estructuras que aprendimos, estaríamos súper perdidos. En flujo, estructura y usabilidad mi app está sólida.",
+        "AI can give you recommendations, but you need the knowledge to guide it. Without the analysis frameworks we learned, we'd be completely lost. My app is now solid in flow, structure, and usability."
       ),
-      name: "Laura Vásquez",
-      role: t("UI Designer · Freelancer", "UI Designer · Freelancer"),
-      result: t("Tiempo de entrega reducido 60%", "Delivery time cut by 60%"),
+      name: "Nicolás Herrera",
+      role: t("Estudiante · App Social de Eventos", "Student · Social Events App"),
+      result: t("Auditoría + rediseño en 2 semanas", "Audit + redesign in 2 weeks"),
     },
     {
       text: t(
-        "El framework 90-10 cambió mi proceso por completo. Antes saltaba entre herramientas sin dirección. Ahora tengo estructura y resultados.",
-        "The 90-10 framework completely changed my process. I used to jump between tools without direction. Now I have structure and results."
+        "Es muy importante tener las bases. Una cosa es imaginarse las funcionalidades y otra es tenerlas aplicadas con criterio. Las auditorías me mostraron exactamente qué mejorar en el perfil y el onboarding sin perderme en opciones infinitas.",
+        "Having the foundations is crucial. It's one thing to imagine features, another to apply them with real criteria. The audits showed me exactly what to improve in the profile and onboarding without getting lost in endless options."
       ),
-      name: "Diego Torres",
-      role: t("Developer · Frontend Lead", "Developer · Frontend Lead"),
-      result: t("Proceso de diseño 3x más rápido", "Design process 3x faster"),
+      name: "Isabella Ríos",
+      role: t("Diseñadora UX · App de Experiencias", "UX Designer · Experiences App"),
+      result: t("Onboarding y perfil rediseñados", "Onboarding & profile redesigned"),
     },
     {
       text: t(
-        "No aprendí a usar otra herramienta. Aprendí a hacer las preguntas correctas. Y eso cambió cómo trabajo, no solo cómo diseño.",
-        "I didn't learn another tool. I learned to ask the right questions. And that changed how I work, not just how I design."
+        "Me dijo que mi aplicativo era muy profesional pero que pensara más en el usuario que no sabe. Eso me hizo replantear todo el onboarding. Ahora mi app es una herramienta de apoyo real, no solo un sistema técnico.",
+        "It told me my app was very professional but to think more about users who don't know. That made me rethink the entire onboarding. Now my app is a real support tool, not just a technical system."
       ),
-      name: "Valentina Ruiz",
-      role: t("Diseñadora de Producto · Agencia", "Product Designer · Agency"),
-      result: t("Ascendida a Lead Designer", "Promoted to Lead Designer"),
+      name: "Tomás Aguirre",
+      role: t("Maker · Help3D · Impresión 3D", "Maker · Help3D · 3D Printing"),
+      result: t("Onboarding humanizado completo", "Fully humanized onboarding"),
     },
     {
       text: t(
-        "Entrego más rápido, pero con más profundidad. Dejé de competir por precio y empecé a competir por valor. Mis tarifas subieron 40%.",
-        "I deliver faster but with more depth. I stopped competing on price and started competing on value. My rates went up 40%."
+        "Aprendí a cruzar los gaps cognitivos con los nudges para encontrar mejoras reales. Dejar el modo simple por default, mostrar fechas límite en vez de días hábiles, mensajes personalizados por uso... son cambios pequeños que transforman la experiencia.",
+        "I learned to cross cognitive gaps with nudges to find real improvements. Defaulting to simple mode, showing deadlines instead of business days, personalized messages by usage... small changes that transform the experience."
       ),
-      name: "Santiago López",
-      role: t("Freelancer UX/UI · B2B", "Freelance UX/UI · B2B"),
-      result: t("Tarifas +40% en 3 meses", "Rates +40% in 3 months"),
+      name: "Daniel Mora",
+      role: t("Desarrollador · Plataforma Legal", "Developer · Legal Platform"),
+      result: t("6 nudges implementados en MVP", "6 nudges implemented in MVP"),
     },
   ]
 

@@ -11,24 +11,24 @@ export function SocialProofBar() {
 
   const recentActivities = [
     {
-      company: t("Startup fintech", "Fintech startup"),
-      action: t("nos contactó con una idea sin validar", "contacted us with an unvalidated idea"),
-      time: t("Semana 1", "Week 1"),
+      company: t("Equipo FinTech en Bogotá", "FinTech team in Bogotá"),
+      action: t("redujo su discovery de 3 meses a 3 semanas", "reduced discovery from 3 months to 3 weeks"),
+      time: t("Caso reciente", "Recent case"),
     },
     {
-      company: t("Startup fintech", "Fintech startup"),
-      action: t("validó su propuesta con UXBox en 3 días", "validated its proposal with UXBox in 3 days"),
-      time: t("Semana 1", "Week 1"),
+      company: t("SaaS B2B en México", "B2B SaaS in Mexico"),
+      action: t("aumentó activación de usuarios 40%", "increased user activation by 40%"),
+      time: t("Caso reciente", "Recent case"),
     },
     {
-      company: t("Startup fintech", "Fintech startup"),
-      action: t("lanzó MVP diseñado con usuarios reales", "launched MVP designed with real users"),
-      time: t("Semana 4", "Week 4"),
+      company: t("HealthTech startup", "HealthTech startup"),
+      action: t("validó su MVP con usuarios reales en días", "validated their MVP with real users in days"),
+      time: t("Caso reciente", "Recent case"),
     },
     {
-      company: t("Startup fintech", "Fintech startup"),
-      action: t("aumentó conversión 38% tras lanzamiento", "increased conversion 38% after launch"),
-      time: t("Mes 2", "Month 2"),
+      company: t("E-commerce en Chile", "E-commerce in Chile"),
+      action: t("mejoró conversión 35% con rediseño UX", "improved conversion 35% with UX redesign"),
+      time: t("Caso reciente", "Recent case"),
     },
   ]
 
@@ -45,7 +45,7 @@ export function SocialProofBar() {
     if (!show) return
     const interval = setInterval(() => {
       setCurrent((prev) => (prev + 1) % recentActivities.length)
-    }, 4000)
+    }, 8000)
     return () => clearInterval(interval)
   }, [show, recentActivities.length])
 
@@ -56,8 +56,8 @@ export function SocialProofBar() {
   return (
     <div
       className="fixed bottom-6 left-6 z-40 animate-slide-up hidden md:block"
-      role="status"
-      aria-live="polite"
+      role="complementary"
+      aria-label={t("Casos de éxito recientes", "Recent success stories")}
     >
       <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-card border border-border shadow-xl max-w-xs">
         <div

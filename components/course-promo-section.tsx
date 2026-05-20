@@ -111,7 +111,7 @@ export function CoursePromoSection() {
             </h2>
 
             {/* Subtext */}
-            <p className="text-base md:text-lg text-white/50 leading-relaxed max-w-xl">
+            <p className="text-base md:text-lg text-white/65 leading-relaxed max-w-xl">
               {t(
                 "Nuestra metodología de 9 módulos para diseñadores UX/UI, developers y startups que quieren usar IA como copiloto estratégico — no como reemplazo.",
                 "Our 9-module methodology for UX/UI designers, developers, and startups that want to use AI as a strategic copilot — not a replacement."
@@ -145,7 +145,7 @@ export function CoursePromoSection() {
               </Link>
               <Link
                 href={localized("/curso") + "#metodologia"}
-                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-medium text-white/50 border border-white/[0.08] hover:border-white/[0.18] hover:text-white/75 hover:bg-white/[0.02] transition-all duration-300"
+                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-medium text-white/65 border border-white/[0.08] hover:border-white/[0.18] hover:text-white/75 hover:bg-white/[0.02] transition-all duration-300"
               >
                 {t("Ver metodología", "View methodology")}
               </Link>
@@ -164,7 +164,7 @@ export function CoursePromoSection() {
                 <span className="text-xs font-semibold tracking-widest uppercase text-[var(--cyan)]">
                   {t("¿Qué vas a lograr?", "What will you achieve?")}
                 </span>
-                <p className="text-sm text-white/40 leading-relaxed">
+                <p className="text-sm text-white/60 leading-relaxed">
                   {t(
                     "Un programa intensivo diseñado para profesionales que quieren liderar la era IA con criterio, no con miedo.",
                     "An intensive program for professionals who want to lead the AI era with judgment, not fear."
@@ -198,7 +198,7 @@ export function CoursePromoSection() {
                         <h3 className="text-sm font-semibold text-white">
                           {t(h.titleEs, h.titleEn)}
                         </h3>
-                        <p className="text-xs text-white/40 leading-relaxed">
+                        <p className="text-xs text-white/60 leading-relaxed">
                           {t(h.descEs, h.descEn)}
                         </p>
                       </div>

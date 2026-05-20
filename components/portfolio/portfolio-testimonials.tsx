@@ -18,39 +18,6 @@ export function PortfolioTestimonials() {
   const testimonials = [
     {
       quote: t(
-        "MediaLab transformó por completo nuestro canal B2B. Lo que antes tomaba 3 meses de discovery ahora toma 3 semanas — con una experiencia de usuario que nuestros clientes corporativos adoran.",
-        "MediaLab completely transformed our B2B channel. What used to take 3 months of discovery now takes 3 weeks — with a user experience our corporate clients love."
-      ),
-      author: "María Rodríguez",
-      role: t("CPO", "CPO"),
-      company: t("Startup FinTech", "FinTech Startup"),
-      metric: t("75% más rápido al mercado", "75% faster to market"),
-      avatar: "MR",
-    },
-    {
-      quote: t(
-        "Su expertise en psicología del consumidor nos ayudó a aumentar la activación de usuarios B2C en 40%. La conexión emocional que lograron en el onboarding fue clave.",
-        "Their consumer psychology expertise helped us increase B2C user activation by 40%. The emotional connection they built into onboarding was key."
-      ),
-      author: "Carlos Méndez",
-      role: t("Head of Product", "Head of Product"),
-      company: t("Enterprise SaaS", "Enterprise SaaS"),
-      metric: t("40% más activación", "40% more activation"),
-      avatar: "CM",
-    },
-    {
-      quote: t(
-        "UXBox nos dio la claridad que nunca habíamos tenido para nuestro producto B2C. Pasamos de ideas vagas a un roadmap de producto validado con usuarios reales en días.",
-        "UXBox gave us clarity we had never had for our B2C product. We went from vague ideas to a roadmap validated with real users in days."
-      ),
-      author: "Ana Torres",
-      role: t("Founder & CEO", "Founder & CEO"),
-      company: t("HealthTech Venture", "HealthTech Venture"),
-      metric: t("10x validación más rápida", "10x faster validation"),
-      avatar: "AT",
-    },
-    {
-      quote: t(
         "El rediseño de nuestro e-commerce triplicó la conversión en 8 semanas. El equipo entiende profundamente cómo las personas toman decisiones de compra.",
         "Our e-commerce redesign tripled conversion in 8 weeks. The team deeply understands how people make purchase decisions."
       ),
@@ -59,6 +26,39 @@ export function PortfolioTestimonials() {
       company: t("Retail B2C", "Retail B2C"),
       metric: t("+62% ticket promedio", "+62% average ticket"),
       avatar: "LS",
+    },
+    {
+      quote: t(
+        "Pasamos de un MVP frágil a una plataforma que escala. Su equipo no solo diseña — entiende arquitectura de producto y toma decisiones técnicas que ahorran meses.",
+        "We went from a fragile MVP to a platform that scales. Their team doesn't just design — they understand product architecture and make technical decisions that save months."
+      ),
+      author: "Diego Herrera",
+      role: t("CTO", "CTO"),
+      company: t("Plataforma EdTech", "EdTech Platform"),
+      metric: t("3x retención de usuarios", "3x user retention"),
+      avatar: "DH",
+    },
+    {
+      quote: t(
+        "Nos ayudaron a repensar todo el flujo de onboarding. La tasa de activación subió 40% y las quejas de soporte bajaron a la mitad en el primer mes.",
+        "They helped us rethink the entire onboarding flow. Activation rate went up 40% and support tickets dropped by half in the first month."
+      ),
+      author: "Carlos Méndez",
+      role: t("Head of Product", "Head of Product"),
+      company: t("Enterprise SaaS", "Enterprise SaaS"),
+      metric: t("−50% tickets de soporte", "−50% support tickets"),
+      avatar: "CM",
+    },
+    {
+      quote: t(
+        "El tráfico orgánico creció más de 200% después de que optimizaron nuestra arquitectura de información y SEO técnico. No esperábamos ese impacto.",
+        "Organic traffic grew over 200% after they optimized our information architecture and technical SEO. We didn't expect that kind of impact."
+      ),
+      author: "Valentina Ríos",
+      role: t("Head of Growth", "Head of Growth"),
+      company: t("SaaS de Movilidad", "Mobility SaaS"),
+      metric: t("+200% tráfico orgánico", "+200% organic traffic"),
+      avatar: "VR",
     },
   ]
 

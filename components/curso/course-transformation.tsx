@@ -51,7 +51,7 @@ export function CourseTransformation() {
           transition={{ duration: 0.8, delay: 0.15 }}
           className="relative w-full h-48 md:h-72 lg:h-80 rounded-2xl overflow-hidden mb-10 border border-foreground/[0.12] dark:border-foreground/[0.1]"
         >
-          <Image src="/images/curso/transformation.png" alt="" fill className="object-cover object-center opacity-90 dark:opacity-80" />
+          <Image src="/images/curso/transformation.png" alt="" fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover object-center opacity-90 dark:opacity-80" />
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-6 md:gap-4 items-start">

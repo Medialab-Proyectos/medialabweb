@@ -9,7 +9,7 @@ import { BookingModal } from "./booking-modal"
 export function CTASection() {
   const ref = useRef<HTMLDivElement>(null)
   const [visible, setVisible] = useState(false)
-  const { t } = useLanguage()
+  const { t, localized } = useLanguage()
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -53,34 +53,39 @@ export function CTASection() {
             {/* Urgency badge */}
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--magenta)]/20 border border-[var(--magenta)]/30 text-sm">
               <Clock size={14} className="text-[var(--magenta)]" />
-              <span className="text-white/90 font-medium">Disponibilidad limitada Q3 2026</span>
+              <span className="text-white/90 font-medium">{t("Disponibilidad limitada Q3 2026", "Limited availability Q3 2026")}</span>
             </div>
 
             <h2
               id="cta-heading"
               className="font-display font-bold text-3xl md:text-5xl leading-tight text-white text-balance"
             >
-              Tu producto merece usuarios que lo amen. Nosotros te ayudamos a lograrlo.
+              {t(
+                "Tu producto merece usuarios que lo amen. Nosotros te ayudamos a lograrlo.",
+                "Your product deserves users who love it. We help you make it happen."
+              )}
             </h2>
 
             <p className="text-base text-white/70 leading-relaxed text-pretty">
-              30 minutos. Sin compromiso. Te escuchamos, entendemos tu desafío y te mostramos exactamente
-              cómo podríamos resolverlo juntos. Si no encajamos, te lo decimos con honestidad.
+              {t(
+                "30 minutos. Sin compromiso. Te escuchamos, entendemos tu desafío y te mostramos exactamente cómo podríamos resolverlo juntos. Si no encajamos, te lo decimos con honestidad.",
+                "30 minutes. No commitment. We listen, understand your challenge, and show you exactly how we'd solve it together. If we're not the right fit, we'll tell you honestly."
+              )}
             </p>
 
             {/* Value props */}
             <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-white/60">
               <span className="flex items-center gap-1.5">
                 <CheckCircle2 size={14} className="text-green-400" />
-                Consulta gratuita
+                {t("Consulta gratuita", "Free consultation")}
               </span>
               <span className="flex items-center gap-1.5">
                 <Zap size={14} className="text-[var(--orange)]" />
-                Respuesta en 24h
+                {t("Respuesta en 24h", "Reply within 24h")}
               </span>
               <span className="flex items-center gap-1.5">
                 <Shield size={14} className="text-[var(--cyan)]" />
-                NDA disponible
+                {t("NDA disponible", "NDA available")}
               </span>
             </div>
 
@@ -102,12 +107,12 @@ export function CTASection() {
             </div>
 
             {/* Alternative CTA for reflective profiles */}
-            <p className="text-xs text-white/40 mt-1">
+            <p className="text-xs text-white/60 mt-1">
               {t(
                 "¿Prefieres ver primero cómo trabajamos? ",
                 "Prefer to see how we work first? "
               )}
-              <Link href="#cases" className="underline text-[var(--cyan)]/70 hover:text-[var(--cyan)] transition-colors">
+              <Link href={localized("/portafolio")} className="underline text-[var(--cyan)]/70 hover:text-[var(--cyan)] transition-colors">
                 {t("Ver casos de éxito →", "See case studies →")}
               </Link>
             </p>
@@ -115,21 +120,30 @@ export function CTASection() {
             {/* Social proof */}
             <div className="flex items-center gap-3 pt-4 border-t border-white/10 mt-2">
               <div className="flex -space-x-2">
-                {["JD", "MR", "AT"].map((initials, i) => (
+                {[
+                  { initials: "MR", name: "María R." },
+                  { initials: "CM", name: "Carlos M." },
+                  { initials: "AT", name: "Ana T." },
+                ].map((person, i) => (
                   <div
-                    key={initials}
+                    key={person.initials}
                     className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white border-2 border-black/50"
                     style={{
                       background: `linear-gradient(135deg, var(--${["magenta", "cyan", "orange"][i]}), var(--${["orange", "magenta", "cyan"][i]}))`,
                       zIndex: 3 - i,
                     }}
+                    title={person.name}
                   >
-                    {initials}
+                    {person.initials}
                   </div>
                 ))}
               </div>
-              <p className="text-xs text-white/50">
-                <span className="text-white font-medium">40+ equipos</span> ya transformaron su producto con nosotros. El próximo podría ser el tuyo.
+              <p className="text-xs text-white/60">
+                <span className="text-white font-medium">{t("40+ equipos", "40+ teams")}</span>{" "}
+                {t(
+                  "ya transformaron su producto con nosotros. El próximo podría ser el tuyo.",
+                  "have already transformed their product with us. Yours could be next."
+                )}
               </p>
             </div>
           </div>

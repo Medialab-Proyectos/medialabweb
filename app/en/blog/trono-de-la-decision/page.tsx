@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "The Throne of Decision — MediaLab Ingeniería",
+    title: "The Throne of Decision",
     description: "AI, human autonomy, and ethical design in the agentic era.",
     type: "article",
     locale: "en_US",

@@ -214,7 +214,7 @@ export function WorldMapSection() {
                   style={{ background: "var(--magenta)" }}
                 />
                 <span className="text-sm text-white/80">{country.name}</span>
-                <span className="text-xs text-white/40">({country.projects})</span>
+                <span className="text-xs text-white/60">({country.projects})</span>
               </div>
             ))}
           </div>

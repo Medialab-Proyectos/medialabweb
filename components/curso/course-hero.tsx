@@ -56,11 +56,11 @@ function OrbitalGraphic() {
       {/* Center */}
       <div className="absolute inset-[5rem] md:inset-[6.5rem] flex items-center justify-center">
         <div className="text-center">
-          <p className="text-[9px] tracking-[0.2em] uppercase text-white/35 mb-2">{t("Resultado", "Result")}</p>
+          <p className="text-[9px] tracking-[0.2em] uppercase text-white/60 mb-2">{t("Resultado", "Result")}</p>
           <p className="text-3xl md:text-4xl font-bold font-display leading-none" style={{ color: 'var(--cyan)' }}>90%</p>
-          <p className="text-[11px] text-white/50 mb-2">{t("productividad", "productivity")}</p>
+          <p className="text-[11px] text-white/65 mb-2">{t("productividad", "productivity")}</p>
           <p className="text-3xl md:text-4xl font-bold font-display leading-none" style={{ color: 'var(--magenta)' }}>10%</p>
-          <p className="text-[11px] text-white/50">{t("esfuerzo", "effort")}</p>
+          <p className="text-[11px] text-white/65">{t("esfuerzo", "effort")}</p>
         </div>
       </div>
 
@@ -93,7 +93,7 @@ export function CourseHero() {
     <section ref={ref} className="relative min-h-[90vh] md:min-h-screen flex items-center overflow-hidden bg-[var(--surface-dark)] text-[var(--surface-dark-fg)]">
       {/* Background image */}
       <div className="absolute inset-0">
-        <Image src="/images/curso/hero-team.png" alt="" fill className="object-cover opacity-[0.40]" priority />
+        <Image src="/images/curso/hero-team.png" alt="" fill sizes="100vw" className="object-cover opacity-[0.40]" priority />
         <div className="absolute inset-0 bg-gradient-to-b from-[var(--surface-dark)]/50 via-[var(--surface-dark)]/30 to-[var(--surface-dark)]/80" />
       </div>
       {/* Background effects — stronger opacity */}
@@ -159,13 +159,13 @@ export function CourseHero() {
               <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
               {t("Precio de lanzamiento · Garantía semana 1", "Launch price · Week 1 guarantee")}
             </motion.p>
-            <motion.p variants={fadeUp} className="text-[11px] text-white/40 mb-6">
+            <motion.p variants={fadeUp} className="text-[11px] text-white/60 mb-6">
               {t("Cohorte 01 · 30 cupos", "Cohort 01 · 30 seats")}
             </motion.p>
 
             {/* Role pills */}
             <motion.div variants={fadeUp} className="hidden sm:flex flex-wrap items-center gap-2 mb-6">
-              <span className="text-[10px] tracking-[0.12em] uppercase text-white/50 font-medium mr-1">{t("Sales como:", "You become:")}</span>
+              <span className="text-[10px] tracking-[0.12em] uppercase text-white/65 font-medium mr-1">{t("Sales como:", "You become:")}</span>
               <span className="px-3 py-1 rounded-full border border-[var(--cyan)]/30 bg-[var(--cyan)]/[0.1] text-[11px] font-semibold" style={{ color: 'var(--cyan)' }}>
                 {t("Arquitecto UX con IA", "AI UX Architect")}
               </span>
@@ -183,7 +183,7 @@ export function CourseHero() {
                 const Icon = badge.icon
                 return (
                   <div key={i} className="flex items-center gap-2">
-                    <Icon className="w-3.5 h-3.5 text-white/50" />
+                    <Icon className="w-3.5 h-3.5 text-white/65" />
                     <span className="text-xs text-white/60">{badge.text}</span>
                   </div>
                 )

@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "The Architecture of Perception — MediaLab Ingeniería",
+    title: "The Architecture of Perception",
     description: "Users move through emotional states, not logical flows. Learn to design from conscious perception.",
     type: "article",
     locale: "en_US",

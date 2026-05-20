@@ -5,17 +5,18 @@ const FROM_EMAIL = process.env.FROM_EMAIL || "MediaLab <onboarding@resend.dev>"
 
 export async function POST(req: NextRequest) {
   try {
-    const { name, email, role, experience, motivation } = await req.json()
+    const { name, email, role, experience, motivation, lang = "es" } = await req.json()
+    const isEn = lang === "en"
 
     if (!name || !email) {
-      return NextResponse.json({ error: "Nombre y email son requeridos" }, { status: 400 })
+      return NextResponse.json({ error: isEn ? "Name and email are required" : "Nombre y email son requeridos" }, { status: 400 })
     }
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return NextResponse.json({ error: "Email no valido" }, { status: 400 })
+      return NextResponse.json({ error: isEn ? "Invalid email" : "Email no valido" }, { status: 400 })
     }
 
-    const timestamp = new Date().toLocaleString("es-CO", { timeZone: "America/Bogota" })
+    const timestamp = new Date().toLocaleString(isEn ? "en-US" : "es-CO", { timeZone: "America/Bogota" })
 
     // Admin notification email
     const adminHtml = `
@@ -64,10 +65,10 @@ export async function POST(req: NextRequest) {
 </div>
 </body></html>`
 
-    // Confirmation email to student
+    // Confirmation email to student (bilingual)
     const studentHtml = `
 <!DOCTYPE html>
-<html lang="es">
+<html lang="${isEn ? "en" : "es"}">
 <head><meta charset="UTF-8"><style>
   body { font-family: 'Segoe UI', Arial, sans-serif; background: #f5f5f5; margin: 0; padding: 0; }
   .container { max-width: 600px; margin: 32px auto; background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
@@ -91,24 +92,27 @@ export async function POST(req: NextRequest) {
 <div class="container">
   <div class="header">
     <div class="logo">Media<span>Lab</span></div>
-    <h1>Tu registro ha sido recibido</h1>
+    <h1>${isEn ? "Your registration has been received" : "Tu registro ha sido recibido"}</h1>
     <p>AI Experience Architect &mdash; UX Prompt Design</p>
   </div>
   <div class="body">
     <div class="highlight">
-      <p>Hola <strong>${name}</strong>,<br><br>Hemos recibido tu registro para el curso <strong>AI Experience Architect</strong>. Nuestro equipo revisara tu perfil y te contactara en las proximas <strong>48 horas</strong> con los detalles de inscripcion, metodos de pago y fecha de inicio.</p>
+      <p>${isEn
+        ? `Hi <strong>${name}</strong>,<br><br>We've received your registration for the <strong>AI Experience Architect</strong> course. Our team will review your profile and contact you within <strong>48 hours</strong> with enrollment details, payment methods, and start date.`
+        : `Hola <strong>${name}</strong>,<br><br>Hemos recibido tu registro para el curso <strong>AI Experience Architect</strong>. Nuestro equipo revisara tu perfil y te contactara en las proximas <strong>48 horas</strong> con los detalles de inscripcion, metodos de pago y fecha de inicio.`
+      }</p>
     </div>
 
     <div class="info-box">
-      <h3>Detalles del curso</h3>
-      <div class="info-item">&#x2022; <span><strong>Duracion:</strong> 8 semanas intensivas</span></div>
-      <div class="info-item">&#x2022; <span><strong>Modalidad:</strong> Online en vivo + grabaciones</span></div>
-      <div class="info-item">&#x2022; <span><strong>Cupos:</strong> Solo 30 personas por cohorte</span></div>
-      <div class="info-item">&#x2022; <span><strong>Precio lanzamiento:</strong> $995 USD (regular $1,500)</span></div>
+      <h3>${isEn ? "Course details" : "Detalles del curso"}</h3>
+      <div class="info-item">&#x2022; <span><strong>${isEn ? "Duration:" : "Duracion:"}</strong> ${isEn ? "8 intensive weeks" : "8 semanas intensivas"}</span></div>
+      <div class="info-item">&#x2022; <span><strong>${isEn ? "Format:" : "Modalidad:"}</strong> ${isEn ? "Live online + recordings" : "Online en vivo + grabaciones"}</span></div>
+      <div class="info-item">&#x2022; <span><strong>${isEn ? "Seats:" : "Cupos:"}</strong> ${isEn ? "Only 30 per cohort" : "Solo 30 personas por cohorte"}</span></div>
+      <div class="info-item">&#x2022; <span><strong>${isEn ? "Launch price:" : "Precio lanzamiento:"}</strong> $995 USD (${isEn ? "regular" : "regular"} $1,500)</span></div>
     </div>
 
     <div class="contact">
-      <p>Tienes preguntas? Escribenos directamente<br>
+      <p>${isEn ? "Have questions? Reach out directly" : "Tienes preguntas? Escribenos directamente"}<br>
       <a href="mailto:info@medilab.design">info@medilab.design</a> &middot;
       <a href="https://wa.me/573054009505">WhatsApp</a></p>
     </div>
@@ -136,7 +140,9 @@ export async function POST(req: NextRequest) {
       resend.emails.send({
         from: FROM_EMAIL,
         to: [email],
-        subject: "Registro recibido — AI Experience Architect | MediaLab",
+        subject: isEn
+          ? "Registration received — AI Experience Architect | MediaLab"
+          : "Registro recibido — AI Experience Architect | MediaLab",
         html: studentHtml,
       }),
     ])

@@ -75,28 +75,28 @@ export function CourseCta() {
               <div className="space-y-2.5 mb-5 flex-1">
                 <div className="flex items-center gap-3 text-sm text-foreground/70 dark:text-foreground/55">
                   <CheckCircle size={16} style={{ color: 'var(--cyan)' }} className="shrink-0" />
+                  <span className="flex-1">{t("9 módulos + workshops en vivo", "9 modules + live workshops")}</span>
+                  <span className="text-xs text-foreground/30 font-mono">$1,000</span>
+                </div>
+                <div className="flex items-center gap-3 text-sm text-foreground/70 dark:text-foreground/55">
+                  <CheckCircle size={16} style={{ color: 'var(--cyan)' }} className="shrink-0" />
                   <span className="flex-1">{t("Proyecto real en tu portafolio", "Real project in your portfolio")}</span>
-                  <span className="text-xs text-foreground/30 font-mono">$300</span>
-                </div>
-                <div className="flex items-center gap-3 text-sm text-foreground/70 dark:text-foreground/55">
-                  <CheckCircle size={16} style={{ color: 'var(--cyan)' }} className="shrink-0" />
-                  <span className="flex-1">{t("Comunidad de por vida", "Lifetime community")}</span>
-                  <span className="text-xs text-foreground/30 font-mono">$200</span>
-                </div>
-                <div className="flex items-center gap-3 text-sm text-foreground/70 dark:text-foreground/55">
-                  <CheckCircle size={16} style={{ color: 'var(--cyan)' }} className="shrink-0" />
-                  <span className="flex-1">{t("Herramientas premium incluidas", "Premium tools included")}</span>
-                  <span className="text-xs text-foreground/30 font-mono">$150</span>
+                  <span className="text-xs text-foreground/30 font-mono">$400</span>
                 </div>
                 <div className="flex items-center gap-3 text-sm text-foreground/70 dark:text-foreground/55">
                   <CheckCircle size={16} style={{ color: 'var(--cyan)' }} className="shrink-0" />
                   <span className="flex-1">{t("Certificación profesional", "Professional certification")}</span>
-                  <span className="text-xs text-foreground/30 font-mono">$250</span>
+                  <span className="text-xs text-foreground/30 font-mono">$450</span>
                 </div>
                 <div className="flex items-center gap-3 text-sm text-foreground/70 dark:text-foreground/55">
                   <CheckCircle size={16} style={{ color: 'var(--cyan)' }} className="shrink-0" />
-                  <span className="flex-1">{t("9 módulos + workshops en vivo", "9 modules + live workshops")}</span>
-                  <span className="text-xs text-foreground/30 font-mono">$500</span>
+                  <span className="flex-1">{t("Comunidad de por vida", "Lifetime community")}</span>
+                  <span className="text-xs text-foreground/30 font-mono">$300</span>
+                </div>
+                <div className="flex items-center gap-3 text-sm text-foreground/70 dark:text-foreground/55">
+                  <CheckCircle size={16} style={{ color: 'var(--cyan)' }} className="shrink-0" />
+                  <span className="flex-1">{t("Herramientas premium incluidas", "Premium tools included")}</span>
+                  <span className="text-xs text-foreground/30 font-mono">$250</span>
                 </div>
               </div>
 

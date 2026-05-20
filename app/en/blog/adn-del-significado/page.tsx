@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "The DNA of Meaning — MediaLab Ingeniería",
+    title: "The DNA of Meaning",
     description: "Why some products become identity, and others get abandoned.",
     type: "article",
     locale: "en_US",

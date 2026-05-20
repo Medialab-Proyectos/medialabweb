@@ -29,7 +29,7 @@ export function TestimonialsSection() {
       author: "María Rodríguez",
       role: "CPO",
       company: t("Startup FinTech", "FinTech Startup"),
-      metric: t("75% más rápido al mercado", "75% faster to market"),
+      metric: t("75% más rápido al mercado", "Up to 75% faster to market"),
       avatar: "MR",
     },
     {
@@ -51,7 +51,7 @@ export function TestimonialsSection() {
       author: "Ana Torres",
       role: "Founder & CEO",
       company: "HealthTech Venture",
-      metric: t("10x validación más rápida", "10x faster validation"),
+      metric: t("10x validación más rápida", "Up to 10x faster validation"),
       avatar: "AT",
     },
   ]

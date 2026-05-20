@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "Influence Without Erosion — MediaLab Ingeniería",
+    title: "Influence Without Erosion",
     description: "Sustainable behavioral design without manipulation.",
     type: "article",
     locale: "en_US",

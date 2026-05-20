@@ -5,9 +5,14 @@ import { Layers, Globe, Clock, Users } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 
 function useCountUp(target: number, duration = 1800, active: boolean) {
-  const [count, setCount] = useState(0)
+  // Start with target value for SSR/no-JS — animate down from 0 only after hydration
+  const [count, setCount] = useState(target)
+  const hasAnimated = useRef(false)
+
   useEffect(() => {
-    if (!active) return
+    if (!active || hasAnimated.current) return
+    hasAnimated.current = true
+    setCount(0)
     let start = 0
     const step = target / (duration / 16)
     const timer = setInterval(() => {
@@ -71,10 +76,10 @@ export function TrustMetrics() {
   }, [])
 
   const metrics = [
-    { value: 40, suffix: "+", label: t("Productos que la gente ama usar", "Products people love to use"), icon: Layers },
+    { value: 40, suffix: "+", label: t("Productos entregados en producción", "Products shipped to production"), icon: Layers },
     { value: 98, suffix: "%", label: t("De clientes que volverían a trabajar con nosotros", "Of clients who would work with us again"), icon: Users },
     { value: 7, suffix: "", label: t("Países donde nuestro diseño impacta", "Countries where our design has impact"), icon: Globe },
-    { value: 75, suffix: "%", label: t("Más rápido que el discovery tradicional", "Faster than traditional discovery"), icon: Clock },
+    { value: 75, suffix: "%", label: t("Más rápido que el discovery tradicional (promedio)", "Faster than traditional discovery (avg.)"), icon: Clock },
   ]
 
   return (

@@ -3,6 +3,7 @@ import { Lato, Poppins } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { ThemeProvider } from '@/components/theme-provider'
 import { LanguageProvider } from '@/lib/language-context'
+import { SkipToContent } from '@/components/skip-to-content'
 import './globals.css'
 
 const lato = Lato({
@@ -31,7 +32,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://medialab.design'),
   title: {
-    default: 'MediaLab Ingeniería | Agencia UX/UI, IA y Productos Digitales en 2026',
+    default: 'MediaLab Ingeniería | Agencia UX/UI, IA y Productos Digitales',
     template: '%s | MediaLab Ingeniería',
   },
   description:
@@ -211,7 +212,7 @@ export default function RootLayout({
               '@type': 'WebSite',
               name: 'MediaLab Ingeniería',
               url: 'https://medialab.design',
-              inLanguage: 'es-CO',
+              inLanguage: ['es-CO', 'en'],
               description:
                 'Sitio oficial de MediaLab Ingeniería, agencia de diseño UX/UI, IA, SEO técnico y desarrollo de productos digitales B2B y B2C.',
               publisher: {
@@ -219,11 +220,13 @@ export default function RootLayout({
                 name: 'MediaLab Ingeniería',
                 url: 'https://medialab.design',
               },
-              potentialAction: {
-                '@type': 'CommunicateAction',
-                target: 'https://medialab.design/#contact',
-                name: 'Agendar llamada de discovery',
-              },
+              potentialAction: [
+                {
+                  '@type': 'CommunicateAction',
+                  target: 'https://medialab.design/#contact',
+                  name: 'Agendar llamada de discovery',
+                },
+              ],
             }),
           }}
         />
@@ -301,10 +304,67 @@ export default function RootLayout({
               '@type': 'BreadcrumbList',
               itemListElement: [
                 { '@type': 'ListItem', position: 1, name: 'Inicio', item: 'https://medialab.design' },
-                { '@type': 'ListItem', position: 2, name: 'Servicios', item: 'https://medialab.design/#services' },
-                { '@type': 'ListItem', position: 3, name: 'Metodología', item: 'https://medialab.design/#method' },
-                { '@type': 'ListItem', position: 4, name: 'Industrias', item: 'https://medialab.design/#industries' },
-                { '@type': 'ListItem', position: 5, name: 'Contacto', item: 'https://medialab.design/#contact' },
+                { '@type': 'ListItem', position: 2, name: 'Servicios', item: 'https://medialab.design/servicios' },
+                { '@type': 'ListItem', position: 3, name: 'Portafolio', item: 'https://medialab.design/portafolio' },
+                { '@type': 'ListItem', position: 4, name: 'Curso UX + IA', item: 'https://medialab.design/curso' },
+                { '@type': 'ListItem', position: 5, name: 'Sobre Nosotros', item: 'https://medialab.design/sobre-nosotros' },
+                { '@type': 'ListItem', position: 6, name: 'Blog', item: 'https://medialab.design/blog' },
+                { '@type': 'ListItem', position: 7, name: 'Contacto', item: 'https://medialab.design/contacto' },
+              ],
+            }),
+          }}
+        />
+        {/* SiteNavigationElement Schema — helps Google generate sitelinks */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'ItemList',
+              name: 'Main Navigation',
+              itemListElement: [
+                {
+                  '@type': 'SiteNavigationElement',
+                  position: 1,
+                  name: 'Servicios',
+                  description: 'Diseño UX/UI, Discovery con IA y Desarrollo de Software a medida',
+                  url: 'https://medialab.design/servicios',
+                },
+                {
+                  '@type': 'SiteNavigationElement',
+                  position: 2,
+                  name: 'Portafolio',
+                  description: 'Casos de éxito y productos digitales entregados',
+                  url: 'https://medialab.design/portafolio',
+                },
+                {
+                  '@type': 'SiteNavigationElement',
+                  position: 3,
+                  name: 'Curso UX + IA',
+                  description: 'Curso profesional de diseño UX con inteligencia artificial',
+                  url: 'https://medialab.design/curso',
+                },
+                {
+                  '@type': 'SiteNavigationElement',
+                  position: 4,
+                  name: 'Sobre Nosotros',
+                  description: 'Equipo, metodología y presencia global de MediaLab Ingeniería',
+                  url: 'https://medialab.design/sobre-nosotros',
+                },
+                {
+                  '@type': 'SiteNavigationElement',
+                  position: 5,
+                  name: 'Blog',
+                  description: 'Artículos sobre UX, IA, diseño conductual y productos digitales',
+                  url: 'https://medialab.design/blog',
+                },
+                {
+                  '@type': 'SiteNavigationElement',
+                  position: 6,
+                  name: 'Contacto',
+                  description: 'Agenda una llamada de discovery gratuita',
+                  url: 'https://medialab.design/contacto',
+                },
               ],
             }),
           }}
@@ -418,12 +478,7 @@ export default function RootLayout({
         />
       </head>
       <body className={`${lato.variable} ${poppins.variable} font-sans antialiased`}>
-        <a
-          href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-foreground focus:text-background focus:rounded-lg focus:text-sm focus:font-semibold"
-        >
-          Saltar al contenido principal
-        </a>
+        <SkipToContent />
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           <LanguageProvider>
             {children}

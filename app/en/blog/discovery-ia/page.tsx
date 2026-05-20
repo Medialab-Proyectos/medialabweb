@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "Product Discovery with AI — MediaLab Ingeniería",
+    title: "Product Discovery with AI",
     description: "How AI is transforming product discovery.",
     type: "article",
     locale: "en_US",

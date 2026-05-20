@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "El ADN del Significado — MediaLab Ingeniería",
+    title: "El ADN del Significado",
     description:
       "La motivación inicia la acción, pero el significado sostiene el hábito. Diseño noético para productos que trascienden.",
     type: "article",
@@ -76,7 +76,7 @@ export default function BlogAdnSignificadoPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       {/* Hero */}
       <div className="relative w-full h-[420px] md:h-[520px] overflow-hidden">
-        <Image src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1200&auto=format&fit=crop" alt="Equipo colaborando en el propósito y significado de un producto digital" fill className="object-cover" priority unoptimized />
+        <Image src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1200&auto=format&fit=crop" alt="Equipo colaborando en el propósito y significado de un producto digital" fill className="object-cover" priority sizes="100vw" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
         <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-12 max-w-4xl mx-auto">
           <div className="flex items-center gap-2 mb-4">

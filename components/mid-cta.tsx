@@ -92,7 +92,7 @@ export function MidCTA({
             {resolvedHeadline}
           </h3>
           <p className="text-base text-white/60">{resolvedSubheadline}</p>
-          <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 text-sm text-white/50">
+          <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 text-sm text-white/65">
             <span className="flex items-center gap-1.5">
               <CheckCircle2 size={14} className="text-green-400" />
               {t("Llamada gratuita de 30 min", "Free 30-min call")}
@@ -110,7 +110,7 @@ export function MidCTA({
         <BookingModal>
           <button
             type="button"
-            className="group inline-flex items-center gap-2 px-8 py-4 rounded-full font-semibold text-sm bg-[var(--magenta)] text-white hover:brightness-110 transition-all duration-200 active:scale-95 shadow-lg shadow-[var(--magenta)]/25 animate-pulse-glow"
+            className="group inline-flex items-center gap-2 px-8 py-4 rounded-full font-semibold text-sm bg-[var(--magenta)] text-white hover:brightness-110 transition-all duration-200 active:scale-95 shadow-lg shadow-[var(--magenta)]/25"
           >
             {resolvedButtonText}
             <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />

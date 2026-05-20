@@ -14,7 +14,7 @@ const WorldMap = dynamic(
         className="w-full rounded-2xl border border-white/10 flex items-center justify-center"
         style={{ background: "#0a1628", aspectRatio: "16/7" }}
       >
-        <div className="flex flex-col items-center gap-3 text-white/40">
+        <div className="flex flex-col items-center gap-3 text-white/60">
           <div className="w-8 h-8 rounded-full border-2 border-white/20 border-t-[#E8751A] animate-spin" />
           <span className="text-xs">Cargando mapa...</span>
         </div>

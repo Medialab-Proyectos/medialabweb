@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "AI Experience Architect — UX Prompt Design Course | MediaLab",
+  title: "AI Experience Architect — UX Prompt Design Course",
   description:
     "Premium 8-week course: AI Experience Architect and UX Prompt Design. Learn to use AI as a strategic copilot to design, research, and build digital products. Only 30 seats. By MediaLab Ingeniería.",
   keywords: [

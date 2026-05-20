@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import { PortfolioContent } from "./portfolio-content"
 
 export const metadata: Metadata = {
-  title: "Portafolio | Casos de Éxito en UX, IA y Productos Digitales",
+  title: "Portafolio — Casos de Éxito en UX, IA y Productos Digitales",
   description:
     "Descubre cómo MediaLab Ingeniería ha transformado productos digitales para empresas B2B y B2C. Casos de éxito reales con resultados medibles en UX/UI, IA y desarrollo de software.",
   openGraph: {

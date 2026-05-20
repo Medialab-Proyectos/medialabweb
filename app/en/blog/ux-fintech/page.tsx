@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "UX in Fintech — MediaLab Ingeniería",
+    title: "UX in Fintech",
     description: "Designing for trust in financial products.",
     type: "article",
     locale: "en_US",

@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "The Psychology of Digital Adoption — MediaLab Ingeniería",
+    title: "The Psychology of Digital Adoption",
     description: "How to apply consumer psychology to accelerate digital adoption.",
     type: "article",
     locale: "en_US",

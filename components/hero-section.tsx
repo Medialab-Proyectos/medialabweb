@@ -17,6 +17,12 @@ export function HeroSection() {
 
     const canvas = canvasRef.current
     if (!canvas) return
+
+    // Skip animation on mobile or when user prefers reduced motion
+    const isMobile = window.innerWidth < 768
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    if (isMobile || prefersReducedMotion) return () => clearTimeout(timer)
+
     const ctx = canvas.getContext("2d")
     if (!ctx) return
 
@@ -159,13 +165,13 @@ export function HeroSection() {
             </BookingModal>
             <Link
               href="#uxbox"
-              className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full font-semibold text-sm border border-white/20 text-white hover:bg-white/10 transition-all duration-200 active:scale-95"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium border border-white/15 text-white/75 hover:text-white hover:border-white/30 hover:bg-white/5 transition-all duration-200 active:scale-95"
             >
-              <Package size={16} />
+              <Package size={14} />
               {t("Probar UXBox gratis →", "Try UXBox free →")}
             </Link>
           </div>
-          <p className="text-xs text-white/40 flex items-center gap-2">
+          <p className="text-xs text-white/60 flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
             {t("30 min gratis · Sin compromiso · Respuesta en 24h", "30 min free · No commitment · Response in 24h")}
           </p>

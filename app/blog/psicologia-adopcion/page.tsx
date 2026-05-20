@@ -66,7 +66,7 @@ export default function BlogPsicologiaAdopcionPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       {/* Hero */}
       <div className="relative w-full h-[420px] md:h-[520px] overflow-hidden">
-        <Image src="/images/blog-behavioral.jpg" alt="Psicología de adopción digital" fill className="object-cover" priority />
+        <Image src="/images/blog-behavioral.jpg" alt="Psicología de adopción digital" fill sizes="100vw" className="object-cover" priority />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
         <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-12 max-w-4xl mx-auto">
           <span className="inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider text-white mb-4 w-fit" style={{ background: "#E8751A" }}>

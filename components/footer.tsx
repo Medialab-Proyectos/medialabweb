@@ -18,35 +18,31 @@ export function Footer() {
     {
       title: t("Servicios", "Services"),
       links: [
-        { label: t("UX y Diseño Conductual", "UX & Behavioral Design"), href: "#services" },
-        { label: t("Discovery con IA", "Discovery with AI"), href: "#services" },
-        { label: t("Desarrollo a Medida", "Custom Development"), href: "#services" },
+        { label: t("UX y Diseño Conductual", "UX & Behavioral Design"), href: "/servicios" },
+        { label: t("Discovery con IA", "Discovery with AI"), href: "/servicios" },
+        { label: t("Desarrollo a Medida", "Custom Development"), href: "/servicios" },
       ],
     },
     {
       title: t("Productos", "Products"),
       links: [
         { label: t("Portafolio", "Portfolio"), href: "/portafolio" },
-        { label: "UXBox", href: "#uxbox" },
-        { label: "SinDeudas", href: "#products" },
-        { label: "Electrolineras", href: "#products" },
+        { label: "UXBox", href: "/#uxbox" },
       ],
     },
     {
       title: t("Empresa", "Company"),
       links: [
-        { label: t("Sobre Nosotros", "About Us"), href: "#about" },
-        { label: t("Metodología", "Methodology"), href: "#method" },
-        { label: t("Industrias", "Industries"), href: "#industries" },
+        { label: t("Sobre Nosotros", "About Us"), href: "/sobre-nosotros" },
+        { label: t("Educación", "Education"), href: "/curso" },
+        { label: "Blog", href: "/blog" },
       ],
     },
     {
       title: t("Recursos", "Resources"),
       links: [
-        { label: "Blog", href: "#blog" },
-        { label: t("Educación", "Education"), href: "/curso" },
-        { label: "FAQ", href: "#faq" },
-        { label: t("Contacto", "Contact"), href: "#contact" },
+        { label: t("Contacto", "Contact"), href: "/contacto" },
+        { label: "FAQ", href: "/contacto" },
       ],
     },
   ]
@@ -64,7 +60,7 @@ export function Footer() {
             <Link href={localized("/")} className="inline-flex items-center gap-2" aria-label="MediaLab Ingeniería home">
               <Image src="/logo.svg" alt="MediaLab Ingeniería" width={140} height={32} className="h-8 w-auto" />
             </Link>
-            <p className="text-sm text-white/50 leading-relaxed max-w-xs">
+            <p className="text-sm text-white/65 leading-relaxed max-w-xs">
               {t(
                 "Investigamos cómo piensan tus usuarios, diseñamos lo que necesitan sentir y construimos el producto que tu negocio necesita. Sin suposiciones. Con datos.",
                 "We research how your users think, design what they need to feel, and build the product your business needs. No assumptions. With data."
@@ -92,7 +88,7 @@ export function Footer() {
           {/* Nav columns */}
           {navColumns.map((col) => (
             <nav key={col.title} className="flex flex-col gap-4" aria-label={col.title}>
-              <span className="text-xs font-semibold uppercase tracking-widest text-white/40">
+              <span className="text-xs font-semibold uppercase tracking-widest text-white/60">
                 {col.title}
               </span>
               <ul className="flex flex-col gap-2.5">

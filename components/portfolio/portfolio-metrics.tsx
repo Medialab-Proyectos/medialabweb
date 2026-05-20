@@ -5,9 +5,12 @@ import { Layers, TrendingUp, Users, Clock, Award, Globe } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 
 function useCountUp(target: number, duration: number, active: boolean, decimals = 0) {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(target)
+  const hasAnimated = useRef(false)
   useEffect(() => {
-    if (!active) return
+    if (!active || hasAnimated.current) return
+    hasAnimated.current = true
+    setCount(0)
     let start = 0
     const step = target / (duration / 16)
     const timer = setInterval(() => {
@@ -56,10 +59,10 @@ export function PortfolioMetrics() {
   }, [])
 
   const metrics: Metric[] = [
-    { value: 40, suffix: "+", label: t("Productos entregados", "Products delivered"), icon: Layers },
-    { value: 3.2, suffix: "x", label: t("ROI promedio de nuestros clientes", "Average client ROI"), icon: TrendingUp, decimals: 1 },
+    { value: 40, suffix: "+", label: t("Productos entregados en producción", "Products shipped to production"), icon: Layers },
+    { value: 3.2, suffix: "x", label: t("ROI promedio reportado por clientes", "Average ROI reported by clients"), icon: TrendingUp, decimals: 1 },
     { value: 98, suffix: "%", label: t("Clientes que repiten", "Returning clients"), icon: Users },
-    { value: 75, suffix: "%", label: t("Más rápido al mercado", "Faster time to market"), icon: Clock },
+    { value: 75, suffix: "%", label: t("Más rápido al mercado (promedio)", "Faster time to market (avg.)"), icon: Clock },
     { value: 7, suffix: "", label: t("Países con impacto", "Countries impacted"), icon: Globe },
     { value: 15, suffix: "+", label: t("Premios y reconocimientos", "Awards & recognitions"), icon: Award },
   ]

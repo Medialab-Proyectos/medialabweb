@@ -6,7 +6,7 @@ import { motion } from "framer-motion"
 import { useLanguage } from "@/lib/language-context"
 
 export function CourseRegisterForm() {
-  const { t, localized } = useLanguage()
+  const { lang, t, localized } = useLanguage()
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [role, setRole] = useState("")
@@ -52,7 +52,7 @@ export function CourseRegisterForm() {
       const res = await fetch("/api/course-register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, role, experience, motivation }),
+        body: JSON.stringify({ name, email, role, experience, motivation, lang }),
       })
       const data = await res.json()
       if (res.ok && data.success) {

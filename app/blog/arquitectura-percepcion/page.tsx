@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "La Arquitectura de la Percepción — MediaLab Ingeniería",
+    title: "La Arquitectura de la Percepción",
     description:
       "Los usuarios transitan estados emocionales, no flujos lógicos. Aprende a diseñar desde la percepción consciente.",
     type: "article",
@@ -100,7 +100,7 @@ export default function BlogArquitecturaPercepcionPage() {
       />
       {/* Hero */}
       <div className="relative w-full h-[420px] md:h-[520px] overflow-hidden">
-        <Image src="https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=1200&auto=format&fit=crop" alt="Equipo de diseño UX analizando estados emocionales del usuario" fill className="object-cover" priority unoptimized />
+        <Image src="https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=1200&auto=format&fit=crop" alt="Equipo de diseño UX analizando estados emocionales del usuario" fill className="object-cover" priority sizes="100vw" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
         <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-12 max-w-4xl mx-auto">
           <div className="flex items-center gap-2 mb-4">

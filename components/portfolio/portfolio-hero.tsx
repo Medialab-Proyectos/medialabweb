@@ -85,7 +85,7 @@ export function PortfolioHero() {
     <section ref={ref} className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-background pt-20">
       {/* Background image */}
       <div className="absolute inset-0 z-0">
-        <Image src="/images/portfolio-hero.png" alt="" fill className="object-cover opacity-30" priority />
+        <Image src="/images/portfolio-hero.png" alt="" fill sizes="100vw" className="object-cover opacity-30" priority />
         <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-background/80 to-background" />
       </div>
 

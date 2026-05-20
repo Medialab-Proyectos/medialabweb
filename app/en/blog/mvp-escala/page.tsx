@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "From MVP to Scale — MediaLab Ingeniería",
+    title: "From MVP to Scale",
     description: "Architecture decisions that matter.",
     type: "article",
     locale: "en_US",

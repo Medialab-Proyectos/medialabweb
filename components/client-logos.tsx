@@ -4,18 +4,19 @@ import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
 import { useLanguage } from "@/lib/language-context"
 
+// TODO: Replace placeholder names with real client names + logos when available
 const logos = [
-  { id: 1, src: "/images/1.svg", alt: "Brand 1" },
-  { id: 2, src: "/images/2.svg", alt: "Brand 2" },
-  { id: 3, src: "/images/3.svg", alt: "Brand 3" },
-  { id: 4, src: "/images/4.svg", alt: "Brand 4" },
-  { id: 5, src: "/images/5.svg", alt: "Brand 5" },
-  { id: 6, src: "/images/6.svg", alt: "Brand 6" },
-  { id: 7, src: "/images/7.svg", alt: "Brand 7" },
-  { id: 8, src: "/images/8.svg", alt: "Brand 8" },
-  { id: 9, src: "/images/9.svg", alt: "Brand 9" },
-  { id: 10, src: "/images/10.svg", alt: "Brand 10" },
-  { id: 11, src: "/images/11.svg", alt: "Brand 11" },
+  { id: 1, src: "/images/1.svg", alt: "Client logo — FinTech" },
+  { id: 2, src: "/images/2.svg", alt: "Client logo — SaaS B2B" },
+  { id: 3, src: "/images/3.svg", alt: "Client logo — E-commerce" },
+  { id: 4, src: "/images/4.svg", alt: "Client logo — HealthTech" },
+  { id: 5, src: "/images/5.svg", alt: "Client logo — Banking" },
+  { id: 6, src: "/images/6.svg", alt: "Client logo — Mobility" },
+  { id: 7, src: "/images/7.svg", alt: "Client logo — Education" },
+  { id: 8, src: "/images/8.svg", alt: "Client logo — Sustainability" },
+  { id: 9, src: "/images/9.svg", alt: "Client logo — Retail" },
+  { id: 10, src: "/images/10.svg", alt: "Client logo — Startup" },
+  { id: 11, src: "/images/11.svg", alt: "Client logo — Enterprise" },
 ]
 
 export function ClientLogos() {

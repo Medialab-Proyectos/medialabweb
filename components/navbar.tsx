@@ -10,20 +10,20 @@ import { useLanguage } from "@/lib/language-context"
 
 const navLinks = {
   es: [
-    { label: "Servicios", href: "#services" },
+    { label: "Servicios", href: "/servicios" },
     { label: "Portafolio", href: "/portafolio" },
     { label: "Educación", href: "/curso", highlight: true },
-    { label: "UXBox", href: "#uxbox" },
-    { label: "Metodología", href: "#method" },
-    { label: "Blog", href: "#blog" },
+    { label: "UXBox", href: "/#uxbox" },
+    { label: "Metodología", href: "/#method" },
+    { label: "Blog", href: "/blog" },
   ],
   en: [
-    { label: "Services", href: "#services" },
+    { label: "Services", href: "/servicios" },
     { label: "Portfolio", href: "/portafolio" },
     { label: "Education", href: "/curso", highlight: true },
-    { label: "UXBox", href: "#uxbox" },
-    { label: "Methodology", href: "#method" },
-    { label: "Blog", href: "#blog" },
+    { label: "UXBox", href: "/#uxbox" },
+    { label: "Methodology", href: "/#method" },
+    { label: "Blog", href: "/blog" },
   ],
 }
 

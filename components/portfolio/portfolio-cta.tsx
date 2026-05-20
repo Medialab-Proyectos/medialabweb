@@ -50,7 +50,7 @@ export function PortfolioCTA() {
 
             <div className="flex flex-col sm:flex-row items-center gap-4 pt-2">
               <BookingModal>
-                <button type="button" className="group flex items-center justify-center gap-2 px-8 py-4 rounded-full font-semibold text-[15px] bg-[var(--magenta)] text-white transition-all hover:brightness-110 active:scale-95 shadow-lg shadow-[var(--magenta)]/25 animate-pulse-glow">
+                <button type="button" className="group flex items-center justify-center gap-2 px-8 py-4 rounded-full font-semibold text-[15px] bg-[var(--magenta)] text-white transition-all hover:brightness-110 active:scale-95 shadow-lg shadow-[var(--magenta)]/25 ">
                   {t("Quiero transformar mi producto", "I want to transform my product")} <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                 </button>
               </BookingModal>
@@ -61,11 +61,15 @@ export function PortfolioCTA() {
 
             <div className="flex items-center gap-3 pt-4 border-t border-white/10 mt-2">
               <div className="flex -space-x-2">
-                {["JD", "MR", "AT", "LS"].map((initials, i) => (
-                  <div key={initials} className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white border-2 border-black/50" style={{ background: `linear-gradient(135deg, var(--${["magenta", "cyan", "orange", "magenta"][i]}), var(--${["orange", "magenta", "cyan", "orange"][i]}))`, zIndex: 4 - i }}>{initials}</div>
+                {[
+                  { initials: "MR", name: "María R." },
+                  { initials: "CM", name: "Carlos M." },
+                  { initials: "AT", name: "Ana T." },
+                ].map((person, i) => (
+                  <div key={person.initials} className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white border-2 border-black/50" style={{ background: `linear-gradient(135deg, var(--${["magenta", "cyan", "orange"][i]}), var(--${["orange", "magenta", "cyan"][i]}))`, zIndex: 3 - i }} title={person.name}>{person.initials}</div>
                 ))}
               </div>
-              <p className="text-xs text-white/50">
+              <p className="text-xs text-white/60">
                 <span className="text-white font-medium">{t("40+ equipos", "40+ teams")}</span>{" "}
                 {t("ya transformaron su producto con nosotros.", "have already transformed their product with us.")}
               </p>

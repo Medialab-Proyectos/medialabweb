@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "El Trono de la Decisión — MediaLab Ingeniería",
+    title: "El Trono de la Decisión",
     description: "La ética del diseño en la era de la IA.",
     type: "article",
     url: "/blog/trono-de-la-decision",
@@ -75,7 +75,7 @@ export default function BlogTronoDecisionPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       {/* Hero */}
       <div className="relative w-full h-[420px] md:h-[520px] overflow-hidden">
-        <Image src="/images/blog-zero-ui-decision.png" alt="IA, autonomía humana y diseño ético" fill className="object-cover" priority />
+        <Image src="/images/blog-zero-ui-decision.png" alt="IA, autonomía humana y diseño ético" fill sizes="100vw" className="object-cover" priority />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
         <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-12 max-w-4xl mx-auto">
           <div className="flex items-center gap-2 mb-4">

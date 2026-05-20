@@ -6,8 +6,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const routes: { path: string; changeFrequency: "weekly" | "monthly" | "yearly"; priority: number }[] = [
     { path: "", changeFrequency: "weekly", priority: 1.0 },
+    { path: "/servicios", changeFrequency: "monthly", priority: 0.95 },
     { path: "/curso", changeFrequency: "weekly", priority: 0.95 },
     { path: "/portafolio", changeFrequency: "monthly", priority: 0.9 },
+    { path: "/sobre-nosotros", changeFrequency: "monthly", priority: 0.85 },
+    { path: "/contacto", changeFrequency: "monthly", priority: 0.85 },
     { path: "/blog", changeFrequency: "weekly", priority: 0.9 },
     { path: "/blog/arquitectura-percepcion", changeFrequency: "monthly", priority: 0.8 },
     { path: "/blog/adn-del-significado", changeFrequency: "monthly", priority: 0.8 },
