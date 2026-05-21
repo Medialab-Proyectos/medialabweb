@@ -1,12 +1,21 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
-import { Star, Quote, Linkedin } from "lucide-react"
+import { useEffect, useRef, useState, useCallback } from "react"
+import { Star, Quote, Linkedin, ChevronLeft, ChevronRight } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  type CarouselApi,
+} from "@/components/ui/carousel"
 
 export function PortfolioTestimonials() {
   const ref = useRef<HTMLDivElement>(null)
   const [visible, setVisible] = useState(false)
+  const [api, setApi] = useState<CarouselApi>()
+  const [current, setCurrent] = useState(0)
+  const [count, setCount] = useState(0)
   const { t } = useLanguage()
 
   useEffect(() => {
@@ -14,6 +23,16 @@ export function PortfolioTestimonials() {
     if (ref.current) obs.observe(ref.current)
     return () => obs.disconnect()
   }, [])
+
+  useEffect(() => {
+    if (!api) return
+    setCount(api.scrollSnapList().length)
+    setCurrent(api.selectedScrollSnap())
+    api.on("select", () => setCurrent(api.selectedScrollSnap()))
+  }, [api])
+
+  const scrollPrev = useCallback(() => api?.scrollPrev(), [api])
+  const scrollNext = useCallback(() => api?.scrollNext(), [api])
 
   const testimonials = [
     {
@@ -85,31 +104,77 @@ export function PortfolioTestimonials() {
           </h2>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6">
-          {testimonials.map((item, i) => (
-            <div key={item.author} className={`relative flex flex-col gap-5 p-8 rounded-3xl border border-border bg-card transition-all duration-700 hover:border-[var(--magenta)]/30 hover:shadow-xl ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`} style={{ transitionDelay: `${i * 100}ms` }}>
-              <Quote size={28} className="absolute top-6 right-6 opacity-10 text-[var(--magenta)]" />
-              <div className="flex gap-0.5">{[...Array(5)].map((_, j) => <Star key={j} size={14} className="fill-[var(--orange)] text-[var(--orange)]" />)}</div>
-              <p className="text-base text-foreground leading-relaxed flex-1">&ldquo;{item.quote}&rdquo;</p>
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold w-fit" style={{ background: "var(--magenta)", color: "white" }}>{item.metric}</div>
-              <div className="flex items-center gap-3 pt-4 border-t border-border">
-                <div className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white shrink-0" style={{ background: "linear-gradient(135deg, var(--magenta), var(--orange))" }}>{item.avatar}</div>
-                <div className="flex-1">
-                  <span className="text-sm font-semibold text-foreground">{item.author}</span>
-                  <span className="block text-xs text-muted-foreground">{item.role}, {item.company}</span>
-                </div>
-                <a
-                  href={item.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`${item.author} en LinkedIn`}
-                  className="text-muted-foreground hover:text-[#0A66C2] transition-colors shrink-0"
-                >
-                  <Linkedin size={18} />
-                </a>
-              </div>
-            </div>
-          ))}
+        {/* Carousel */}
+        <div className="relative">
+          <Carousel
+            opts={{ align: "start", loop: true }}
+            setApi={setApi}
+            className="w-full"
+          >
+            <CarouselContent className="-ml-4">
+              {testimonials.map((item, i) => (
+                <CarouselItem key={item.author} className="pl-4 md:basis-1/2">
+                  <div
+                    className={`relative flex flex-col gap-5 p-8 rounded-3xl border border-border bg-card h-full transition-all duration-700 hover:border-[var(--magenta)]/30 hover:shadow-xl ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+                    style={{ transitionDelay: `${i * 100}ms` }}
+                  >
+                    <Quote size={28} className="absolute top-6 right-6 opacity-10 text-[var(--magenta)]" />
+                    <div className="flex gap-0.5">{[...Array(5)].map((_, j) => <Star key={j} size={14} className="fill-[var(--orange)] text-[var(--orange)]" />)}</div>
+                    <p className="text-base text-foreground leading-relaxed flex-1">&ldquo;{item.quote}&rdquo;</p>
+                    <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold w-fit" style={{ background: "var(--magenta)", color: "white" }}>{item.metric}</div>
+                    <div className="flex items-center gap-3 pt-4 border-t border-border">
+                      <div className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white shrink-0" style={{ background: "linear-gradient(135deg, var(--magenta), var(--orange))" }}>{item.avatar}</div>
+                      <div className="flex-1">
+                        <span className="text-sm font-semibold text-foreground">{item.author}</span>
+                        <span className="block text-xs text-muted-foreground">{item.role}, {item.company}</span>
+                      </div>
+                      <a
+                        href={item.linkedin}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`${item.author} en LinkedIn`}
+                        className="text-muted-foreground hover:text-[#0A66C2] transition-colors shrink-0"
+                      >
+                        <Linkedin size={18} />
+                      </a>
+                    </div>
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </Carousel>
+
+          {/* Navigation arrows */}
+          <button
+            onClick={scrollPrev}
+            className="absolute -left-4 md:-left-6 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-card border border-border shadow-lg flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-[var(--magenta)]/50 transition-all z-10"
+            aria-label="Previous testimonial"
+          >
+            <ChevronLeft size={20} />
+          </button>
+          <button
+            onClick={scrollNext}
+            className="absolute -right-4 md:-right-6 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-card border border-border shadow-lg flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-[var(--magenta)]/50 transition-all z-10"
+            aria-label="Next testimonial"
+          >
+            <ChevronRight size={20} />
+          </button>
+
+          {/* Dot indicators */}
+          <div className="flex items-center justify-center gap-2 mt-8">
+            {Array.from({ length: count }).map((_, i) => (
+              <button
+                key={i}
+                onClick={() => api?.scrollTo(i)}
+                className={`h-2 rounded-full transition-all ${
+                  i === current
+                    ? "w-8 bg-[var(--magenta)]"
+                    : "w-2 bg-border hover:bg-muted-foreground"
+                }`}
+                aria-label={`Go to testimonial ${i + 1}`}
+              />
+            ))}
+          </div>
         </div>
 
         {/* Trust bar */}
