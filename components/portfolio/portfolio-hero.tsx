@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import Image from "next/image"
 import { ArrowDown, Sparkles } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 
@@ -82,11 +81,11 @@ export function PortfolioHero() {
   }, [])
 
   return (
-    <section ref={ref} className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-background pt-20">
-      {/* Background image */}
+    <section ref={ref} className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-[var(--surface-dark)] text-[var(--surface-dark-fg)] pt-20">
+      {/* Gradient background */}
       <div className="absolute inset-0 z-0">
-        <Image src="/images/portfolio-hero.png" alt="" fill sizes="100vw" className="object-cover opacity-30" priority />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-background/80 to-background" />
+        <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse 80% 60% at 30% 40%, rgba(230,0,126,0.15), transparent), radial-gradient(ellipse 60% 50% at 70% 60%, rgba(42,171,179,0.12), transparent)" }} />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[var(--surface-dark)]" />
       </div>
 
       {/* Animated canvas background */}

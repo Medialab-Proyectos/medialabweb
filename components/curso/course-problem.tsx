@@ -85,7 +85,6 @@ export function CourseProblem() {
               <span className="text-red-500/60 dark:text-red-400/45 font-serif text-2xl leading-none shrink-0 mt-0.5" aria-hidden="true">&ldquo;</span>
               <div className="flex-1 min-w-0">
                 <p className="text-[15px] text-foreground/90 dark:text-foreground/85 leading-snug italic">{quote.text}</p>
-                <p className="text-[11px] text-foreground/50 dark:text-foreground/45 mt-1.5">— {quote.context}</p>
               </div>
             </motion.div>
           ))}
@@ -106,7 +105,6 @@ export function CourseProblem() {
                 <p className="text-sm text-foreground/85 dark:text-foreground/80 leading-relaxed flex-1 group-hover:text-foreground transition-colors duration-300">
                   {quote.text}
                 </p>
-                <p className="text-[11px] text-foreground/50 dark:text-foreground/40 mt-2 pt-2 border-t border-foreground/[0.08] dark:border-foreground/[0.06]">{quote.context}</p>
               </div>
             </motion.div>
           ))}

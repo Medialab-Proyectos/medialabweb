@@ -202,6 +202,68 @@ export default function RootLayout({
                 'https://github.com/medialabingenieria',
                 'https://www.zeroui.me/',
               ],
+              aggregateRating: {
+                '@type': 'AggregateRating',
+                ratingValue: '4.9',
+                bestRating: '5',
+                worstRating: '1',
+                ratingCount: '4',
+                reviewCount: '4',
+              },
+              review: [
+                {
+                  '@type': 'Review',
+                  datePublished: '2025-08-15',
+                  reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' },
+                  author: {
+                    '@type': 'Person',
+                    name: 'Alexander Naranjo',
+                    jobTitle: 'CEO',
+                    worksFor: { '@type': 'Organization', name: 'Metrics Lab' },
+                    sameAs: 'https://www.linkedin.com/in/alexandernaranjo/',
+                  },
+                  reviewBody: 'MediaLab nos ayudó a construir una experiencia B2C que realmente conecta con nuestros usuarios. Su enfoque basado en datos y psicología del consumidor transformó nuestro producto digital.',
+                },
+                {
+                  '@type': 'Review',
+                  datePublished: '2025-11-20',
+                  reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' },
+                  author: {
+                    '@type': 'Person',
+                    name: 'Rosa Eugenia Beltrán',
+                    jobTitle: 'Directora',
+                    worksFor: { '@type': 'Organization', name: 'Funcicolombia & ESAF' },
+                    sameAs: 'https://www.linkedin.com/in/rosa-eugenia-beltran-332408173/',
+                  },
+                  reviewBody: 'Trabajar con MediaLab en nuestras plataformas educativas y motores de aprendizaje fue un antes y un después. Entendieron la complejidad de nuestras necesidades institucionales y entregaron soluciones que realmente impactan.',
+                },
+                {
+                  '@type': 'Review',
+                  datePublished: '2026-01-10',
+                  reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' },
+                  author: {
+                    '@type': 'Person',
+                    name: 'Claudia Lazaneo',
+                    jobTitle: 'Founder & CEO',
+                    worksFor: { '@type': 'Organization', name: 'Vinnove' },
+                    sameAs: 'https://www.linkedin.com/in/claudia-lazaneo/',
+                  },
+                  reviewBody: 'MediaLab entendió nuestra visión B2B desde el primer día. Nos ayudaron a construir una presencia digital sólida y proyectos que generan confianza con nuestros clientes corporativos.',
+                },
+                {
+                  '@type': 'Review',
+                  datePublished: '2026-03-05',
+                  reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' },
+                  author: {
+                    '@type': 'Person',
+                    name: 'Héctor Zuñiga',
+                    jobTitle: 'CEO',
+                    worksFor: { '@type': 'Organization', name: 'Global Talentech' },
+                    sameAs: 'https://www.linkedin.com/in/hector-zd/',
+                  },
+                  reviewBody: 'MediaLab proporcionó una asesoría clara y dinámica que permitió a nuestros estudiantes desarrollar sus habilidades de manera efectiva. El proyecto fue todo un éxito — entregamos a tiempo, dentro del presupuesto, y el cliente quedó muy satisfecho con un diseño innovador y visualmente atractivo.',
+                },
+              ],
             }),
           }}
         />
@@ -474,6 +536,48 @@ export default function RootLayout({
                 'Neurociencia del diseño',
                 'IA Adaptativa',
                 'Estoicismo digital',
+              ],
+            }),
+          }}
+        />
+        {/* LocalBusiness Schema for local SEO */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'LocalBusiness',
+              '@id': 'https://medialab.design/#localbusiness',
+              name: 'MediaLab Ingeniería',
+              description:
+                'Agencia de diseño UX/UI, inteligencia artificial y desarrollo de productos digitales en Bogotá. Especialistas en experiencias B2B y B2C.',
+              url: 'https://medialab.design',
+              logo: 'https://medialab.design/logo.svg',
+              image: 'https://medialab.design/images/ux-research.jpg',
+              telephone: '+57-305-400-9505',
+              email: 'info@medialab.design',
+              address: {
+                '@type': 'PostalAddress',
+                addressLocality: 'Bogotá',
+                addressRegion: 'Cundinamarca',
+                addressCountry: 'CO',
+              },
+              geo: {
+                '@type': 'GeoCoordinates',
+                latitude: 4.711,
+                longitude: -74.0721,
+              },
+              priceRange: '$$$',
+              openingHoursSpecification: {
+                '@type': 'OpeningHoursSpecification',
+                dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+                opens: '09:00',
+                closes: '18:00',
+              },
+              sameAs: [
+                'https://www.linkedin.com/company/medialab-ingenieria',
+                'https://x.com/MediaLabIng',
+                'https://www.instagram.com/medialabingenieria',
               ],
             }),
           }}

@@ -90,37 +90,7 @@ export function TestimonialsSection() {
     },
   ]
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    name: "MediaLab Ingeniería",
-    url: "https://medialab.design",
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: "4.9",
-      bestRating: "5",
-      ratingCount: String(testimonials.length),
-    },
-    review: testimonials.map((item) => ({
-      "@type": "Review",
-      reviewRating: { "@type": "Rating", ratingValue: "5", bestRating: "5" },
-      author: {
-        "@type": "Person",
-        name: item.author,
-        jobTitle: item.role,
-        worksFor: { "@type": "Organization", name: item.company },
-        sameAs: item.linkedin,
-      },
-      reviewBody: item.quote,
-    })),
-  }
-
   return (
-    <>
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-    />
     <section
       ref={ref}
       className="py-24 px-6 bg-background"
@@ -281,6 +251,5 @@ export function TestimonialsSection() {
         </div>
       </div>
     </section>
-    </>
   )
 }

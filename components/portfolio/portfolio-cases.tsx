@@ -21,7 +21,6 @@ type CaseItem = {
   tags: string[]
   categories: Category[]
   usedUxbox: boolean
-  testimonial: { quote: string; author: string; role: string }
 }
 
 function CaseCard({ c, i, visible, labels }: { c: CaseItem; i: number; visible: boolean; labels: { challenge: string; solution: string } }) {
@@ -92,16 +91,6 @@ function CaseCard({ c, i, visible, labels }: { c: CaseItem; i: number; visible: 
           ))}
         </div>
 
-        {/* Inline testimonial */}
-        <div className="flex items-start gap-3 p-4 rounded-xl bg-secondary/50 border border-border">
-          <div className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0" style={{ background: c.gradient }}>
-            {c.testimonial.author.split(" ").map(w => w[0]).join("")}
-          </div>
-          <div>
-            <p className="text-sm text-foreground italic leading-relaxed">&ldquo;{c.testimonial.quote}&rdquo;</p>
-            <p className="text-xs text-muted-foreground mt-1">{c.testimonial.author}, {c.testimonial.role}</p>
-          </div>
-        </div>
       </div>
     </div>
   )
@@ -152,14 +141,6 @@ export function PortfolioCases() {
       tags: ["UX Research", "Prototype", "User Testing", "Development"],
       categories: ["mobile-app"],
       usedUxbox: false,
-      testimonial: {
-        quote: t(
-          "MediaLab entendió nuestras necesidades de capacitación y entregó una plataforma que superó nuestras expectativas en adopción.",
-          "MediaLab understood our training needs and delivered a platform that exceeded our adoption expectations."
-        ),
-        author: t("Equipo Pepsico", "Pepsico Team"),
-        role: t("Training Division", "Training Division"),
-      },
     },
     {
       id: "montaner",
@@ -185,14 +166,6 @@ export function PortfolioCases() {
       tags: ["Web Design", "UX/UI", "Prototype", "Development"],
       categories: ["web-design"],
       usedUxbox: false,
-      testimonial: {
-        quote: t(
-          "El equipo de MediaLab capturó perfectamente la esencia artística y la transformó en una experiencia digital inolvidable.",
-          "The MediaLab team perfectly captured the artistic essence and turned it into an unforgettable digital experience."
-        ),
-        author: t("Equipo Montaner", "Montaner Team"),
-        role: "Management",
-      },
     },
     {
       id: "bellanova",
@@ -218,14 +191,6 @@ export function PortfolioCases() {
       tags: ["Web Design", "Prototype", "User Testing", "Development"],
       categories: ["web-design", "branding"],
       usedUxbox: false,
-      testimonial: {
-        quote: t(
-          "El sitio web que creó MediaLab transmite exactamente la elegancia y confianza que nuestra clínica representa.",
-          "The website MediaLab built conveys exactly the elegance and trust our clinic represents."
-        ),
-        author: "Bellanova",
-        role: t("Dirección", "Direction"),
-      },
     },
     {
       id: "spectrum",
@@ -251,14 +216,6 @@ export function PortfolioCases() {
       tags: ["Branding", "Web Design", "SEO", "Social Media"],
       categories: ["web-design", "branding"],
       usedUxbox: false,
-      testimonial: {
-        quote: t(
-          "MediaLab no solo rediseñó nuestro sitio — transformó completamente cómo nos ve nuestra audiencia ideal.",
-          "MediaLab didn't just redesign our site — they completely transformed how our ideal audience sees us."
-        ),
-        author: "Spectrum",
-        role: "Miami, FL",
-      },
     },
     {
       id: "ginseng",
@@ -284,14 +241,6 @@ export function PortfolioCases() {
       tags: ["Machine Learning", "Prototype", "User Testing", "IA"],
       categories: ["ia", "mobile-app"],
       usedUxbox: false,
-      testimonial: {
-        quote: t(
-          "La integración de ML que implementó MediaLab revolucionó nuestro proceso de análisis de reportes médicos.",
-          "The ML integration MediaLab implemented revolutionized our medical report analysis process."
-        ),
-        author: "Ginseng",
-        role: "CTO",
-      },
     },
     {
       id: "fusapp",
@@ -317,14 +266,6 @@ export function PortfolioCases() {
       tags: ["Mobile App", "UX Research", "Development", "User Testing"],
       categories: ["mobile-app"],
       usedUxbox: false,
-      testimonial: {
-        quote: t(
-          "FusApp transformó nuestra gestión de riesgos de un proceso manual a un sistema digital eficiente y confiable.",
-          "FusApp transformed our risk management from a manual process to an efficient, reliable digital system."
-        ),
-        author: "FusApp",
-        role: t("Director de Operaciones", "Operations Director"),
-      },
     },
   ]
 

@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { Layers, TrendingUp, Users, Clock, Award, Globe } from "lucide-react"
+import { Layers, TrendingUp, Users, Clock, Globe } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 
 function useCountUp(target: number, duration: number, active: boolean, decimals = 0) {
@@ -64,7 +64,6 @@ export function PortfolioMetrics() {
     { value: 98, suffix: "%", label: t("Clientes que repiten", "Returning clients"), icon: Users },
     { value: 75, suffix: "%", label: t("Más rápido al mercado (promedio)", "Faster time to market (avg.)"), icon: Clock },
     { value: 7, suffix: "", label: t("Países con impacto", "Countries impacted"), icon: Globe },
-    { value: 15, suffix: "+", label: t("Premios y reconocimientos", "Awards & recognitions"), icon: Award },
   ]
 
   return (
@@ -73,7 +72,7 @@ export function PortfolioMetrics() {
         <p className="text-center text-xs font-semibold tracking-widest uppercase text-[var(--magenta)] mb-10">
           {t("El impacto acumulado de nuestros proyectos", "The cumulative impact of our projects")}
         </p>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
           {metrics.map((m, i) => <MetricCard key={m.label} m={m} active={active} i={i} />)}
         </div>
       </div>
