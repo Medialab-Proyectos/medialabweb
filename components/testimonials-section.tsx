@@ -23,36 +23,36 @@ export function TestimonialsSection() {
   const testimonials = [
     {
       quote: t(
-        "MediaLab transformó por completo nuestro canal B2B. Lo que antes tomaba 3 meses de discovery ahora toma 3 semanas — con una experiencia de usuario que nuestros clientes corporativos adoran.",
-        "MediaLab completely transformed our B2B channel. What used to take 3 months of discovery now takes 3 weeks — with a user experience our enterprise clients love."
+        "MediaLab nos ayudó a construir una experiencia B2C que realmente conecta con nuestros usuarios. Su enfoque basado en datos y psicología del consumidor transformó nuestro producto digital.",
+        "MediaLab helped us build a B2C experience that truly connects with our users. Their data-driven approach and consumer psychology transformed our digital product."
       ),
-      author: "María Rodríguez",
-      role: "CPO",
-      company: t("Startup FinTech", "FinTech Startup"),
-      metric: t("75% más rápido al mercado", "Up to 75% faster to market"),
-      avatar: "MR",
+      author: "Alexander Naranjo",
+      role: "CEO",
+      company: "Metrics Lab",
+      metric: t("Producto B2C transformado", "B2C product transformed"),
+      avatar: "AN",
     },
     {
       quote: t(
-        "Su expertise en psicología del consumidor nos ayudó a aumentar la activación de usuarios B2C en 40%. La conexión emocional que lograron en el onboarding fue clave.",
-        "Their expertise in consumer psychology helped us increase B2C user activation by 40%. The emotional connection they achieved in onboarding was key."
+        "Trabajar con MediaLab en nuestras plataformas educativas y motores de aprendizaje fue un antes y un después. Entendieron la complejidad de nuestras necesidades institucionales y entregaron soluciones que realmente impactan.",
+        "Working with MediaLab on our educational platforms and learning engines was a turning point. They understood the complexity of our institutional needs and delivered solutions that truly make an impact."
       ),
-      author: "Carlos Méndez",
-      role: t("Head of Product", "Head of Product"),
-      company: "Enterprise SaaS",
-      metric: t("40% más activación", "40% more activation"),
-      avatar: "CM",
+      author: "Rosa Eugenia Beltrán",
+      role: t("Directora", "Director"),
+      company: "Funcicolombia & ESAF",
+      metric: t("Plataformas educativas rediseñadas", "Educational platforms redesigned"),
+      avatar: "RB",
     },
     {
       quote: t(
-        "UXBox nos dio la claridad que nunca habíamos tenido para nuestro producto B2C. Pasamos de ideas vagas a un roadmap de producto validado con usuarios reales en días.",
-        "UXBox gave us a clarity we'd never had for our B2C product. We went from vague ideas to a roadmap validated with real users in days."
+        "MediaLab entendió nuestra visión B2B desde el primer día. Nos ayudaron a construir una presencia digital sólida y proyectos que generan confianza con nuestros clientes corporativos.",
+        "MediaLab understood our B2B vision from day one. They helped us build a solid digital presence and projects that generate trust with our corporate clients."
       ),
-      author: "Ana Torres",
+      author: "Claudia Lazaneo",
       role: "Founder & CEO",
-      company: "HealthTech Venture",
-      metric: t("10x validación más rápida", "Up to 10x faster validation"),
-      avatar: "AT",
+      company: "Vinnove",
+      metric: t("Presencia B2B fortalecida", "B2B presence strengthened"),
+      avatar: "CL",
     },
   ]
 

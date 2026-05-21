@@ -18,47 +18,47 @@ export function PortfolioTestimonials() {
   const testimonials = [
     {
       quote: t(
-        "El rediseño de nuestro e-commerce triplicó la conversión en 8 semanas. El equipo entiende profundamente cómo las personas toman decisiones de compra.",
-        "Our e-commerce redesign tripled conversion in 8 weeks. The team deeply understands how people make purchase decisions."
+        "MediaLab nos ayudó a construir una experiencia B2C que realmente conecta con nuestros usuarios. Su enfoque basado en datos y psicología del consumidor transformó nuestro producto digital.",
+        "MediaLab helped us build a B2C experience that truly connects with our users. Their data-driven approach and consumer psychology transformed our digital product."
       ),
-      author: "Laura Sánchez",
-      role: t("CMO", "CMO"),
-      company: t("Retail B2C", "Retail B2C"),
-      metric: t("+62% ticket promedio", "+62% average ticket"),
-      avatar: "LS",
+      author: "Alexander Naranjo",
+      role: "CEO",
+      company: "Metrics Lab",
+      metric: t("Producto B2C transformado", "B2C product transformed"),
+      avatar: "AN",
     },
     {
       quote: t(
-        "Pasamos de un MVP frágil a una plataforma que escala. Su equipo no solo diseña — entiende arquitectura de producto y toma decisiones técnicas que ahorran meses.",
-        "We went from a fragile MVP to a platform that scales. Their team doesn't just design — they understand product architecture and make technical decisions that save months."
+        "Trabajar con MediaLab en nuestras plataformas educativas y motores de aprendizaje fue un antes y un después. Entendieron la complejidad de nuestras necesidades institucionales y entregaron soluciones que realmente impactan.",
+        "Working with MediaLab on our educational platforms and learning engines was a turning point. They understood the complexity of our institutional needs and delivered solutions that truly make an impact."
       ),
-      author: "Diego Herrera",
-      role: t("CTO", "CTO"),
-      company: t("Plataforma EdTech", "EdTech Platform"),
-      metric: t("3x retención de usuarios", "3x user retention"),
-      avatar: "DH",
+      author: "Rosa Eugenia Beltrán",
+      role: t("Directora", "Director"),
+      company: "Funcicolombia & ESAF",
+      metric: t("Plataformas educativas rediseñadas", "Educational platforms redesigned"),
+      avatar: "RB",
     },
     {
       quote: t(
-        "Nos ayudaron a repensar todo el flujo de onboarding. La tasa de activación subió 40% y las quejas de soporte bajaron a la mitad en el primer mes.",
-        "They helped us rethink the entire onboarding flow. Activation rate went up 40% and support tickets dropped by half in the first month."
+        "MediaLab entendió nuestra visión B2B desde el primer día. Nos ayudaron a construir una presencia digital sólida y proyectos que generan confianza con nuestros clientes corporativos.",
+        "MediaLab understood our B2B vision from day one. They helped us build a solid digital presence and projects that generate trust with our corporate clients."
       ),
-      author: "Carlos Méndez",
-      role: t("Head of Product", "Head of Product"),
-      company: t("Enterprise SaaS", "Enterprise SaaS"),
-      metric: t("−50% tickets de soporte", "−50% support tickets"),
-      avatar: "CM",
+      author: "Claudia Lazaneo",
+      role: "Founder & CEO",
+      company: "Vinnove",
+      metric: t("Presencia B2B fortalecida", "B2B presence strengthened"),
+      avatar: "CL",
     },
     {
       quote: t(
-        "El tráfico orgánico creció más de 200% después de que optimizaron nuestra arquitectura de información y SEO técnico. No esperábamos ese impacto.",
-        "Organic traffic grew over 200% after they optimized our information architecture and technical SEO. We didn't expect that kind of impact."
+        "MediaLab proporcionó una asesoría clara y dinámica que permitió a nuestros estudiantes desarrollar sus habilidades de manera efectiva. El proyecto fue todo un éxito — entregamos a tiempo, dentro del presupuesto, y el cliente quedó muy satisfecho con un diseño innovador y visualmente atractivo.",
+        "MediaLab provided clear, dynamic guidance that allowed our students to develop their skills effectively. The project was a complete success — we delivered on time, within budget, and the client was very satisfied with an innovative and visually appealing design."
       ),
-      author: "Valentina Ríos",
-      role: t("Head of Growth", "Head of Growth"),
-      company: t("SaaS de Movilidad", "Mobility SaaS"),
-      metric: t("+200% tráfico orgánico", "+200% organic traffic"),
-      avatar: "VR",
+      author: "Héctor Zuñiga",
+      role: "CEO",
+      company: "Global Talentech",
+      metric: t("Entrega exitosa a tiempo y en presupuesto", "Successful on-time, on-budget delivery"),
+      avatar: "HZ",
     },
   ]
 
