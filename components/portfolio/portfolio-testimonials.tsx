@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { Star, Quote } from "lucide-react"
+import { Star, Quote, Linkedin } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 
 export function PortfolioTestimonials() {
@@ -26,6 +26,7 @@ export function PortfolioTestimonials() {
       company: "Metrics Lab",
       metric: t("Producto B2C transformado", "B2C product transformed"),
       avatar: "AN",
+      linkedin: "https://www.linkedin.com/in/alexandernaranjo/",
     },
     {
       quote: t(
@@ -37,6 +38,7 @@ export function PortfolioTestimonials() {
       company: "Funcicolombia & ESAF",
       metric: t("Plataformas educativas rediseñadas", "Educational platforms redesigned"),
       avatar: "RB",
+      linkedin: "https://www.linkedin.com/in/rosa-eugenia-beltran-332408173/",
     },
     {
       quote: t(
@@ -48,6 +50,7 @@ export function PortfolioTestimonials() {
       company: "Vinnove",
       metric: t("Presencia B2B fortalecida", "B2B presence strengthened"),
       avatar: "CL",
+      linkedin: "https://www.linkedin.com/in/claudia-lazaneo/",
     },
     {
       quote: t(
@@ -59,6 +62,7 @@ export function PortfolioTestimonials() {
       company: "Global Talentech",
       metric: t("Entrega exitosa a tiempo y en presupuesto", "Successful on-time, on-budget delivery"),
       avatar: "HZ",
+      linkedin: "https://www.linkedin.com/in/hector-zd/",
     },
   ]
 
@@ -90,10 +94,19 @@ export function PortfolioTestimonials() {
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold w-fit" style={{ background: "var(--magenta)", color: "white" }}>{item.metric}</div>
               <div className="flex items-center gap-3 pt-4 border-t border-border">
                 <div className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white shrink-0" style={{ background: "linear-gradient(135deg, var(--magenta), var(--orange))" }}>{item.avatar}</div>
-                <div>
+                <div className="flex-1">
                   <span className="text-sm font-semibold text-foreground">{item.author}</span>
                   <span className="block text-xs text-muted-foreground">{item.role}, {item.company}</span>
                 </div>
+                <a
+                  href={item.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${item.author} en LinkedIn`}
+                  className="text-muted-foreground hover:text-[#0A66C2] transition-colors shrink-0"
+                >
+                  <Linkedin size={18} />
+                </a>
               </div>
             </div>
           ))}

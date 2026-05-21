@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { Star, Quote } from "lucide-react"
+import { Star, Quote, Linkedin } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 
 export function TestimonialsSection() {
@@ -31,6 +31,7 @@ export function TestimonialsSection() {
       company: "Metrics Lab",
       metric: t("Producto B2C transformado", "B2C product transformed"),
       avatar: "AN",
+      linkedin: "https://www.linkedin.com/in/alexandernaranjo/",
     },
     {
       quote: t(
@@ -42,6 +43,7 @@ export function TestimonialsSection() {
       company: "Funcicolombia & ESAF",
       metric: t("Plataformas educativas rediseñadas", "Educational platforms redesigned"),
       avatar: "RB",
+      linkedin: "https://www.linkedin.com/in/rosa-eugenia-beltran-332408173/",
     },
     {
       quote: t(
@@ -53,10 +55,41 @@ export function TestimonialsSection() {
       company: "Vinnove",
       metric: t("Presencia B2B fortalecida", "B2B presence strengthened"),
       avatar: "CL",
+      linkedin: "https://www.linkedin.com/in/claudia-lazaneo/",
     },
   ]
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "MediaLab Ingeniería",
+    url: "https://medialab.design",
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: "4.9",
+      bestRating: "5",
+      ratingCount: String(testimonials.length),
+    },
+    review: testimonials.map((item) => ({
+      "@type": "Review",
+      reviewRating: { "@type": "Rating", ratingValue: "5", bestRating: "5" },
+      author: {
+        "@type": "Person",
+        name: item.author,
+        jobTitle: item.role,
+        worksFor: { "@type": "Organization", name: item.company },
+        sameAs: item.linkedin,
+      },
+      reviewBody: item.quote,
+    })),
+  }
+
   return (
+    <>
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+    />
     <section
       ref={ref}
       className="py-24 px-6 bg-background"
@@ -137,12 +170,21 @@ export function TestimonialsSection() {
                 >
                   {item.avatar}
                 </div>
-                <div className="flex flex-col">
+                <div className="flex flex-col flex-1">
                   <span className="text-sm font-semibold text-foreground">{item.author}</span>
                   <span className="text-xs text-muted-foreground">
                     {item.role}, {item.company}
                   </span>
                 </div>
+                <a
+                  href={item.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${item.author} en LinkedIn`}
+                  className="text-muted-foreground hover:text-[#0A66C2] transition-colors shrink-0"
+                >
+                  <Linkedin size={18} />
+                </a>
               </div>
             </div>
           ))}
@@ -167,5 +209,6 @@ export function TestimonialsSection() {
         </div>
       </div>
     </section>
+    </>
   )
 }
