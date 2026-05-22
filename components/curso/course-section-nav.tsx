@@ -11,17 +11,17 @@ export function CourseSectionNav() {
   const { t } = useLanguage()
 
   const sections = [
+    { id: "problema", label: t("El Problema", "The Problem") },
     { id: "objetivo", label: t("Objetivo", "Objective") },
     { id: "audiencia", label: t("¿Para quién?", "Who's it for?") },
-    { id: "problema", label: t("El Problema", "The Problem") },
+    { id: "testimonios", label: t("Testimonios", "Testimonials") },
     { id: "diferencia", label: t("La Diferencia", "The Difference") },
     { id: "metodologia", label: t("Metodología", "Methodology") },
     { id: "programa", label: t("Programa", "Program") },
     { id: "transformacion", label: t("Resultado", "Outcome") },
     { id: "herramientas", label: t("Herramientas", "Tools") },
-    { id: "comunidad", label: t("Comunidad", "Community") },
-    { id: "testimonios", label: t("Testimonios", "Testimonials") },
     { id: "faq", label: "FAQ" },
+    { id: "comunidad", label: t("Comunidad", "Community") },
     { id: "registro", label: t("Reservar", "Reserve") },
   ]
 
@@ -101,7 +101,7 @@ export function CourseSectionNav() {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: -60, opacity: 0 }}
           transition={{ duration: 0.3 }}
-          className="fixed top-16 md:top-20 left-0 right-0 z-40 border-b border-foreground/[0.1] backdrop-blur-xl bg-background/90"
+          className="sticky top-16 md:fixed md:top-20 left-0 right-0 z-40 border-b border-foreground/[0.1] backdrop-blur-xl bg-background/90"
         >
           <div className="max-w-7xl mx-auto px-4">
             <div className="flex items-center gap-1 overflow-x-auto no-scrollbar py-2.5">

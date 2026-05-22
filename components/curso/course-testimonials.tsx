@@ -32,6 +32,41 @@ export function CourseTestimonials() {
 
   const projects = [
     {
+      name: "Juan Pablo Morán",
+      role: "UX/UI Designer",
+      project: "Help3D",
+      description: t(
+        "Copiloto técnico para impresión 3D FDM: configura, diagnostica y optimiza tus impresiones de forma visual e inteligente.",
+        "Technical copilot for FDM 3D printing: configure, diagnose, and optimize your prints visually and intelligently."
+      ),
+      quote: t(
+        "Me hizo replantear todo el onboarding. Ahora mi app es una herramienta de apoyo real, no solo un sistema técnico.",
+        "It made me rethink the entire onboarding. Now my app is a real support tool, not just a technical system."
+      ),
+      result: t("Onboarding humanizado completo", "Fully humanized onboarding"),
+      image: "/images/help3d-showcase.png",
+      linkedin: "https://www.linkedin.com/in/jpmorán-uxui-designer",
+      productUrl: "https://help3d-xi.vercel.app/",
+    },
+    {
+      name: "Jorge Pineda",
+      role: "UX/UI Designer",
+      project: "FocusFlow",
+      description: t(
+        "App inteligente para optimizar rutinas de trabajo y descanso: bloques de concentración profunda, hidratación y bienestar cognitivo.",
+        "Smart app to optimize work and rest routines: deep focus blocks, hydration tracking, and cognitive wellness."
+      ),
+      quote: t(
+        "Ha cambiado mucho el flujo de mi app. Uno se da cuenta de lo importante que es que todo esté en su sitio para que funcione.",
+        "It completely changed my app's flow. You realize how important it is for everything to be where it belongs."
+      ),
+      result: t("Flujo reestructurado completo", "Fully restructured user flow"),
+      image: "/images/focusflow-showcase.png",
+      linkedin: "",
+      behance: "https://www.behance.net/pineda1995",
+      productUrl: "",
+    },
+    {
       name: "Sebastián Vargas",
       role: t("Desarrollador", "Developer"),
       project: t("App de Derechos Ciudadanos", "Civic Rights App"),
@@ -45,19 +80,6 @@ export function CourseTestimonials() {
       productUrl: "",
     },
     {
-      name: "Mariana Castro",
-      role: t("Diseñadora", "Designer"),
-      project: t("App de Bienestar Mental", "Mental Wellness App"),
-      quote: t(
-        "Ha cambiado mucho el flujo de mi app. Uno se da cuenta de lo importante que es que todo esté en su sitio para que funcione.",
-        "It completely changed my app's flow. You realize how important it is for everything to be where it belongs."
-      ),
-      result: t("Flujo reestructurado completo", "Fully restructured user flow"),
-      image: "/images/case-mobility.png",
-      linkedin: "",
-      productUrl: "",
-    },
-    {
       name: "Nicolás Herrera",
       role: t("Estudiante", "Student"),
       project: t("App Social de Eventos", "Social Events App"),
@@ -67,32 +89,6 @@ export function CourseTestimonials() {
       ),
       result: t("Auditoría + rediseño en 2 semanas", "Audit + redesign in 2 weeks"),
       image: "/images/case-fintech.png",
-      linkedin: "",
-      productUrl: "",
-    },
-    {
-      name: "Tomás Aguirre",
-      role: "Maker",
-      project: "Help3D",
-      quote: t(
-        "Me hizo replantear todo el onboarding. Ahora mi app es una herramienta de apoyo real, no solo un sistema técnico.",
-        "It made me rethink the entire onboarding. Now my app is a real support tool, not just a technical system."
-      ),
-      result: t("Onboarding humanizado completo", "Fully humanized onboarding"),
-      image: "/images/case-ecommerce.png",
-      linkedin: "",
-      productUrl: "",
-    },
-    {
-      name: "Daniel Mora",
-      role: t("Desarrollador", "Developer"),
-      project: t("Plataforma Legal", "Legal Platform"),
-      quote: t(
-        "Aprendí a cruzar los gaps cognitivos con los nudges para encontrar mejoras reales. Son cambios pequeños que transforman la experiencia.",
-        "I learned to cross cognitive gaps with nudges to find real improvements. Small changes that transform the experience."
-      ),
-      result: t("6 nudges implementados en MVP", "6 nudges implemented in MVP"),
-      image: "/images/case-saas.png",
       linkedin: "",
       productUrl: "",
     },
@@ -147,6 +143,11 @@ export function CourseTestimonials() {
                         <span className="text-xs font-semibold tracking-wider uppercase" style={{ color: "var(--magenta)" }}>
                           {item.project}
                         </span>
+                        {item.description && (
+                          <p className="text-[11px] text-foreground/50 leading-snug mt-1 line-clamp-2">
+                            {item.description}
+                          </p>
+                        )}
                       </div>
                     </div>
 
@@ -184,6 +185,19 @@ export function CourseTestimonials() {
                               className="text-muted-foreground hover:text-[#0A66C2] transition-colors"
                             >
                               <Linkedin size={16} />
+                            </a>
+                          )}
+                          {(item as any).behance && (
+                            <a
+                              href={(item as any).behance}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label={`${item.name} en Behance`}
+                              className="text-muted-foreground hover:text-[#1769FF] transition-colors"
+                            >
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M22 7h-7V5h7v2zm1.726 10c-.442 1.297-2.029 3-5.101 3-3.074 0-5.564-1.729-5.564-5.675 0-3.91 2.325-5.92 5.466-5.92 3.082 0 4.964 1.782 5.375 4.426.078.506.109 1.188.095 2.14H15.97c.13 3.211 3.483 3.312 4.588 2.029h3.168zm-7.686-4h4.965c-.105-1.547-1.136-2.219-2.477-2.219-1.466 0-2.277.768-2.488 2.219zm-9.574 6.988H0V5.021h6.953c5.476.081 5.58 5.444 2.72 6.906 3.461 1.26 3.577 8.061-3.207 8.061zM3 11h3.584c2.508 0 2.906-3-.312-3H3v3zm3.391 3H3v3.016h3.341c3.055 0 2.868-3.016.05-3.016z"/>
+                              </svg>
                             </a>
                           )}
                           {item.productUrl && (

@@ -22,10 +22,11 @@ export default function CursoPage() {
   return (
     <main id="main-content" className="overflow-x-hidden">
       <Navbar />
-      <CourseSectionNav />
 
       {/* 1. Hook */}
       <CourseHero />
+
+      <CourseSectionNav />
 
       {/* 2. Problem */}
       <CourseProblem />

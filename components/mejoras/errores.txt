@@ -1,0 +1,82 @@
+Coherencia de títulos
+25.0
+/100
+warning No hay keywords de la etiqueta título incluidas en el texto de la página
+
+medialab, ingeniería, producto, digital
+
+Coherencia H1
+50.0
+/100
+warning Algunas keywords de la H1 no están incluidas en el texto de la página
+
+merece amen
+
+Título en la Etiqueta <a>
+4.3
+/100
+warning Algunas Etiquetas <a> de esta página no contienen el atributo de título. ¡Arréglalo!
+
+Hay 44/46 etiquetas <a> sin el atributo de título.
+
+Redes sociales
+
+YouTube
+
+red-flag
+Parece que quizá no estés enlazando a una página de YouTube. Añade un enlace deYouTube válido para mostrar tu contenido de video y aumentar la interacción delos visitantes.
+
+Redes sociales
+
+Facebook
+
+red-flag
+Parece que puede que no estés enlazando a una página de Facebook. Añade unEnlace de Facebook que funcione para ayudar a los Visitantes a conectarsecontigo en Redes sociales.
+
+SEO on-page
+
+Descripción meta
+
+red-flag
+Tu meta descripción es demasiado larga (149 caracteres). Considera acortarla a 100-130 caracteres.
+
+SEO fuera del sitio
+
+Puntuación de Autoridad
+
+Sin datos de Competidor
+
+SEO fuera del sitio
+
+Nofollow vs. Dofollow
+
+Datos insuficientes para calcular la proporción follow/Nofollow.
+
+Descripción meta
+red-flag
+Tu meta descripción es demasiado larga (149 caracteres). Considera acortarla a 100-130 caracteres.
+
+
+Tips
+Diseñamos y desarrollamos productos digitales que las personas entienden, usan y recomiendan. UX, IA, software y SE
+
+Compatibilidad con Móvil
+red-flag
+Tu página no es apta para dispositivos móviles. Los usuarios de Móvil pueden tener dificultades con texto muy pequeño, ausencia de diseños adaptables o botones difíciles de pulsar. Implementa un viewport adaptable, aumenta los tamaños de fuente y amplía y separa los objetivos táctiles.
+
+Interacción hasta la siguiente pintura (INP)
+red-flag
+Los clics y toques en la página se sienten notablemente retrasados y lentos. Posponga JavaScript no crítico, traslade el trabajo fuera del hilo principal y reduzca el impacto de los scripts de terceros para mejorar la experiencia del Usuario.
+
+Tamaño del DOM
+red-flag
+No se puede recuperar la métrica de tamaño del DOM. Es posible que la página nosea accesible o que la API no esté disponible.
+
+Dominios de referencia
+
+red-flag
+Issue assessment
+
+Referring domains: N/A
+
+Competitor average: N/A

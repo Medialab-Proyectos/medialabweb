@@ -42,7 +42,9 @@
       "WebFetch(domain:www.linkedin.com)",
       "Bash(echo \"exit: $?\")",
       "Bash(identify \"C:/Users/coben/OneDrive/Desktop/MediLab/Version 1/public/images/curso/transformation.png\")",
-      "Bash(taskkill //F //IM node.exe)"
+      "Bash(taskkill //F //IM node.exe)",
+      "Bash(xargs grep:*)",
+      "Bash(grep -E \"page\\\\.\\(mdx|tsx\\)$\")"
     ]
   }
 }
