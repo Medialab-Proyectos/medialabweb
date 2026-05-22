@@ -2,10 +2,10 @@ import { MetadataRoute } from "next"
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "MediaLab Ingeniería — Diseño UX, IA y Productos Digitales",
+    name: "MediaLab Ingeniería",
     short_name: "MediaLab",
     description:
-      "Agencia de diseño UX/UI, inteligencia artificial, SEO técnico y desarrollo de productos digitales B2B/B2C. Investigamos, diseñamos y construimos con datos.",
+      "Ingeniería de producto digital: UX, IA, software y SEO técnico para empresas B2B y B2C.",
     start_url: "/",
     scope: "/",
     display: "standalone",

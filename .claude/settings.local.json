@@ -36,7 +36,13 @@
       "Bash(xargs wc:*)",
       "Bash(grep -v \"^ui$\\\\|^blog\\\\|^curso\\\\|^portfolio\")",
       "Bash(ls \"C:/Users/coben/OneDrive/Desktop/MediLab/Version 1/public/manifest\"*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(cat .npmrc)",
+      "Bash(cat ~/.npmrc)",
+      "WebFetch(domain:www.linkedin.com)",
+      "Bash(echo \"exit: $?\")",
+      "Bash(identify \"C:/Users/coben/OneDrive/Desktop/MediLab/Version 1/public/images/curso/transformation.png\")",
+      "Bash(taskkill //F //IM node.exe)"
     ]
   }
 }

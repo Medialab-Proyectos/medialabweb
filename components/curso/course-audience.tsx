@@ -49,20 +49,19 @@ export function CourseAudience() {
           transition={{ duration: 0.7 }}
           className="text-center mb-10"
         >
-          <span className="inline-block text-xs tracking-[0.2em] uppercase mb-4 font-display font-medium" style={{ color: 'var(--magenta)' }}>
-            {t("Talento híbrido", "Hybrid talent")}
+          <span className="inline-block text-xs tracking-[0.2em] uppercase mb-4 font-display font-medium" style={{ color: "var(--magenta)" }}>
+            {t("¿Para quién es?", "Who is it for?")}
           </span>
           <h2 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight leading-tight mb-4 font-display">
-            {t("UX + IA + Producto + Negocio.", "UX + AI + Product + Business.")}
+            {t("Talento híbrido", "Hybrid talent")}
             <br />
-            <span className="text-foreground/50">{t("Una nueva generación de profesionales.", "A new generation of professionals.")}</span>
+            <span className="text-foreground/50">{t("UX + IA + Producto + Negocio.", "UX + AI + Product + Business.")}</span>
           </h2>
-          <p className="text-sm text-foreground/60 dark:text-foreground/40">
-            {t("Toca el perfil que te represente. Si dudas entre dos, es buena señal.", "Tap the one that fits. If you're torn between two, good sign.")}
+          <p className="text-sm text-foreground/60 dark:text-foreground/45">
+            {t("Si te identificas con más de un perfil, es buena señal.", "If you identify with more than one profile, that's a good sign.")}
           </p>
         </motion.div>
 
-        {/* Professional profiles */}
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-14">
           {profiles.map((profile, i) => {
             const Icon = profile.icon
@@ -84,12 +83,11 @@ export function CourseAudience() {
           })}
         </div>
 
-        {/* University programs */}
         <motion.div initial={{ opacity: 0, y: 30 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ delay: 0.5, duration: 0.6 }}>
           <div className="text-center mb-6">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[var(--cyan)]/25 bg-[var(--cyan)]/[0.08] dark:bg-[var(--cyan)]/[0.06] mb-3">
-              <GraduationCap size={14} style={{ color: 'var(--cyan)' }} />
-              <span className="text-xs tracking-[0.12em] uppercase font-medium" style={{ color: 'var(--cyan)' }}>
+              <GraduationCap size={14} style={{ color: "var(--cyan)" }} />
+              <span className="text-xs tracking-[0.12em] uppercase font-medium" style={{ color: "var(--cyan)" }}>
                 {t("Universidades", "Universities")}
               </span>
             </div>
@@ -118,26 +116,6 @@ export function CourseAudience() {
               )
             })}
           </div>
-
-          {/* Institutional — high contrast solid background */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay: 0.8, duration: 0.5 }}
-            className="mt-10 p-8 md:p-10 rounded-2xl bg-[var(--surface-dark)] border border-[var(--cyan)]/20 shadow-xl text-center relative overflow-hidden"
-          >
-            {/* Subtle glow accents */}
-            <div className="absolute top-0 left-1/4 w-[200px] h-[200px] bg-[var(--cyan)]/[0.06] rounded-full blur-[80px] pointer-events-none" />
-            <div className="absolute bottom-0 right-1/4 w-[200px] h-[200px] bg-[var(--magenta)]/[0.04] rounded-full blur-[80px] pointer-events-none" />
-            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--cyan)]/30 to-transparent" />
-            <p className="relative text-sm md:text-base text-white/80 leading-relaxed max-w-3xl mx-auto">
-              <span className="font-bold text-white uppercase tracking-wider text-base md:text-lg block mb-3" style={{ color: 'var(--cyan)' }}>{t("Arquitecto de Experiencia de Usuario con IA", "AI User Experience Architect")}</span>
-              <span className="text-white/60">{t(
-                "— programa orientado a la construcción estratégica de productos digitales funcionales mediante UX/UI, análisis conductual y validación continua, sin reemplazar procesos de ingeniería de software.",
-                "— a program oriented toward the strategic construction of functional digital products through UX/UI, behavioral analysis, and continuous validation, without replacing software engineering processes."
-              )}</span>
-            </p>
-          </motion.div>
         </motion.div>
       </div>
     </section>

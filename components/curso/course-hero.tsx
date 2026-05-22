@@ -93,7 +93,7 @@ export function CourseHero() {
     <section ref={ref} className="relative min-h-[90vh] md:min-h-screen flex items-center overflow-hidden bg-[var(--surface-dark)] text-[var(--surface-dark-fg)]">
       {/* Background image */}
       <div className="absolute inset-0">
-        <Image src="/images/curso/hero-team.png" alt="" fill sizes="100vw" className="object-cover opacity-[0.40]" priority />
+        <Image src="/images/curso/hero-team.png" alt="" fill sizes="100vw" className="object-cover opacity-[0.10]" priority />
         <div className="absolute inset-0 bg-gradient-to-b from-[var(--surface-dark)]/50 via-[var(--surface-dark)]/30 to-[var(--surface-dark)]/80" />
       </div>
       {/* Background effects — stronger opacity */}
@@ -111,7 +111,7 @@ export function CourseHero() {
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[var(--cyan)]/30 bg-[var(--cyan)]/[0.1]">
                 <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: 'var(--cyan)' }} />
                 <span className="text-[11px] tracking-[0.12em] uppercase font-medium" style={{ color: 'var(--cyan)' }}>
-                  {t("Arquitecto de Experiencia de Usuario con IA", "AI User Experience Architect")}
+                  {t("Curso Arquitecto de Experiencia de Usuario con IA", "AI User Experience Architect Course")}
                 </span>
               </div>
             </motion.div>

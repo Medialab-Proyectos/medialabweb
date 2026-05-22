@@ -1,11 +1,11 @@
 {
   "name": "MediaLab Ingeniería",
   "short_name": "MediaLab",
-  "description": "Agencia UX/UI, IA y Productos Digitales",
+  "description": "Ingeniería de producto digital: UX, IA, software y SEO técnico",
   "start_url": "/",
   "display": "browser",
   "background_color": "#0a0a0a",
-  "theme_color": "#e6007e",
+  "theme_color": "#E8751A",
   "icons": [
     {
       "src": "/favicon.ico",

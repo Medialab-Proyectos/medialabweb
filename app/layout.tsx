@@ -34,11 +34,11 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://medialab.design'),
   title: {
-    default: 'MediaLab Ingeniería | Agencia UX/UI, IA y Productos Digitales',
+    default: 'MediaLab Ingeniería | Ingeniería de producto digital',
     template: '%s | MediaLab Ingeniería',
   },
   description:
-    'Agencia de diseño UX/UI con IA, SEO técnico, CRO y desarrollo de productos digitales para empresas B2B y marcas B2C. Investigamos, diseñamos y construimos experiencias humanas, indexables y medibles desde Bogotá para el mundo.',
+    'Diseñamos y desarrollamos productos digitales que las personas entienden, usan y recomiendan. UX, IA, software y SEO técnico para empresas B2B y B2C.',
   generator: 'Next.js',
   applicationName: 'MediaLab Ingeniería',
   category: 'Design, Software, Artificial Intelligence, SEO',
@@ -78,9 +78,9 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: 'MediaLab Ingeniería | Productos digitales que posicionan, conectan y convierten',
+    title: 'MediaLab Ingeniería | Ingeniería de producto digital',
     description:
-      'Diseño UX/UI, IA, SEO técnico y desarrollo de software para experiencias B2B y B2C humanas, indexables y orientadas a conversión.',
+      'UX, IA, software y SEO técnico para productos digitales que la gente entiende, usa y recomienda.',
     url: 'https://medialab.design',
     siteName: 'MediaLab Ingeniería',
     locale: 'es_CO',
@@ -100,8 +100,8 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     site: '@MediaLabIng',
     creator: '@MediaLabIng',
-    title: 'MediaLab Ingeniería | UX, IA, SEO y productos digitales',
-    description: 'Creamos experiencias B2B y B2C que posicionan, conectan emocionalmente y convierten con diseño centrado en el ser humano.',
+    title: 'MediaLab Ingeniería | Ingeniería de producto digital',
+    description: 'Diseñamos y desarrollamos productos digitales claros, útiles y medibles para empresas B2B y B2C.',
     images: ['/images/ux-research.jpg'],
   },
   icons: {
@@ -275,10 +275,11 @@ export default function RootLayout({
               '@context': 'https://schema.org',
               '@type': 'WebSite',
               name: 'MediaLab Ingeniería',
+              alternateName: ['MediaLab', 'MediaLab Design', 'medialab.design'],
               url: 'https://medialab.design',
               inLanguage: ['es-CO', 'en'],
               description:
-                'Sitio oficial de MediaLab Ingeniería, agencia de diseño UX/UI, IA, SEO técnico y desarrollo de productos digitales B2B y B2C.',
+                'Sitio oficial de MediaLab Ingeniería. Diseñamos y desarrollamos productos digitales con UX, IA, software y SEO técnico.',
               publisher: {
                 '@type': 'Organization',
                 name: 'MediaLab Ingeniería',

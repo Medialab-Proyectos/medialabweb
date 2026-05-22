@@ -5,9 +5,9 @@ import { FAQSection } from "@/components/faq-section"
 import { Footer } from "@/components/footer"
 
 export const metadata: Metadata = {
-  title: "Contacto — Agenda una Llamada de Discovery Gratis",
+  title: "Contacto",
   description:
-    "Agenda una sesión de discovery gratuita de 30 minutos con MediaLab Ingeniería. Hablemos de tu producto digital, UX/UI, IA o desarrollo de software.",
+    "Cuéntanos qué quieres construir o mejorar. MediaLab Ingeniería te responde en 24 horas para revisar tu producto, idea o plataforma digital.",
   alternates: {
     canonical: "/contacto",
     languages: {
@@ -17,10 +17,11 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "Contacto MediaLab — Agenda tu Discovery Gratis",
+    title: "Contacto | MediaLab Ingeniería",
     description:
-      "30 minutos para explorar cómo transformar tu producto digital. Sin compromiso. Respuesta en 24 horas.",
+      "Hablemos de tu producto digital, tus usuarios y el siguiente paso para hacerlo claro, útil y medible.",
     url: "/contacto",
+    siteName: "MediaLab Ingeniería",
   },
 }
 

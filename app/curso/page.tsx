@@ -9,6 +9,7 @@ import { CourseMethodology } from "@/components/curso/course-methodology"
 import { CourseMidCta } from "@/components/curso/course-mid-cta"
 import { CourseCurriculum } from "@/components/curso/course-curriculum"
 import { CourseTransformation } from "@/components/curso/course-transformation"
+import { CourseObjective } from "@/components/curso/course-objective"
 import { CourseAudience } from "@/components/curso/course-audience"
 import { CourseTools } from "@/components/curso/course-tools"
 import { CourseValidation } from "@/components/curso/course-validation"
@@ -17,42 +18,28 @@ import { CourseCta } from "@/components/curso/course-cta"
 import { CourseCommunity } from "@/components/curso/course-community"
 import { StickyCTA } from "@/components/sticky-cta"
 
-/**
- * Landing Page — Metodología IA by MediaLab
- *
- * BEHAVIORAL DESIGN FUNNEL:
- *
- * 1. HOOK        → Hero: emotional hook + social proof + clear value prop
- * 2. MIRROR      → Problem: empathy — "we see what you feel"
- * 3. PROOF       → Testimonials: social proof EARLY (trust before explaining)
- * 4. MICRO-CTA   → Soft commitment — "¿Te identificas?"
- * 5. CONTRAST    → Comparison: traditional vs MediaLab — loss aversion
- * 6. SYSTEM      → Methodology: 9-module system — authority + competence
- * 7. MICRO-CTA   → Commitment escalation — "¿Quieres ver el programa?"
- * 8. VALUE       → Curriculum: 9 modules — tangible value
- * 9. VISION      → Transformation: before vs after — aspirational identity
- * 10. ENABLEMENT → Tools: premium stack — value stacking
- * 11. TRUST      → Validation: academic + ethical — credibility
- * 12. RESOLVE    → FAQ: objection handling — remove friction
- * 13. CONVERT    → CTA: epic final — urgency + clarity
- */
-
 export default function CursoPage() {
   return (
     <main id="main-content" className="overflow-x-hidden">
       <Navbar />
       <CourseSectionNav />
 
-      {/* 1. HOOK */}
+      {/* 1. Hook */}
       <CourseHero />
 
-      {/* 2. MIRROR */}
+      {/* 2. Problem */}
       <CourseProblem />
 
-      {/* 3. PROOF (social proof early) */}
+      {/* 3. Objective: what the course is about */}
+      <CourseObjective />
+
+      {/* 4. Audience: who it's for */}
+      <CourseAudience />
+
+      {/* 4. Proof */}
       <CourseTestimonials />
 
-      {/* 4. MICRO-CTA — soft commitment after emotional sections */}
+      {/* 5. Soft commitment */}
       <CourseMidCta
         headline="Si te identificaste con algo de esto, no es casualidad."
         headlineEn="If any of this resonated, it's not a coincidence."
@@ -65,13 +52,13 @@ export default function CursoPage() {
         bgImage="/images/curso/midcta-identified.png"
       />
 
-      {/* 5. CONTRAST — loss aversion */}
+      {/* 6. Contrast */}
       <CourseComparison />
 
-      {/* 6. SYSTEM — authority */}
+      {/* 7. System */}
       <CourseMethodology />
 
-      {/* 7. MICRO-CTA — commitment escalation */}
+      {/* 8. Commitment escalation */}
       <CourseMidCta
         headline="Cada fase existe por una razón."
         headlineEn="Every phase exists for a reason."
@@ -84,28 +71,25 @@ export default function CursoPage() {
         bgImage="/images/curso/midcta-methodology.png"
       />
 
-      {/* 8. VALUE */}
+      {/* 9. Curriculum */}
       <CourseCurriculum />
 
-      {/* 9. VISION — aspirational identity */}
+      {/* 10. Transformation */}
       <CourseTransformation />
 
-      {/* 9.5 AUDIENCE — expanded target: hybrid talent, 12+ university programs */}
-      <CourseAudience />
-
-      {/* 10. ENABLEMENT — value stacking */}
+      {/* 11. Tools */}
       <CourseTools />
 
-      {/* 11. TRUST */}
+      {/* 12. Trust */}
       <CourseValidation />
 
-      {/* 12. RESOLVE — friction removal */}
+      {/* 13. FAQ */}
       <CourseFaq />
 
-      {/* 13. COMMUNITY — continuous UX collaboration */}
+      {/* 14. Community */}
       <CourseCommunity />
 
-      {/* 13.5. COMMUNITY CTA — no button, just statement */}
+      {/* 15. Community statement */}
       <CourseMidCta
         headline="La IA evoluciona cada semana. Tu comunidad también."
         headlineEn="AI evolves every week. So does your community."
@@ -115,12 +99,10 @@ export default function CursoPage() {
         bgImage="/images/curso/midcta-community.png"
       />
 
-      {/* 14. CONVERT + REGISTER — final conversion with registration form */}
+      {/* 16. Conversion */}
       <CourseCta />
 
       <Footer />
-
-      {/* Mobile sticky inscription CTA */}
       <StickyCTA scrollToId="registro" labelEs="Inscribirme al curso" labelEn="Enroll in the course" />
     </main>
   )

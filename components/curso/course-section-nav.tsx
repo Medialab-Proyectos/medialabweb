@@ -11,12 +11,15 @@ export function CourseSectionNav() {
   const { t } = useLanguage()
 
   const sections = [
+    { id: "objetivo", label: t("Objetivo", "Objective") },
+    { id: "audiencia", label: t("¿Para quién?", "Who's it for?") },
     { id: "problema", label: t("El Problema", "The Problem") },
     { id: "diferencia", label: t("La Diferencia", "The Difference") },
     { id: "metodologia", label: t("Metodología", "Methodology") },
     { id: "programa", label: t("Programa", "Program") },
     { id: "transformacion", label: t("Resultado", "Outcome") },
     { id: "herramientas", label: t("Herramientas", "Tools") },
+    { id: "comunidad", label: t("Comunidad", "Community") },
     { id: "testimonios", label: t("Testimonios", "Testimonials") },
     { id: "faq", label: "FAQ" },
     { id: "registro", label: t("Reservar", "Reserve") },

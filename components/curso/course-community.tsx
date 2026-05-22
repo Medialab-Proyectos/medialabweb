@@ -62,7 +62,7 @@ export function CourseCommunity() {
   ]
 
   return (
-    <section className="relative py-24 md:py-32 bg-background overflow-hidden">
+    <section id="comunidad" className="relative py-24 md:py-32 bg-background overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0">
         <div className="absolute top-1/2 left-1/3 w-[600px] h-[600px] bg-[var(--cyan)]/[0.04] rounded-full blur-[200px]" />
@@ -120,6 +120,26 @@ export function CourseCommunity() {
               )
             })}
           </div>
+
+          {/* CTA */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 0.6, duration: 0.5 }}
+            className="mt-12 text-center"
+          >
+            <a
+              href="#registro"
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 text-sm font-semibold text-white rounded-full transition-all duration-300 hover:scale-[1.03] active:scale-95 shadow-[0_8px_28px_-6px_rgba(42,171,179,0.5)]"
+              style={{ background: "linear-gradient(135deg, var(--cyan), color-mix(in srgb, var(--cyan) 70%, var(--magenta)))" }}
+            >
+              <Users size={16} />
+              {t("Unirme a la comunidad →", "Join the community →")}
+            </a>
+            <p className="mt-3 text-xs text-foreground/40">
+              {t("Incluido con tu inscripción al curso — acceso de por vida.", "Included with your course enrollment — lifetime access.")}
+            </p>
+          </motion.div>
 
         </motion.div>
       </div>
