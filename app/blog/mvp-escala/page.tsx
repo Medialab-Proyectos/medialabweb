@@ -6,6 +6,7 @@ import {
   BlogChromeEnNotice,
   BlogChromeCTA,
 } from "@/components/blog/blog-chrome"
+import { BlogRelatedArticles } from "@/components/blog/blog-related"
 
 export const metadata: Metadata = {
   title: "De MVP a Escala: Decisiones de Arquitectura que Importan",
@@ -85,10 +86,10 @@ export default function BlogMVPEscalaPage() {
 
       <article className="max-w-3xl mx-auto px-6 py-12 md:py-16">
         <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed mb-12 font-medium">
-          Las decisiones técnicas que tomes en el MVP definirán qué tan rápido puedes crecer — y cuánto dolor pagarás después.
+          Las decisiones técnicas que tomes en el MVP definirán qué tan rápido puedes crecer — y cuánto dolor pagarás después. La arquitectura, el stack y los patrones de diseño que elijas hoy determinan si tu producto puede escalar cuando llegue la tracción, o si tendrás que reescribirlo desde cero. Este artículo cubre las decisiones de arquitectura que realmente importan para startups y equipos de producto.
         </p>
 
-        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">El Mito del "Lo Arreglamos Después"</h2>
+        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">¿Por Qué "Lo Arreglamos Después" Es un Mito Peligroso?</h2>
         <p className="text-lg text-muted-foreground leading-relaxed mb-6">
           Hay una trampa mental peligrosa en el desarrollo de productos: la idea de que las decisiones técnicas del MVP son temporales. "Lo hacemos rápido ahora y lo refactorizamos cuando tengamos tracción." Lo que nadie te dice es que ese momento de refactorización nunca llega — porque cuando tienes tracción, tienes usuarios, y esos usuarios no pueden esperar.
         </p>
@@ -96,7 +97,7 @@ export default function BlogMVPEscalaPage() {
           Las decisiones de arquitectura del MVP no son setup — son la fundación. Y como en cualquier construcción, cambiar la fundación cuando el edificio ya está en pie es destructivo y carísimo.
         </p>
 
-        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">Las 4 Decisiones que Más Importan</h2>
+        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">¿Cuáles Son las 4 Decisiones de Arquitectura que Más Importan?</h2>
 
         <h3 className="text-xl font-bold text-foreground mt-8 mb-4">1. Modelo de Datos</h3>
         <p className="text-lg text-muted-foreground leading-relaxed mb-6">
@@ -120,7 +121,7 @@ export default function BlogMVPEscalaPage() {
 
         <div className="my-12 h-px w-full bg-border" />
 
-        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">Lo que Sí Puedes Dejar Para Después</h2>
+        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">¿Qué Sí Puedes Dejar Para Después en un MVP?</h2>
         <p className="text-lg text-muted-foreground leading-relaxed mb-6">
           No todo necesita ser perfecto en el MVP. La optimización de performance, microservicios, pipelines de CI/CD sofisticados, multi-región — estas son optimizaciones que tiene sentido hacer cuando tienes el problema de escala real. Premature optimization is the root of all evil, como diría Knuth.
         </p>
@@ -128,7 +129,7 @@ export default function BlogMVPEscalaPage() {
           La prueba de fuego es esta: ¿esta decisión técnica me costará 10x más de revertir con 1,000 usuarios que con 10? Si la respuesta es sí, no la patees. Si la respuesta es no, puedes iterar después.
         </p>
 
-        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">El Framework que Usamos en MediaLab</h2>
+        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">¿Qué Framework Usa MediaLab para Escalar MVPs?</h2>
         <p className="text-lg text-muted-foreground leading-relaxed mb-6">
           Cuando hacemos desarrollo de MVPs, aplicamos lo que llamamos el principio de "decisiones irreversibles vs. reversibles". Las decisiones irreversibles (modelo de datos, arquitectura de autenticación, separación de dominios) reciben 80% del tiempo de diseño técnico. Las reversibles (framework de UI, proveedor de email, analytics) se eligen rápidamente por conveniencia y se optimizan después.
         </p>
@@ -137,7 +138,7 @@ export default function BlogMVPEscalaPage() {
         </p>
       </article>
 
-      <div className="max-w-3xl mx-auto px-6 pb-20">
+      <div className="max-w-3xl mx-auto px-6 pb-20 space-y-6">
         <BlogChromeCTA
           headlineEs="¿Estás construyendo tu MVP?"
           headlineEn="Building your MVP?"
@@ -147,6 +148,17 @@ export default function BlogMVPEscalaPage() {
           ctaEn="Book a call"
           gradient="linear-gradient(90deg, #E8751A, #c65a10)"
         />
+        <BlogChromeCTA
+          headlineEs="Conoce nuestros servicios de desarrollo de producto"
+          headlineEn="Explore our product development services"
+          subEs="Diseño UX, discovery con IA y desarrollo a medida para startups y empresas B2B."
+          subEn="UX design, AI discovery, and custom development for startups and B2B companies."
+          ctaEs="Ver servicios"
+          ctaEn="View services"
+          href="/servicios"
+          gradient="linear-gradient(90deg, #2AABB3, #1d8a91)"
+        />
+        <BlogRelatedArticles currentSlug="mvp-escala" slugs={["discovery-ia", "ux-fintech", "psicologia-adopcion"]} />
       </div>
     </main>
   )

@@ -58,7 +58,10 @@ export function BlogChromeAuthorLine() {
   const { t } = useLanguage()
   return (
     <p className="text-sm text-muted-foreground/60 mt-8 italic">
-      — {t("Por MediaLab Ingeniería.", "By MediaLab Ingeniería.")}
+      — {t(
+        "Por Christian Benavides, CEO de MediaLab Ingeniería.",
+        "By Christian Benavides, CEO of MediaLab Ingeniería."
+      )}
     </p>
   )
 }

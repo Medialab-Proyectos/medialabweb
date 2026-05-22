@@ -95,7 +95,7 @@ export function BlogSection() {
               {t("Ideas sobre diseño UX, IA y experiencias B2B/B2C", "Ideas on UX design, AI and B2B/B2C experiences")}
             </h2>
           </div>
-          <a href={localized("/blog")} className="group inline-flex items-center gap-2 text-sm font-semibold shrink-0"
+          <a href={localized("/blog")} title={t("Ver todos los artículos del blog", "View all blog articles")} className="group inline-flex items-center gap-2 text-sm font-semibold shrink-0"
             style={{ color: "var(--magenta)" }}>
             {t("Ver todos los artículos", "View all articles")}
             <ArrowRight size={15} className="group-hover:translate-x-1 transition-transform" />
@@ -107,6 +107,7 @@ export function BlogSection() {
 
           {/* Featured article — tall card spanning 1 col on lg, full on mobile */}
           <a href={localized(`/blog/${featured.slug}`)}
+            title={t(featured.titleEs, featured.titleEn)}
             className="group lg:col-span-1 flex flex-col rounded-2xl border border-border bg-card overflow-hidden hover:shadow-xl hover:border-transparent transition-all duration-300">
             {/* Image */}
             <div className="relative w-full h-56 overflow-hidden shrink-0">
@@ -118,14 +119,14 @@ export function BlogSection() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
               {/* Category chip on top of image */}
-              <span className="absolute bottom-3 left-3 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider text-white"
+              <span className="absolute bottom-3 left-3 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider text-white"
                 style={{ background: featured.color }}>
                 {t(featured.categoryEs, featured.categoryEn)}
               </span>
             </div>
             {/* Content */}
             <div className="flex flex-col gap-3 p-6 flex-1">
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase w-fit"
+              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold uppercase w-fit"
                 style={{ color: featured.color, background: `${featured.color}18` }}>
                 {t("Destacado", "Featured")}
               </div>
@@ -136,7 +137,7 @@ export function BlogSection() {
                 {t(featured.excerptEs, featured.excerptEn)}
               </p>
               <div className="flex items-center gap-3 mt-auto pt-4 border-t border-border text-xs text-muted-foreground">
-                <span className="flex items-center gap-1"><Clock size={11} />{featured.readTime}</span>
+                <span className="flex items-center gap-1"><Clock size={14} />{featured.readTime}</span>
                 <span className="ml-auto font-semibold flex items-center gap-1 group-hover:gap-2 transition-all" style={{ color: featured.color }}>
                   {t("Leer", "Read")} <ArrowRight size={12} />
                 </span>
@@ -150,6 +151,7 @@ export function BlogSection() {
               <a
                 key={article.slug}
                 href={localized(`/blog/${article.slug}`)}
+                title={t(article.titleEs, article.titleEn)}
                 className="group flex gap-5 rounded-2xl border border-border bg-card overflow-hidden hover:shadow-xl hover:border-transparent transition-all duration-300 p-0"
                 style={{ transitionDelay: `${i * 60}ms` }}
               >
@@ -164,7 +166,7 @@ export function BlogSection() {
                 </div>
                 {/* Content */}
                 <div className="flex flex-col gap-2 py-5 pr-6 flex-1 justify-center">
-                  <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: article.color }}>
+                  <span className="text-xs font-bold uppercase tracking-widest" style={{ color: article.color }}>
                     {t(article.categoryEs, article.categoryEn)}
                   </span>
                   <h3 className="font-display font-semibold text-base text-foreground leading-snug text-balance group-hover:opacity-80 transition-opacity line-clamp-2">
@@ -174,7 +176,7 @@ export function BlogSection() {
                     {t(article.excerptEs, article.excerptEn)}
                   </p>
                   <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground">
-                    <span className="flex items-center gap-1"><Clock size={10} />{article.readTime}</span>
+                    <span className="flex items-center gap-1"><Clock size={14} />{article.readTime}</span>
                     <span className="text-muted-foreground/60">{article.date}</span>
                     <span className="ml-auto font-semibold flex items-center gap-1 group-hover:gap-1.5 transition-all" style={{ color: article.color }}>
                       {t("Leer", "Read")} <ArrowRight size={11} />

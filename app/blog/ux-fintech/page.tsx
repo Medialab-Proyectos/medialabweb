@@ -6,6 +6,7 @@ import {
   BlogChromeEnNotice,
   BlogChromeCTA,
 } from "@/components/blog/blog-chrome"
+import { BlogRelatedArticles } from "@/components/blog/blog-related"
 
 export const metadata: Metadata = {
   title: "Diseñando para la Confianza: UX y Comportamiento Financiero",
@@ -85,10 +86,10 @@ export default function BlogUXFintechPage() {
 
       <article className="max-w-3xl mx-auto px-6 py-12 md:py-16">
         <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed mb-12 font-medium">
-          Los principios de diseño que hacen que las personas se sientan seguras tomando decisiones financieras digitalmente.
+          Diseñar productos fintech requiere entender que el dinero activa el sistema límbico de forma más intensa que casi cualquier otra decisión digital. Los principios de UX que hacen que las personas se sientan seguras tomando decisiones financieras — transferir, invertir, solicitar crédito — no son los mismos que aplican al e-commerce o al entretenimiento. La confianza se diseña, no se asume.
         </p>
 
-        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">El Dinero y el Miedo: Una Relación Inevitable</h2>
+        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">¿Por Qué el Dinero y el Miedo Son Inseparables en UX?</h2>
         <p className="text-lg text-muted-foreground leading-relaxed mb-6">
           Las decisiones financieras activan el sistema límbico de manera mucho más intensa que otras decisiones digitales. Transferir dinero, invertir ahorros o solicitar un crédito son acciones cargadas de ansiedad — incluso para personas con altos niveles de educación financiera. El diseño fintech que ignora esta realidad psicológica está construido sobre arena.
         </p>
@@ -96,7 +97,7 @@ export default function BlogUXFintechPage() {
           Según un estudio de Nielsen Norman Group, los usuarios de aplicaciones financieras tienen 3 veces más probabilidades de abandonar una tarea a mitad de camino que los usuarios de apps de entretenimiento. La razón principal: la sensación de riesgo irreversible. A diferencia de elegir una película equivocada, una transferencia mal hecha no se puede deshacer fácilmente.
         </p>
 
-        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">Los 5 Pilares del Diseño de Confianza Financiera</h2>
+        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">¿Cuáles Son los 5 Pilares del Diseño de Confianza Financiera?</h2>
         <p className="text-lg text-muted-foreground leading-relaxed mb-8">Después de diseñar docenas de productos fintech, hemos identificado cinco principios que construyen confianza genuina:</p>
 
         <h3 className="text-xl font-bold text-foreground mt-8 mb-4">1. Transparencia Total, No Solo Legal</h3>
@@ -126,7 +127,7 @@ export default function BlogUXFintechPage() {
 
         <div className="my-12 h-px w-full bg-border" />
 
-        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">Caso Práctico: Rediseñando el Flujo de Primera Transferencia</h2>
+        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">¿Cómo Rediseñar el Flujo de Primera Transferencia?</h2>
         <p className="text-lg text-muted-foreground leading-relaxed mb-6">
           En un proyecto reciente con un cliente de pagos digitales, identificamos que el 45% del abandono ocurría en el paso de confirmación de la primera transferencia. El análisis reveló que los usuarios no entendían exactamente qué iba a pasar con su dinero ni cuándo llegaría.
         </p>
@@ -135,7 +136,7 @@ export default function BlogUXFintechPage() {
         </p>
       </article>
 
-      <div className="max-w-3xl mx-auto px-6 pb-20">
+      <div className="max-w-3xl mx-auto px-6 pb-20 space-y-6">
         <BlogChromeCTA
           headlineEs="¿Estás construyendo un producto financiero?"
           headlineEn="Building a financial product?"
@@ -145,6 +146,17 @@ export default function BlogUXFintechPage() {
           ctaEn="Book a call"
           gradient="linear-gradient(90deg, #E8751A, #c65a10)"
         />
+        <BlogChromeCTA
+          headlineEs="Ve nuestros casos en producción"
+          headlineEn="See our production case studies"
+          subEs="Productos fintech, banca y e-commerce que ya están generando resultados reales."
+          subEn="Fintech, banking, and e-commerce products already driving real results."
+          ctaEs="Ver portafolio"
+          ctaEn="View portfolio"
+          href="/portafolio"
+          gradient="linear-gradient(90deg, #2AABB3, #1d8a91)"
+        />
+        <BlogRelatedArticles currentSlug="ux-fintech" slugs={["psicologia-adopcion", "mvp-escala", "influencia-sin-erosion"]} />
       </div>
     </main>
   )

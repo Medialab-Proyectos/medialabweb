@@ -7,6 +7,7 @@ import {
   BlogChromeAuthorLine,
   BlogChromeCTA,
 } from "@/components/blog/blog-chrome"
+import { BlogRelatedArticles } from "@/components/blog/blog-related"
 
 export const metadata: Metadata = {
   title: "El ADN del Significado: Por Qué la Motivación No Basta para Retener Usuarios",
@@ -104,7 +105,7 @@ export default function BlogAdnSignificadoPage() {
           técnicamente superiores, caen en el olvido? La respuesta no está en las funcionalidades — está en el <em className="italic text-foreground">significado</em>.
         </p>
 
-        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">La Noética: La Ciencia del Significado en el Diseño</h2>
+        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">¿Qué Es la Noética y Cómo Se Aplica al Diseño?</h2>
         <p className="text-lg text-muted-foreground leading-relaxed mb-6">
           La noética es la rama de la filosofía que estudia el pensamiento y el conocimiento intuitivo que trasciende los sentidos tradicionales.
           Aplicada al diseño de experiencia, nos revela algo profundo: <strong className="font-semibold text-foreground">las personas no regresan a productos que solo ejecutan tareas; regresan a aquellos que refuerzan quiénes son o quiénes quieren ser</strong>.
@@ -118,7 +119,7 @@ export default function BlogAdnSignificadoPage() {
           &ldquo;El diseño consciente no se pregunta: '¿Qué puede hacer el usuario aquí?'. Pregunta: '¿Qué versión de sí mismo está construyendo el usuario al hacerlo?'&rdquo;
         </blockquote>
 
-        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">4 Patrones de Diseño Noético</h2>
+        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">¿Cuáles Son los 4 Patrones de Diseño Noético?</h2>
         <p className="text-lg text-muted-foreground leading-relaxed mb-6">
           Para que el propósito sea operativo en tu producto B2B o B2C, debe traducirse en patrones claros:
         </p>
@@ -137,7 +138,7 @@ export default function BlogAdnSignificadoPage() {
           </li>
         </ol>
 
-        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">Motivación vs. Significado: La Diferencia Crítica</h2>
+        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">¿Cuál Es la Diferencia entre Motivación y Significado?</h2>
         <p className="text-lg text-muted-foreground leading-relaxed mb-6">
           <strong className="font-semibold text-foreground">La motivación inicia la acción, pero el significado sostiene el hábito.</strong> Sin la capa noética, el riesgo es generar engagement efímero sin lealtad real. Es la diferencia entre una red social que devora el tiempo mediante refuerzos variables y una plataforma que facilita el crecimiento intelectual.
         </p>
@@ -147,7 +148,7 @@ export default function BlogAdnSignificadoPage() {
 
         <div className="my-12 h-px w-full bg-border" />
 
-        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">Conclusión: Diseñar Identidad, Propósito y Narrativa</h2>
+        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">¿Cómo Diseñar Identidad, Propósito y Narrativa en tu Producto?</h2>
         <p className="text-lg text-muted-foreground leading-relaxed mb-6">
           La noética explica por qué algunos productos permanecen y otros mueren. El significado sostiene lo que la motivación no puede. Tu producto debe diseñar identidad, propósito y narrativa — y la IA permite personalizar el sentido, no solo la acción.
         </p>
@@ -155,7 +156,7 @@ export default function BlogAdnSignificadoPage() {
       </article>
 
       {/* CTA footer */}
-      <div className="max-w-3xl mx-auto px-6 pb-20">
+      <div className="max-w-3xl mx-auto px-6 pb-20 space-y-6">
         <BlogChromeCTA
           headlineEs="¿Tu producto genera significado o solo engagement?"
           headlineEn="Does your product create meaning, or just engagement?"
@@ -165,6 +166,17 @@ export default function BlogAdnSignificadoPage() {
           ctaEn="Book a call"
           gradient="linear-gradient(90deg, #2AABB3, #1d8a91)"
         />
+        <BlogChromeCTA
+          headlineEs="Conoce nuestros servicios de diseño conductual"
+          headlineEn="Explore our behavioral design services"
+          subEs="Investigación UX, diseño conductual y desarrollo de producto digital end-to-end."
+          subEn="UX research, behavioral design, and end-to-end digital product development."
+          ctaEs="Ver servicios"
+          ctaEn="View services"
+          href="/servicios"
+          gradient="linear-gradient(90deg, #E8751A, #c65a10)"
+        />
+        <BlogRelatedArticles currentSlug="adn-del-significado" slugs={["arquitectura-percepcion", "influencia-sin-erosion", "psicologia-adopcion"]} />
       </div>
     </main>
   )

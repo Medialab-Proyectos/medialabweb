@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     alternateLocale: ["es_CO"],
     images: [
       {
-        url: "/images/ux-research.jpg",
+        url: "/images/team-collaboration.png",
         width: 1200,
         height: 630,
         alt: "MediaLab Ingeniería — UX, AI & Behavioral Design Agency",
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
     creator: "@MediaLabIng",
     title: "MediaLab Ingeniería | UX, AI, SEO & Digital Products",
     description: "We design and build clear, useful, measurable digital products for B2B and B2C companies.",
-    images: ["/images/ux-research.jpg"],
+    images: ["/images/team-collaboration.png"],
   },
 }
 

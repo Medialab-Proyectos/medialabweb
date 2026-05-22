@@ -7,6 +7,7 @@ import {
   BlogChromeAuthorLine,
   BlogChromeCTA,
 } from "@/components/blog/blog-chrome"
+import { BlogRelatedArticles } from "@/components/blog/blog-related"
 
 export const metadata: Metadata = {
   title: "Influencia sin Erosión: Cómo Diseñar Comportamiento Sostenible sin Manipular",
@@ -101,7 +102,7 @@ export default function BlogInfluenciaSinErosionPage() {
           El diseño del comportamiento nació de una intención legítima: ayudar a las personas a realizar aquello que ya desean hacer, pero que no logran sostener. Los modelos pioneros resolvieron la <em className="italic text-foreground">activación</em>. Pero dejaron una pregunta vital: <strong className="font-semibold text-foreground">¿Qué ocurre después?</strong>
         </p>
 
-        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">El Límite Invisible del Behavioral Design Clásico</h2>
+        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">¿Cuál Es el Límite Invisible del Behavioral Design Clásico?</h2>
         <p className="text-lg text-muted-foreground leading-relaxed mb-6">
           La mayoría de los patrones conductuales contemporáneos se enfocan obsesivamente en los disparadores, la gratificación inmediata y la eliminación total de la fricción. Son herramientas diseñadas para el asalto al corto plazo, pero fallan estrepitosamente cuando intentan construir bienestar, autonomía o confianza duradera.
         </p>
@@ -113,7 +114,7 @@ export default function BlogInfluenciaSinErosionPage() {
           &ldquo;En el diseño consciente, el comportamiento no se fuerza; el comportamiento emerge.&rdquo;
         </blockquote>
 
-        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">Las 4 Capas de la Acción</h2>
+        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">¿Cuáles Son las 4 Capas de la Acción del Usuario?</h2>
         <p className="text-lg text-muted-foreground leading-relaxed mb-6">
           En el ecosistema del diseño consciente, el comportamiento no es un evento aislado, sino el resultado de cuatro capas previas en perfecta armonía. Si una falla, el comportamiento se degrada sin importar cuán potente sea el disparador tecnológico:
         </p>
@@ -132,7 +133,7 @@ export default function BlogInfluenciaSinErosionPage() {
           </li>
         </ol>
 
-        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">5 Patrones de Diseño Conductual Consciente</h2>
+        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">¿Cuáles Son los 5 Patrones de Diseño Conductual Consciente?</h2>
 
         <h3 className="text-xl font-display font-bold text-foreground mt-8 mb-4" style={{ color: "var(--orange, #E8751A)" }}>1. Activación Contextual</h3>
         <p className="text-lg text-muted-foreground leading-relaxed mb-6">
@@ -159,7 +160,7 @@ export default function BlogInfluenciaSinErosionPage() {
           El usuario debe poder salir del flujo sin sentir que ha fallado. &ldquo;Tu progreso queda guardado&rdquo; y &ldquo;está bien no continuar ahora&rdquo; construyen confianza inquebrantable, asegurando retorno basado en lealtad, no en culpa.
         </p>
 
-        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">El Caso del Botón de $300 Millones</h2>
+        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">¿Qué Enseña el Caso del Botón de $300 Millones?</h2>
         <p className="text-lg text-muted-foreground leading-relaxed mb-6">
           Un gran sitio de e-commerce cambió el botón &ldquo;Registrarse&rdquo; por &ldquo;Continuar&rdquo;, permitiendo el pago como invitado. Este pequeño ajuste en la autonomía del usuario <strong className="font-semibold text-foreground">aumentó las ventas en $300 millones de dólares anuales</strong>.
         </p>
@@ -169,7 +170,7 @@ export default function BlogInfluenciaSinErosionPage() {
 
         <div className="my-12 h-px w-full bg-border" />
 
-        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">Conclusión: De Motor de Engagement a Cuidadora del Contexto</h2>
+        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">¿Cómo Pasar de Motor de Engagement a Cuidadora del Contexto?</h2>
         <p className="text-lg text-muted-foreground leading-relaxed mb-6">
           El comportamiento sostenido no nace de la presión. Nace de una conciencia que se siente respetada. En esta nueva era, la IA deja de ser una herramienta para maximizar clics y se convierte en un mediador ético entre la intención y la acción del usuario.
         </p>
@@ -177,7 +178,7 @@ export default function BlogInfluenciaSinErosionPage() {
       </article>
 
       {/* CTA footer */}
-      <div className="max-w-3xl mx-auto px-6 pb-20">
+      <div className="max-w-3xl mx-auto px-6 pb-20 space-y-6">
         <BlogChromeCTA
           headlineEs="¿Quieres influir sin erosionar a tus usuarios?"
           headlineEn="Want to influence without eroding your users?"
@@ -187,6 +188,17 @@ export default function BlogInfluenciaSinErosionPage() {
           ctaEn="Book a call"
           gradient="linear-gradient(90deg, #2AABB3, #1d8a91)"
         />
+        <BlogChromeCTA
+          headlineEs="Ve cómo aplicamos diseño conductual en producción"
+          headlineEn="See how we apply behavioral design in production"
+          subEs="Casos reales de productos digitales que mejoraron retención y conversión con nuestro enfoque."
+          subEn="Real cases of digital products that improved retention and conversion with our approach."
+          ctaEs="Ver portafolio"
+          ctaEn="View portfolio"
+          href="/portafolio"
+          gradient="linear-gradient(90deg, #E8751A, #c65a10)"
+        />
+        <BlogRelatedArticles currentSlug="influencia-sin-erosion" slugs={["trono-de-la-decision", "adn-del-significado", "arquitectura-percepcion"]} />
       </div>
     </main>
   )

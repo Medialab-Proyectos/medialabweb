@@ -7,6 +7,7 @@ import {
   BlogChromeAuthorLine,
   BlogChromeCTA,
 } from "@/components/blog/blog-chrome"
+import { BlogRelatedArticles } from "@/components/blog/blog-related"
 
 export const metadata: Metadata = {
   title: "El Trono de la Decisión: IA, Autonomía Humana y el Futuro del Diseño Ético",
@@ -104,7 +105,7 @@ export default function BlogTronoDecisionPage() {
           La mayor preocupación ética no es la privacidad: es la <em className="italic text-foreground">integridad de la voluntad humana</em>.
         </p>
 
-        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">El Riesgo Silencioso: La Infantilización del Usuario</h2>
+        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">¿Qué Es la Infantilización del Usuario y Por Qué Es un Riesgo?</h2>
         <p className="text-lg text-muted-foreground leading-relaxed mb-6">
           Si la tecnología comienza a decidirlo todo por nosotros — desde qué noticias consumir hasta cómo gestionar nuestras finanzas — corremos el riesgo de perder nuestra <strong className="font-semibold text-foreground">agencia</strong>: esa capacidad única de los seres humanos para actuar con intención y propósito.
         </p>
@@ -116,7 +117,7 @@ export default function BlogTronoDecisionPage() {
           &ldquo;Un sistema bien diseñado no decide por ti. Te ayuda a decidir mejor.&rdquo;
         </blockquote>
 
-        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">El Dilema Silencioso del UX Moderno</h2>
+        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">¿Cuál Es el Dilema Ético del UX con IA?</h2>
         <p className="text-lg text-muted-foreground leading-relaxed mb-6">
           Existe una verdad incómoda: muchos de los productos digitales más exitosos han alcanzado su estatus precisamente porque han logrado <strong className="font-semibold text-foreground">erosionar la autonomía del usuario</strong>. Durante años, el diseño persuasivo fue celebrado: menos fricción, decisiones más rápidas, tasas de conversión más altas.
         </p>
@@ -124,7 +125,7 @@ export default function BlogTronoDecisionPage() {
           Sin embargo, este enfoque esconde una tensión profunda: cuando un sistema decide &ldquo;demasiado bien&rdquo;, el ser humano deja de decidir. El CXD surge como un acto de rebelión ética frente a esta tendencia.
         </p>
 
-        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">El Ethos Estoico Aplicado al Diseño Digital</h2>
+        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">¿Cómo Aplicar el Estoicismo al Diseño Digital?</h2>
         <p className="text-lg text-muted-foreground leading-relaxed mb-6">
           El estoicismo nos enseña una lección fundamental para la era digital: debemos distinguir claramente entre lo que está bajo nuestro control y lo que no. En el diseño de productos, esto se traduce en un imperativo técnico:
         </p>
@@ -135,7 +136,7 @@ export default function BlogTronoDecisionPage() {
           <li>Preguntarse: <em className="italic">&ldquo;¿Qué tipo de relación de control estamos construyendo entre el humano y la máquina?&rdquo;</em></li>
         </ul>
 
-        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">La IA como Guardiana, No como Dictadora</h2>
+        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">¿Cómo Diseñar IA que Sea Guardiana y No Dictadora?</h2>
         <p className="text-lg text-muted-foreground leading-relaxed mb-6">
           En el marco del diseño consciente, la IA deja de ser un motor de engagement para convertirse en un <strong className="font-semibold text-foreground">mediador ético</strong> entre la intención y la acción. Una IA ética:
         </p>
@@ -148,7 +149,7 @@ export default function BlogTronoDecisionPage() {
 
         <div className="my-12 h-px w-full bg-border" />
 
-        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">Conclusión: De la Persuasión a la Conciencia</h2>
+        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">¿Cómo Pasar de la Persuasión a la Conciencia en el Diseño?</h2>
         <p className="text-lg text-muted-foreground leading-relaxed mb-6">
           El futuro del diseño digital no está en quién logra más clics, sino en quién construye sistemas que fortalezcan la agencia humana. En un mundo donde la IA puede simularnos, el verdadero diferencial será quién entienda mejor al ser humano que la tecnología está afectando.
         </p>
@@ -156,7 +157,7 @@ export default function BlogTronoDecisionPage() {
       </article>
 
       {/* CTA footer */}
-      <div className="max-w-3xl mx-auto px-6 pb-20">
+      <div className="max-w-3xl mx-auto px-6 pb-20 space-y-6">
         <BlogChromeCTA
           headlineEs="¿Tu IA fortalece o debilita a tus usuarios?"
           headlineEn="Is your AI empowering or weakening your users?"
@@ -166,6 +167,17 @@ export default function BlogTronoDecisionPage() {
           ctaEn="Book a call"
           gradient="linear-gradient(90deg, #E8751A, #c65a10)"
         />
+        <BlogChromeCTA
+          headlineEs="Formamos arquitectos de experiencias con IA"
+          headlineEn="We train AI experience architects"
+          subEs="Ética, diseño conductual e IA aplicada en nuestro programa AI User Experience Architect."
+          subEn="Ethics, behavioral design, and applied AI in our AI User Experience Architect program."
+          ctaEs="Ver curso"
+          ctaEn="View course"
+          href="/curso"
+          gradient="linear-gradient(90deg, #2AABB3, #1d8a91)"
+        />
+        <BlogRelatedArticles currentSlug="trono-de-la-decision" slugs={["influencia-sin-erosion", "discovery-ia", "arquitectura-percepcion"]} />
       </div>
     </main>
   )

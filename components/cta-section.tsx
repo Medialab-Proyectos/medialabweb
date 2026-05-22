@@ -125,21 +125,21 @@ export function CTASection() {
                   <Phone size={16} className="text-[var(--magenta)]" />
                   <div>
                     <span className="text-white/50 text-xs block">{t("Contacto directo", "Direct contact")}</span>
-                    <a href="tel:+573054009505" className="text-white hover:text-[var(--cyan)] transition-colors">+57 305 400 9505</a>
+                    <a href="https://wa.me/573054009505" target="_blank" rel="noopener noreferrer" title={t("Contactar MediaLab por WhatsApp", "Contact MediaLab via WhatsApp")} className="text-white hover:text-[var(--cyan)] transition-colors">{t("Escríbenos por WhatsApp", "Message us on WhatsApp")}</a>
                   </div>
                 </div>
                 <div className="flex items-center gap-3 text-sm">
                   <Users size={16} className="text-[var(--cyan)]" />
                   <div>
                     <span className="text-white/50 text-xs block">{t("Únete a la comunidad", "Join the community")}</span>
-                    <a href="https://wa.me/573144236970" target="_blank" rel="noopener noreferrer" className="text-white hover:text-[var(--cyan)] transition-colors">+57 314 423 6970</a>
+                    <a href="https://wa.me/573144236970" target="_blank" rel="noopener noreferrer" title={t("Únete a la comunidad WhatsApp de MediaLab", "Join MediaLab WhatsApp community")} className="text-white hover:text-[var(--cyan)] transition-colors">{t("Comunidad WhatsApp", "WhatsApp Community")}</a>
                   </div>
                 </div>
                 <div className="flex items-center gap-3 text-sm">
                   <MessageCircle size={16} className="text-[var(--orange)]" />
                   <div>
                     <span className="text-white/50 text-xs block">Email</span>
-                    <a href="mailto:hablemos@medialab.design" className="text-white hover:text-[var(--cyan)] transition-colors">hablemos@medialab.design</a>
+                    <a href="mailto:hablemos@medialab.design" title={t("Enviar email a MediaLab", "Send email to MediaLab")} className="text-white hover:text-[var(--cyan)] transition-colors">hablemos@medialab.design</a>
                   </div>
                 </div>
               </div>
@@ -246,7 +246,7 @@ export function CTASection() {
                       "También puedes escribirnos directamente por ",
                       "You can also reach us via "
                     )}
-                    <a href="https://wa.me/573054009505" target="_blank" rel="noopener noreferrer" className="text-[var(--cyan)]/70 hover:text-[var(--cyan)] underline transition-colors">
+                    <a href="https://wa.me/573054009505" target="_blank" rel="noopener noreferrer" title="WhatsApp" className="text-[var(--cyan)]/70 hover:text-[var(--cyan)] underline transition-colors">
                       WhatsApp
                     </a>
                   </p>

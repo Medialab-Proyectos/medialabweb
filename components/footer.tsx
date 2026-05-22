@@ -14,7 +14,7 @@ const socials = [
 export function Footer() {
   const { t, localized } = useLanguage()
 
-  const navColumns = [
+  const navColumns: { title: string; links: { label: string; href: string; external?: boolean }[] }[] = [
     {
       title: t("Servicios", "Services"),
       links: [
@@ -43,6 +43,9 @@ export function Footer() {
       links: [
         { label: t("Contacto", "Contact"), href: "/contacto" },
         { label: "FAQ", href: "/contacto" },
+        { label: "Medium", href: "https://medium.com/@co.benavides86", external: true },
+        { label: "Clutch", href: "https://clutch.co/profile/medialab-ingenier", external: true },
+        { label: "GoodFirms", href: "https://www.goodfirms.co/company/medialab-ingenieria", external: true },
       ],
     },
   ]
@@ -76,9 +79,10 @@ export function Footer() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={`${t("Visitar", "Visit")} ${s.label}`}
-                    className="w-8 h-8 rounded-lg flex items-center justify-center bg-white/5 border border-white/10 text-white/50 hover:bg-[var(--magenta)] hover:text-white hover:border-[var(--magenta)] transition-all duration-200"
+                    title={`${t("Visitar", "Visit")} MediaLab ${t("en", "on")} ${s.label}`}
+                    className="w-10 h-10 rounded-lg flex items-center justify-center bg-white/5 border border-white/10 text-white/50 hover:bg-[var(--magenta)] hover:text-white hover:border-[var(--magenta)] transition-all duration-200"
                   >
-                    <Icon size={15} />
+                    <Icon size={18} />
                   </a>
                 )
               })}
@@ -94,12 +98,25 @@ export function Footer() {
               <ul className="flex flex-col gap-2.5">
                 {col.links.map((link) => (
                   <li key={link.label}>
-                    <Link
-                      href={link.href.startsWith("#") ? link.href : localized(link.href)}
-                      className="text-sm text-white/60 hover:text-white transition-colors duration-200"
-                    >
-                      {link.label}
-                    </Link>
+                    {link.external ? (
+                      <a
+                        href={link.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title={`${t("Visitar", "Visit")} ${link.label}`}
+                        className="text-sm text-white/60 hover:text-white transition-colors duration-200"
+                      >
+                        {link.label}
+                      </a>
+                    ) : (
+                      <Link
+                        href={link.href.startsWith("#") ? link.href : localized(link.href)}
+                        title={link.label}
+                        className="text-sm text-white/60 hover:text-white transition-colors duration-200"
+                      >
+                        {link.label}
+                      </Link>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -114,10 +131,10 @@ export function Footer() {
             {t("Todos los derechos reservados.", "All rights reserved.")}
           </p>
           <div className="flex items-center gap-6">
-            <Link href={localized("/politica-de-privacidad")} className="hover:text-white/60 transition-colors">
+            <Link href={localized("/politica-de-privacidad")} title={t("Política de Privacidad", "Privacy Policy")} className="hover:text-white/60 transition-colors">
               {t("Política de Privacidad", "Privacy Policy")}
             </Link>
-            <Link href={localized("/terminos-de-servicio")} className="hover:text-white/60 transition-colors">
+            <Link href={localized("/terminos-de-servicio")} title={t("Términos de Servicio", "Terms of Service")} className="hover:text-white/60 transition-colors">
               {t("Términos de Servicio", "Terms of Service")}
             </Link>
           </div>

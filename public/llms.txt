@@ -67,10 +67,24 @@ Fintech, Banca, Salud y Bienestar, Educación (EdTech), Startups, Retail/E-comme
 ## Páginas principales
 
 - Inicio: https://medialab.design
+- Servicios: https://medialab.design/servicios
 - Programa IA: https://medialab.design/curso
 - Portafolio: https://medialab.design/portafolio
+- Sobre nosotros: https://medialab.design/sobre-nosotros
+- Contacto: https://medialab.design/contacto
 - Blog: https://medialab.design/blog
 - Información completa para LLMs: https://medialab.design/llms-full.txt
+
+## Artículos del blog
+
+- La Arquitectura de la Percepción: https://medialab.design/blog/arquitectura-percepcion
+- El ADN del Significado: https://medialab.design/blog/adn-del-significado
+- El Trono de la Decisión — IA y Diseño Ético: https://medialab.design/blog/trono-de-la-decision
+- Influencia sin Erosión — Diseño Conductual Sostenible: https://medialab.design/blog/influencia-sin-erosion
+- Psicología de la Adopción Digital: https://medialab.design/blog/psicologia-adopcion
+- Discovery de Producto con IA: https://medialab.design/blog/discovery-ia
+- UX en Fintech — Diseñar para la Confianza: https://medialab.design/blog/ux-fintech
+- Del MVP a la Escala: https://medialab.design/blog/mvp-escala
 
 ## Diferenciadores citables
 

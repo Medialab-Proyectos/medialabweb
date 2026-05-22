@@ -6,6 +6,7 @@ import {
   BlogChromeEnNotice,
   BlogChromeCTA,
 } from "@/components/blog/blog-chrome"
+import { BlogRelatedArticles } from "@/components/blog/blog-related"
 
 export const metadata: Metadata = {
   title: "La Psicología Oculta Detrás de la Adopción de Productos Digitales",
@@ -107,7 +108,7 @@ export default function BlogPsicologiaAdopcionPage() {
           La mayoría de los equipos de producto diseñan para la <em className="italic text-foreground">primera visita</em>, no para la <em className="italic text-foreground">décima</em>. El onboarding se optimiza, los primeros pantallazos son pulidos, pero nadie ha pensado en por qué alguien volvería mañana. La psicología nos dice que los humanos somos criaturas del contexto: necesitamos anchors cognitivos — razones para volver — y momentos de inversión que hagan que dejar el producto sea costoso.
         </p>
 
-        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">Las 3 Variables que Predicen la Retención</h2>
+        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">¿Cuáles Son las 3 Variables que Predicen la Retención?</h2>
         <p className="text-lg text-muted-foreground leading-relaxed mb-6">
           Después de analizar docenas de productos digitales, hemos identificado tres variables que correlacionan fuertemente con la retención a 30 días:
         </p>
@@ -117,7 +118,7 @@ export default function BlogPsicologiaAdopcionPage() {
           <li><strong className="font-semibold text-foreground">Costo de cambio percibido:</strong> ¿Cuánto perdería el usuario si deja el producto? Calendarios llenos, playlists curadas, historiales de compra — toda esta inversión crea fricción psicológica al salir.</li>
         </ol>
 
-        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">Diseñando para la Habituación, No Solo para la Conversión</h2>
+        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">¿Cómo Diseñar para la Habituación y No Solo para la Conversión?</h2>
         <p className="text-lg text-muted-foreground leading-relaxed mb-6">
           El error más común en product design es optimizar métricas de conversión (sign-ups, downloads, purchases) sin pensar en habituación. Un producto puede tener tasas de conversión extraordinarias y aun así fracasar si el comportamiento no se repite.
         </p>
@@ -127,7 +128,7 @@ export default function BlogPsicologiaAdopcionPage() {
 
         <div className="my-12 h-px w-full bg-border" />
 
-        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">Conclusión: El Diseño Conductual Como Ventaja Competitiva</h2>
+        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">¿Por Qué el Diseño Conductual Es una Ventaja Competitiva?</h2>
         <p className="text-lg text-muted-foreground leading-relaxed mb-6">
           La adopción no es accidental — es diseñada. Los productos que lideran sus categorías no lo hacen solo por ser los más funcionales, sino por ser los más inteligentes en cómo entienden y aprovechan la psicología humana. Esto no es manipulación — es empatía aplicada al diseño de sistemas.
         </p>
@@ -137,7 +138,7 @@ export default function BlogPsicologiaAdopcionPage() {
       </article>
 
       {/* CTA footer */}
-      <div className="max-w-3xl mx-auto px-6 pb-20">
+      <div className="max-w-3xl mx-auto px-6 pb-20 space-y-6">
         <BlogChromeCTA
           headlineEs="¿Tu producto tiene problemas de retención?"
           headlineEn="Is your product struggling with retention?"
@@ -147,6 +148,17 @@ export default function BlogPsicologiaAdopcionPage() {
           ctaEn="Book a call"
           gradient="linear-gradient(90deg, #E8751A, #c65a10)"
         />
+        <BlogChromeCTA
+          headlineEs="Aprende psicología del consumidor aplicada a UX"
+          headlineEn="Learn consumer psychology applied to UX"
+          subEs="Nuestro curso AI User Experience Architect incluye diseño conductual y psicología de la adopción."
+          subEn="Our AI User Experience Architect course includes behavioral design and adoption psychology."
+          ctaEs="Ver curso"
+          ctaEn="View course"
+          href="/curso"
+          gradient="linear-gradient(90deg, #2AABB3, #1d8a91)"
+        />
+        <BlogRelatedArticles currentSlug="psicologia-adopcion" slugs={["adn-del-significado", "arquitectura-percepcion", "influencia-sin-erosion"]} />
       </div>
     </main>
   )

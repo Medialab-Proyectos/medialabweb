@@ -99,6 +99,7 @@ export function Navbar() {
             <Link
               key={link.href}
               href={link.href.startsWith("#") ? link.href : localized(link.href)}
+              title={link.label}
               className={`text-sm font-medium transition-colors relative after:absolute after:bottom-[-3px] after:left-0 after:w-0 after:h-px after:bg-[var(--magenta)] hover:after:w-full after:transition-all after:duration-300 ${
                 (link as any).highlight
                   ? "text-[var(--magenta)] font-semibold hover:text-[var(--magenta)]"
@@ -166,6 +167,10 @@ export function Navbar() {
           )}
           <Link
             href={isCurso ? "#registro" : "#contact"}
+            title={isCurso
+              ? (lang === "es" ? "Inscribirme al curso" : "Enroll in the course")
+              : (lang === "es" ? "Iniciar un proyecto con MediaLab" : "Start a project with MediaLab")
+            }
             className="px-5 py-2.5 rounded-full text-sm font-semibold bg-foreground text-background hover:bg-[var(--magenta)] hover:text-white transition-all duration-200 active:scale-95"
           >
             {isCurso
@@ -214,6 +219,7 @@ export function Navbar() {
             <Link
               key={link.href}
               href={link.href.startsWith("#") ? link.href : localized(link.href)}
+              title={link.label}
               onClick={() => setMobileOpen(false)}
               className="text-base font-medium text-foreground py-2 border-b border-border last:border-0"
             >
@@ -248,6 +254,10 @@ export function Navbar() {
           )}
           <Link
             href={isCurso ? "#registro" : "#contact"}
+            title={isCurso
+              ? (lang === "es" ? "Inscribirme al curso" : "Enroll in the course")
+              : (lang === "es" ? "Iniciar un proyecto con MediaLab" : "Start a project with MediaLab")
+            }
             onClick={() => setMobileOpen(false)}
             className="mt-2 px-5 py-3 rounded-full text-sm font-semibold bg-foreground text-background text-center hover:bg-[var(--magenta)] hover:text-white transition-all duration-200"
           >

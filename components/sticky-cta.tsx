@@ -52,7 +52,7 @@ export function StickyCTA({ scrollToId, labelEs, labelEn }: StickyCTAProps) {
     >
       <div className="px-4 py-3">
         {scrollToId ? (
-          <a href={`#${scrollToId}`} onClick={handleAnchorClick} className={btnClass}>
+          <a href={`#${scrollToId}`} onClick={handleAnchorClick} title={label} className={btnClass}>
             {label}
             <ArrowRight size={16} />
           </a>

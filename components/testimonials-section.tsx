@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState, useCallback } from "react"
+import Image from "next/image"
 import { Star, Quote, Linkedin, ChevronLeft, ChevronRight } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 import {
@@ -49,7 +50,7 @@ export function TestimonialsSection() {
       role: "CEO",
       company: "Metrics Lab",
       metric: t("Producto B2C transformado", "B2C product transformed"),
-      avatar: "AN",
+      logo: "/images/logo-metrixslab.png",
       linkedin: "https://www.linkedin.com/in/alexandernaranjo/",
     },
     {
@@ -61,7 +62,7 @@ export function TestimonialsSection() {
       role: t("Directora", "Director"),
       company: "Funcicolombia & ESAF",
       metric: t("Plataformas educativas rediseñadas", "Educational platforms redesigned"),
-      avatar: "RB",
+      logo: "/images/logo-esaf.png",
       linkedin: "https://www.linkedin.com/in/rosa-eugenia-beltran-332408173/",
     },
     {
@@ -73,7 +74,7 @@ export function TestimonialsSection() {
       role: "Founder & CEO",
       company: "Vinnove",
       metric: t("Presencia B2B fortalecida", "B2B presence strengthened"),
-      avatar: "CL",
+      logo: "/images/logo-vinnove.png",
       linkedin: "https://www.linkedin.com/in/claudia-lazaneo/",
     },
     {
@@ -85,7 +86,7 @@ export function TestimonialsSection() {
       role: "CEO",
       company: "Global Talentech",
       metric: t("Entrega exitosa a tiempo y en presupuesto", "Successful on-time, on-budget delivery"),
-      avatar: "HZ",
+      logo: "/images/logo-talentech.png",
       linkedin: "https://www.linkedin.com/in/hector-zd/",
     },
   ]
@@ -171,11 +172,14 @@ export function TestimonialsSection() {
 
                     {/* Author */}
                     <div className="flex items-center gap-3 pt-4 border-t border-border">
-                      <div
-                        className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white shrink-0"
-                        style={{ background: "linear-gradient(135deg, var(--magenta), var(--orange))" }}
-                      >
-                        {item.avatar}
+                      <div className="w-10 h-10 rounded-full overflow-hidden bg-white flex items-center justify-center shrink-0 border border-border">
+                        <Image
+                          src={item.logo}
+                          alt={item.company}
+                          width={32}
+                          height={32}
+                          className="object-contain"
+                        />
                       </div>
                       <div className="flex flex-col flex-1">
                         <span className="text-sm font-semibold text-foreground">{item.author}</span>

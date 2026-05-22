@@ -51,8 +51,8 @@ export function AboutSection() {
           </p>
           <p className="text-base text-muted-foreground leading-relaxed">
             {t(
-              "Nosotros empezamos por ahí. Combinamos psicología del consumidor, IA y diseño UX para que cada decisión de tu producto esté respaldada por evidencia real. El resultado: productos que la gente quiere usar y negocios que crecen.",
-              "That's where we start. We combine consumer psychology, AI, and UX design so every product decision is backed by real evidence. The result: products people want to use and businesses that grow."
+              "En MediaLab Ingeniería empezamos por ahí. Combinamos psicología del consumidor, IA y diseño UX para que cada decisión de tu producto digital esté respaldada por evidencia real. El resultado: productos que la gente quiere usar y negocios que crecen.",
+              "At MediaLab Ingeniería we start there. We combine consumer psychology, AI, and UX design so every digital product decision is backed by real evidence. The result: products people want to use and businesses that grow."
             )}
           </p>
           <p className="text-base font-medium text-foreground leading-relaxed">

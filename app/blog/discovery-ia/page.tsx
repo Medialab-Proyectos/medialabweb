@@ -6,6 +6,7 @@ import {
   BlogChromeEnNotice,
   BlogChromeCTA,
 } from "@/components/blog/blog-chrome"
+import { BlogRelatedArticles } from "@/components/blog/blog-related"
 
 export const metadata: Metadata = {
   title: "Discovery con IA: El Fin de los Workshops Interminables",
@@ -85,10 +86,10 @@ export default function BlogDiscoveryIAPage() {
 
       <article className="max-w-3xl mx-auto px-6 py-12 md:py-16">
         <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed mb-12 font-medium">
-          Cómo las herramientas inteligentes están reemplazando semanas de sesiones con stakeholders — y por qué eso es bueno para todos.
+          El discovery de producto con IA permite comprimir semanas de workshops y sesiones con stakeholders en días, sin perder rigor investigativo. Las herramientas inteligentes analizan patrones de mercado, generan hipótesis validables y aceleran la síntesis — liberando al equipo para enfocarse en lo que realmente importa: decisiones basadas en evidencia y contacto real con usuarios.
         </p>
 
-        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">El Problema con el Discovery Tradicional</h2>
+        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">¿Por Qué el Discovery Tradicional Ya No Funciona?</h2>
         <p className="text-lg text-muted-foreground leading-relaxed mb-6">
           El proceso clásico de product discovery involucra semanas de workshops, entrevistas a usuarios, análisis competitivo y sesiones de síntesis. Para una empresa mediana, esto puede sumar fácilmente 80–120 horas de trabajo antes de escribir una sola línea de código — y un costo que pocas startups pueden sostener.
         </p>
@@ -96,7 +97,7 @@ export default function BlogDiscoveryIAPage() {
           Además, los workshops tienen un problema estructural: tienden a generar falso consenso. Los stakeholders más ruidosos dominan la conversación, los más introvertidos callan sus mejores ideas, y el resultado suele ser un promedio tibio de todas las opiniones, no la solución óptima.
         </p>
 
-        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">Cómo la IA Está Cambiando el Juego</h2>
+        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">¿Cómo Está la IA Cambiando el Discovery de Producto?</h2>
         <p className="text-lg text-muted-foreground leading-relaxed mb-6">
           Con herramientas como GPT-4, Claude y sistemas especializados de análisis de usuarios, es posible comprimir una semana de trabajo de discovery en horas. No porque la IA reemplace el pensamiento humano — sino porque elimina el trabajo repetitivo y acelera la síntesis.
         </p>
@@ -110,7 +111,7 @@ export default function BlogDiscoveryIAPage() {
           <li>Generación de user stories y criterios de aceptación de forma semi-automática</li>
         </ul>
 
-        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">Lo que la IA No Puede Reemplazar</h2>
+        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">¿Qué No Puede Reemplazar la IA en el Discovery?</h2>
         <p className="text-lg text-muted-foreground leading-relaxed mb-6">
           La IA es extraordinariamente buena para sintetizar información existente. Pero no puede generar insights que no están en los datos — y los insights más valiosos en producto suelen venir de observar directamente cómo las personas fallan en completar una tarea, no de leer lo que dicen que hacen.
         </p>
@@ -120,7 +121,7 @@ export default function BlogDiscoveryIAPage() {
 
         <div className="my-12 h-px w-full bg-border" />
 
-        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">El Resultado: Discovery en 48 Horas</h2>
+        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">¿Es Posible Hacer Discovery en 48 Horas?</h2>
         <p className="text-lg text-muted-foreground leading-relaxed mb-6">
           Con nuestro proceso actual, podemos entregar un brief de producto completo — incluyendo análisis de mercado, definición de usuario objetivo, propuesta de valor única y priorizacion de features — en 48 horas. Esto que antes tomaba 3–4 semanas.
         </p>
@@ -129,7 +130,7 @@ export default function BlogDiscoveryIAPage() {
         </p>
       </article>
 
-      <div className="max-w-3xl mx-auto px-6 pb-20">
+      <div className="max-w-3xl mx-auto px-6 pb-20 space-y-6">
         <BlogChromeCTA
           headlineEs="¿Quieres hacer discovery en 48h?"
           headlineEn="Want to run discovery in 48h?"
@@ -139,6 +140,17 @@ export default function BlogDiscoveryIAPage() {
           ctaEn="Book a call"
           gradient="linear-gradient(90deg, #E8751A, #c65a10)"
         />
+        <BlogChromeCTA
+          headlineEs="Aprende discovery con IA en nuestro curso"
+          headlineEn="Learn AI discovery in our course"
+          subEs="El módulo de AI-Assisted Discovery es parte de nuestro programa AI User Experience Architect."
+          subEn="The AI-Assisted Discovery module is part of our AI User Experience Architect program."
+          ctaEs="Ver curso"
+          ctaEn="View course"
+          href="/curso"
+          gradient="linear-gradient(90deg, #2AABB3, #1d8a91)"
+        />
+        <BlogRelatedArticles currentSlug="discovery-ia" slugs={["mvp-escala", "trono-de-la-decision", "psicologia-adopcion"]} />
       </div>
     </main>
   )

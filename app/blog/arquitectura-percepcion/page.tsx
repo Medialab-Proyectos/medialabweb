@@ -7,6 +7,7 @@ import {
   BlogChromeAuthorLine,
   BlogChromeCTA,
 } from "@/components/blog/blog-chrome"
+import { BlogRelatedArticles } from "@/components/blog/blog-related"
 
 export const metadata: Metadata = {
   title: "La Arquitectura de la Percepción: Por Qué Tus Usuarios No Navegan Flujos, Sino Estados Emocionales",
@@ -128,7 +129,7 @@ export default function BlogArquitecturaPercepcionPage() {
           Y aun así, algo falla. Es una <em className="italic text-foreground">fricción invisible</em>. Cuando esto ocurre, el problema no está en el código ni en la estética — es un fallo en la arquitectura de la percepción.
         </p>
 
-        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">El Malentendido Central del UX Moderno</h2>
+        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">¿Cuál Es el Malentendido Central del UX Moderno?</h2>
         <p className="text-lg text-muted-foreground leading-relaxed mb-6">
           Durante décadas, la industria del diseño digital se ha cimentado sobre una ecuación errónea: <strong className="font-semibold text-foreground">Clic + Pantalla + Acción = Experiencia</strong>. Esta visión atómica ignora una verdad fundamental: una interacción es solo un evento aislado, mientras que la experiencia es un <em className="italic text-foreground">estado de conciencia sostenido</em>.
         </p>
@@ -140,7 +141,7 @@ export default function BlogArquitecturaPercepcionPage() {
           &ldquo;Las personas no navegan a través de flujos lógicos; navegan a través de estados emocionales. El usuario no habita botones ni wireframes; habita sensaciones de claridad, duda, control, ansiedad o seguridad.&rdquo;
         </blockquote>
 
-        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">Los 4 Estados Críticos de la Percepción</h2>
+        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">¿Cuáles Son los 4 Estados Críticos de la Percepción?</h2>
         <p className="text-lg text-muted-foreground leading-relaxed mb-6">
           El Diseño de Experiencia Consciente (CXD) establece que para que un diseño sea verdaderamente consciente, debe responder con precisión a cuatro estados críticos:
         </p>
@@ -151,7 +152,7 @@ export default function BlogArquitecturaPercepcionPage() {
           <li><strong className="font-semibold text-foreground">Seguridad y Confianza:</strong> &ldquo;Confío plenamente en que el sistema no cometerá errores con mi información.&rdquo; Requiere transparencia total, especialmente en sistemas impulsados por IA.</li>
         </ol>
 
-        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">Cuando la Lógica Produce Experiencias Incorrectas</h2>
+        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">¿Por Qué la Lógica Produce Experiencias Incorrectas?</h2>
         <p className="text-lg text-muted-foreground leading-relaxed mb-6">
           Un caso paradigmático: McDonald&apos;s implementó un sistema de pedidos por voz con IA para sus drive-thru. El sistema, diseñado para optimizar la eficiencia, fracasó estrepitosamente al no considerar el contexto real: ruido ambiental, acentos regionales, voces superpuestas. Los pedidos absurdos se volvieron virales.
         </p>
@@ -159,7 +160,7 @@ export default function BlogArquitecturaPercepcionPage() {
           Técnicamente, el código procesaba datos siguiendo su lógica interna, pero <strong className="font-semibold text-foreground">fenomenológicamente el sistema era ciego</strong> a la confusión del cliente. Un enfoque de diseño consciente habría detectado la degradación en la calidad de la respuesta para ceder el control a un humano antes de que el error escalara.
         </p>
 
-        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">De la Fenomenología al Diseño UX Práctico</h2>
+        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">¿Cómo Aplicar la Fenomenología al Diseño UX Práctico?</h2>
         <p className="text-lg text-muted-foreground leading-relaxed mb-6">
           La fenomenología nos ofrece patrones de UX accionables para cualquier producto B2B o B2C:
         </p>
@@ -172,7 +173,7 @@ export default function BlogArquitecturaPercepcionPage() {
 
         <div className="my-12 h-px w-full bg-border" />
 
-        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">Conclusión: Diseñar para la Conciencia, No para el Clic</h2>
+        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground mt-12 mb-6">¿Por Qué Diseñar para la Conciencia y No para el Clic?</h2>
         <p className="text-lg text-muted-foreground leading-relaxed mb-6">
           La pregunta fundamental del CXD no es <em className="italic">&ldquo;¿qué debe hacer el usuario?&rdquo;</em>, sino <em className="italic text-foreground">&ldquo;¿desde qué estado mental está intentando hacerlo?&rdquo;</em>. Cuando diseñamos desde la percepción consciente, no solo creamos productos más usables — creamos experiencias que respetan la humanidad de quien las usa.
         </p>
@@ -180,7 +181,7 @@ export default function BlogArquitecturaPercepcionPage() {
       </article>
 
       {/* CTA footer */}
-      <div className="max-w-3xl mx-auto px-6 pb-20">
+      <div className="max-w-3xl mx-auto px-6 pb-20 space-y-6">
         <BlogChromeCTA
           headlineEs="¿Quieres diseñar desde la percepción consciente?"
           headlineEn="Want to design from conscious perception?"
@@ -190,6 +191,17 @@ export default function BlogArquitecturaPercepcionPage() {
           ctaEn="Book a call"
           gradient="linear-gradient(90deg, #E8751A, #c65a10)"
         />
+        <BlogChromeCTA
+          headlineEs="Aprende a diseñar experiencias con IA"
+          headlineEn="Learn to design experiences with AI"
+          subEs="Nuestro curso AI User Experience Architect te enseña a aplicar psicología del consumidor e IA en productos reales."
+          subEn="Our AI User Experience Architect course teaches you to apply consumer psychology and AI to real products."
+          ctaEs="Ver curso"
+          ctaEn="View course"
+          href="/curso"
+          gradient="linear-gradient(90deg, #2AABB3, #1d8a91)"
+        />
+        <BlogRelatedArticles currentSlug="arquitectura-percepcion" slugs={["adn-del-significado", "psicologia-adopcion", "influencia-sin-erosion"]} />
       </div>
     </main>
   )

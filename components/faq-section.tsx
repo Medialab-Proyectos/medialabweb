@@ -126,14 +126,14 @@ export function FAQSection() {
                     {faq.question}
                   </span>
                   <span
-                    className="shrink-0 w-7 h-7 rounded-full flex items-center justify-center transition-all duration-200"
+                    className="shrink-0 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200"
                     style={{
                       background: isOpen ? "var(--magenta)" : "var(--secondary)",
                       color: isOpen ? "white" : "var(--muted-foreground)",
                     }}
                     aria-hidden="true"
                   >
-                    {isOpen ? <Minus size={14} /> : <Plus size={14} />}
+                    {isOpen ? <Minus size={16} /> : <Plus size={16} />}
                   </span>
                 </button>
                 <div
