@@ -1,5 +1,13 @@
 {
   "installCommand": "npm install --legacy-peer-deps",
   "buildCommand": "npm run build",
-  "framework": "nextjs"
+  "framework": "nextjs",
+  "redirects": [
+    {
+      "source": "/:path(.*)",
+      "has": [{ "type": "host", "value": "www.medialab.design" }],
+      "destination": "https://medialab.design/:path",
+      "permanent": true
+    }
+  ]
 }
