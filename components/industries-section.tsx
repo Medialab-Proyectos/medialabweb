@@ -2,13 +2,14 @@
 
 import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
+import Link from "next/link"
 import { CreditCard, Landmark, Car, Rocket, GraduationCap, ShoppingCart, Leaf, LayoutGrid } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 
 export function IndustriesSection() {
   const ref = useRef<HTMLDivElement>(null)
   const [visible, setVisible] = useState(false)
-  const { t } = useLanguage()
+  const { t, localized } = useLanguage()
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -25,6 +26,7 @@ export function IndustriesSection() {
       icon: CreditCard,
       color: "var(--magenta)",
       image: "/images/industry_fintech.jpg",
+      href: "/industrias/fintech",
       description: t(
         "Apps financieras donde la confianza se siente, no se explica",
         "Financial apps where trust is felt, not explained"
@@ -136,17 +138,13 @@ export function IndustriesSection() {
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
           {industries.map((industry, i) => {
             const Icon = industry.icon
-            return (
-              <div
-                key={industry.label}
-                className={`group relative overflow-hidden rounded-2xl border border-border bg-card
-                  hover:border-transparent hover:shadow-2xl transition-all duration-400 cursor-default
-                  ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
-                style={{
-                  transitionDelay: `${i * 70}ms`,
-                  transitionDuration: "500ms",
-                }}
-              >
+            const cardClass = `group relative overflow-hidden rounded-2xl border border-border bg-card
+                  hover:border-transparent hover:shadow-2xl transition-all duration-400
+                  ${industry.href ? "cursor-pointer" : "cursor-default"}
+                  ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`
+            const cardStyle = { transitionDelay: `${i * 70}ms`, transitionDuration: "500ms" }
+            const inner = (
+              <>
                 {/* Image */}
                 <div className="relative w-full h-44 overflow-hidden">
                   <Image
@@ -190,6 +188,15 @@ export function IndustriesSection() {
                   className="absolute bottom-0 left-0 h-0.5 w-0 group-hover:w-full transition-all duration-400"
                   style={{ background: industry.color }}
                 />
+              </>
+            )
+            return industry.href ? (
+              <Link key={industry.label} href={localized(industry.href)} className={cardClass} style={cardStyle} aria-label={industry.label}>
+                {inner}
+              </Link>
+            ) : (
+              <div key={industry.label} className={cardClass} style={cardStyle}>
+                {inner}
               </div>
             )
           })}
