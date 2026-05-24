@@ -19,6 +19,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/servicios/discovery-con-ia", changeFrequency: "monthly", priority: 0.9, en: true },
     { path: "/servicios/diseno-ux-ui", changeFrequency: "monthly", priority: 0.9, en: true },
     { path: "/servicios/desarrollo-producto-digital", changeFrequency: "monthly", priority: 0.9, en: true },
+    { path: "/servicios/cro-saas", changeFrequency: "monthly", priority: 0.85, en: true },
     { path: "/industrias/fintech", changeFrequency: "monthly", priority: 0.85, en: true },
     { path: "/industrias/startups", changeFrequency: "monthly", priority: 0.85, en: true },
     { path: "/curso", changeFrequency: "weekly", priority: 0.95, en: true },

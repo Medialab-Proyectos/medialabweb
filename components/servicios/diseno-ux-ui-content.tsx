@@ -183,6 +183,8 @@ export function DisenoUxUiContent() {
             </Link>
             {t(" o prueba ", " or try ")}
             <Link href={localized("/")+"#uxbox"} className="text-[var(--magenta)] font-medium hover:underline">UXBox</Link>.
+            {t(" ¿Ya tienes tráfico pero poca conversión? Mira ", " Already have traffic but low conversion? See ")}
+            <Link href={localized("/servicios/cro-saas")} className="text-[var(--magenta)] font-medium hover:underline">{t("CRO para SaaS", "CRO for SaaS")}</Link>.
           </p>
         </div>
       </section>
