@@ -89,6 +89,9 @@ const services = [
     descriptionEn:
       "The best software feels invisible. We build products with clean code, architecture that scales with you, and an obsessive focus on making every interaction feel natural.",
     tech: ["React", "Next.js", "Node.js", "Cloud", "AI"],
+    href: "/servicios/desarrollo-producto-digital",
+    ctaEs: "Conoce el desarrollo de producto",
+    ctaEn: "Explore product development",
   },
 ]
 
