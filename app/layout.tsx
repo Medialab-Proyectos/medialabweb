@@ -88,10 +88,10 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: '/images/team-collaboration.png',
+        url: '/images/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'MediaLab Ingeniería — Agencia de UX, IA y Diseño Conductual',
+        alt: 'MediaLab Ingeniería — Ingeniería de producto digital: UX, IA, Software y SEO técnico',
         type: 'image/png',
       },
     ],
@@ -102,7 +102,7 @@ export const metadata: Metadata = {
     creator: '@MediaLabIng',
     title: 'MediaLab Ingeniería | Ingeniería de producto digital',
     description: 'Productos digitales que las personas entienden, usan y recomiendan. UX, IA, software y SEO técnico B2B y B2C.',
-    images: ['/images/team-collaboration.png'],
+    images: ['/images/og-image.png'],
   },
   icons: {
     icon: [
@@ -151,7 +151,7 @@ export default function RootLayout({
               description:
                 'Agencia experta en diseño UX/UI, inteligencia artificial y psicología del consumidor. Creamos productos digitales B2B y B2C que conectan emocionalmente con los usuarios y generan resultados comerciales medibles.',
               url: 'https://medialab.design',
-              logo: 'https://medialab.design/logo.svg',
+              logo: 'https://medialab.design/images/logo-medialab-400.png',
               foundingDate: '2020',
               founder: {
                 '@type': 'Person',
@@ -309,8 +309,8 @@ export default function RootLayout({
               '@type': 'ProfessionalService',
               name: 'MediaLab Ingeniería',
               url: 'https://medialab.design',
-              image: 'https://medialab.design/images/team-collaboration.png',
-              logo: 'https://medialab.design/logo.svg',
+              image: 'https://medialab.design/images/og-image.png',
+              logo: 'https://medialab.design/images/logo-medialab-400.png',
               description:
                 'Agencia especializada en diseño UX/UI, IA, SEO técnico, CRO, diseño conductual y desarrollo de software para productos digitales B2B y B2C.',
               areaServed: ['Colombia', 'Latinoamérica', 'United States', 'Worldwide'],
@@ -558,8 +558,8 @@ export default function RootLayout({
               description:
                 'Agencia de diseño UX/UI, inteligencia artificial y desarrollo de productos digitales en Bogotá. Especialistas en experiencias B2B y B2C.',
               url: 'https://medialab.design',
-              logo: 'https://medialab.design/logo.svg',
-              image: 'https://medialab.design/images/team-collaboration.png',
+              logo: 'https://medialab.design/images/logo-medialab-400.png',
+              image: 'https://medialab.design/images/og-image.png',
               telephone: '+57-305-400-9505',
               email: 'info@medialab.design',
               address: {
