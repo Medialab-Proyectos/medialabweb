@@ -32,6 +32,9 @@ const services = [
       "Tus usuarios no navegan flujos — navegan estados emocionales. Investigamos cómo piensan, qué sienten y qué los frena. Luego diseñamos experiencias que los hacen sentir seguros, comprendidos y listos para actuar.",
     descriptionEn:
       "Your users don't navigate flows — they navigate emotional states. We research how they think, what they feel, and what holds them back. Then we design experiences that make them feel safe, understood, and ready to act.",
+    href: "/servicios/diseno-ux-ui",
+    ctaEs: "Conoce el diseño UX/UI",
+    ctaEn: "Explore UX/UI design",
   },
   {
     icon: Brain,

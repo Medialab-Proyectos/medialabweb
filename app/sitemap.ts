@@ -17,6 +17,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "", changeFrequency: "weekly", priority: 1.0, en: true },
     { path: "/servicios", changeFrequency: "monthly", priority: 0.95, en: true },
     { path: "/servicios/discovery-con-ia", changeFrequency: "monthly", priority: 0.9, en: true },
+    { path: "/servicios/diseno-ux-ui", changeFrequency: "monthly", priority: 0.9, en: true },
     { path: "/industrias/fintech", changeFrequency: "monthly", priority: 0.85, en: true },
     { path: "/curso", changeFrequency: "weekly", priority: 0.95, en: true },
     { path: "/portafolio", changeFrequency: "monthly", priority: 0.9, en: true },
