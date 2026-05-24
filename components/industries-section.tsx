@@ -57,6 +57,7 @@ export function IndustriesSection() {
       icon: Rocket,
       color: "var(--magenta)",
       image: "/images/industry_startups.jpg",
+      href: "/industrias/startups",
       description: t(
         "De idea a producto validado antes de que se acabe la pista",
         "From idea to validated product before the runway runs out"
