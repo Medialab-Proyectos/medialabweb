@@ -1,7 +1,8 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { Microscope, Brain, Code2, ChevronRight } from "lucide-react"
+import Link from "next/link"
+import { Microscope, Brain, Code2, ChevronRight, ArrowRight } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 
 const services = [
@@ -56,6 +57,9 @@ const services = [
       "¿Cuántas semanas llevas definiendo tu producto? UXBox comprime meses de discovery en días. Le cuentas tu idea, y nuestra IA genera una propuesta estructurada con requisitos, estrategia y conceptos de diseño.",
     descriptionEn:
       "How many weeks have you spent defining your product? UXBox compresses months of discovery into days. You describe your idea, and our AI generates a structured proposal with requirements, strategy, and design concepts.",
+    href: "/servicios/discovery-con-ia",
+    ctaEs: "Conoce el discovery con IA",
+    ctaEn: "Explore AI discovery",
   },
   {
     icon: Code2,
@@ -95,7 +99,7 @@ function ServiceCard({
   visible: boolean
 }) {
   const [hovered, setHovered] = useState(false)
-  const { lang } = useLanguage()
+  const { lang, localized } = useLanguage()
   const Icon = service.icon
   const title = lang === "es" ? service.titleEs : service.titleEn
   const description = lang === "es" ? service.descriptionEs : service.descriptionEn
@@ -159,6 +163,18 @@ function ServiceCard({
             </span>
           ))}
         </div>
+      )}
+
+      {/* Dedicated landing link (internal linking for SEO) */}
+      {service.href && (
+        <Link
+          href={localized(service.href)}
+          className="inline-flex items-center gap-1.5 text-sm font-semibold mt-auto pt-2 transition-colors hover:underline"
+          style={{ color: service.color }}
+        >
+          {lang === "es" ? service.ctaEs : service.ctaEn}
+          <ArrowRight size={14} />
+        </Link>
       )}
     </div>
   )

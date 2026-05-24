@@ -2,9 +2,9 @@ import type { Metadata } from "next"
 import Home from "../page"
 
 export const metadata: Metadata = {
-  title: "Digital Product Engineering",
+  title: "AI-Powered UX & Product Discovery Agency",
   description:
-    "We design and build digital products people understand, use, and recommend. UX, AI, software, and technical SEO for B2B and B2C companies.",
+    "MediaLab designs digital products people love: UX, AI, and consumer psychology. We accelerate product discovery from months to days, validated with human judgment.",
   keywords: [
     "UX UI agency Colombia", "AI product design", "behavioral design",
     "UX agency Bogotá", "B2B B2C digital product development",
@@ -25,9 +25,9 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "MediaLab Ingeniería | Digital Product Engineering",
+    title: "AI-Powered UX & Product Discovery Agency | MediaLab Ingeniería",
     description:
-      "UX, AI, software, and technical SEO for digital products people understand, use, and recommend.",
+      "Digital products people love: UX, AI, and consumer psychology. We accelerate product discovery from months to days, validated with human judgment.",
     url: "https://medialab.design/en",
     locale: "en_US",
     alternateLocale: ["es_CO"],

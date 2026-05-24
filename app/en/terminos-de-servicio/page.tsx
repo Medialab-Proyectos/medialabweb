@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { TermsContent } from "../../terminos-de-servicio/terms-content"
 
 export const metadata: Metadata = {
+  robots: { index: false, follow: true },
   title: "Terms of Service",
   description:
     "Terms and conditions for using MediaLab Ingeniería's services.",

@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
+  robots: { index: false, follow: true },
   title: "From MVP to Scale",
   description:
     "How to design an MVP that not only validates your idea but is also ready to scale without technical debt. Original article in Spanish.",

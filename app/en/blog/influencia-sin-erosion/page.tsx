@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
+  robots: { index: false, follow: true },
   title: "Influence Without Erosion: Sustainable Behavioral Design Without Manipulation",
   description:
     "Sustained behavior isn't born from pressure. It's born from a respected consciousness. Original article in Spanish.",

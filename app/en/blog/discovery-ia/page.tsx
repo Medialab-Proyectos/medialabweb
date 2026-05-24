@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
+  robots: { index: false, follow: true },
   title: "Product Discovery with AI",
   description:
     "How AI is transforming product discovery and shortening definition cycles. Original article in Spanish.",

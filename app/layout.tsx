@@ -34,11 +34,11 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://medialab.design'),
   title: {
-    default: 'MediaLab Ingeniería | Ingeniería de producto digital',
+    default: 'Agencia UX con IA y Discovery de Producto | MediaLab Ingeniería',
     template: '%s | MediaLab Ingeniería',
   },
   description:
-    'Diseñamos productos digitales que las personas entienden, usan y recomiendan. UX, IA, software y SEO técnico B2B y B2C.',
+    'MediaLab diseña productos digitales que las personas aman: UX, IA y psicología del consumidor. Aceleramos tu discovery de producto de meses a días.',
   generator: 'Next.js',
   applicationName: 'MediaLab Ingeniería',
   category: 'Design, Software, Artificial Intelligence, SEO',
@@ -78,9 +78,9 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: 'MediaLab Ingeniería | Ingeniería de producto digital',
+    title: 'Agencia UX con IA y Discovery de Producto | MediaLab Ingeniería',
     description:
-      'UX, IA, software y SEO técnico para productos digitales que la gente entiende, usa y recomienda.',
+      'Productos digitales que las personas aman: UX, IA y psicología del consumidor. Aceleramos tu discovery de meses a días, validado con criterio humano.',
     url: 'https://medialab.design',
     siteName: 'MediaLab Ingeniería',
     locale: 'es_CO',
@@ -100,8 +100,8 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     site: '@MediaLabIng',
     creator: '@MediaLabIng',
-    title: 'MediaLab Ingeniería | Ingeniería de producto digital',
-    description: 'Productos digitales que las personas entienden, usan y recomiendan. UX, IA, software y SEO técnico B2B y B2C.',
+    title: 'Agencia UX con IA y Discovery de Producto | MediaLab Ingeniería',
+    description: 'Productos digitales que las personas aman: UX, IA y psicología del consumidor. Discovery de meses a días, validado con criterio humano.',
     images: ['/images/og-image.png'],
   },
   icons: {
@@ -361,6 +361,40 @@ export default function RootLayout({
                   { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Discovery con IA (UXBox)', description: 'Plataforma inteligente de descubrimiento de producto que comprime meses de definición en días' } },
                   { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Desarrollo de Software a Medida', description: 'Plataformas web B2B, apps B2C, MVPs y arquitecturas escalables con React, Next.js y Node.js' } },
                 ],
+              },
+            }),
+          }}
+        />
+        {/* UXBox SoftwareApplication Schema — entidad de producto propio */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'SoftwareApplication',
+              name: 'UXBox',
+              alternateName: 'UXBox Discovery',
+              applicationCategory: 'BusinessApplication',
+              operatingSystem: 'Web',
+              url: 'https://medialab.design/#uxbox',
+              description:
+                'Herramienta de discovery de producto con IA de MediaLab: convierte una idea en un brief de producto estructurado (problema, usuarios, requisitos y enfoque de diseño) en minutos, revisado por un equipo humano.',
+              creator: {
+                '@type': 'Organization',
+                name: 'MediaLab Ingeniería',
+                url: 'https://medialab.design',
+              },
+              featureList: [
+                'Brief de producto generado con IA',
+                'Definición de problema y público objetivo',
+                'Requisitos y enfoque de diseño UX',
+                'Revisión por expertos humanos',
+              ],
+              offers: {
+                '@type': 'Offer',
+                price: '0',
+                priceCurrency: 'USD',
+                description: 'Generación de brief de discovery gratuita',
               },
             }),
           }}

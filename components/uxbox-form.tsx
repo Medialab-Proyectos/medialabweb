@@ -1,57 +1,37 @@
 "use client"
 
 import { useState } from "react"
+import Link from "next/link"
 import {
   ArrowRight, CheckCircle2, Sparkles, Mail, Lightbulb, Rocket,
-  Loader2, Globe, Building2, Calendar, ExternalLink, ChevronLeft,
-  MessageCircle, Clock, Phone
+  Loader2, Globe, Building2, ChevronLeft, MessageCircle, Clock,
+  ShieldCheck, RotateCcw, UserCheck,
 } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 import { BookingModal } from "./booking-modal"
 
-type Step = 1 | 2 | 3 | 4 | 5
-
-// Colombia business hours: Tue–Fri, 9am–4pm (COT = UTC-5)
-const AVAILABLE_DAYS = [2, 3, 4, 5] // Tue=2, Wed=3, Thu=4, Fri=5
-const SLOTS = ["9:00 AM", "10:00 AM", "11:00 AM", "12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM"]
-
-function getNextDays(count: number): Date[] {
-  const days: Date[] = []
-  const today = new Date()
-  let d = new Date(today)
-  d.setDate(d.getDate() + 1)
-  while (days.length < count) {
-    if (AVAILABLE_DAYS.includes(d.getDay())) days.push(new Date(d))
-    d.setDate(d.getDate() + 1)
-  }
-  return days
-}
-
-function fmtDay(d: Date) {
-  return d.toLocaleDateString("es-CO", { weekday: "short", day: "numeric", month: "short" })
-}
+type Step = 1 | 2 | 3 | 4
 
 export function UXBoxForm() {
   const { t } = useLanguage()
   const [step, setStep] = useState<Step>(1)
   const [email, setEmail] = useState("")
+  const [consent, setConsent] = useState(false)
+  const [projectType, setProjectType] = useState("")
   const [idea, setIdea] = useState("")
   const [industry, setIndustry] = useState("")
   const [referenceUrls, setReferenceUrls] = useState("")
   const [existingBrand, setExistingBrand] = useState("")
   const [emailError, setEmailError] = useState("")
   const [loading, setLoading] = useState(false)
+  const [resending, setResending] = useState(false)
   const [brief, setBrief] = useState("")
   const [prototype, setPrototype] = useState("")
   const [briefError, setBriefError] = useState("")
   const [isValidatingEmail, setIsValidatingEmail] = useState(false)
   const [pinInput, setPinInput] = useState("")
-  const [serverPin, setServerPin] = useState("")
-  const [selectedDay, setSelectedDay] = useState<Date | null>(null)
-  const [selectedSlot, setSelectedSlot] = useState<string | null>(null)
-  const [callBooked, setCallBooked] = useState(false)
-
-  const availableDays = getNextDays(10)
+  const [isDemo, setIsDemo] = useState(false)
+  const [demoPin, setDemoPin] = useState("")
 
   const industries = [
     t("Fintech / Banca", "Fintech / Banking"),
@@ -63,7 +43,50 @@ export function UXBoxForm() {
     t("Otro", "Other"),
   ]
 
+  // Plantillas adaptativas: ajustan el ejemplo de idea según el tipo de proyecto.
+  const projectTypes = [
+    {
+      id: "startup",
+      label: t("Startup / MVP", "Startup / MVP"),
+      placeholder: t(
+        "Ej: Una app que ayuda a fundadores a validar su idea de negocio antes de invertir en desarrollo...",
+        "E.g: An app that helps founders validate their business idea before investing in development..."
+      ),
+    },
+    {
+      id: "pyme",
+      label: t("Pyme / Negocio", "SMB / Business"),
+      placeholder: t(
+        "Ej: Una plataforma para que mi negocio gestione cobros y clientes sin complicaciones...",
+        "E.g: A platform for my business to manage payments and clients without hassle..."
+      ),
+    },
+    {
+      id: "empresa",
+      label: t("Empresa / Corporativo", "Enterprise"),
+      placeholder: t(
+        "Ej: Un portal interno para capacitar a nuestra fuerza de ventas a gran escala...",
+        "E.g: An internal portal to train our sales force at scale..."
+      ),
+    },
+  ]
+
+  const activeTemplate = projectTypes.find((p) => p.id === projectType)
+  const ideaPlaceholder = activeTemplate?.placeholder ?? t(
+    "Ej: Una app que ayuda a pequeñas empresas a gestionar cobros sin complicaciones...",
+    "E.g: An app that helps small businesses manage payments without complications..."
+  )
+
   const validateEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)
+
+  const sendOtp = async () => {
+    const res = await fetch("/api/send-otp", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    })
+    return res.json().then((data) => ({ ok: res.ok, data }))
+  }
 
   const handleStep1 = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -71,57 +94,88 @@ export function UXBoxForm() {
       setEmailError(t("Ingresa un email válido", "Enter a valid email"))
       return
     }
+    if (!consent) {
+      setEmailError(t("Necesitamos tu consentimiento para continuar", "We need your consent to continue"))
+      return
+    }
 
+    // Límite suave anti-spam (orientativo, no es control de seguridad).
     try {
-      // Limit check
-      const leadsString = localStorage.getItem("uxbox_leads") || "{}"
-      const leads = JSON.parse(leadsString)
+      const leads = JSON.parse(localStorage.getItem("uxbox_leads") || "{}")
       if (leads[email] >= 2) {
-        setEmailError(t("Has alcanzado el límite de 2 registros para este email.", "You have reached the limit of 2 registrations for this email."))
+        setEmailError(t(
+          "Ya enviaste 2 ideas con este correo. Escríbenos por WhatsApp para continuar.",
+          "You've already sent 2 ideas with this email. Message us on WhatsApp to continue."
+        ))
         return
       }
-    } catch {
-      // Ignore parsing errors
-    }
+    } catch {}
 
     setLoading(true)
     setEmailError("")
-    
-    // Send OTP
     try {
-      const res = await fetch("/api/send-otp", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      })
-      const data = await res.json()
-      if (res.ok && data.success) {
-        setServerPin(data.pin)
+      const { ok, data } = await sendOtp()
+      if (ok && data.success) {
+        setIsDemo(!!data.demo)
+        setDemoPin(data.pin || "")
         setIsValidatingEmail(true)
       } else {
-        setEmailError(data.error || "Error enviando el código.")
+        setEmailError(data.error || t("Error enviando el código.", "Error sending the code."))
       }
-    } catch (err) {
-      setEmailError("Error de conexión.")
+    } catch {
+      setEmailError(t("Error de conexión.", "Connection error."))
     } finally {
       setLoading(false)
     }
   }
 
-  const handleVerifyOtp = (e: React.FormEvent) => {
+  const handleResend = async () => {
+    setResending(true)
+    setEmailError("")
+    setPinInput("")
+    try {
+      const { ok, data } = await sendOtp()
+      if (ok && data.success) {
+        setIsDemo(!!data.demo)
+        setDemoPin(data.pin || "")
+      } else {
+        setEmailError(data.error || t("No pudimos reenviar el código.", "Couldn't resend the code."))
+      }
+    } catch {
+      setEmailError(t("Error de conexión.", "Connection error."))
+    } finally {
+      setResending(false)
+    }
+  }
+
+  const handleVerifyOtp = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (pinInput === serverPin || pinInput === "0000") { // Fallback for testing just in case
-      try {
-        const leadsString = localStorage.getItem("uxbox_leads") || "{}"
-        const leads = JSON.parse(leadsString)
-        leads[email] = (leads[email] || 0) + 1
-        localStorage.setItem("uxbox_leads", JSON.stringify(leads))
-      } catch {}
-      
-      setIsValidatingEmail(false)
-      setStep(2)
-    } else {
-      setEmailError(t("Código incorrecto.", "Incorrect code."))
+    setLoading(true)
+    setEmailError("")
+    try {
+      const res = await fetch("/api/verify-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pin: pinInput }),
+      })
+      const data = await res.json()
+      if (data.valid) {
+        try {
+          const leads = JSON.parse(localStorage.getItem("uxbox_leads") || "{}")
+          leads[email] = (leads[email] || 0) + 1
+          localStorage.setItem("uxbox_leads", JSON.stringify(leads))
+        } catch {}
+        setIsValidatingEmail(false)
+        setStep(2)
+      } else if (data.error === "expired") {
+        setEmailError(t("El código expiró. Reenvíalo.", "The code expired. Resend it."))
+      } else {
+        setEmailError(t("Código incorrecto.", "Incorrect code."))
+      }
+    } catch {
+      setEmailError(t("Error de conexión.", "Connection error."))
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -133,7 +187,7 @@ export function UXBoxForm() {
       const res = await fetch("/api/generate-brief", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ idea, industry, referenceUrls, existingBrand }),
+        body: JSON.stringify({ idea, industry, referenceUrls, existingBrand, projectType }),
       })
       if (!res.ok) throw new Error("API error")
       const data = await res.json()
@@ -165,11 +219,6 @@ export function UXBoxForm() {
       setLoading(false)
       setStep(4)
     }
-  }
-
-  const handleBookCall = () => {
-    // Legacy function, handled by modal now
-    setCallBooked(true)
   }
 
   const accent = "#E8751A"
@@ -210,25 +259,30 @@ export function UXBoxForm() {
 
       <div className="relative z-10 max-w-3xl mx-auto">
         {/* Header */}
-        <div className="flex flex-col items-center gap-4 text-center mb-12">
+        <div className="flex flex-col items-center gap-4 text-center mb-8">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold border"
             style={{ color: "var(--magenta)", borderColor: accentBorder, background: accentBg }}>
             <Sparkles size={14} />
             UXBox Discovery
           </div>
           <h2 id="uxbox-heading" className="font-display font-bold text-4xl md:text-5xl text-foreground text-balance leading-tight">
-            {t("Valida tu idea en 24 horas", "Validate your idea in 24 hours")}
+            {t("Convierte tu idea en un brief de producto", "Turn your idea into a product brief")}
           </h2>
           <p className="text-lg text-muted-foreground max-w-lg leading-relaxed">
             {t(
-              "Cuéntanos tu idea y nuestra IA generará un brief formal de proyecto al instante.",
-              "Tell us your idea and our AI will generate a formal project brief instantly."
+              "UXBox es nuestra herramienta de IA que transforma tu idea en un brief estructurado — problema, usuarios, requisitos y enfoque de diseño — en minutos.",
+              "UXBox is our AI tool that turns your idea into a structured brief — problem, users, requirements, and design approach — in minutes."
             )}
           </p>
+          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs text-muted-foreground">
+            <span className="flex items-center gap-1.5"><Clock size={13} style={{ color: accent }} /> {t("Toma ~3 minutos", "Takes ~3 minutes")}</span>
+            <span className="flex items-center gap-1.5"><UserCheck size={13} style={{ color: accent }} /> {t("Revisado por un humano", "Reviewed by a human")}</span>
+            <span className="flex items-center gap-1.5"><ShieldCheck size={13} style={{ color: accent }} /> {t("Tus datos solo se usan para tu brief", "Your data is only used for your brief")}</span>
+          </div>
         </div>
 
         {/* Stepper */}
-        <div className="flex items-center justify-center gap-0 mb-10" aria-label="Progress">
+        <div className="flex items-center justify-center gap-0 mb-4" aria-label="Progress">
           {steps.map((s, i) => {
             const num = (i + 1) as Step
             const Icon = s.icon
@@ -258,6 +312,9 @@ export function UXBoxForm() {
             )
           })}
         </div>
+        <p className="text-center text-xs text-muted-foreground mb-8">
+          {t("Paso", "Step")} {step} {t("de", "of")} 4
+        </p>
 
         {/* Card */}
         <div className="rounded-2xl border border-border bg-card shadow-xl p-8 md:p-10 max-w-xl mx-auto">
@@ -287,11 +344,30 @@ export function UXBoxForm() {
                 />
                 {emailError && <p className="text-xs text-red-500 font-medium">{emailError}</p>}
               </div>
+
+              <label className="flex items-start gap-2.5 text-xs text-muted-foreground cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={consent}
+                  onChange={(e) => { setConsent(e.target.checked); setEmailError("") }}
+                  className="mt-0.5 accent-[#E8751A] w-4 h-4 shrink-0"
+                />
+                <span>
+                  {t(
+                    "Acepto que MediaLab use mis datos para generar y enviarme mi brief, según la ",
+                    "I agree to let MediaLab use my data to generate and send my brief, per the "
+                  )}
+                  <Link href="/politica-de-privacidad" className="underline hover:text-foreground">
+                    {t("política de privacidad", "privacy policy")}
+                  </Link>.
+                </span>
+              </label>
+
               <button type="submit" disabled={loading} className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold text-sm text-white transition-all active:scale-95 disabled:opacity-50" style={btnStyle}>
                 {loading ? t("Enviando código...", "Sending code...") : t("Continuar", "Continue")} <ArrowRight size={16} />
               </button>
               <p className="text-xs text-muted-foreground text-center">
-                {t("Solo 2 registros permitidos por correo electrónico", "Only 2 registrations allowed per email")}
+                {t("Para evitar spam, permitimos hasta 2 ideas por correo.", "To prevent spam, we allow up to 2 ideas per email.")}
               </p>
             </form>
           )}
@@ -307,34 +383,55 @@ export function UXBoxForm() {
                   <strong className="text-foreground">{email}</strong>
                 </p>
               </div>
+
+              {isDemo && demoPin && (
+                <div className="rounded-lg border border-dashed px-4 py-3 text-xs text-center" style={{ borderColor: accentBorder, background: accentBg }}>
+                  {t("Modo demo — tu código es ", "Demo mode — your code is ")}
+                  <strong className="text-base tracking-widest" style={{ color: accent }}>{demoPin}</strong>
+                </div>
+              )}
+
               <div className="flex flex-col gap-2">
                 <input
                   type="text"
+                  inputMode="numeric"
                   maxLength={4}
                   value={pinInput}
-                  onChange={(e) => { setPinInput(e.target.value); setEmailError("") }}
-                  placeholder="Ej: 4812"
+                  onChange={(e) => { setPinInput(e.target.value.replace(/\D/g, "")); setEmailError("") }}
+                  placeholder={t("Ej: 4812", "E.g: 4812")}
                   className={`${inputClass} text-center tracking-widest font-bold text-2xl`}
                   style={{ borderColor: emailError ? "#ef4444" : undefined }}
                   {...inputFocus}
                   required
                 />
                 {emailError && <p className="text-xs text-red-500 font-medium text-center">{emailError}</p>}
-                <button
-                  type="button"
-                  onClick={() => setIsValidatingEmail(false)}
-                  className="text-xs text-muted-foreground hover:underline text-center mt-2"
-                >
-                  {t("Cambiar correo", "Change email")}
-                </button>
+                <div className="flex items-center justify-center gap-4 mt-2 text-xs">
+                  <button
+                    type="button"
+                    onClick={handleResend}
+                    disabled={resending}
+                    className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground disabled:opacity-50"
+                  >
+                    <RotateCcw size={12} className={resending ? "animate-spin" : ""} />
+                    {resending ? t("Reenviando...", "Resending...") : t("Reenviar código", "Resend code")}
+                  </button>
+                  <span className="w-px h-3 bg-border" />
+                  <button
+                    type="button"
+                    onClick={() => { setIsValidatingEmail(false); setPinInput(""); setEmailError("") }}
+                    className="text-muted-foreground hover:text-foreground"
+                  >
+                    {t("Cambiar correo", "Change email")}
+                  </button>
+                </div>
               </div>
-              <button type="submit" disabled={pinInput.length < 4} className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold text-sm text-white transition-all active:scale-95 disabled:opacity-50" style={btnStyle}>
-                {t("Verificar código", "Verify code")} <ArrowRight size={16} />
+              <button type="submit" disabled={pinInput.length < 4 || loading} className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold text-sm text-white transition-all active:scale-95 disabled:opacity-50" style={btnStyle}>
+                {loading ? t("Verificando...", "Verifying...") : t("Verificar código", "Verify code")} <ArrowRight size={16} />
               </button>
             </form>
           )}
 
-          {/* ── Step 2: Idea + details ── */}
+          {/* ── Step 2: Project type + idea + details ── */}
           {step === 2 && (
             <form onSubmit={handleStep2} className="flex flex-col gap-5">
               <div className="flex flex-col gap-1">
@@ -346,6 +443,26 @@ export function UXBoxForm() {
                 </p>
               </div>
 
+              {/* Project type templates */}
+              <div className="flex flex-col gap-2">
+                <label className="text-xs font-semibold text-foreground uppercase tracking-wide">
+                  {t("¿Qué tipo de proyecto es?", "What type of project is it?")}
+                </label>
+                <div className="grid grid-cols-3 gap-2">
+                  {projectTypes.map((p) => (
+                    <button key={p.id} type="button" onClick={() => setProjectType(p.id)}
+                      className="px-2 py-2.5 rounded-xl text-xs font-medium border transition-all text-center"
+                      style={{
+                        background: projectType === p.id ? accentBg : "var(--background)",
+                        color: projectType === p.id ? accent : "var(--muted-foreground)",
+                        borderColor: projectType === p.id ? accent : "var(--border)",
+                      }}>
+                      {p.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               {/* Idea textarea */}
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-semibold text-foreground uppercase tracking-wide">
@@ -354,10 +471,7 @@ export function UXBoxForm() {
                 <textarea
                   value={idea}
                   onChange={(e) => setIdea(e.target.value)}
-                  placeholder={t(
-                    "Ej: Una app que ayuda a pequeñas empresas a gestionar cobros sin complicaciones...",
-                    "E.g: An app that helps small businesses manage payments without complications..."
-                  )}
+                  placeholder={ideaPlaceholder}
                   rows={4}
                   className={inputClass}
                   {...inputFocus}
@@ -483,6 +597,14 @@ export function UXBoxForm() {
                 </div>
               )}
 
+              <p className="flex items-start gap-2 text-xs text-muted-foreground">
+                <UserCheck size={14} className="shrink-0 mt-0.5" style={{ color: accent }} />
+                {t(
+                  "Esto es una propuesta preliminar generada con IA. Nuestro equipo la revisa y la afina contigo en una sesión gratuita de 30 minutos.",
+                  "This is a preliminary AI-generated proposal. Our team reviews and refines it with you in a free 30-minute session."
+                )}
+              </p>
+
               <div className="flex gap-3">
                 <button onClick={() => setStep(2)} className="flex-1 py-3.5 rounded-xl font-semibold text-sm border border-border text-muted-foreground hover:text-foreground transition-all flex items-center justify-center gap-2">
                   <ChevronLeft size={15} /> {t("Editar", "Edit")}
@@ -510,13 +632,12 @@ export function UXBoxForm() {
                 {t("¡Todo listo!", "All set!")}
               </h3>
               <p className="text-muted-foreground mb-8 text-base leading-relaxed max-w-sm">
-                {t("Hemos recibido tu idea. Nuestro equipo la revisará y te contactaremos en menos de 24 horas con los siguientes pasos.", "We have received your idea. Our team will review it and contact you within 24 hours with the next steps.")}
+                {t("Hemos recibido tu idea y te enviamos el brief por correo. Nuestro equipo lo revisará y te contactaremos en menos de 24 horas con los siguientes pasos.", "We received your idea and sent the brief to your email. Our team will review it and contact you within 24 hours with the next steps.")}
               </p>
 
-              {/* Botón de Pop de BookingModal */}
               <BookingModal>
                 <button type="button" className="w-full sm:w-auto px-8 py-3.5 rounded-xl font-semibold text-sm text-white transition-all active:scale-95 shadow-lg shadow-orange-500/20" style={btnStyle}>
-                  {t("Agendar una llamada ahora", "Schedule a call now")}
+                  {t("Agendar mi sesión gratuita de 30 min", "Book my free 30-min session")}
                 </button>
               </BookingModal>
             </div>
@@ -538,8 +659,6 @@ export function UXBoxForm() {
                 <span className="text-muted-foreground">
                   {t("¿Prefieres agendar una llamada?", "Prefer to schedule a call?")}
                 </span>
-                
-                {/* Pop de BookingModal */}
                 <BookingModal>
                   <button type="button" className="text-foreground hover:underline ml-1 font-semibold border-none bg-transparent">
                     {t("Agenda aquí", "Schedule here")}

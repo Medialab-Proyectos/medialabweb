@@ -62,9 +62,9 @@ export function PortfolioCTA() {
             <div className="flex items-center gap-3 pt-4 border-t border-white/10 mt-2">
               <div className="flex -space-x-2">
                 {[
-                  { initials: "MR", name: "María R." },
-                  { initials: "CM", name: "Carlos M." },
-                  { initials: "AT", name: "Ana T." },
+                  { initials: "AN", name: "Alexander Naranjo" },
+                  { initials: "CL", name: "Claudia Lazaneo" },
+                  { initials: "HZ", name: "Héctor Zuñiga" },
                 ].map((person, i) => (
                   <div key={person.initials} className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white border-2 border-black/50" style={{ background: `linear-gradient(135deg, var(--${["magenta", "cyan", "orange"][i]}), var(--${["orange", "magenta", "cyan"][i]}))`, zIndex: 3 - i }} title={person.name}>{person.initials}</div>
                 ))}
@@ -74,6 +74,13 @@ export function PortfolioCTA() {
                 {t("ya transformaron su producto con nosotros.", "have already transformed their product with us.")}
               </p>
             </div>
+
+            <Link
+              href="/#method"
+              className="text-xs text-white/50 hover:text-white/80 underline underline-offset-4 transition-colors"
+            >
+              {t("Conoce la metodología detrás de estos resultados →", "See the methodology behind these results →")}
+            </Link>
           </div>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
+  robots: { index: false, follow: true },
   title: "The Architecture of Perception: Why Your Users Don't Navigate Flows, They Navigate Emotional States",
   description:
     "Users don't abandon products for lack of logic but because of invisible emotional friction. Discover MediaLab's Conscious Experience Design (CXD). Original article in Spanish.",

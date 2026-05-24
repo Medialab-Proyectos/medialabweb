@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
+  robots: { index: false, follow: true },
   title: "The Throne of Decision: AI, Human Autonomy, and Ethical Design",
   description:
     "In the age of AI agents, the greatest risk isn't privacy — it's the infantilization of the user. Discover Agentic Experience Design (AXD). Original article in Spanish.",

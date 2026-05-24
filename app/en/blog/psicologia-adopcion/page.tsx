@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
+  robots: { index: false, follow: true },
   title: "The Psychology of Digital Adoption",
   description:
     "How to apply consumer psychology principles to accelerate adoption of B2B and B2C digital products. Original article in Spanish.",

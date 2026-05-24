@@ -132,10 +132,11 @@ export function HeroSection() {
           className={`font-display font-bold text-4xl sm:text-5xl md:text-6xl lg:text-[4.5rem] leading-[1.07] text-balance text-white transition-all duration-700 ${ready ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
           style={{ transitionDelay: "100ms" }}
         >
-          {t("Tu producto merece", "Your product deserves")}{" "}
+          {t("Productos digitales que las personas ", "Digital products people ")}
           <span className="bg-clip-text text-transparent" style={{ backgroundImage: "linear-gradient(90deg, #E8751A, #2AABB3)" }}>
-            {t("usuarios que lo amen.", "users who love it.")}
+            {t("aman", "love")}
           </span>
+          {t(" — con IA, UX y psicología del consumidor.", " — powered by AI, UX, and consumer psychology.")}
         </h1>
 
         {/* Subheadline */}
@@ -144,8 +145,8 @@ export function HeroSection() {
           style={{ transitionDelay: "200ms" }}
         >
           {t(
-            "Diseño UX + IA + psicología del consumidor. Creamos experiencias digitales que posicionan, conectan y convierten.",
-            "UX design + AI + consumer psychology. We create digital experiences that rank, connect, and convert."
+            "Aceleramos el discovery de producto de meses a días y lo validamos con criterio humano.",
+            "We accelerate product discovery from months to days and validate it with human judgment."
           )}
         </p>
 

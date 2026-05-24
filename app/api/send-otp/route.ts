@@ -1,16 +1,19 @@
 import { NextResponse } from "next/server"
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
 export async function POST(req: Request) {
   try {
     const { email } = await req.json()
 
-    if (!email) {
-      return NextResponse.json({ error: "Email es requerido" }, { status: 400 })
+    if (!email || !EMAIL_RE.test(email)) {
+      return NextResponse.json({ error: "Email válido es requerido" }, { status: 400 })
     }
 
     const pin = Math.floor(1000 + Math.random() * 9000).toString()
+    const hasResend = !!process.env.RESEND_API_KEY
 
-    if (process.env.RESEND_API_KEY) {
+    if (hasResend) {
       const { Resend } = await import("resend")
       const resend = new Resend(process.env.RESEND_API_KEY)
 
@@ -35,7 +38,22 @@ export async function POST(req: Request) {
       }
     }
 
-    return NextResponse.json({ success: true, pin })
+    // El PIN se guarda en una cookie HttpOnly (no accesible desde JS) y se
+    // verifica server-side en /api/verify-otp. En modo demo (sin email real)
+    // lo revelamos en la respuesta para que el flujo sea probable y se entienda.
+    const res = NextResponse.json({
+      success: true,
+      demo: !hasResend,
+      ...(hasResend ? {} : { pin }),
+    })
+    res.cookies.set("uxbox_otp", pin, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: 600, // 10 minutos
+    })
+    return res
   } catch (error: any) {
     return NextResponse.json({ error: error.message || "Error al enviar OTP" }, { status: 500 })
   }

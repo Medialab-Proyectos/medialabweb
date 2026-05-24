@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
+  robots: { index: false, follow: true },
   title: "The DNA of Meaning: Why Motivation Isn't Enough to Retain Users",
   description:
     "Motivation starts the action, but meaning sustains the habit. 4 noetic design patterns to create products that transcend. Original article in Spanish.",

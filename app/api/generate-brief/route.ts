@@ -1,8 +1,15 @@
 import { NextRequest, NextResponse } from "next/server"
 
-function generateSimulatedBrief(idea: string, industry: string, referenceUrls: string, existingBrand: string) {
+const PROJECT_TYPE_TEXT: Record<string, string> = {
+  startup: "una startup en etapa temprana que necesita validar y lanzar rápido",
+  pyme: "una pyme que busca digitalizar y escalar su operación",
+  empresa: "una empresa que requiere una solución robusta y a escala",
+}
+
+function generateSimulatedBrief(idea: string, industry: string, referenceUrls: string, existingBrand: string, projectType?: string) {
   const industryText = industry || "tecnología"
-  const brief = `El proyecto propuesto aborda una necesidad creciente en el sector de ${industryText}: ${idea}. En un mercado donde los usuarios esperan experiencias digitales fluidas, intuitivas y personalizadas, esta solución se posiciona como un diferenciador clave para conectar con el público objetivo de manera significativa y generar valor comercial sostenible.
+  const audienceText = (projectType && PROJECT_TYPE_TEXT[projectType]) || "un equipo que busca claridad de producto"
+  const brief = `El proyecto propuesto aborda una necesidad creciente en el sector de ${industryText} para ${audienceText}: ${idea}. En un mercado donde los usuarios esperan experiencias digitales fluidas, intuitivas y personalizadas, esta solución se posiciona como un diferenciador clave para conectar con el público objetivo de manera significativa y generar valor comercial sostenible.
 
 La solución contempla el desarrollo de una plataforma digital centrada en el usuario que integra flujos de interacción optimizados, arquitectura de información clara y componentes de diseño conductual que guían al usuario hacia acciones de alto valor. Las funcionalidades clave incluyen onboarding adaptativo, dashboards personalizados, sistema de notificaciones inteligentes y módulos de autoservicio que reducen la fricción operativa.
 
@@ -17,7 +24,7 @@ Como próximos pasos recomendados, sugerimos iniciar con una fase de discovery a
 
 export async function POST(req: NextRequest) {
   try {
-    const { idea, industry, referenceUrls, existingBrand } = await req.json()
+    const { idea, industry, referenceUrls, existingBrand, projectType } = await req.json()
 
     if (!idea) {
       return NextResponse.json({ error: "Se requiere una idea" }, { status: 400 })
@@ -25,7 +32,7 @@ export async function POST(req: NextRequest) {
 
     // Si no hay API key, usar simulación inteligente
     if (!process.env.OPENAI_API_KEY) {
-      const simulated = generateSimulatedBrief(idea, industry, referenceUrls, existingBrand)
+      const simulated = generateSimulatedBrief(idea, industry, referenceUrls, existingBrand, projectType)
       return NextResponse.json(simulated)
     }
 

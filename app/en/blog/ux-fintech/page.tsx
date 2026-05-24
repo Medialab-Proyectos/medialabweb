@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
+  robots: { index: false, follow: true },
   title: "UX in Fintech: Designing for Trust",
   description:
     "UX design strategies specific to fintech products that need to build trust from the first touch. Original article in Spanish.",
