@@ -37,6 +37,7 @@ export function IndustriesSection() {
       icon: Landmark,
       color: "var(--cyan)",
       image: "/images/industry_banca.jpg",
+      href: "/industrias/banca",
       description: t(
         "Experiencias bancarias que eliminan la ansiedad del usuario",
         "Banking experiences that remove user anxiety"
