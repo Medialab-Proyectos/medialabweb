@@ -46,6 +46,10 @@ export function TestimonialsSection() {
         "MediaLab nos ayudó a construir una experiencia B2C que realmente conecta con nuestros usuarios. Su enfoque basado en datos y psicología del consumidor transformó nuestro producto digital.",
         "MediaLab helped us build a B2C experience that truly connects with our users. Their data-driven approach and consumer psychology transformed our digital product."
       ),
+      challenge: t(
+        "Su producto B2C no lograba conectar emocionalmente con los usuarios.",
+        "Their B2C product wasn't connecting emotionally with users."
+      ),
       author: "Alexander Naranjo",
       role: "CEO",
       company: "Metrics Lab",
@@ -57,6 +61,10 @@ export function TestimonialsSection() {
       quote: t(
         "Trabajar con MediaLab en nuestras plataformas educativas y motores de aprendizaje fue un antes y un después. Entendieron la complejidad de nuestras necesidades institucionales y entregaron soluciones que realmente impactan.",
         "Working with MediaLab on our educational platforms and learning engines was a turning point. They understood the complexity of our institutional needs and delivered solutions that truly make an impact."
+      ),
+      challenge: t(
+        "Plataformas educativas con necesidades institucionales complejas por resolver.",
+        "Educational platforms with complex institutional needs to solve."
       ),
       author: "Rosa Eugenia Beltrán",
       role: t("Directora", "Director"),
@@ -70,6 +78,10 @@ export function TestimonialsSection() {
         "MediaLab entendió nuestra visión B2B desde el primer día. Nos ayudaron a construir una presencia digital sólida y proyectos que generan confianza con nuestros clientes corporativos.",
         "MediaLab understood our B2B vision from day one. They helped us build a solid digital presence and projects that generate trust with our corporate clients."
       ),
+      challenge: t(
+        "Necesitaban una presencia digital B2B que generara confianza con clientes corporativos.",
+        "They needed a B2B digital presence that built trust with corporate clients."
+      ),
       author: "Claudia Lazaneo",
       role: "Founder & CEO",
       company: "Vinnove",
@@ -81,6 +93,10 @@ export function TestimonialsSection() {
       quote: t(
         "MediaLab proporcionó una asesoría clara y dinámica que permitió a nuestros estudiantes desarrollar sus habilidades de manera efectiva. El proyecto fue todo un éxito — entregamos a tiempo, dentro del presupuesto, y el cliente quedó muy satisfecho con un diseño innovador y visualmente atractivo.",
         "MediaLab provided clear, dynamic guidance that allowed our students to develop their skills effectively. The project was a complete success — we delivered on time, within budget, and the client was very satisfied with an innovative and visually appealing design."
+      ),
+      challenge: t(
+        "Necesitaban que sus estudiantes desarrollaran habilidades de forma efectiva, a tiempo y en presupuesto.",
+        "They needed their students to build skills effectively, on time and on budget."
       ),
       author: "Héctor Zuñiga",
       role: "CEO",
@@ -154,20 +170,30 @@ export function TestimonialsSection() {
                       ))}
                     </div>
 
-                    {/* Quote */}
+                    {/* El reto (encuadre) */}
+                    <div className="flex flex-col gap-1">
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                        {t("El reto", "The challenge")}
+                      </span>
+                      <p className="text-sm text-muted-foreground leading-relaxed">{item.challenge}</p>
+                    </div>
+
+                    {/* Lo que vivieron (cita textual del cliente) */}
                     <p className="text-base text-foreground leading-relaxed flex-1">
                       &ldquo;{item.quote}&rdquo;
                     </p>
 
-                    {/* Metric badge */}
-                    <div
-                      className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold w-fit"
-                      style={{
-                        background: "var(--magenta)",
-                        color: "white",
-                      }}
-                    >
-                      {item.metric}
+                    {/* El resultado */}
+                    <div className="flex flex-col gap-1.5">
+                      <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: "var(--magenta)" }}>
+                        {t("El resultado", "The result")}
+                      </span>
+                      <div
+                        className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold w-fit"
+                        style={{ background: "var(--magenta)", color: "white" }}
+                      >
+                        {item.metric}
+                      </div>
                     </div>
 
                     {/* Author */}

@@ -65,8 +65,8 @@ export function MethodSection() {
         "Every screen designed so your user feels confident"
       ),
       description: t(
-        "No decoramos interfaces — arquitectamos experiencias emocionales. Cada interacción, cada transición, cada palabra está pensada para que el usuario se sienta seguro y quiera seguir.",
-        "We don't decorate interfaces — we architect emotional experiences. Every interaction, every transition, every word is crafted so the user feels safe and wants to continue."
+        "Arquitectamos experiencias emocionales: cada interacción, cada transición, cada palabra está pensada para que el usuario se sienta seguro y quiera seguir.",
+        "We architect emotional experiences: every interaction, every transition, every word is crafted so the user feels safe and wants to continue."
       ),
       icon: PenTool,
       color: "var(--orange)",
@@ -140,8 +140,8 @@ export function MethodSection() {
           </h2>
           <p className="text-base text-muted-foreground leading-relaxed">
             {t(
-              "No improvisamos. Cada proyecto sigue un proceso probado que elimina suposiciones y garantiza que tu producto conecte con las personas desde el primer día. Así es como lo hacemos:",
-              "We don't improvise. Every project follows a proven process that removes assumptions and ensures your product connects with people from day one. Here's how we do it:"
+              "Cada proyecto sigue un proceso probado que elimina suposiciones y garantiza que tu producto conecte con las personas desde el primer día. Así es como lo hacemos:",
+              "Every project follows a proven process that removes assumptions and ensures your product connects with people from day one. Here's how we do it:"
             )}
           </p>
         </div>
