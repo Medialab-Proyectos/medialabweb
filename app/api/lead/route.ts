@@ -6,7 +6,7 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 export async function POST(req: Request) {
   try {
-    const { email, goal, source } = await req.json()
+    const { email, goal, source, score, details } = await req.json()
     if (!email || !EMAIL_RE.test(email)) {
       return NextResponse.json({ error: "Email válido es requerido" }, { status: 400 })
     }
@@ -17,11 +17,13 @@ export async function POST(req: Request) {
       await resend.emails.send({
         from: FROM_EMAIL,
         to: [ADMIN_EMAIL],
-        subject: `Nuevo lead — ${source || "Kit Discovery UX + IA"} — ${email}`,
-        html: `<div style="font-family:sans-serif"><h2>Nuevo lead del kit</h2>
+        subject: `Nuevo lead — ${source || "MediaLab"} — ${email}`,
+        html: `<div style="font-family:sans-serif"><h2>Nuevo lead</h2>
           <p><b>Email:</b> ${email}</p>
           <p><b>Objetivo:</b> ${goal || "No especificado"}</p>
-          <p><b>Origen:</b> ${source || "Kit Discovery UX + IA"}</p></div>`,
+          ${typeof score === "number" ? `<p><b>Score de diagnóstico:</b> ${score}/100</p>` : ""}
+          ${details ? `<p><b>Detalle:</b> ${String(details).slice(0, 800)}</p>` : ""}
+          <p><b>Origen:</b> ${source || "MediaLab"}</p></div>`,
       }).catch(() => {})
     }
 

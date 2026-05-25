@@ -236,9 +236,9 @@ export function DiscoveryConIAContent() {
             <Link href={localized("/blog/discovery-ia")} className="text-[var(--magenta)] font-medium hover:underline">
               {t("Discovery con IA: el fin de los workshops interminables", "AI Discovery: the end of endless workshops")}
             </Link>.
-            {t(" ¿Prefieres hacerlo tú? Descarga el ", " Prefer to do it yourself? Download the ")}
-            <Link href={localized("/recursos/kit-discovery-ux-ia")} className="text-[var(--magenta)] font-medium hover:underline">
-              {t("Kit de Discovery UX + IA gratis", "free UX + AI Discovery Kit")}
+            {t(" ¿Quieres un diagnóstico rápido? Prueba el ", " Want a quick diagnosis? Try the ")}
+            <Link href={localized("/recursos/analizador-ux-ia")} className="text-[var(--magenta)] font-medium hover:underline">
+              {t("UX + AI Discovery Analyzer gratis", "free UX + AI Discovery Analyzer")}
             </Link>.
           </p>
         </div>
