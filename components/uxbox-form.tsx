@@ -126,6 +126,9 @@ export function UXBoxForm() {
   useEffect(() => { briefRef.current = brief }, [brief])
   useEffect(() => { protoRef.current = prototype }, [prototype])
 
+  const labRef = useRef<Lab>(lab)
+  useEffect(() => { labRef.current = lab }, [lab])
+
   // Live clock — drives the time-based deep-dive countdown (Phase 2)
   const [now, setNow] = useState(() => Date.now())
   useEffect(() => {
@@ -152,11 +155,16 @@ export function UXBoxForm() {
   }, [])
 
   const persist = (patch: Partial<Lab>) => {
-    setLab((prev) => {
-      const next = { ...prev, ...patch }
-      try { localStorage.setItem(LAB_KEY, JSON.stringify(next)) } catch {}
-      return next
-    })
+    const next = { ...labRef.current, ...patch }
+    labRef.current = next
+    setLab(next)
+    try { localStorage.setItem(LAB_KEY, JSON.stringify(next)) } catch {}
+    // Sincroniza al servidor (no-op si no hay sesión / KV); el cliente no depende de la respuesta.
+    fetch("/api/lab", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(next),
+    }).catch(() => {})
   }
 
   /* ── Spark: analyze idea, instant reward ── */
@@ -231,8 +239,24 @@ export function UXBoxForm() {
       })
       const data = await res.json()
       if (data.valid) {
-        persist({ email })
-        setPhase("feed")
+        const serverLab = data.lab as Lab | null
+        if (serverLab && serverLab.completedAt) {
+          // Retorno cross-device: hidratar desde el servidor
+          const insight = RETURN_INSIGHTS[(serverLab.visits || 0) % RETURN_INSIGHTS.length]
+          setReturnInsight(t(insight[0], insight[1]))
+          const merged = { ...serverLab, email, visits: (serverLab.visits || 0) + 1 }
+          labRef.current = merged
+          setLab(merged)
+          try { localStorage.setItem(LAB_KEY, JSON.stringify(merged)) } catch {}
+          setBrief(serverLab.brief || "")
+          setPrototype(serverLab.prototype || "")
+          setActiveStage(5)
+          setPhase("return")
+          fetch("/api/lab", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(merged) }).catch(() => {})
+        } else {
+          persist({ email })
+          setPhase("feed")
+        }
       } else if (data.error === "expired") {
         setError(t("El código expiró. Reenvíalo.", "The code expired. Resend it."))
       } else setError(t("Código incorrecto.", "Incorrect code."))

@@ -46,7 +46,9 @@ export async function POST(req: Request) {
       demo: !hasResend,
       ...(hasResend ? {} : { pin }),
     })
-    res.cookies.set("uxbox_otp", pin, {
+    // Guardamos pin + email juntos: verify-otp usa el email de la cookie
+    // (el cliente no puede sustituirlo y leer el lab de otra persona).
+    res.cookies.set("uxbox_otp", `${pin}|${email.trim().toLowerCase()}`, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
