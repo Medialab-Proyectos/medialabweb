@@ -290,8 +290,8 @@
 
 /* Slow bounce for scroll indicator */
 @keyframes bounce-slow {
-  0%, 100% { transform: translateY(0) translateX(-50%); }
-  50%       { transform: translateY(8px) translateX(-50%); }
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(8px); }
 }
 .animate-bounce-slow { animation: bounce-slow 2.5s ease-in-out infinite; }
 
@@ -308,6 +308,12 @@
   50%       { box-shadow: 0 0 20px 4px rgba(232, 117, 26, 0.35); }
 }
 .animate-pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
+
+/* World map — flowing dots from HQ to destination cities */
+@keyframes flowDots {
+  from { stroke-dashoffset: 20; }
+  to   { stroke-dashoffset: 0; }
+}
 
 /* Social proof bar — progress indicator shrinks left-to-right */
 @keyframes shrinkWidth {

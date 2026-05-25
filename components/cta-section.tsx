@@ -70,7 +70,7 @@ export function CTASection() {
       <div className="max-w-7xl mx-auto">
         <div
           className={`relative overflow-hidden rounded-2xl sm:rounded-3xl p-5 sm:p-8 md:p-14 transition-all duration-700 ${visible ? "opacity-100 scale-100" : "opacity-0 scale-95"}`}
-          style={{ background: "linear-gradient(135deg, oklch(0.10 0 0) 0%, oklch(0.06 0 0) 100%)" }}
+          style={{ background: "linear-gradient(135deg, oklch(0.10 0 0) 0%, oklch(0.06 0 0) 100%)", color: "white" }}
         >
           {/* Background blobs */}
           <div
@@ -158,7 +158,7 @@ export function CTASection() {
             </div>
 
             {/* Right — Form */}
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-5 sm:p-6 md:p-8 backdrop-blur-sm">
+            <div className="bg-white/[0.07] border border-white/25 rounded-2xl p-5 sm:p-6 md:p-8 backdrop-blur-sm">
               {submitted ? (
                 <div className="flex flex-col items-center justify-center gap-5 py-10 text-center">
                   <div className="w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center">
@@ -201,7 +201,7 @@ export function CTASection() {
                       type="text"
                       onChange={() => setErrors((p) => ({ ...p, name: undefined }))}
                       placeholder={t("Tu nombre completo", "Your full name")}
-                      className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[var(--magenta)]/50 focus:ring-1 focus:ring-[var(--magenta)]/30 transition-all"
+                      className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/20 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[var(--magenta)]/60 focus:ring-1 focus:ring-[var(--magenta)]/30 transition-all"
                     />
                     {errors.name && <p className="text-xs text-red-400">{errors.name}</p>}
                   </div>
@@ -216,7 +216,7 @@ export function CTASection() {
                       type="tel"
                       onChange={() => setErrors((p) => ({ ...p, phone: undefined }))}
                       placeholder={t("+57 300 000 0000", "+1 555 000 0000")}
-                      className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[var(--magenta)]/50 focus:ring-1 focus:ring-[var(--magenta)]/30 transition-all"
+                      className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/20 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[var(--magenta)]/60 focus:ring-1 focus:ring-[var(--magenta)]/30 transition-all"
                     />
                     {errors.phone
                       ? <p className="text-xs text-red-400">{errors.phone}</p>
@@ -232,7 +232,7 @@ export function CTASection() {
                       name="company"
                       type="text"
                       placeholder={t("Nombre de tu empresa", "Your company name")}
-                      className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[var(--magenta)]/50 focus:ring-1 focus:ring-[var(--magenta)]/30 transition-all"
+                      className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/20 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[var(--magenta)]/60 focus:ring-1 focus:ring-[var(--magenta)]/30 transition-all"
                     />
                   </div>
 
@@ -249,7 +249,7 @@ export function CTASection() {
                         "Cuéntanos brevemente sobre tu proyecto o desafío...",
                         "Briefly tell us about your project or challenge..."
                       )}
-                      className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[var(--magenta)]/50 focus:ring-1 focus:ring-[var(--magenta)]/30 transition-all resize-none"
+                      className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/20 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[var(--magenta)]/50 focus:ring-1 focus:ring-[var(--magenta)]/30 transition-all resize-none"
                     />
                     {errors.message && <p className="text-xs text-red-400">{errors.message}</p>}
                   </div>

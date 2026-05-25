@@ -48,9 +48,9 @@ function MetricCard({
     <div className="flex flex-col items-center gap-3 p-6 group">
       <div
         className="w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300 group-hover:scale-110"
-        style={{ background: "linear-gradient(135deg, var(--magenta), var(--orange))" }}
+        style={{ background: "linear-gradient(135deg, #E8751A 0%, #c65a10 100%)" }}
       >
-        <Icon size={22} className="text-white" />
+        <Icon size={22} color="white" strokeWidth={1.75} />
       </div>
       <div className="font-display font-bold text-4xl md:text-5xl text-foreground tabular-nums">
         {count}

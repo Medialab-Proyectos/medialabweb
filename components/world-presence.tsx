@@ -37,9 +37,8 @@ export function WorldPresence() {
   return (
     <section
       id="presence"
-      className="relative py-20 md:py-32 px-6 overflow-hidden"
+      className="relative py-20 md:py-32 px-6 overflow-hidden bg-[var(--surface-dark)] text-foreground transition-colors duration-300"
       aria-labelledby="presence-heading"
-      style={{ background: "var(--surface-dark)" }}
     >
       <div className="max-w-6xl mx-auto flex flex-col gap-12">
 
@@ -51,11 +50,11 @@ export function WorldPresence() {
             </span>
             <h2
               id="presence-heading"
-              className="font-display font-bold text-3xl md:text-4xl lg:text-5xl text-white text-balance leading-tight"
+              className="font-display font-bold text-3xl md:text-4xl lg:text-5xl text-foreground text-balance leading-tight"
             >
               {t("Alcance global para clientes B2B y B2C", "Global reach for B2B and B2C clients")}
             </h2>
-            <p className="text-base text-white/55 leading-relaxed max-w-lg">
+            <p className="text-base text-muted-foreground leading-relaxed max-w-lg">
               {t(
                 "Casa Matriz en Bogotá, Colombia — con proyectos B2B enterprise y productos B2C en 9 países y 15 ciudades alrededor del mundo.",
                 "Headquartered in Bogotá, Colombia — with B2B enterprise projects and B2C products across 9 countries and 15 cities worldwide."
@@ -79,13 +78,12 @@ export function WorldPresence() {
           {stats.map((s) => (
             <div
               key={s.value}
-              className="flex flex-col items-center gap-2 py-6 rounded-xl border border-white/10"
-              style={{ background: "rgba(255,255,255,0.03)" }}
+              className="flex flex-col items-center gap-2 py-6 rounded-xl border dark:border-white/10 border-foreground/10 dark:bg-white/5 bg-foreground/5"
             >
               <span className="font-display font-bold text-3xl md:text-4xl" style={{ color: "var(--magenta)" }}>
                 {s.value}
               </span>
-              <span className="text-sm font-medium text-white/60">
+              <span className="text-sm font-medium dark:text-white/60 text-muted-foreground">
                 {t(s.labelEs, s.labelEn)}
               </span>
             </div>
