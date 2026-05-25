@@ -69,6 +69,7 @@ export function IndustriesSection() {
       icon: GraduationCap,
       color: "var(--cyan)",
       image: "/images/industry_educacion.jpg",
+      href: "/industrias/educacion",
       description: t(
         "Plataformas donde aprender se siente natural, no forzado",
         "Platforms where learning feels natural, not forced"
