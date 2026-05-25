@@ -64,12 +64,12 @@ export function CTASection() {
     <section
       id="contact"
       ref={ref}
-      className="py-24 px-6 bg-background"
+      className="py-24 px-3 sm:px-6 bg-background"
       aria-labelledby="cta-heading"
     >
       <div className="max-w-7xl mx-auto">
         <div
-          className={`relative overflow-hidden rounded-3xl p-8 md:p-14 transition-all duration-700 ${visible ? "opacity-100 scale-100" : "opacity-0 scale-95"}`}
+          className={`relative overflow-hidden rounded-2xl sm:rounded-3xl p-5 sm:p-8 md:p-14 transition-all duration-700 ${visible ? "opacity-100 scale-100" : "opacity-0 scale-95"}`}
           style={{ background: "linear-gradient(135deg, oklch(0.10 0 0) 0%, oklch(0.06 0 0) 100%)" }}
         >
           {/* Background blobs */}
@@ -158,7 +158,7 @@ export function CTASection() {
             </div>
 
             {/* Right — Form */}
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-6 md:p-8 backdrop-blur-sm">
+            <div className="bg-white/5 border border-white/10 rounded-2xl p-5 sm:p-6 md:p-8 backdrop-blur-sm">
               {submitted ? (
                 <div className="flex flex-col items-center justify-center gap-5 py-10 text-center">
                   <div className="w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center">

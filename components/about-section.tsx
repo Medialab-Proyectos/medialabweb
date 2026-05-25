@@ -62,7 +62,7 @@ export function AboutSection() {
             href="#contact"
             className="group inline-flex items-center gap-2 text-sm font-semibold text-[var(--magenta)] hover:gap-3 transition-all duration-200 w-fit"
           >
-            {t("Cuéntanos tu desafío →", "Tell us your challenge →")}
+            {t("Cuéntanos tu desafío", "Tell us your challenge")}
             <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>

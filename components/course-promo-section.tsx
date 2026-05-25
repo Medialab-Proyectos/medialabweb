@@ -61,17 +61,17 @@ export function CoursePromoSection() {
       aria-labelledby="curso-promo-heading"
     >
       {/* Cinematic dark gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[var(--surface-dark)] via-[#0c0c0c] to-[var(--surface-mid)]" />
+      <div className="absolute inset-0 bg-gradient-to-br from-[var(--surface-dark)] via-[var(--surface-dark)]/90 to-[var(--surface-mid)] transition-colors duration-300" />
 
-      {/* Ambient glow orbs */}
-      <div className="absolute top-[15%] left-[10%] w-[420px] h-[420px] bg-[var(--magenta)]/[0.05] rounded-full blur-[180px] pointer-events-none" />
-      <div className="absolute bottom-[10%] right-[15%] w-[380px] h-[380px] bg-[var(--cyan)]/[0.04] rounded-full blur-[160px] pointer-events-none" />
+      {/* Ambient glow orbs (Dark only) */}
+      <div className="absolute top-[15%] left-[10%] w-[420px] h-[420px] bg-[var(--magenta)]/[0.05] rounded-full blur-[180px] pointer-events-none ambient-glow" />
+      <div className="absolute bottom-[10%] right-[15%] w-[380px] h-[380px] bg-[var(--cyan)]/[0.04] rounded-full blur-[160px] pointer-events-none ambient-glow" />
 
       {/* Subtle grid overlay */}
       <div
-        className="absolute inset-0 opacity-[0.02] pointer-events-none"
+        className="absolute inset-0 opacity-[0.03] pointer-events-none"
         style={{
-          backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
+          backgroundImage: `linear-gradient(var(--dot-color) 1px, transparent 1px), linear-gradient(90deg, var(--dot-color) 1px, transparent 1px)`,
           backgroundSize: "60px 60px",
         }}
         aria-hidden="true"
@@ -102,7 +102,7 @@ export function CoursePromoSection() {
             {/* Headline */}
             <h2
               id="curso-promo-heading"
-              className="font-display font-bold text-3xl md:text-4xl lg:text-[2.75rem] leading-[1.15] text-white text-balance"
+              className="font-display font-bold text-3xl md:text-4xl lg:text-[2.75rem] leading-[1.15] dark:text-white text-foreground text-balance"
             >
               {t(
                 "Aprende a construir con IA sin perder tu criterio humano.",
@@ -111,7 +111,7 @@ export function CoursePromoSection() {
             </h2>
 
             {/* Subtext */}
-            <p className="text-base md:text-lg text-white/65 leading-relaxed max-w-xl">
+            <p className="text-base md:text-lg dark:text-white/65 text-muted-foreground leading-relaxed max-w-xl">
               {t(
                 "Nuestra metodología de 9 módulos para diseñadores UX/UI, developers y startups que quieren usar IA como copiloto estratégico — no como reemplazo.",
                 "Our 9-module methodology for UX/UI designers, developers, and startups that want to use AI as a strategic copilot — not a replacement."
@@ -119,22 +119,22 @@ export function CoursePromoSection() {
             </p>
 
             {/* Trust badges */}
-            <div className="flex flex-wrap items-center gap-5 text-xs text-white/35">
+            <div className="flex flex-wrap items-center gap-5 text-xs dark:text-white/35 text-muted-foreground/60">
               <span className="flex items-center gap-1.5">
-                <Users size={13} className="text-white/25" />
+                <Users size={13} className="dark:text-white/25 text-muted-foreground/40 shrink-0" />
                 {t("Cohorte 01 · Solo 30 cupos", "Cohort 01 · Only 30 spots")}
               </span>
               <span className="flex items-center gap-1.5">
-                <GraduationCap size={13} className="text-white/25" />
+                <GraduationCap size={13} className="dark:text-white/25 text-muted-foreground/40 shrink-0" />
                 {t("Metodología propietaria validada", "Validated proprietary methodology")}
               </span>
             </div>
 
             {/* CTA */}
-            <div className="flex flex-col sm:flex-row items-start gap-3 pt-2">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2">
               <Link
                 href={localized("/curso")}
-                className="group inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-semibold text-white transition-all duration-300 hover:scale-[1.03] hover:shadow-lg active:scale-95"
+                className="group inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full text-sm font-semibold text-white transition-all duration-300 hover:scale-[1.03] hover:shadow-lg active:scale-95 w-full sm:w-auto"
                 style={{ background: "var(--magenta)" }}
               >
                 {t("Explorar el curso", "Explore the course")}
@@ -145,7 +145,7 @@ export function CoursePromoSection() {
               </Link>
               <Link
                 href={localized("/curso") + "#metodologia"}
-                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-medium text-white/65 border border-white/[0.08] hover:border-white/[0.18] hover:text-white/75 hover:bg-white/[0.02] transition-all duration-300"
+                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full text-sm font-medium dark:text-white/65 text-foreground/75 border dark:border-white/[0.08] border-foreground/15 hover:dark:border-white/[0.18] hover:border-foreground/30 hover:dark:text-white hover:text-foreground hover:dark:bg-white/[0.02] hover:bg-foreground/[0.02] transition-all duration-300 w-full sm:w-auto"
               >
                 {t("Ver metodología", "View methodology")}
               </Link>
@@ -158,13 +158,13 @@ export function CoursePromoSection() {
               visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
             }`}
           >
-            <div className="rounded-3xl border border-white/[0.06] bg-white/[0.02] backdrop-blur-sm p-8 md:p-10 flex flex-col gap-7">
+            <div className="rounded-3xl border dark:border-white/[0.06] border-foreground/10 dark:bg-white/[0.02] bg-foreground/[0.02] backdrop-blur-sm p-8 md:p-10 flex flex-col gap-7">
               {/* Card header */}
               <div className="flex flex-col gap-2">
                 <span className="text-xs font-semibold tracking-widest uppercase text-[var(--cyan)]">
                   {t("¿Qué vas a lograr?", "What will you achieve?")}
                 </span>
-                <p className="text-sm text-white/60 leading-relaxed">
+                <p className="text-sm dark:text-white/60 text-muted-foreground leading-relaxed">
                   {t(
                     "Un programa intensivo diseñado para profesionales que quieren liderar la era IA con criterio, no con miedo.",
                     "An intensive program for professionals who want to lead the AI era with judgment, not fear."
@@ -179,7 +179,7 @@ export function CoursePromoSection() {
                   return (
                     <div
                       key={i}
-                      className="group flex gap-4 items-start p-4 rounded-2xl border border-transparent hover:border-white/[0.06] hover:bg-white/[0.02] transition-all duration-300"
+                      className="group flex gap-4 items-start p-4 rounded-2xl border border-transparent hover:dark:border-white/[0.06] hover:border-foreground/10 hover:dark:bg-white/[0.02] hover:bg-foreground/[0.02] transition-all duration-300"
                     >
                       <div
                         className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
@@ -195,10 +195,10 @@ export function CoursePromoSection() {
                         <Icon size={18} className="text-white" />
                       </div>
                       <div className="flex flex-col gap-1">
-                        <h3 className="text-sm font-semibold text-white">
+                        <h3 className="text-sm font-semibold dark:text-white text-foreground">
                           {t(h.titleEs, h.titleEn)}
                         </h3>
-                        <p className="text-xs text-white/60 leading-relaxed">
+                        <p className="text-xs dark:text-white/60 text-muted-foreground leading-relaxed">
                           {t(h.descEs, h.descEn)}
                         </p>
                       </div>
@@ -211,7 +211,7 @@ export function CoursePromoSection() {
               <div className="h-px w-full bg-gradient-to-r from-transparent via-[var(--magenta)]/30 to-transparent" />
 
               {/* Quote */}
-              <p className="text-xs text-white/25 italic text-center">
+              <p className="text-xs dark:text-white/25 text-muted-foreground/45 italic text-center">
                 &ldquo;{t(
                   "La IA genera opciones. Tú aprenderás a darles sentido.",
                   "AI generates options. You'll learn to give them meaning."

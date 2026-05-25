@@ -75,13 +75,13 @@ export function HeroSection() {
 
   return (
     <section
-      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-[var(--surface-dark)] text-[var(--surface-dark-fg)]"
+      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-[var(--surface-dark)] text-foreground transition-colors duration-300"
       aria-label="Hero"
     >
       {/* Animated canvas background */}
       <canvas
         ref={canvasRef}
-        className="absolute inset-0 w-full h-full pointer-events-none"
+        className="absolute inset-0 w-full h-full pointer-events-none hero-canvas"
         aria-hidden="true"
       />
 
@@ -89,7 +89,7 @@ export function HeroSection() {
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px)",
+          backgroundImage: "radial-gradient(circle, var(--dot-color) 1px, transparent 1px)",
           backgroundSize: "40px 40px",
         }}
         aria-hidden="true"
@@ -99,7 +99,7 @@ export function HeroSection() {
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: "radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.55) 100%)",
+          background: "radial-gradient(ellipse at center, transparent 40%, var(--vignette-color) 100%)",
         }}
         aria-hidden="true"
       />
@@ -108,14 +108,14 @@ export function HeroSection() {
       <div className="relative z-10 max-w-5xl mx-auto px-6 text-center flex flex-col items-center gap-8 pt-20 pb-28">
         {/* Badge with social proof */}
         <div
-          className={`inline-flex items-center gap-2 sm:gap-3 px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm text-xs sm:text-sm font-medium text-white/75 transition-all duration-700 ${ready ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+          className={`inline-flex items-center gap-2 sm:gap-3 px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full border dark:border-white/10 border-foreground/10 dark:bg-white/5 bg-foreground/5 backdrop-blur-sm text-xs sm:text-sm font-medium dark:text-white/75 text-foreground/75 transition-all duration-700 ${ready ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
           style={{ transitionDelay: "0ms" }}
         >
           <span className="flex items-center gap-1.5 sm:gap-2">
             <Sparkles size={13} style={{ color: "var(--magenta)" }} />
             {t("40+ productos que conectan y convierten", "40+ products that connect & convert")}
           </span>
-          <span className="hidden sm:inline w-px h-4 bg-white/20" aria-hidden="true" />
+          <span className="hidden sm:inline w-px h-4 dark:bg-white/20 bg-foreground/20" aria-hidden="true" />
           <a
             href="https://a.co/d/069qLWdY"
             target="_blank"
@@ -129,7 +129,7 @@ export function HeroSection() {
 
         {/* Headline */}
         <h1
-          className={`font-display font-bold text-4xl sm:text-5xl md:text-6xl lg:text-[4.5rem] leading-[1.07] text-balance text-white transition-all duration-700 ${ready ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
+          className={`font-display font-bold text-4xl sm:text-5xl md:text-6xl lg:text-[4.5rem] leading-[1.07] text-balance dark:text-white text-foreground transition-all duration-700 ${ready ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
           style={{ transitionDelay: "100ms" }}
         >
           {t("Productos digitales que las personas ", "Digital products people ")}
@@ -141,7 +141,7 @@ export function HeroSection() {
 
         {/* Subheadline */}
         <p
-          className={`text-lg md:text-xl text-white/65 max-w-2xl leading-relaxed text-pretty transition-all duration-700 ${ready ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
+          className={`text-lg md:text-xl dark:text-white/65 text-muted-foreground max-w-2xl leading-relaxed text-pretty transition-all duration-700 ${ready ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
           style={{ transitionDelay: "200ms" }}
         >
           {t(
@@ -154,11 +154,11 @@ export function HeroSection() {
           className={`flex flex-col items-center gap-4 mt-2 transition-all duration-700 ${ready ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
           style={{ transitionDelay: "300ms" }}
         >
-          <div className="flex flex-col sm:flex-row items-center gap-4">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full sm:w-auto">
             <BookingModal>
               <button
                 type="button"
-                className="inline-flex items-center justify-center gap-3 px-10 py-4 rounded-full font-semibold text-[15px] text-white transition-colors duration-200 active:scale-95 shadow-lg hover:brightness-110"
+                className="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full font-semibold text-[15px] text-white transition-colors duration-200 active:scale-95 shadow-lg hover:brightness-110 w-full sm:w-auto"
                 style={{ background: "#E8751A", boxShadow: "0 8px 30px rgba(232,117,26,0.35)" }}
               >
                 {t("Quiero transformar mi producto", "I want to transform my product")}
@@ -166,13 +166,13 @@ export function HeroSection() {
             </BookingModal>
             <Link
               href="#uxbox"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium border border-white/15 text-white/75 hover:text-white hover:border-white/30 hover:bg-white/5 transition-all duration-200 active:scale-95"
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full text-[15px] font-semibold border dark:border-white/15 border-foreground/15 dark:text-white/75 text-foreground/75 dark:hover:text-white hover:text-foreground dark:hover:border-white/30 hover:border-foreground/30 dark:hover:bg-white/5 hover:bg-foreground/5 transition-all duration-200 active:scale-95 w-full sm:w-auto"
             >
-              <Package size={14} />
-              {t("Probar UXBox gratis →", "Try UXBox free →")}
+              <Package size={15} />
+              {t("Probar UXBox gratis", "Try UXBox free")}
             </Link>
           </div>
-          <p className="text-xs text-white/60 flex items-center gap-2">
+          <p className="text-xs dark:text-white/60 text-muted-foreground flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
             {t("30 min gratis · Sin compromiso · Respuesta en 24h", "30 min free · No commitment · Response in 24h")}
           </p>
@@ -182,9 +182,9 @@ export function HeroSection() {
       </div>
 
       {/* Scroll indicator */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/25 animate-bounce-slow">
-        <span className="text-xs tracking-widest uppercase">{t("Ver cómo trabajamos", "See how we work")}</span>
-        <div className="w-px h-10 bg-gradient-to-b from-white/25 to-transparent" />
+      <div className="absolute bottom-6 left-0 right-0 flex flex-col items-center gap-2 dark:text-white/25 text-foreground/25 animate-bounce-slow">
+        <span className="text-xs tracking-widest uppercase text-center whitespace-nowrap">{t("Ver cómo trabajamos", "See how we work")}</span>
+        <div className="w-px h-10 bg-gradient-to-b dark:from-white/25 from-foreground/25 to-transparent" />
       </div>
     </section>
   )

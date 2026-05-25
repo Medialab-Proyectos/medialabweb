@@ -2,14 +2,19 @@
 @import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
+@custom-variant pure-dark (&:is(.pure-dark *));
+@custom-variant warm (&:is(.warm *));
+@custom-variant light (&:is(.light *));
 
 :root {
   /* Brand palette — MediaLab Ingeniería */
   --magenta: #E8751A;   /* brand orange */
   --orange: #E8751A;    /* brand orange (alias) */
   --cyan: #2AABB3;      /* brand teal */
+  --uxgreen: #00BFA6;   /* UXGreen™ — bioluminescent teal-green */
+  --radius: 0.5rem;
 
-  /* Light mode */
+  /* Light mode (Default/Fallback) */
   --background: oklch(0.99 0 0);
   --foreground: oklch(0.08 0 0);
   --card: oklch(0.97 0 0);
@@ -29,12 +34,14 @@
   --border: oklch(0.88 0 0);
   --input: oklch(0.88 0 0);
   --ring: #E8751A;
-  --radius: 0.5rem;
 
-  /* Section backgrounds — always dark (footer, marquee, etc.) */
-  --surface-dark: oklch(0.05 0 0);
-  --surface-dark-foreground: oklch(0.97 0 0);
-  --surface-mid: oklch(0.1 0 0);
+  /* Section backgrounds - Light */
+  --surface-dark: oklch(0.98 0.005 240);
+  --surface-dark-foreground: oklch(0.08 0 0);
+  --surface-mid: oklch(0.94 0.01 240);
+
+  --dot-color: rgba(0, 0, 0, 0.05);
+  --vignette-color: rgba(0, 0, 0, 0.02);
 
   --chart-1: #E8751A;
   --chart-2: #2AABB3;
@@ -43,7 +50,36 @@
   --chart-5: #c65a10;
 }
 
+.light {
+  --background: oklch(0.99 0 0);
+  --foreground: oklch(0.08 0 0);
+  --card: oklch(0.97 0 0);
+  --card-foreground: oklch(0.08 0 0);
+  --popover: oklch(0.99 0 0);
+  --popover-foreground: oklch(0.08 0 0);
+  --primary: oklch(0.08 0 0);
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.94 0 0);
+  --secondary-foreground: oklch(0.08 0 0);
+  --muted: oklch(0.94 0 0);
+  --muted-foreground: oklch(0.38 0 0);
+  --border: oklch(0.88 0 0);
+  --input: oklch(0.88 0 0);
+
+  --surface-dark: oklch(0.98 0.005 240);
+  --surface-dark-foreground: oklch(0.08 0 0);
+  --surface-mid: oklch(0.94 0.01 240);
+
+  --dot-color: rgba(0, 0, 0, 0.05);
+  --vignette-color: rgba(0, 0, 0, 0.02);
+
+  --overlay-from: oklch(0.98 0.005 240 / 0.45);
+  --overlay-via: oklch(0.98 0.005 240 / 0.20);
+  --overlay-to: oklch(0.98 0.005 240 / 0.85);
+}
+
 .dark {
+  --uxgreen: #00BFA6;
   --background: oklch(0.08 0 0);
   --foreground: oklch(0.97 0 0);
   --card: oklch(0.12 0 0);
@@ -68,11 +104,80 @@
   --surface-dark-foreground: oklch(0.97 0 0);
   --surface-mid: oklch(0.1 0 0);
 
-  --chart-1: #E8751A;
-  --chart-2: #2AABB3;
-  --chart-3: #f4a261;
-  --chart-4: #1a7a80;
-  --chart-5: #c65a10;
+  --dot-color: rgba(255, 255, 255, 0.06);
+  --vignette-color: rgba(0, 0, 0, 0.55);
+
+  --overlay-from: oklch(0.05 0 0 / 0.50);
+  --overlay-via: oklch(0.05 0 0 / 0.30);
+  --overlay-to: oklch(0.05 0 0 / 0.80);
+}
+
+.warm {
+  --uxgreen: #00BFA6;
+  --background: #faf6eb;
+  --foreground: #2d231b;
+  --card: #f5eedc;
+  --card-foreground: #2d231b;
+  --popover: #faf6eb;
+  --popover-foreground: #2d231b;
+  --primary: #2d231b;
+  --primary-foreground: #faf6eb;
+  --secondary: #ede4ce;
+  --secondary-foreground: #2d231b;
+  --muted: #ede4ce;
+  --muted-foreground: #6e6150;
+  --accent: #E8751A;
+  --accent-foreground: oklch(0.99 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: #decfae;
+  --input: #decfae;
+  --ring: #E8751A;
+
+  --surface-dark: #faf6eb;
+  --surface-dark-foreground: #2d231b;
+  --surface-mid: #ede4ce;
+
+  --dot-color: rgba(45, 35, 27, 0.06);
+  --vignette-color: rgba(45, 35, 27, 0.02);
+
+  --overlay-from: rgba(250, 246, 235, 0.45);
+  --overlay-via: rgba(250, 246, 235, 0.20);
+  --overlay-to: rgba(250, 246, 235, 0.85);
+}
+
+.pure-dark {
+  --uxgreen: #00BFA6;
+  --background: #000000;
+  --foreground: #ffffff;
+  --card: #0e0e0e;
+  --card-foreground: #ffffff;
+  --popover: #0e0e0e;
+  --popover-foreground: #ffffff;
+  --primary: #ffffff;
+  --primary-foreground: #000000;
+  --secondary: #181818;
+  --secondary-foreground: #ffffff;
+  --muted: #181818;
+  --muted-foreground: #a0a0a0;
+  --accent: #E8751A;
+  --accent-foreground: oklch(0.99 0 0);
+  --destructive: oklch(0.396 0.141 25.723);
+  --destructive-foreground: oklch(0.637 0.237 25.331);
+  --border: #282828;
+  --input: #282828;
+  --ring: #E8751A;
+
+  --surface-dark: #000000;
+  --surface-dark-foreground: #ffffff;
+  --surface-mid: #0e0e0e;
+
+  --dot-color: rgba(255, 255, 255, 0.12);
+  --vignette-color: transparent;
+
+  --overlay-from: rgba(0, 0, 0, 0.50);
+  --overlay-via: rgba(0, 0, 0, 0.30);
+  --overlay-to: rgba(0, 0, 0, 0.80);
 }
 
 @theme inline {
@@ -112,6 +217,7 @@
   --color-magenta: var(--magenta);
   --color-orange-brand: var(--orange);
   --color-cyan-brand: var(--cyan);
+  --color-uxgreen: var(--uxgreen);
   --color-surface-dark: var(--surface-dark);
   --color-surface-dark-fg: var(--surface-dark-foreground);
   --color-surface-mid: var(--surface-mid);
@@ -203,6 +309,12 @@
 }
 .animate-pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
 
+/* Social proof bar — progress indicator shrinks left-to-right */
+@keyframes shrinkWidth {
+  from { transform: scaleX(1); }
+  to   { transform: scaleX(0); }
+}
+
 /* Hide scrollbar but keep scroll functionality */
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
@@ -242,4 +354,174 @@
 }
 .dark .curso-glow {
   opacity: 0.06;
+}
+
+/* ─── Theme-aware visibility utilities ─────────────────────────────
+   These bypass Tailwind v4's dark: variant which uses prefers-color-scheme
+   by default and fails with class-based theme switching (next-themes).
+   Normal blending is used for canvas and glows to prevent dirty alpha-blending
+   shadows on light backgrounds.
+   ------------------------------------------------------------------ */
+
+/* Hero canvas — blend adapted per theme */
+.hero-canvas {
+  display: block;
+  opacity: 1;
+  mix-blend-mode: normal;
+}
+.dark .hero-canvas {
+  opacity: 1;
+}
+.light .hero-canvas {
+  opacity: 0.55;
+  filter: saturate(1.4);
+}
+.warm .hero-canvas {
+  opacity: 0.45;
+  filter: saturate(1.2);
+}
+.pure-dark .hero-canvas {
+  display: none !important;
+}
+
+/* Portfolio canvas — wave animation */
+.portfolio-canvas {
+  display: block;
+  opacity: 1;
+}
+.light .portfolio-canvas {
+  filter: contrast(1.6) brightness(0.85) saturate(1.5);
+}
+.warm .portfolio-canvas {
+  filter: contrast(1.4) brightness(0.9) saturate(1.3);
+}
+.pure-dark .portfolio-canvas {
+  display: none !important;
+}
+
+/* Ambient glow orbs — blend adapted per theme */
+.ambient-glow {
+  display: block;
+  opacity: 1;
+  mix-blend-mode: normal;
+}
+.dark .ambient-glow {
+  opacity: 1;
+}
+.light .ambient-glow {
+  opacity: 0.9;
+  filter: saturate(1.4) brightness(1.02);
+}
+.warm .ambient-glow {
+  opacity: 0.8;
+  filter: saturate(1.2) brightness(1.02);
+}
+.pure-dark .ambient-glow {
+  display: none !important;
+}
+
+/* Course hero background image — opacity per theme */
+.course-hero-bg {
+  opacity: 0.08;
+  transition: opacity 0.3s ease;
+}
+.dark .course-hero-bg { opacity: 0.12; }
+.light .course-hero-bg { opacity: 0.22; }
+.warm .course-hero-bg { opacity: 0.18; }
+.pure-dark .course-hero-bg { opacity: 0.08; }
+
+/* Course hero gradient overlay — theme-aware */
+.course-hero-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(to bottom, 
+    var(--overlay-from), 
+    var(--overlay-via), 
+    var(--overlay-to)
+  );
+  transition: background 0.3s ease;
+}
+
+/* Theme-aware overrides for Tailwind white classes in light/warm modes */
+.light .text-white,
+.warm .text-white {
+  color: var(--foreground) !important;
+}
+
+.light .hover\:text-white:hover,
+.warm .hover\:text-white:hover {
+  color: var(--foreground) !important;
+}
+
+.light .text-white\/90,
+.warm .text-white\/90,
+.light .text-white\/85,
+.warm .text-white\/85,
+.light .text-white\/80,
+.warm .text-white\/80,
+.light .text-white\/75,
+.warm .text-white\/75,
+.light .text-white\/70,
+.warm .text-white\/70,
+.light .text-white\/65,
+.warm .text-white\/65,
+.light .text-white\/60,
+.warm .text-white\/60 {
+  color: var(--foreground) !important;
+  opacity: 0.85;
+}
+
+.light .text-white\/50,
+.warm .text-white\/50,
+.light .text-white\/45,
+.warm .text-white\/45,
+.light .text-white\/40,
+.warm .text-white\/40,
+.light .text-white\/35,
+.warm .text-white\/35,
+.light .text-white\/30,
+.warm .text-white\/30 {
+  color: var(--muted-foreground) !important;
+  opacity: 0.7;
+}
+
+.light .text-white\/25,
+.warm .text-white\/25,
+.light .text-white\/20,
+.warm .text-white\/20,
+.light .text-white\/15,
+.warm .text-white\/15,
+.light .text-white\/10,
+.warm .text-white\/10 {
+  color: var(--muted-foreground) !important;
+  opacity: 0.4;
+}
+
+.light .border-white\/5,
+.warm .border-white\/5,
+.light .border-white\/10,
+.warm .border-white\/10,
+.light .border-white\/15,
+.warm .border-white\/15,
+.light .border-white\/20,
+.warm .border-white\/20,
+.light .border-white\/25,
+.warm .border-white\/25,
+.light .border-white\/30,
+.warm .border-white\/30 {
+  border-color: var(--border) !important;
+}
+
+.light .bg-white\/5,
+.warm .bg-white\/5 {
+  background-color: rgba(0, 0, 0, 0.03) !important;
+}
+.light .bg-white\/10,
+.warm .bg-white\/10 {
+  background-color: rgba(0, 0, 0, 0.05) !important;
+}
+.light .bg-white\/20,
+.warm .bg-white\/20 {
+  background-color: rgba(0, 0, 0, 0.08) !important;
 }

@@ -59,8 +59,8 @@ export function TestimonialsSection() {
     },
     {
       quote: t(
-        "Trabajar con MediaLab en nuestras plataformas educativas y motores de aprendizaje fue un antes y un después. Entendieron la complejidad de nuestras necesidades institucionales y entregaron soluciones que realmente impactan.",
-        "Working with MediaLab on our educational platforms and learning engines was a turning point. They understood the complexity of our institutional needs and delivered solutions that truly make an impact."
+        "Trabajar con MediaLab fue un antes y un después. Entendieron la complejidad de nuestras necesidades institucionales y entregaron soluciones que realmente impactan en el aprendizaje.",
+        "Working with MediaLab was a turning point. They understood our institutional complexity and delivered solutions that truly impact learning."
       ),
       challenge: t(
         "Plataformas educativas con necesidades institucionales complejas por resolver.",
@@ -91,8 +91,8 @@ export function TestimonialsSection() {
     },
     {
       quote: t(
-        "MediaLab proporcionó una asesoría clara y dinámica que permitió a nuestros estudiantes desarrollar sus habilidades de manera efectiva. El proyecto fue todo un éxito — entregamos a tiempo, dentro del presupuesto, y el cliente quedó muy satisfecho con un diseño innovador y visualmente atractivo.",
-        "MediaLab provided clear, dynamic guidance that allowed our students to develop their skills effectively. The project was a complete success — we delivered on time, within budget, and the client was very satisfied with an innovative and visually appealing design."
+        "MediaLab proporcionó una asesoría clara que permitió a nuestros estudiantes desarrollar sus habilidades de manera efectiva. Entregamos a tiempo, dentro del presupuesto, y el cliente quedó muy satisfecho con el diseño.",
+        "MediaLab provided clear guidance that allowed our students to build skills effectively. We delivered on time, on budget, and the client was very satisfied with the design."
       ),
       challenge: t(
         "Necesitaban que sus estudiantes desarrollaran habilidades de forma efectiva, a tiempo y en presupuesto.",
@@ -265,7 +265,7 @@ export function TestimonialsSection() {
         {/* Trust indicators */}
         <div className="flex flex-wrap items-center justify-center gap-8 pt-8 border-t border-border">
           <div className="flex flex-col items-center gap-1">
-            <span className="font-display font-bold text-2xl text-foreground">4.9/5</span>
+            <span className="font-display font-bold text-2xl text-foreground">4.8/5</span>
             <span className="text-xs text-muted-foreground">{t("Nos recomiendan a otros", "They recommend us to others")}</span>
           </div>
           <div className="w-px h-10 bg-border hidden sm:block" />

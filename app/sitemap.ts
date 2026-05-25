@@ -32,6 +32,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/contacto", changeFrequency: "monthly", priority: 0.85, en: true },
     { path: "/blog", changeFrequency: "weekly", priority: 0.9, en: true },
     { path: "/recursos/analizador-ux-ia", changeFrequency: "monthly", priority: 0.85, en: true },
+    { path: "/uxgreen", changeFrequency: "monthly", priority: 0.90, en: true },
     { path: "/blog/arquitectura-percepcion", changeFrequency: "monthly", priority: 0.8, en: false },
     { path: "/blog/adn-del-significado", changeFrequency: "monthly", priority: 0.8, en: false },
     { path: "/blog/trono-de-la-decision", changeFrequency: "monthly", priority: 0.8, en: false },

@@ -91,9 +91,36 @@ Fintech, Banca, Salud y Bienestar, Educación (EdTech), Startups, Retail/E-comme
 - Diseño UX para E-commerce: https://medialab.design/industrias/ecommerce
 - Diseño UX para Movilidad: https://medialab.design/industrias/movilidad
 
+## UXGreen™: Certificación de Eficiencia Digital Sostenible
+
+UXGreen™ es el framework y certificación propietaria de MediaLab que evalúa la eficiencia digital total de un producto web. Combina performance, Core Web Vitals, huella de carbono digital, accesibilidad WCAG 2.2, eficiencia para IA, carga cognitiva y UX sostenible en un único score verificable (0-100).
+
+**Propuesta clave:** La sostenibilidad digital no es un compromiso con el rendimiento — es su consecuencia inevitable. Un sitio lento no solo frustra a los usuarios: consume 4× más energía, genera más CO₂, requiere más infraestructura y destruye negocio.
+
+**Las 8 dimensiones UXGreen™:**
+1. Performance — velocidad de carga y respuesta del servidor
+2. Core Web Vitals — LCP, CLS, TBT medidos por Google
+3. Carbon Efficiency — huella CO₂ por visita vs promedio global
+4. UX Efficiency — ratio clics necesarios vs valor entregado
+5. Accessibility — cumplimiento WCAG 2.2 y usabilidad universal
+6. AI Efficiency — optimización para indexación y citabilidad por LLMs
+7. Cognitive Load — complejidad mental requerida para tareas clave
+8. Sustainable UX — eficiencia global de recursos digitales vs experiencia
+
+**Niveles de certificación:**
+- UXGreen™ Foundation (score 60-74): base establecida, oportunidades claras
+- UXGreen™ Certified (score 75-89): estándar verificado de eficiencia digital
+- UXGreen™ Elite (score 90+): top 10% de eficiencia web global
+
+**UXGreen™ Analyzer:** Herramienta gratuita de análisis en tiempo real. Usa Website Carbon API y Google PageSpeed Insights. Sin registro. Resultado en <30 segundos.
+
+Landing UXGreen™: https://medialab.design/uxgreen
+Analyzer (calculadora): https://medialab.design/uxgreen#calculator
+
 ## Recursos y herramientas
 
 - UX + AI Discovery Analyzer (gratis): https://medialab.design/recursos/analizador-ux-ia
+- UXGreen™ Analyzer — eficiencia digital sostenible (gratis): https://medialab.design/uxgreen
 
 ## Artículos del blog
 

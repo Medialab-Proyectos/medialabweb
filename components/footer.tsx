@@ -5,6 +5,8 @@ import Image from "next/image"
 import { Linkedin, Twitter, Instagram } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 
+const UXGREEN_BADGE = "/images/curso/logos/Green%20UX%20v%202.svg"
+
 const socials = [
   { icon: Linkedin, label: "LinkedIn", href: "https://www.linkedin.com/company/medialab-ingenieria" },
   { icon: Twitter, label: "X", href: "https://x.com/MediaLabIng" },
@@ -29,6 +31,7 @@ export function Footer() {
       links: [
         { label: t("Portafolio", "Portfolio"), href: "/portafolio" },
         { label: "UXBox", href: "/#uxbox" },
+        { label: "UXGreen™", href: "/uxgreen" },
       ],
     },
     {
@@ -54,7 +57,7 @@ export function Footer() {
 
   return (
     <footer
-      className="bg-[var(--surface-dark)] text-[var(--surface-dark-fg)] pt-16 pb-8 px-6"
+      className="bg-[#090909] text-white/70 pt-16 pb-8 px-6 border-t border-white/5"
       aria-label="Footer"
     >
       <div className="max-w-7xl mx-auto flex flex-col gap-12">
@@ -127,17 +130,48 @@ export function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="border-t border-white/10 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-white/30">
-          <p>
-            © {new Date().getFullYear()} MediaLab Ingeniería.{" "}
-            {t("Todos los derechos reservados.", "All rights reserved.")}
-          </p>
-          <div className="flex items-center gap-6">
-            <Link href={localized("/politica-de-privacidad")} title={t("Política de Privacidad", "Privacy Policy")} className="hover:text-white/60 transition-colors">
-              {t("Política de Privacidad", "Privacy Policy")}
-            </Link>
-            <Link href={localized("/terminos-de-servicio")} title={t("Términos de Servicio", "Terms of Service")} className="hover:text-white/60 transition-colors">
-              {t("Términos de Servicio", "Terms of Service")}
+        <div className="border-t border-white/10 pt-8 flex flex-col gap-4 text-xs text-white/30">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p>
+              © {new Date().getFullYear()} MediaLab Ingeniería.{" "}
+              {t("Todos los derechos reservados.", "All rights reserved.")}
+            </p>
+            <div className="flex items-center gap-6">
+              <Link href={localized("/politica-de-privacidad")} title={t("Política de Privacidad", "Privacy Policy")} className="hover:text-white/60 transition-colors">
+                {t("Política de Privacidad", "Privacy Policy")}
+              </Link>
+              <Link href={localized("/terminos-de-servicio")} title={t("Términos de Servicio", "Terms of Service")} className="hover:text-white/60 transition-colors">
+                {t("Términos de Servicio", "Terms of Service")}
+              </Link>
+            </div>
+          </div>
+          {/* UXGreen™ Badge */}
+          <div className="flex justify-center sm:justify-start">
+            <Link
+              href={localized("/uxgreen")}
+              title="UXGreen™ — Certificación de eficiencia digital sostenible"
+              className="inline-flex items-center gap-2.5 px-3 py-2 rounded-xl border transition-all hover:border-[#00BFA6]/30 hover:bg-[#00BFA6]/5 group"
+              style={{ borderColor: "rgba(0,191,166,0.15)", background: "rgba(0,191,166,0.04)" }}
+            >
+              <Image
+                src={UXGREEN_BADGE}
+                alt="UXGreen™ Certified badge"
+                width={28}
+                height={28}
+                className="opacity-85 group-hover:opacity-100 transition-opacity"
+                unoptimized
+              />
+              <div className="flex flex-col">
+                <span
+                  className="text-[10px] font-bold tracking-widest uppercase leading-tight"
+                  style={{ color: "rgba(0,191,166,0.75)" }}
+                >
+                  UXGreen™
+                </span>
+                <span className="text-[9px] text-white/25 leading-tight">
+                  {t("Eficiencia Digital Sostenible", "Sustainable Digital Efficiency")}
+                </span>
+              </div>
             </Link>
           </div>
         </div>

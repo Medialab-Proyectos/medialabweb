@@ -368,6 +368,43 @@ export default function RootLayout({
             }),
           }}
         />
+        {/* UXGreen™ Certification Schema — entidad de certificación propia */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'SoftwareApplication',
+              name: 'UXGreen™ Analyzer',
+              alternateName: ['UXGreen™', 'UXGreen Certification', 'UXGreen™ Framework'],
+              applicationCategory: 'BusinessApplication',
+              operatingSystem: 'Web',
+              url: 'https://medialab.design/uxgreen',
+              description:
+                'Herramienta gratuita de análisis de eficiencia digital sostenible. Mide performance, Core Web Vitals, huella de carbono, accesibilidad WCAG 2.2, AI efficiency y carga cognitiva en un único UXGreen™ Score.',
+              creator: {
+                '@type': 'Organization',
+                name: 'MediaLab Ingeniería',
+                url: 'https://medialab.design',
+              },
+              featureList: [
+                'Análisis de performance en tiempo real (Google PageSpeed)',
+                'Medición de huella de carbono digital (Website Carbon API)',
+                'Evaluación Core Web Vitals (LCP, CLS, TBT)',
+                'Auditoría de accesibilidad WCAG 2.2',
+                'Score de eficiencia para IA y LLMs',
+                'Análisis de carga cognitiva',
+                'Certificación UXGreen™ verificable',
+              ],
+              offers: {
+                '@type': 'Offer',
+                price: '0',
+                priceCurrency: 'USD',
+                description: 'Análisis UXGreen™ gratuito',
+              },
+            }),
+          }}
+        />
         {/* UXBox SoftwareApplication Schema — entidad de producto propio */}
         <script
           type="application/ld+json"
@@ -628,7 +665,7 @@ export default function RootLayout({
       </head>
       <body className={`${lato.variable} ${poppins.variable} font-sans antialiased`}>
         <SkipToContent />
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem themes={["light", "dark", "warm", "pure-dark"]}>
           <LanguageProvider>
             {children}
           </LanguageProvider>

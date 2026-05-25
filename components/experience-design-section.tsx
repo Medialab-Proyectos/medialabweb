@@ -150,10 +150,11 @@ export function ExperienceDesignSection() {
           </p>
           <Link
             href="#contact"
-            className="inline-flex items-center gap-2 rounded-md bg-foreground px-5 py-3 text-sm font-semibold text-background transition hover:bg-[var(--magenta)] hover:text-white"
+            className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-white transition-all hover:brightness-110 active:scale-95"
+            style={{ background: "var(--magenta)" }}
           >
-            Quiero mejorar mi experiencia →
-            <ArrowRight size={16} />
+            {t("Quiero mejorar mi experiencia", "I want to improve my experience")}
+            <ArrowRight size={15} />
           </Link>
         </div>
       </div>

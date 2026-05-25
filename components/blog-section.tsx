@@ -44,7 +44,7 @@ const articles = [
     excerptEn: "In the age of AI agents, the greatest risk isn't privacy — it's user infantilization. Stoic ethics applied to digital design.",
     readTime: "9 min",
     date: "May 2026",
-    image: "/images/blog-zero-ui-decision.png",
+    image: "https://images.unsplash.com/photo-1655720828018-edd2daec9349?q=80&w=1200&auto=format&fit=crop",
     color: "#E8751A",
     featured: false,
   },

@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
-import { Menu, X, Moon, Sun, AArrowUp, AArrowDown } from "lucide-react"
+import { Menu, X, Moon, Sun, BookOpen, Contrast } from "lucide-react"
 import { useTheme } from "next-themes"
 import { useLanguage } from "@/lib/language-context"
 
@@ -14,7 +14,7 @@ const navLinks = {
     { label: "Portafolio", href: "/portafolio" },
     { label: "Educación", href: "/curso", highlight: true },
     { label: "UXBox", href: "/#uxbox" },
-    { label: "Metodología", href: "/#method" },
+    { label: "UXGreen™", href: "/uxgreen", uxgreen: true },
     { label: "Blog", href: "/blog" },
   ],
   en: [
@@ -22,7 +22,7 @@ const navLinks = {
     { label: "Portfolio", href: "/portafolio" },
     { label: "Education", href: "/curso", highlight: true },
     { label: "UXBox", href: "/#uxbox" },
-    { label: "Methodology", href: "/#method" },
+    { label: "UXGreen™", href: "/uxgreen", uxgreen: true },
     { label: "Blog", href: "/blog" },
   ],
 }
@@ -45,14 +45,18 @@ export function Navbar() {
   const ctaHref = isCurso ? "#registro" : isHome ? "#contact" : localized("/contacto")
   const currentLinks = navLinks[lang]
 
+  const activeTheme = mounted ? theme : "dark"
+  const isDarkTheme = activeTheme === "dark" || activeTheme === "pure-dark"
+
   // Pages whose top is a hardcoded dark hero (var(--surface-dark)). When the
   // navbar is transparent (pre-scroll), text-foreground is dark in light mode
   // and would disappear on those dark heroes — so override to light colors.
   const isDarkHero =
-    pathname === "/" ||
-    pathname === "/en" ||
-    pathname === "/curso" ||
-    pathname === "/en/curso"
+    isDarkTheme &&
+    (pathname === "/" ||
+      pathname === "/en" ||
+      pathname === "/curso" ||
+      pathname === "/en/curso")
   const overDarkHero = !scrolled && isDarkHero
   const linkIdle = overDarkHero
     ? "text-white/70 hover:text-white"
@@ -61,6 +65,40 @@ export function Navbar() {
     ? "text-white/70 hover:text-white border-white/20 hover:border-white/40"
     : "text-muted-foreground hover:text-foreground hover:border-foreground/30"
   const switcherBorder = overDarkHero ? "border-white/20" : "border-border"
+
+  const cycleTheme = useCallback(() => {
+    const themes = ["dark", "light", "warm", "pure-dark"]
+    const nextIndex = (themes.indexOf(theme || "dark") + 1) % themes.length
+    setTheme(themes[nextIndex])
+  }, [theme, setTheme])
+
+  const getThemeLabel = useCallback((themeName?: string) => {
+    switch (themeName) {
+      case "light":
+        return lang === "es" ? "Cambiar a modo Lectura (Cálido)" : "Switch to Reading Mode (Warm)"
+      case "warm":
+        return lang === "es" ? "Cambiar a Noche Pura (Alto Contraste)" : "Switch to Pure Dark (High Contrast)"
+      case "pure-dark":
+        return lang === "es" ? "Cambiar a modo Cinemático (Oscuro)" : "Switch to Cinematic Mode (Dark)"
+      case "dark":
+      default:
+        return lang === "es" ? "Cambiar a modo Claro (Limpio)" : "Switch to Light Mode (Clean)"
+    }
+  }, [lang])
+
+  const ThemeIcon = ({ themeName }: { themeName?: string }) => {
+    switch (themeName) {
+      case "light":
+        return <Sun size={15} />
+      case "warm":
+        return <BookOpen size={15} />
+      case "pure-dark":
+        return <Contrast size={15} />
+      case "dark":
+      default:
+        return <Moon size={15} />
+    }
+  }
 
   const cycleFontSize = useCallback(() => {
     const next = (fontIndex + 1) % FONT_SIZES.length
@@ -104,9 +142,17 @@ export function Navbar() {
               key={link.href}
               href={link.href.startsWith("#") ? link.href : localized(link.href)}
               title={link.label}
-              className={`text-sm font-medium transition-colors relative after:absolute after:bottom-[-3px] after:left-0 after:w-0 after:h-px after:bg-[var(--magenta)] hover:after:w-full after:transition-all after:duration-300 ${
+              className={`text-sm font-medium transition-colors relative after:absolute after:bottom-[-3px] after:left-0 after:w-0 after:h-px after:transition-all after:duration-300 ${
+                (link as any).uxgreen
+                  ? "after:bg-[#00BFA6] hover:after:w-full"
+                  : "after:bg-[var(--magenta)] hover:after:w-full"
+              } ${
                 (link as any).highlight
                   ? "text-[var(--magenta)] font-semibold hover:text-[var(--magenta)]"
+                  : (link as any).uxgreen
+                  ? overDarkHero
+                    ? "text-[#00BFA6]/80 hover:text-[#00BFA6]"
+                    : "text-[#00BFA6]/70 hover:text-[#00BFA6]"
                   : linkIdle
               }`}
             >
@@ -159,14 +205,15 @@ export function Navbar() {
               {FONT_LABELS[fontIndex]}
             </button>
           )}
-          {/* Dark mode toggle */}
+          {/* Theme mode toggle */}
           {mounted && (
             <button
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              onClick={cycleTheme}
               className={`w-9 h-9 rounded-full flex items-center justify-center border transition-all duration-200 ${iconBtn}`}
-              aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+              aria-label={getThemeLabel(theme)}
+              title={getThemeLabel(theme)}
             >
-              {theme === "dark" ? <Sun size={15} /> : <Moon size={15} />}
+              <ThemeIcon themeName={theme} />
             </button>
           )}
           <Link
@@ -198,11 +245,12 @@ export function Navbar() {
           )}
           {mounted && (
             <button
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              onClick={cycleTheme}
               className={`w-9 h-9 rounded-full flex items-center justify-center border transition-all duration-200 ${iconBtn}`}
-              aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+              aria-label={getThemeLabel(theme)}
+              title={getThemeLabel(theme)}
             >
-              {theme === "dark" ? <Sun size={15} /> : <Moon size={15} />}
+              <ThemeIcon themeName={theme} />
             </button>
           )}
           <button
@@ -225,7 +273,13 @@ export function Navbar() {
               href={link.href.startsWith("#") ? link.href : localized(link.href)}
               title={link.label}
               onClick={() => setMobileOpen(false)}
-              className="text-base font-medium text-foreground py-2 border-b border-border last:border-0"
+              className={`text-base font-medium py-2 border-b border-border last:border-0 ${
+                (link as any).uxgreen
+                  ? "text-[#00BFA6]"
+                  : (link as any).highlight
+                  ? "text-[var(--magenta)]"
+                  : "text-foreground"
+              }`}
             >
               {link.label}
             </Link>
