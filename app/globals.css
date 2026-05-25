@@ -96,8 +96,8 @@
   --accent-foreground: oklch(0.99 0 0);
   --destructive: oklch(0.396 0.141 25.723);
   --destructive-foreground: oklch(0.637 0.237 25.331);
-  --border: oklch(0.22 0 0);
-  --input: oklch(0.22 0 0);
+  --border: oklch(0.30 0 0);
+  --input: oklch(0.28 0 0);
   --ring: #E8751A;
 
   --surface-dark: oklch(0.05 0 0);
@@ -164,8 +164,8 @@
   --accent-foreground: oklch(0.99 0 0);
   --destructive: oklch(0.396 0.141 25.723);
   --destructive-foreground: oklch(0.637 0.237 25.331);
-  --border: #282828;
-  --input: #282828;
+  --border: #383838;
+  --input: #323232;
   --ring: #E8751A;
 
   --surface-dark: #000000;
@@ -534,4 +534,162 @@
 .light .bg-white\/20,
 .warm .bg-white\/20 {
   background-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+/* CTA card container — theme-aware background & text */
+.cta-card-container {
+  background: linear-gradient(135deg, oklch(0.10 0 0) 0%, oklch(0.06 0 0) 100%);
+  color: #ffffff !important;
+  transition: all 0.3s ease;
+}
+/* Ensure the text colors inside cta-card-container are white in dark/pure-dark */
+.cta-card-container .text-white,
+.cta-card-container h2,
+.cta-card-container h3,
+.cta-card-container span {
+  color: #ffffff;
+}
+
+.light .cta-card-container {
+  background: linear-gradient(135deg, oklch(0.97 0.005 240) 0%, oklch(0.94 0.005 240) 100%) !important;
+  color: var(--foreground) !important;
+  border: 1px solid var(--border);
+}
+.light .cta-card-container .text-white,
+.light .cta-card-container h2,
+.light .cta-card-container h3,
+.light .cta-card-container span,
+.light .cta-card-container label {
+  color: var(--foreground) !important;
+}
+
+.warm .cta-card-container {
+  background: linear-gradient(135deg, #f5eedc 0%, #ede4ce 100%) !important;
+  color: var(--foreground) !important;
+  border: 1px solid var(--border);
+}
+.warm .cta-card-container .text-white,
+.warm .cta-card-container h2,
+.warm .cta-card-container h3,
+.warm .cta-card-container span,
+.warm .cta-card-container label {
+  color: var(--foreground) !important;
+}
+
+.pure-dark .cta-card-container {
+  background: linear-gradient(135deg, #000000 0%, #0c0c0c 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid #181818;
+}
+
+/* CTA Form Container — theme-aware form container */
+.cta-form-container {
+  background-color: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.25) !important;
+  transition: all 0.3s ease;
+}
+
+.light .cta-form-container {
+  background-color: rgba(0, 0, 0, 0.02) !important;
+  border-color: var(--border) !important;
+}
+
+.warm .cta-form-container {
+  background-color: rgba(0, 0, 0, 0.02) !important;
+  border-color: var(--border) !important;
+}
+
+.pure-dark .cta-form-container {
+  background-color: rgba(255, 255, 255, 0.04) !important;
+  border-color: #282828 !important;
+}
+
+/* Centralized placeholder overrides for light and warm modes */
+.light ::placeholder,
+.warm ::placeholder {
+  color: var(--muted-foreground) !important;
+  opacity: 0.55 !important;
+}
+.light input, .light textarea,
+.warm input, .warm textarea {
+  color: var(--foreground) !important;
+}
+
+/* Prevent overrides from turning text dark inside footer */
+.light footer,
+.warm footer {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.light footer .text-white,
+.warm footer .text-white,
+.light footer h2,
+.warm footer h2,
+.light footer h3,
+.warm footer h3,
+.light footer span,
+.warm footer span,
+.light footer a,
+.warm footer a {
+  color: #ffffff !important;
+}
+
+.light footer .text-white\/90,
+.warm footer .text-white\/90,
+.light footer .text-white\/85,
+.warm footer .text-white\/85,
+.light footer .text-white\/80,
+.warm footer .text-white\/80,
+.light footer .text-white\/75,
+.warm footer .text-white\/75,
+.light footer .text-white\/70,
+.warm footer .text-white\/70,
+.light footer .text-white\/65,
+.warm footer .text-white\/65,
+.light footer .text-white\/60,
+.warm footer .text-white\/60 {
+  color: rgba(255, 255, 255, 0.7) !important;
+  opacity: 1 !important;
+}
+
+.light footer .text-white\/50,
+.warm footer .text-white\/50,
+.light footer .text-white\/45,
+.warm footer .text-white\/45,
+.light footer .text-white\/40,
+.warm footer .text-white\/40,
+.light footer .text-white\/35,
+.warm footer .text-white\/35,
+.light footer .text-white\/30,
+.warm footer .text-white\/30 {
+  color: rgba(255, 255, 255, 0.5) !important;
+  opacity: 1 !important;
+}
+
+.light footer .text-white\/25,
+.warm footer .text-white\/25,
+.light footer .text-white\/20,
+.warm footer .text-white\/20,
+.light footer .text-white\/15,
+.warm footer .text-white\/15,
+.light footer .text-white\/10,
+.warm footer .text-white\/10 {
+  color: rgba(255, 255, 255, 0.3) !important;
+  opacity: 1 !important;
+}
+
+.light footer .hover\:text-white:hover,
+.warm footer .hover\:text-white:hover {
+  color: #ffffff !important;
+}
+
+.light footer .border-white\/10,
+.warm footer .border-white\/10,
+.light footer .border-white\/5,
+.warm footer .border-white\/5 {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+.light footer .bg-white\/5,
+.warm footer .bg-white\/5 {
+  background-color: rgba(255, 255, 255, 0.05) !important;
 }

@@ -158,7 +158,7 @@ export function CoursePromoSection() {
               visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
             }`}
           >
-            <div className="rounded-3xl border dark:border-white/[0.06] border-foreground/10 dark:bg-white/[0.02] bg-foreground/[0.02] backdrop-blur-sm p-8 md:p-10 flex flex-col gap-7">
+            <div className="rounded-3xl border dark:border-white/[0.14] border-foreground/10 dark:bg-white/[0.02] bg-foreground/[0.02] backdrop-blur-sm p-8 md:p-10 flex flex-col gap-7">
               {/* Card header */}
               <div className="flex flex-col gap-2">
                 <span className="text-xs font-semibold tracking-widest uppercase text-[var(--cyan)]">
