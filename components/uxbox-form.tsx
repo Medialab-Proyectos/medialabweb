@@ -5,7 +5,7 @@ import Link from "next/link"
 import {
   ArrowRight, Sparkles, Mail, Loader2, ChevronLeft, RotateCcw,
   CheckCircle2, Circle, Lock, Radar, Target, Layers, Rocket, MessageCircle,
-  Cpu, Activity, ShieldCheck,
+  Cpu, Activity, ShieldCheck, Clock, FileSearch,
 } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 import { BookingModal } from "./booking-modal"
@@ -29,6 +29,17 @@ type Lab = {
 
 const LAB_KEY = "uxbox_lab"
 const ACCENT = "#E8751A"
+
+// Ventana del "análisis profundo" que madura en tiempo real (tunable).
+const DEEP_DIVE_MINUTES = 37
+const DEEP_DIVE_MS = DEEP_DIVE_MINUTES * 60 * 1000
+
+function fmtCountdown(ms: number) {
+  const total = Math.max(0, Math.ceil(ms / 1000))
+  const m = Math.floor(total / 60)
+  const s = total % 60
+  return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`
+}
 
 /* ── Streaming text (typewriter) ── */
 function useTypewriter(text: string, speed = 16) {
@@ -114,6 +125,14 @@ export function UXBoxForm() {
   const protoRef = useRef("")
   useEffect(() => { briefRef.current = brief }, [brief])
   useEffect(() => { protoRef.current = prototype }, [prototype])
+
+  // Live clock — drives the time-based deep-dive countdown (Phase 2)
+  const [now, setNow] = useState(() => Date.now())
+  useEffect(() => {
+    if (phase !== "engine" && phase !== "return") return
+    const id = setInterval(() => setNow(Date.now()), 1000)
+    return () => clearInterval(id)
+  }, [phase])
 
   /* Resume an existing lab on mount */
   useEffect(() => {
@@ -320,6 +339,17 @@ export function UXBoxForm() {
     { icon: Layers, label: t("Oportunidades UX", "UX opportunities"), insight: t("Encontré ángulos de diferenciación por experiencia.", "I found differentiation angles through experience.") },
     { icon: Cpu, label: t("Blueprint generado", "Blueprint generated"), insight: t("Tu definición de producto está lista.", "Your product definition is ready.") },
     { icon: Rocket, label: t("Listos para hablar", "Ready to talk"), insight: t("Desbloqueado: agenda con un humano.", "Unlocked: book a session with a human.") },
+  ]
+
+  // ── Deep-dive: matures in real time across visits (Phase 2) ──
+  const labStart = lab.startedAt || lab.completedAt || now
+  const deepReadyAt = labStart + DEEP_DIVE_MS
+  const deepReady = now >= deepReadyAt
+  const deepRemaining = fmtCountdown(deepReadyAt - now)
+  const deepFindings = [
+    t(`Espacio competitivo en ${lab.signals[0] || "tu categoría"}: hueco claro en la experiencia de onboarding.`, `Competitive space in ${lab.signals[0] || "your category"}: a clear gap in the onboarding experience.`),
+    t("Módulo de mayor impacto detectado: automatización del primer flujo de valor.", "Highest-impact module detected: automating the first value flow."),
+    t("Riesgo principal a validar: disposición a pagar antes de construir features avanzadas.", "Main risk to validate: willingness to pay before building advanced features."),
   ]
 
   const accentBg = "rgba(232,117,26,0.08)"
@@ -590,6 +620,43 @@ export function UXBoxForm() {
                   <ShieldCheck size={12} /> {t("Propuesta preliminar generada con IA y revisada por nuestro equipo.", "Preliminary AI-generated proposal, reviewed by our team.")}
                 </p>
               </div>
+            )}
+
+            {/* Deep-dive — matures in real time across visits (Phase 2) */}
+            {(activeStage >= 5 || phase === "return") && (
+              deepReady ? (
+                <div className="rounded-2xl border p-6 flex flex-col gap-3 animate-in fade-in duration-500" style={{ borderColor: accentBorder, background: accentBg }}>
+                  <div className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest w-fit" style={{ color: ACCENT }}>
+                    <FileSearch size={12} /> {t("Análisis profundo listo", "Deep analysis ready")}
+                  </div>
+                  <ul className="flex flex-col gap-2">
+                    {deepFindings.map((f) => (
+                      <li key={f} className="flex items-start gap-2 text-sm text-white/75 leading-relaxed">
+                        <CheckCircle2 size={15} className="shrink-0 mt-0.5" style={{ color: ACCENT }} /> {f}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : (
+                <div className="rounded-2xl border border-white/10 bg-white/5 p-6 flex flex-col gap-3">
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-2 text-sm text-white/70">
+                      <Loader2 size={15} className="animate-spin shrink-0" style={{ color: ACCENT }} />
+                      {t("Análisis competitivo profundo en progreso…", "Deep competitive analysis in progress…")}
+                    </div>
+                    <div className="flex items-center gap-1.5 font-mono text-sm font-semibold tabular-nums shrink-0" style={{ color: ACCENT }}>
+                      <Clock size={13} /> {deepRemaining}
+                    </div>
+                  </div>
+                  <div className="h-1.5 rounded-full bg-white/10 overflow-hidden">
+                    <div className="h-full rounded-full transition-all duration-1000"
+                      style={{ width: `${Math.min(100, Math.round(((DEEP_DIVE_MS - Math.max(0, deepReadyAt - now)) / DEEP_DIVE_MS) * 100))}%`, background: "linear-gradient(90deg, #E8751A, #2AABB3)" }} />
+                  </div>
+                  <p className="text-xs text-white/45">
+                    {t("Puedes cerrar esta página: el motor sigue trabajando. Vuelve con tu correo y verás el avance.", "You can close this page: the engine keeps working. Return with your email to see the progress.")}
+                  </p>
+                </div>
+              )
             )}
 
             {/* Unlock CTA */}
