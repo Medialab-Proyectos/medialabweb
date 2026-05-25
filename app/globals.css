@@ -213,6 +213,10 @@
   --radius-lg: calc(var(--radius) + 4px);
   --radius-xl: calc(var(--radius) + 8px);
 
+  /* Explicit white/black — prevents text-white/* from inheriting body color in light mode */
+  --color-white: #ffffff;
+  --color-black: #000000;
+
   /* Brand colors as utility classes */
   --color-magenta: var(--magenta);
   --color-orange-brand: var(--orange);
