@@ -80,6 +80,7 @@ export function IndustriesSection() {
       icon: ShoppingCart,
       color: "var(--orange)",
       image: "/images/industry_ecommerce.jpg",
+      href: "/industrias/ecommerce",
       description: t(
         "Experiencias de compra que convierten visitantes en clientes fieles",
         "Shopping experiences that turn visitors into loyal customers"
