@@ -97,13 +97,14 @@ export function ClientLogos() {
           opacity: 1;
         }
 
-        /* Dark mode: logos are nearly white → push to near-white so brands like
-           Kupi / Vinnove are clearly readable on the dark background */
-        .dark .client-logo {
+        /* Dark / Pure-dark mode: keep logos light so they read on dark backgrounds */
+        .dark .client-logo,
+        .pure-dark .client-logo {
           filter: grayscale(1) brightness(1.6) contrast(1.05);
           opacity: 0.85;
         }
-        .dark .client-logo:hover {
+        .dark .client-logo:hover,
+        .pure-dark .client-logo:hover {
           filter: grayscale(1) brightness(2) contrast(1.1);
           opacity: 1;
         }
