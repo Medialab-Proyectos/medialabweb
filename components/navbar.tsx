@@ -39,6 +39,10 @@ export function Navbar() {
   const { lang, setLang, localized } = useLanguage()
   const pathname = usePathname()
   const isCurso = pathname === "/curso" || pathname === "/en/curso"
+  const isHome = pathname === "/" || pathname === "/en"
+  // El CTA usa anclas same-page solo donde existen (home: #contact, curso: #registro);
+  // en el resto apunta a la página real /contacto para no dejar caminos muertos.
+  const ctaHref = isCurso ? "#registro" : isHome ? "#contact" : localized("/contacto")
   const currentLinks = navLinks[lang]
 
   // Pages whose top is a hardcoded dark hero (var(--surface-dark)). When the
@@ -166,7 +170,7 @@ export function Navbar() {
             </button>
           )}
           <Link
-            href={isCurso ? "#registro" : "#contact"}
+            href={ctaHref}
             title={isCurso
               ? (lang === "es" ? "Inscribirme al curso" : "Enroll in the course")
               : (lang === "es" ? "Iniciar un proyecto con MediaLab" : "Start a project with MediaLab")
@@ -253,7 +257,7 @@ export function Navbar() {
             </div>
           )}
           <Link
-            href={isCurso ? "#registro" : "#contact"}
+            href={ctaHref}
             title={isCurso
               ? (lang === "es" ? "Inscribirme al curso" : "Enroll in the course")
               : (lang === "es" ? "Iniciar un proyecto con MediaLab" : "Start a project with MediaLab")

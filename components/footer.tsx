@@ -18,9 +18,10 @@ export function Footer() {
     {
       title: t("Servicios", "Services"),
       links: [
-        { label: t("UX y Diseño Conductual", "UX & Behavioral Design"), href: "/servicios" },
-        { label: t("Discovery con IA", "Discovery with AI"), href: "/servicios" },
-        { label: t("Desarrollo a Medida", "Custom Development"), href: "/servicios" },
+        { label: t("Diseño UX/UI", "UX/UI Design"), href: "/servicios/diseno-ux-ui" },
+        { label: t("Discovery con IA", "Discovery with AI"), href: "/servicios/discovery-con-ia" },
+        { label: t("Desarrollo a Medida", "Custom Development"), href: "/servicios/desarrollo-producto-digital" },
+        { label: t("CRO para SaaS", "CRO for SaaS"), href: "/servicios/cro-saas" },
       ],
     },
     {
@@ -41,8 +42,9 @@ export function Footer() {
     {
       title: t("Recursos", "Resources"),
       links: [
+        { label: t("Analizador UX + IA", "UX + AI Analyzer"), href: "/recursos/analizador-ux-ia" },
         { label: t("Contacto", "Contact"), href: "/contacto" },
-        { label: "FAQ", href: "/contacto" },
+        { label: "FAQ", href: "/#faq" },
         { label: "Medium", href: "https://medium.com/@co.benavides86", external: true },
         { label: "Clutch", href: "https://clutch.co/profile/medialab-ingenier", external: true },
         { label: "GoodFirms", href: "https://www.goodfirms.co/company/medialab-ingenieria", external: true },
