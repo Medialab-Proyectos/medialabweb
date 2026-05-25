@@ -1,670 +1,630 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import {
-  ArrowRight, CheckCircle2, Sparkles, Mail, Lightbulb, Rocket,
-  Loader2, Globe, Building2, ChevronLeft, MessageCircle, Clock,
-  ShieldCheck, RotateCcw, UserCheck,
+  ArrowRight, Sparkles, Mail, Loader2, ChevronLeft, RotateCcw,
+  CheckCircle2, Circle, Lock, Radar, Target, Layers, Rocket, MessageCircle,
+  Cpu, Activity, ShieldCheck,
 } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 import { BookingModal } from "./booking-modal"
 
-type Step = 1 | 2 | 3 | 4
+type Phase = "spark" | "reacting" | "gate" | "otp" | "feed" | "engine" | "return"
+
+type Lab = {
+  email?: string
+  idea: string
+  signals: string[]
+  projectName?: string
+  references?: string
+  objective?: string
+  audience?: string
+  brief?: string
+  prototype?: string
+  startedAt?: number
+  completedAt?: number
+  visits?: number
+}
+
+const LAB_KEY = "uxbox_lab"
+const ACCENT = "#E8751A"
+
+/* ── Streaming text (typewriter) ── */
+function useTypewriter(text: string, speed = 16) {
+  const [out, setOut] = useState("")
+  useEffect(() => {
+    setOut("")
+    if (!text) return
+    let i = 0
+    const id = setInterval(() => {
+      i += 1
+      setOut(text.slice(0, i))
+      if (i >= text.length) clearInterval(id)
+    }, speed)
+    return () => clearInterval(id)
+  }, [text, speed])
+  return out
+}
+
+/* ── Client-side idea analysis (mock "AI") ── */
+function detectSignals(idea: string): string[] {
+  const x = idea.toLowerCase()
+  const s: string[] = []
+  if (/\b(saas|software|plataforma|dashboard|b2b|herramienta)\b/.test(x)) s.push("SaaS B2B")
+  if (/\b(app|m[oó]vil|mobile|aplicaci[oó]n)\b/.test(x)) s.push("Mobile")
+  if (/\b(tienda|ecommerce|e-commerce|comprar|venta|carrito|productos)\b/.test(x)) s.push("E-commerce")
+  if (/\b(ia|inteligencia artificial|\bai\b|automat|agente)\b/.test(x)) s.push("Automatización con IA")
+  if (/\b(pago|finanzas|banco|cr[eé]dito|fintech|inversi[oó]n)\b/.test(x)) s.push("Fintech")
+  if (/\b(salud|m[eé]dic|paciente|cl[ií]nica|bienestar)\b/.test(x)) s.push("HealthTech")
+  if (/\b(curso|aprend|educa|estudiante|capacit)\b/.test(x)) s.push("EdTech")
+  if (s.length === 0) s.push("Producto digital", "Oportunidad de nicho")
+  return s.slice(0, 3)
+}
+
+const RETURN_INSIGHTS = [
+  ["Detecté una oportunidad de automatización que reduce fricción en el onboarding.", "I detected an automation opportunity that reduces onboarding friction."],
+  ["Tu idea encaja con una tendencia creciente en búsquedas de producto con IA.", "Your idea fits a growing trend in AI product searches."],
+  ["Hay un ángulo de diferenciación por psicología del consumidor sin explotar.", "There's an untapped differentiation angle through consumer psychology."],
+  ["Un competidor dejó un hueco claro en la experiencia móvil.", "A competitor left a clear gap in the mobile experience."],
+  ["Tu público objetivo responde mejor a flujos guiados con progreso visible.", "Your target audience responds better to guided flows with visible progress."],
+]
+
+function loadLab(): Lab | null {
+  try {
+    const raw = localStorage.getItem(LAB_KEY)
+    return raw ? (JSON.parse(raw) as Lab) : null
+  } catch {
+    return null
+  }
+}
 
 export function UXBoxForm() {
   const { t } = useLanguage()
-  const [step, setStep] = useState<Step>(1)
+
+  const [phase, setPhase] = useState<Phase>("spark")
+  const [lab, setLab] = useState<Lab>({ idea: "", signals: [] })
+  const [hydrated, setHydrated] = useState(false)
+
+  // form-local state
+  const [idea, setIdea] = useState("")
   const [email, setEmail] = useState("")
   const [consent, setConsent] = useState(false)
-  const [projectType, setProjectType] = useState("")
-  const [idea, setIdea] = useState("")
-  const [industry, setIndustry] = useState("")
-  const [referenceUrls, setReferenceUrls] = useState("")
-  const [existingBrand, setExistingBrand] = useState("")
-  const [emailError, setEmailError] = useState("")
-  const [loading, setLoading] = useState(false)
-  const [resending, setResending] = useState(false)
-  const [brief, setBrief] = useState("")
-  const [prototype, setPrototype] = useState("")
-  const [briefError, setBriefError] = useState("")
-  const [isValidatingEmail, setIsValidatingEmail] = useState(false)
   const [pinInput, setPinInput] = useState("")
   const [isDemo, setIsDemo] = useState(false)
   const [demoPin, setDemoPin] = useState("")
+  const [error, setError] = useState("")
+  const [loading, setLoading] = useState(false)
+  const [resending, setResending] = useState(false)
 
-  const industries = [
-    t("Fintech / Banca", "Fintech / Banking"),
-    t("Salud", "Healthcare"),
-    t("Educación", "Education"),
-    t("Retail / E-commerce", "Retail / E-commerce"),
-    t("Startups", "Startups"),
-    t("Gobierno", "Government"),
-    t("Otro", "Other"),
-  ]
+  // feed state
+  const [feedStep, setFeedStep] = useState(0)
+  const [projectName, setProjectName] = useState("")
+  const [references, setReferences] = useState("")
+  const [objective, setObjective] = useState("")
+  const [audience, setAudience] = useState("")
 
-  // Plantillas adaptativas: ajustan el ejemplo de idea según el tipo de proyecto.
-  const projectTypes = [
-    {
-      id: "startup",
-      label: t("Startup / MVP", "Startup / MVP"),
-      placeholder: t(
-        "Ej: Una app que ayuda a fundadores a validar su idea de negocio antes de invertir en desarrollo...",
-        "E.g: An app that helps founders validate their business idea before investing in development..."
-      ),
-    },
-    {
-      id: "pyme",
-      label: t("Pyme / Negocio", "SMB / Business"),
-      placeholder: t(
-        "Ej: Una plataforma para que mi negocio gestione cobros y clientes sin complicaciones...",
-        "E.g: A platform for my business to manage payments and clients without hassle..."
-      ),
-    },
-    {
-      id: "empresa",
-      label: t("Empresa / Corporativo", "Enterprise"),
-      placeholder: t(
-        "Ej: Un portal interno para capacitar a nuestra fuerza de ventas a gran escala...",
-        "E.g: An internal portal to train our sales force at scale..."
-      ),
-    },
-  ]
+  // engine state
+  const [activeStage, setActiveStage] = useState(0)
+  const [brief, setBrief] = useState("")
+  const [prototype, setPrototype] = useState("")
+  const [returnInsight, setReturnInsight] = useState("")
 
-  const activeTemplate = projectTypes.find((p) => p.id === projectType)
-  const ideaPlaceholder = activeTemplate?.placeholder ?? t(
-    "Ej: Una app que ayuda a pequeñas empresas a gestionar cobros sin complicaciones...",
-    "E.g: An app that helps small businesses manage payments without complications..."
+  const briefRef = useRef("")
+  const protoRef = useRef("")
+  useEffect(() => { briefRef.current = brief }, [brief])
+  useEffect(() => { protoRef.current = prototype }, [prototype])
+
+  /* Resume an existing lab on mount */
+  useEffect(() => {
+    const saved = loadLab()
+    setHydrated(true)
+    if (saved && saved.completedAt) {
+      const insight = RETURN_INSIGHTS[(saved.visits || 0) % RETURN_INSIGHTS.length]
+      setReturnInsight(t(insight[0], insight[1]))
+      setLab({ ...saved, visits: (saved.visits || 0) + 1 })
+      setBrief(saved.brief || "")
+      setPrototype(saved.prototype || "")
+      setActiveStage(5)
+      setPhase("return")
+      try { localStorage.setItem(LAB_KEY, JSON.stringify({ ...saved, visits: (saved.visits || 0) + 1 })) } catch {}
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const persist = (patch: Partial<Lab>) => {
+    setLab((prev) => {
+      const next = { ...prev, ...patch }
+      try { localStorage.setItem(LAB_KEY, JSON.stringify(next)) } catch {}
+      return next
+    })
+  }
+
+  /* ── Spark: analyze idea, instant reward ── */
+  const reaction = useTypewriter(
+    phase === "reacting" && lab.signals.length
+      ? t(
+          `Detecto señales fuertes de ${lab.signals.join(" + ")}. Hay un ángulo claro para diferenciarte. Asegura tu laboratorio para ver el análisis completo.`,
+          `I detect strong signals of ${lab.signals.join(" + ")}. There's a clear angle to differentiate. Secure your lab to see the full analysis.`
+        )
+      : ""
   )
 
-  const validateEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)
+  const handleSpark = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (idea.trim().length < 6) {
+      setError(t("Cuéntame un poco más sobre tu idea.", "Tell me a bit more about your idea."))
+      return
+    }
+    setError("")
+    const signals = detectSignals(idea)
+    persist({ idea: idea.trim(), signals })
+    setPhase("reacting")
+  }
 
+  /* ── Gate: email + OTP ── */
   const sendOtp = async () => {
     const res = await fetch("/api/send-otp", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email }),
     })
-    return res.json().then((data) => ({ ok: res.ok, data }))
+    const data = await res.json()
+    return { ok: res.ok, data }
   }
 
-  const handleStep1 = async (e: React.FormEvent) => {
+  const handleGate = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!validateEmail(email)) {
-      setEmailError(t("Ingresa un email válido", "Enter a valid email"))
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setError(t("Ingresa un email válido", "Enter a valid email"))
       return
     }
     if (!consent) {
-      setEmailError(t("Necesitamos tu consentimiento para continuar", "We need your consent to continue"))
+      setError(t("Necesitamos tu consentimiento para guardar tu laboratorio", "We need your consent to save your lab"))
       return
     }
-
-    // Límite suave anti-spam (orientativo, no es control de seguridad).
-    try {
-      const leads = JSON.parse(localStorage.getItem("uxbox_leads") || "{}")
-      if (leads[email] >= 2) {
-        setEmailError(t(
-          "Ya enviaste 2 ideas con este correo. Escríbenos por WhatsApp para continuar.",
-          "You've already sent 2 ideas with this email. Message us on WhatsApp to continue."
-        ))
-        return
-      }
-    } catch {}
-
-    setLoading(true)
-    setEmailError("")
+    setLoading(true); setError("")
     try {
       const { ok, data } = await sendOtp()
       if (ok && data.success) {
-        setIsDemo(!!data.demo)
-        setDemoPin(data.pin || "")
-        setIsValidatingEmail(true)
-      } else {
-        setEmailError(data.error || t("Error enviando el código.", "Error sending the code."))
-      }
-    } catch {
-      setEmailError(t("Error de conexión.", "Connection error."))
-    } finally {
-      setLoading(false)
-    }
+        setIsDemo(!!data.demo); setDemoPin(data.pin || "")
+        setPhase("otp")
+      } else setError(data.error || t("Error enviando el código.", "Error sending the code."))
+    } catch { setError(t("Error de conexión.", "Connection error.")) }
+    finally { setLoading(false) }
   }
 
   const handleResend = async () => {
-    setResending(true)
-    setEmailError("")
-    setPinInput("")
+    setResending(true); setError(""); setPinInput("")
     try {
       const { ok, data } = await sendOtp()
-      if (ok && data.success) {
-        setIsDemo(!!data.demo)
-        setDemoPin(data.pin || "")
-      } else {
-        setEmailError(data.error || t("No pudimos reenviar el código.", "Couldn't resend the code."))
-      }
-    } catch {
-      setEmailError(t("Error de conexión.", "Connection error."))
-    } finally {
-      setResending(false)
-    }
+      if (ok && data.success) { setIsDemo(!!data.demo); setDemoPin(data.pin || "") }
+    } catch {} finally { setResending(false) }
   }
 
-  const handleVerifyOtp = async (e: React.FormEvent) => {
+  const handleOtp = async (e: React.FormEvent) => {
     e.preventDefault()
-    setLoading(true)
-    setEmailError("")
+    setLoading(true); setError("")
     try {
       const res = await fetch("/api/verify-otp", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ pin: pinInput }),
       })
       const data = await res.json()
       if (data.valid) {
-        try {
-          const leads = JSON.parse(localStorage.getItem("uxbox_leads") || "{}")
-          leads[email] = (leads[email] || 0) + 1
-          localStorage.setItem("uxbox_leads", JSON.stringify(leads))
-        } catch {}
-        setIsValidatingEmail(false)
-        setStep(2)
+        persist({ email })
+        setPhase("feed")
       } else if (data.error === "expired") {
-        setEmailError(t("El código expiró. Reenvíalo.", "The code expired. Resend it."))
-      } else {
-        setEmailError(t("Código incorrecto.", "Incorrect code."))
-      }
-    } catch {
-      setEmailError(t("Error de conexión.", "Connection error."))
-    } finally {
-      setLoading(false)
+        setError(t("El código expiró. Reenvíalo.", "The code expired. Resend it."))
+      } else setError(t("Código incorrecto.", "Incorrect code."))
+    } catch { setError(t("Error de conexión.", "Connection error.")) }
+    finally { setLoading(false) }
+  }
+
+  /* ── Feed: progressive disclosure ── */
+  const feedFields = [
+    {
+      key: "projectName", value: projectName, set: setProjectName,
+      label: t("¿Cómo se llama tu proyecto?", "What's your project called?"),
+      ai: t("Dale un nombre y empiezo a tratarlo como un producto real.", "Give it a name and I'll start treating it as a real product."),
+      placeholder: t("Ej: FlowPay", "E.g: FlowPay"), required: true,
+    },
+    {
+      key: "objective", value: objective, set: setObjective,
+      label: t("¿Cuál es el objetivo principal?", "What's the main goal?"),
+      ai: t("Con esto detecto mejor las oportunidades y métricas que importan.", "With this I better detect the opportunities and metrics that matter."),
+      placeholder: t("Ej: que la gente complete su primer pago sin ayuda", "E.g: people complete their first payment unaided"), required: true,
+    },
+    {
+      key: "audience", value: audience, set: setAudience,
+      label: t("¿Para quién es?", "Who is it for?"),
+      ai: t("Para entender a tus competidores necesito saber a quién le hablas.", "To map your competitors I need to know who you're talking to."),
+      placeholder: t("Ej: freelancers en LatAm", "E.g: freelancers in LatAm"), required: true,
+    },
+    {
+      key: "references", value: references, set: setReferences,
+      label: t("¿Algún referente? (opcional)", "Any references? (optional)"),
+      ai: t("Productos que admiras me ayudan a calibrar el nivel.", "Products you admire help me calibrate the bar."),
+      placeholder: t("Ej: stripe.com, linear.app", "E.g: stripe.com, linear.app"), required: false,
+    },
+  ]
+  const feedProgress = Math.round(25 + (feedStep / feedFields.length) * 75)
+  const currentField = feedFields[feedStep]
+
+  const advanceFeed = () => {
+    if (currentField.required && !currentField.value.trim()) {
+      setError(t("Este dato me ayuda a afinar el análisis.", "This detail helps me sharpen the analysis."))
+      return
+    }
+    setError("")
+    if (feedStep < feedFields.length - 1) {
+      setFeedStep((s) => s + 1)
+    } else {
+      persist({ projectName, objective, audience, references, startedAt: Date.now() })
+      setPhase("engine")
     }
   }
 
-  const handleStep2 = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
-    setBriefError("")
-    try {
-      const res = await fetch("/api/generate-brief", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ idea, industry, referenceUrls, existingBrand, projectType }),
-      })
-      if (!res.ok) throw new Error("API error")
-      const data = await res.json()
-      setBrief(data.brief || "")
-      setPrototype(data.prototype || "")
-      setStep(3)
-    } catch {
-      setBriefError(t(
-        "No pudimos conectar con la IA. Continúa de todas formas.",
-        "Couldn't connect to AI. Continue anyway."
-      ))
-      setStep(3)
-    } finally {
-      setLoading(false)
+  /* ── Engine: run the living timeline ── */
+  useEffect(() => {
+    if (phase !== "engine") return
+    let cancelled = false
+    const timers: ReturnType<typeof setTimeout>[] = []
+
+    ;(async () => {
+      try {
+        const res = await fetch("/api/generate-brief", {
+          method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            idea: lab.idea, industry: lab.signals[0] || "", referenceUrls: references,
+            existingBrand: projectName, projectType: "", objective, audience,
+          }),
+        })
+        const data = await res.json()
+        if (!cancelled) { setBrief(data.brief || ""); setPrototype(data.prototype || "") }
+      } catch { /* mock fallback handled visually */ }
+    })()
+
+    setActiveStage(0)
+    for (let s = 1; s <= 5; s += 1) {
+      timers.push(setTimeout(() => { if (!cancelled) setActiveStage(s) }, s * 2300))
     }
+    timers.push(setTimeout(() => {
+      if (cancelled) return
+      persist({ brief: briefRef.current, prototype: protoRef.current, completedAt: Date.now() })
+      // notify lead in background (mock-safe; no-op if email not configured)
+      fetch("/api/send-brief-email", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: lab.email, idea: lab.idea, industry: lab.signals[0] || "", referenceUrls: references, existingBrand: projectName, brief: briefRef.current, prototype: protoRef.current }),
+      }).catch(() => {})
+    }, 5 * 2300 + 600))
+
+    return () => { cancelled = true; timers.forEach(clearTimeout) }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase])
+
+  const resetLab = () => {
+    try { localStorage.removeItem(LAB_KEY) } catch {}
+    setLab({ idea: "", signals: [] })
+    setIdea(""); setEmail(""); setConsent(false); setPinInput(""); setProjectName("")
+    setReferences(""); setObjective(""); setAudience(""); setFeedStep(0); setActiveStage(0)
+    setBrief(""); setPrototype(""); setError("")
+    setPhase("spark")
   }
 
-  const handleStep3 = async () => {
-    setLoading(true)
-    try {
-      await fetch("/api/send-brief-email", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, idea, industry, referenceUrls, existingBrand, brief, prototype }),
-      })
-    } catch {
-      // Silent fail — proceed to success anyway
-    } finally {
-      setLoading(false)
-      setStep(4)
-    }
-  }
-
-  const accent = "#E8751A"
-  const accentBg = "rgba(232,117,26,0.08)"
-  const accentBorder = "rgba(232,117,26,0.25)"
-  const btnStyle = { background: "linear-gradient(90deg, #E8751A, #c65a10)" }
-
-  const steps = [
-    { icon: Mail, labelEs: "Email", labelEn: "Email" },
-    { icon: Lightbulb, labelEs: "Tu idea", labelEn: "Your idea" },
-    { icon: Sparkles, labelEs: "Brief IA", labelEn: "AI Brief" },
-    { icon: Rocket, labelEs: "Listo", labelEn: "Done" },
+  /* ── Timeline definition ── */
+  const stages = [
+    { icon: Sparkles, label: t("Idea inicial", "Initial idea"), insight: t("Idea capturada y estructurada.", "Idea captured and structured.") },
+    { icon: Radar, label: t("Mercado detectado", "Market detected"), insight: t(`Señales: ${lab.signals.join(", ")}.`, `Signals: ${lab.signals.join(", ")}.`) },
+    { icon: Target, label: t("Competidores", "Competitors"), insight: t("Mapeando jugadores y huecos del espacio…", "Mapping players and gaps in the space…") },
+    { icon: Layers, label: t("Oportunidades UX", "UX opportunities"), insight: t("Encontré ángulos de diferenciación por experiencia.", "I found differentiation angles through experience.") },
+    { icon: Cpu, label: t("Blueprint generado", "Blueprint generated"), insight: t("Tu definición de producto está lista.", "Your product definition is ready.") },
+    { icon: Rocket, label: t("Listos para hablar", "Ready to talk"), insight: t("Desbloqueado: agenda con un humano.", "Unlocked: book a session with a human.") },
   ]
 
-  const inputClass = "w-full px-4 py-3.5 rounded-xl border border-border text-foreground bg-background placeholder:text-muted-foreground focus:outline-none resize-none text-sm transition-all"
-  const inputFocus = {
-    onFocus: (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-      e.currentTarget.style.borderColor = accent
-      e.currentTarget.style.boxShadow = "0 0 0 3px rgba(232,117,26,0.15)"
-    },
-    onBlur: (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-      e.currentTarget.style.borderColor = "var(--border)"
-      e.currentTarget.style.boxShadow = "none"
-    },
-  }
+  const accentBg = "rgba(232,117,26,0.08)"
+  const accentBorder = "rgba(232,117,26,0.25)"
+  const inputClass = "w-full px-4 py-3.5 rounded-xl border border-white/10 bg-white/5 text-white placeholder:text-white/35 focus:outline-none focus:border-[var(--orange)] focus:ring-2 focus:ring-[rgba(232,117,26,0.25)] resize-none text-sm transition-all"
 
   return (
     <section
       id="uxbox"
-      className="relative py-20 md:py-32 px-6 overflow-hidden"
+      className="relative py-20 md:py-32 px-6 overflow-hidden bg-[var(--surface-dark)] text-white"
       aria-labelledby="uxbox-heading"
-      style={{ background: "linear-gradient(180deg, var(--background) 0%, rgba(232,117,26,0.04) 50%, var(--background) 100%)" }}
     >
-      <div className="absolute -top-32 right-0 w-96 h-96 rounded-full blur-3xl pointer-events-none opacity-30"
+      {/* ambient glows */}
+      <div className="absolute -top-32 right-0 w-[28rem] h-[28rem] rounded-full blur-3xl pointer-events-none opacity-25"
         style={{ background: "radial-gradient(circle, #E8751A 0%, transparent 70%)" }} aria-hidden="true" />
-      <div className="absolute -bottom-32 left-0 w-96 h-96 rounded-full blur-3xl pointer-events-none opacity-20"
+      <div className="absolute -bottom-32 left-0 w-[28rem] h-[28rem] rounded-full blur-3xl pointer-events-none opacity-15"
         style={{ background: "radial-gradient(circle, #2AABB3 0%, transparent 70%)" }} aria-hidden="true" />
+      <div className="absolute inset-0 pointer-events-none opacity-[0.04]"
+        style={{ backgroundImage: "radial-gradient(circle, #fff 1px, transparent 1px)", backgroundSize: "38px 38px" }} aria-hidden="true" />
 
       <div className="relative z-10 max-w-3xl mx-auto">
         {/* Header */}
-        <div className="flex flex-col items-center gap-4 text-center mb-8">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold border"
-            style={{ color: "var(--magenta)", borderColor: accentBorder, background: accentBg }}>
-            <Sparkles size={14} />
-            UXBox Discovery
+        <div className="flex flex-col items-center gap-4 text-center mb-10">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold border"
+            style={{ color: "#fff", borderColor: accentBorder, background: accentBg }}>
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-60" style={{ background: ACCENT }} />
+              <span className="relative inline-flex rounded-full h-2 w-2" style={{ background: ACCENT }} />
+            </span>
+            {t("Motor de inteligencia de producto · en vivo", "Product intelligence engine · live")}
           </div>
-          <h2 id="uxbox-heading" className="font-display font-bold text-4xl md:text-5xl text-foreground text-balance leading-tight">
-            {t("Convierte tu idea en un brief de producto", "Turn your idea into a product brief")}
+          <h2 id="uxbox-heading" className="font-display font-bold text-4xl md:text-5xl text-white text-balance leading-tight">
+            {phase === "return"
+              ? t("Bienvenido de vuelta a tu laboratorio", "Welcome back to your lab")
+              : t("Enciende tu idea. Mira cómo evoluciona.", "Ignite your idea. Watch it evolve.")}
           </h2>
-          <p className="text-lg text-muted-foreground max-w-lg leading-relaxed">
-            {t(
-              "UXBox es nuestra herramienta de IA que transforma tu idea en un brief estructurado — problema, usuarios, requisitos y enfoque de diseño — en minutos.",
-              "UXBox is our AI tool that turns your idea into a structured brief — problem, users, requirements, and design approach — in minutes."
-            )}
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs text-muted-foreground">
-            <span className="flex items-center gap-1.5"><Clock size={13} style={{ color: accent }} /> {t("Toma ~3 minutos", "Takes ~3 minutes")}</span>
-            <span className="flex items-center gap-1.5"><UserCheck size={13} style={{ color: accent }} /> {t("Revisado por un humano", "Reviewed by a human")}</span>
-            <span className="flex items-center gap-1.5"><ShieldCheck size={13} style={{ color: accent }} /> {t("Tus datos solo se usan para tu brief", "Your data is only used for your brief")}</span>
-          </div>
+          {phase === "spark" && (
+            <p className="text-lg text-white/55 max-w-xl leading-relaxed">
+              {t(
+                "UXBox analiza tu idea con IA —mercado, competidores, oportunidades UX y módulos— y te entrega un blueprint accionable. Empieza a verlo en segundos.",
+                "UXBox analyzes your idea with AI —market, competitors, UX opportunities, and modules— and delivers an actionable blueprint. Start seeing it in seconds."
+              )}
+            </p>
+          )}
         </div>
 
-        {/* Stepper */}
-        <div className="flex items-center justify-center gap-0 mb-4" aria-label="Progress">
-          {steps.map((s, i) => {
-            const num = (i + 1) as Step
-            const Icon = s.icon
-            const done = step > num
-            const active = step === num
-            return (
-              <div key={i} className="flex items-center">
-                <div className="flex flex-col items-center gap-1.5">
-                  <div className="w-9 h-9 rounded-full flex items-center justify-center font-semibold text-sm transition-all duration-300"
-                    style={{
-                      background: done ? accent : active ? accent : "var(--secondary)",
-                      color: done || active ? "white" : "var(--muted-foreground)",
-                      boxShadow: active ? `0 0 0 4px ${accentBorder}` : "none",
-                    }}>
-                    {done ? <CheckCircle2 size={16} /> : <Icon size={15} />}
-                  </div>
-                  <span className="text-[10px] font-medium text-center hidden sm:block"
-                    style={{ color: active ? accent : "var(--muted-foreground)" }}>
-                    {t(s.labelEs, s.labelEn)}
-                  </span>
-                </div>
-                {i < steps.length - 1 && (
-                  <div className="w-12 md:w-20 h-px mx-2 mb-5 transition-all duration-500"
-                    style={{ background: step > i + 1 ? accent : "var(--border)" }} />
-                )}
+        {/* ───────── SPARK ───────── */}
+        {phase === "spark" && (
+          <form onSubmit={handleSpark} className="flex flex-col gap-4 max-w-xl mx-auto animate-in fade-in duration-500">
+            <div className="relative">
+              <textarea
+                value={idea}
+                onChange={(e) => { setIdea(e.target.value); setError("") }}
+                placeholder={t("Describe tu idea en una línea…", "Describe your idea in one line…")}
+                rows={3}
+                autoFocus
+                className={`${inputClass} text-base pr-4`}
+              />
+            </div>
+            {error && <p className="text-xs text-red-400 font-medium">{error}</p>}
+            <button type="submit" className="w-full flex items-center justify-center gap-2 py-4 rounded-xl font-semibold text-[15px] text-white transition-all active:scale-95 hover:brightness-110"
+              style={{ background: "linear-gradient(90deg, #E8751A, #c65a10)", boxShadow: "0 8px 30px rgba(232,117,26,0.3)" }}>
+              <Sparkles size={17} /> {t("Analizar mi idea", "Analyze my idea")}
+            </button>
+            <p className="text-xs text-white/40 text-center flex items-center justify-center gap-1.5">
+              <Activity size={12} /> {t("173 ideas analizadas esta semana · resultado en minutos", "173 ideas analyzed this week · result in minutes")}
+            </p>
+          </form>
+        )}
+
+        {/* ───────── REACTING (instant reward) ───────── */}
+        {phase === "reacting" && (
+          <div className="max-w-xl mx-auto flex flex-col gap-6 animate-in fade-in duration-500">
+            <div className="rounded-2xl border p-6 backdrop-blur-sm" style={{ borderColor: accentBorder, background: "rgba(255,255,255,0.04)" }}>
+              <div className="flex items-center gap-2 mb-3 text-xs font-semibold uppercase tracking-widest" style={{ color: ACCENT }}>
+                <Cpu size={13} /> {t("Reacción de la IA", "AI reaction")}
               </div>
-            )
-          })}
-        </div>
-        <p className="text-center text-xs text-muted-foreground mb-8">
-          {t("Paso", "Step")} {step} {t("de", "of")} 4
-        </p>
-
-        {/* Card */}
-        <div className="rounded-2xl border border-border bg-card shadow-xl p-8 md:p-10 max-w-xl mx-auto">
-
-          {/* ── Step 1: Email & Validation ── */}
-          {step === 1 && !isValidatingEmail && (
-            <form onSubmit={handleStep1} className="flex flex-col gap-6">
-              <div className="flex flex-col gap-1">
-                <h3 className="font-display font-bold text-xl text-foreground">
-                  {t("¿Cuál es tu email de trabajo?", "What is your work email?")}
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                  {t("Te enviaremos el brief de tu proyecto al finalizar.", "We'll send you the project brief when done.")}
-                </p>
-              </div>
-              <div className="flex flex-col gap-2">
-                <input
-                  type="email"
-                  value={email}
-                  disabled={loading}
-                  onChange={(e) => { setEmail(e.target.value); setEmailError("") }}
-                  placeholder={t("nombre@empresa.com", "name@company.com")}
-                  className={inputClass}
-                  style={{ borderColor: emailError ? "#ef4444" : undefined }}
-                  {...inputFocus}
-                  required
-                />
-                {emailError && <p className="text-xs text-red-500 font-medium">{emailError}</p>}
-              </div>
-
-              <label className="flex items-start gap-2.5 text-xs text-muted-foreground cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={consent}
-                  onChange={(e) => { setConsent(e.target.checked); setEmailError("") }}
-                  className="mt-0.5 accent-[#E8751A] w-4 h-4 shrink-0"
-                />
-                <span>
-                  {t(
-                    "Acepto que MediaLab use mis datos para generar y enviarme mi brief, según la ",
-                    "I agree to let MediaLab use my data to generate and send my brief, per the "
-                  )}
-                  <Link href="/politica-de-privacidad" className="underline hover:text-foreground">
-                    {t("política de privacidad", "privacy policy")}
-                  </Link>.
-                </span>
-              </label>
-
-              <button type="submit" disabled={loading} className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold text-sm text-white transition-all active:scale-95 disabled:opacity-50" style={btnStyle}>
-                {loading ? t("Enviando código...", "Sending code...") : t("Continuar", "Continue")} <ArrowRight size={16} />
-              </button>
-              <p className="text-xs text-muted-foreground text-center">
-                {t("Para evitar spam, permitimos hasta 2 ideas por correo.", "To prevent spam, we allow up to 2 ideas per email.")}
+              <p className="text-base text-white/85 leading-relaxed min-h-[3rem]">
+                {reaction}<span className="inline-block w-1.5 h-4 ml-0.5 align-middle animate-pulse" style={{ background: ACCENT }} />
               </p>
-            </form>
-          )}
-
-          {step === 1 && isValidatingEmail && (
-            <form onSubmit={handleVerifyOtp} className="flex flex-col gap-6">
-              <div className="flex flex-col gap-1">
-                <h3 className="font-display font-bold text-xl text-foreground">
-                  {t("Revisa tu correo", "Check your email")}
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                  {t("Hemos enviado un código PIN de 4 dígitos a ", "We've sent a 4-digit PIN code to ")}
-                  <strong className="text-foreground">{email}</strong>
-                </p>
+              <div className="flex flex-wrap gap-2 mt-4">
+                {lab.signals.map((s) => (
+                  <span key={s} className="px-3 py-1 rounded-full text-xs font-medium border border-white/15 bg-white/5 text-white/80">{s}</span>
+                ))}
               </div>
+            </div>
+            <button onClick={() => setPhase("gate")} className="w-full flex items-center justify-center gap-2 py-4 rounded-xl font-semibold text-[15px] text-white transition-all active:scale-95 hover:brightness-110"
+              style={{ background: "linear-gradient(90deg, #E8751A, #c65a10)" }}>
+              <ShieldCheck size={17} /> {t("Asegurar mi laboratorio", "Secure my lab")}
+            </button>
+            <button onClick={resetLab} className="text-xs text-white/40 hover:text-white/70 transition-colors mx-auto">
+              {t("Empezar con otra idea", "Start with another idea")}
+            </button>
+          </div>
+        )}
 
-              {isDemo && demoPin && (
-                <div className="rounded-lg border border-dashed px-4 py-3 text-xs text-center" style={{ borderColor: accentBorder, background: accentBg }}>
-                  {t("Modo demo — tu código es ", "Demo mode — your code is ")}
-                  <strong className="text-base tracking-widest" style={{ color: accent }}>{demoPin}</strong>
-                </div>
-              )}
+        {/* ───────── GATE (email) ───────── */}
+        {phase === "gate" && (
+          <form onSubmit={handleGate} className="max-w-md mx-auto flex flex-col gap-5 animate-in fade-in duration-500">
+            <div className="flex flex-col gap-1 text-center">
+              <h3 className="font-display font-bold text-xl text-white">{t("Asegura tu laboratorio", "Secure your lab")}</h3>
+              <p className="text-sm text-white/55">{t("Para no perder este análisis y poder volver cuando quieras.", "So you don't lose this analysis and can return anytime.")}</p>
+            </div>
+            <div className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3">
+              <Mail size={16} className="text-white/40 shrink-0" />
+              <input type="email" value={email} disabled={loading}
+                onChange={(e) => { setEmail(e.target.value); setError("") }}
+                placeholder={t("nombre@empresa.com", "name@company.com")}
+                className="w-full py-3.5 bg-transparent text-white placeholder:text-white/35 focus:outline-none text-sm" required />
+            </div>
+            <label className="flex items-start gap-2.5 text-xs text-white/55 cursor-pointer">
+              <input type="checkbox" checked={consent} onChange={(e) => { setConsent(e.target.checked); setError("") }} className="mt-0.5 accent-[#E8751A] w-4 h-4 shrink-0" />
+              <span>{t("Acepto que MediaLab use mis datos para generar mi análisis, según la ", "I agree to let MediaLab use my data to generate my analysis, per the ")}
+                <Link href="/politica-de-privacidad" className="underline hover:text-white">{t("política de privacidad", "privacy policy")}</Link>.</span>
+            </label>
+            {error && <p className="text-xs text-red-400 font-medium">{error}</p>}
+            <button type="submit" disabled={loading} className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold text-sm text-white transition-all active:scale-95 disabled:opacity-50"
+              style={{ background: "linear-gradient(90deg, #E8751A, #c65a10)" }}>
+              {loading ? t("Enviando llave…", "Sending key…") : t("Entrar a mi laboratorio", "Enter my lab")} <ArrowRight size={15} />
+            </button>
+          </form>
+        )}
 
-              <div className="flex flex-col gap-2">
-                <input
-                  type="text"
-                  inputMode="numeric"
-                  maxLength={4}
-                  value={pinInput}
-                  onChange={(e) => { setPinInput(e.target.value.replace(/\D/g, "")); setEmailError("") }}
-                  placeholder={t("Ej: 4812", "E.g: 4812")}
-                  className={`${inputClass} text-center tracking-widest font-bold text-2xl`}
-                  style={{ borderColor: emailError ? "#ef4444" : undefined }}
-                  {...inputFocus}
-                  required
-                />
-                {emailError && <p className="text-xs text-red-500 font-medium text-center">{emailError}</p>}
-                <div className="flex items-center justify-center gap-4 mt-2 text-xs">
-                  <button
-                    type="button"
-                    onClick={handleResend}
-                    disabled={resending}
-                    className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground disabled:opacity-50"
-                  >
-                    <RotateCcw size={12} className={resending ? "animate-spin" : ""} />
-                    {resending ? t("Reenviando...", "Resending...") : t("Reenviar código", "Resend code")}
-                  </button>
-                  <span className="w-px h-3 bg-border" />
-                  <button
-                    type="button"
-                    onClick={() => { setIsValidatingEmail(false); setPinInput(""); setEmailError("") }}
-                    className="text-muted-foreground hover:text-foreground"
-                  >
-                    {t("Cambiar correo", "Change email")}
-                  </button>
-                </div>
+        {/* ───────── OTP ───────── */}
+        {phase === "otp" && (
+          <form onSubmit={handleOtp} className="max-w-md mx-auto flex flex-col gap-5 animate-in fade-in duration-500">
+            <div className="flex flex-col gap-1 text-center">
+              <h3 className="font-display font-bold text-xl text-white">{t("Revisa tu correo", "Check your email")}</h3>
+              <p className="text-sm text-white/55">{t("Te envié una llave de 4 dígitos a ", "I sent a 4-digit key to ")}<strong className="text-white">{email}</strong></p>
+            </div>
+            {isDemo && demoPin && (
+              <div className="rounded-lg border border-dashed px-4 py-3 text-xs text-center" style={{ borderColor: accentBorder, background: accentBg }}>
+                {t("Modo demo — tu llave es ", "Demo mode — your key is ")}<strong className="text-base tracking-widest" style={{ color: ACCENT }}>{demoPin}</strong>
               </div>
-              <button type="submit" disabled={pinInput.length < 4 || loading} className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold text-sm text-white transition-all active:scale-95 disabled:opacity-50" style={btnStyle}>
-                {loading ? t("Verificando...", "Verifying...") : t("Verificar código", "Verify code")} <ArrowRight size={16} />
+            )}
+            <input type="text" inputMode="numeric" maxLength={4} value={pinInput}
+              onChange={(e) => { setPinInput(e.target.value.replace(/\D/g, "")); setError("") }}
+              placeholder={t("Ej: 4812", "E.g: 4812")} autoFocus
+              className={`${inputClass} text-center tracking-[0.5em] font-bold text-2xl`} required />
+            {error && <p className="text-xs text-red-400 font-medium text-center">{error}</p>}
+            <div className="flex items-center justify-center gap-4 text-xs">
+              <button type="button" onClick={handleResend} disabled={resending} className="flex items-center gap-1.5 text-white/50 hover:text-white disabled:opacity-50">
+                <RotateCcw size={12} className={resending ? "animate-spin" : ""} /> {resending ? t("Reenviando…", "Resending…") : t("Reenviar llave", "Resend key")}
               </button>
-            </form>
-          )}
+              <span className="w-px h-3 bg-white/20" />
+              <button type="button" onClick={() => { setPhase("gate"); setPinInput(""); setError("") }} className="text-white/50 hover:text-white">{t("Cambiar correo", "Change email")}</button>
+            </div>
+            <button type="submit" disabled={pinInput.length < 4 || loading} className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold text-sm text-white transition-all active:scale-95 disabled:opacity-50"
+              style={{ background: "linear-gradient(90deg, #E8751A, #c65a10)" }}>
+              {loading ? t("Verificando…", "Verifying…") : t("Entrar", "Enter")} <ArrowRight size={15} />
+            </button>
+          </form>
+        )}
 
-          {/* ── Step 2: Project type + idea + details ── */}
-          {step === 2 && (
-            <form onSubmit={handleStep2} className="flex flex-col gap-5">
-              <div className="flex flex-col gap-1">
-                <h3 className="font-display font-bold text-xl text-foreground">
-                  {t("Cuéntanos tu idea", "Tell us about your idea")}
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                  {t("Entre más detalle, mejor será el brief que generemos.", "The more detail, the better brief we'll generate.")}
-                </p>
+        {/* ───────── FEED (progressive disclosure) ───────── */}
+        {phase === "feed" && (
+          <div className="max-w-md mx-auto flex flex-col gap-6 animate-in fade-in duration-500">
+            {/* progress */}
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center justify-between text-xs text-white/50">
+                <span>{t("Definiendo tu producto", "Defining your product")}</span>
+                <span className="font-semibold" style={{ color: ACCENT }}>{feedProgress}%</span>
               </div>
-
-              {/* Project type templates */}
-              <div className="flex flex-col gap-2">
-                <label className="text-xs font-semibold text-foreground uppercase tracking-wide">
-                  {t("¿Qué tipo de proyecto es?", "What type of project is it?")}
-                </label>
-                <div className="grid grid-cols-3 gap-2">
-                  {projectTypes.map((p) => (
-                    <button key={p.id} type="button" onClick={() => setProjectType(p.id)}
-                      className="px-2 py-2.5 rounded-xl text-xs font-medium border transition-all text-center"
-                      style={{
-                        background: projectType === p.id ? accentBg : "var(--background)",
-                        color: projectType === p.id ? accent : "var(--muted-foreground)",
-                        borderColor: projectType === p.id ? accent : "var(--border)",
-                      }}>
-                      {p.label}
-                    </button>
-                  ))}
-                </div>
+              <div className="h-1.5 rounded-full bg-white/10 overflow-hidden">
+                <div className="h-full rounded-full transition-all duration-500" style={{ width: `${feedProgress}%`, background: "linear-gradient(90deg, #E8751A, #2AABB3)" }} />
               </div>
+            </div>
 
-              {/* Idea textarea */}
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-foreground uppercase tracking-wide">
-                  {t("Tu idea de producto *", "Your product idea *")}
-                </label>
-                <textarea
-                  value={idea}
-                  onChange={(e) => setIdea(e.target.value)}
-                  placeholder={ideaPlaceholder}
-                  rows={4}
-                  className={inputClass}
-                  {...inputFocus}
-                  required
-                />
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-6 flex flex-col gap-4">
+              <div className="flex items-start gap-2 text-xs text-white/55">
+                <Cpu size={14} className="shrink-0 mt-0.5" style={{ color: ACCENT }} />
+                <span>{currentField.ai}</span>
               </div>
+              <label className="font-display font-bold text-lg text-white">{currentField.label}</label>
+              <input
+                type="text" value={currentField.value} autoFocus
+                onChange={(e) => { currentField.set(e.target.value); setError("") }}
+                onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); advanceFeed() } }}
+                placeholder={currentField.placeholder}
+                className={inputClass}
+              />
+              {error && <p className="text-xs text-red-400 font-medium">{error}</p>}
+            </div>
 
-              {/* Industry */}
-              <div className="flex flex-col gap-2">
-                <label className="text-xs font-semibold text-foreground uppercase tracking-wide">
-                  {t("¿En qué industria?", "Which industry?")}
-                </label>
-                <div className="flex flex-wrap gap-2">
-                  {industries.map((ind) => (
-                    <button key={ind} type="button" onClick={() => setIndustry(ind)}
-                      className="px-3 py-1.5 rounded-full text-xs font-medium border transition-all"
-                      style={{
-                        background: industry === ind ? accent : "var(--background)",
-                        color: industry === ind ? "white" : "var(--muted-foreground)",
-                        borderColor: industry === ind ? accent : "var(--border)",
-                      }}>
-                      {ind}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Reference URLs */}
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-foreground uppercase tracking-wide flex items-center gap-1.5">
-                  <Globe size={12} />
-                  {t("Sitios web de referencia", "Reference websites")}
-                  <span className="text-muted-foreground font-normal normal-case tracking-normal">({t("opcional", "optional")})</span>
-                </label>
-                <input
-                  type="text"
-                  value={referenceUrls}
-                  onChange={(e) => setReferenceUrls(e.target.value)}
-                  placeholder={t("e.g. airbnb.com, notion.so, figma.com", "e.g. airbnb.com, notion.so, figma.com")}
-                  className={inputClass}
-                  {...inputFocus}
-                />
-                <p className="text-xs text-muted-foreground">
-                  {t("Separa múltiples URLs con comas", "Separate multiple URLs with commas")}
-                </p>
-              </div>
-
-              {/* Existing brand */}
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-foreground uppercase tracking-wide flex items-center gap-1.5">
-                  <Building2 size={12} />
-                  {t("¿Tienes marca o página web existente?", "Do you have an existing brand or website?")}
-                  <span className="text-muted-foreground font-normal normal-case tracking-normal">({t("opcional", "optional")})</span>
-                </label>
-                <input
-                  type="text"
-                  value={existingBrand}
-                  onChange={(e) => setExistingBrand(e.target.value)}
-                  placeholder={t("Deja el link o describe tu marca...", "Leave the link or describe your brand...")}
-                  className={inputClass}
-                  {...inputFocus}
-                />
-              </div>
-
-              {briefError && (
-                <p className="text-xs text-amber-500 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-lg px-3 py-2">
-                  {briefError}
-                </p>
-              )}
-
-              <div className="flex gap-3 pt-1">
-                <button type="button" onClick={() => setStep(1)}
-                  className="flex-1 py-3.5 rounded-xl font-semibold text-sm border border-border text-muted-foreground hover:text-foreground transition-all flex items-center justify-center gap-2">
+            <div className="flex gap-3">
+              {feedStep > 0 && (
+                <button onClick={() => { setFeedStep((s) => s - 1); setError("") }} className="flex-1 py-3.5 rounded-xl font-semibold text-sm border border-white/15 text-white/70 hover:text-white transition-all flex items-center justify-center gap-2">
                   <ChevronLeft size={15} /> {t("Atrás", "Back")}
                 </button>
-                <button type="submit" disabled={!idea.trim() || loading}
-                  className="flex-[2] flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold text-sm text-white disabled:opacity-50 transition-all active:scale-95"
-                  style={btnStyle}>
-                  {loading ? (
-                    <><Loader2 size={15} className="animate-spin" /> {t("Generando brief IA...", "Generating AI brief...")}</>
-                  ) : (
-                    <><Sparkles size={15} /> {t("Generar mi Brief con IA", "Generate my AI Brief")}</>
-                  )}
-                </button>
-              </div>
-            </form>
-          )}
+              )}
+              <button onClick={advanceFeed} className="flex-[2] flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold text-sm text-white transition-all active:scale-95"
+                style={{ background: "linear-gradient(90deg, #E8751A, #c65a10)" }}>
+                {feedStep < feedFields.length - 1
+                  ? (<>{t("Continuar", "Continue")} <ArrowRight size={15} /></>)
+                  : (<><Cpu size={15} /> {t("Encender el motor", "Ignite the engine")}</>)}
+              </button>
+            </div>
+          </div>
+        )}
 
-          {/* ── Step 3: Review AI Brief ── */}
-          {step === 3 && (
-            <div className="flex flex-col gap-6">
-              <div className="flex flex-col gap-1">
-                <div className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide px-2 py-1 rounded-full w-fit"
-                  style={{ background: accentBg, color: accent }}>
-                  <Sparkles size={11} /> {t("Brief generado por IA", "AI-generated brief")}
+        {/* ───────── ENGINE + RETURN (timeline) ───────── */}
+        {(phase === "engine" || phase === "return") && (
+          <div className="max-w-2xl mx-auto flex flex-col gap-8 animate-in fade-in duration-500">
+            {phase === "return" && (
+              <div className="rounded-2xl border p-5 flex items-start gap-3" style={{ borderColor: accentBorder, background: accentBg }}>
+                <Activity size={16} className="shrink-0 mt-0.5" style={{ color: ACCENT }} />
+                <div>
+                  <p className="text-sm text-white/85 font-medium">{t("Tu idea avanzó mientras no estabas.", "Your idea advanced while you were away.")}</p>
+                  <p className="text-sm text-white/55 mt-1">{returnInsight}</p>
                 </div>
-                <h3 className="font-display font-bold text-xl text-foreground">
-                  {t("El brief de tu proyecto", "Your project brief")}
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                  {t("Revisa la definición formal que generamos para tu idea.", "Review the formal definition we generated for your idea.")}
-                </p>
               </div>
+            )}
 
-              {brief ? (
-                <div className="rounded-xl border border-border bg-secondary/30 p-5 flex flex-col gap-4 max-h-64 overflow-y-auto">
-                  {brief.split("\n\n").filter(Boolean).map((para, i) => (
-                    <p key={i} className="text-sm text-foreground leading-relaxed">{para}</p>
+            {/* Timeline */}
+            <div className="flex flex-col">
+              {stages.map((st, i) => {
+                const done = i < activeStage || (phase === "return")
+                const active = i === activeStage && phase === "engine"
+                const locked = i > activeStage && phase === "engine"
+                const Icon = st.icon
+                return (
+                  <div key={st.label} className={`relative flex gap-4 pb-7 ${locked ? "opacity-35 blur-[1px]" : "opacity-100"} transition-all duration-500`}>
+                    {/* connector */}
+                    {i < stages.length - 1 && (
+                      <div className="absolute left-[19px] top-10 bottom-0 w-px" style={{ background: done ? ACCENT : "rgba(255,255,255,0.12)" }} aria-hidden="true" />
+                    )}
+                    {/* node */}
+                    <div className="relative shrink-0 w-10 h-10 rounded-xl flex items-center justify-center border"
+                      style={{
+                        background: done ? "linear-gradient(135deg, var(--magenta), var(--orange))" : active ? accentBg : "rgba(255,255,255,0.04)",
+                        borderColor: done || active ? accentBorder : "rgba(255,255,255,0.1)",
+                      }}>
+                      {done ? <CheckCircle2 size={18} className="text-white" />
+                        : active ? <Loader2 size={16} className="animate-spin" style={{ color: ACCENT }} />
+                        : i === stages.length - 1 ? <Lock size={15} className="text-white/40" />
+                        : <Circle size={14} className="text-white/30" />}
+                      {active && <span className="absolute inset-0 rounded-xl animate-ping" style={{ background: ACCENT, opacity: 0.18 }} />}
+                    </div>
+                    {/* content */}
+                    <div className="flex flex-col gap-1 pt-1.5 flex-1">
+                      <div className="flex items-center gap-2">
+                        <Icon size={13} className="text-white/40" />
+                        <h3 className="font-display font-bold text-sm text-white">{st.label}</h3>
+                      </div>
+                      {(done || active) && (
+                        active && i === 4 && !brief
+                          ? <div className="mt-1 h-3 w-2/3 rounded bg-white/10 animate-pulse" />
+                          : <p className="text-xs text-white/55 leading-relaxed">{st.insight}</p>
+                      )}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+
+            {/* Blueprint preview */}
+            {(activeStage >= 4 || phase === "return") && brief && (
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-6 flex flex-col gap-3 animate-in fade-in duration-500">
+                <div className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest w-fit" style={{ color: ACCENT }}>
+                  <Cpu size={12} /> {t("Tu blueprint", "Your blueprint")}
+                </div>
+                <div className="max-h-48 overflow-y-auto flex flex-col gap-3">
+                  {brief.split("\n\n").filter(Boolean).slice(0, 2).map((p, i) => (
+                    <p key={i} className="text-sm text-white/75 leading-relaxed">{p}</p>
                   ))}
                 </div>
-              ) : (
-                <div className="rounded-xl border border-border bg-secondary/30 p-5 text-sm text-muted-foreground italic">
-                  {t("Brief no disponible en este momento.", "Brief not available at this time.")}
-                </div>
-              )}
-
-              {prototype && (
-                <div className="rounded-xl border p-4" style={{ borderColor: accentBorder, background: accentBg }}>
-                  <p className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: accent }}>
-                    🎨 {t("Prototipo sugerido", "Suggested prototype")}
-                  </p>
-                  <p className="text-sm text-foreground leading-relaxed">{prototype}</p>
-                </div>
-              )}
-
-              <p className="flex items-start gap-2 text-xs text-muted-foreground">
-                <UserCheck size={14} className="shrink-0 mt-0.5" style={{ color: accent }} />
-                {t(
-                  "Esto es una propuesta preliminar generada con IA. Nuestro equipo la revisa y la afina contigo en una sesión gratuita de 30 minutos.",
-                  "This is a preliminary AI-generated proposal. Our team reviews and refines it with you in a free 30-minute session."
-                )}
-              </p>
-
-              <div className="flex gap-3">
-                <button onClick={() => setStep(2)} className="flex-1 py-3.5 rounded-xl font-semibold text-sm border border-border text-muted-foreground hover:text-foreground transition-all flex items-center justify-center gap-2">
-                  <ChevronLeft size={15} /> {t("Editar", "Edit")}
-                </button>
-                <button onClick={handleStep3} disabled={loading}
-                  className="flex-[2] flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold text-sm text-white disabled:opacity-50 transition-all active:scale-95"
-                  style={btnStyle}>
-                  {loading ? (
-                    <><Loader2 size={15} className="animate-spin" /> {t("Enviando...", "Sending...")}</>
-                  ) : (
-                    <><Rocket size={15} /> {t("Confirmar y recibir por email", "Confirm & receive by email")}</>
-                  )}
-                </button>
+                <p className="text-xs text-white/40 flex items-center gap-1.5">
+                  <ShieldCheck size={12} /> {t("Propuesta preliminar generada con IA y revisada por nuestro equipo.", "Preliminary AI-generated proposal, reviewed by our team.")}
+                </p>
               </div>
-            </div>
-          )}
+            )}
 
-          {/* ── Step 4: Done ── */}
-          {step === 4 && (
-            <div className="flex flex-col items-center justify-center p-8 text-center animate-in fade-in zoom-in duration-500">
-              <div className="w-20 h-20 rounded-full flex items-center justify-center mb-6" style={{ background: accentBg, color: accent }}>
-                <CheckCircle2 size={40} />
-              </div>
-              <h3 className="font-display font-bold text-3xl mb-4 text-foreground">
-                {t("¡Todo listo!", "All set!")}
-              </h3>
-              <p className="text-muted-foreground mb-8 text-base leading-relaxed max-w-sm">
-                {t("Hemos recibido tu idea y te enviamos el brief por correo. Nuestro equipo lo revisará y te contactaremos en menos de 24 horas con los siguientes pasos.", "We received your idea and sent the brief to your email. Our team will review it and contact you within 24 hours with the next steps.")}
-              </p>
-
-              <BookingModal>
-                <button type="button" className="w-full sm:w-auto px-8 py-3.5 rounded-xl font-semibold text-sm text-white transition-all active:scale-95 shadow-lg shadow-orange-500/20" style={btnStyle}>
-                  {t("Agendar mi sesión gratuita de 30 min", "Book my free 30-min session")}
-                </button>
-              </BookingModal>
-            </div>
-          )}
-        </div>
-
-        {/* Form specific Footer */}
-        {step < 4 && (
-          <div className="mt-8 pt-8 border-t border-border/50 text-center flex flex-col items-center gap-4">
-            <span className="text-xs font-semibold uppercase tracking-widest text-[var(--magenta)]">
-              {t("¿Quieres hablar con un humano?", "Want to talk to a human?")}
-            </span>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 text-sm">
-              <a href="https://wa.me/573054009505" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-foreground hover:text-[var(--magenta)] transition-colors font-medium hover:bg-secondary/50 px-4 py-2 rounded-full border border-transparent hover:border-border">
-                <MessageCircle size={18} className="text-[#25D366]" /> WhatsApp
-              </a>
-              <div className="hidden sm:block w-1.5 h-1.5 rounded-full bg-border" />
-              <div className="flex items-center gap-2">
-                <span className="text-muted-foreground">
-                  {t("¿Prefieres agendar una llamada?", "Prefer to schedule a call?")}
-                </span>
+            {/* Unlock CTA */}
+            {(activeStage >= 5 || phase === "return") ? (
+              <div className="flex flex-col items-center gap-4 text-center">
+                <p className="text-sm text-white/60">{t("Tu análisis está listo. El siguiente paso es humano.", "Your analysis is ready. The next step is human.")}</p>
                 <BookingModal>
-                  <button type="button" className="text-foreground hover:underline ml-1 font-semibold border-none bg-transparent">
-                    {t("Agenda aquí", "Schedule here")}
+                  <button type="button" className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-semibold text-[15px] text-white transition-all active:scale-95 shadow-lg hover:brightness-110"
+                    style={{ background: "linear-gradient(90deg, #E8751A, #c65a10)" }}>
+                    <Rocket size={16} /> {t("Estamos listos para hablar contigo", "We're ready to talk to you")}
                   </button>
                 </BookingModal>
+                <button onClick={resetLab} className="text-xs text-white/40 hover:text-white/70 transition-colors">{t("Analizar otra idea", "Analyze another idea")}</button>
               </div>
+            ) : (
+              <div className="rounded-xl border border-white/10 bg-white/5 px-5 py-4 flex items-center gap-3 text-sm text-white/60">
+                <Loader2 size={15} className="animate-spin shrink-0" style={{ color: ACCENT }} />
+                {t("Cruzando tu idea con +2.000 patrones de producto…", "Cross-referencing your idea with 2,000+ product patterns…")}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Human escape hatch (not during engine run) */}
+        {hydrated && phase !== "engine" && (
+          <div className="mt-10 pt-8 border-t border-white/10 text-center flex flex-col items-center gap-3">
+            <span className="text-xs font-semibold uppercase tracking-widest text-white/40">{t("¿Prefieres hablar con un humano?", "Prefer to talk to a human?")}</span>
+            <div className="flex items-center justify-center gap-5 text-sm">
+              <a href="https://wa.me/573054009505" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-white/75 hover:text-white transition-colors">
+                <MessageCircle size={16} className="text-[#25D366]" /> WhatsApp
+              </a>
+              <span className="w-1 h-1 rounded-full bg-white/20" />
+              <BookingModal>
+                <button type="button" className="text-white/75 hover:text-white font-medium">{t("Agendar llamada", "Book a call")}</button>
+              </BookingModal>
             </div>
           </div>
         )}
