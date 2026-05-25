@@ -19,9 +19,9 @@ export const metadata: Metadata = {
       "Investigación de usuarios, diseño conductual e IA para experiencias que conectan y convierten.",
     type: "article",
     url: "/servicios/diseno-ux-ui",
-    images: [{ url: "/images/ux-research.jpg", width: 1200, height: 630, alt: "Diseño UX/UI con IA" }],
+    images: [{ url: "/images/ux-research.png", width: 1200, height: 630, alt: "Diseño UX/UI con IA y psicología del consumidor — MediaLab Ingeniería" }],
   },
-  twitter: { card: "summary_large_image", images: ["/images/ux-research.jpg"] },
+  twitter: { card: "summary_large_image", images: ["/images/ux-research.png"] },
 }
 
 const serviceSchema = {

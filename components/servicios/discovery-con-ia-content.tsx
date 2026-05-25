@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import {
   Sparkles, Search, Users, FileText, Rocket, CheckCircle2,
   ArrowRight, ChevronRight, Clock, Brain, Target,
@@ -73,12 +74,12 @@ export function DiscoveryConIAContent() {
   ]
 
   const industries = [
-    t("Fintech y Banca", "Fintech & Banking"),
-    t("Salud y HealthTech", "Health & HealthTech"),
-    t("Educación", "Education"),
-    t("Retail y E-commerce", "Retail & E-commerce"),
-    t("Movilidad", "Mobility"),
-    t("SaaS B2B", "B2B SaaS"),
+    { name: t("Fintech", "Fintech"), href: "/industrias/fintech" },
+    { name: t("Banca", "Banking"), href: "/industrias/banca" },
+    { name: t("Educación", "Education"), href: "/industrias/educacion" },
+    { name: t("E-commerce", "E-commerce"), href: "/industrias/ecommerce" },
+    { name: t("Movilidad", "Mobility"), href: "/industrias/movilidad" },
+    { name: t("Startups y SaaS", "Startups & SaaS"), href: "/industrias/startups" },
   ]
 
   const faqs = [
@@ -92,7 +93,7 @@ export function DiscoveryConIAContent() {
     {
       q: t("¿La IA reemplaza la investigación de usuarios?", "Does AI replace user research?"),
       a: t(
-        "No. La IA acelera el análisis y genera hipótesis, pero la investigación con usuarios reales y la psicología del consumidor siguen siendo el filtro que evita construir el producto equivocado. Usamos IA como copiloto, no como reemplazo del criterio.",
+        "No. La IA acelera el análisis y generates hipótesis, pero la investigación con usuarios reales y la psicología del consumidor siguen siendo el filtro que evita construir el producto equivocado. Usamos IA como copiloto, no como reemplazo del criterio.",
         "No. AI accelerates analysis and generates hypotheses, but research with real users and consumer psychology remain the filter that prevents building the wrong product. We use AI as a copilot, not a replacement for judgment."
       ),
     },
@@ -120,47 +121,61 @@ export function DiscoveryConIAContent() {
       <section className="relative pt-32 pb-20 px-6 bg-[var(--surface-dark)] text-white overflow-hidden" aria-labelledby="discovery-h1">
         <div className="absolute -top-24 right-0 w-96 h-96 rounded-full blur-3xl pointer-events-none opacity-25"
           style={{ background: "radial-gradient(circle, #E8751A 0%, transparent 70%)" }} aria-hidden="true" />
-        <div className="relative z-10 max-w-4xl mx-auto flex flex-col gap-6">
-          {/* Breadcrumb */}
-          <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-white/50">
-            <Link href={localized("/")} className="hover:text-white">{t("Inicio", "Home")}</Link>
-            <ChevronRight size={12} />
-            <Link href={localized("/servicios")} className="hover:text-white">{t("Servicios", "Services")}</Link>
-            <ChevronRight size={12} />
-            <span className="text-white/80">{t("Discovery con IA", "AI Discovery")}</span>
-          </nav>
+        <div className="relative z-10 max-w-6xl mx-auto grid lg:grid-cols-12 gap-12 items-center">
+          <div className="lg:col-span-7 flex flex-col gap-6">
+            {/* Breadcrumb */}
+            <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-white/50">
+              <Link href={localized("/")} className="hover:text-white">{t("Inicio", "Home")}</Link>
+              <ChevronRight size={12} />
+              <Link href={localized("/servicios")} className="hover:text-white">{t("Servicios", "Services")}</Link>
+              <ChevronRight size={12} />
+              <span className="text-white/80">{t("Discovery con IA", "AI Discovery")}</span>
+            </nav>
 
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold border w-fit"
-            style={{ color: "var(--magenta)", borderColor: "rgba(232,117,26,0.3)", background: "rgba(232,117,26,0.08)" }}>
-            <Sparkles size={14} /> {t("Servicio", "Service")}
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold border w-fit"
+              style={{ color: "var(--magenta)", borderColor: "rgba(232,117,26,0.3)", background: "rgba(232,117,26,0.08)" }}>
+              <Sparkles size={14} /> {t("Servicio", "Service")}
+            </div>
+
+            <h1 id="discovery-h1" className="font-display font-bold text-4xl md:text-5xl lg:text-6xl leading-[1.08] text-balance">
+              {t("Discovery de producto con IA sin perder criterio humano", "AI product discovery without losing human judgment")}
+            </h1>
+
+            {/* Answer-first summary (AEO) */}
+            <p className="text-lg text-white/70 max-w-2xl leading-relaxed">
+              {t(
+                "El discovery de producto con IA convierte una idea vaga en un brief accionable —problema, usuarios, requisitos y enfoque de diseño— en días en lugar de meses. En MediaLab combinamos IA, investigación de usuarios y psicología del consumidor para darte claridad con evidencia, no solo velocidad.",
+                "AI product discovery turns a vague idea into an actionable brief —problem, users, requirements, and design approach— in days instead of months. At MediaLab we combine AI, user research, and consumer psychology to give you clarity with evidence, not just speed."
+              )}
+            </p>
+
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mt-2">
+              <BookingModal>
+                <button type="button" className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-semibold text-[15px] text-white transition-all active:scale-95 shadow-lg hover:brightness-110"
+                  style={{ background: "#E8751A", boxShadow: "0 8px 30px rgba(232,117,26,0.35)" }}>
+                  {t("Agenda un discovery gratis", "Book a free discovery")}
+                </button>
+              </BookingModal>
+              <Link href={localized("/")+"#uxbox"} className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium border border-white/15 text-white/75 hover:text-white hover:border-white/30 transition-all">
+                {t("Probar UXBox gratis", "Try UXBox free")} <ArrowRight size={14} />
+              </Link>
+            </div>
+            <p className="text-xs text-white/50 flex items-center gap-2">
+              <Clock size={12} /> {t("De idea vaga a roadmap accionable en días", "From vague idea to actionable roadmap in days")}
+            </p>
           </div>
-
-          <h1 id="discovery-h1" className="font-display font-bold text-4xl md:text-5xl lg:text-6xl leading-[1.08] text-balance">
-            {t("Discovery de producto con IA sin perder criterio humano", "AI product discovery without losing human judgment")}
-          </h1>
-
-          {/* Answer-first summary (AEO) */}
-          <p className="text-lg text-white/70 max-w-2xl leading-relaxed">
-            {t(
-              "El discovery de producto con IA convierte una idea vaga en un brief accionable —problema, usuarios, requisitos y enfoque de diseño— en días en lugar de meses. En MediaLab combinamos IA, investigación de usuarios y psicología del consumidor para darte claridad con evidencia, no solo velocidad.",
-              "AI product discovery turns a vague idea into an actionable brief —problem, users, requirements, and design approach— in days instead of months. At MediaLab we combine AI, user research, and consumer psychology to give you clarity with evidence, not just speed."
-            )}
-          </p>
-
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mt-2">
-            <BookingModal>
-              <button type="button" className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-semibold text-[15px] text-white transition-all active:scale-95 shadow-lg hover:brightness-110"
-                style={{ background: "#E8751A", boxShadow: "0 8px 30px rgba(232,117,26,0.35)" }}>
-                {t("Agenda un discovery gratis", "Book a free discovery")}
-              </button>
-            </BookingModal>
-            <Link href={localized("/")+"#uxbox"} className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium border border-white/15 text-white/75 hover:text-white hover:border-white/30 transition-all">
-              {t("Probar UXBox gratis", "Try UXBox free")} <ArrowRight size={14} />
-            </Link>
+          <div className="lg:col-span-5 flex justify-center w-full">
+            <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden border border-white/10 shadow-2xl shadow-black/50 bg-secondary/20">
+              <Image
+                src="/images/discovery-hero.png"
+                alt={t("Discovery de producto con IA", "AI product discovery")}
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 500px"
+                priority
+              />
+            </div>
           </div>
-          <p className="text-xs text-white/50 flex items-center gap-2">
-            <Clock size={12} /> {t("De idea vaga a roadmap accionable en días", "From vague idea to actionable roadmap in days")}
-          </p>
         </div>
       </section>
 
@@ -258,7 +273,9 @@ export function DiscoveryConIAContent() {
           </p>
           <div className="flex flex-wrap gap-2.5">
             {industries.map((ind) => (
-              <span key={ind} className="px-4 py-2 rounded-full text-sm font-medium border border-border bg-card text-foreground/80">{ind}</span>
+              <Link key={ind.name} href={localized(ind.href)} className="px-4 py-2 rounded-full text-sm font-medium border border-border bg-card text-[var(--magenta)] hover:bg-secondary transition-all">
+                {ind.name}
+              </Link>
             ))}
           </div>
           <p className="text-sm text-muted-foreground pt-2">

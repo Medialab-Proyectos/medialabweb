@@ -19,9 +19,9 @@ export const metadata: Metadata = {
       "Convierte más sin gastar más en tráfico. Optimización de activación, retención y expansión con datos e IA.",
     type: "article",
     url: "/servicios/cro-saas",
-    images: [{ url: "/images/ux-research.jpg", width: 1200, height: 630, alt: "CRO para SaaS" }],
+    images: [{ url: "/images/cro-saas.png", width: 1200, height: 630, alt: "CRO para SaaS — optimización de conversión con datos e IA — MediaLab Ingeniería" }],
   },
-  twitter: { card: "summary_large_image", images: ["/images/ux-research.jpg"] },
+  twitter: { card: "summary_large_image", images: ["/images/cro-saas.png"] },
 }
 
 const serviceSchema = {

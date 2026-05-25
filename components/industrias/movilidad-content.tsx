@@ -190,6 +190,12 @@ export function MovilidadContent() {
           <p className="text-sm text-muted-foreground pt-2">
             {t("Mira casos reales en nuestro ", "See real cases in our ")}
             <Link href={localized("/portafolio")} className="text-[var(--magenta)] font-medium hover:underline">{t("portafolio", "portfolio")}</Link>.
+            {t(" Te ayudamos con nuestros servicios de ", " We help you with our services of ")}
+            <Link href={localized("/servicios/discovery-con-ia")} className="text-[var(--magenta)] font-medium hover:underline">{t("Discovery con IA", "AI Discovery")}</Link>
+            {t(", ", ", ")}
+            <Link href={localized("/servicios/diseno-ux-ui")} className="text-[var(--magenta)] font-medium hover:underline">{t("Diseño UX/UI", "UX/UI Design")}</Link>
+            {t(" y ", " and ")}
+            <Link href={localized("/servicios/desarrollo-producto-digital")} className="text-[var(--magenta)] font-medium hover:underline">{t("Desarrollo de Producto", "Product Development")}</Link>.
           </p>
         </div>
       </section>

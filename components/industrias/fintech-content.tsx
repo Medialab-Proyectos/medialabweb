@@ -186,6 +186,14 @@ export function FintechContent() {
             <Link href={localized("/portafolio")} className="text-[var(--magenta)] font-medium hover:underline">{t("portafolio", "portfolio")}</Link>
             {t(" y profundiza en ", " and dive into ")}
             <Link href={localized("/blog/ux-fintech")} className="text-[var(--magenta)] font-medium hover:underline">{t("UX en Fintech: diseñar para la confianza", "UX in Fintech: designing for trust")}</Link>.
+            {t(" Optimiza tu producto financiero con nuestros servicios de ", " Optimize your financial product with our services of ")}
+            <Link href={localized("/servicios/discovery-con-ia")} className="text-[var(--magenta)] font-medium hover:underline">{t("Discovery con IA", "AI Discovery")}</Link>
+            {t(", ", ", ")}
+            <Link href={localized("/servicios/diseno-ux-ui")} className="text-[var(--magenta)] font-medium hover:underline">{t("Diseño UX/UI", "UX/UI Design")}</Link>
+            {t(", ", ", ")}
+            <Link href={localized("/servicios/desarrollo-producto-digital")} className="text-[var(--magenta)] font-medium hover:underline">{t("Desarrollo de Producto", "Product Development")}</Link>
+            {t(" y ", " and ")}
+            <Link href={localized("/servicios/cro-saas")} className="text-[var(--magenta)] font-medium hover:underline">{t("CRO para SaaS", "CRO for SaaS")}</Link>.
           </p>
         </div>
       </section>

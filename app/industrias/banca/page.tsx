@@ -81,7 +81,7 @@ const breadcrumbSchema = {
   "@type": "BreadcrumbList",
   itemListElement: [
     { "@type": "ListItem", position: 1, name: "Inicio", item: "https://medialab.design" },
-    { "@type": "ListItem", position: 2, name: "Industrias", item: "https://medialab.design/industrias/banca" },
+    { "@type": "ListItem", position: 2, name: "Industrias", item: "https://medialab.design/servicios" },
     { "@type": "ListItem", position: 3, name: "Banca", item: "https://medialab.design/industrias/banca" },
   ],
 }

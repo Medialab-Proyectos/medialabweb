@@ -19,9 +19,9 @@ export const metadata: Metadata = {
     type: "article",
     locale: "en_US",
     url: "/en/servicios/diseno-ux-ui",
-    images: [{ url: "/images/ux-research.jpg", width: 1200, height: 630 }],
+    images: [{ url: "/images/ux-research.png", width: 1200, height: 630, alt: "UX/UI Design with AI — MediaLab Ingeniería" }],
   },
-  twitter: { card: "summary_large_image", images: ["/images/ux-research.jpg"] },
+  twitter: { card: "summary_large_image", images: ["/images/ux-research.png"] },
 }
 
 export { default } from "../../../servicios/diseno-ux-ui/page"

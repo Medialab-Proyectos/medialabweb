@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import {
   Sparkles, BarChart3, MousePointerClick, FlaskConical, TrendingUp, Filter, Eye,
   ArrowRight, ChevronRight, CheckCircle2,
@@ -52,7 +53,7 @@ export function CroSaasContent() {
     {
       q: t("¿Qué es el CRO (optimización de conversión)?", "What is CRO (conversion rate optimization)?"),
       a: t(
-        "El CRO es el proceso de aumentar el porcentaje de visitantes que realizan la acción deseada —registrarse, pagar, activar— mejorando la experiencia en lugar de comprar más tráfico. Combina análisis de datos, investigación de usuarios y experimentación.",
+        "El CRO is el proceso de aumentar el porcentaje de visitantes que realizan la acción deseada —registrarse, pagar, activar— mejorando la experiencia en lugar de comprar más tráfico. Combina análisis de datos, investigación de usuarios y experimentación.",
         "CRO is the process of increasing the percentage of visitors who take the desired action — sign up, pay, activate — by improving the experience instead of buying more traffic. It combines data analysis, user research, and experimentation."
       ),
     },
@@ -87,41 +88,55 @@ export function CroSaasContent() {
       <section className="relative pt-32 pb-20 px-6 bg-[var(--surface-dark)] text-white overflow-hidden" aria-labelledby="cro-h1">
         <div className="absolute -top-24 right-0 w-96 h-96 rounded-full blur-3xl pointer-events-none opacity-25"
           style={{ background: "radial-gradient(circle, #E8751A 0%, transparent 70%)" }} aria-hidden="true" />
-        <div className="relative z-10 max-w-4xl mx-auto flex flex-col gap-6">
-          <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-white/50">
-            <Link href={localized("/")} className="hover:text-white">{t("Inicio", "Home")}</Link>
-            <ChevronRight size={12} />
-            <Link href={localized("/servicios")} className="hover:text-white">{t("Servicios", "Services")}</Link>
-            <ChevronRight size={12} />
-            <span className="text-white/80">{t("CRO para SaaS", "CRO for SaaS")}</span>
-          </nav>
+        <div className="relative z-10 max-w-6xl mx-auto grid lg:grid-cols-12 gap-12 items-center">
+          <div className="lg:col-span-7 flex flex-col gap-6">
+            <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-white/50">
+              <Link href={localized("/")} className="hover:text-white">{t("Inicio", "Home")}</Link>
+              <ChevronRight size={12} />
+              <Link href={localized("/servicios")} className="hover:text-white">{t("Servicios", "Services")}</Link>
+              <ChevronRight size={12} />
+              <span className="text-white/80">{t("CRO para SaaS", "CRO for SaaS")}</span>
+            </nav>
 
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold border w-fit"
-            style={{ color: "var(--magenta)", borderColor: "rgba(232,117,26,0.3)", background: "rgba(232,117,26,0.08)" }}>
-            <Sparkles size={14} /> {t("Servicio", "Service")}
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold border w-fit"
+              style={{ color: "var(--magenta)", borderColor: "rgba(232,117,26,0.3)", background: "rgba(232,117,26,0.08)" }}>
+              <Sparkles size={14} /> {t("Servicio", "Service")}
+            </div>
+
+            <h1 id="cro-h1" className="font-display font-bold text-4xl md:text-5xl lg:text-6xl leading-[1.08] text-balance">
+              {t("CRO para SaaS: convierte más sin gastar más en tráfico", "CRO for SaaS: convert more without spending more on traffic")}
+            </h1>
+
+            <p className="text-lg text-white/70 max-w-2xl leading-relaxed">
+              {t(
+                "El CRO (optimización de la tasa de conversión) es el proceso de lograr que más visitantes se conviertan en usuarios activos y clientes, mejorando la experiencia en vez de comprar más tráfico. En MediaLab optimizamos todo el ciclo SaaS —activación, retención y expansión— con datos, investigación de usuarios e IA.",
+                "CRO (conversion rate optimization) is the process of getting more visitors to become active users and customers by improving the experience instead of buying more traffic. At MediaLab we optimize the whole SaaS lifecycle — activation, retention, and expansion — with data, user research, and AI."
+              )}
+            </p>
+
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mt-2">
+              <BookingModal>
+                <button type="button" className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-semibold text-[15px] text-white transition-all active:scale-95 shadow-lg hover:brightness-110"
+                  style={{ background: "#E8751A", boxShadow: "0 8px 30px rgba(232,117,26,0.35)" }}>
+                  {t("Audita tu conversión gratis", "Audit your conversion free")}
+                </button>
+              </BookingModal>
+              <Link href={localized("/servicios/diseno-ux-ui")} className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium border border-white/15 text-white/75 hover:text-white hover:border-white/30 transition-all">
+                {t("Ver diseño UX/UI", "See UX/UI design")} <ArrowRight size={14} />
+              </Link>
+            </div>
           </div>
-
-          <h1 id="cro-h1" className="font-display font-bold text-4xl md:text-5xl lg:text-6xl leading-[1.08] text-balance">
-            {t("CRO para SaaS: convierte más sin gastar más en tráfico", "CRO for SaaS: convert more without spending more on traffic")}
-          </h1>
-
-          <p className="text-lg text-white/70 max-w-2xl leading-relaxed">
-            {t(
-              "El CRO (optimización de la tasa de conversión) es el proceso de lograr que más visitantes se conviertan en usuarios activos y clientes, mejorando la experiencia en vez de comprar más tráfico. En MediaLab optimizamos todo el ciclo SaaS —activación, retención y expansión— con datos, investigación de usuarios e IA.",
-              "CRO (conversion rate optimization) is the process of getting more visitors to become active users and customers by improving the experience instead of buying more traffic. At MediaLab we optimize the whole SaaS lifecycle — activation, retention, and expansion — with data, user research, and AI."
-            )}
-          </p>
-
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mt-2">
-            <BookingModal>
-              <button type="button" className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-semibold text-[15px] text-white transition-all active:scale-95 shadow-lg hover:brightness-110"
-                style={{ background: "#E8751A", boxShadow: "0 8px 30px rgba(232,117,26,0.35)" }}>
-                {t("Audita tu conversión gratis", "Audit your conversion free")}
-              </button>
-            </BookingModal>
-            <Link href={localized("/servicios/diseno-ux-ui")} className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium border border-white/15 text-white/75 hover:text-white hover:border-white/30 transition-all">
-              {t("Ver diseño UX/UI", "See UX/UI design")} <ArrowRight size={14} />
-            </Link>
+          <div className="lg:col-span-5 flex justify-center w-full">
+            <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden border border-white/10 shadow-2xl shadow-black/50 bg-secondary/20">
+              <Image
+                src="/images/cro-saas.png"
+                alt={t("CRO para SaaS", "CRO for SaaS")}
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 500px"
+                priority
+              />
+            </div>
           </div>
         </div>
       </section>
@@ -186,6 +201,14 @@ export function CroSaasContent() {
             <Link href={localized("/servicios/diseno-ux-ui")} className="text-[var(--magenta)] font-medium hover:underline">{t("diseño UX/UI", "UX/UI design")}</Link>
             {t(". Mira resultados reales en el ", ". See real results in our ")}
             <Link href={localized("/portafolio")} className="text-[var(--magenta)] font-medium hover:underline">{t("portafolio", "portfolio")}</Link>.
+          </p>
+          <p className="text-sm text-muted-foreground pt-2">
+            {t("Aplicamos CRO estratégico especialmente en: ", "We apply strategic CRO especially in: ")}
+            <Link href={localized("/industrias/startups")} className="text-[var(--magenta)] font-medium hover:underline">{t("Startups y SaaS", "Startups & SaaS")}</Link>
+            {t(", ", ", ")}
+            <Link href={localized("/industrias/ecommerce")} className="text-[var(--magenta)] font-medium hover:underline">{t("E-commerce", "E-commerce")}</Link>
+            {t(" y ", " and ")}
+            <Link href={localized("/industrias/fintech")} className="text-[var(--magenta)] font-medium hover:underline">{t("Fintech", "Fintech")}</Link>.
           </p>
         </div>
       </section>

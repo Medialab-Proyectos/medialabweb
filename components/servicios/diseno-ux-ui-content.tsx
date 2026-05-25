@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import {
   Sparkles, Microscope, Compass, PenTool, LayoutGrid, BarChart3,
   ArrowRight, ChevronRight, CheckCircle2, Heart,
@@ -103,41 +104,55 @@ export function DisenoUxUiContent() {
       <section className="relative pt-32 pb-20 px-6 bg-[var(--surface-dark)] text-white overflow-hidden" aria-labelledby="uxui-h1">
         <div className="absolute -top-24 right-0 w-96 h-96 rounded-full blur-3xl pointer-events-none opacity-25"
           style={{ background: "radial-gradient(circle, #E8751A 0%, transparent 70%)" }} aria-hidden="true" />
-        <div className="relative z-10 max-w-4xl mx-auto flex flex-col gap-6">
-          <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-white/50">
-            <Link href={localized("/")} className="hover:text-white">{t("Inicio", "Home")}</Link>
-            <ChevronRight size={12} />
-            <Link href={localized("/servicios")} className="hover:text-white">{t("Servicios", "Services")}</Link>
-            <ChevronRight size={12} />
-            <span className="text-white/80">{t("Diseño UX/UI", "UX/UI Design")}</span>
-          </nav>
+        <div className="relative z-10 max-w-6xl mx-auto grid lg:grid-cols-12 gap-12 items-center">
+          <div className="lg:col-span-7 flex flex-col gap-6">
+            <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-white/50">
+              <Link href={localized("/")} className="hover:text-white">{t("Inicio", "Home")}</Link>
+              <ChevronRight size={12} />
+              <Link href={localized("/servicios")} className="hover:text-white">{t("Servicios", "Services")}</Link>
+              <ChevronRight size={12} />
+              <span className="text-white/80">{t("Diseño UX/UI", "UX/UI Design")}</span>
+            </nav>
 
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold border w-fit"
-            style={{ color: "var(--magenta)", borderColor: "rgba(232,117,26,0.3)", background: "rgba(232,117,26,0.08)" }}>
-            <Sparkles size={14} /> {t("Servicio", "Service")}
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold border w-fit"
+              style={{ color: "var(--magenta)", borderColor: "rgba(232,117,26,0.3)", background: "rgba(232,117,26,0.08)" }}>
+              <Sparkles size={14} /> {t("Servicio", "Service")}
+            </div>
+
+            <h1 id="uxui-h1" className="font-display font-bold text-4xl md:text-5xl lg:text-6xl leading-[1.08] text-balance">
+              {t("Diseño UX/UI con IA y psicología del consumidor", "UX/UI design with AI and consumer psychology")}
+            </h1>
+
+            <p className="text-lg text-white/70 max-w-2xl leading-relaxed">
+              {t(
+                "El diseño UX/UI es el proceso de investigar, estructurar y diseñar productos digitales para que las personas los entiendan, los usen y los recomienden. En MediaLab combinamos investigación de usuarios, diseño conductual e IA para crear experiencias que conectan emocionalmente y convierten.",
+                "UX/UI design is the process of researching, structuring, and designing digital products so people understand, use, and recommend them. At MediaLab we combine user research, behavioral design, and AI to create experiences that connect emotionally and convert."
+              )}
+            </p>
+
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mt-2">
+              <BookingModal>
+                <button type="button" className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-semibold text-[15px] text-white transition-all active:scale-95 shadow-lg hover:brightness-110"
+                  style={{ background: "#E8751A", boxShadow: "0 8px 30px rgba(232,117,26,0.35)" }}>
+                  {t("Agenda una consulta gratis", "Book a free consultation")}
+                </button>
+              </BookingModal>
+              <Link href={localized("/portafolio")} className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium border border-white/15 text-white/75 hover:text-white hover:border-white/30 transition-all">
+                {t("Ver portafolio", "See portfolio")} <ArrowRight size={14} />
+              </Link>
+            </div>
           </div>
-
-          <h1 id="uxui-h1" className="font-display font-bold text-4xl md:text-5xl lg:text-6xl leading-[1.08] text-balance">
-            {t("Diseño UX/UI con IA y psicología del consumidor", "UX/UI design with AI and consumer psychology")}
-          </h1>
-
-          <p className="text-lg text-white/70 max-w-2xl leading-relaxed">
-            {t(
-              "El diseño UX/UI es el proceso de investigar, estructurar y diseñar productos digitales para que las personas los entiendan, los usen y los recomienden. En MediaLab combinamos investigación de usuarios, diseño conductual e IA para crear experiencias que conectan emocionalmente y convierten.",
-              "UX/UI design is the process of researching, structuring, and designing digital products so people understand, use, and recommend them. At MediaLab we combine user research, behavioral design, and AI to create experiences that connect emotionally and convert."
-            )}
-          </p>
-
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mt-2">
-            <BookingModal>
-              <button type="button" className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-semibold text-[15px] text-white transition-all active:scale-95 shadow-lg hover:brightness-110"
-                style={{ background: "#E8751A", boxShadow: "0 8px 30px rgba(232,117,26,0.35)" }}>
-                {t("Agenda una consulta gratis", "Book a free consultation")}
-              </button>
-            </BookingModal>
-            <Link href={localized("/portafolio")} className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium border border-white/15 text-white/75 hover:text-white hover:border-white/30 transition-all">
-              {t("Ver portafolio", "See portfolio")} <ArrowRight size={14} />
-            </Link>
+          <div className="lg:col-span-5 flex justify-center w-full">
+            <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden border border-white/10 shadow-2xl shadow-black/50 bg-secondary/20">
+              <Image
+                src="/images/uxui-design-hero.png"
+                alt={t("Diseño UX/UI con IA y psicología", "UX/UI design with AI and psychology")}
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 500px"
+                priority
+              />
+            </div>
           </div>
         </div>
       </section>
@@ -185,6 +200,20 @@ export function DisenoUxUiContent() {
             <Link href={localized("/")+"#uxbox"} className="text-[var(--magenta)] font-medium hover:underline">UXBox</Link>.
             {t(" ¿Ya tienes tráfico pero poca conversión? Mira ", " Already have traffic but low conversion? See ")}
             <Link href={localized("/servicios/cro-saas")} className="text-[var(--magenta)] font-medium hover:underline">{t("CRO para SaaS", "CRO for SaaS")}</Link>.
+          </p>
+          <p className="text-sm text-muted-foreground pt-2">
+            {t("Diseñamos experiencias para industrias de alta exigencia: ", "We design experiences for high-demand industries: ")}
+            <Link href={localized("/industrias/fintech")} className="text-[var(--magenta)] font-medium hover:underline">{t("Fintech", "Fintech")}</Link>
+            {t(", ", ", ")}
+            <Link href={localized("/industrias/banca")} className="text-[var(--magenta)] font-medium hover:underline">{t("Banca", "Banking")}</Link>
+            {t(", ", ", ")}
+            <Link href={localized("/industrias/ecommerce")} className="text-[var(--magenta)] font-medium hover:underline">{t("E-commerce", "E-commerce")}</Link>
+            {t(", ", ", ")}
+            <Link href={localized("/industrias/educacion")} className="text-[var(--magenta)] font-medium hover:underline">{t("Educación", "Education")}</Link>
+            {t(", ", ", ")}
+            <Link href={localized("/industrias/movilidad")} className="text-[var(--magenta)] font-medium hover:underline">{t("Movilidad", "Mobility")}</Link>
+            {t(" y ", " and ")}
+            <Link href={localized("/industrias/startups")} className="text-[var(--magenta)] font-medium hover:underline">{t("Startups", "Startups")}</Link>.
           </p>
         </div>
       </section>

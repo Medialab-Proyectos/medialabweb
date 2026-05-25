@@ -19,9 +19,9 @@ export const metadata: Metadata = {
     type: "article",
     locale: "en_US",
     url: "/en/servicios/cro-saas",
-    images: [{ url: "/images/ux-research.jpg", width: 1200, height: 630 }],
+    images: [{ url: "/images/cro-saas.png", width: 1200, height: 630, alt: "CRO for SaaS — MediaLab Ingeniería" }],
   },
-  twitter: { card: "summary_large_image", images: ["/images/ux-research.jpg"] },
+  twitter: { card: "summary_large_image", images: ["/images/cro-saas.png"] },
 }
 
 export { default } from "../../../servicios/cro-saas/page"

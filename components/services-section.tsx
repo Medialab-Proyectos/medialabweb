@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
-import { Microscope, Brain, Code2, ChevronRight, ArrowRight } from "lucide-react"
+import { Microscope, Brain, Code2, BarChart3, ChevronRight, ArrowRight } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 
 const services = [
@@ -92,6 +92,32 @@ const services = [
     href: "/servicios/desarrollo-producto-digital",
     ctaEs: "Conoce el desarrollo de producto",
     ctaEn: "Explore product development",
+  },
+  {
+    icon: BarChart3,
+    titleEs: "Más conversión sin gastar más en tráfico",
+    titleEn: "More conversion without spending more on traffic",
+    color: "var(--magenta)",
+    gradient: "linear-gradient(135deg, oklch(0.55 0.22 320), var(--magenta))",
+    itemsEs: [
+      "Embudos de activación y onboarding",
+      "Optimización de pricing y checkout",
+      "Retención y expansión de planes",
+      "Experimentación A/B basada en datos",
+    ],
+    itemsEn: [
+      "Activation and onboarding funnels",
+      "Pricing and checkout optimization",
+      "Plan retention and expansion",
+      "Data-driven A/B experimentation",
+    ],
+    descriptionEs:
+      "Tu SaaS tiene tráfico, pero la conversión no sube. Analizamos comportamiento real y optimizamos cada punto de fricción — activación, retención y expansión — con datos, investigación de usuarios e IA.",
+    descriptionEn:
+      "Your SaaS has traffic, but conversion won't budge. We analyze real behavior and optimize every friction point — activation, retention, and expansion — with data, user research, and AI.",
+    href: "/servicios/cro-saas",
+    ctaEs: "Conoce el CRO para SaaS",
+    ctaEn: "Explore CRO for SaaS",
   },
 ]
 
@@ -231,7 +257,7 @@ export function ServicesSection() {
         </div>
 
         {/* Cards */}
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 gap-6">
           {services.map((service, i) => (
             <ServiceCard key={service.titleEs} service={service} index={i} visible={visible} />
           ))}
