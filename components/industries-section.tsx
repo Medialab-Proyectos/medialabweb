@@ -48,6 +48,7 @@ export function IndustriesSection() {
       icon: Car,
       color: "var(--orange)",
       image: "/images/industry_movilidad.jpg",
+      href: "/industrias/movilidad",
       description: t(
         "Interfaces que hacen que moverte sea simple y seguro",
         "Interfaces that make moving around simple and safe"

@@ -25,6 +25,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/industrias/banca", changeFrequency: "monthly", priority: 0.8, en: true },
     { path: "/industrias/educacion", changeFrequency: "monthly", priority: 0.8, en: true },
     { path: "/industrias/ecommerce", changeFrequency: "monthly", priority: 0.8, en: true },
+    { path: "/industrias/movilidad", changeFrequency: "monthly", priority: 0.8, en: true },
     { path: "/curso", changeFrequency: "weekly", priority: 0.95, en: true },
     { path: "/portafolio", changeFrequency: "monthly", priority: 0.9, en: true },
     { path: "/sobre-nosotros", changeFrequency: "monthly", priority: 0.85, en: true },
