@@ -84,14 +84,14 @@ export function PortfolioHero() {
     <section ref={ref} className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-[var(--surface-dark)] text-[var(--surface-dark-fg)] pt-20">
       {/* Gradient background */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse 80% 60% at 30% 40%, rgba(230,0,126,0.15), transparent), radial-gradient(ellipse 60% 50% at 70% 60%, rgba(42,171,179,0.12), transparent)" }} />
+        <div className="absolute inset-0 ambient-glow" style={{ background: "radial-gradient(ellipse 80% 60% at 30% 40%, rgba(230,0,126,0.15), transparent), radial-gradient(ellipse 60% 50% at 70% 60%, rgba(42,171,179,0.12), transparent)" }} />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[var(--surface-dark)]" />
       </div>
 
       {/* Animated canvas background */}
       <canvas
         ref={canvasRef}
-        className="absolute inset-0 w-full h-full pointer-events-none z-[1]"
+        className="absolute inset-0 w-full h-full pointer-events-none z-[1] portfolio-canvas"
         aria-hidden="true"
       />
 

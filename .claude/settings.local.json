@@ -44,7 +44,11 @@
       "Bash(identify \"C:/Users/coben/OneDrive/Desktop/MediLab/Version 1/public/images/curso/transformation.png\")",
       "Bash(taskkill //F //IM node.exe)",
       "Bash(xargs grep:*)",
-      "Bash(grep -E \"page\\\\.\\(mdx|tsx\\)$\")"
+      "Bash(grep -E \"page\\\\.\\(mdx|tsx\\)$\")",
+      "Bash(echo \"---EXIT $?---\")",
+      "Bash(node -e \"const m = require\\('react-simple-maps'\\); console.log\\(Object.keys\\(m\\).join\\(', '\\)\\)\")",
+      "Bash(node -e \"require\\('d3-geo'\\); console.log\\('d3-geo OK'\\)\")",
+      "Bash(node -e \"const m = require\\('react-simple-maps'\\); const ctx = m.MapContext; console.log\\(typeof ctx\\)\")"
     ]
   }
 }

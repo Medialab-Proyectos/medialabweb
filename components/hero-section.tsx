@@ -36,11 +36,15 @@ export function HeroSection() {
     resize()
     window.addEventListener("resize", resize)
 
+    const html = document.documentElement
+    const isLight = html.classList.contains("light") || html.classList.contains("warm")
+    const a = isLight ? [0.72, 0.65, 0.60, 0.50] : [0.35, 0.30, 0.28, 0.22]
+
     const blobs = [
-      { x: 0.15, y: 0.25, r: 0.5, color: "rgba(232,117,26,0.35)", dx: 0.00005, dy: 0.00003 },
-      { x: 0.8, y: 0.55, r: 0.45, color: "rgba(42,171,179,0.30)", dx: -0.00003, dy: 0.00004 },
-      { x: 0.5, y: 0.85, r: 0.4, color: "rgba(232,117,26,0.28)", dx: 0.00003, dy: -0.00005 },
-      { x: 0.65, y: 0.15, r: 0.3, color: "rgba(42,171,179,0.22)", dx: -0.00002, dy: 0.00003 },
+      { x: 0.15, y: 0.25, r: 0.5, color: `rgba(232,117,26,${a[0]})`,  dx: 0.00005,  dy: 0.00003  },
+      { x: 0.8,  y: 0.55, r: 0.45, color: `rgba(42,171,179,${a[1]})`, dx: -0.00003, dy: 0.00004  },
+      { x: 0.5,  y: 0.85, r: 0.4, color: `rgba(232,117,26,${a[2]})`,  dx: 0.00003,  dy: -0.00005 },
+      { x: 0.65, y: 0.15, r: 0.3, color: `rgba(42,171,179,${a[3]})`,  dx: -0.00002, dy: 0.00003  },
     ]
 
     const draw = () => {

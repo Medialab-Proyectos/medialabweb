@@ -12,16 +12,16 @@ const REAPPEAR_MS    = 40000 // espera entre notificaciones — no invasivo
 const AUTO_HIDE_MS   = 10000 // auto-dismiss si el usuario lo ignora
 
 const POOL: [string, string][] = [
-  ["+40% activación · SaaS B2B México",             "+40% activation · B2B SaaS Mexico"],
-  ["Discovery 4× más rápido · Fintech",              "4× faster discovery · Fintech"],
-  ["MVP validado con usuarios reales · HealthTech",  "MVP validated with real users · HealthTech"],
-  ["+35% conversión · E-commerce Chile",             "+35% conversion · E-commerce Chile"],
-  ["+28% retención en onboarding · EdTech LATAM",   "+28% onboarding retention · EdTech LATAM"],
-  ["Churn reducido 3× · SaaS B2C Argentina",         "Churn reduced 3× · B2C SaaS Argentina"],
-  ["NPS 38→71 en 60 días · Fintech Colombia",        "NPS 38→71 in 60 days · Fintech Colombia"],
-  ["Time-to-value 40% menor · B2B Enterprise",       "40% faster time-to-value · B2B Enterprise"],
-  ["Producto lanzado en 6 semanas · Startup México", "Product launched in 6 weeks · Mexico startup"],
-  ["+52% retención mes 3 · App wellness LATAM",      "+52% month-3 retention · LATAM wellness app"],
+  ["Startup en México: el doble de usuarios activos desde el primer día",       "Mexico startup doubled its active users from day one"],
+  ["Plataforma financiera lanzó nuevas funciones cuatro veces más rápido",      "Fintech platform launched new features four times faster"],
+  ["App de salud llegó a sus primeros clientes reales en solo 8 semanas",       "Health app reached its first real customers in just 8 weeks"],
+  ["Tienda online en Chile: un tercio más de visitantes completaron su compra", "Chilean online store: a third more visitors completed their purchase"],
+  ["Plataforma educativa: 28% más de nuevos usuarios terminaron el tutorial",   "Ed-tech: 28% more new users completed the onboarding tutorial"],
+  ["Startup en Argentina triplicó los usuarios que renovaron su suscripción",   "Argentine startup tripled the users who renewed their subscription"],
+  ["Fintech en Colombia pasó de quejas a recomendaciones en 60 días",           "Colombian fintech turned complaints into referrals in 60 days"],
+  ["Empresa B2B: sus clientes ven resultados un 40% más rápido que antes",      "B2B company: clients see results 40% faster than before"],
+  ["Startup de México: de idea a clientes pagando en solo 6 semanas",           "Mexico startup: from idea to paying customers in just 6 weeks"],
+  ["App de bienestar: más de la mitad de usuarios siguen activos al 3er mes",   "Wellness app: more than half of users still active at month three"],
 ]
 
 const INDICES = POOL.map((_, i) => i)

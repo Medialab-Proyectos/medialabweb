@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState, type FormEvent } from "react"
-import { ArrowRight, MessageCircle, Clock, CheckCircle2, Shield, Zap, Send, Phone, Users } from "lucide-react"
+import { ArrowRight, MessageCircle, Clock, CheckCircle2, Shield, Zap, Send, Phone, Users, Mail } from "lucide-react"
 import Link from "next/link"
 import { useLanguage } from "@/lib/language-context"
 
@@ -10,7 +10,7 @@ export function CTASection() {
   const [visible, setVisible] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [sending, setSending] = useState(false)
-  const [errors, setErrors] = useState<{ name?: string; phone?: string; message?: string }>({})
+  const [errors, setErrors] = useState<{ name?: string; email?: string; phone?: string; message?: string }>({})
   const { t, localized } = useLanguage()
 
   useEffect(() => {
@@ -27,15 +27,17 @@ export function CTASection() {
 
     const form = e.currentTarget
     const data = new FormData(form)
-    const name = ((data.get("name") as string) || "").trim()
-    const phone = ((data.get("phone") as string) || "").trim()
+    const name    = ((data.get("name")    as string) || "").trim()
+    const email   = ((data.get("email")   as string) || "").trim()
+    const phone   = ((data.get("phone")   as string) || "").trim()
     const company = ((data.get("company") as string) || "").trim()
     const message = ((data.get("message") as string) || "").trim()
 
-    // Validación amable y orientadora (Yifrah)
-    const newErrors: { name?: string; phone?: string; message?: string } = {}
-    if (!name) newErrors.name = t("Nos falta tu nombre para poder contactarte.", "We need your name to reach you.")
-    if (!phone) newErrors.phone = t("Déjanos un teléfono o WhatsApp para coordinar.", "Leave a phone or WhatsApp so we can coordinate.")
+    const newErrors: { name?: string; email?: string; phone?: string; message?: string } = {}
+    if (!name)    newErrors.name    = t("Nos falta tu nombre para poder contactarte.", "We need your name to reach you.")
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+                  newErrors.email   = t("Ingresa un email válido para enviarte la confirmación.", "Enter a valid email so we can send your confirmation.")
+    if (!phone)   newErrors.phone   = t("Déjanos un teléfono o WhatsApp para coordinar.", "Leave a phone or WhatsApp so we can coordinate.")
     if (!message) newErrors.message = t("Cuéntanos brevemente tu desafío — así llegamos preparados.", "Briefly tell us your challenge — so we come prepared.")
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors)
@@ -44,20 +46,19 @@ export function CTASection() {
     setErrors({})
     setSending(true)
 
-    const body = encodeURIComponent(
-      `Nombre: ${name}\nTeléfono: ${phone}${company ? `\nEmpresa: ${company}` : ""}\n\n${message}`
-    )
-    const subject = encodeURIComponent(`Contacto desde medialab.design — ${name}`)
-
-    window.open(
-      `mailto:hablemos@medialab.design?subject=${subject}&body=${body}`,
-      "_self"
-    )
-
-    setTimeout(() => {
-      setSending(false)
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, phone, company, message }),
+      })
+      if (!res.ok) throw new Error("api_error")
       setSubmitted(true)
-    }, 500)
+    } catch {
+      setErrors({ message: t("Error enviando el mensaje. Escríbenos por WhatsApp.", "Error sending. Reach us on WhatsApp.") })
+    } finally {
+      setSending(false)
+    }
   }
 
   return (
@@ -69,22 +70,21 @@ export function CTASection() {
     >
       <div className="max-w-7xl mx-auto">
         <div
-          className={`relative overflow-hidden rounded-2xl sm:rounded-3xl p-5 sm:p-8 md:p-14 transition-all duration-700 ${visible ? "opacity-100 scale-100" : "opacity-0 scale-95"}`}
-          style={{ background: "linear-gradient(135deg, oklch(0.10 0 0) 0%, oklch(0.06 0 0) 100%)", color: "white" }}
+          className={`relative overflow-hidden rounded-2xl sm:rounded-3xl p-5 sm:p-8 md:p-14 transition-all duration-700 cta-card-container ${visible ? "opacity-100 scale-100" : "opacity-0 scale-95"}`}
         >
           {/* Background blobs */}
           <div
-            className="absolute top-0 left-1/4 w-64 h-64 rounded-full pointer-events-none"
+            className="absolute top-0 left-1/4 w-64 h-64 rounded-full pointer-events-none ambient-glow"
             style={{ background: "radial-gradient(circle, rgba(200,0,120,0.25), transparent 70%)", transform: "translate(-50%, -50%)" }}
             aria-hidden="true"
           />
           <div
-            className="absolute bottom-0 right-1/4 w-80 h-80 rounded-full pointer-events-none"
+            className="absolute bottom-0 right-1/4 w-80 h-80 rounded-full pointer-events-none ambient-glow"
             style={{ background: "radial-gradient(circle, rgba(0,200,220,0.15), transparent 70%)", transform: "translate(50%, 50%)" }}
             aria-hidden="true"
           />
           <div
-            className="absolute top-1/2 right-0 w-56 h-56 rounded-full pointer-events-none"
+            className="absolute top-1/2 right-0 w-56 h-56 rounded-full pointer-events-none ambient-glow"
             style={{ background: "radial-gradient(circle, rgba(240,120,0,0.15), transparent 70%)", transform: "translate(30%, -50%)" }}
             aria-hidden="true"
           />
@@ -158,7 +158,7 @@ export function CTASection() {
             </div>
 
             {/* Right — Form */}
-            <div className="bg-white/[0.07] border border-white/25 rounded-2xl p-5 sm:p-6 md:p-8 backdrop-blur-sm">
+            <div className="cta-form-container border rounded-2xl p-5 sm:p-6 md:p-8 backdrop-blur-sm">
               {submitted ? (
                 <div className="flex flex-col items-center justify-center gap-5 py-10 text-center">
                   <div className="w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center">
@@ -204,6 +204,23 @@ export function CTASection() {
                       className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/20 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[var(--magenta)]/60 focus:ring-1 focus:ring-[var(--magenta)]/30 transition-all"
                     />
                     {errors.name && <p className="text-xs text-red-400">{errors.name}</p>}
+                  </div>
+
+                  <div className="flex flex-col gap-1.5">
+                    <label htmlFor="cta-email" className="text-xs text-white/50 font-medium">
+                      {t("Email", "Email")} *
+                    </label>
+                    <input
+                      id="cta-email"
+                      name="email"
+                      type="email"
+                      onChange={() => setErrors((p) => ({ ...p, email: undefined }))}
+                      placeholder={t("tu@empresa.com", "you@company.com")}
+                      className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/20 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[var(--magenta)]/60 focus:ring-1 focus:ring-[var(--magenta)]/30 transition-all"
+                    />
+                    {errors.email
+                      ? <p className="text-xs text-red-400">{errors.email}</p>
+                      : <p className="text-[11px] text-white/35">{t("Te enviaremos la confirmación aquí.", "We'll send your confirmation here.")}</p>}
                   </div>
 
                   <div className="flex flex-col gap-1.5">

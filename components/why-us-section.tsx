@@ -96,7 +96,7 @@ export function WhyUsSection() {
   return (
     <section
       ref={ref}
-      className="py-24 px-6 bg-[var(--surface-dark)] text-[var(--surface-dark-fg)] relative overflow-hidden"
+      className="py-24 px-6 bg-[var(--surface-dark)] text-[var(--surface-dark-fg)] relative overflow-hidden transition-colors duration-300"
       aria-labelledby="why-us-heading"
     >
       {/* Subtle grid bg */}
@@ -118,14 +118,14 @@ export function WhyUsSection() {
           </span>
           <h2
             id="why-us-heading"
-            className="font-display font-bold text-3xl md:text-4xl lg:text-5xl leading-tight text-white text-balance"
+            className="font-display font-bold text-3xl md:text-4xl lg:text-5xl leading-tight dark:text-white text-foreground text-balance"
           >
             {t(
               "No somos la única opción. Somos la que entiende a tus usuarios.",
               "We're not your only option. We're the one that understands your users."
             )}
           </h2>
-          <p className="text-base text-white/60 leading-relaxed">
+          <p className="text-base dark:text-white/60 text-muted-foreground leading-relaxed">
             {t(
               "Hay muchas agencias que diseñan bonito. Pocas que investigan antes de diseñar. Y casi ninguna que combina psicología del consumidor, IA y desarrollo en un solo equipo.",
               "Plenty of agencies design beautifully. Few research before they design. And almost none combine consumer psychology, AI, and development in a single team."
@@ -140,8 +140,8 @@ export function WhyUsSection() {
             return (
               <div
                 key={reason.title}
-                className={`group flex flex-col gap-4 p-6 rounded-2xl border border-white/10 bg-white/5
-                  hover:bg-white/8 hover:border-white/20 transition-all duration-300 cursor-default
+                className={`group flex flex-col gap-4 p-6 rounded-2xl border dark:border-white/10 border-foreground/10 dark:bg-white/5 bg-foreground/5
+                  hover:dark:bg-white/8 hover:bg-foreground/8 hover:dark:border-white/20 hover:border-foreground/20 transition-all duration-300 cursor-default
                   ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
                 style={{ transitionDelay: `${i * 80}ms` }}
               >
@@ -151,8 +151,8 @@ export function WhyUsSection() {
                 >
                   <Icon size={20} style={{ color: reason.color }} />
                 </div>
-                <h3 className="font-semibold text-base text-white">{reason.title}</h3>
-                <p className="text-sm text-white/60 leading-relaxed">{reason.description}</p>
+                <h3 className="font-semibold text-base dark:text-white text-foreground">{reason.title}</h3>
+                <p className="text-sm dark:text-white/60 text-muted-foreground leading-relaxed">{reason.description}</p>
               </div>
             )
           })}

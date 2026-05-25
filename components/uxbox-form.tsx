@@ -378,40 +378,40 @@ export function UXBoxForm() {
 
   const accentBg = "rgba(232,117,26,0.08)"
   const accentBorder = "rgba(232,117,26,0.25)"
-  const inputClass = "w-full px-4 py-3.5 rounded-xl border border-white/10 bg-white/5 text-white placeholder:text-white/35 focus:outline-none focus:border-[var(--orange)] focus:ring-2 focus:ring-[rgba(232,117,26,0.25)] resize-none text-sm transition-all"
+  const inputClass = "w-full px-4 py-3.5 rounded-xl border dark:border-white/25 border-foreground/20 dark:bg-white/5 bg-foreground/5 dark:text-white text-foreground placeholder:dark:text-white/35 placeholder:text-foreground/35 focus:outline-none focus:border-[var(--orange)] focus:ring-2 focus:ring-[rgba(232,117,26,0.25)] resize-none text-sm transition-all"
 
   return (
     <section
       id="uxbox"
-      className="relative py-20 md:py-32 px-6 overflow-hidden bg-[var(--surface-dark)] text-white"
+      className="relative py-20 md:py-32 px-6 overflow-hidden bg-[var(--surface-dark)] text-foreground transition-colors duration-300"
       aria-labelledby="uxbox-heading"
     >
-      {/* ambient glows */}
-      <div className="absolute -top-32 right-0 w-[28rem] h-[28rem] rounded-full blur-3xl pointer-events-none opacity-25"
+      {/* ambient glows (Dark only) */}
+      <div className="absolute -top-32 right-0 w-[28rem] h-[28rem] rounded-full blur-3xl pointer-events-none opacity-25 ambient-glow"
         style={{ background: "radial-gradient(circle, #E8751A 0%, transparent 70%)" }} aria-hidden="true" />
-      <div className="absolute -bottom-32 left-0 w-[28rem] h-[28rem] rounded-full blur-3xl pointer-events-none opacity-15"
+      <div className="absolute -bottom-32 left-0 w-[28rem] h-[28rem] rounded-full blur-3xl pointer-events-none opacity-15 ambient-glow"
         style={{ background: "radial-gradient(circle, #2AABB3 0%, transparent 70%)" }} aria-hidden="true" />
       <div className="absolute inset-0 pointer-events-none opacity-[0.04]"
-        style={{ backgroundImage: "radial-gradient(circle, #fff 1px, transparent 1px)", backgroundSize: "38px 38px" }} aria-hidden="true" />
+        style={{ backgroundImage: "radial-gradient(circle, var(--dot-color) 1px, transparent 1px)", backgroundSize: "38px 38px" }} aria-hidden="true" />
 
       <div className="relative z-10 max-w-3xl mx-auto">
         {/* Header */}
         <div className="flex flex-col items-center gap-4 text-center mb-10">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold border"
-            style={{ color: "#fff", borderColor: accentBorder, background: accentBg }}>
+            style={{ color: "var(--foreground)", borderColor: accentBorder, background: accentBg }}>
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-60" style={{ background: ACCENT }} />
               <span className="relative inline-flex rounded-full h-2 w-2" style={{ background: ACCENT }} />
             </span>
             {t("Motor de inteligencia de producto · en vivo", "Product intelligence engine · live")}
           </div>
-          <h2 id="uxbox-heading" className="font-display font-bold text-4xl md:text-5xl text-white text-balance leading-tight">
+          <h2 id="uxbox-heading" className="font-display font-bold text-4xl md:text-5xl dark:text-white text-foreground text-balance leading-tight">
             {phase === "return"
               ? t("Bienvenido de vuelta a tu laboratorio", "Welcome back to your lab")
               : t("Enciende tu idea. Mira cómo evoluciona.", "Ignite your idea. Watch it evolve.")}
           </h2>
           {phase === "spark" && (
-            <p className="text-lg text-white/55 max-w-xl leading-relaxed">
+            <p className="text-lg dark:text-white/55 text-muted-foreground max-w-xl leading-relaxed">
               {t(
                 "UXBox analiza tu idea con IA —mercado, competidores, oportunidades UX y módulos— y te entrega un blueprint accionable. Empieza a verlo en segundos.",
                 "UXBox analyzes your idea with AI —market, competitors, UX opportunities, and modules— and delivers an actionable blueprint. Start seeing it in seconds."
@@ -438,7 +438,7 @@ export function UXBoxForm() {
               style={{ background: "linear-gradient(90deg, #E8751A, #c65a10)", boxShadow: "0 8px 30px rgba(232,117,26,0.3)" }}>
               <Sparkles size={17} /> {t("Analizar mi idea", "Analyze my idea")}
             </button>
-            <p className="text-xs text-white/40 text-center flex items-center justify-center gap-1.5">
+            <p className="text-xs dark:text-white/40 text-muted-foreground text-center flex items-center justify-center gap-1.5">
               <Activity size={12} /> {t("173 ideas analizadas esta semana · resultado en minutos", "173 ideas analyzed this week · result in minutes")}
             </p>
           </form>
@@ -447,16 +447,16 @@ export function UXBoxForm() {
         {/* ───────── REACTING (instant reward) ───────── */}
         {phase === "reacting" && (
           <div className="max-w-xl mx-auto flex flex-col gap-6 animate-in fade-in duration-500">
-            <div className="rounded-2xl border p-6 backdrop-blur-sm" style={{ borderColor: accentBorder, background: "rgba(255,255,255,0.04)" }}>
+            <div className="rounded-2xl border p-6 backdrop-blur-sm animate-fade-in-up" style={{ borderColor: accentBorder, background: "rgba(255,255,255,0.04)" }}>
               <div className="flex items-center gap-2 mb-3 text-xs font-semibold uppercase tracking-widest" style={{ color: ACCENT }}>
                 <Cpu size={13} /> {t("Reacción de la IA", "AI reaction")}
               </div>
-              <p className="text-base text-white/85 leading-relaxed min-h-[3rem]">
+              <p className="text-base dark:text-white/85 text-foreground leading-relaxed min-h-[3rem]">
                 {reaction}<span className="inline-block w-1.5 h-4 ml-0.5 align-middle animate-pulse" style={{ background: ACCENT }} />
               </p>
               <div className="flex flex-wrap gap-2 mt-4">
                 {lab.signals.map((s) => (
-                  <span key={s} className="px-3 py-1 rounded-full text-xs font-medium border border-white/15 bg-white/5 text-white/80">{s}</span>
+                  <span key={s} className="px-3 py-1 rounded-full text-xs font-medium border dark:border-white/15 border-foreground/15 dark:bg-white/5 bg-foreground/5 dark:text-white/80 text-foreground/80">{s}</span>
                 ))}
               </div>
             </div>
@@ -464,7 +464,7 @@ export function UXBoxForm() {
               style={{ background: "linear-gradient(90deg, #E8751A, #c65a10)" }}>
               <ShieldCheck size={17} /> {t("Asegurar mi laboratorio", "Secure my lab")}
             </button>
-            <button onClick={resetLab} className="text-xs text-white/40 hover:text-white/70 transition-colors mx-auto">
+            <button onClick={resetLab} className="text-xs dark:text-white/40 text-muted-foreground hover:dark:text-white hover:text-foreground transition-colors mx-auto">
               {t("Empezar con otra idea", "Start with another idea")}
             </button>
           </div>
@@ -474,20 +474,20 @@ export function UXBoxForm() {
         {phase === "gate" && (
           <form onSubmit={handleGate} className="max-w-md mx-auto flex flex-col gap-5 animate-in fade-in duration-500">
             <div className="flex flex-col gap-1 text-center">
-              <h3 className="font-display font-bold text-xl text-white">{t("Asegura tu laboratorio", "Secure your lab")}</h3>
-              <p className="text-sm text-white/55">{t("Para no perder este análisis y poder volver cuando quieras.", "So you don't lose this analysis and can return anytime.")}</p>
+              <h3 className="font-display font-bold text-xl dark:text-white text-foreground">{t("Asegura tu laboratorio", "Secure your lab")}</h3>
+              <p className="text-sm dark:text-white/55 text-muted-foreground">{t("Para no perder este análisis y poder volver cuando quieras.", "So you don't lose this analysis and can return anytime.")}</p>
             </div>
-            <div className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3">
-              <Mail size={16} className="text-white/40 shrink-0" />
+            <div className="flex items-center gap-2 rounded-xl border dark:border-white/25 border-foreground/20 dark:bg-white/5 bg-foreground/5 px-3">
+              <Mail size={16} className="dark:text-white/40 text-foreground/40 shrink-0" />
               <input type="email" value={email} disabled={loading}
                 onChange={(e) => { setEmail(e.target.value); setError("") }}
                 placeholder={t("nombre@empresa.com", "name@company.com")}
-                className="w-full py-3.5 bg-transparent text-white placeholder:text-white/35 focus:outline-none text-sm" required />
+                className="w-full py-3.5 bg-transparent dark:text-white text-foreground placeholder:dark:text-white/35 placeholder:text-foreground/35 focus:outline-none text-sm" required />
             </div>
-            <label className="flex items-start gap-2.5 text-xs text-white/55 cursor-pointer">
+            <label className="flex items-start gap-2.5 text-xs dark:text-white/55 text-muted-foreground cursor-pointer">
               <input type="checkbox" checked={consent} onChange={(e) => { setConsent(e.target.checked); setError("") }} className="mt-0.5 accent-[#E8751A] w-4 h-4 shrink-0" />
               <span>{t("Acepto que MediaLab use mis datos para generar mi análisis, según la ", "I agree to let MediaLab use my data to generate my analysis, per the ")}
-                <Link href="/politica-de-privacidad" className="underline hover:text-white">{t("política de privacidad", "privacy policy")}</Link>.</span>
+                <Link href="/politica-de-privacidad" className="underline hover:dark:text-white hover:text-foreground">{t("política de privacidad", "privacy policy")}</Link>.</span>
             </label>
             {error && <p className="text-xs text-red-400 font-medium">{error}</p>}
             <button type="submit" disabled={loading} className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold text-sm text-white transition-all active:scale-95 disabled:opacity-50"
@@ -501,8 +501,8 @@ export function UXBoxForm() {
         {phase === "otp" && (
           <form onSubmit={handleOtp} className="max-w-md mx-auto flex flex-col gap-5 animate-in fade-in duration-500">
             <div className="flex flex-col gap-1 text-center">
-              <h3 className="font-display font-bold text-xl text-white">{t("Revisa tu correo", "Check your email")}</h3>
-              <p className="text-sm text-white/55">{t("Te envié una llave de 4 dígitos a ", "I sent a 4-digit key to ")}<strong className="text-white">{email}</strong></p>
+              <h3 className="font-display font-bold text-xl dark:text-white text-foreground">{t("Revisa tu correo", "Check your email")}</h3>
+              <p className="text-sm dark:text-white/55 text-muted-foreground">{t("Te envié una llave de 4 dígitos a ", "I sent a 4-digit key to ")}<strong className="dark:text-white text-foreground">{email}</strong></p>
             </div>
             {isDemo && demoPin && (
               <div className="rounded-lg border border-dashed px-4 py-3 text-xs text-center" style={{ borderColor: accentBorder, background: accentBg }}>
@@ -515,11 +515,11 @@ export function UXBoxForm() {
               className={`${inputClass} text-center tracking-[0.5em] font-bold text-2xl`} required />
             {error && <p className="text-xs text-red-400 font-medium text-center">{error}</p>}
             <div className="flex items-center justify-center gap-4 text-xs">
-              <button type="button" onClick={handleResend} disabled={resending} className="flex items-center gap-1.5 text-white/50 hover:text-white disabled:opacity-50">
+              <button type="button" onClick={handleResend} disabled={resending} className="flex items-center gap-1.5 dark:text-white/50 text-foreground/50 hover:dark:text-white hover:text-foreground disabled:opacity-50">
                 <RotateCcw size={12} className={resending ? "animate-spin" : ""} /> {resending ? t("Reenviando…", "Resending…") : t("Reenviar llave", "Resend key")}
               </button>
-              <span className="w-px h-3 bg-white/20" />
-              <button type="button" onClick={() => { setPhase("gate"); setPinInput(""); setError("") }} className="text-white/50 hover:text-white">{t("Cambiar correo", "Change email")}</button>
+              <span className="w-px h-3 dark:bg-white/20 bg-foreground/20" />
+              <button type="button" onClick={() => { setPhase("gate"); setPinInput(""); setError("") }} className="dark:text-white/50 text-foreground/50 hover:dark:text-white hover:text-foreground">{t("Cambiar correo", "Change email")}</button>
             </div>
             <button type="submit" disabled={pinInput.length < 4 || loading} className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold text-sm text-white transition-all active:scale-95 disabled:opacity-50"
               style={{ background: "linear-gradient(90deg, #E8751A, #c65a10)" }}>
@@ -533,21 +533,21 @@ export function UXBoxForm() {
           <div className="max-w-md mx-auto flex flex-col gap-6 animate-in fade-in duration-500">
             {/* progress */}
             <div className="flex flex-col gap-2">
-              <div className="flex items-center justify-between text-xs text-white/50">
+              <div className="flex items-center justify-between text-xs dark:text-white/50 text-muted-foreground">
                 <span>{t("Definiendo tu producto", "Defining your product")}</span>
                 <span className="font-semibold" style={{ color: ACCENT }}>{feedProgress}%</span>
               </div>
-              <div className="h-1.5 rounded-full bg-white/10 overflow-hidden">
+              <div className="h-1.5 rounded-full dark:bg-white/10 bg-foreground/10 overflow-hidden">
                 <div className="h-full rounded-full transition-all duration-500" style={{ width: `${feedProgress}%`, background: "linear-gradient(90deg, #E8751A, #2AABB3)" }} />
               </div>
             </div>
 
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-6 flex flex-col gap-4">
-              <div className="flex items-start gap-2 text-xs text-white/55">
+            <div className="rounded-2xl border dark:border-white/10 border-foreground/10 dark:bg-white/5 bg-foreground/5 p-6 flex flex-col gap-4">
+              <div className="flex items-start gap-2 text-xs dark:text-white/55 text-muted-foreground">
                 <Cpu size={14} className="shrink-0 mt-0.5" style={{ color: ACCENT }} />
                 <span>{currentField.ai}</span>
               </div>
-              <label className="font-display font-bold text-lg text-white">{currentField.label}</label>
+              <label className="font-display font-bold text-lg dark:text-white text-foreground">{currentField.label}</label>
               <input
                 type="text" value={currentField.value} autoFocus
                 onChange={(e) => { currentField.set(e.target.value); setError("") }}
@@ -560,7 +560,7 @@ export function UXBoxForm() {
 
             <div className="flex gap-3">
               {feedStep > 0 && (
-                <button onClick={() => { setFeedStep((s) => s - 1); setError("") }} className="flex-1 py-3.5 rounded-xl font-semibold text-sm border border-white/15 text-white/70 hover:text-white transition-all flex items-center justify-center gap-2">
+                <button onClick={() => { setFeedStep((s) => s - 1); setError("") }} className="flex-1 py-3.5 rounded-xl font-semibold text-sm border dark:border-white/15 border-foreground/15 dark:text-white/70 text-foreground/70 hover:dark:text-white hover:text-foreground transition-all flex items-center justify-center gap-2">
                   <ChevronLeft size={15} /> {t("Atrás", "Back")}
                 </button>
               )}
@@ -581,8 +581,8 @@ export function UXBoxForm() {
               <div className="rounded-2xl border p-5 flex items-start gap-3" style={{ borderColor: accentBorder, background: accentBg }}>
                 <Activity size={16} className="shrink-0 mt-0.5" style={{ color: ACCENT }} />
                 <div>
-                  <p className="text-sm text-white/85 font-medium">{t("Tu idea avanzó mientras no estabas.", "Your idea advanced while you were away.")}</p>
-                  <p className="text-sm text-white/55 mt-1">{returnInsight}</p>
+                  <p className="text-sm dark:text-white/85 text-foreground font-medium">{t("Tu idea avanzó mientras no estabas.", "Your idea advanced while you were away.")}</p>
+                  <p className="text-sm dark:text-white/55 text-muted-foreground mt-1">{returnInsight}</p>
                 </div>
               </div>
             )}
@@ -598,30 +598,30 @@ export function UXBoxForm() {
                   <div key={st.label} className={`relative flex gap-4 pb-7 ${locked ? "opacity-35 blur-[1px]" : "opacity-100"} transition-all duration-500`}>
                     {/* connector */}
                     {i < stages.length - 1 && (
-                      <div className="absolute left-[19px] top-10 bottom-0 w-px" style={{ background: done ? ACCENT : "rgba(255,255,255,0.12)" }} aria-hidden="true" />
+                      <div className="absolute left-[19px] top-10 bottom-0 w-px dark:bg-white/12 bg-foreground/12" style={{ background: done ? ACCENT : undefined }} aria-hidden="true" />
                     )}
                     {/* node */}
-                    <div className="relative shrink-0 w-10 h-10 rounded-xl flex items-center justify-center border"
+                    <div className={`relative shrink-0 w-10 h-10 rounded-xl flex items-center justify-center border ${done || active ? "" : "dark:border-white/10 border-foreground/10 dark:bg-white/5 bg-foreground/5"}`}
                       style={{
-                        background: done ? "linear-gradient(135deg, var(--magenta), var(--orange))" : active ? accentBg : "rgba(255,255,255,0.04)",
-                        borderColor: done || active ? accentBorder : "rgba(255,255,255,0.1)",
+                        background: done ? "linear-gradient(135deg, var(--magenta), var(--orange))" : active ? accentBg : undefined,
+                        borderColor: done || active ? accentBorder : undefined,
                       }}>
                       {done ? <CheckCircle2 size={18} className="text-white" />
                         : active ? <Loader2 size={16} className="animate-spin" style={{ color: ACCENT }} />
-                        : i === stages.length - 1 ? <Lock size={15} className="text-white/40" />
-                        : <Circle size={14} className="text-white/30" />}
+                        : i === stages.length - 1 ? <Lock size={15} className="dark:text-white/40 text-foreground/40" />
+                        : <Circle size={14} className="dark:text-white/30 text-foreground/30" />}
                       {active && <span className="absolute inset-0 rounded-xl animate-ping" style={{ background: ACCENT, opacity: 0.18 }} />}
                     </div>
                     {/* content */}
                     <div className="flex flex-col gap-1 pt-1.5 flex-1">
                       <div className="flex items-center gap-2">
-                        <Icon size={13} className="text-white/40" />
-                        <h3 className="font-display font-bold text-sm text-white">{st.label}</h3>
+                        <Icon size={13} className="dark:text-white/40 text-foreground/40" />
+                        <h3 className="font-display font-bold text-sm dark:text-white text-foreground">{st.label}</h3>
                       </div>
                       {(done || active) && (
                         active && i === 4 && !brief
-                          ? <div className="mt-1 h-3 w-2/3 rounded bg-white/10 animate-pulse" />
-                          : <p className="text-xs text-white/55 leading-relaxed">{st.insight}</p>
+                          ? <div className="mt-1 h-3 w-2/3 rounded dark:bg-white/10 bg-foreground/10 animate-pulse" />
+                          : <p className="text-xs dark:text-white/55 text-muted-foreground leading-relaxed">{st.insight}</p>
                       )}
                     </div>
                   </div>
@@ -631,16 +631,16 @@ export function UXBoxForm() {
 
             {/* Blueprint preview */}
             {(activeStage >= 4 || phase === "return") && brief && (
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-6 flex flex-col gap-3 animate-in fade-in duration-500">
+              <div className="rounded-2xl border dark:border-white/10 border-foreground/10 dark:bg-white/5 bg-foreground/5 p-6 flex flex-col gap-3 animate-in fade-in duration-500">
                 <div className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest w-fit" style={{ color: ACCENT }}>
                   <Cpu size={12} /> {t("Tu blueprint", "Your blueprint")}
                 </div>
                 <div className="max-h-48 overflow-y-auto flex flex-col gap-3">
                   {brief.split("\n\n").filter(Boolean).slice(0, 2).map((p, i) => (
-                    <p key={i} className="text-sm text-white/75 leading-relaxed">{p}</p>
+                    <p key={i} className="text-sm dark:text-white/75 text-foreground/75 leading-relaxed">{p}</p>
                   ))}
                 </div>
-                <p className="text-xs text-white/40 flex items-center gap-1.5">
+                <p className="text-xs dark:text-white/40 text-muted-foreground flex items-center gap-1.5">
                   <ShieldCheck size={12} /> {t("Propuesta preliminar generada con IA y revisada por nuestro equipo.", "Preliminary AI-generated proposal, reviewed by our team.")}
                 </p>
               </div>
@@ -655,16 +655,16 @@ export function UXBoxForm() {
                   </div>
                   <ul className="flex flex-col gap-2">
                     {deepFindings.map((f) => (
-                      <li key={f} className="flex items-start gap-2 text-sm text-white/75 leading-relaxed">
+                      <li key={f} className="flex items-start gap-2 text-sm dark:text-white/75 text-foreground/75 leading-relaxed">
                         <CheckCircle2 size={15} className="shrink-0 mt-0.5" style={{ color: ACCENT }} /> {f}
                       </li>
                     ))}
                   </ul>
                 </div>
               ) : (
-                <div className="rounded-2xl border border-white/10 bg-white/5 p-6 flex flex-col gap-3">
+                <div className="rounded-2xl border dark:border-white/10 border-foreground/10 dark:bg-white/5 bg-foreground/5 p-6 flex flex-col gap-3">
                   <div className="flex items-center justify-between gap-3">
-                    <div className="flex items-center gap-2 text-sm text-white/70">
+                    <div className="flex items-center gap-2 text-sm dark:text-white/70 text-foreground/70">
                       <Loader2 size={15} className="animate-spin shrink-0" style={{ color: ACCENT }} />
                       {t("Análisis competitivo profundo en progreso…", "Deep competitive analysis in progress…")}
                     </div>
@@ -672,11 +672,11 @@ export function UXBoxForm() {
                       <Clock size={13} /> {deepRemaining}
                     </div>
                   </div>
-                  <div className="h-1.5 rounded-full bg-white/10 overflow-hidden">
+                  <div className="h-1.5 rounded-full dark:bg-white/10 bg-foreground/10 overflow-hidden">
                     <div className="h-full rounded-full transition-all duration-1000"
                       style={{ width: `${Math.min(100, Math.round(((DEEP_DIVE_MS - Math.max(0, deepReadyAt - now)) / DEEP_DIVE_MS) * 100))}%`, background: "linear-gradient(90deg, #E8751A, #2AABB3)" }} />
                   </div>
-                  <p className="text-xs text-white/45">
+                  <p className="text-xs dark:text-white/45 text-muted-foreground">
                     {t("Puedes cerrar esta página: el motor sigue trabajando. Vuelve con tu correo y verás el avance.", "You can close this page: the engine keeps working. Return with your email to see the progress.")}
                   </p>
                 </div>
@@ -686,17 +686,17 @@ export function UXBoxForm() {
             {/* Unlock CTA */}
             {(activeStage >= 5 || phase === "return") ? (
               <div className="flex flex-col items-center gap-4 text-center">
-                <p className="text-sm text-white/60">{t("Tu análisis está listo. El siguiente paso es humano.", "Your analysis is ready. The next step is human.")}</p>
+                <p className="text-sm dark:text-white/60 text-muted-foreground">{t("Tu análisis está listo. El siguiente paso es humano.", "Your analysis is ready. The next step is human.")}</p>
                 <BookingModal>
                   <button type="button" className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-semibold text-[15px] text-white transition-all active:scale-95 shadow-lg hover:brightness-110"
                     style={{ background: "linear-gradient(90deg, #E8751A, #c65a10)" }}>
                     <Rocket size={16} /> {t("Estamos listos para hablar contigo", "We're ready to talk to you")}
                   </button>
                 </BookingModal>
-                <button onClick={resetLab} className="text-xs text-white/40 hover:text-white/70 transition-colors">{t("Analizar otra idea", "Analyze another idea")}</button>
+                <button onClick={resetLab} className="text-xs dark:text-white/40 text-muted-foreground hover:dark:text-white hover:text-foreground transition-colors">{t("Analizar otra idea", "Analyze another idea")}</button>
               </div>
             ) : (
-              <div className="rounded-xl border border-white/10 bg-white/5 px-5 py-4 flex items-center gap-3 text-sm text-white/60">
+              <div className="rounded-xl border dark:border-white/10 border-foreground/10 dark:bg-white/5 bg-foreground/5 px-5 py-4 flex items-center gap-3 text-sm dark:text-white/60 text-muted-foreground">
                 <Loader2 size={15} className="animate-spin shrink-0" style={{ color: ACCENT }} />
                 {t("Cruzando tu idea con +2.000 patrones de producto…", "Cross-referencing your idea with 2,000+ product patterns…")}
               </div>
@@ -706,15 +706,15 @@ export function UXBoxForm() {
 
         {/* Human escape hatch (not during engine run) */}
         {hydrated && phase !== "engine" && (
-          <div className="mt-10 pt-8 border-t border-white/10 text-center flex flex-col items-center gap-3">
-            <span className="text-xs font-semibold uppercase tracking-widest text-white/40">{t("¿Prefieres hablar con un humano?", "Prefer to talk to a human?")}</span>
+          <div className="mt-10 pt-8 border-t dark:border-white/10 border-foreground/10 text-center flex flex-col items-center gap-3">
+            <span className="text-xs font-semibold uppercase tracking-widest dark:text-white/40 text-muted-foreground">{t("¿Prefieres hablar con un humano?", "Prefer to talk to a human?")}</span>
             <div className="flex items-center justify-center gap-5 text-sm">
-              <a href="https://wa.me/573054009505" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-white/75 hover:text-white transition-colors">
+              <a href="https://wa.me/573054009505" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 dark:text-white/75 text-foreground/75 hover:dark:text-white hover:text-foreground transition-colors">
                 <MessageCircle size={16} className="text-[#25D366]" /> WhatsApp
               </a>
-              <span className="w-1 h-1 rounded-full bg-white/20" />
+              <span className="w-1 h-1 rounded-full dark:bg-white/20 bg-foreground/20" />
               <BookingModal>
-                <button type="button" className="text-white/75 hover:text-white font-medium">{t("Agendar llamada", "Book a call")}</button>
+                <button type="button" className="dark:text-white/75 text-foreground/75 hover:dark:text-white hover:text-foreground font-medium">{t("Agendar llamada", "Book a call")}</button>
               </BookingModal>
             </div>
           </div>

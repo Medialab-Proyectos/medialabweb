@@ -23,14 +23,14 @@ export function MarqueeTicker() {
 
   return (
     <div
-      className="overflow-hidden py-4 bg-[var(--surface-dark)] border-y border-white/5"
+      className="overflow-hidden py-4 bg-[var(--surface-dark)] border-y dark:border-white/5 border-foreground/5 transition-colors duration-300"
       aria-hidden="true"
     >
       <div className="animate-marquee">
         {doubled.map((item, i) => (
           <span
             key={i}
-            className="inline-flex items-center gap-6 px-6 text-xs font-semibold uppercase tracking-widest text-white/30 shrink-0"
+            className="inline-flex items-center gap-6 px-6 text-xs font-semibold uppercase tracking-widest dark:text-white/30 text-foreground/30 shrink-0"
           >
             {item}
             <span

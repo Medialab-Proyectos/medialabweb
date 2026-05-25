@@ -82,17 +82,17 @@ export function MidCTA({
   return (
     <div
       ref={ref}
-      className={`py-20 px-6 bg-gradient-to-br from-[var(--surface-dark)] to-[var(--surface-mid)] text-white transition-all duration-700 ${
+      className={`py-20 px-6 bg-gradient-to-br from-[var(--surface-dark)] to-[var(--surface-mid)] text-foreground transition-all duration-300 ${
         visible ? "opacity-100" : "opacity-0"
       }`}
     >
       <div className="max-w-5xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-10">
         <div className="flex flex-col gap-4 max-w-xl text-center lg:text-left">
-          <h3 className="font-display font-bold text-2xl md:text-3xl text-white text-balance">
+          <h3 className="font-display font-bold text-2xl md:text-3xl dark:text-white text-foreground text-balance">
             {resolvedHeadline}
           </h3>
-          <p className="text-base text-white/60">{resolvedSubheadline}</p>
-          <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 text-sm text-white/65">
+          <p className="text-base dark:text-white/60 text-muted-foreground">{resolvedSubheadline}</p>
+          <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 text-sm dark:text-white/65 text-muted-foreground">
             <span className="flex items-center gap-1.5">
               <CheckCircle2 size={14} className="text-green-400" />
               {t("Llamada gratuita de 30 min", "Free 30-min call")}

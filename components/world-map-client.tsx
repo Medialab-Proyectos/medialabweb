@@ -5,6 +5,9 @@ import { ComposableMap, Geographies, Geography, Marker, ZoomableGroup } from "re
 
 const GEO_URL = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json"
 
+// Colombia ISO 3166-1 numeric code in world-atlas topojson
+const COLOMBIA_ID = "170"
+
 // Line exists at runtime but is absent from auto-inferred types in this version
 type LineProps = {
   from: [number, number]
@@ -47,8 +50,9 @@ const markers: {
 // Connections only to cities outside Colombia
 const connections = markers.filter(m => !m.isHQ && m.country !== "Colombia")
 
-// 4-pointed diamond star — identifies HQ
-const STAR = "0,-10 2.4,-2.4 10,0 2.4,2.4 0,10 -2.4,2.4 -10,0 -2.4,-2.4"
+// HQ rendered separately and last so it sits on top of all other markers
+const nonHQMarkers = markers.filter(m => !m.isHQ)
+const hqMarker = markers.find(m => m.isHQ)!
 
 interface Props {
   tooltip: { name: string; country: string } | null
@@ -78,20 +82,23 @@ export function WorldMap({ tooltip, setTooltip }: Props) {
       >
         <ZoomableGroup zoom={1} minZoom={1} maxZoom={4}>
 
-          {/* Countries */}
+          {/* Countries — Colombia highlighted as HQ country */}
           <Geographies geography={GEO_URL}>
             {({ geographies }: { geographies: unknown[] }) =>
-              (geographies as Array<{ rsmKey: string }>).map((geo) => (
-                <Geography
-                  key={geo.rsmKey}
-                  geography={geo}
-                  style={{
-                    default: { fill: "#2AABB3", stroke: "#0a1628", strokeWidth: 0.5, outline: "none" },
-                    hover:   { fill: "#38c5ce", stroke: "#0a1628", strokeWidth: 0.5, outline: "none" },
-                    pressed: { fill: "#1e8f97", stroke: "#0a1628", strokeWidth: 0.5, outline: "none" },
-                  }}
-                />
-              ))
+              (geographies as Array<{ rsmKey: string; id: string }>).map((geo) => {
+                const isColombia = geo.id === COLOMBIA_ID
+                return (
+                  <Geography
+                    key={geo.rsmKey}
+                    geography={geo}
+                    style={{
+                      default: { fill: isColombia ? "#E8751A" : "#2AABB3", stroke: "#0a1628", strokeWidth: 0.5, outline: "none" },
+                      hover:   { fill: isColombia ? "#f08a35" : "#38c5ce", stroke: "#0a1628", strokeWidth: 0.5, outline: "none" },
+                      pressed: { fill: isColombia ? "#d06010" : "#1e8f97", stroke: "#0a1628", strokeWidth: 0.5, outline: "none" },
+                    }}
+                  />
+                )
+              })
             }
           </Geographies>
 
@@ -125,43 +132,44 @@ export function WorldMap({ tooltip, setTooltip }: Props) {
             />
           ))}
 
-          {/* Markers */}
-          {markers.map((m) => (
+          {/* Non-HQ markers */}
+          {nonHQMarkers.map((m) => (
             <Marker
               key={m.name}
               coordinates={m.coords}
               onMouseEnter={() => setTooltip({ name: m.name, country: m.country })}
               onMouseLeave={() => setTooltip(null)}
             >
-              {m.isHQ ? (
-                // Casa Matriz — diamond star marker
-                <>
-                  <circle r={22} fill="#E8751A" fillOpacity={0.07} />
-                  <circle r={14} fill="#E8751A" fillOpacity={0.14} />
-                  <polygon points={STAR} fill="#E8751A" />
-                  <circle r={3} fill="white" />
-                </>
-              ) : (
-                <>
-                  <circle r={5} fill="#E8751A" />
-                  <circle r={2} fill="white" />
-                </>
-              )}
+              <circle r={5} fill="#E8751A" />
+              <circle r={2} fill="white" />
             </Marker>
           ))}
+
+          {/* HQ marker — white so it pops against the orange Colombia fill; rendered last = on top */}
+          <Marker
+            key={hqMarker.name}
+            coordinates={hqMarker.coords}
+            onMouseEnter={() => setTooltip({ name: hqMarker.name, country: hqMarker.country })}
+            onMouseLeave={() => setTooltip(null)}
+          >
+            <circle r={20} fill="white" fillOpacity={0.07} />
+            <circle r={12} fill="white" fillOpacity={0.14} />
+            <circle r={7} fill="white" />
+            <circle r={2.5} fill="#E8751A" />
+          </Marker>
 
         </ZoomableGroup>
       </ComposableMap>
 
-      {/* Legend — inline color: white works in all color modes */}
+      {/* Legend */}
       <div
         className="absolute bottom-4 left-4 flex flex-col gap-2 px-3 py-2.5 rounded-lg text-xs font-medium"
         style={{ background: "rgba(10,22,40,0.88)", border: "1px solid rgba(232,117,26,0.35)" }}
       >
         <div className="flex items-center gap-2">
-          <svg width="14" height="14" viewBox="-12 -12 24 24" aria-hidden="true">
-            <polygon points={STAR} fill="#E8751A" />
-            <circle r={2.5} fill="white" />
+          <svg width="14" height="14" viewBox="-8 -8 16 16" aria-hidden="true">
+            <circle r={7} fill="white" />
+            <circle r={2.5} fill="#E8751A" />
           </svg>
           <span style={{ color: "white" }}>Casa Matriz — Bogotá</span>
         </div>

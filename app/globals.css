@@ -383,11 +383,11 @@
   opacity: 1;
 }
 .light .hero-canvas {
-  opacity: 0.55;
+  opacity: 1;
   filter: saturate(1.4);
 }
 .warm .hero-canvas {
-  opacity: 0.45;
+  opacity: 1;
   filter: saturate(1.2);
 }
 .pure-dark .hero-canvas {
