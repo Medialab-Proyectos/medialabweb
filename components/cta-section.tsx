@@ -10,6 +10,7 @@ export function CTASection() {
   const [visible, setVisible] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [sending, setSending] = useState(false)
+  const [errors, setErrors] = useState<{ name?: string; phone?: string; message?: string }>({})
   const { t, localized } = useLanguage()
 
   useEffect(() => {
@@ -23,14 +24,25 @@ export function CTASection() {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    setSending(true)
 
     const form = e.currentTarget
     const data = new FormData(form)
-    const name = data.get("name") as string
-    const phone = data.get("phone") as string
-    const company = data.get("company") as string
-    const message = data.get("message") as string
+    const name = ((data.get("name") as string) || "").trim()
+    const phone = ((data.get("phone") as string) || "").trim()
+    const company = ((data.get("company") as string) || "").trim()
+    const message = ((data.get("message") as string) || "").trim()
+
+    // Validación amable y orientadora (Yifrah)
+    const newErrors: { name?: string; phone?: string; message?: string } = {}
+    if (!name) newErrors.name = t("Nos falta tu nombre para poder contactarte.", "We need your name to reach you.")
+    if (!phone) newErrors.phone = t("Déjanos un teléfono o WhatsApp para coordinar.", "Leave a phone or WhatsApp so we can coordinate.")
+    if (!message) newErrors.message = t("Cuéntanos brevemente tu desafío — así llegamos preparados.", "Briefly tell us your challenge — so we come prepared.")
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors)
+      return
+    }
+    setErrors({})
+    setSending(true)
 
     const body = encodeURIComponent(
       `Nombre: ${name}\nTeléfono: ${phone}${company ? `\nEmpresa: ${company}` : ""}\n\n${message}`
@@ -148,22 +160,33 @@ export function CTASection() {
             {/* Right — Form */}
             <div className="bg-white/5 border border-white/10 rounded-2xl p-6 md:p-8 backdrop-blur-sm">
               {submitted ? (
-                <div className="flex flex-col items-center justify-center gap-4 py-12 text-center">
+                <div className="flex flex-col items-center justify-center gap-5 py-10 text-center">
                   <div className="w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center">
                     <CheckCircle2 size={32} className="text-green-400" />
                   </div>
-                  <h3 className="text-xl font-bold text-white">
-                    {t("¡Mensaje enviado!", "Message sent!")}
-                  </h3>
-                  <p className="text-white/60 text-sm">
-                    {t(
-                      "Te responderemos en menos de 24 horas.",
-                      "We'll get back to you within 24 hours."
-                    )}
-                  </p>
+                  <div className="flex flex-col gap-1">
+                    <h3 className="text-xl font-bold text-white">
+                      {t("¡Listo! Diste el primer paso", "Done! You took the first step")}
+                    </h3>
+                    <p className="text-white/60 text-sm">
+                      {t("Esto es exactamente lo que sigue:", "Here's exactly what happens next:")}
+                    </p>
+                  </div>
+                  <ol className="flex flex-col gap-3 text-left w-full max-w-xs">
+                    {[
+                      t("Revisamos tu caso con detalle.", "We review your case in detail."),
+                      t("Te contactamos en menos de 24 horas.", "We contact you within 24 hours."),
+                      t("Sesión gratuita de 30 min para mostrarte el camino.", "Free 30-min session to show you the path."),
+                    ].map((s, i) => (
+                      <li key={i} className="flex items-start gap-3 text-sm text-white/80">
+                        <span className="shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white bg-[var(--magenta)]">{i + 1}</span>
+                        {s}
+                      </li>
+                    ))}
+                  </ol>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+                <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-5">
                   <h3 className="text-lg font-bold text-white">
                     {t("Cuéntanos sobre tu proyecto", "Tell us about your project")}
                   </h3>
@@ -176,10 +199,11 @@ export function CTASection() {
                       id="cta-name"
                       name="name"
                       type="text"
-                      required
+                      onChange={() => setErrors((p) => ({ ...p, name: undefined }))}
                       placeholder={t("Tu nombre completo", "Your full name")}
                       className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[var(--magenta)]/50 focus:ring-1 focus:ring-[var(--magenta)]/30 transition-all"
                     />
+                    {errors.name && <p className="text-xs text-red-400">{errors.name}</p>}
                   </div>
 
                   <div className="flex flex-col gap-1.5">
@@ -190,10 +214,13 @@ export function CTASection() {
                       id="cta-phone"
                       name="phone"
                       type="tel"
-                      required
+                      onChange={() => setErrors((p) => ({ ...p, phone: undefined }))}
                       placeholder={t("+57 300 000 0000", "+1 555 000 0000")}
                       className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[var(--magenta)]/50 focus:ring-1 focus:ring-[var(--magenta)]/30 transition-all"
                     />
+                    {errors.phone
+                      ? <p className="text-xs text-red-400">{errors.phone}</p>
+                      : <p className="text-[11px] text-white/35">{t("Solo para coordinar. Nunca spam.", "Only to coordinate. Never spam.")}</p>}
                   </div>
 
                   <div className="flex flex-col gap-1.5">
@@ -216,14 +243,15 @@ export function CTASection() {
                     <textarea
                       id="cta-message"
                       name="message"
-                      required
                       rows={4}
+                      onChange={() => setErrors((p) => ({ ...p, message: undefined }))}
                       placeholder={t(
                         "Cuéntanos brevemente sobre tu proyecto o desafío...",
                         "Briefly tell us about your project or challenge..."
                       )}
                       className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[var(--magenta)]/50 focus:ring-1 focus:ring-[var(--magenta)]/30 transition-all resize-none"
                     />
+                    {errors.message && <p className="text-xs text-red-400">{errors.message}</p>}
                   </div>
 
                   <button
@@ -235,7 +263,7 @@ export function CTASection() {
                       t("Enviando...", "Sending...")
                     ) : (
                       <>
-                        {t("Enviar mensaje", "Send message")}
+                        {t("Dar el primer paso", "Take the first step")}
                         <Send size={16} className="group-hover:translate-x-1 transition-transform" />
                       </>
                     )}

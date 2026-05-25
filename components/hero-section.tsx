@@ -183,7 +183,7 @@ export function HeroSection() {
 
       {/* Scroll indicator */}
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/25 animate-bounce-slow">
-        <span className="text-xs tracking-widest uppercase">{t("Explorar", "Explore")}</span>
+        <span className="text-xs tracking-widest uppercase">{t("Ver cómo trabajamos", "See how we work")}</span>
         <div className="w-px h-10 bg-gradient-to-b from-white/25 to-transparent" />
       </div>
     </section>

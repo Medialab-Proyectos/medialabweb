@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { CreditCard, Landmark, Car, Rocket, GraduationCap, ShoppingCart, Leaf, LayoutGrid } from "lucide-react"
+import { CreditCard, Landmark, Car, Rocket, GraduationCap, ShoppingCart } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 
 export function IndustriesSection() {
@@ -85,26 +85,6 @@ export function IndustriesSection() {
       description: t(
         "Experiencias de compra que convierten visitantes en clientes fieles",
         "Shopping experiences that turn visitors into loyal customers"
-      ),
-    },
-    {
-      label: t("Medio Ambiente", "Environment"),
-      icon: Leaf,
-      color: "var(--cyan)",
-      image: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=600&q=80&fit=crop",
-      description: t(
-        "Tecnología que hace visible el impacto positivo",
-        "Technology that makes positive impact visible"
-      ),
-    },
-    {
-      label: t("Plataformas Digitales", "Digital Platforms"),
-      icon: LayoutGrid,
-      color: "var(--magenta)",
-      image: "https://images.unsplash.com/photo-1551434678-e076c223a692?w=600&q=80&fit=crop",
-      description: t(
-        "Sistemas complejos que se sienten simples desde el primer clic",
-        "Complex systems that feel simple from the first click"
       ),
     },
   ]
