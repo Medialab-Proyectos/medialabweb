@@ -151,7 +151,7 @@ export function CTASection() {
                   <MessageCircle size={16} className="text-[var(--orange)]" />
                   <div>
                     <span className="text-white/50 text-xs block">Email</span>
-                    <a href="mailto:hablemos@medialab.design" title={t("Enviar email a MediaLab", "Send email to MediaLab")} className="text-white hover:text-[var(--cyan)] transition-colors">hablemos@medialab.design</a>
+                    <a href="mailto:hello@medialab.design" title={t("Enviar email a MediaLab", "Send email to MediaLab")} className="text-white hover:text-[var(--cyan)] transition-colors">hello@medialab.design</a>
                   </div>
                 </div>
               </div>

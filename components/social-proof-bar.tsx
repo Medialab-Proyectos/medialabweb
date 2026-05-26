@@ -12,16 +12,16 @@ const REAPPEAR_MS    = 40000 // espera entre notificaciones — no invasivo
 const AUTO_HIDE_MS   = 10000 // auto-dismiss si el usuario lo ignora
 
 const POOL: [string, string][] = [
-  ["Startup en México: el doble de usuarios activos desde el primer día",       "Mexico startup doubled its active users from day one"],
-  ["Plataforma financiera lanzó nuevas funciones cuatro veces más rápido",      "Fintech platform launched new features four times faster"],
-  ["App de salud llegó a sus primeros clientes reales en solo 8 semanas",       "Health app reached its first real customers in just 8 weeks"],
-  ["Tienda online en Chile: un tercio más de visitantes completaron su compra", "Chilean online store: a third more visitors completed their purchase"],
-  ["Plataforma educativa: 28% más de nuevos usuarios terminaron el tutorial",   "Ed-tech: 28% more new users completed the onboarding tutorial"],
-  ["Startup en Argentina triplicó los usuarios que renovaron su suscripción",   "Argentine startup tripled the users who renewed their subscription"],
-  ["Fintech en Colombia pasó de quejas a recomendaciones en 60 días",           "Colombian fintech turned complaints into referrals in 60 days"],
-  ["Empresa B2B: sus clientes ven resultados un 40% más rápido que antes",      "B2B company: clients see results 40% faster than before"],
-  ["Startup de México: de idea a clientes pagando en solo 6 semanas",           "Mexico startup: from idea to paying customers in just 6 weeks"],
-  ["App de bienestar: más de la mitad de usuarios siguen activos al 3er mes",   "Wellness app: more than half of users still active at month three"],
+  ["Startup en México inició su Discovery con IA en solo 2 semanas",            "Mexico startup kicked off its AI-powered Discovery in just 2 weeks"],
+  ["Fintech en Colombia desplegó su producto digital en 3 semanas",             "Colombian fintech deployed its digital product in 3 weeks"],
+  ["Empresa de salud rediseñó su app con UX research en 4 semanas",             "Health company redesigned its app with UX research in 4 weeks"],
+  ["E-commerce en Chile lanzó su nuevo checkout diseñado por MediaLab",         "Chilean e-commerce launched its new checkout designed by MediaLab"],
+  ["Startup edtech completó su diseño UX/UI y salió al mercado en 6 semanas",   "Edtech startup completed its UX/UI design and went to market in 6 weeks"],
+  ["Empresa B2B optimizó su conversión SaaS con auditoría CRO de MediaLab",     "B2B company optimized SaaS conversion with MediaLab's CRO audit"],
+  ["Fintech en Argentina validó su MVP con usuarios reales en 3 semanas",       "Argentine fintech validated its MVP with real users in 3 weeks"],
+  ["Startup de movilidad pasó de idea a prototipo funcional en 4 semanas",      "Mobility startup went from idea to working prototype in 4 weeks"],
+  ["Empresa de educación lanzó su plataforma con diseño centrado en el usuario","Education company launched its platform with user-centered design"],
+  ["Banco digital en LATAM rediseñó su onboarding con MediaLab en 5 semanas",  "LATAM digital bank redesigned its onboarding with MediaLab in 5 weeks"],
 ]
 
 const INDICES = POOL.map((_, i) => i)

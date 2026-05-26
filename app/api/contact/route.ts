@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "hablemos@medialab.design"
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "hello@medialab.design"
 const FROM_EMAIL  = process.env.FROM_EMAIL  || "MediaLab <onboarding@resend.dev>"
 const SITE_URL    = process.env.SITE_URL    || "https://medialab.design"
 const LOGO_URL    = `${SITE_URL}/images/logo-medialab-400.png`
@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
       timeStyle: "short",
     })
 
-    // ── Email 1: Notificación interna a hablemos@medialab.design ──
+    // ── Email 1: Notificación interna a hello@medialab.design ──
     const adminHtml = `<!DOCTYPE html>
 <html lang="es">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
