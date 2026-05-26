@@ -171,8 +171,8 @@ export function UXBoxForm() {
   const reaction = useTypewriter(
     phase === "reacting" && lab.signals.length
       ? t(
-          `Detecto señales fuertes de ${lab.signals.join(" + ")}. Hay un ángulo claro para diferenciarte. Asegura tu laboratorio para ver el análisis completo.`,
-          `I detect strong signals of ${lab.signals.join(" + ")}. There's a clear angle to differentiate. Secure your lab to see the full analysis.`
+          `Detecto señales fuertes de ${lab.signals.join(" + ")}. Hay un ángulo claro para diferenciarte. Asegura tu análisis para ver el resultado completo.`,
+          `I detect strong signals of ${lab.signals.join(" + ")}. There's a clear angle to differentiate. Secure your analysis to see the full result.`
         )
       : ""
   )
@@ -207,7 +207,7 @@ export function UXBoxForm() {
       return
     }
     if (!consent) {
-      setError(t("Necesitamos tu consentimiento para guardar tu laboratorio", "We need your consent to save your lab"))
+      setError(t("Necesitamos tu consentimiento para guardar tu análisis", "We need your consent to save your analysis"))
       return
     }
     setLoading(true); setError("")
@@ -357,12 +357,12 @@ export function UXBoxForm() {
 
   /* ── Timeline definition ── */
   const stages = [
-    { icon: Sparkles, label: t("Idea inicial", "Initial idea"), insight: t("Idea capturada y estructurada.", "Idea captured and structured.") },
-    { icon: Radar, label: t("Mercado detectado", "Market detected"), insight: t(`Señales: ${lab.signals.join(", ")}.`, `Signals: ${lab.signals.join(", ")}.`) },
-    { icon: Target, label: t("Competidores", "Competitors"), insight: t("Mapeando jugadores y huecos del espacio…", "Mapping players and gaps in the space…") },
-    { icon: Layers, label: t("Oportunidades UX", "UX opportunities"), insight: t("Encontré ángulos de diferenciación por experiencia.", "I found differentiation angles through experience.") },
-    { icon: Cpu, label: t("Blueprint generado", "Blueprint generated"), insight: t("Tu definición de producto está lista.", "Your product definition is ready.") },
-    { icon: Rocket, label: t("Listos para hablar", "Ready to talk"), insight: t("Desbloqueado: agenda con un humano.", "Unlocked: book a session with a human.") },
+    { icon: Sparkles, label: t("Idea inicial", "Initial idea"), time: "~10 min", insight: t("Idea capturada y estructurada.", "Idea captured and structured.") },
+    { icon: Radar, label: t("Mercado detectado", "Market detected"), time: "~2 hrs", insight: t(`Señales: ${lab.signals.join(", ")}.`, `Signals: ${lab.signals.join(", ")}.`) },
+    { icon: Target, label: t("Competidores", "Competitors"), time: "~3 hrs", insight: t("Mapeando jugadores y huecos del espacio…", "Mapping players and gaps in the space…") },
+    { icon: Layers, label: t("Oportunidades UX", "UX opportunities"), time: "~2 hrs", insight: t("Encontré ángulos de diferenciación por experiencia.", "I found differentiation angles through experience.") },
+    { icon: Cpu, label: t("Blueprint generado", "Blueprint generated"), time: "~10 min", insight: t("Tu definición de producto está lista.", "Your product definition is ready.") },
+    { icon: Rocket, label: t("Listos para hablar", "Ready to talk"), time: "", insight: t("Desbloqueado: agenda con un humano.", "Unlocked: book a session with a human.") },
   ]
 
   // ── Deep-dive: matures in real time across visits (Phase 2) ──
@@ -407,7 +407,7 @@ export function UXBoxForm() {
           </div>
           <h2 id="uxbox-heading" className="font-display font-bold text-4xl md:text-5xl dark:text-white text-foreground text-balance leading-tight">
             {phase === "return"
-              ? t("Bienvenido de vuelta a tu laboratorio", "Welcome back to your lab")
+              ? t("Bienvenido de vuelta a tu análisis", "Welcome back to your analysis")
               : t("Enciende tu idea. Mira cómo evoluciona.", "Ignite your idea. Watch it evolve.")}
           </h2>
           {phase === "spark" && (
@@ -462,7 +462,7 @@ export function UXBoxForm() {
             </div>
             <button onClick={() => setPhase("gate")} className="w-full flex items-center justify-center gap-2 py-4 rounded-xl font-semibold text-[15px] text-white transition-all active:scale-95 hover:brightness-110"
               style={{ background: "linear-gradient(90deg, #E8751A, #c65a10)" }}>
-              <ShieldCheck size={17} /> {t("Asegurar mi laboratorio", "Secure my lab")}
+              <ShieldCheck size={17} /> {t("Asegurar mi análisis", "Secure my analysis")}
             </button>
             <button onClick={resetLab} className="text-xs dark:text-white/40 text-muted-foreground hover:dark:text-white hover:text-foreground transition-colors mx-auto">
               {t("Empezar con otra idea", "Start with another idea")}
@@ -474,7 +474,7 @@ export function UXBoxForm() {
         {phase === "gate" && (
           <form onSubmit={handleGate} className="max-w-md mx-auto flex flex-col gap-5 animate-in fade-in duration-500">
             <div className="flex flex-col gap-1 text-center">
-              <h3 className="font-display font-bold text-xl dark:text-white text-foreground">{t("Asegura tu laboratorio", "Secure your lab")}</h3>
+              <h3 className="font-display font-bold text-xl dark:text-white text-foreground">{t("Asegura tu análisis", "Secure your analysis")}</h3>
               <p className="text-sm dark:text-white/55 text-muted-foreground">{t("Para no perder este análisis y poder volver cuando quieras.", "So you don't lose this analysis and can return anytime.")}</p>
             </div>
             <div className="flex items-center gap-2 rounded-xl border dark:border-white/25 border-foreground/20 dark:bg-white/5 bg-foreground/5 px-3">
@@ -492,7 +492,7 @@ export function UXBoxForm() {
             {error && <p className="text-xs text-red-400 font-medium">{error}</p>}
             <button type="submit" disabled={loading} className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold text-sm text-white transition-all active:scale-95 disabled:opacity-50"
               style={{ background: "linear-gradient(90deg, #E8751A, #c65a10)" }}>
-              {loading ? t("Enviando llave…", "Sending key…") : t("Entrar a mi laboratorio", "Enter my lab")} <ArrowRight size={15} />
+              {loading ? t("Enviando llave…", "Sending key…") : t("Acceder a mi análisis", "Access my analysis")} <ArrowRight size={15} />
             </button>
           </form>
         )}
@@ -531,14 +531,18 @@ export function UXBoxForm() {
         {/* ───────── FEED (progressive disclosure) ───────── */}
         {phase === "feed" && (
           <div className="max-w-md mx-auto flex flex-col gap-6 animate-in fade-in duration-500">
-            {/* progress */}
+            {/* progress — step indicators */}
             <div className="flex flex-col gap-2">
               <div className="flex items-center justify-between text-xs dark:text-white/50 text-muted-foreground">
                 <span>{t("Definiendo tu producto", "Defining your product")}</span>
-                <span className="font-semibold" style={{ color: ACCENT }}>{feedProgress}%</span>
+                <span className="font-semibold" style={{ color: ACCENT }}>{t(`Paso ${feedStep + 1} de ${feedFields.length}`, `Step ${feedStep + 1} of ${feedFields.length}`)}</span>
               </div>
-              <div className="h-1.5 rounded-full dark:bg-white/10 bg-foreground/10 overflow-hidden">
-                <div className="h-full rounded-full transition-all duration-500" style={{ width: `${feedProgress}%`, background: "linear-gradient(90deg, #E8751A, #2AABB3)" }} />
+              <div className="flex gap-1.5">
+                {feedFields.map((_, i) => (
+                  <div key={i} className="flex-1 h-1.5 rounded-full overflow-hidden dark:bg-white/10 bg-foreground/10">
+                    <div className="h-full rounded-full transition-all duration-500" style={{ width: i <= feedStep ? "100%" : "0%", background: "linear-gradient(90deg, #E8751A, #2AABB3)" }} />
+                  </div>
+                ))}
               </div>
             </div>
 
@@ -617,6 +621,7 @@ export function UXBoxForm() {
                       <div className="flex items-center gap-2">
                         <Icon size={13} className="dark:text-white/40 text-foreground/40" />
                         <h3 className="font-display font-bold text-sm dark:text-white text-foreground">{st.label}</h3>
+                        {st.time && <span className="text-[10px] dark:text-white/35 text-muted-foreground font-medium">{st.time}</span>}
                       </div>
                       {(done || active) && (
                         active && i === 4 && !brief

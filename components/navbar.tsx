@@ -10,7 +10,7 @@ import { useLanguage } from "@/lib/language-context"
 
 const navLinks = {
   es: [
-    { label: "Servicios", href: "/servicios" },
+    { label: "Servicios", href: "/#services" },
     { label: "Portafolio", href: "/portafolio" },
     { label: "Educación", href: "/curso", highlight: true },
     { label: "UXBox", href: "/#uxbox" },
@@ -18,7 +18,7 @@ const navLinks = {
     { label: "Blog", href: "/blog" },
   ],
   en: [
-    { label: "Services", href: "/servicios" },
+    { label: "Services", href: "/#services" },
     { label: "Portfolio", href: "/portafolio" },
     { label: "Education", href: "/curso", highlight: true },
     { label: "UXBox", href: "/#uxbox" },

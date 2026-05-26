@@ -184,6 +184,13 @@ export function CTASection() {
                       </li>
                     ))}
                   </ol>
+                  <button
+                    type="button"
+                    onClick={() => setSubmitted(false)}
+                    className="mt-4 text-sm font-medium text-[var(--cyan)] hover:underline transition-colors"
+                  >
+                    {t("Enviar otro mensaje", "Send another message")}
+                  </button>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-5">

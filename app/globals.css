@@ -536,6 +536,37 @@
   background-color: rgba(0, 0, 0, 0.08) !important;
 }
 
+/* Calendly popup — always light mode, rounded corners + overlay */
+.calendly-overlay {
+  background: rgba(0, 0, 0, 0.55) !important;
+  color-scheme: light !important;
+}
+.calendly-overlay .calendly-popup {
+  border-radius: 16px !important;
+  overflow: hidden !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  padding: 0 !important;
+  border: none !important;
+}
+.calendly-overlay .calendly-popup-content {
+  background: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.calendly-overlay .calendly-popup-content iframe {
+  border-radius: 16px !important;
+}
+.calendly-overlay .calendly-popup-close {
+  color: #666666 !important;
+}
+.calendly-overlay .calendly-popup-close > svg {
+  fill: #666666 !important;
+}
+.calendly-overlay .calendly-close-overlay {
+  background: transparent !important;
+}
+
 /* CTA card container — theme-aware background & text */
 .cta-card-container {
   background: linear-gradient(135deg, oklch(0.10 0 0) 0%, oklch(0.06 0 0) 100%);
