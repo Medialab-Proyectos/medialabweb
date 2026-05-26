@@ -40,6 +40,7 @@ export function Navbar() {
   const pathname = usePathname()
   const isCurso = pathname === "/curso" || pathname === "/en/curso"
   const isHome = pathname === "/" || pathname === "/en"
+  const isUXGreen = pathname === "/uxgreen" || pathname === "/en/uxgreen"
   // El CTA usa anclas same-page solo donde existen (home: #contact, curso: #registro);
   // en el resto apunta a la página real /contacto para no dejar caminos muertos.
   const ctaHref = isCurso ? "#registro" : isHome ? "#contact" : localized("/contacto")
@@ -56,7 +57,8 @@ export function Navbar() {
       (pathname === "/" ||
         pathname === "/en" ||
         pathname === "/curso" ||
-        pathname === "/en/curso")) ||
+        pathname === "/en/curso" ||
+        isUXGreen)) ||
     pathname === "/carreras" ||
     pathname === "/en/carreras"
   const overDarkHero = !scrolled && isDarkHero
@@ -120,6 +122,8 @@ export function Navbar() {
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
           ? "bg-background/90 backdrop-blur-md border-b border-border shadow-sm"
+          : isUXGreen
+          ? "bg-background/85 backdrop-blur-md border-b border-border/25 shadow-sm"
           : "bg-transparent"
       }`}
     >
