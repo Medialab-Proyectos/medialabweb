@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Send, Loader2, CheckCircle, User, Mail, Briefcase, Sparkles, MessageSquare } from "lucide-react"
+import { Send, Loader2, CheckCircle, User, Mail, Phone, Briefcase, Sparkles, MessageSquare } from "lucide-react"
 import { motion } from "framer-motion"
 import { useLanguage } from "@/lib/language-context"
 
@@ -9,6 +9,7 @@ export function CourseRegisterForm() {
   const { lang, t, localized } = useLanguage()
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
+  const [phone, setPhone] = useState("")
   const [role, setRole] = useState("")
   const [experience, setExperience] = useState("")
   const [motivation, setMotivation] = useState("")
@@ -37,8 +38,8 @@ export function CourseRegisterForm() {
     e.preventDefault()
     setError("")
 
-    if (!name.trim() || !email.trim()) {
-      setError(t("Nombre y email son obligatorios.", "Name and email are required."))
+    if (!name.trim() || !email.trim() || !phone.trim()) {
+      setError(t("Nombre, email y teléfono son obligatorios.", "Name, email, and phone are required."))
       return
     }
 
@@ -52,7 +53,7 @@ export function CourseRegisterForm() {
       const res = await fetch("/api/course-register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, role, experience, motivation, lang }),
+        body: JSON.stringify({ name, email, phone, role, experience, motivation, lang }),
       })
       const data = await res.json()
       if (res.ok && data.success) {
@@ -122,6 +123,23 @@ export function CourseRegisterForm() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder={t("tu@email.com", "your@email.com")}
+            required
+            className="w-full px-3.5 py-3 rounded-xl bg-foreground/[0.05] border border-foreground/[0.08] text-foreground placeholder:text-foreground/25 focus:outline-none focus:border-[var(--magenta)]/40 focus:bg-foreground/[0.07] transition-all duration-200 text-sm"
+          />
+        </div>
+
+        {/* Phone */}
+        <div className="space-y-1.5">
+          <label htmlFor="course-phone" className="flex items-center gap-1.5 text-xs font-medium text-foreground/60">
+            <Phone size={12} style={{ color: 'var(--magenta)' }} />
+            {t("Teléfono / WhatsApp", "Phone / WhatsApp")} <span className="text-[var(--magenta)]">*</span>
+          </label>
+          <input
+            id="course-phone"
+            type="tel"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            placeholder={t("+57 300 000 0000", "+1 000 000 0000")}
             required
             className="w-full px-3.5 py-3 rounded-xl bg-foreground/[0.05] border border-foreground/[0.08] text-foreground placeholder:text-foreground/25 focus:outline-none focus:border-[var(--magenta)]/40 focus:bg-foreground/[0.07] transition-all duration-200 text-sm"
           />

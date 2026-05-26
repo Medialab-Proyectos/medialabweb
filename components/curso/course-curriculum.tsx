@@ -5,7 +5,7 @@ import { motion, useInView, AnimatePresence } from "framer-motion"
 import {
   Search, Layers, ShieldCheck, Brain, Rocket,
   Users, Repeat, ClipboardCheck, Sparkles,
-  ChevronDown
+  ChevronDown, Download, Leaf
 } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 
@@ -130,6 +130,29 @@ export function CourseCurriculum() {
           deliverable: t("App optimizada para engagement con loops de hábito.", "App optimized for engagement with habit loops."),
         },
         {
+          icon: Leaf, number: "07+", optional: true,
+          title: t("Diseño de Tendencias y UX Green", "Trend Design & UX Green"),
+          subtitle: t("Diseño sostenible y tendencias emergentes", "Sustainable design and emerging trends"),
+          problem: t("Los productos ignoran el impacto ambiental digital y las tendencias que definirán el mercado.", "Products ignore digital environmental impact and the trends that will define the market."),
+          learns: [
+            t("UX Green: diseño sostenible y eficiencia energética digital", "UX Green: sustainable design and digital energy efficiency"),
+            t("Tendencias emergentes en diseño de producto", "Emerging trends in product design"),
+            t("Diseño responsable y huella de carbono digital", "Responsible design and digital carbon footprint"),
+            t("Frameworks de sostenibilidad aplicados a UX", "Sustainability frameworks applied to UX"),
+          ],
+          tools: ["Figma", "Claude", "Website Carbon"],
+          deliverable: t("Auditoría de sostenibilidad + rediseño con principios UX Green.", "Sustainability audit + redesign with UX Green principles."),
+        },
+      ],
+    },
+    {
+      id: "bloque3",
+      label: t("Bloque 3", "Block 3"),
+      title: t("Validación Humana", "Human Validation"),
+      subtitle: t("Valida con personas reales y prepara tu producto para evolucionar", "Validate with real people and prepare your product to evolve"),
+      color: "var(--uxgreen, #00BFA6)",
+      modules: [
+        {
           icon: ClipboardCheck, number: "08",
           title: t("Validación Real", "Real Validation"),
           subtitle: t("Feedback real, no suposiciones", "Real feedback, not assumptions"),
@@ -179,14 +202,23 @@ export function CourseCurriculum() {
             {t("Programa completo", "Full program")}
           </span>
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground tracking-tight leading-snug mb-5 font-display">
-            {t("9 módulos. 2 bloques. 1 producto real.", "9 modules. 2 blocks. 1 real product.")}
+            {t("9 módulos. 3 bloques. 1 producto real.", "9 modules. 3 blocks. 1 real product.")}
           </h2>
-          <p className="max-w-2xl mx-auto text-lg text-foreground/50">
+          <p className="max-w-2xl mx-auto text-lg text-foreground/50 mb-6">
             {t(
               "Cada módulo construye sobre el anterior. Al final no tienes 9 ejercicios sueltos — tienes un producto completo listo para mercado.",
               "Each module builds on the previous one. At the end you don't have 9 loose exercises — you have a complete product ready for market."
             )}
           </p>
+          <a
+            href="/docs/curriculo-arquitecto-ux-ia.pdf"
+            download
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold border border-[var(--cyan)]/30 hover:bg-[var(--cyan)]/10 transition-all duration-300"
+            style={{ color: 'var(--cyan)' }}
+          >
+            <Download size={16} />
+            {t("Descargar currículo en PDF", "Download curriculum PDF")}
+          </a>
         </motion.div>
 
         {/* Blocks */}
@@ -219,7 +251,7 @@ export function CourseCurriculum() {
                 ))}
               </div>
 
-              {/* Checkpoint after block 1 */}
+              {/* Checkpoints after blocks */}
               {block.id === "bloque1" && (
                 <motion.div
                   initial={{ opacity: 0 }}
@@ -236,6 +268,24 @@ export function CourseCurriculum() {
                   </p>
                 </motion.div>
               )}
+
+              {/* Checkpoint after block 2 */}
+              {block.id === "bloque2" && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={inView ? { opacity: 1 } : {}}
+                  transition={{ delay: 0.5, duration: 0.5 }}
+                  className="mt-8 p-5 rounded-2xl border border-[var(--magenta)]/10 bg-[var(--magenta)]/[0.03] text-center"
+                >
+                  <p className="text-sm text-foreground/50">
+                    <span className="font-semibold" style={{ color: 'var(--magenta)' }}>Checkpoint:</span>{" "}
+                    {t(
+                      "Tu producto ya genera engagement y hábitos. Ahora toca validar con personas reales y prepararlo para evolucionar.",
+                      "Your product already generates engagement and habits. Now it's time to validate with real people and prepare it to evolve."
+                    )}
+                  </p>
+                </motion.div>
+              )}
             </div>
           ))}
         </div>
@@ -245,7 +295,7 @@ export function CourseCurriculum() {
 }
 
 function ModuleCard({ mod, blockColor, index, inView, t }: {
-  mod: { icon: any; number: string; title: string; subtitle: string; problem: string; learns: string[]; tools: string[]; deliverable: string }
+  mod: { icon: any; number: string; title: string; subtitle: string; problem: string; learns: string[]; tools: string[]; deliverable: string; optional?: boolean }
   blockColor: string; index: number; inView: boolean; t: (es: string, en: string) => string
 }) {
   const [open, setOpen] = useState(false)
@@ -256,9 +306,10 @@ function ModuleCard({ mod, blockColor, index, inView, t }: {
       initial={{ opacity: 0, y: 20 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ delay: 0.1 + index * 0.06, duration: 0.5 }}
+      className={mod.optional ? "md:col-span-2" : ""}
     >
       <div
-        className="relative rounded-2xl border curso-card hover:border-foreground/20 transition-all duration-300 overflow-hidden cursor-pointer"
+        className={`relative rounded-2xl border curso-card hover:border-foreground/20 transition-all duration-300 overflow-hidden cursor-pointer ${mod.optional ? "border-dashed" : ""}`}
         onClick={() => setOpen(!open)}
       >
         <div className="p-5 sm:p-6 flex items-start gap-4">
@@ -271,6 +322,11 @@ function ModuleCard({ mod, blockColor, index, inView, t }: {
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1">
               <span className="text-[10px] font-mono" style={{ color: blockColor }}>{mod.number}</span>
+              {mod.optional && (
+                <span className="px-2 py-0.5 rounded-full text-[9px] font-semibold uppercase tracking-wider border border-[var(--uxgreen,#00BFA6)]/30 bg-[var(--uxgreen,#00BFA6)]/10 text-[var(--uxgreen,#00BFA6)]">
+                  {t("Opcional", "Optional")}
+                </span>
+              )}
               <span className="text-[10px] text-foreground/20">·</span>
               <span className="text-[10px] text-foreground/30 truncate">{mod.subtitle}</span>
             </div>

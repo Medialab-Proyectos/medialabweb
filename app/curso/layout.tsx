@@ -192,7 +192,7 @@ export default function CursoLayout({
                 name: '¿Cuánto cuesta el programa AI Experience Architect?',
                 acceptedAnswer: {
                   '@type': 'Answer',
-                  text: 'El precio de lanzamiento de la Cohorte 01 es $995 USD (precio regular $1,500 USD). Incluye 9 módulos, workshops en vivo, mentoría grupal, comunidad de por vida, herramientas premium y certificación. Garantía de devolución la primera semana.',
+                  text: 'El precio de prelanzamiento de la Cohorte 02 es $995 USD (precio regular $1,500 USD). Incluye 9 módulos, workshops en vivo, mentoría grupal, comunidad de por vida, herramientas premium y certificación. Garantía de devolución la primera semana. Cohorte 01 cerró con satisfacción 4.7/5.',
                 },
               },
             ],

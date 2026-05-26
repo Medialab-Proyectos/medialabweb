@@ -2,13 +2,14 @@
 
 import { useRef, useState } from "react"
 import { motion, useInView, AnimatePresence } from "framer-motion"
-import { Search, Layers, ShieldCheck, Brain, Rocket, Users, Repeat, ClipboardCheck, Sparkles } from "lucide-react"
+import { Search, Layers, ShieldCheck, Brain, Rocket, Users, Repeat, ClipboardCheck, Sparkles, Leaf } from "lucide-react"
 import Image from "next/image"
 import { useLanguage } from "@/lib/language-context"
 
 const stageStyles: Record<string, { border: string; bg: string; text: string; dot: string }> = {
   cyan:    { border: "border-[var(--cyan)]/20", bg: "bg-[var(--cyan)]/[0.06]", text: "text-[var(--cyan)]", dot: "bg-[var(--cyan)]" },
   magenta: { border: "border-[var(--magenta)]/20", bg: "bg-[var(--magenta)]/[0.06]", text: "text-[var(--magenta)]", dot: "bg-[var(--magenta)]" },
+  uxgreen: { border: "border-[var(--uxgreen)]/20", bg: "bg-[var(--uxgreen)]/[0.06]", text: "text-[var(--uxgreen)]", dot: "bg-[var(--uxgreen)]" },
 }
 
 export function CourseMethodology() {
@@ -20,6 +21,7 @@ export function CourseMethodology() {
   const stages = [
     { label: t("Diseño Funcional", "Functional Design"), color: "cyan" },
     { label: t("Diseño para Masas", "Design for Masses"), color: "magenta" },
+    { label: t("Validación Humana", "Human Validation"), color: "uxgreen" },
   ]
 
   const phases = [
@@ -129,7 +131,22 @@ export function CourseMethodology() {
       tools: ["Figma", "Claude", "ChatGPT"],
     },
     {
-      id: 8, stage: 1, icon: ClipboardCheck,
+      id: 7.1, stage: 1, icon: Leaf, optional: true,
+      name: t("Diseño de Tendencias y UX Green", "Trend Design & UX Green"),
+      subtitle: t("Opcional — Diseña para el planeta", "Optional — Design for the planet"),
+      description: t(
+        "Módulo opcional que explora tendencias emergentes de diseño sostenible. Aplicas principios de UX Green, diseño circular, accesibilidad ambiental y métricas de impacto ecológico en productos digitales.",
+        "Optional module exploring emerging sustainable design trends. You apply UX Green principles, circular design, environmental accessibility, and ecological impact metrics in digital products."
+      ),
+      outputs: [
+        t("Auditoría de sostenibilidad UX", "UX sustainability audit"),
+        t("Métricas de impacto", "Impact metrics"),
+        t("Rediseño sostenible", "Sustainable redesign"),
+      ],
+      tools: ["Figma", "Claude", "EcoGrader"],
+    },
+    {
+      id: 8, stage: 2, icon: ClipboardCheck,
       name: t("Validación real y diseño ético", "Real validation & ethical design"),
       subtitle: t("Feedback real, no suposiciones", "Real feedback, not assumptions"),
       description: t(
@@ -144,7 +161,7 @@ export function CourseMethodology() {
       tools: ["Maze", "Figma", "ChatGPT"],
     },
     {
-      id: 9, stage: 1, icon: Sparkles,
+      id: 9, stage: 2, icon: Sparkles,
       name: t("IA adaptativa y diseño consciente", "Adaptive AI & conscious design"),
       subtitle: t("Productos que evolucionan solos", "Products that evolve on their own"),
       description: t(
@@ -176,18 +193,19 @@ export function CourseMethodology() {
             {t("Una metodología, no un bootcamp", "A methodology, not a bootcamp")}
           </span>
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground tracking-tight leading-snug mb-5 font-display">
-            {t("9 módulos. 2 bloques. ", "9 modules. 2 blocks. ")}
+            {t("9 fases. 3 bloques. ", "9 phases. 3 blocks. ")}
             <span className="bg-gradient-to-r from-[var(--cyan)] to-[var(--magenta)] bg-clip-text text-transparent">
               {t("De la confusión al producto real.", "From confusion to real product.")}
             </span>
           </h2>
           <p className="max-w-2xl mx-auto text-lg text-foreground/50 mb-4">
             {t(
-              "Un puente entre Diseño, Producto, Tecnología, Innovación, Desarrollo y Negocio. Cada módulo produce entregables que reducen retrabajo en equipos técnicos.",
-              "A bridge between Design, Product, Technology, Innovation, Development, and Business. Each module produces deliverables that reduce rework for technical teams."
+              "Este curso es un puente entre Diseño, Producto, Tecnología, Innovación, Desarrollo y Negocio. Cada módulo produce entregables que reducen retrabajo en equipos técnicos. El resultado: ",
+              "This course is a bridge between Design, Product, Technology, Innovation, Development, and Business. Each module produces deliverables that reduce rework for technical teams. The result: "
             )}
+            <span className="font-bold text-foreground/70">{t("90% productividad. 10% esfuerzo.", "90% productivity. 10% effort.")}</span>
           </p>
-          <div className="flex flex-wrap justify-center gap-2 max-w-xl mx-auto">
+          <div className="flex flex-nowrap justify-center gap-2 overflow-x-auto no-scrollbar px-2">
             {[
               t("UX/UI", "UX/UI"), t("Product Design", "Product Design"), t("AI-assisted Design", "AI-assisted Design"),
               t("Product Thinking", "Product Thinking"), t("Digital Architecture", "Digital Architecture"),
@@ -257,7 +275,7 @@ export function CourseMethodology() {
                   className={`relative pl-16 md:pl-0 md:grid md:grid-cols-2 md:gap-8 ${isLeft ? '' : 'md:direction-rtl'}`}
                 >
                   {/* Node dot */}
-                  <div className={`absolute left-4 md:left-1/2 top-6 w-5 h-5 rounded-full border-2 ${s.border} ${s.bg} md:-translate-x-1/2 z-10 transition-all duration-300 ${isActive ? 'scale-150 shadow-lg' : ''}`}>
+                  <div className={`absolute left-4 md:left-1/2 top-6 w-5 h-5 rounded-full ${(phase as any).optional ? 'border-2 border-dashed' : 'border-2'} ${s.border} ${s.bg} md:-translate-x-1/2 z-10 transition-all duration-300 ${isActive ? 'scale-150 shadow-lg' : ''}`}>
                     <div className={`absolute inset-1 rounded-full ${isActive ? s.dot : 'bg-foreground/20'} transition-colors duration-300`} />
                   </div>
 
@@ -270,7 +288,16 @@ export function CourseMethodology() {
                           <div className={`w-8 h-8 rounded-lg ${s.bg} flex items-center justify-center shrink-0`}>
                             <Icon className={`w-4 h-4 ${s.text}`} />
                           </div>
-                          <span className={`text-xs font-mono ${s.text}`}>{t("Módulo", "Module")} {String(phase.id).padStart(2, '0')}</span>
+                          <div className="flex items-center gap-2">
+                            <span className={`text-xs font-mono ${s.text}`}>
+                              {t("Módulo", "Module")} {phase.id === 7.1 ? "07+" : String(phase.id).padStart(2, '0')}
+                            </span>
+                            {(phase as any).optional && (
+                              <span className="text-[9px] px-1.5 py-0.5 rounded-full border border-dashed border-[var(--uxgreen)]/40 text-[var(--uxgreen)] font-medium">
+                                {t("Opcional", "Optional")}
+                              </span>
+                            )}
+                          </div>
                         </div>
                         <h3 className="text-xl font-bold text-foreground mb-1">{phase.name}</h3>
                         <p className="text-sm text-foreground/40 mb-3">{phase.subtitle}</p>

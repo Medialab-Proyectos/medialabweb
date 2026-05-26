@@ -11,14 +11,14 @@ export function CourseValidation() {
   const { t } = useLanguage()
 
   const items = [
-    { icon: Shield, title: t("NO reemplaza desarrollo", "Does NOT replace development"), desc: t("Acelera decisiones antes de inversión técnica avanzada.", "Accelerates decisions before advanced technical investment."), highlight: true },
-    { icon: Layers, title: t("Frontera entre 7 disciplinas", "At the frontier of 7 disciplines"), desc: t("UX/UI · Product Design · AI Design · Product Thinking · Digital Architecture · UX Strategy · Human-Centered AI.", "UX/UI · Product Design · AI Design · Product Thinking · Digital Architecture · UX Strategy · Human-Centered AI."), highlight: false },
-    { icon: GraduationCap, title: t("Camino a validación universitaria", "Path to university validation"), desc: t("Certificación con peso académico real, no solo un PDF.", "Certification with real academic weight, not just a PDF."), highlight: false },
-    { icon: BookOpen, title: t("Desde la práctica, no la teoría", "From practice, not theory"), desc: t("Metodología nacida de 40+ proyectos reales.", "Methodology born from 40+ real projects."), highlight: false },
-    { icon: Microscope, title: t("Respaldada por datos", "Backed by data"), desc: t("Cada fase probada con equipos reales en múltiples industrias.", "Every phase tested with real teams across multiple industries."), highlight: false },
-    { icon: HeartHandshake, title: t("Personas primero", "People first"), desc: t("Reforzamos tu criterio humano, no lo sustituimos.", "We reinforce your human judgment, not replace it."), highlight: false },
-    { icon: Zap, title: t("IA con responsabilidad", "Responsible AI"), desc: t("Transparencia y ética en cada decisión de diseño.", "Transparency and ethics in every design decision."), highlight: false },
-    { icon: Brain, title: t("Lo que la IA no hace por ti", "What AI won't do for you"), desc: t("Evaluar, filtrar, decidir. Eso te hace irreemplazable.", "Evaluate, filter, decide. That makes you irreplaceable."), highlight: false },
+    { icon: Shield, title: t("NO reemplaza desarrollo", "Does NOT replace development"), desc: t("Acelera decisiones antes de inversión técnica avanzada.", "Accelerates decisions before advanced technical investment.") },
+    { icon: Layers, title: t("Frontera entre 7 disciplinas", "At the frontier of 7 disciplines"), desc: t("UX/UI · Product Design · AI Design · Product Thinking · Digital Architecture · UX Strategy · Human-Centered AI.", "UX/UI · Product Design · AI Design · Product Thinking · Digital Architecture · UX Strategy · Human-Centered AI.") },
+    { icon: GraduationCap, title: t("Camino a validación universitaria", "Path to university validation"), desc: t("Certificación con peso académico real, no solo un PDF.", "Certification with real academic weight, not just a PDF.") },
+    { icon: BookOpen, title: t("Desde la práctica, no la teoría", "From practice, not theory"), desc: t("Metodología nacida de 40+ proyectos reales.", "Methodology born from 40+ real projects.") },
+    { icon: Microscope, title: t("Respaldada por datos", "Backed by data"), desc: t("Cada fase probada con equipos reales en múltiples industrias.", "Every phase tested with real teams across multiple industries.") },
+    { icon: HeartHandshake, title: t("Personas primero", "People first"), desc: t("Reforzamos tu criterio humano, no lo sustituimos.", "We reinforce your human judgment, not replace it.") },
+    { icon: Zap, title: t("IA con responsabilidad", "Responsible AI"), desc: t("Transparencia y ética en cada decisión de diseño.", "Transparency and ethics in every design decision.") },
+    { icon: Brain, title: t("Lo que la IA no hace por ti", "What AI won't do for you"), desc: t("Evaluar, filtrar, decidir. Eso te hace irreemplazable.", "Evaluate, filter, decide. That makes you irreplaceable.") },
   ]
 
   return (
@@ -40,7 +40,7 @@ export function CourseValidation() {
           </h2>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           {items.map((item, i) => {
             const Icon = item.icon
             return (
@@ -49,11 +49,10 @@ export function CourseValidation() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={inView ? { opacity: 1, y: 0 } : {}}
                 transition={{ delay: 0.1 + i * 0.06, duration: 0.5 }}
-                className={item.highlight ? 'md:col-span-2 lg:col-span-2' : ''}
               >
-                <div className={`${item.highlight ? 'curso-card-highlight' : 'curso-card'} p-5 md:p-6 rounded-xl border transition-all duration-300 h-full`}>
-                  <Icon className="w-5 h-5 mb-3" style={{ color: item.highlight ? 'var(--cyan)' : undefined, opacity: item.highlight ? 1 : 0.5 }} />
-                  <h3 className={`text-sm font-semibold mb-1.5 ${item.highlight ? '' : 'text-foreground'}`} style={item.highlight ? { color: 'var(--cyan)' } : undefined}>{item.title}</h3>
+                <div className="curso-card p-5 md:p-6 rounded-xl border transition-all duration-300 h-full">
+                  <Icon className="w-5 h-5 mb-3 text-foreground/50" />
+                  <h3 className="text-sm font-semibold text-foreground mb-1.5">{item.title}</h3>
                   <p className="text-xs text-foreground/55 dark:text-foreground/40 leading-relaxed">{item.desc}</p>
                 </div>
               </motion.div>

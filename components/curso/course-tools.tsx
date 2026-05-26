@@ -57,8 +57,8 @@ export function CourseTools() {
             <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: 'var(--cyan)' }} />
             <span className="text-sm font-medium" style={{ color: 'var(--cyan)' }}>
               {t(
-                "Licencias premium incluidas — sin costo adicional",
-                "Premium licenses included — at no extra cost"
+                "Licencias premium incluidas — sin costo durante el curso",
+                "Premium licenses included — free during the course"
               )}
             </span>
           </div>

@@ -130,7 +130,7 @@ export function CourseCommunity() {
           >
             <a
               href="#registro"
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 text-sm font-semibold text-white rounded-full transition-all duration-300 hover:scale-[1.03] active:scale-95 shadow-[0_8px_28px_-6px_rgba(42,171,179,0.5)]"
+              className="flex items-center justify-center gap-2 w-full max-w-xl mx-auto px-8 py-4 text-sm font-semibold text-white rounded-full transition-all duration-300 hover:scale-[1.02] active:scale-95 shadow-[0_8px_28px_-6px_rgba(42,171,179,0.5)]"
               style={{ background: "linear-gradient(135deg, var(--cyan), color-mix(in srgb, var(--cyan) 70%, var(--magenta)))" }}
             >
               <Users size={16} />

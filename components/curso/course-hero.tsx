@@ -1,9 +1,8 @@
 "use client"
 
-import { useRef } from "react"
+import { useRef, useEffect, useCallback, useState } from "react"
 import { motion, useScroll, useTransform } from "framer-motion"
-import { Users, Star, BookOpen, GraduationCap } from "lucide-react"
-import Image from "next/image"
+import { Users, Star, BookOpen, GraduationCap, Shield } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 
 const stagger = {
@@ -15,42 +14,303 @@ const fadeUp = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.25, 0.4, 0.25, 1] as const } },
 }
 
-/* Orbital animation — 2 rings */
+/*
+ * Interactive constellation — particles float freely; when the cursor
+ * approaches, nearby nodes light up and form connections.
+ * Metaphor: "You guide, AI connects." Reinforces the course message.
+ * On mobile (no hover), particles self-organise in slow waves.
+ */
+function ConstellationBackground() {
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const mouse = useRef({ x: -1000, y: -1000 })
+
+  const onMove = useCallback((e: MouseEvent | TouchEvent) => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const rect = canvas.getBoundingClientRect()
+    const pt = "touches" in e ? e.touches[0] : e
+    mouse.current = { x: pt.clientX - rect.left, y: pt.clientY - rect.top }
+  }, [])
+
+  const onLeave = useCallback(() => {
+    mouse.current = { x: -1000, y: -1000 }
+  }, [])
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
+
+    const ctx = canvas.getContext("2d")
+    if (!ctx) return
+
+    let animId: number
+
+    const resize = () => {
+      canvas.width = canvas.offsetWidth
+      canvas.height = canvas.offsetHeight
+    }
+    resize()
+    window.addEventListener("resize", resize)
+    canvas.addEventListener("mousemove", onMove)
+    canvas.addEventListener("touchmove", onMove, { passive: true })
+    canvas.addEventListener("mouseleave", onLeave)
+
+    /* Theme detection */
+    const html = document.documentElement
+    const isPureDark = html.classList.contains("pure-dark")
+    const isDark = isPureDark || html.classList.contains("dark")
+    const isWarm = html.classList.contains("warm")
+
+    /* Alphas: idle (dim) → hover (bright). Light/warm need much higher
+       values because particles compete with a near-white background. */
+    const idleAlpha = isPureDark ? 0.14 : isDark ? 0.18 : isWarm ? 0.30 : 0.45
+    const hoverAlpha = isPureDark ? 0.55 : isDark ? 0.65 : isWarm ? 0.70 : 0.85
+    const lineIdleAlpha = isPureDark ? 0.05 : isDark ? 0.06 : isWarm ? 0.12 : 0.18
+    const lineHoverAlpha = isPureDark ? 0.30 : isDark ? 0.35 : isWarm ? 0.40 : 0.50
+
+    const CYAN = [42, 171, 179]
+    const MAGENTA = [232, 117, 26]
+
+    /* Particles */
+    type Node = { x: number; y: number; vx: number; vy: number; r: number; color: number[] }
+    const nodes: Node[] = []
+    const count = Math.min(55, Math.floor((canvas.width * canvas.height) / 18000))
+    for (let i = 0; i < count; i++) {
+      nodes.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        vx: (Math.random() - 0.5) * 0.25,
+        vy: (Math.random() - 0.5) * 0.25,
+        r: Math.random() * 2.0 + 1.0,
+        color: i % 3 === 0 ? MAGENTA : CYAN,
+      })
+    }
+
+    const INTERACT_RADIUS = 180
+    const CONNECT_RADIUS = 130
+    let frame = 0
+
+    const draw = () => {
+      const { width: w, height: h } = canvas
+      ctx.clearRect(0, 0, w, h)
+      frame++
+
+      const mx = mouse.current.x
+      const my = mouse.current.y
+      const hasHover = mx > -500
+
+      /* Move */
+      nodes.forEach((n) => {
+        n.x += n.vx
+        n.y += n.vy
+        if (n.x < 0 || n.x > w) n.vx *= -1
+        if (n.y < 0 || n.y > h) n.vy *= -1
+
+        /* Gentle attraction towards cursor */
+        if (hasHover) {
+          const dx = mx - n.x
+          const dy = my - n.y
+          const dist = Math.sqrt(dx * dx + dy * dy)
+          if (dist < INTERACT_RADIUS && dist > 5) {
+            n.vx += (dx / dist) * 0.012
+            n.vy += (dy / dist) * 0.012
+          }
+        }
+
+        /* Speed cap */
+        const speed = Math.sqrt(n.vx * n.vx + n.vy * n.vy)
+        if (speed > 0.6) {
+          n.vx *= 0.98
+          n.vy *= 0.98
+        }
+      })
+
+      /* Connections */
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const dx = nodes[i].x - nodes[j].x
+          const dy = nodes[i].y - nodes[j].y
+          const dist = Math.sqrt(dx * dx + dy * dy)
+          if (dist > CONNECT_RADIUS) continue
+
+          /* Proximity to cursor boosts visibility */
+          const midX = (nodes[i].x + nodes[j].x) / 2
+          const midY = (nodes[i].y + nodes[j].y) / 2
+          let cursorProx = 0
+          if (hasHover) {
+            const dmc = Math.sqrt((midX - mx) ** 2 + (midY - my) ** 2)
+            cursorProx = Math.max(0, 1 - dmc / INTERACT_RADIUS)
+          }
+
+          const proximity = 1 - dist / CONNECT_RADIUS
+          const alpha = lineIdleAlpha + (lineHoverAlpha - lineIdleAlpha) * cursorProx
+          const c = (i + j) % 3 === 0 ? MAGENTA : CYAN
+          ctx.strokeStyle = `rgba(${c[0]},${c[1]},${c[2]},${alpha * proximity})`
+          ctx.lineWidth = 0.6 + cursorProx * 0.6
+          ctx.beginPath()
+          ctx.moveTo(nodes[i].x, nodes[i].y)
+          ctx.lineTo(nodes[j].x, nodes[j].y)
+          ctx.stroke()
+        }
+      }
+
+      /* Draw nodes */
+      nodes.forEach((n) => {
+        let cursorProx = 0
+        if (hasHover) {
+          const d = Math.sqrt((n.x - mx) ** 2 + (n.y - my) ** 2)
+          cursorProx = Math.max(0, 1 - d / INTERACT_RADIUS)
+        }
+        const alpha = idleAlpha + (hoverAlpha - idleAlpha) * cursorProx
+        const r = n.r + cursorProx * 1.2
+
+        /* Glow on hover */
+        if (cursorProx > 0.3) {
+          ctx.fillStyle = `rgba(${n.color[0]},${n.color[1]},${n.color[2]},${alpha * 0.15})`
+          ctx.beginPath()
+          ctx.arc(n.x, n.y, r * 3, 0, Math.PI * 2)
+          ctx.fill()
+        }
+
+        ctx.fillStyle = `rgba(${n.color[0]},${n.color[1]},${n.color[2]},${alpha})`
+        ctx.beginPath()
+        ctx.arc(n.x, n.y, r, 0, Math.PI * 2)
+        ctx.fill()
+      })
+
+      animId = requestAnimationFrame(draw)
+    }
+
+    draw()
+
+    return () => {
+      cancelAnimationFrame(animId)
+      window.removeEventListener("resize", resize)
+      canvas.removeEventListener("mousemove", onMove)
+      canvas.removeEventListener("touchmove", onMove)
+      canvas.removeEventListener("mouseleave", onLeave)
+    }
+  }, [onMove, onLeave])
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="absolute inset-0 w-full h-full"
+      aria-hidden="true"
+    />
+  )
+}
+
+/*
+ * Orbital animation — 2 rings with 4 labels that glow when a dot
+ * passes their quadrant. Labels are bilingual via t().
+ *
+ * Outer ring: 50s per revolution  → dot at top   = 0°, right = 90°, etc.
+ * Inner ring: 35s per revolution (counter-clockwise)
+ *
+ * Each label "lights up" when a dot is within ±40° of its position.
+ * top=0°  right=90°  bottom=180°  left=270°
+ */
 function OrbitalGraphic() {
   const { t } = useLanguage()
+  const elapsed = useRef(0)
+  /* "off" | "cyan" | "magenta" per label position */
+  const [active, setActive] = useState<Record<string, string>>({ top: "off", right: "off", bottom: "off", left: "off" })
+
+  useEffect(() => {
+    let animId: number
+    let last = performance.now()
+
+    /* Each dot: { angle, color } */
+    const tick = (now: number) => {
+      const dt = (now - last) / 1000
+      last = now
+      elapsed.current += dt
+
+      const outerAngle = ((elapsed.current / 50) * 360) % 360
+      const innerAngle = (360 - ((elapsed.current / 35) * 360) % 360) % 360
+
+      const dots = [
+        { angle: outerAngle, color: "cyan" },                        // outer dot 1 — cyan
+        { angle: (outerAngle + 210) % 360, color: "magenta" },       // outer dot 2 — magenta
+        { angle: (innerAngle + 90) % 360, color: "magenta" },        // inner dot 1 — magenta
+        { angle: (innerAngle + 330) % 360, color: "cyan" },          // inner dot 2 — cyan
+      ]
+
+      const threshold = 40
+
+      const nearestColor = (target: number): string => {
+        let best = "off"
+        let bestDiff = threshold
+        for (const d of dots) {
+          const diff = Math.abs(((d.angle - target + 540) % 360) - 180)
+          if (diff < bestDiff) {
+            bestDiff = diff
+            best = d.color
+          }
+        }
+        return best
+      }
+
+      setActive({ top: nearestColor(0), right: nearestColor(90), bottom: nearestColor(180), left: nearestColor(270) })
+      animId = requestAnimationFrame(tick)
+    }
+
+    animId = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(animId)
+  }, [])
+
+  const labelBase = "text-[9px] tracking-[0.18em] uppercase font-medium transition-colors duration-500"
+  const labelDim = "dark:text-white/20 text-foreground/25"
+
+  const labelColor = (state: string) => {
+    if (state === "cyan") return "text-[var(--cyan)]"
+    if (state === "magenta") return "text-[var(--magenta)]"
+    return labelDim
+  }
+
   return (
     <div className="relative w-[320px] h-[320px] md:w-[400px] md:h-[400px] mx-auto">
-      <span className="absolute -top-7 left-1/2 -translate-x-1/2 text-[9px] tracking-[0.18em] uppercase dark:text-white/30 text-muted-foreground/50 font-medium">Discovery</span>
-      <span className="absolute top-1/2 -right-12 md:-right-14 -translate-y-1/2 text-[9px] tracking-[0.18em] uppercase dark:text-white/30 text-muted-foreground/50 font-medium rotate-90">Design</span>
-      <span className="absolute -bottom-7 left-1/2 -translate-x-1/2 text-[9px] tracking-[0.18em] uppercase dark:text-white/30 text-muted-foreground/50 font-medium">Build</span>
-      <span className="absolute top-1/2 -left-12 md:-left-14 -translate-y-1/2 text-[9px] tracking-[0.18em] uppercase dark:text-white/30 text-muted-foreground/50 font-medium -rotate-90">Validate</span>
+      <span className={`absolute -top-7 left-1/2 -translate-x-1/2 ${labelBase} ${labelColor(active.top)}`}>
+        {t("Descubrir", "Discover")}
+      </span>
+      <span className={`absolute top-1/2 -right-12 md:-right-14 -translate-y-1/2 rotate-90 ${labelBase} ${labelColor(active.right)}`}>
+        {t("Diseñar", "Design")}
+      </span>
+      <span className={`absolute -bottom-7 left-1/2 -translate-x-1/2 ${labelBase} ${labelColor(active.bottom)}`}>
+        {t("Construir", "Build")}
+      </span>
+      <span className={`absolute top-1/2 -left-12 md:-left-14 -translate-y-1/2 -rotate-90 ${labelBase} ${labelColor(active.left)}`}>
+        {t("Validar", "Validate")}
+      </span>
 
       {/* Outer ring */}
       <motion.div
         animate={{ rotate: 360 }}
         transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
-        className="absolute inset-0 rounded-full border dark:border-white/[0.20] border-foreground/[0.12]"
+        className="absolute inset-0 rounded-full border dark:border-white/[0.20] border-[var(--cyan)]/25"
       >
         <motion.div animate={{ opacity: [0.6, 1, 0.6] }} transition={{ duration: 2, repeat: Infinity }}
           className="absolute -top-2.5 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full"
-          style={{ background: 'var(--cyan)', boxShadow: '0 0 30px 4px var(--cyan)' }} />
+          style={{ background: 'var(--cyan)', boxShadow: '0 0 30px 6px var(--cyan)' }} />
         <motion.div animate={{ opacity: [0.4, 0.8, 0.4] }} transition={{ duration: 3, repeat: Infinity }}
           className="absolute -bottom-1.5 left-1/3 w-3 h-3 rounded-full"
-          style={{ background: 'var(--magenta)', boxShadow: '0 0 22px 3px var(--magenta)' }} />
+          style={{ background: 'var(--magenta)', boxShadow: '0 0 22px 5px var(--magenta)' }} />
       </motion.div>
 
       {/* Inner ring */}
       <motion.div
         animate={{ rotate: -360 }}
         transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
-        className="absolute inset-14 md:inset-[4.5rem] rounded-full border dark:border-white/[0.22] border-foreground/[0.15]"
+        className="absolute inset-14 md:inset-[4.5rem] rounded-full border dark:border-white/[0.22] border-[var(--magenta)]/20"
       >
         <motion.div animate={{ opacity: [0.6, 1, 0.6] }} transition={{ duration: 2.5, repeat: Infinity }}
           className="absolute top-1/2 -right-2 -translate-y-1/2 w-3.5 h-3.5 rounded-full"
-          style={{ background: 'var(--magenta)', boxShadow: '0 0 26px 3px var(--magenta)' }} />
+          style={{ background: 'var(--magenta)', boxShadow: '0 0 26px 5px var(--magenta)' }} />
         <motion.div animate={{ opacity: [0.4, 0.7, 0.4] }} transition={{ duration: 3.5, repeat: Infinity }}
           className="absolute -top-1.5 left-1/3 w-2.5 h-2.5 rounded-full"
-          style={{ background: 'var(--cyan)', boxShadow: '0 0 20px 2px var(--cyan)' }} />
+          style={{ background: 'var(--cyan)', boxShadow: '0 0 20px 4px var(--cyan)' }} />
       </motion.div>
 
       {/* Center */}
@@ -64,11 +324,11 @@ function OrbitalGraphic() {
         </div>
       </div>
 
-      {/* Background glow — stronger (Dark only) */}
+      {/* Background glow — visible in all themes */}
       <motion.div
-        animate={{ opacity: [0.10, 0.20, 0.10] }}
+        animate={{ opacity: [0.12, 0.25, 0.12] }}
         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute inset-1/4 rounded-full blur-[50px] ambient-glow"
+        className="absolute inset-1/4 rounded-full blur-[50px]"
         style={{ background: 'linear-gradient(135deg, var(--cyan), var(--magenta))' }}
       />
     </div>
@@ -91,23 +351,34 @@ export function CourseHero() {
 
   return (
     <section ref={ref} className="relative min-h-[90vh] md:min-h-screen flex items-center overflow-hidden bg-[var(--surface-dark)] text-foreground transition-colors duration-300">
-      {/* Background image */}
-      <div className="absolute inset-0">
-        <Image src="/images/curso/hero-team.png" alt="" fill sizes="100vw" className="object-cover course-hero-bg" priority />
-        <div className="absolute inset-0 course-hero-overlay" />
+      {/* Layer 1: slow-moving aura behind everything */}
+      <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
+        <motion.div
+          animate={{ x: ["0%", "15%", "-10%", "0%"], y: ["0%", "-10%", "5%", "0%"] }}
+          transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute -top-[25%] -left-[15%] w-[65%] h-[110%] rounded-full blur-[120px] course-aura"
+          style={{ background: 'radial-gradient(ellipse at center, var(--cyan), transparent 70%)' }}
+        />
+        <motion.div
+          animate={{ x: ["0%", "-12%", "8%", "0%"], y: ["0%", "8%", "-6%", "0%"] }}
+          transition={{ duration: 26, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute -bottom-[20%] -right-[10%] w-[55%] h-[90%] rounded-full blur-[100px] course-aura"
+          style={{ background: 'radial-gradient(ellipse at center, var(--magenta), transparent 70%)' }}
+        />
       </div>
-      {/* Background effects — stronger opacity (Dark only) */}
-      <div className="absolute inset-0 ambient-glow">
-        <div className="absolute top-[20%] left-[15%] w-[500px] h-[500px] rounded-full blur-[100px]" style={{ background: 'rgba(42,171,179,0.15)' }} />
-        <div className="absolute bottom-[25%] right-[10%] w-[400px] h-[400px] rounded-full blur-[80px]" style={{ background: 'rgba(232,117,26,0.12)' }} />
+
+      {/* Layer 2: interactive constellation */}
+      <div className="absolute inset-0">
+        <ConstellationBackground />
+        <div className="absolute inset-0 course-hero-overlay" />
       </div>
 
       <motion.div style={{ opacity, y }} className="relative z-10 w-full max-w-6xl mx-auto px-6 lg:px-8 pt-28 md:pt-32 pb-16">
         <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-10 md:gap-16 items-center">
           {/* Left — Text */}
           <motion.div variants={stagger} initial="hidden" animate="visible">
-            {/* Eyebrow */}
-            <motion.div variants={fadeUp} className="flex items-center gap-3 mb-6">
+            {/* Eyebrow — capsule on desktop, text on mobile */}
+            <motion.div variants={fadeUp} className="hidden sm:flex items-center gap-3 mb-6">
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[var(--cyan)]/30 bg-[var(--cyan)]/[0.1]">
                 <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: 'var(--cyan)' }} />
                 <span className="text-[11px] tracking-[0.12em] uppercase font-medium" style={{ color: 'var(--cyan)' }}>
@@ -129,18 +400,23 @@ export function CourseHero() {
             </motion.h1>
 
             {/* Value prop — 2 líneas max */}
-            <motion.p variants={fadeUp} className="text-base md:text-lg dark:text-white/80 text-muted-foreground leading-relaxed mb-6 max-w-md">
+            <motion.p variants={fadeUp} className="text-base md:text-lg dark:text-white/80 text-muted-foreground leading-relaxed mb-4 max-w-md">
               {t(
                 "Estructura, valida y optimiza productos digitales funcionales con IA — antes de invertir en desarrollo.",
                 "Structure, validate, and optimize functional digital products with AI — before investing in development."
               )}
             </motion.p>
 
-            {/* CTAs */}
+            {/* Course name — mobile only */}
+            <motion.p variants={fadeUp} className="sm:hidden text-xs tracking-[0.12em] uppercase font-medium mb-5" style={{ color: 'var(--cyan)' }}>
+              {t("Curso · Arquitecto de Experiencia de Usuario con IA", "Course · AI User Experience Architect")}
+            </motion.p>
+
+            {/* CTAs — stacked full-width on mobile, side-by-side on desktop */}
             <motion.div variants={fadeUp} className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mb-3">
               <a
                 href="#registro"
-                className="inline-flex items-center justify-center gap-2 px-7 py-4 text-sm font-semibold text-white rounded-full transition-all duration-300 hover:scale-[1.03] active:scale-95 shadow-[0_10px_32px_-8px_rgba(232,117,26,0.65)]"
+                className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-7 py-4 text-sm font-semibold text-white rounded-full transition-all duration-300 hover:scale-[1.03] active:scale-95 shadow-[0_10px_32px_-8px_rgba(232,117,26,0.65)]"
                 style={{ background: 'var(--magenta)' }}
               >
                 {t("Inscribirme →", "Enroll now →")}
@@ -149,19 +425,28 @@ export function CourseHero() {
                 href="https://wa.me/573054009505?text=Hola%2C%20quiero%20información%20sobre%20AI%20User%20Experience%20Architect"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 px-7 py-4 text-sm font-semibold rounded-full transition-all duration-300 hover:scale-[1.03] active:scale-95 border dark:border-[var(--cyan)]/50 border-[var(--cyan)]/30 dark:text-[var(--cyan)] text-teal-800 hover:bg-[var(--cyan)]/15 hover:text-foreground dark:hover:text-[var(--cyan)]"
+                className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-7 py-4 text-sm font-semibold rounded-full transition-all duration-300 hover:scale-[1.03] active:scale-95 border dark:border-[var(--cyan)]/50 border-[var(--cyan)]/30 dark:text-[var(--cyan)] text-teal-800 hover:bg-[var(--cyan)]/15 hover:text-foreground dark:hover:text-[var(--cyan)]"
               >
                 {t("Hablar con un asesor", "Talk to an advisor")}
               </a>
             </motion.div>
 
-            <motion.p variants={fadeUp} className="text-xs dark:text-white/60 text-muted-foreground mb-1 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-              {t("Precio de lanzamiento · Garantía semana 1", "Launch price · Week 1 guarantee")}
-            </motion.p>
-            <motion.p variants={fadeUp} className="text-[11px] dark:text-white/60 text-muted-foreground mb-6">
-              {t("Cohorte 01 · 30 cupos", "Cohort 01 · 30 seats")}
-            </motion.p>
+            <motion.div variants={fadeUp} className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs dark:text-white/60 text-muted-foreground mb-6">
+              <span className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+                {t("Cohorte 02 · 30 cupos", "Cohort 02 · 30 seats")}
+              </span>
+              <span className="hidden sm:inline dark:text-white/20 text-foreground/20">|</span>
+              <span className="flex items-center gap-1">
+                <Star className="w-3 h-3" style={{ color: 'var(--magenta)' }} />
+                {t("Satisfacción 4.7/5", "4.7/5 satisfaction")}
+              </span>
+              <span className="hidden sm:inline dark:text-white/20 text-foreground/20">|</span>
+              <span className="flex items-center gap-1">
+                <Shield className="w-3 h-3 text-green-500" />
+                {t("Garantía semana 1", "Week 1 guarantee")}
+              </span>
+            </motion.div>
 
             {/* Role pills */}
             <motion.div variants={fadeUp} className="hidden sm:flex flex-wrap items-center gap-2 mb-6">

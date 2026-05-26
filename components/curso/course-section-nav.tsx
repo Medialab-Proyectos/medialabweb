@@ -41,18 +41,23 @@ export function CourseSectionNav() {
           sectionRefs.current.set(entry.target.id, entry)
         })
 
-        // Find the section most visible in viewport
+        // Pick the intersecting section whose top is closest to (but above) the viewport center
+        const sectionOrder = sections.map((s) => s.id)
         let bestId = ""
-        let bestRatio = 0
+        let bestTop = -Infinity
 
         sectionRefs.current.forEach((entry, id) => {
-          if (entry.isIntersecting && entry.intersectionRatio > bestRatio) {
-            bestRatio = entry.intersectionRatio
-            bestId = id
+          if (entry.isIntersecting) {
+            const top = entry.boundingClientRect.top
+            // Prefer the section whose top is most recently scrolled past the nav bar
+            if (top <= 140 && top > bestTop) {
+              bestTop = top
+              bestId = id
+            }
           }
         })
 
-        // If no section has high ratio, pick the one closest to top
+        // Fallback: if nothing scrolled past nav, pick the first intersecting
         if (!bestId) {
           let closestDist = Infinity
           sectionRefs.current.forEach((entry, id) => {
@@ -66,11 +71,16 @@ export function CourseSectionNav() {
           })
         }
 
+        // At page bottom, force last section active
+        if (window.innerHeight + window.scrollY >= document.body.scrollHeight - 100) {
+          bestId = sectionOrder[sectionOrder.length - 1]
+        }
+
         if (bestId) setActive(bestId)
       },
       {
-        rootMargin: "-120px 0px -40% 0px",
-        threshold: [0, 0.1, 0.2, 0.3, 0.5],
+        rootMargin: "-100px 0px -20% 0px",
+        threshold: [0, 0.1, 0.25, 0.5],
       }
     )
 

@@ -123,11 +123,11 @@ El programa está en la intersección de: UX/UI, Product Design, AI-assisted Des
 ### Detalles del programa
 - **Nombre:** AI User Experience Architect — Arquitectura de Experiencias Digitales con IA
 - **Duración:** 8 semanas intensivas
-- **Metodología:** 9 módulos en 2 bloques (Diseño Funcional + Diseño para Masas)
+- **Metodología:** 9 módulos en 3 bloques (Diseño Funcional + Diseño para Masas + Validación Humana)
 - **Modalidad:** Online en vivo + grabaciones
 - **Cupos:** Solo 30 personas por cohorte
 - **Precio regular:** $1,500 USD
-- **Precio de lanzamiento (Cohorte 01):** $995 USD
+- **Precio de prelanzamiento (Cohorte 02):** $995 USD
 - **Instructor:** Christian Benavides (CEO MediaLab, autor de Zero UI)
 - **Página del programa:** https://medialab.design/curso
 - **Registro:** https://medialab.design/curso#registro

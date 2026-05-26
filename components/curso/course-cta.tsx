@@ -1,15 +1,45 @@
 "use client"
 
-import { useRef } from "react"
+import { useRef, useState, useEffect } from "react"
 import { motion, useInView } from "framer-motion"
 import { Users, Briefcase, Award, MessageCircle, Clock, Shield, Zap, CheckCircle } from "lucide-react"
 import { CourseRegisterForm } from "./course-register-form"
 import { useLanguage } from "@/lib/language-context"
 
+/* Countdown target: 2026-05-28T23:59:59 COL (UTC-5) */
+const COUNTDOWN_END = new Date("2026-05-28T23:59:59-05:00").getTime()
+
+function useCountdown() {
+  const [timeLeft, setTimeLeft] = useState({ d: 0, h: 0, m: 0, s: 0, expired: false })
+
+  useEffect(() => {
+    const tick = () => {
+      const diff = COUNTDOWN_END - Date.now()
+      if (diff <= 0) {
+        setTimeLeft({ d: 0, h: 0, m: 0, s: 0, expired: true })
+        return
+      }
+      setTimeLeft({
+        d: Math.floor(diff / 86400000),
+        h: Math.floor((diff % 86400000) / 3600000),
+        m: Math.floor((diff % 3600000) / 60000),
+        s: Math.floor((diff % 60000) / 1000),
+        expired: false,
+      })
+    }
+    tick()
+    const id = setInterval(tick, 1000)
+    return () => clearInterval(id)
+  }, [])
+
+  return timeLeft
+}
+
 export function CourseCta() {
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, margin: "-80px" })
   const { t } = useLanguage()
+  const countdown = useCountdown()
 
   return (
     <section id="registro" className="relative py-20 md:py-28 bg-background overflow-hidden">
@@ -52,11 +82,19 @@ export function CourseCta() {
                 {t("Tu inversión", "Your investment")}
               </h3>
 
-              {/* Anchor + savings */}
-              <div className="flex items-end gap-3 mb-1">
+              {/* Anchor + savings with inline countdown */}
+              <div className="flex flex-wrap items-center gap-2 mb-1">
                 <span className="text-foreground/30 line-through text-lg">$1,500 USD</span>
-                <span className="px-2.5 py-1 rounded-full text-xs font-bold" style={{ background: 'var(--magenta)', color: 'white' }}>
-                  {t("-34% Fundadores", "-34% Founders")}
+                <span className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full text-xs font-bold" style={{ background: 'var(--magenta)', color: 'white' }}>
+                  {t("-34% Prelanzamiento", "-34% Pre-launch")}
+                  {!countdown.expired && (
+                    <>
+                      <span className="w-px h-3 bg-white/30" />
+                      <span className="font-mono tabular-nums text-[11px] font-semibold">
+                        {String(countdown.d).padStart(2, '0')}d {String(countdown.h).padStart(2, '0')}h {String(countdown.m).padStart(2, '0')}m {String(countdown.s).padStart(2, '0')}s
+                      </span>
+                    </>
+                  )}
                 </span>
               </div>
               <div className="flex items-baseline gap-2 mb-1">
@@ -68,47 +106,49 @@ export function CourseCta() {
                 {t("semana · menos que una suscripción a herramientas de IA", "week · less than an AI tools subscription")}
               </p>
 
-              {/* Value stack — with title */}
-              <p className="text-xs font-semibold text-foreground/60 dark:text-foreground/45 uppercase tracking-wider mb-3">
-                {t("Incluido en tu acceso", "Included in your access")}
-              </p>
-              <div className="space-y-2.5 mb-5 flex-1">
-                <div className="flex items-center gap-3 text-sm text-foreground/70 dark:text-foreground/55">
-                  <CheckCircle size={16} style={{ color: 'var(--cyan)' }} className="shrink-0" />
-                  <span className="flex-1">{t("9 módulos + workshops en vivo", "9 modules + live workshops")}</span>
-                  <span className="text-xs text-foreground/30 font-mono">$1,000</span>
+              {/* Value stack + total — unified box */}
+              <div className="p-4 rounded-xl bg-foreground/[0.04] dark:bg-white/[0.05] border border-foreground/[0.08] dark:border-white/[0.10] mb-4 flex-1 flex flex-col">
+                <p className="text-xs font-semibold text-foreground/60 dark:text-foreground/45 uppercase tracking-wider mb-3 text-center">
+                  {t("Incluido en tu acceso", "Included in your access")}
+                </p>
+                <div className="space-y-2.5 mb-4">
+                  <div className="flex items-center gap-3 text-sm text-foreground/70 dark:text-foreground/55">
+                    <CheckCircle size={16} style={{ color: 'var(--cyan)' }} className="shrink-0" />
+                    <span className="flex-1">{t("9 módulos + workshops en vivo", "9 modules + live workshops")}</span>
+                    <span className="text-xs text-foreground/30 font-mono">$1,000</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-sm text-foreground/70 dark:text-foreground/55">
+                    <CheckCircle size={16} style={{ color: 'var(--cyan)' }} className="shrink-0" />
+                    <span className="flex-1">{t("Proyecto real en tu portafolio", "Real project in your portfolio")}</span>
+                    <span className="text-xs text-foreground/30 font-mono">$400</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-sm text-foreground/70 dark:text-foreground/55">
+                    <CheckCircle size={16} style={{ color: 'var(--cyan)' }} className="shrink-0" />
+                    <span className="flex-1">{t("Certificación profesional", "Professional certification")}</span>
+                    <span className="text-xs text-foreground/30 font-mono">$450</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-sm text-foreground/70 dark:text-foreground/55">
+                    <CheckCircle size={16} style={{ color: 'var(--cyan)' }} className="shrink-0" />
+                    <span className="flex-1">{t("Comunidad de por vida", "Lifetime community")}</span>
+                    <span className="text-xs text-foreground/30 font-mono">$300</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-sm text-foreground/70 dark:text-foreground/55">
+                    <CheckCircle size={16} style={{ color: 'var(--cyan)' }} className="shrink-0" />
+                    <span className="flex-1">{t("Herramientas premium incluidas", "Premium tools included")}</span>
+                    <span className="text-xs text-foreground/30 font-mono">$250</span>
+                  </div>
                 </div>
-                <div className="flex items-center gap-3 text-sm text-foreground/70 dark:text-foreground/55">
-                  <CheckCircle size={16} style={{ color: 'var(--cyan)' }} className="shrink-0" />
-                  <span className="flex-1">{t("Proyecto real en tu portafolio", "Real project in your portfolio")}</span>
-                  <span className="text-xs text-foreground/30 font-mono">$400</span>
-                </div>
-                <div className="flex items-center gap-3 text-sm text-foreground/70 dark:text-foreground/55">
-                  <CheckCircle size={16} style={{ color: 'var(--cyan)' }} className="shrink-0" />
-                  <span className="flex-1">{t("Certificación profesional", "Professional certification")}</span>
-                  <span className="text-xs text-foreground/30 font-mono">$450</span>
-                </div>
-                <div className="flex items-center gap-3 text-sm text-foreground/70 dark:text-foreground/55">
-                  <CheckCircle size={16} style={{ color: 'var(--cyan)' }} className="shrink-0" />
-                  <span className="flex-1">{t("Comunidad de por vida", "Lifetime community")}</span>
-                  <span className="text-xs text-foreground/30 font-mono">$300</span>
-                </div>
-                <div className="flex items-center gap-3 text-sm text-foreground/70 dark:text-foreground/55">
-                  <CheckCircle size={16} style={{ color: 'var(--cyan)' }} className="shrink-0" />
-                  <span className="flex-1">{t("Herramientas premium incluidas", "Premium tools included")}</span>
-                  <span className="text-xs text-foreground/30 font-mono">$250</span>
-                </div>
-              </div>
 
-              {/* Gap cognitive */}
-              <div className="flex items-center justify-between p-4 rounded-xl bg-foreground/[0.05] dark:bg-white/[0.07] border border-foreground/[0.1] dark:border-white/[0.14] mb-4">
-                <div>
-                  <p className="text-xs text-foreground/40">{t("Valor total", "Total value")}</p>
-                  <p className="text-xl font-bold text-foreground/30 line-through">$2,400</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-xs font-semibold" style={{ color: 'var(--cyan)' }}>{t("Tú pagas", "You pay")}</p>
-                  <p className="text-xl font-bold" style={{ color: 'var(--cyan)' }}>$995</p>
+                {/* Valor total / Tú pagas */}
+                <div className="flex items-center justify-between pt-3 border-t border-foreground/[0.08] dark:border-white/[0.10] mt-auto">
+                  <div>
+                    <p className="text-xs text-foreground/40">{t("Valor total", "Total value")}</p>
+                    <p className="text-xl font-bold text-foreground/30 line-through">$2,400</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-xs font-semibold" style={{ color: 'var(--cyan)' }}>{t("Tú pagas", "You pay")}</p>
+                    <p className="text-xl font-bold" style={{ color: 'var(--cyan)' }}>$995</p>
+                  </div>
                 </div>
               </div>
 
@@ -125,8 +165,8 @@ export function CourseCta() {
               <div className="flex items-center gap-2 mb-4">
                 <Clock size={14} className="text-[var(--magenta)] shrink-0" />
                 <p className="text-xs text-foreground/50 dark:text-foreground/38">
-                  <span className="font-semibold" style={{ color: 'var(--magenta)' }}>{t("Cohorte 01", "Cohort 01")}</span>
-                  {t(" — cupos limitados. Este precio aplica solo para los primeros 30.", " — limited seats. This price only applies to the first 30.")}
+                  <span className="font-semibold" style={{ color: 'var(--magenta)' }}>{t("Cohorte 02", "Cohort 02")}</span>
+                  {t(" — cupos limitados. Precio de prelanzamiento por tiempo limitado.", " — limited seats. Pre-launch price for a limited time.")}
                 </p>
               </div>
 

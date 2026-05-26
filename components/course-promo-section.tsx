@@ -122,7 +122,7 @@ export function CoursePromoSection() {
             <div className="flex flex-wrap items-center gap-5 text-xs dark:text-white/35 text-muted-foreground/60">
               <span className="flex items-center gap-1.5">
                 <Users size={13} className="dark:text-white/25 text-muted-foreground/40 shrink-0" />
-                {t("Cohorte 01 · Solo 30 cupos", "Cohort 01 · Only 30 spots")}
+                {t("Cohorte 02 · Solo 30 cupos", "Cohort 02 · Only 30 spots")}
               </span>
               <span className="flex items-center gap-1.5">
                 <GraduationCap size={13} className="dark:text-white/25 text-muted-foreground/40 shrink-0" />

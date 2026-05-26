@@ -5,7 +5,7 @@ const FROM_EMAIL = process.env.FROM_EMAIL || "MediaLab <onboarding@resend.dev>"
 
 export async function POST(req: NextRequest) {
   try {
-    const { name, email, role, experience, motivation, lang = "es" } = await req.json()
+    const { name, email, phone, role, experience, motivation, lang = "es" } = await req.json()
     const isEn = lang === "en"
 
     if (!name || !email) {
@@ -48,6 +48,10 @@ export async function POST(req: NextRequest) {
     <div class="field">
       <label>Email</label>
       <p>${email}</p>
+    </div>
+    <div class="field">
+      <label>Telefono / WhatsApp</label>
+      <p>${phone || "No especificado"}</p>
     </div>
     <div class="field">
       <label>Rol profesional</label>
@@ -108,7 +112,7 @@ export async function POST(req: NextRequest) {
       <div class="info-item">&#x2022; <span><strong>${isEn ? "Duration:" : "Duracion:"}</strong> ${isEn ? "8 intensive weeks" : "8 semanas intensivas"}</span></div>
       <div class="info-item">&#x2022; <span><strong>${isEn ? "Format:" : "Modalidad:"}</strong> ${isEn ? "Live online + recordings" : "Online en vivo + grabaciones"}</span></div>
       <div class="info-item">&#x2022; <span><strong>${isEn ? "Seats:" : "Cupos:"}</strong> ${isEn ? "Only 30 per cohort" : "Solo 30 personas por cohorte"}</span></div>
-      <div class="info-item">&#x2022; <span><strong>${isEn ? "Launch price:" : "Precio lanzamiento:"}</strong> $995 USD (${isEn ? "regular" : "regular"} $1,500)</span></div>
+      <div class="info-item">&#x2022; <span><strong>${isEn ? "Pre-launch price:" : "Precio prelanzamiento:"}</strong> $995 USD (${isEn ? "regular" : "regular"} $1,500)</span></div>
     </div>
 
     <div class="contact">

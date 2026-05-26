@@ -80,7 +80,7 @@ export function CourseObjective() {
           <div className="relative p-8 md:p-12">
             {/* Description */}
             <div className="text-center mb-8">
-              <p className="text-base md:text-lg text-white/80 leading-relaxed max-w-3xl mx-auto">
+              <p className="text-base md:text-lg text-foreground/70 dark:text-white/80 leading-relaxed max-w-3xl mx-auto">
                 {t(
                   "Programa orientado a la construcción estratégica de productos digitales funcionales mediante UX/UI, análisis conductual y validación continua, sin reemplazar procesos de ingeniería de software.",
                   "A program oriented toward the strategic construction of functional digital products through UX/UI, behavioral analysis, and continuous validation, without replacing software engineering processes."
@@ -98,10 +98,10 @@ export function CourseObjective() {
                     initial={{ opacity: 0, y: 15 }}
                     animate={inView ? { opacity: 1, y: 0 } : {}}
                     transition={{ delay: 0.3 + i * 0.08, duration: 0.5 }}
-                    className="flex flex-col items-center gap-2 p-4 rounded-xl border border-white/[0.08] bg-white/[0.03] hover:border-white/[0.15] transition-all duration-300"
+                    className="flex flex-col items-center gap-2 p-4 rounded-xl border border-foreground/[0.12] dark:border-white/[0.08] bg-foreground/[0.03] dark:bg-white/[0.03] hover:border-foreground/[0.22] dark:hover:border-white/[0.15] transition-all duration-300"
                   >
                     <Icon className="w-5 h-5" style={{ color: pillar.color }} />
-                    <span className="text-[11px] font-medium text-white/70 text-center leading-tight">{pillar.label}</span>
+                    <span className="text-[11px] font-medium text-foreground/70 dark:text-white/70 text-center leading-tight">{pillar.label}</span>
                   </motion.div>
                 )
               })}
