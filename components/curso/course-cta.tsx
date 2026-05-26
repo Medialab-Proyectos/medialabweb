@@ -59,12 +59,11 @@ export function CourseCta() {
             {t("La IA no va a esperarte.", "AI won't wait for you.")}
             <br />
             <span className="bg-gradient-to-r from-[var(--magenta)] via-[var(--cyan)] to-[var(--magenta)] bg-clip-text text-transparent">
-              {t("Pero puedes estar listo.", "But you can be ready.")}
+              {t("Pero tú puedes llevarle ventaja.", "But you can get ahead of it.")}
             </span>
           </h2>
           <p className="mt-3 text-sm text-foreground/55 dark:text-foreground/40 max-w-lg mx-auto">
-            {t("30 cupos · 8 semanas · Sales como ", "30 spots · 8 weeks · You leave as ")}
-            <span className="font-semibold" style={{ color: 'var(--cyan)' }}>{t("Arquitecto de Experiencia de Usuario con IA", "AI User Experience Architect")}</span>
+            {t("30 cupos · 8 semanas · Sales con un producto real y el criterio para construir los que vienen.", "30 spots · 8 weeks · You leave with a real product and the judgment to build what comes next.")}
           </p>
         </motion.div>
 

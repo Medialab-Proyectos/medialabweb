@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { Navbar } from "@/components/navbar"
+import { Footer } from "@/components/footer"
 import { UXGreenLanding } from "@/components/uxgreen-landing"
 
 export const metadata: Metadata = {
@@ -151,6 +152,7 @@ export default function UXGreenPage() {
       <main id="main-content">
         <UXGreenLanding />
       </main>
+      <Footer />
     </>
   )
 }

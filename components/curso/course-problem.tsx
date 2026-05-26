@@ -35,12 +35,12 @@ export function CourseProblem() {
       context: t("CEO · Startup", "CEO · Startup"),
     },
     {
-      text: t("Soy el 'experto en IA' del equipo y no sé qué hacer.", "I'm the team's 'AI expert' and I don't know what to do."),
-      context: t("Diseñador en transición", "Designer in transition"),
+      text: t("Tengo la visión de producto pero no el framework para ejecutarla.", "I have the product vision but not the framework to execute it."),
+      context: t("Product Lead · 6 años", "Product Lead · 6 yrs"),
     },
     {
-      text: t("Cada semana hay una herramienta nueva y nunca voy a alcanzar.", "A new tool every week — I'll never catch up."),
-      context: t("Estudiante Multimedia", "Multimedia student"),
+      text: t("Mi equipo iría 3× más rápido si conectáramos diseño con desarrollo.", "My team would go 3× faster if we connected design with dev."),
+      context: t("CTO · Startup", "CTO · Startup"),
     },
   ]
 

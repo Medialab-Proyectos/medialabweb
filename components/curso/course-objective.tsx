@@ -59,8 +59,8 @@ export function CourseObjective() {
           </h2>
           <p className="max-w-2xl mx-auto text-base md:text-lg text-foreground/55 leading-relaxed">
             {t(
-              "No enseñamos prompts. Enseñamos a construir productos digitales reales — desde la estrategia hasta la validación con usuarios.",
-              "We don't teach prompts. We teach you to build real digital products — from strategy to user validation."
+              "Investigas un problema real. Diseñas la solución. Auditas cada pantalla. Pruebas con usuarios de verdad. Sales con un producto en portafolio, no con un certificado vacío.",
+              "You research a real problem. Design the solution. Audit every screen. Test with real users. You leave with a product in your portfolio, not an empty certificate."
             )}
           </p>
         </motion.div>
@@ -82,8 +82,8 @@ export function CourseObjective() {
             <div className="text-center mb-8">
               <p className="text-base md:text-lg text-foreground/70 dark:text-white/80 leading-relaxed max-w-3xl mx-auto">
                 {t(
-                  "Programa orientado a la construcción estratégica de productos digitales funcionales mediante UX/UI, análisis conductual y validación continua, sin reemplazar procesos de ingeniería de software.",
-                  "A program oriented toward the strategic construction of functional digital products through UX/UI, behavioral analysis, and continuous validation, without replacing software engineering processes."
+                  "Diseñas, auditas y validas un producto digital real — desde la primera idea hasta pruebas con usuarios. No reemplaza desarrollo: lo que construyes aquí llega a ingeniería listo para implementar, con cero retrabajo.",
+                  "You design, audit, and validate a real digital product — from the first idea to user testing. It doesn't replace development: what you build here arrives at engineering ready to implement, with zero rework."
                 )}
               </p>
             </div>

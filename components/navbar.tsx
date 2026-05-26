@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
-import { Menu, X, Moon, Sun, BookOpen, Contrast } from "lucide-react"
+import { Menu, X, Moon, Sun, BookOpen, Contrast, Leaf } from "lucide-react"
 import { useTheme } from "next-themes"
 import { useLanguage } from "@/lib/language-context"
 
@@ -57,18 +57,20 @@ export function Navbar() {
       (pathname === "/" ||
         pathname === "/en" ||
         pathname === "/curso" ||
-        pathname === "/en/curso" ||
-        isUXGreen)) ||
+        pathname === "/en/curso")) ||
+    isUXGreen ||
     pathname === "/carreras" ||
     pathname === "/en/carreras"
   const overDarkHero = !scrolled && isDarkHero
-  const linkIdle = overDarkHero
+  // UXGreen always has a dark navbar, even when scrolled in light mode
+  const forceDarkNav = isUXGreen
+  const linkIdle = overDarkHero || forceDarkNav
     ? "text-white/70 hover:text-white"
     : "text-muted-foreground hover:text-foreground"
-  const iconBtn = overDarkHero
+  const iconBtn = overDarkHero || forceDarkNav
     ? "text-white/70 hover:text-white border-white/20 hover:border-white/40"
     : "text-muted-foreground hover:text-foreground hover:border-foreground/30"
-  const switcherBorder = overDarkHero ? "border-white/20" : "border-border"
+  const switcherBorder = overDarkHero || forceDarkNav ? "border-white/20" : "border-border"
 
   const cycleTheme = useCallback(() => {
     const themes = ["dark", "light", "warm", "pure-dark"]
@@ -119,11 +121,13 @@ export function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${forceDarkNav ? "uxgreen-nav" : ""} ${
         scrolled
-          ? "bg-background/90 backdrop-blur-md border-b border-border shadow-sm"
+          ? isUXGreen
+            ? "bg-[#0a0a0a]/95 backdrop-blur-md border-b border-white/10 shadow-sm"
+            : "bg-background/90 backdrop-blur-md border-b border-border shadow-sm"
           : isUXGreen
-          ? "bg-background/85 backdrop-blur-md border-b border-border/25 shadow-sm"
+          ? "bg-[#0a0a0a]/70 backdrop-blur-md border-b border-white/5"
           : "bg-transparent"
       }`}
     >
@@ -165,6 +169,7 @@ export function Navbar() {
               {(link as any).highlight && (
                 <span className="absolute -top-1 -right-1.5 w-1.5 h-1.5 rounded-full bg-[var(--magenta)] animate-pulse" />
               )}
+              {(link as any).uxgreen && <Leaf size={12} className="inline-block mr-1 -mt-0.5" />}
               {link.label}
             </Link>
           ))}
@@ -228,7 +233,11 @@ export function Navbar() {
               ? (lang === "es" ? "Inscribirme al curso" : "Enroll in the course")
               : (lang === "es" ? "Iniciar un proyecto con MediaLab" : "Start a project with MediaLab")
             }
-            className="px-5 py-2.5 rounded-full text-sm font-semibold bg-foreground text-background hover:bg-[var(--magenta)] hover:text-white transition-all duration-200 active:scale-95"
+            className={`px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200 active:scale-95 ${
+              forceDarkNav
+                ? "bg-white text-black hover:bg-[#00BFA6] hover:text-black"
+                : "bg-foreground text-background hover:bg-[var(--magenta)] hover:text-white"
+            }`}
           >
             {isCurso
               ? (lang === "es" ? "Inscribirme" : "Enroll now")
@@ -260,7 +269,7 @@ export function Navbar() {
             </button>
           )}
           <button
-            className={`p-2 transition-colors ${overDarkHero ? "text-white" : "text-foreground"}`}
+            className={`p-2 transition-colors ${overDarkHero || forceDarkNav ? "text-white" : "text-foreground"}`}
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
             aria-expanded={mobileOpen}
@@ -279,7 +288,7 @@ export function Navbar() {
               href={link.href.startsWith("#") ? link.href : localized(link.href)}
               title={link.label}
               onClick={() => setMobileOpen(false)}
-              className={`text-base font-medium py-2 border-b border-border last:border-0 ${
+              className={`text-base font-medium py-2 border-b border-border last:border-0 flex items-center gap-1.5 ${
                 (link as any).uxgreen
                   ? "text-[#00BFA6]"
                   : (link as any).highlight
@@ -287,6 +296,7 @@ export function Navbar() {
                   : "text-foreground"
               }`}
             >
+              {(link as any).uxgreen && <Leaf size={14} />}
               {link.label}
             </Link>
           ))}

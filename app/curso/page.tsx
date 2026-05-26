@@ -31,6 +31,18 @@ export default function CursoPage() {
       {/* 2. Problem */}
       <CourseProblem />
 
+      {/* 2.5 Micro-commitment: low-friction action after pain activation (Clear + Eyal) */}
+      <CourseMidCta
+        headline="No tienes que decidir ahora."
+        headlineEn="You don't have to decide now."
+        subtext="Descarga el currículo completo y revísalo con calma. 9 módulos, herramientas, entregables y todo lo que vas a construir."
+        subtextEn="Download the full curriculum and review it at your pace. 9 modules, tools, deliverables, and everything you'll build."
+        ctaText="Descargar currículo en PDF →"
+        ctaTextEn="Download curriculum PDF →"
+        ctaHref="/docs/curriculo-arquitecto-ux-ia.pdf"
+        variant="subtle"
+      />
+
       {/* 3. Objective: what the course is about */}
       <CourseObjective />
 

@@ -13,19 +13,19 @@ export function CourseTransformation() {
   const pairs = [
     {
       before: { label: t("Abrumado", "Overwhelmed"), desc: t("15 herramientas nuevas al mes, ninguna dirección clara.", "15 new tools per month, no clear direction.") },
-      after: { label: t("Arquitecto UX con IA", "AI UX Architect"), desc: t("Diseñas experiencias donde la IA potencia al humano.", "You design experiences where AI empowers the human.") },
+      after: { label: t("En control", "In control"), desc: t("Tú decides cuándo usar IA y cuándo confiar en tu criterio. Tu primer producto real en portafolio antes del módulo 5.", "You decide when to use AI and when to trust your judgment. Your first real product in your portfolio before module 5.") },
     },
     {
       before: { label: t("Desconectado", "Disconnected"), desc: t("Tus entregables generan retrabajo en desarrollo.", "Your deliverables create rework for dev.") },
-      after: { label: t("Arquitecto de Producto", "Product Architect"), desc: t("Productos listos para evolucionar hacia desarrollo real.", "Products ready to evolve toward real development.") },
+      after: { label: t("Integrado", "Integrated"), desc: t("Diseño, negocio y desarrollo hablan el mismo idioma en tus entregables. Cero retrabajo en handoff.", "Design, business, and dev speak the same language in your deliverables. Zero rework at handoff.") },
     },
     {
       before: { label: t("Inseguro", "Unsure"), desc: t("No sabes si lo que genera la IA es bueno o solo rápido.", "You don't know if what AI generates is good or just fast.") },
-      after: { label: t("Puente UX ↔ Dev", "UX ↔ Dev Bridge"), desc: t("Conectas diseño, negocio y equipos técnicos.", "You connect design, business, and tech teams.") },
+      after: { label: t("Con criterio", "With judgment"), desc: t("Evalúas, filtras y decides con frameworks probados. La IA propone, tú dispones.", "You evaluate, filter, and decide with proven frameworks. AI proposes, you decide.") },
     },
     {
       before: { label: t("Dependiente", "Dependent"), desc: t("No puedes validar sin depender del equipo técnico.", "Can't validate without depending on the tech team.") },
-      after: { label: t("A prueba de futuro", "Future-proof"), desc: t("Skills que no caducan: pensamiento, no botones.", "Skills that don't expire: thinking, not clicking.") },
+      after: { label: t("Autónomo", "Autonomous"), desc: t("Validas con usuarios reales, construyes prototipos funcionales y llegas a desarrollo con todo resuelto.", "You validate with real users, build functional prototypes, and arrive at dev with everything resolved.") },
     },
   ]
 

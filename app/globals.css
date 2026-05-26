@@ -964,3 +964,169 @@
 .warm .uxgreen-secondary-btn:hover {
   background: rgba(0, 191, 166, 0.12);
 }
+
+/* ── UXGreen page: force dark aesthetic in light & warm modes ──────────────── */
+/* Override CSS variables inside the UXGreen page so it always renders
+   with a dark palette — dark backgrounds, light text, green accents —
+   regardless of the global theme. This preserves the brand identity. */
+
+.light .uxgreen-page,
+.warm .uxgreen-page {
+  --surface-dark: #0a0a0a;
+  --surface-dark-foreground: #f5f5f5;
+  --surface-mid: #111111;
+  --dot-color: rgba(255, 255, 255, 0.04);
+  color: #f5f5f5;
+}
+
+/* Cards revert to dark-theme style */
+.light .uxgreen-page .uxgreen-card,
+.warm .uxgreen-page .uxgreen-card {
+  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.03);
+  box-shadow: none;
+}
+.light .uxgreen-page .uxgreen-card:hover,
+.warm .uxgreen-page .uxgreen-card:hover {
+  border-color: rgba(0, 191, 166, 0.50);
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 20px rgba(0, 191, 166, 0.10);
+}
+
+/* Hero overlay stays dark */
+.light .uxgreen-page .uxgreen-hero-overlay,
+.warm .uxgreen-page .uxgreen-hero-overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(10, 10, 10, 0.25) 0%,
+    rgba(10, 10, 10, 0.50) 50%,
+    rgba(10, 10, 10, 0.80) 100%
+  );
+}
+
+/* Hero bg image toned down like dark mode */
+.light .uxgreen-page .uxgreen-hero-bg,
+.warm .uxgreen-page .uxgreen-hero-bg {
+  opacity: 0.65;
+  filter: saturate(1.2);
+}
+
+/* Leaf canvas visible like dark mode */
+.light .uxgreen-page .uxgreen-leaf-canvas,
+.warm .uxgreen-page .uxgreen-leaf-canvas {
+  opacity: 0.8;
+  filter: none;
+}
+
+/* Secondary button stays dark-mode style */
+.light .uxgreen-page .uxgreen-secondary-btn,
+.warm .uxgreen-page .uxgreen-secondary-btn {
+  background: rgba(0, 191, 166, 0.08);
+  border-color: rgba(0, 191, 166, 0.35) !important;
+  color: #00BFA6 !important;
+}
+.light .uxgreen-page .uxgreen-secondary-btn:hover,
+.warm .uxgreen-page .uxgreen-secondary-btn:hover {
+  background: rgba(0, 191, 166, 0.15);
+}
+
+/* Opacity-based text utilities need to stay light-on-dark */
+.light .uxgreen-page [class*="opacity-"],
+.warm .uxgreen-page [class*="opacity-"] {
+  color: inherit;
+}
+
+/* Borders stay subtle white */
+.light .uxgreen-page [class*="border-current"],
+.warm .uxgreen-page [class*="border-current"] {
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+/* ── UXGreen page: protect navbar from light-mode text overrides ───────────
+   The navbar adds .uxgreen-nav when on the UXGreen page. This prevents
+   the global light/warm text-white overrides from making the nav invisible
+   over the dark UXGreen hero background. ──────────────────────────────────── */
+
+/* Force navbar text white on UXGreen in light/warm */
+.light .uxgreen-nav .text-white,
+.warm .uxgreen-nav .text-white,
+.light .uxgreen-nav .text-white\/70,
+.warm .uxgreen-nav .text-white\/70,
+.light .uxgreen-nav .text-white\/80,
+.warm .uxgreen-nav .text-white\/80,
+.light .uxgreen-nav .text-white\/90,
+.warm .uxgreen-nav .text-white\/90 {
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+.light .uxgreen-nav .hover\:text-white:hover,
+.warm .uxgreen-nav .hover\:text-white:hover {
+  color: #ffffff !important;
+}
+
+/* Navbar borders stay subtle white */
+.light .uxgreen-nav .border-white\/20,
+.warm .uxgreen-nav .border-white\/20,
+.light .uxgreen-nav .border-white\/10,
+.warm .uxgreen-nav .border-white\/10,
+.light .uxgreen-nav .border-white\/5,
+.warm .uxgreen-nav .border-white\/5 {
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Navbar hover borders */
+.light .uxgreen-nav .hover\:border-white\/40:hover,
+.warm .uxgreen-nav .hover\:border-white\/40:hover {
+  border-color: rgba(255, 255, 255, 0.4) !important;
+}
+
+/* UXGreen link color stays teal */
+.light .uxgreen-nav [class*="text-\[#00BFA6\]"],
+.warm .uxgreen-nav [class*="text-\[#00BFA6\]"] {
+  color: #00BFA6 !important;
+}
+
+/* Navbar CTA button — keep white bg with dark text */
+.light .uxgreen-nav a[class*="bg-white"],
+.warm .uxgreen-nav a[class*="bg-white"] {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+/* Scrolled navbar background — keep dark on UXGreen page */
+.light .uxgreen-nav[class*="bg-background"],
+.warm .uxgreen-nav[class*="bg-background"] {
+  background-color: rgba(10, 10, 10, 0.95) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Muted foreground text in the navbar on UXGreen needs to stay light */
+.light .uxgreen-nav .text-muted-foreground,
+.warm .uxgreen-nav .text-muted-foreground {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+.light .uxgreen-nav .hover\:text-foreground:hover,
+.warm .uxgreen-nav .hover\:text-foreground:hover {
+  color: #ffffff !important;
+}
+.light .uxgreen-nav .hover\:border-foreground\/30:hover,
+.warm .uxgreen-nav .hover\:border-foreground\/30:hover {
+  border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+/* Language switcher active pill */
+.light .uxgreen-nav .bg-foreground,
+.warm .uxgreen-nav .bg-foreground {
+  background-color: #ffffff !important;
+}
+.light .uxgreen-nav .text-background,
+.warm .uxgreen-nav .text-background {
+  color: #000000 !important;
+}
+
+/* Hamburger icon on mobile */
+.light .uxgreen-nav .text-foreground,
+.warm .uxgreen-nav .text-foreground {
+  color: #ffffff !important;
+}
