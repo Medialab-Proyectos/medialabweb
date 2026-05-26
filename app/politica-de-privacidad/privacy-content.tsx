@@ -1,8 +1,35 @@
 "use client"
 
+import { useState } from "react"
 import Link from "next/link"
-import { ArrowLeft } from "lucide-react"
+import { ArrowLeft, ChevronDown } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
+import { Navbar } from "@/components/navbar"
+import { Footer } from "@/components/footer"
+
+function Accordion({ title, children }: { title: string; children: React.ReactNode }) {
+  const [open, setOpen] = useState(false)
+  return (
+    <div className="border border-border/40 rounded-lg overflow-hidden">
+      <button
+        type="button"
+        onClick={() => setOpen(!open)}
+        className="w-full flex items-center justify-between gap-4 px-5 py-4 text-left hover:bg-muted/30 transition-colors"
+      >
+        <span className="font-display font-semibold text-base text-foreground">{title}</span>
+        <ChevronDown
+          size={18}
+          className={`shrink-0 text-muted-foreground transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+        />
+      </button>
+      {open && (
+        <div className="px-5 pb-5 pt-1">
+          <div className="text-sm text-muted-foreground leading-relaxed">{children}</div>
+        </div>
+      )}
+    </div>
+  )
+}
 
 export function PrivacyContent() {
   const { t, localized } = useLanguage()
@@ -46,49 +73,47 @@ export function PrivacyContent() {
   ]
 
   return (
-    <main className="min-h-screen bg-background text-foreground">
-      <div className="max-w-3xl mx-auto px-6 py-24">
-        <Link
-          href={localized("/")}
-          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-10"
-        >
-          <ArrowLeft size={14} />
-          {t("Volver al inicio", "Back to home")}
-        </Link>
+    <>
+      <Navbar />
+      <main className="min-h-screen bg-background text-foreground">
+        <div className="max-w-3xl mx-auto px-6 py-24" style={{ userSelect: "none", WebkitUserSelect: "none" }}>
+          <Link
+            href={localized("/")}
+            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-10"
+          >
+            <ArrowLeft size={14} />
+            {t("Volver al inicio", "Back to home")}
+          </Link>
 
-        <h1 className="font-display font-bold text-3xl md:text-4xl text-foreground mb-4">
-          {t("Política de Privacidad", "Privacy Policy")}
-        </h1>
-        <p className="text-sm text-muted-foreground mb-10">
-          {t("Última actualización: mayo 2026", "Last updated: May 2026")}
-        </p>
+          <h1 className="font-display font-bold text-4xl md:text-5xl lg:text-6xl text-foreground mb-4">
+            {t("Política de Privacidad", "Privacy Policy")}
+          </h1>
+          <p className="text-sm text-muted-foreground mb-10">
+            {t("Última actualización: mayo 2026", "Last updated: May 2026")}
+          </p>
 
-        <div className="prose prose-neutral dark:prose-invert max-w-none flex flex-col gap-8">
-          {sections.map((s) => (
-            <section key={s.title}>
-              <h2 className="font-display font-semibold text-xl text-foreground mb-3">
-                {s.title}
-              </h2>
-              <p className="text-sm text-muted-foreground leading-relaxed">{s.body}</p>
-            </section>
-          ))}
+          <div className="flex flex-col gap-3">
+            {sections.map((s) => (
+              <Accordion key={s.title} title={s.title}>
+                <p>{s.body}</p>
+              </Accordion>
+            ))}
 
-          <section>
-            <h2 className="font-display font-semibold text-xl text-foreground mb-3">
-              {t("6. Contacto", "6. Contact")}
-            </h2>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              {t(
-                "Si tienes preguntas sobre esta política de privacidad, puedes contactarnos a través de nuestro sitio web en ",
-                "If you have questions about this privacy policy, you can contact us through our website at "
-              )}
-              <Link href={localized("/") + "#contact"} className="text-[var(--magenta)] hover:underline">
-                medialabingenieria.com
-              </Link>.
-            </p>
-          </section>
+            <Accordion title={t("6. Contacto", "6. Contact")}>
+              <p>
+                {t(
+                  "Si tienes preguntas sobre esta política de privacidad, puedes contactarnos a través de nuestro sitio web en ",
+                  "If you have questions about this privacy policy, you can contact us through our website at "
+                )}
+                <Link href={localized("/") + "#contact"} className="text-[var(--magenta)] hover:underline">
+                  medialabingenieria.com
+                </Link>.
+              </p>
+            </Accordion>
+          </div>
         </div>
-      </div>
-    </main>
+      </main>
+      <Footer />
+    </>
   )
 }

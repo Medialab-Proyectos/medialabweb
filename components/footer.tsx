@@ -39,6 +39,7 @@ export function Footer() {
       links: [
         { label: t("Sobre Nosotros", "About Us"), href: "/sobre-nosotros" },
         { label: t("Educación", "Education"), href: "/curso" },
+        { label: t("Carreras", "Careers"), href: "/carreras" },
         { label: "Blog", href: "/blog" },
       ],
     },

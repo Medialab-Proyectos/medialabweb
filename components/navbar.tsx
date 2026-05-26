@@ -15,7 +15,7 @@ const navLinks = {
     { label: "Educación", href: "/curso", highlight: true },
     { label: "UXBox", href: "/#uxbox" },
     { label: "UXGreen™", href: "/uxgreen", uxgreen: true },
-    { label: "Blog", href: "/blog" },
+    { label: "Carreras", href: "/carreras" },
   ],
   en: [
     { label: "Services", href: "/#services" },
@@ -23,7 +23,7 @@ const navLinks = {
     { label: "Education", href: "/curso", highlight: true },
     { label: "UXBox", href: "/#uxbox" },
     { label: "UXGreen™", href: "/uxgreen", uxgreen: true },
-    { label: "Blog", href: "/blog" },
+    { label: "Careers", href: "/carreras" },
   ],
 }
 
@@ -52,11 +52,13 @@ export function Navbar() {
   // navbar is transparent (pre-scroll), text-foreground is dark in light mode
   // and would disappear on those dark heroes — so override to light colors.
   const isDarkHero =
-    isDarkTheme &&
-    (pathname === "/" ||
-      pathname === "/en" ||
-      pathname === "/curso" ||
-      pathname === "/en/curso")
+    (isDarkTheme &&
+      (pathname === "/" ||
+        pathname === "/en" ||
+        pathname === "/curso" ||
+        pathname === "/en/curso")) ||
+    pathname === "/carreras" ||
+    pathname === "/en/carreras"
   const overDarkHero = !scrolled && isDarkHero
   const linkIdle = overDarkHero
     ? "text-white/70 hover:text-white"

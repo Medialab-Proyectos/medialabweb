@@ -6,6 +6,7 @@ import { PortfolioHero } from "@/components/portfolio/portfolio-hero"
 import { PortfolioMetrics } from "@/components/portfolio/portfolio-metrics"
 import { PortfolioCases } from "@/components/portfolio/portfolio-cases"
 import { PortfolioCTA } from "@/components/portfolio/portfolio-cta"
+import { StickyCTA } from "@/components/sticky-cta"
 
 export function PortfolioContent() {
   return (
@@ -16,6 +17,7 @@ export function PortfolioContent() {
       <PortfolioCases />
       <PortfolioCTA />
       <Footer />
+      <StickyCTA />
     </main>
   )
 }

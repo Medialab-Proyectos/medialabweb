@@ -6,6 +6,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next'
 import { ThemeProvider } from '@/components/theme-provider'
 import { LanguageProvider } from '@/lib/language-context'
 import { SkipToContent } from '@/components/skip-to-content'
+import { CookieConsent } from '@/components/cookie-consent'
 import './globals.css'
 
 const lato = Lato({
@@ -669,6 +670,7 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem themes={["light", "dark", "warm", "pure-dark"]}>
           <LanguageProvider>
             {children}
+            <CookieConsent />
           </LanguageProvider>
         </ThemeProvider>
         <Analytics />

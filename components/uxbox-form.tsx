@@ -117,6 +117,7 @@ export function UXBoxForm() {
 
   // engine state
   const [activeStage, setActiveStage] = useState(0)
+  const [stageProgress, setStageProgress] = useState(0) // 0-100 progress within current stage
   const [brief, setBrief] = useState("")
   const [prototype, setPrototype] = useState("")
   const [returnInsight, setReturnInsight] = useState("")
@@ -167,14 +168,56 @@ export function UXBoxForm() {
     }).catch(() => {})
   }
 
-  /* ── Spark: analyze idea, instant reward ── */
+  /* ── Spark: analyze idea, instant reward (personalized without AI) ── */
+  const buildReaction = (): string => {
+    if (!lab.signals.length) return ""
+    const primary = lab.signals[0]
+    const ideaShort = lab.idea.length > 60 ? lab.idea.slice(0, 60).trim() + "…" : lab.idea
+
+    // Signal-specific emotional templates
+    const templates: Record<string, [string, string]> = {
+      "SaaS B2B": [
+        `Me encanta lo que propones: "${ideaShort}". Veo potencial real en el espacio ${primary}. Hay un ángulo claro de diferenciación y quiero mostrarte exactamente cómo explotarlo. Vamos adelante.`,
+        `I love what you're proposing: "${ideaShort}". I see real potential in the ${primary} space. There's a clear differentiation angle and I want to show you exactly how to leverage it. Let's go.`,
+      ],
+      "Mobile": [
+        `Tu idea sobre "${ideaShort}" tiene un ángulo fuerte en experiencia móvil. El mercado ${primary} está creciendo y hay espacio para algo nuevo. Quiero que veas lo que encontré.`,
+        `Your idea about "${ideaShort}" has a strong angle in mobile experience. The ${primary} market is growing and there's room for something new. I want you to see what I found.`,
+      ],
+      "E-commerce": [
+        `"${ideaShort}" — esto me emociona. En ${primary}, la diferenciación está en la experiencia de compra, y tu propuesta tiene el ángulo correcto. Asegura tu análisis para ver los detalles.`,
+        `"${ideaShort}" — this excites me. In ${primary}, differentiation lies in the buying experience, and your proposal has the right angle. Secure your analysis to see the details.`,
+      ],
+      "Automatización con IA": [
+        `Excelente. "${ideaShort}" toca una de las áreas con mayor crecimiento: ${primary}. Detecté oportunidades concretas que quiero compartirte. Vamos con todo.`,
+        `Excellent. "${ideaShort}" touches one of the fastest-growing areas: ${primary}. I detected concrete opportunities I want to share. Let's go all in.`,
+      ],
+      "Fintech": [
+        `"${ideaShort}" es exactamente el tipo de producto que el ecosistema ${primary} necesita. Hay brechas claras que podemos aprovechar. Quiero mostrarte el mapa completo.`,
+        `"${ideaShort}" is exactly the kind of product the ${primary} ecosystem needs. There are clear gaps we can leverage. I want to show you the full map.`,
+      ],
+      "HealthTech": [
+        `Tu idea sobre "${ideaShort}" tiene un impacto real. En ${primary}, la experiencia del usuario es donde se ganan las batallas. Déjame mostrarte lo que encontré.`,
+        `Your idea about "${ideaShort}" has real impact. In ${primary}, user experience is where battles are won. Let me show you what I found.`,
+      ],
+      "EdTech": [
+        `Me encanta "${ideaShort}". En ${primary}, las mejores oportunidades están en cómo se entrega el valor, no solo en el contenido. Veo ángulos claros para ti.`,
+        `I love "${ideaShort}". In ${primary}, the best opportunities are in how value is delivered, not just the content. I see clear angles for you.`,
+      ],
+    }
+
+    const match = templates[primary]
+    if (match) return t(match[0], match[1])
+
+    // Default fallback for "Producto digital" / "Oportunidad de nicho"
+    return t(
+      `Me encanta lo que propones: "${ideaShort}". Detecto señales fuertes de ${lab.signals.join(" + ")}. Hay un ángulo claro para diferenciarte y quiero mostrártelo. Vamos adelante con tu idea.`,
+      `I love what you're proposing: "${ideaShort}". I detect strong signals of ${lab.signals.join(" + ")}. There's a clear angle to differentiate and I want to show you. Let's move forward with your idea.`
+    )
+  }
+
   const reaction = useTypewriter(
-    phase === "reacting" && lab.signals.length
-      ? t(
-          `Detecto señales fuertes de ${lab.signals.join(" + ")}. Hay un ángulo claro para diferenciarte. Asegura tu análisis para ver el resultado completo.`,
-          `I detect strong signals of ${lab.signals.join(" + ")}. There's a clear angle to differentiate. Secure your analysis to see the full result.`
-        )
-      : ""
+    phase === "reacting" ? buildReaction() : ""
   )
 
   const handleSpark = (e: React.FormEvent) => {
@@ -308,6 +351,20 @@ export function UXBoxForm() {
     }
   }
 
+  // Animate stage progress bar (updates every 100ms within 2300ms stage)
+  const STAGE_DURATION = 2300
+  useEffect(() => {
+    if (phase !== "engine") return
+    setStageProgress(0)
+    const start = Date.now()
+    const id = setInterval(() => {
+      const elapsed = Date.now() - start
+      const pct = Math.min(100, Math.round((elapsed / STAGE_DURATION) * 100))
+      setStageProgress(pct)
+    }, 100)
+    return () => clearInterval(id)
+  }, [phase, activeStage])
+
   /* ── Engine: run the living timeline ── */
   useEffect(() => {
     if (phase !== "engine") return
@@ -330,7 +387,7 @@ export function UXBoxForm() {
 
     setActiveStage(0)
     for (let s = 1; s <= 5; s += 1) {
-      timers.push(setTimeout(() => { if (!cancelled) setActiveStage(s) }, s * 2300))
+      timers.push(setTimeout(() => { if (!cancelled) { setActiveStage(s); setStageProgress(0) } }, s * STAGE_DURATION))
     }
     timers.push(setTimeout(() => {
       if (cancelled) return
@@ -340,7 +397,7 @@ export function UXBoxForm() {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: lab.email, idea: lab.idea, industry: lab.signals[0] || "", referenceUrls: references, existingBrand: projectName, brief: briefRef.current, prototype: protoRef.current }),
       }).catch(() => {})
-    }, 5 * 2300 + 600))
+    }, 5 * STAGE_DURATION + 600))
 
     return () => { cancelled = true; timers.forEach(clearTimeout) }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -627,6 +684,23 @@ export function UXBoxForm() {
                         active && i === 4 && !brief
                           ? <div className="mt-1 h-3 w-2/3 rounded dark:bg-white/10 bg-foreground/10 animate-pulse" />
                           : <p className="text-xs dark:text-white/55 text-muted-foreground leading-relaxed">{st.insight}</p>
+                      )}
+                      {active && phase === "engine" && (
+                        <div className="mt-2 flex items-center gap-2">
+                          <div className="flex-1 h-1.5 rounded-full dark:bg-white/10 bg-foreground/10 overflow-hidden">
+                            <div
+                              className="h-full rounded-full"
+                              style={{
+                                width: `${stageProgress}%`,
+                                background: "linear-gradient(90deg, #E8751A, #2AABB3)",
+                                transition: "width 100ms linear",
+                              }}
+                            />
+                          </div>
+                          <span className="text-[10px] font-mono tabular-nums dark:text-white/40 text-foreground/40 shrink-0" style={{ color: ACCENT }}>
+                            {Math.ceil(((100 - stageProgress) / 100) * (STAGE_DURATION / 1000))}s
+                          </span>
+                        </div>
                       )}
                     </div>
                   </div>

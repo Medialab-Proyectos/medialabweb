@@ -776,3 +776,61 @@
 .warm footer .bg-white\/5 {
   background-color: rgba(255, 255, 255, 0.05) !important;
 }
+
+/* Prevent overrides from turning text dark inside careers dark hero or other always-dark sections */
+.light .dark-hero-text,
+.warm .dark-hero-text {
+  color: #ffffff !important;
+}
+
+.light .dark-hero-text .text-white,
+.warm .dark-hero-text .text-white,
+.light .dark-hero-text h1,
+.warm .dark-hero-text h1,
+.light .dark-hero-text p,
+.warm .dark-hero-text p,
+.light .dark-hero-text span,
+.warm .dark-hero-text span,
+.light .dark-hero-text a,
+.warm .dark-hero-text a {
+  color: #ffffff !important;
+}
+
+.light .dark-hero-text .text-white\/90,
+.warm .dark-hero-text .text-white\/90,
+.light .dark-hero-text .text-white\/85,
+.warm .dark-hero-text .text-white\/85,
+.light .dark-hero-text .text-white\/80,
+.warm .dark-hero-text .text-white\/80,
+.light .dark-hero-text .text-white\/75,
+.warm .dark-hero-text .text-white\/75,
+.light .dark-hero-text .text-white\/70,
+.warm .dark-hero-text .text-white\/70,
+.light .dark-hero-text .text-white\/65,
+.warm .dark-hero-text .text-white\/65,
+.light .dark-hero-text .text-white\/60,
+.warm .dark-hero-text .text-white\/60 {
+  color: rgba(255, 255, 255, 0.7) !important;
+  opacity: 1 !important;
+}
+
+.light .dark-hero-text .text-white\/50,
+.warm .dark-hero-text .text-white\/50,
+.light .dark-hero-text .text-white\/45,
+.warm .dark-hero-text .text-white\/45,
+.light .dark-hero-text .text-white\/40,
+.warm .dark-hero-text .text-white\/40,
+.light .dark-hero-text .text-white\/35,
+.warm .dark-hero-text .text-white\/35,
+.light .dark-hero-text .text-white\/30,
+.warm .dark-hero-text .text-white\/30 {
+  color: rgba(255, 255, 255, 0.5) !important;
+  opacity: 1 !important;
+}
+
+.light .dark-hero-text .border-white\/10,
+.warm .dark-hero-text .border-white\/10,
+.light .dark-hero-text .border-white\/20,
+.warm .dark-hero-text .border-white\/20 {
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
