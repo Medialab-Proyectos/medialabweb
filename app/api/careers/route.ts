@@ -73,7 +73,7 @@ export async function POST(req: NextRequest) {
     </div>
     ${linkedin ? `<div class="field"><div class="field-label">LinkedIn</div><div class="field-value"><a href="${linkedin}" style="color:#E8751A">${linkedin}</a></div></div>` : ""}
     ${portfolio ? `<div class="field"><div class="field-label">Portafolio</div><div class="field-value"><a href="${portfolio}" style="color:#E8751A">${portfolio}</a></div></div>` : ""}
-    ${resume ? `<div class="field"><div class="field-label">Hoja de vida</div><div class="field-value"><a href="${resume}" style="color:#E8751A">${resume}</a></div></div>` : ""}
+    ${resume ? `<div class="field"><div class="field-label">Currículum</div><div class="field-value"><a href="${resume}" style="color:#E8751A">${resume}</a></div></div>` : ""}
     <div class="field">
       <div class="field-label">Mayor reto en UX</div>
       <div class="field-value">${challenge}</div>

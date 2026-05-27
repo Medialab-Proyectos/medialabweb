@@ -134,7 +134,19 @@ export function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-16 md:h-20">
         {/* Logo */}
-        <Link href={localized("/")} className="flex items-center gap-2 group" aria-label="MediaLab Ingeniería home">
+        <Link
+          href={localized("/")}
+          className="flex items-center gap-2 group"
+          aria-label="MediaLab Ingeniería home"
+          onClick={(e) => {
+            if (isHome) {
+              e.preventDefault()
+              window.scrollTo({ top: 0, behavior: "smooth" })
+              return
+            }
+            sessionStorage.setItem("homeNavBehavior", "top")
+          }}
+        >
           <Image
             src="/logo.svg"
             alt="MediaLab Ingeniería"

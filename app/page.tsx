@@ -21,6 +21,7 @@ import { SocialProofBar } from "@/components/social-proof-bar"
 import { StickyCTA } from "@/components/sticky-cta"
 import { MidCTA } from "@/components/mid-cta"
 import { CoursePromoSection } from "@/components/course-promo-section"
+import { HomeScrollRestorer } from "@/components/home-scroll-restorer"
 
 /**
  * Information Architecture Flow (2026 UX Best Practices):
@@ -44,6 +45,7 @@ import { CoursePromoSection } from "@/components/course-promo-section"
 export default function Home() {
   return (
     <main id="main-content">
+      <HomeScrollRestorer />
       <Navbar />
 
       {/* — AWARENESS — */}

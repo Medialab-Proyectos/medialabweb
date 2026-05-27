@@ -446,7 +446,7 @@ export function CareersLanding() {
 
             {/* Community card — with image */}
             <a
-              href="https://chat.whatsapp.com/Cfj6N07Bpch6V4luFipfUC"
+              href="https://wa.me/573054009505?text=Hola!%20%F0%9F%91%8B%20%C2%A1Un%20gusto%20en%20pertenecer%20al%20equipo!%20Mi%20nombre%20es%20___%20y%20soy%20___"
               target="_blank"
               rel="noopener noreferrer"
               className="group relative rounded-2xl border border-border bg-card hover:border-[var(--cyan)]/40 transition-all duration-300 overflow-hidden"

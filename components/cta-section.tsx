@@ -144,7 +144,7 @@ export function CTASection() {
                   <Users size={16} className="text-[var(--cyan)]" />
                   <div>
                     <span className="text-white/50 text-xs block">{t("Únete a la comunidad", "Join the community")}</span>
-                    <a href="https://chat.whatsapp.com/Cfj6N07Bpch6V4luFipfUC" target="_blank" rel="noopener noreferrer" title={t("Únete a la comunidad WhatsApp de MediaLab", "Join MediaLab WhatsApp community")} className="text-white hover:text-[var(--cyan)] transition-colors">{t("Comunidad WhatsApp", "WhatsApp Community")}</a>
+                    <a href="https://wa.me/573054009505?text=Hola!%20%F0%9F%91%8B%20%C2%A1Un%20gusto%20en%20pertenecer%20al%20equipo!%20Mi%20nombre%20es%20___%20y%20soy%20___" target="_blank" rel="noopener noreferrer" title={t("Únete a la comunidad WhatsApp de MediaLab", "Join MediaLab WhatsApp community")} className="text-white hover:text-[var(--cyan)] transition-colors">{t("Comunidad WhatsApp", "WhatsApp Community")}</a>
                   </div>
                 </div>
                 <div className="flex items-center gap-3 text-sm">

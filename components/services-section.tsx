@@ -157,6 +157,7 @@ function ServiceCard({
     if (navigating || !service.href) return
     e.preventDefault()
     setNavigating(true)
+    sessionStorage.setItem("homeScrollY", String(window.scrollY))
     router.push(localized(service.href))
   }, [navigating, service.href, router, localized])
 

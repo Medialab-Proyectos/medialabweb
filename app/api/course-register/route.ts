@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 
-const COURSE_EMAIL = "info@medialab.design"
+const COURSE_EMAIL = process.env.ADMIN_EMAIL || "hello@medialab.design"
 const FROM_EMAIL = process.env.FROM_EMAIL || "MediaLab <onboarding@resend.dev>"
 
 export async function POST(req: NextRequest) {
@@ -117,7 +117,7 @@ export async function POST(req: NextRequest) {
 
     <div class="contact">
       <p>${isEn ? "Have questions? Reach out directly" : "Tienes preguntas? Escribenos directamente"}<br>
-      <a href="mailto:info@medialab.design">info@medialab.design</a> &middot;
+      <a href="mailto:hello@medialab.design">hello@medialab.design</a> &middot;
       <a href="https://wa.me/573054009505">WhatsApp</a></p>
     </div>
   </div>

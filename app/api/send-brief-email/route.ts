@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "co.benavides86@gmail.com"
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "hello@medialab.design"
 const FROM_EMAIL = process.env.FROM_EMAIL || "MediaLab <onboarding@resend.dev>"
 
 export async function POST(req: NextRequest) {
