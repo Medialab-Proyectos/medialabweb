@@ -5,12 +5,13 @@ import Image from "next/image"
 import {
   Search, Users, FileText, Rocket, CheckCircle2,
   ArrowRight, ChevronRight, Clock, Brain, Target,
-  CreditCard, Landmark, GraduationCap, ShoppingCart, Car,
+  CreditCard, Landmark, GraduationCap, ShoppingCart, Car, Box,
 } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { BookingModal } from "@/components/booking-modal"
+import { StickyServiceBreadcrumb } from "./sticky-service-breadcrumb"
 
 export function DiscoveryConIAContent() {
   const { t, localized } = useLanguage()
@@ -118,21 +119,14 @@ export function DiscoveryConIAContent() {
     <main id="main-content">
       <Navbar />
 
+      <StickyServiceBreadcrumb pageEs="Discovery con IA" pageEn="AI Discovery" />
+
       {/* Hero */}
-      <section className="relative pt-32 pb-20 px-6 bg-[var(--surface-dark)] text-white overflow-hidden" aria-labelledby="discovery-h1">
+      <section className="relative pt-6 pb-20 px-6 bg-[var(--surface-dark)] text-white overflow-hidden" aria-labelledby="discovery-h1">
         <div className="absolute -top-24 right-0 w-96 h-96 rounded-full blur-3xl pointer-events-none opacity-25"
           style={{ background: "radial-gradient(circle, #E8751A 0%, transparent 70%)" }} aria-hidden="true" />
         <div className="relative z-10 max-w-6xl mx-auto grid lg:grid-cols-12 gap-12 items-center">
           <div className="lg:col-span-7 flex flex-col gap-6">
-            {/* Breadcrumb */}
-            <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-white/50">
-              <Link href={localized("/")} className="hover:text-white">{t("Inicio", "Home")}</Link>
-              <ChevronRight size={12} />
-              <Link href={localized("/servicios")} className="hover:text-white">{t("Servicios", "Services")}</Link>
-              <ChevronRight size={12} />
-              <span className="text-white/80">{t("Discovery con IA", "AI Discovery")}</span>
-            </nav>
-
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold border w-fit"
               style={{ color: "var(--magenta)", borderColor: "rgba(232,117,26,0.3)", background: "rgba(232,117,26,0.08)" }}>
               <Brain size={14} /> {t("AI-powered UX Research", "AI-powered UX Research")}
@@ -158,7 +152,7 @@ export function DiscoveryConIAContent() {
                 </button>
               </BookingModal>
               <Link href={localized("/")+"#uxbox"} className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-4 rounded-full text-sm font-medium border border-white/15 text-white/75 hover:text-white hover:border-white/30 transition-all">
-                {t("Probar UXBox gratis", "Try UXBox free")} <ArrowRight size={14} />
+                <Box size={14} /> {t("Probar UXBox gratis", "Try UXBox free")} <ArrowRight size={14} />
               </Link>
             </div>
             <p className="text-xs text-white/50 flex items-center gap-2">
@@ -248,8 +242,8 @@ export function DiscoveryConIAContent() {
               <ArrowRight size={14} className="shrink-0 mt-0.5 text-[var(--magenta)]" />
               <span>
                 {t("¿Quieres ver el punto de partida automático? ", "Want to see the automatic starting point? ")}
-                <Link href={localized("/")+"#uxbox"} className="text-[var(--magenta)] font-medium underline decoration-[var(--magenta)]/30 hover:decoration-[var(--magenta)] transition-colors">
-                  {t("Genera tu brief con UXBox", "Generate your brief with UXBox")}
+                <Link href={localized("/")+"#uxbox"} className="inline-flex items-center gap-1 text-[var(--magenta)] font-medium underline decoration-[var(--magenta)]/30 hover:decoration-[var(--magenta)] transition-colors">
+                  <Box size={12} className="shrink-0" />{t("Genera tu brief con UXBox", "Generate your brief with UXBox")}
                 </Link>
               </span>
             </li>

@@ -5,11 +5,13 @@ import Image from "next/image"
 import {
   BarChart3, MousePointerClick, FlaskConical, TrendingUp, Filter, Eye,
   ArrowRight, ChevronRight, CheckCircle2,
+  Rocket, ShoppingCart, CreditCard,
 } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { BookingModal } from "@/components/booking-modal"
+import { StickyServiceBreadcrumb } from "./sticky-service-breadcrumb"
 
 export function CroSaasContent() {
   const { t, localized } = useLanguage()
@@ -84,20 +86,14 @@ export function CroSaasContent() {
     <main id="main-content">
       <Navbar />
 
+      <StickyServiceBreadcrumb pageEs="CRO para SaaS" pageEn="CRO for SaaS" />
+
       {/* Hero */}
-      <section className="relative pt-32 pb-20 px-6 bg-[var(--surface-dark)] text-white overflow-hidden" aria-labelledby="cro-h1">
+      <section className="relative pt-6 pb-20 px-6 bg-[var(--surface-dark)] text-white overflow-hidden" aria-labelledby="cro-h1">
         <div className="absolute -top-24 right-0 w-96 h-96 rounded-full blur-3xl pointer-events-none opacity-25"
           style={{ background: "radial-gradient(circle, #E8751A 0%, transparent 70%)" }} aria-hidden="true" />
         <div className="relative z-10 max-w-6xl mx-auto grid lg:grid-cols-12 gap-12 items-center">
           <div className="lg:col-span-7 flex flex-col gap-6">
-            <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-white/50">
-              <Link href={localized("/")} className="hover:text-white">{t("Inicio", "Home")}</Link>
-              <ChevronRight size={12} />
-              <Link href={localized("/servicios")} className="hover:text-white">{t("Servicios", "Services")}</Link>
-              <ChevronRight size={12} />
-              <span className="text-white/80">{t("CRO para SaaS", "CRO for SaaS")}</span>
-            </nav>
-
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold border w-fit"
               style={{ color: "var(--magenta)", borderColor: "rgba(232,117,26,0.3)", background: "rgba(232,117,26,0.08)" }}>
               <TrendingUp size={14} /> {t("Interfaces diseñadas para conversión", "Interfaces designed for conversion")}
@@ -216,11 +212,12 @@ export function CroSaasContent() {
             <p className="text-sm text-muted-foreground mb-2.5">{t("Aplicamos CRO estratégico especialmente en:", "We apply strategic CRO especially in:")}</p>
             <div className="flex flex-wrap gap-2">
               {[
-                { name: t("Startups y SaaS", "Startups & SaaS"), href: "/industrias/startups" },
-                { name: t("E-commerce", "E-commerce"), href: "/industrias/ecommerce" },
-                { name: t("Fintech", "Fintech"), href: "/industrias/fintech" },
+                { name: t("Startups y SaaS", "Startups & SaaS"), href: "/industrias/startups", icon: Rocket },
+                { name: t("E-commerce", "E-commerce"), href: "/industrias/ecommerce", icon: ShoppingCart },
+                { name: t("Fintech", "Fintech"), href: "/industrias/fintech", icon: CreditCard },
               ].map((ind) => (
-                <Link key={ind.name} href={localized(ind.href)} className="px-4 py-2 rounded-full text-sm font-medium border border-border bg-card text-[var(--magenta)] hover:bg-secondary transition-all">
+                <Link key={ind.name} href={localized(ind.href)} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium border border-border bg-card text-[var(--magenta)] hover:bg-secondary transition-all">
+                  <ind.icon size={13} className="shrink-0" />
                   {ind.name}
                 </Link>
               ))}

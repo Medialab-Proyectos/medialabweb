@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, useCallback } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
+import Image from "next/image"
 import { Microscope, Brain, Code2, BarChart3, ChevronRight, ArrowRight, Loader2 } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 
@@ -13,6 +14,9 @@ const services = [
     titleEn: "Experiences your users will remember",
     color: "var(--magenta)",
     gradient: "linear-gradient(135deg, var(--magenta), oklch(0.45 0.24 300))",
+    image: "/images/service-ux-design-team.png",
+    imageAltEs: "Equipo de diseño UX trabajando en wireframes y sistema de diseño",
+    imageAltEn: "UX design team working on wireframes and design system",
     itemsEs: [
       "Investigación profunda de usuarios B2B y B2C",
       "Diseño de interacción y experiencia emocional",
@@ -43,6 +47,9 @@ const services = [
     titleEn: "From vague idea to clear product in days",
     color: "var(--cyan)",
     gradient: "linear-gradient(135deg, var(--cyan), oklch(0.55 0.18 220))",
+    image: "/images/service-ai-discovery-team.png",
+    imageAltEs: "Fundador trabajando en el discovery de producto con IA",
+    imageAltEn: "Founder working on AI-powered product discovery",
     itemsEs: [
       "Discovery de producto acelerado con IA",
       "Validación rápida de ideas y conceptos",
@@ -71,6 +78,9 @@ const services = [
     titleEn: "Code your users will never notice (and that's good)",
     color: "var(--orange)",
     gradient: "linear-gradient(135deg, var(--orange), oklch(0.65 0.2 60))",
+    image: "/images/service-dev-team.png",
+    imageAltEs: "Desarrolladores revisando código en setup de monitores dual",
+    imageAltEn: "Developers reviewing code on dual monitor setup",
     itemsEs: [
       "Plataformas web B2B y dashboards",
       "Apps móviles y experiencias B2C",
@@ -100,6 +110,9 @@ const services = [
     titleEn: "More conversion without spending more on traffic",
     color: "var(--magenta)",
     gradient: "linear-gradient(135deg, oklch(0.55 0.22 320), var(--magenta))",
+    image: "/images/service-cro-saas-team.png",
+    imageAltEs: "Equipo de growth analizando métricas de conversión en laptop",
+    imageAltEn: "Growth team analyzing conversion metrics on laptop",
     itemsEs: [
       "Embudos de activación y onboarding",
       "Optimización de pricing y checkout",
@@ -151,7 +164,7 @@ function ServiceCard({
     <div
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className={`relative flex flex-col gap-6 p-8 rounded-3xl border border-border bg-card overflow-hidden cursor-default
+      className={`group relative flex flex-col gap-6 p-8 rounded-3xl border border-border bg-card overflow-hidden cursor-default
         transition-all duration-700 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}
         hover:border-transparent hover:shadow-2xl ${navigating ? "opacity-70 pointer-events-none" : ""}`}
       style={{
@@ -192,6 +205,28 @@ function ServiceCard({
 
       {/* Description */}
       <p className="text-sm text-muted-foreground leading-relaxed">{description}</p>
+
+      {/* Human team photo */}
+      {service.image && (
+        <div className="relative w-full h-48 rounded-2xl overflow-hidden">
+          <Image
+            src={service.image}
+            alt={lang === "es" ? (service.imageAltEs ?? "") : (service.imageAltEn ?? "")}
+            fill
+            className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
+            sizes="(max-width: 768px) 100vw, 50vw"
+          />
+          {/* Subtle color overlay on hover */}
+          <div
+            className="absolute inset-0 opacity-0 transition-opacity duration-300 pointer-events-none"
+            style={{
+              background: service.gradient,
+              opacity: hovered ? 0.15 : 0,
+            }}
+            aria-hidden="true"
+          />
+        </div>
+      )}
 
       {/* Items */}
       <ul className="flex flex-col gap-2" aria-label={`${title} services`}>

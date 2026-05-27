@@ -5,11 +5,13 @@ import Image from "next/image"
 import {
   Microscope, Compass, PenTool, LayoutGrid, BarChart3,
   ArrowRight, ChevronRight, CheckCircle2, Heart,
+  CreditCard, Landmark, ShoppingCart, BookOpen, Car, Rocket, Box,
 } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { BookingModal } from "@/components/booking-modal"
+import { StickyServiceBreadcrumb } from "./sticky-service-breadcrumb"
 
 export function DisenoUxUiContent() {
   const { t, localized } = useLanguage()
@@ -99,21 +101,14 @@ export function DisenoUxUiContent() {
   return (
     <main id="main-content">
       <Navbar />
+      <StickyServiceBreadcrumb pageEs="Diseño UX/UI" pageEn="UX/UI Design" />
 
       {/* Hero */}
-      <section className="relative pt-32 pb-20 px-6 bg-[var(--surface-dark)] text-white overflow-hidden" aria-labelledby="uxui-h1">
+      <section className="relative pt-6 pb-20 px-6 bg-[var(--surface-dark)] text-white overflow-hidden" aria-labelledby="uxui-h1">
         <div className="absolute -top-24 right-0 w-96 h-96 rounded-full blur-3xl pointer-events-none opacity-25"
           style={{ background: "radial-gradient(circle, #E8751A 0%, transparent 70%)" }} aria-hidden="true" />
         <div className="relative z-10 max-w-6xl mx-auto grid lg:grid-cols-12 gap-12 items-center">
           <div className="lg:col-span-7 flex flex-col gap-6">
-            <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-white/50">
-              <Link href={localized("/")} className="hover:text-white">{t("Inicio", "Home")}</Link>
-              <ChevronRight size={12} />
-              <Link href={localized("/servicios")} className="hover:text-white">{t("Servicios", "Services")}</Link>
-              <ChevronRight size={12} />
-              <span className="text-white/80">{t("Diseño UX/UI", "UX/UI Design")}</span>
-            </nav>
-
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold border w-fit"
               style={{ color: "var(--magenta)", borderColor: "rgba(232,117,26,0.3)", background: "rgba(232,117,26,0.08)" }}>
               <Heart size={14} /> {t("UX Strategy by MediaLab", "UX Strategy by MediaLab")}
@@ -205,7 +200,7 @@ export function DisenoUxUiContent() {
               <ArrowRight size={14} className="shrink-0 mt-0.5 text-[var(--magenta)]" />
               <span>
                 {t("Genera un brief al instante con ", "Generate an instant brief with ")}
-                <Link href={localized("/")+"#uxbox"} className="text-[var(--magenta)] font-medium underline decoration-[var(--magenta)]/30 hover:decoration-[var(--magenta)] transition-colors">UXBox</Link>
+                <Link href={localized("/")+"#uxbox"} className="inline-flex items-center gap-1 text-[var(--magenta)] font-medium underline decoration-[var(--magenta)]/30 hover:decoration-[var(--magenta)] transition-colors"><Box size={12} className="shrink-0" />UXBox</Link>
               </span>
             </li>
             <li className="flex items-start gap-2.5">
@@ -220,14 +215,15 @@ export function DisenoUxUiContent() {
             <p className="text-sm text-muted-foreground mb-2.5">{t("Diseñamos experiencias para industrias de alta exigencia:", "We design experiences for high-demand industries:")}</p>
             <div className="flex flex-wrap gap-2">
               {[
-                { name: t("Fintech", "Fintech"), href: "/industrias/fintech" },
-                { name: t("Banca", "Banking"), href: "/industrias/banca" },
-                { name: t("E-commerce", "E-commerce"), href: "/industrias/ecommerce" },
-                { name: t("Educación", "Education"), href: "/industrias/educacion" },
-                { name: t("Movilidad", "Mobility"), href: "/industrias/movilidad" },
-                { name: t("Startups", "Startups"), href: "/industrias/startups" },
+                { name: t("Fintech", "Fintech"), href: "/industrias/fintech", icon: CreditCard },
+                { name: t("Banca", "Banking"), href: "/industrias/banca", icon: Landmark },
+                { name: t("E-commerce", "E-commerce"), href: "/industrias/ecommerce", icon: ShoppingCart },
+                { name: t("Educación", "Education"), href: "/industrias/educacion", icon: BookOpen },
+                { name: t("Movilidad", "Mobility"), href: "/industrias/movilidad", icon: Car },
+                { name: t("Startups", "Startups"), href: "/industrias/startups", icon: Rocket },
               ].map((ind) => (
-                <Link key={ind.name} href={localized(ind.href)} className="px-4 py-2 rounded-full text-sm font-medium border border-border bg-card text-[var(--magenta)] hover:bg-secondary transition-all">
+                <Link key={ind.name} href={localized(ind.href)} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium border border-border bg-card text-[var(--magenta)] hover:bg-secondary transition-all">
+                  <ind.icon size={13} className="shrink-0" />
                   {ind.name}
                 </Link>
               ))}

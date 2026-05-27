@@ -107,6 +107,8 @@ export function UXBoxForm() {
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
   const [resending, setResending] = useState(false)
+  const [retrieveMode, setRetrieveMode] = useState(false)
+  const [showNotFoundPopup, setShowNotFoundPopup] = useState(false)
 
   // feed state
   const [feedStep, setFeedStep] = useState(0)
@@ -138,21 +140,9 @@ export function UXBoxForm() {
     return () => clearInterval(id)
   }, [phase])
 
-  /* Resume an existing lab on mount */
+  /* Mark hydrated on mount — no auto-resume; user must enter their email to retrieve analysis */
   useEffect(() => {
-    const saved = loadLab()
     setHydrated(true)
-    if (saved && saved.completedAt) {
-      const insight = RETURN_INSIGHTS[(saved.visits || 0) % RETURN_INSIGHTS.length]
-      setReturnInsight(t(insight[0], insight[1]))
-      setLab({ ...saved, visits: (saved.visits || 0) + 1 })
-      setBrief(saved.brief || "")
-      setPrototype(saved.prototype || "")
-      setActiveStage(5)
-      setPhase("return")
-      try { localStorage.setItem(LAB_KEY, JSON.stringify({ ...saved, visits: (saved.visits || 0) + 1 })) } catch {}
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const persist = (patch: Partial<Lab>) => {
@@ -249,7 +239,7 @@ export function UXBoxForm() {
       setError(t("Ingresa un email válido", "Enter a valid email"))
       return
     }
-    if (!consent) {
+    if (!retrieveMode && !consent) {
       setError(t("Necesitamos tu consentimiento para guardar tu análisis", "We need your consent to save your analysis"))
       return
     }
@@ -296,6 +286,9 @@ export function UXBoxForm() {
           setActiveStage(5)
           setPhase("return")
           fetch("/api/lab", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(merged) }).catch(() => {})
+        } else if (retrieveMode) {
+          setShowNotFoundPopup(true)
+          setPinInput(""); setError("")
         } else {
           persist({ email })
           setPhase("feed")
@@ -409,6 +402,7 @@ export function UXBoxForm() {
     setIdea(""); setEmail(""); setConsent(false); setPinInput(""); setProjectName("")
     setReferences(""); setObjective(""); setAudience(""); setFeedStep(0); setActiveStage(0)
     setBrief(""); setPrototype(""); setError("")
+    setRetrieveMode(false); setShowNotFoundPopup(false)
     setPhase("spark")
   }
 
@@ -495,6 +489,16 @@ export function UXBoxForm() {
               style={{ background: "linear-gradient(90deg, #E8751A, #c65a10)", boxShadow: "0 8px 30px rgba(232,117,26,0.3)" }}>
               <Sparkles size={17} /> {t("Analizar mi idea", "Analyze my idea")}
             </button>
+            <button
+              type="button"
+              onClick={() => { setRetrieveMode(true); setPhase("gate") }}
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-medium text-sm border dark:border-white/15 border-foreground/15 dark:text-white/65 text-foreground/65 hover:dark:text-white hover:text-foreground hover:dark:border-white/30 hover:border-foreground/30 transition-all active:scale-95"
+            >
+              {t("Ya tengo una idea en marcha →", "I already have an idea in progress →")}
+            </button>
+            <p className="text-xs dark:text-white/30 text-muted-foreground/50 text-center">
+              {t("Solo una propuesta activa por email", "Only one active proposal per email")}
+            </p>
             <p className="text-xs dark:text-white/40 text-muted-foreground text-center flex items-center justify-center gap-1.5">
               <Activity size={12} /> {t("173 ideas analizadas esta semana · resultado en minutos", "173 ideas analyzed this week · result in minutes")}
             </p>
@@ -531,8 +535,14 @@ export function UXBoxForm() {
         {phase === "gate" && (
           <form onSubmit={handleGate} className="max-w-md mx-auto flex flex-col gap-5 animate-in fade-in duration-500">
             <div className="flex flex-col gap-1 text-center">
-              <h3 className="font-display font-bold text-xl dark:text-white text-foreground">{t("Asegura tu análisis", "Secure your analysis")}</h3>
-              <p className="text-sm dark:text-white/55 text-muted-foreground">{t("Para no perder este análisis y poder volver cuando quieras.", "So you don't lose this analysis and can return anytime.")}</p>
+              <h3 className="font-display font-bold text-xl dark:text-white text-foreground">
+                {retrieveMode ? t("Recupera tu análisis", "Retrieve your analysis") : t("Asegura tu análisis", "Secure your analysis")}
+              </h3>
+              <p className="text-sm dark:text-white/55 text-muted-foreground">
+                {retrieveMode
+                  ? t("Ingresa el email con el que guardaste tu idea.", "Enter the email you used to save your idea.")
+                  : t("Para no perder este análisis y poder volver cuando quieras.", "So you don't lose this analysis and can return anytime.")}
+              </p>
             </div>
             <div className="flex items-center gap-2 rounded-xl border dark:border-white/25 border-foreground/20 dark:bg-white/5 bg-foreground/5 px-3">
               <Mail size={16} className="dark:text-white/40 text-foreground/40 shrink-0" />
@@ -541,16 +551,27 @@ export function UXBoxForm() {
                 placeholder={t("nombre@empresa.com", "name@company.com")}
                 className="w-full py-3.5 bg-transparent dark:text-white text-foreground placeholder:dark:text-white/35 placeholder:text-foreground/35 focus:outline-none text-sm" required />
             </div>
-            <label className="flex items-start gap-2.5 text-xs dark:text-white/55 text-muted-foreground cursor-pointer">
-              <input type="checkbox" checked={consent} onChange={(e) => { setConsent(e.target.checked); setError("") }} className="mt-0.5 accent-[#E8751A] w-4 h-4 shrink-0" />
-              <span>{t("Acepto que MediaLab use mis datos para generar mi análisis, según la ", "I agree to let MediaLab use my data to generate my analysis, per the ")}
-                <Link href="/politica-de-privacidad" className="underline hover:dark:text-white hover:text-foreground">{t("política de privacidad", "privacy policy")}</Link>.</span>
-            </label>
+            {!retrieveMode && (
+              <label className="flex items-start gap-2.5 text-xs dark:text-white/55 text-muted-foreground cursor-pointer">
+                <input type="checkbox" checked={consent} onChange={(e) => { setConsent(e.target.checked); setError("") }} className="mt-0.5 accent-[#E8751A] w-4 h-4 shrink-0" />
+                <span>{t("Acepto que MediaLab use mis datos para generar mi análisis, según la ", "I agree to let MediaLab use my data to generate my analysis, per the ")}
+                  <Link href="/politica-de-privacidad" className="underline hover:dark:text-white hover:text-foreground">{t("política de privacidad", "privacy policy")}</Link>.</span>
+              </label>
+            )}
             {error && <p className="text-xs text-red-400 font-medium">{error}</p>}
             <button type="submit" disabled={loading} className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold text-sm text-white transition-all active:scale-95 disabled:opacity-50"
               style={{ background: "linear-gradient(90deg, #E8751A, #c65a10)" }}>
-              {loading ? t("Enviando llave…", "Sending key…") : t("Acceder a mi análisis", "Access my analysis")} <ArrowRight size={15} />
+              {loading
+                ? t("Enviando llave…", "Sending key…")
+                : retrieveMode ? t("Verificar mi email →", "Verify my email →") : t("Acceder a mi análisis", "Access my analysis")}
+              {!loading && <ArrowRight size={15} />}
             </button>
+            {retrieveMode && (
+              <button type="button" onClick={() => { setRetrieveMode(false); setPhase("spark"); setEmail(""); setError("") }}
+                className="text-xs dark:text-white/40 text-muted-foreground hover:dark:text-white hover:text-foreground transition-colors text-center">
+                {t("← Crear una idea nueva", "← Create a new idea")}
+              </button>
+            )}
           </form>
         )}
 
@@ -780,6 +801,52 @@ export function UXBoxForm() {
                 {t("Cruzando tu idea con +2.000 patrones de producto…", "Cross-referencing your idea with 2,000+ product patterns…")}
               </div>
             )}
+          </div>
+        )}
+
+        {/* ───────── NOT FOUND POPUP ───────── */}
+        {showNotFoundPopup && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center px-6"
+            onClick={() => setShowNotFoundPopup(false)}
+          >
+            <div className="absolute inset-0 bg-black/65 backdrop-blur-sm" />
+            <div
+              className="relative z-10 max-w-sm w-full rounded-2xl border p-7 flex flex-col gap-5 text-center"
+              style={{ borderColor: accentBorder, background: "var(--surface-dark)" }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="w-12 h-12 rounded-xl mx-auto flex items-center justify-center border"
+                style={{ background: accentBg, borderColor: accentBorder }}>
+                <Mail size={20} style={{ color: ACCENT }} />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <h3 className="font-display font-bold text-lg dark:text-white text-foreground">
+                  {t("Email no encontrado", "Email not found")}
+                </h3>
+                <p className="text-sm dark:text-white/60 text-muted-foreground leading-relaxed">
+                  {t(
+                    "Tu email está incorrecto o todavía no tienes una idea en marcha. Crea una ahora, es rápido.",
+                    "Your email is incorrect or you don't have an active idea yet. Create one now — it's quick."
+                  )}
+                </p>
+              </div>
+              <div className="flex flex-col gap-2.5">
+                <button
+                  onClick={() => { setShowNotFoundPopup(false); setRetrieveMode(false); setPhase("spark"); setEmail(""); setError("") }}
+                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-semibold text-sm text-white transition-all active:scale-95 hover:brightness-110"
+                  style={{ background: "linear-gradient(90deg, #E8751A, #c65a10)" }}
+                >
+                  <Sparkles size={14} /> {t("Crear mi idea ahora", "Create my idea now")}
+                </button>
+                <button
+                  onClick={() => { setShowNotFoundPopup(false); setPinInput(""); setError(""); setPhase("gate") }}
+                  className="text-xs dark:text-white/45 text-muted-foreground hover:dark:text-white hover:text-foreground transition-colors"
+                >
+                  {t("Intentar con otro email", "Try a different email")}
+                </button>
+              </div>
+            </div>
           </div>
         )}
 

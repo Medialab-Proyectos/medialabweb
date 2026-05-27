@@ -211,7 +211,7 @@ export function CourseMethodology() {
               t("Product Thinking", "Product Thinking"), t("Digital Architecture", "Digital Architecture"),
               t("UX Strategy", "UX Strategy"), t("Human-Centered AI", "Human-Centered AI"),
             ].map((tag, i) => (
-              <span key={i} className="px-2.5 py-1 rounded-full text-[10px] font-medium border curso-card text-foreground/50 dark:text-foreground/45">
+              <span key={i} className="px-2.5 py-1 rounded-full text-[10px] font-medium border curso-card text-foreground/50 dark:text-foreground/45 whitespace-nowrap shrink-0">
                 {tag}
               </span>
             ))}
@@ -243,8 +243,8 @@ export function CourseMethodology() {
           {stages.map((stage, i) => {
             const s = stageStyles[stage.color]
             return (
-              <div key={i} className={`px-4 py-2 rounded-full ${s.border} ${s.bg} border whitespace-nowrap`}>
-                <span className={`text-xs font-medium ${s.text} tracking-wide`}>
+              <div key={i} className={`px-4 py-2 rounded-full ${s.border} ${s.bg} border whitespace-nowrap shrink-0`}>
+                <span className={`text-xs font-medium ${s.text} tracking-wide whitespace-nowrap`}>
                   <span className="hidden sm:inline">{t("Bloque", "Block")} {String(i + 1).padStart(2, '0')} — </span>
                   <span className="sm:hidden">{t("B", "B")}{i + 1} · </span>
                   {stage.label}

@@ -170,6 +170,12 @@ export function CourseCta() {
               </div>
 
               {/* WhatsApp */}
+              <p className="text-xs text-foreground/45 text-center mb-3 leading-relaxed">
+                {t(
+                  "Un experto del área puede guiarte en una mentoría 1 a 1 gratuita o escribirte sobre nuestras masterclasses online cerradas.",
+                  "An area expert can guide you in a free 1-on-1 mentoring session or reach out about our closed online masterclasses."
+                )}
+              </p>
               <a
                 href={t(
                   "https://wa.me/573054009505?text=Hola%2C%20quiero%20info%20sobre%20AI%20User%20Experience%20Architect",
@@ -181,7 +187,7 @@ export function CourseCta() {
                 style={{ background: 'var(--cyan)' }}
               >
                 <MessageCircle size={15} />
-                {t("¿Dudas? Habla con un asesor", "Questions? Talk to an advisor")}
+                {t("Habla con un experto →", "Talk to an expert →")}
               </a>
             </div>
           </motion.div>
