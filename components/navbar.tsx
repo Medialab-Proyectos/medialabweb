@@ -63,7 +63,8 @@ export function Navbar() {
     pathname === "/en/carreras"
   const overDarkHero = !scrolled && isDarkHero
   // UXGreen always has a dark navbar, even when scrolled in light mode
-  const forceDarkNav = isUXGreen
+  const isCarreras = pathname === "/carreras" || pathname === "/en/carreras"
+  const forceDarkNav = isUXGreen || isCarreras
   const linkIdle = overDarkHero || forceDarkNav
     ? "text-white/70 hover:text-white"
     : "text-muted-foreground hover:text-foreground"
@@ -123,11 +124,11 @@ export function Navbar() {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${forceDarkNav ? "uxgreen-nav" : ""} ${
         scrolled
-          ? isUXGreen
-            ? "bg-[#0a0a0a]/95 backdrop-blur-md border-b border-white/10 shadow-sm"
+          ? forceDarkNav
+            ? "bg-[#0a0a0a]/95 backdrop-blur-md border-b border-white/[0.06] shadow-sm"
             : "bg-background/90 backdrop-blur-md border-b border-border shadow-sm"
-          : isUXGreen
-          ? "bg-[#0a0a0a]/70 backdrop-blur-md border-b border-white/5"
+          : forceDarkNav
+          ? "bg-[#0a0a0a]/70 backdrop-blur-md"
           : "bg-transparent"
       }`}
     >

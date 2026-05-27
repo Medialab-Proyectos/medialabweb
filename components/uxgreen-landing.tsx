@@ -191,18 +191,18 @@ const PILLARS = [
   {
     icon: Globe,
     title: "UX Efficiency",
-    tagline: ["Menos clics, más valor", "Fewer clicks, more value"] as [string, string],
-    desc: ["Una arquitectura de información eficiente reduce el tiempo en tarea, el número de peticiones al servidor y la fricción cognitiva simultáneamente.", "An efficient information architecture reduces time on task, server requests, and cognitive friction simultaneously."] as [string, string],
+    tagline: ["Menos clics, menos energía", "Fewer clicks, less energy"] as [string, string],
+    desc: ["Cada clic innecesario es una petición extra al servidor que consume energía. Un flujo eficiente reduce las solicitudes HTTP, el tiempo de procesamiento y el gasto energético por sesión.", "Every unnecessary click is an extra server request that consumes energy. An efficient flow reduces HTTP requests, processing time, and energy expenditure per session."] as [string, string],
     metric: "40%",
-    metricLabel: ["más conversión con flujos optimizados", "more conversion with optimized flows"] as [string, string],
+    metricLabel: ["menos peticiones con flujos optimizados", "fewer requests with optimized flows"] as [string, string],
   },
   {
     icon: Eye,
     title: "Accessibility",
-    tagline: ["Diseñado para todas las personas", "Designed for everyone"] as [string, string],
-    desc: ["WCAG 2.2 no es solo cumplimiento legal — es también SEO, reducción de rebote y experiencia superior para el 15% de usuarios con alguna discapacidad.", "WCAG 2.2 is not just legal compliance — it also means better SEO, reduced bounce rates, and a superior experience for the 15% of users with a disability."] as [string, string],
+    tagline: ["Inclusión que reduce desperdicio", "Inclusion that reduces waste"] as [string, string],
+    desc: ["Un sitio inaccesible obliga al 15% de usuarios a reintentar, recargar y abandonar — generando tráfico y procesamiento innecesario. WCAG 2.2 no solo es legal: reduce el rebote y el consumo energético por visita fallida.", "An inaccessible site forces 15% of users to retry, reload, and abandon — generating unnecessary traffic and processing. WCAG 2.2 isn't just legal: it reduces bounce rates and energy consumption from failed visits."] as [string, string],
     metric: "15%",
-    metricLabel: ["de usuarios globales con discapacidad", "of global users with a disability"] as [string, string],
+    metricLabel: ["de usuarios generan tráfico extra por barreras", "of users generate extra traffic due to barriers"] as [string, string],
   },
   {
     icon: Cpu,
@@ -215,10 +215,10 @@ const PILLARS = [
   {
     icon: Brain,
     title: "Cognitive Load",
-    tagline: ["Claridad es poder", "Clarity is power"] as [string, string],
-    desc: ["Una interfaz compleja no solo frustra — hace que el usuario repita acciones, recargue páginas y genere peticiones innecesarias al servidor.", "A complex interface doesn't just frustrate — it causes users to repeat actions, reload pages, and generate unnecessary server requests."] as [string, string],
+    tagline: ["Confusión = más consumo", "Confusion = more consumption"] as [string, string],
+    desc: ["Una interfaz confusa genera recargas, clics repetidos y sesiones más largas — cada acción innecesaria consume CPU, ancho de banda y energía del servidor. Reducir la carga cognitiva es reducir la huella de carbono.", "A confusing interface generates reloads, repeated clicks, and longer sessions — every unnecessary action consumes CPU, bandwidth, and server energy. Reducing cognitive load means reducing the carbon footprint."] as [string, string],
     metric: "50ms",
-    metricLabel: ["tarda el cerebro en evaluar tu UI", "for the brain to evaluate your UI"] as [string, string],
+    metricLabel: ["para decidir si tu UI desperdicia energía", "to decide if your UI wastes energy"] as [string, string],
   },
   {
     icon: Wind,
@@ -349,7 +349,7 @@ export function UXGreenLanding() {
         aria-labelledby="uxgreen-hero-heading"
       >
         {/* Background image — nature/sustainability */}
-        <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-black">
           <Image
             src="/images/uxgreen-hero-bg.png"
             alt=""
@@ -424,16 +424,15 @@ export function UXGreenLanding() {
             className="font-display font-bold leading-tight mb-6"
             style={{ fontSize: "clamp(1.75rem, 4.5vw, 3.25rem)" }}
           >
-            {t("Cada clic que tu usuario desperdicia", "Every click your user wastes")}{" "}
-            <span style={{ color: "#00BFA6" }}>{t("te cuesta dinero y CO₂.", "costs you money and CO₂.")}</span>
-            <br />
-            <span className="opacity-60" style={{ fontSize: "clamp(1.1rem, 2.5vw, 1.8rem)" }}>{t("¿Sabes cuánto está perdiendo tu sitio ahora mismo?", "Do you know how much your site is losing right now?")}</span>
+            {t("La ineficiencia energética digital", "Digital energy inefficiency")}{" "}
+            <span className="uxgreen-accent" style={{ color: "#00BFA6" }}>{t("tiene un costo real.", "has a real cost.")}</span>
           </h1>
 
           {/* Subhead */}
-          <p className="opacity-60 max-w-2xl mx-auto leading-relaxed mb-8" style={{ fontSize: "clamp(0.95rem, 1.8vw, 1.1rem)" }}>
-            {t("El 88% de los usuarios no regresa tras una mala experiencia. Google ya penaliza los sitios lentos. Tu competencia ya está optimizando.", "88% of users never return after a bad experience. Google already penalizes slow sites. Your competitors are already optimizing.")}{" "}
-            <strong className="opacity-90" style={{ color: "#00BFA6" }}>{t("UXGreen™ mide lo que ellos miden — en un solo análisis.", "UXGreen™ measures what they measure — in a single analysis.")}</strong>
+          <p className="max-w-2xl mx-auto leading-relaxed mb-8 opacity-80" style={{ fontSize: "clamp(0.95rem, 1.8vw, 1.1rem)" }}>
+            <strong style={{ color: "#00BFA6" }}>{t("UXGreen™ es el estándar de MediaLab", "UXGreen™ is MediaLab's standard")}</strong>{" "}
+            {t("que mide la eficiencia digital de tu producto en 8 dimensiones: performance, accesibilidad, huella de carbono, carga cognitiva, UX y preparación para IA. Optimizar reduce el CO₂ por visita hasta un 80%.", "that measures your product's digital efficiency across 8 dimensions: performance, accessibility, carbon footprint, cognitive load, UX, and AI readiness. Optimizing reduces CO₂ per visit by up to 80%.")}{" "}
+            <strong>{t("Google ya penaliza los sitios lentos e ineficientes — tu ranking depende de esto.", "Google already penalizes slow, inefficient sites — your ranking depends on it.")}</strong>
           </p>
 
           {/* CTAs */}
@@ -545,11 +544,6 @@ export function UXGreenLanding() {
                   priority
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
-                <div className="absolute bottom-4 left-4 right-4 text-left">
-                  <p className="text-white text-xs font-medium opacity-90 drop-shadow-sm">
-                    {t("Investigación y codiseño de interfaces de alta eficiencia digital", "Research and co-design of high-efficiency digital interfaces")}
-                  </p>
-                </div>
               </div>
               <div className="absolute -top-6 -left-6 w-20 h-20 rounded-full pointer-events-none opacity-20 filter blur-xl" style={{ background: "#00BFA6" }} />
             </div>
@@ -655,8 +649,8 @@ export function UXGreenLanding() {
                 <Zap size={16} style={{ color: "#00BFA6" }} />
               </div>
               <div>
-                <h3 className="font-display font-semibold text-sm">{t("Rendimiento", "Performance")}</h3>
-                <p className="text-[10px] opacity-40">{t("La base: velocidad, métricas de Google y huella de carbono", "The foundation: speed, Google metrics, and carbon footprint")}</p>
+                <h3 className="font-display font-semibold text-sm">{t("Consumo energético", "Energy consumption")}</h3>
+                <p className="text-[10px] opacity-40">{t("Velocidad, métricas de Google y huella de carbono por cada visita", "Speed, Google metrics, and carbon footprint per visit")}</p>
               </div>
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -696,8 +690,8 @@ export function UXGreenLanding() {
                 <Eye size={16} style={{ color: "#00BFA6" }} />
               </div>
               <div>
-                <h3 className="font-display font-semibold text-sm">{t("Experiencia", "Experience")}</h3>
-                <p className="text-[10px] opacity-40">{t("El impacto: eficiencia UX, accesibilidad y carga cognitiva", "The impact: UX efficiency, accessibility, and cognitive load")}</p>
+                <h3 className="font-display font-semibold text-sm">{t("Eficiencia de recursos", "Resource efficiency")}</h3>
+                <p className="text-[10px] opacity-40">{t("Menos peticiones al servidor, menos recarga, menos energía desperdiciada por mala UX", "Fewer server requests, fewer reloads, less energy wasted by poor UX")}</p>
               </div>
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -738,8 +732,8 @@ export function UXGreenLanding() {
                 <Wind size={16} style={{ color: "#00BFA6" }} />
               </div>
               <div>
-                <h3 className="font-display font-semibold text-sm">{t("Futuro", "Future")}</h3>
-                <p className="text-[10px] opacity-40">{t("Lo que viene: preparación para IA y sostenibilidad digital", "What's next: AI readiness and digital sustainability")}</p>
+                <h3 className="font-display font-semibold text-sm">{t("Sostenibilidad a largo plazo", "Long-term sustainability")}</h3>
+                <p className="text-[10px] opacity-40">{t("IA eficiente y diseño sostenible que reduce el costo energético con cada iteración", "Efficient AI and sustainable design that reduces energy cost with every iteration")}</p>
               </div>
             </div>
             <div className="grid sm:grid-cols-2 gap-4">
@@ -869,7 +863,7 @@ export function UXGreenLanding() {
             </div>
 
             {/* Mockup image (right 5 cols) */}
-            <div className="lg:col-span-5 relative">
+            <div className="lg:col-span-5 relative lg:mt-20">
               <div className="relative rounded-2xl overflow-hidden aspect-[4/3] w-full border border-current/10 shadow-2xl bg-black/40">
                 <Image
                   src="/images/uxgreen-testing.png"

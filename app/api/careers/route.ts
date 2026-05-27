@@ -87,80 +87,171 @@ export async function POST(req: NextRequest) {
 
     // ── Email 2: Confirmación al postulante ──
     const applicantHtml = `<!DOCTYPE html>
-<html lang="es">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<style>
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;color:#1a1a1a}
-  .wrap{max-width:600px;margin:32px auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 32px rgba(0,0,0,0.10)}
-  .header{background:linear-gradient(135deg,#1a1a1a 0%,#2d2d2d 100%);padding:40px 32px;text-align:center}
-  .header img{height:44px;width:auto;margin-bottom:24px;display:block;margin-left:auto;margin-right:auto}
-  .header h1{color:#fff;font-size:24px;font-weight:700;line-height:1.3;margin-bottom:10px}
-  .header p{color:rgba(255,255,255,0.60);font-size:14px;line-height:1.6}
-  .body{padding:40px 32px}
-  .greeting{font-size:15px;color:#333;line-height:1.7;margin-bottom:28px}
-  .highlight{background:linear-gradient(135deg,#fff8f3,#f0fbfc);border:1px solid #f0d5b8;border-radius:12px;padding:24px;margin-bottom:28px}
-  .highlight p{font-size:14px;color:#444;line-height:1.7}
-  .steps-title{font-size:13px;font-weight:700;color:#1a1a1a;margin-bottom:16px;text-transform:uppercase;letter-spacing:0.06em}
-  .step{display:flex;gap:14px;margin-bottom:14px;align-items:flex-start}
-  .step-num{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#E8751A,#c65a10);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;line-height:1}
-  .step-text{font-size:14px;color:#555;line-height:1.55;padding-top:4px}
-  .step-text strong{color:#1a1a1a}
-  .divider{height:1px;background:#eee;margin:28px 0}
-  .cta-block{text-align:center;margin:28px 0}
-  .cta-btn{display:inline-block;background:linear-gradient(90deg,#E8751A,#c65a10);color:#fff;padding:14px 36px;border-radius:100px;font-size:14px;font-weight:700;text-decoration:none;letter-spacing:0.02em}
-  .footer{padding:24px 32px;background:#f8f8f8;border-top:1px solid #eee;text-align:center;font-size:12px;color:#aaa}
-  .footer a{color:#E8751A;text-decoration:none}
-</style></head>
-<body>
-<div class="wrap">
-  <div class="header">
-    <img src="${LOGO_URL}" alt="MediaLab" />
-    <h1>Recibimos tu postulación, ${name.split(" ")[0]}.</h1>
-    <p>Estamos revisando tu perfil y te contactaremos pronto.</p>
-  </div>
-  <div class="body">
-    <p class="greeting">
-      Hola <strong>${name.split(" ")[0]}</strong>,<br><br>
-      Gracias por tu interés en unirte a la familia MediaLab. Tu postulación llegó correctamente
-      y ya está siendo revisada por nuestro equipo de talento.
-    </p>
+<html lang="es" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <!--[if mso]><style>table,td{font-family:'Segoe UI',Arial,sans-serif!important}</style><![endif]-->
+</head>
+<body style="margin:0;padding:0;background-color:#f0f2f5;font-family:'Segoe UI',Arial,sans-serif;-webkit-font-smoothing:antialiased;">
 
-    <div class="highlight">
-      <p>
-        <strong>¿Qué sigue?</strong><br><br>
-        Revisamos cada perfil con atención. Si tu experiencia y visión se alinean con
-        lo que buscamos, te contactaremos en <strong>máximo 1 semana</strong>
-        para una primera conversación.
-      </p>
-    </div>
+<!-- Outer wrapper -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f0f2f5;">
+  <tr><td align="center" style="padding:32px 16px;">
 
-    <p class="steps-title">Nuestro proceso de selección</p>
+    <!-- Email container -->
+    <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background-color:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 4px 32px rgba(0,0,0,0.10);">
 
-    <div class="step">
-      <div class="step-num">1</div>
-      <div class="step-text"><strong>Revisión de perfil</strong> — Evaluamos tu experiencia, portafolio y tu respuesta sobre UX.</div>
-    </div>
-    <div class="step">
-      <div class="step-num">2</div>
-      <div class="step-text"><strong>Conversación inicial</strong> — 30 min para conocerte, entender tu motivación y compartir nuestra visión.</div>
-    </div>
-    <div class="step">
-      <div class="step-num">3</div>
-      <div class="step-text"><strong>Challenge técnico</strong> — Un ejercicio real de diseño (max 3h) para ver cómo piensas.</div>
-    </div>
+      <!-- Header -->
+      <tr>
+        <td align="center" style="background:linear-gradient(135deg,#1a1a1a 0%,#2d2d2d 100%);background-color:#1a1a1a;padding:40px 32px;">
+          <!-- Logo text rendered as HTML for maximum compatibility -->
+          <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 auto 24px auto;">
+            <tr>
+              <td style="font-family:'Segoe UI',Arial,sans-serif;font-size:28px;font-weight:800;letter-spacing:-0.5px;">
+                <span style="color:#2AABB3;">Media</span><span style="color:#F67327;">Lab</span>
+              </td>
+            </tr>
+            <tr>
+              <td align="center" style="font-family:'Segoe UI',Arial,sans-serif;font-size:11px;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.40);padding-top:4px;">
+                Ingeniería
+              </td>
+            </tr>
+          </table>
+          <h1 style="margin:0 0 10px 0;color:#ffffff;font-size:24px;font-weight:700;line-height:1.3;font-family:'Segoe UI',Arial,sans-serif;">
+            Recibimos tu postulación, ${name.split(" ")[0]}.
+          </h1>
+          <p style="margin:0;color:rgba(255,255,255,0.60);font-size:14px;line-height:1.6;font-family:'Segoe UI',Arial,sans-serif;">
+            Estamos revisando tu perfil y te contactaremos pronto.
+          </p>
+        </td>
+      </tr>
 
-    <div class="divider"></div>
+      <!-- Body -->
+      <tr>
+        <td style="padding:40px 32px;">
 
-    <div class="cta-block">
-      <a href="${SITE_URL}/carreras" class="cta-btn">Explorar más sobre MediaLab →</a>
-    </div>
-  </div>
-  <div class="footer">
-    <a href="${SITE_URL}">medialab.design</a> &nbsp;·&nbsp; MediaLab Ingeniería &nbsp;·&nbsp; Bogotá, Colombia<br>
-    <span style="margin-top:6px;display:block">Este correo fue enviado porque aplicaste a una vacante en nuestro sitio web.</span>
-  </div>
-</div>
+          <!-- Greeting -->
+          <p style="font-size:15px;color:#333333;line-height:1.7;margin:0 0 28px 0;font-family:'Segoe UI',Arial,sans-serif;">
+            Hola <strong>${name.split(" ")[0]}</strong>,<br><br>
+            Gracias por tu interés en unirte a la familia MediaLab. Tu postulación llegó correctamente
+            y ya está siendo revisada por nuestro equipo de talento.
+          </p>
+
+          <!-- Highlight box -->
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;">
+            <tr>
+              <td style="background:linear-gradient(135deg,#fff8f3,#f0fbfc);background-color:#fff8f3;border:1px solid #f0d5b8;border-radius:12px;padding:24px;">
+                <p style="font-size:14px;color:#444444;line-height:1.7;margin:0;font-family:'Segoe UI',Arial,sans-serif;">
+                  <strong style="color:#1a1a1a;">¿Qué sigue?</strong><br><br>
+                  Revisamos cada perfil con atención. Si tu experiencia y visión se alinean con
+                  lo que buscamos, te contactaremos en <strong style="color:#1a1a1a;">máximo 1 semana</strong>
+                  para una primera conversación.
+                </p>
+              </td>
+            </tr>
+          </table>
+
+          <!-- Steps title -->
+          <p style="font-size:13px;font-weight:700;color:#1a1a1a;margin:0 0 20px 0;text-transform:uppercase;letter-spacing:0.06em;font-family:'Segoe UI',Arial,sans-serif;">
+            Nuestro proceso de selección
+          </p>
+
+          <!-- Step 1 -->
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:16px;">
+            <tr>
+              <td width="36" valign="top" style="padding-right:14px;">
+                <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                  <tr>
+                    <td width="32" height="32" align="center" valign="middle" style="background-color:#E8751A;border-radius:50%;color:#ffffff;font-size:13px;font-weight:700;font-family:'Segoe UI',Arial,sans-serif;line-height:32px;">
+                      1
+                    </td>
+                  </tr>
+                </table>
+              </td>
+              <td valign="top" style="font-size:14px;color:#555555;line-height:1.55;padding-top:6px;font-family:'Segoe UI',Arial,sans-serif;">
+                <strong style="color:#1a1a1a;">Revisión de perfil</strong> — Evaluamos tu experiencia, portafolio y tu respuesta sobre UX.
+              </td>
+            </tr>
+          </table>
+
+          <!-- Step 2 -->
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:16px;">
+            <tr>
+              <td width="36" valign="top" style="padding-right:14px;">
+                <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                  <tr>
+                    <td width="32" height="32" align="center" valign="middle" style="background-color:#E8751A;border-radius:50%;color:#ffffff;font-size:13px;font-weight:700;font-family:'Segoe UI',Arial,sans-serif;line-height:32px;">
+                      2
+                    </td>
+                  </tr>
+                </table>
+              </td>
+              <td valign="top" style="font-size:14px;color:#555555;line-height:1.55;padding-top:6px;font-family:'Segoe UI',Arial,sans-serif;">
+                <strong style="color:#1a1a1a;">Conversación inicial</strong> — 30 min para conocerte, entender tu motivación y compartir nuestra visión.
+              </td>
+            </tr>
+          </table>
+
+          <!-- Step 3 -->
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:16px;">
+            <tr>
+              <td width="36" valign="top" style="padding-right:14px;">
+                <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                  <tr>
+                    <td width="32" height="32" align="center" valign="middle" style="background-color:#E8751A;border-radius:50%;color:#ffffff;font-size:13px;font-weight:700;font-family:'Segoe UI',Arial,sans-serif;line-height:32px;">
+                      3
+                    </td>
+                  </tr>
+                </table>
+              </td>
+              <td valign="top" style="font-size:14px;color:#555555;line-height:1.55;padding-top:6px;font-family:'Segoe UI',Arial,sans-serif;">
+                <strong style="color:#1a1a1a;">Challenge técnico</strong> — Un ejercicio real de diseño (max 3h) para ver cómo piensas.
+              </td>
+            </tr>
+          </table>
+
+          <!-- Divider -->
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:28px 0;">
+            <tr><td style="border-top:1px solid #eeeeee;font-size:0;line-height:0;">&nbsp;</td></tr>
+          </table>
+
+          <!-- CTA Button -->
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+              <td align="center" style="padding:0 0 8px 0;">
+                <!--[if mso]>
+                <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${SITE_URL}/carreras" style="height:48px;v-text-anchor:middle;width:280px;" arcsize="50%" strokecolor="#E8751A" fillcolor="#E8751A">
+                <w:anchorlock/>
+                <center style="color:#ffffff;font-family:'Segoe UI',Arial,sans-serif;font-size:14px;font-weight:bold;">Explorar más sobre MediaLab →</center>
+                </v:roundrect>
+                <![endif]-->
+                <!--[if !mso]><!-->
+                <a href="${SITE_URL}/carreras" target="_blank" style="display:inline-block;background-color:#E8751A;color:#ffffff;padding:14px 36px;border-radius:100px;font-size:14px;font-weight:700;text-decoration:none;letter-spacing:0.02em;font-family:'Segoe UI',Arial,sans-serif;mso-hide:all;">
+                  Explorar más sobre MediaLab →
+                </a>
+                <!--<![endif]-->
+              </td>
+            </tr>
+          </table>
+
+        </td>
+      </tr>
+
+      <!-- Footer -->
+      <tr>
+        <td style="padding:24px 32px;background-color:#f8f8f8;border-top:1px solid #eeeeee;text-align:center;font-size:12px;color:#aaaaaa;font-family:'Segoe UI',Arial,sans-serif;">
+          <a href="${SITE_URL}" style="color:#E8751A;text-decoration:none;">medialab.design</a> &nbsp;·&nbsp; MediaLab Ingeniería &nbsp;·&nbsp; Bogotá, Colombia<br>
+          <span style="margin-top:6px;display:block;color:#aaaaaa;">Este correo fue enviado porque aplicaste a una vacante en nuestro sitio web.</span>
+        </td>
+      </tr>
+
+    </table>
+
+  </td></tr>
+</table>
+
 </body></html>`
 
     const [adminResult, applicantResult] = await Promise.allSettled([

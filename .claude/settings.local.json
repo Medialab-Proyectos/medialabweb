@@ -49,7 +49,9 @@
       "Bash(node -e \"const m = require\\('react-simple-maps'\\); console.log\\(Object.keys\\(m\\).join\\(', '\\)\\)\")",
       "Bash(node -e \"require\\('d3-geo'\\); console.log\\('d3-geo OK'\\)\")",
       "Bash(node -e \"const m = require\\('react-simple-maps'\\); const ctx = m.MapContext; console.log\\(typeof ctx\\)\")",
-      "Bash(grep -l \"contact\\\\|Contact\\\\|form\\\\|Form\" components/*.tsx)"
+      "Bash(grep -l \"contact\\\\|Contact\\\\|form\\\\|Form\" components/*.tsx)",
+      "Bash(grep -l \"article\\\\|<nav\\\\|<section\\\\|<header\\\\|<footer\" \"/c/Users/coben/OneDrive/Desktop/MediLab/Version 1/components/\"*.tsx)",
+      "Bash(grep -l \"@type.*Question\\\\|FAQPage\" \"/c/Users/coben/OneDrive/Desktop/MediLab/Version 1/app\"/**/\"page.tsx\")"
     ]
   }
 }

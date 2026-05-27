@@ -337,7 +337,7 @@ export function UXGreenCalculator() {
                   if (e.key === "Enter" && isValidUrl(url)) setStep("context")
                 }}
                 placeholder={t("tudominio.com", "yourdomain.com")}
-                className="w-full pl-11 pr-4 py-4 rounded-xl bg-white/5 border border-white/10 text-sm outline-none focus:border-[#00BFA6]/50 focus:bg-[#00BFA6]/4 transition-all duration-200 placeholder:opacity-25"
+                className="w-full pl-11 pr-4 py-4 rounded-xl bg-white/5 border border-white/20 text-sm outline-none focus:border-[#00BFA6]/50 focus:bg-[#00BFA6]/4 transition-all duration-200 placeholder:opacity-25"
                 autoFocus
               />
             </div>
@@ -345,12 +345,13 @@ export function UXGreenCalculator() {
             <button
               onClick={() => { if (isValidUrl(url)) setStep("context") }}
               disabled={!isValidUrl(url)}
-              className="w-full py-4 rounded-xl font-semibold text-sm transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="w-full py-4 rounded-xl font-semibold text-sm transition-all duration-200 disabled:cursor-not-allowed flex items-center justify-center gap-2 hover:opacity-90"
               style={{
                 background: isValidUrl(url)
                   ? "linear-gradient(135deg, #00BFA6, #00A891)"
-                  : "rgba(255,255,255,0.08)",
-                color: isValidUrl(url) ? "#000" : "rgba(255,255,255,0.3)",
+                  : "rgba(0,191,166,0.15)",
+                color: isValidUrl(url) ? "#000" : "#00BFA6",
+                opacity: isValidUrl(url) ? 1 : 0.5,
               }}
             >
               {t("Analizar sitio", "Analyze site")}

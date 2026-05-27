@@ -236,7 +236,7 @@ export function CareersLanding() {
     <>
       <section
         ref={heroRef}
-        className="relative min-h-[85vh] flex items-center overflow-hidden dark-hero-text"
+        className="relative min-h-screen flex items-center overflow-hidden dark-hero-text"
         style={{ background: "#0a0a0a" }}
       >
         {/* Background image with overlay — always dark tones, never bleed to white */}
@@ -368,8 +368,8 @@ export function CareersLanding() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
               <div className="absolute bottom-4 left-4 right-4">
-                <span className="text-white font-bold text-lg">{t("Trabaja desde tu lugar favorito", "Work from your favorite place")}</span>
-                <p className="text-white/70 text-sm mt-1">{t("Flexibilidad real, no un slide de presentación", "Real flexibility, not a presentation slide")}</p>
+                <span className="font-bold text-lg" style={{ color: "#fff" }}>{t("Trabaja desde tu lugar favorito", "Work from your favorite place")}</span>
+                <p className="text-sm mt-1" style={{ color: "rgba(255,255,255,0.7)" }}>{t("Flexibilidad real, no un slide de presentación", "Real flexibility, not a presentation slide")}</p>
               </div>
             </div>
             <div className="relative aspect-[4/3] rounded-2xl overflow-hidden group">
@@ -381,8 +381,8 @@ export function CareersLanding() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
               <div className="absolute bottom-4 left-4 right-4">
-                <span className="text-white font-bold text-lg">{t("Las herramientas que usamos a diario", "The tools we use every day")}</span>
-                <p className="text-white/70 text-sm mt-1">{t("Figma, IA, investigación y mucho café", "Figma, AI, research, and lots of coffee")}</p>
+                <span className="font-bold text-lg" style={{ color: "#fff" }}>{t("Diseñamos productos que dejan huella", "We design products that make an impact")}</span>
+                <p className="text-sm mt-1" style={{ color: "rgba(255,255,255,0.7)" }}>{t("UX, IA y sostenibilidad digital con propósito real", "UX, AI, and digital sustainability with real purpose")}</p>
               </div>
             </div>
           </div>
@@ -418,7 +418,7 @@ export function CareersLanding() {
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[var(--card)] via-transparent to-transparent" />
+                <div className="absolute inset-0 careers-card-gradient" />
                 <div className="absolute top-4 left-4">
                   <div className="w-10 h-10 rounded-xl bg-[var(--magenta)]/90 flex items-center justify-center backdrop-blur-sm">
                     <GraduationCap size={20} className="text-white" />
@@ -458,7 +458,7 @@ export function CareersLanding() {
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[var(--card)] via-transparent to-transparent" />
+                <div className="absolute inset-0 careers-card-gradient" />
                 <div className="absolute top-4 left-4">
                   <div className="w-10 h-10 rounded-xl bg-[var(--cyan)]/90 flex items-center justify-center backdrop-blur-sm">
                     <Users size={20} className="text-white" />
@@ -700,16 +700,16 @@ export function CareersLanding() {
                   <ol className="flex flex-col gap-4 text-left w-full max-w-sm">
                     {[
                       {
-                        es: "Revisamos tu perfil, portafolio y tu historia UX con detalle.",
-                        en: "We review your profile, portfolio and UX story in detail.",
+                        es: "Revisaremos tu perfil, portafolio y tu historia UX con detalle.",
+                        en: "We'll review your profile, portfolio and UX story in detail.",
                       },
                       {
                         es: "Te contactamos en máximo 1 semana.",
                         en: "We'll contact you within 1 week max.",
                       },
                       {
-                        es: "Conversación de 30 min para conocerte y compartir nuestra visión.",
-                        en: "30-min call to get to know you and share our vision.",
+                        es: "Si tu perfil hace match, tendremos una conversación para conocerte y compartir nuestra visión.",
+                        en: "If your profile is a match, we'll have a conversation to get to know you and share our vision.",
                       },
                     ].map((s, i) => (
                       <li key={i} className="flex items-start gap-3 text-sm text-white/80">

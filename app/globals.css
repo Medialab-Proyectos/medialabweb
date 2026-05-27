@@ -835,6 +835,12 @@
   border-color: rgba(255, 255, 255, 0.15) !important;
 }
 
+/* Green accent text must stay green inside dark heroes in light/warm */
+.light .dark-hero-text .uxgreen-accent,
+.warm .dark-hero-text .uxgreen-accent {
+  color: #00BFA6 !important;
+}
+
 /* ── UXGreen theme-aware card ──────────────────────────────────────────────── */
 .uxgreen-card {
   border: 1px solid rgba(255, 255, 255, 0.22);
@@ -965,32 +971,13 @@
   background: rgba(0, 191, 166, 0.12);
 }
 
-/* ── UXGreen page: force dark aesthetic in light & warm modes ──────────────── */
-/* Override CSS variables inside the UXGreen page so it always renders
-   with a dark palette — dark backgrounds, light text, green accents —
-   regardless of the global theme. This preserves the brand identity. */
+/* ── UXGreen page: hero stays dark in light & warm modes ──────────────────── */
+/* Only the hero section keeps a dark palette. Sections below the hero
+   follow the global theme naturally (light bg, dark text, etc.). */
 
-.light .uxgreen-page,
-.warm .uxgreen-page {
-  --surface-dark: #0a0a0a;
-  --surface-dark-foreground: #f5f5f5;
-  --surface-mid: #111111;
+.light .uxgreen-page .dark-hero-text,
+.warm .uxgreen-page .dark-hero-text {
   --dot-color: rgba(255, 255, 255, 0.04);
-  color: #f5f5f5;
-}
-
-/* Cards revert to dark-theme style */
-.light .uxgreen-page .uxgreen-card,
-.warm .uxgreen-page .uxgreen-card {
-  border-color: rgba(255, 255, 255, 0.22);
-  background: rgba(255, 255, 255, 0.03);
-  box-shadow: none;
-}
-.light .uxgreen-page .uxgreen-card:hover,
-.warm .uxgreen-page .uxgreen-card:hover {
-  border-color: rgba(0, 191, 166, 0.50);
-  background: rgba(255, 255, 255, 0.05);
-  box-shadow: 0 4px 20px rgba(0, 191, 166, 0.10);
 }
 
 /* Hero overlay stays dark */
@@ -1018,7 +1005,7 @@
   filter: none;
 }
 
-/* Secondary button stays dark-mode style */
+/* Secondary button in hero stays dark-mode style */
 .light .uxgreen-page .uxgreen-secondary-btn,
 .warm .uxgreen-page .uxgreen-secondary-btn {
   background: rgba(0, 191, 166, 0.08);
@@ -1030,16 +1017,13 @@
   background: rgba(0, 191, 166, 0.15);
 }
 
-/* Opacity-based text utilities need to stay light-on-dark */
-.light .uxgreen-page [class*="opacity-"],
-.warm .uxgreen-page [class*="opacity-"] {
-  color: inherit;
+/* ── Careers card image gradient ─────────────────────────────────────────── */
+.careers-card-gradient {
+  background: linear-gradient(to top, var(--card), transparent);
 }
-
-/* Borders stay subtle white */
-.light .uxgreen-page [class*="border-current"],
-.warm .uxgreen-page [class*="border-current"] {
-  border-color: rgba(255, 255, 255, 0.12);
+.light .careers-card-gradient,
+.warm .careers-card-gradient {
+  background: none;
 }
 
 /* ── UXGreen page: protect navbar from light-mode text overrides ───────────
