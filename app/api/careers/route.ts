@@ -217,19 +217,56 @@ export async function POST(req: NextRequest) {
             <tr><td style="border-top:1px solid #eeeeee;font-size:0;line-height:0;">&nbsp;</td></tr>
           </table>
 
-          <!-- CTA Button -->
-          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+          <!-- Learn while you wait -->
+          <p style="font-size:13px;font-weight:700;color:#1a1a1a;margin:0 0 12px 0;text-transform:uppercase;letter-spacing:0.06em;font-family:'Segoe UI',Arial,sans-serif;">
+            Mientras esperas, sigue creciendo
+          </p>
+          <p style="font-size:14px;color:#555555;line-height:1.7;margin:0 0 20px 0;font-family:'Segoe UI',Arial,sans-serif;">
+            En MediaLab combinamos <strong style="color:#1a1a1a;">UX, psicología del consumidor e inteligencia artificial</strong>. Puedes empezar a aprender esto desde hoy:
+          </p>
+
+          <!-- Course card -->
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:14px;">
             <tr>
-              <td align="center" style="padding:0 0 8px 0;">
+              <td style="background-color:#fff8f3;border:1px solid #f0d5b8;border-radius:12px;padding:20px 24px;">
+                <p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#E8751A;margin:0 0 6px 0;font-family:'Segoe UI',Arial,sans-serif;">Curso</p>
+                <p style="font-size:15px;font-weight:700;color:#1a1a1a;margin:0 0 8px 0;font-family:'Segoe UI',Arial,sans-serif;">AI UX Architect — 8 semanas</p>
+                <p style="font-size:13px;color:#555555;line-height:1.6;margin:0 0 16px 0;font-family:'Segoe UI',Arial,sans-serif;">
+                  Domina UX, psicología del consumidor e IA. Las mismas herramientas y metodologías que usamos en MediaLab — y que buscaremos en quien se una al equipo.
+                </p>
                 <!--[if mso]>
-                <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${SITE_URL}/carreras" style="height:48px;v-text-anchor:middle;width:280px;" arcsize="50%" strokecolor="#E8751A" fillcolor="#E8751A">
+                <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${SITE_URL}/curso" style="height:40px;v-text-anchor:middle;width:160px;" arcsize="50%" strokecolor="#E8751A" fillcolor="#E8751A">
                 <w:anchorlock/>
-                <center style="color:#ffffff;font-family:'Segoe UI',Arial,sans-serif;font-size:14px;font-weight:bold;">Explorar más sobre MediaLab →</center>
+                <center style="color:#ffffff;font-family:'Segoe UI',Arial,sans-serif;font-size:13px;font-weight:bold;">Ver el curso →</center>
                 </v:roundrect>
                 <![endif]-->
                 <!--[if !mso]><!-->
-                <a href="${SITE_URL}/carreras" target="_blank" style="display:inline-block;background-color:#E8751A;color:#ffffff;padding:14px 36px;border-radius:100px;font-size:14px;font-weight:700;text-decoration:none;letter-spacing:0.02em;font-family:'Segoe UI',Arial,sans-serif;mso-hide:all;">
-                  Explorar más sobre MediaLab →
+                <a href="${SITE_URL}/curso" target="_blank" style="display:inline-block;background-color:#E8751A;color:#ffffff;padding:10px 24px;border-radius:100px;font-size:13px;font-weight:700;text-decoration:none;font-family:'Segoe UI',Arial,sans-serif;mso-hide:all;">
+                  Ver el curso →
+                </a>
+                <!--<![endif]-->
+              </td>
+            </tr>
+          </table>
+
+          <!-- Community card -->
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;">
+            <tr>
+              <td style="background-color:#f0fbfc;border:1px solid #b8e8eb;border-radius:12px;padding:20px 24px;">
+                <p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#2AABB3;margin:0 0 6px 0;font-family:'Segoe UI',Arial,sans-serif;">Comunidad</p>
+                <p style="font-size:15px;font-weight:700;color:#1a1a1a;margin:0 0 8px 0;font-family:'Segoe UI',Arial,sans-serif;">Únete a la comunidad de UX + IA</p>
+                <p style="font-size:13px;color:#555555;line-height:1.6;margin:0 0 16px 0;font-family:'Segoe UI',Arial,sans-serif;">
+                  Conecta con profesionales que están transformando experiencias digitales con inteligencia artificial. Comparte proyectos, retos y sigue creciendo.
+                </p>
+                <!--[if mso]>
+                <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="https://wa.me/573054009505" style="height:40px;v-text-anchor:middle;width:200px;" arcsize="50%" strokecolor="#2AABB3" fillcolor="#2AABB3">
+                <w:anchorlock/>
+                <center style="color:#ffffff;font-family:'Segoe UI',Arial,sans-serif;font-size:13px;font-weight:bold;">Unirme a la comunidad →</center>
+                </v:roundrect>
+                <![endif]-->
+                <!--[if !mso]><!-->
+                <a href="https://wa.me/573054009505" target="_blank" style="display:inline-block;background-color:#2AABB3;color:#ffffff;padding:10px 24px;border-radius:100px;font-size:13px;font-weight:700;text-decoration:none;font-family:'Segoe UI',Arial,sans-serif;mso-hide:all;">
+                  Unirme a la comunidad →
                 </a>
                 <!--<![endif]-->
               </td>
