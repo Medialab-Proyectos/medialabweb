@@ -3,7 +3,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import {
-  Sparkles, Code2, Smartphone, Cloud, Cpu, GitBranch, Gauge,
+  Code2, Smartphone, Cloud, Cpu, GitBranch, Gauge,
   ArrowRight, ChevronRight, CheckCircle2,
 } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
@@ -116,7 +116,7 @@ export function DesarrolloProductoDigitalContent() {
 
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold border w-fit"
               style={{ color: "var(--magenta)", borderColor: "rgba(232,117,26,0.3)", background: "rgba(232,117,26,0.08)" }}>
-              <Sparkles size={14} /> {t("Servicio", "Service")}
+              <Code2 size={14} /> {t("Producto digital con IA", "Digital product with AI")}
             </div>
 
             <h1 id="dev-h1" className="font-display font-bold text-4xl md:text-5xl lg:text-6xl leading-[1.08] text-balance">
@@ -130,14 +130,14 @@ export function DesarrolloProductoDigitalContent() {
               )}
             </p>
 
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mt-2">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 mt-2 w-full sm:w-auto">
               <BookingModal>
-                <button type="button" className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-semibold text-[15px] text-white transition-all active:scale-95 shadow-lg hover:brightness-110"
+                <button type="button" className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-semibold text-[15px] text-white transition-all active:scale-95 shadow-lg hover:brightness-110"
                   style={{ background: "#E8751A", boxShadow: "0 8px 30px rgba(232,117,26,0.35)" }}>
                   {t("Hablemos de tu producto", "Let's talk about your product")}
                 </button>
               </BookingModal>
-              <Link href={localized("/portafolio")} className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium border border-white/15 text-white/75 hover:text-white hover:border-white/30 transition-all">
+              <Link href={localized("/portafolio")} className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-4 rounded-full text-sm font-medium border border-white/15 text-white/75 hover:text-white hover:border-white/30 transition-all">
                 {t("Ver productos entregados", "See shipped products")} <ArrowRight size={14} />
               </Link>
             </div>
@@ -197,30 +197,43 @@ export function DesarrolloProductoDigitalContent() {
               "We don't write code until we understand the problem. Development connects to discovery and design: we build in short sprints with visible weekly deliverables, test with users, and keep the architecture clean so your product grows without accumulating technical debt."
             )}
           </p>
-          <p className="text-sm text-muted-foreground">
-            {t("¿Aún defines tu producto? Empieza por el ", "Still defining your product? Start with ")}
-            <Link href={localized("/servicios/discovery-con-ia")} className="text-[var(--magenta)] font-medium hover:underline">
-              {t("discovery con IA", "AI discovery")}
-            </Link>
-            {t(" o el ", " or ")}
-            <Link href={localized("/servicios/diseno-ux-ui")} className="text-[var(--magenta)] font-medium hover:underline">
-              {t("diseño UX/UI", "UX/UI design")}
-            </Link>.
-          </p>
-          <p className="text-sm text-muted-foreground pt-2">
-            {t("Desarrollamos software robusto para diversas industrias: ", "We develop robust software for various industries: ")}
-            <Link href={localized("/industrias/fintech")} className="text-[var(--magenta)] font-medium hover:underline">{t("Fintech", "Fintech")}</Link>
-            {t(", ", ", ")}
-            <Link href={localized("/industrias/banca")} className="text-[var(--magenta)] font-medium hover:underline">{t("Banca", "Banking")}</Link>
-            {t(", ", ", ")}
-            <Link href={localized("/industrias/ecommerce")} className="text-[var(--magenta)] font-medium hover:underline">{t("E-commerce", "E-commerce")}</Link>
-            {t(", ", ", ")}
-            <Link href={localized("/industrias/educacion")} className="text-[var(--magenta)] font-medium hover:underline">{t("Educación", "Education")}</Link>
-            {t(", ", ", ")}
-            <Link href={localized("/industrias/movilidad")} className="text-[var(--magenta)] font-medium hover:underline">{t("Movilidad", "Mobility")}</Link>
-            {t(" y ", " and ")}
-            <Link href={localized("/industrias/startups")} className="text-[var(--magenta)] font-medium hover:underline">{t("Startups", "Startups")}</Link>.
-          </p>
+          <ul className="flex flex-col gap-3 text-sm text-muted-foreground">
+            <li className="flex items-start gap-2.5">
+              <ArrowRight size={14} className="shrink-0 mt-0.5 text-[var(--magenta)]" />
+              <span>
+                {t("¿Aún defines tu producto? Empieza por el ", "Still defining your product? Start with ")}
+                <Link href={localized("/servicios/discovery-con-ia")} className="text-[var(--magenta)] font-medium underline decoration-[var(--magenta)]/30 hover:decoration-[var(--magenta)] transition-colors">
+                  {t("discovery con IA", "AI discovery")}
+                </Link>
+              </span>
+            </li>
+            <li className="flex items-start gap-2.5">
+              <ArrowRight size={14} className="shrink-0 mt-0.5 text-[var(--magenta)]" />
+              <span>
+                {t("¿Necesitas diseño primero? Ve al ", "Need design first? Go to ")}
+                <Link href={localized("/servicios/diseno-ux-ui")} className="text-[var(--magenta)] font-medium underline decoration-[var(--magenta)]/30 hover:decoration-[var(--magenta)] transition-colors">
+                  {t("diseño UX/UI", "UX/UI design")}
+                </Link>
+              </span>
+            </li>
+          </ul>
+          <div className="pt-2">
+            <p className="text-sm text-muted-foreground mb-2.5">{t("Desarrollamos software robusto para diversas industrias:", "We develop robust software for various industries:")}</p>
+            <div className="flex flex-wrap gap-2">
+              {[
+                { name: t("Fintech", "Fintech"), href: "/industrias/fintech" },
+                { name: t("Banca", "Banking"), href: "/industrias/banca" },
+                { name: t("E-commerce", "E-commerce"), href: "/industrias/ecommerce" },
+                { name: t("Educación", "Education"), href: "/industrias/educacion" },
+                { name: t("Movilidad", "Mobility"), href: "/industrias/movilidad" },
+                { name: t("Startups", "Startups"), href: "/industrias/startups" },
+              ].map((ind) => (
+                <Link key={ind.name} href={localized(ind.href)} className="px-4 py-2 rounded-full text-sm font-medium border border-border bg-card text-[var(--magenta)] hover:bg-secondary transition-all">
+                  {ind.name}
+                </Link>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 

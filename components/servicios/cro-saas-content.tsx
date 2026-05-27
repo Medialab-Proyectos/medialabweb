@@ -3,7 +3,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import {
-  Sparkles, BarChart3, MousePointerClick, FlaskConical, TrendingUp, Filter, Eye,
+  BarChart3, MousePointerClick, FlaskConical, TrendingUp, Filter, Eye,
   ArrowRight, ChevronRight, CheckCircle2,
 } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
@@ -100,7 +100,7 @@ export function CroSaasContent() {
 
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold border w-fit"
               style={{ color: "var(--magenta)", borderColor: "rgba(232,117,26,0.3)", background: "rgba(232,117,26,0.08)" }}>
-              <Sparkles size={14} /> {t("Servicio", "Service")}
+              <TrendingUp size={14} /> {t("Interfaces diseñadas para conversión", "Interfaces designed for conversion")}
             </div>
 
             <h1 id="cro-h1" className="font-display font-bold text-4xl md:text-5xl lg:text-6xl leading-[1.08] text-balance">
@@ -114,14 +114,14 @@ export function CroSaasContent() {
               )}
             </p>
 
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mt-2">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 mt-2 w-full sm:w-auto">
               <BookingModal>
-                <button type="button" className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-semibold text-[15px] text-white transition-all active:scale-95 shadow-lg hover:brightness-110"
+                <button type="button" className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-semibold text-[15px] text-white transition-all active:scale-95 shadow-lg hover:brightness-110"
                   style={{ background: "#E8751A", boxShadow: "0 8px 30px rgba(232,117,26,0.35)" }}>
                   {t("Audita tu conversión gratis", "Audit your conversion free")}
                 </button>
               </BookingModal>
-              <Link href={localized("/servicios/diseno-ux-ui")} className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium border border-white/15 text-white/75 hover:text-white hover:border-white/30 transition-all">
+              <Link href={localized("/servicios/diseno-ux-ui")} className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-4 rounded-full text-sm font-medium border border-white/15 text-white/75 hover:text-white hover:border-white/30 transition-all">
                 {t("Ver diseño UX/UI", "See UX/UI design")} <ArrowRight size={14} />
               </Link>
             </div>
@@ -196,20 +196,36 @@ export function CroSaasContent() {
               </div>
             ))}
           </div>
-          <p className="text-sm text-muted-foreground pt-2">
-            {t("El CRO funciona mejor sobre una base sólida de ", "CRO works best on a solid foundation of ")}
-            <Link href={localized("/servicios/diseno-ux-ui")} className="text-[var(--magenta)] font-medium hover:underline">{t("diseño UX/UI", "UX/UI design")}</Link>
-            {t(". Mira resultados reales en el ", ". See real results in our ")}
-            <Link href={localized("/portafolio")} className="text-[var(--magenta)] font-medium hover:underline">{t("portafolio", "portfolio")}</Link>.
-          </p>
-          <p className="text-sm text-muted-foreground pt-2">
-            {t("Aplicamos CRO estratégico especialmente en: ", "We apply strategic CRO especially in: ")}
-            <Link href={localized("/industrias/startups")} className="text-[var(--magenta)] font-medium hover:underline">{t("Startups y SaaS", "Startups & SaaS")}</Link>
-            {t(", ", ", ")}
-            <Link href={localized("/industrias/ecommerce")} className="text-[var(--magenta)] font-medium hover:underline">{t("E-commerce", "E-commerce")}</Link>
-            {t(" y ", " and ")}
-            <Link href={localized("/industrias/fintech")} className="text-[var(--magenta)] font-medium hover:underline">{t("Fintech", "Fintech")}</Link>.
-          </p>
+          <ul className="flex flex-col gap-3 text-sm text-muted-foreground">
+            <li className="flex items-start gap-2.5">
+              <ArrowRight size={14} className="shrink-0 mt-0.5 text-[var(--magenta)]" />
+              <span>
+                {t("El CRO funciona mejor sobre una base sólida de ", "CRO works best on a solid foundation of ")}
+                <Link href={localized("/servicios/diseno-ux-ui")} className="text-[var(--magenta)] font-medium underline decoration-[var(--magenta)]/30 hover:decoration-[var(--magenta)] transition-colors">{t("diseño UX/UI", "UX/UI design")}</Link>
+              </span>
+            </li>
+            <li className="flex items-start gap-2.5">
+              <ArrowRight size={14} className="shrink-0 mt-0.5 text-[var(--magenta)]" />
+              <span>
+                {t("Mira resultados reales en el ", "See real results in our ")}
+                <Link href={localized("/portafolio")} className="text-[var(--magenta)] font-medium underline decoration-[var(--magenta)]/30 hover:decoration-[var(--magenta)] transition-colors">{t("portafolio", "portfolio")}</Link>
+              </span>
+            </li>
+          </ul>
+          <div className="pt-2">
+            <p className="text-sm text-muted-foreground mb-2.5">{t("Aplicamos CRO estratégico especialmente en:", "We apply strategic CRO especially in:")}</p>
+            <div className="flex flex-wrap gap-2">
+              {[
+                { name: t("Startups y SaaS", "Startups & SaaS"), href: "/industrias/startups" },
+                { name: t("E-commerce", "E-commerce"), href: "/industrias/ecommerce" },
+                { name: t("Fintech", "Fintech"), href: "/industrias/fintech" },
+              ].map((ind) => (
+                <Link key={ind.name} href={localized(ind.href)} className="px-4 py-2 rounded-full text-sm font-medium border border-border bg-card text-[var(--magenta)] hover:bg-secondary transition-all">
+                  {ind.name}
+                </Link>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 

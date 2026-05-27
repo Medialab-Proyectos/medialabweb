@@ -445,7 +445,7 @@ export function CareersLanding() {
 
             {/* Community card — with image */}
             <a
-              href="https://wa.me/573144236970"
+              href="https://chat.whatsapp.com/Cfj6N07Bpch6V4luFipfUC"
               target="_blank"
               rel="noopener noreferrer"
               className="group relative rounded-2xl border border-border bg-card hover:border-[var(--cyan)]/40 transition-all duration-300 overflow-hidden"
@@ -472,8 +472,8 @@ export function CareersLanding() {
                 </h3>
                 <p className="text-muted-foreground text-sm leading-relaxed mb-4">
                   {t(
-                    "Únete a nuestra comunidad activa de diseñadores. Compartimos recursos, oportunidades, workshops exclusivos y debatimos las últimas tendencias en UX e IA.",
-                    "Join our active designer community. We share resources, opportunities, exclusive workshops, and discuss the latest UX and AI trends."
+                    "Un ambiente de aprendizaje en diseño de experiencia: ofertas laborales, networking, oportunidades de experimentar y ser mentoriado por pares.",
+                    "A learning environment for experience design: job offers, networking, experimentation opportunities, and peer mentoring."
                   )}
                 </p>
                 <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--cyan)] group-hover:gap-3 transition-all">

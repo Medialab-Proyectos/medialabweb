@@ -1,8 +1,9 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState, useCallback } from "react"
+import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { Microscope, Brain, Code2, BarChart3, ChevronRight, ArrowRight } from "lucide-react"
+import { Microscope, Brain, Code2, BarChart3, ChevronRight, ArrowRight, Loader2 } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 
 const services = [
@@ -131,11 +132,20 @@ function ServiceCard({
   visible: boolean
 }) {
   const [hovered, setHovered] = useState(false)
+  const [navigating, setNavigating] = useState(false)
   const { lang, localized } = useLanguage()
+  const router = useRouter()
   const Icon = service.icon
   const title = lang === "es" ? service.titleEs : service.titleEn
   const description = lang === "es" ? service.descriptionEs : service.descriptionEn
   const items = lang === "es" ? service.itemsEs : service.itemsEn
+
+  const handleNavigate = useCallback((e: React.MouseEvent) => {
+    if (navigating || !service.href) return
+    e.preventDefault()
+    setNavigating(true)
+    router.push(localized(service.href))
+  }, [navigating, service.href, router, localized])
 
   return (
     <div
@@ -143,12 +153,22 @@ function ServiceCard({
       onMouseLeave={() => setHovered(false)}
       className={`relative flex flex-col gap-6 p-8 rounded-3xl border border-border bg-card overflow-hidden cursor-default
         transition-all duration-700 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}
-        hover:border-transparent hover:shadow-2xl`}
+        hover:border-transparent hover:shadow-2xl ${navigating ? "opacity-70 pointer-events-none" : ""}`}
       style={{
         transitionDelay: `${index * 120}ms`,
         boxShadow: hovered ? `0 24px 48px -12px ${service.color}33` : undefined,
       }}
     >
+      {/* Loading overlay */}
+      {navigating && (
+        <div className="absolute inset-0 z-20 flex items-center justify-center bg-card/60 backdrop-blur-[2px] rounded-3xl">
+          <div className="flex flex-col items-center gap-3">
+            <Loader2 size={28} className="animate-spin" style={{ color: service.color }} />
+            <span className="text-xs font-medium text-muted-foreground">{lang === "es" ? "Cargando experiencia…" : "Loading experience…"}</span>
+          </div>
+        </div>
+      )}
+
       {/* Gradient accent on hover */}
       <div
         className="absolute inset-0 opacity-0 transition-opacity duration-300 pointer-events-none rounded-3xl"
@@ -201,11 +221,22 @@ function ServiceCard({
       {service.href && (
         <Link
           href={localized(service.href)}
-          className="inline-flex items-center gap-1.5 text-sm font-semibold mt-auto pt-2 transition-colors hover:underline"
+          onClick={handleNavigate}
+          className={`inline-flex items-center gap-1.5 text-sm font-semibold mt-auto pt-2 transition-colors hover:underline ${navigating ? "cursor-wait" : ""}`}
           style={{ color: service.color }}
+          aria-disabled={navigating}
         >
-          {lang === "es" ? service.ctaEs : service.ctaEn}
-          <ArrowRight size={14} />
+          {navigating ? (
+            <>
+              <Loader2 size={14} className="animate-spin" />
+              {lang === "es" ? "Cargando…" : "Loading…"}
+            </>
+          ) : (
+            <>
+              {lang === "es" ? service.ctaEs : service.ctaEn}
+              <ArrowRight size={14} />
+            </>
+          )}
         </Link>
       )}
     </div>

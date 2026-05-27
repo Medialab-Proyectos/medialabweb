@@ -3,8 +3,9 @@
 import Link from "next/link"
 import Image from "next/image"
 import {
-  Sparkles, Search, Users, FileText, Rocket, CheckCircle2,
+  Search, Users, FileText, Rocket, CheckCircle2,
   ArrowRight, ChevronRight, Clock, Brain, Target,
+  CreditCard, Landmark, GraduationCap, ShoppingCart, Car,
 } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 import { Navbar } from "@/components/navbar"
@@ -74,12 +75,12 @@ export function DiscoveryConIAContent() {
   ]
 
   const industries = [
-    { name: t("Fintech", "Fintech"), href: "/industrias/fintech" },
-    { name: t("Banca", "Banking"), href: "/industrias/banca" },
-    { name: t("Educación", "Education"), href: "/industrias/educacion" },
-    { name: t("E-commerce", "E-commerce"), href: "/industrias/ecommerce" },
-    { name: t("Movilidad", "Mobility"), href: "/industrias/movilidad" },
-    { name: t("Startups y SaaS", "Startups & SaaS"), href: "/industrias/startups" },
+    { name: t("Fintech", "Fintech"), href: "/industrias/fintech", icon: CreditCard },
+    { name: t("Banca", "Banking"), href: "/industrias/banca", icon: Landmark },
+    { name: t("Educación", "Education"), href: "/industrias/educacion", icon: GraduationCap },
+    { name: t("E-commerce", "E-commerce"), href: "/industrias/ecommerce", icon: ShoppingCart },
+    { name: t("Movilidad", "Mobility"), href: "/industrias/movilidad", icon: Car },
+    { name: t("Startups y SaaS", "Startups & SaaS"), href: "/industrias/startups", icon: Rocket },
   ]
 
   const faqs = [
@@ -134,7 +135,7 @@ export function DiscoveryConIAContent() {
 
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold border w-fit"
               style={{ color: "var(--magenta)", borderColor: "rgba(232,117,26,0.3)", background: "rgba(232,117,26,0.08)" }}>
-              <Sparkles size={14} /> {t("Servicio", "Service")}
+              <Brain size={14} /> {t("AI-powered UX Research", "AI-powered UX Research")}
             </div>
 
             <h1 id="discovery-h1" className="font-display font-bold text-4xl md:text-5xl lg:text-6xl leading-[1.08] text-balance">
@@ -149,14 +150,14 @@ export function DiscoveryConIAContent() {
               )}
             </p>
 
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mt-2">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 mt-2 w-full sm:w-auto">
               <BookingModal>
-                <button type="button" className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-semibold text-[15px] text-white transition-all active:scale-95 shadow-lg hover:brightness-110"
+                <button type="button" className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-semibold text-[15px] text-white transition-all active:scale-95 shadow-lg hover:brightness-110"
                   style={{ background: "#E8751A", boxShadow: "0 8px 30px rgba(232,117,26,0.35)" }}>
                   {t("Agenda un discovery gratis", "Book a free discovery")}
                 </button>
               </BookingModal>
-              <Link href={localized("/")+"#uxbox"} className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium border border-white/15 text-white/75 hover:text-white hover:border-white/30 transition-all">
+              <Link href={localized("/")+"#uxbox"} className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-4 rounded-full text-sm font-medium border border-white/15 text-white/75 hover:text-white hover:border-white/30 transition-all">
                 {t("Probar UXBox gratis", "Try UXBox free")} <ArrowRight size={14} />
               </Link>
             </div>
@@ -242,20 +243,35 @@ export function DiscoveryConIAContent() {
               </div>
             ))}
           </div>
-          <p className="text-sm text-muted-foreground">
-            {t("¿Quieres ver el punto de partida automático? ", "Want to see the automatic starting point? ")}
-            <Link href={localized("/")+"#uxbox"} className="text-[var(--magenta)] font-medium hover:underline">
-              {t("Genera tu brief con UXBox", "Generate your brief with UXBox")}
-            </Link>
-            {t(" o lee ", " or read ")}
-            <Link href={localized("/blog/discovery-ia")} className="text-[var(--magenta)] font-medium hover:underline">
-              {t("Discovery con IA: el fin de los workshops interminables", "AI Discovery: the end of endless workshops")}
-            </Link>.
-            {t(" ¿Quieres un diagnóstico rápido? Prueba el ", " Want a quick diagnosis? Try the ")}
-            <Link href={localized("/recursos/analizador-ux-ia")} className="text-[var(--magenta)] font-medium hover:underline">
-              {t("UX + AI Discovery Analyzer gratis", "free UX + AI Discovery Analyzer")}
-            </Link>.
-          </p>
+          <ul className="flex flex-col gap-3 text-sm text-muted-foreground">
+            <li className="flex items-start gap-2.5">
+              <ArrowRight size={14} className="shrink-0 mt-0.5 text-[var(--magenta)]" />
+              <span>
+                {t("¿Quieres ver el punto de partida automático? ", "Want to see the automatic starting point? ")}
+                <Link href={localized("/")+"#uxbox"} className="text-[var(--magenta)] font-medium underline decoration-[var(--magenta)]/30 hover:decoration-[var(--magenta)] transition-colors">
+                  {t("Genera tu brief con UXBox", "Generate your brief with UXBox")}
+                </Link>
+              </span>
+            </li>
+            <li className="flex items-start gap-2.5">
+              <ArrowRight size={14} className="shrink-0 mt-0.5 text-[var(--magenta)]" />
+              <span>
+                {t("Lee ", "Read ")}
+                <Link href={localized("/blog/discovery-ia")} className="text-[var(--magenta)] font-medium underline decoration-[var(--magenta)]/30 hover:decoration-[var(--magenta)] transition-colors">
+                  {t("Discovery con IA: el fin de los workshops interminables", "AI Discovery: the end of endless workshops")}
+                </Link>
+              </span>
+            </li>
+            <li className="flex items-start gap-2.5">
+              <ArrowRight size={14} className="shrink-0 mt-0.5 text-[var(--magenta)]" />
+              <span>
+                {t("¿Quieres un diagnóstico rápido? Prueba el ", "Want a quick diagnosis? Try the ")}
+                <Link href={localized("/recursos/analizador-ux-ia")} className="text-[var(--magenta)] font-medium underline decoration-[var(--magenta)]/30 hover:decoration-[var(--magenta)] transition-colors">
+                  {t("UX + AI Discovery Analyzer gratis", "free UX + AI Discovery Analyzer")}
+                </Link>
+              </span>
+            </li>
+          </ul>
         </div>
       </section>
 
@@ -273,15 +289,19 @@ export function DiscoveryConIAContent() {
           </p>
           <div className="flex flex-wrap gap-2.5">
             {industries.map((ind) => (
-              <Link key={ind.name} href={localized(ind.href)} className="px-4 py-2 rounded-full text-sm font-medium border border-border bg-card text-[var(--magenta)] hover:bg-secondary transition-all">
+              <Link key={ind.name} href={localized(ind.href)} className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium border border-border bg-card text-[var(--magenta)] hover:bg-secondary transition-all">
+                <ind.icon size={14} className="shrink-0" />
                 {ind.name}
               </Link>
             ))}
           </div>
-          <p className="text-sm text-muted-foreground pt-2">
-            {t("Mira ejemplos reales en nuestro ", "See real examples in our ")}
-            <Link href={localized("/portafolio")} className="text-[var(--magenta)] font-medium hover:underline">{t("portafolio de casos", "case portfolio")}</Link>.
-          </p>
+          <div className="flex items-start gap-2.5 text-sm text-muted-foreground pt-2">
+            <ArrowRight size={14} className="shrink-0 mt-0.5 text-[var(--magenta)]" />
+            <span>
+              {t("Mira ejemplos reales en nuestro ", "See real examples in our ")}
+              <Link href={localized("/portafolio")} className="text-[var(--magenta)] font-medium underline decoration-[var(--magenta)]/30 hover:decoration-[var(--magenta)] transition-colors">{t("portafolio de casos", "case portfolio")}</Link>
+            </span>
+          </div>
         </div>
       </section>
 
@@ -314,14 +334,14 @@ export function DiscoveryConIAContent() {
               "30 minutes, no commitment. You'll leave with more clarity about your product than you have today."
             )}
           </p>
-          <div className="flex flex-col sm:flex-row items-center gap-4">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full sm:w-auto">
             <BookingModal>
-              <button type="button" className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-semibold text-[15px] text-white transition-all active:scale-95 shadow-lg hover:brightness-110"
+              <button type="button" className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-semibold text-[15px] text-white transition-all active:scale-95 shadow-lg hover:brightness-110"
                 style={{ background: "#E8751A" }}>
                 {t("Agenda tu sesión gratuita", "Book your free session")} <Rocket size={16} />
               </button>
             </BookingModal>
-            <Link href={localized("/curso")} className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium border border-border text-foreground hover:bg-secondary transition-all">
+            <Link href={localized("/curso")} className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-4 rounded-full text-sm font-medium border border-border text-foreground hover:bg-secondary transition-all">
               {t("¿Prefieres aprender el método? Ver el curso", "Prefer to learn the method? See the course")} <ArrowRight size={14} />
             </Link>
           </div>

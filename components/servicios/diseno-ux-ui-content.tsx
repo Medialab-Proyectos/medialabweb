@@ -3,7 +3,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import {
-  Sparkles, Microscope, Compass, PenTool, LayoutGrid, BarChart3,
+  Microscope, Compass, PenTool, LayoutGrid, BarChart3,
   ArrowRight, ChevronRight, CheckCircle2, Heart,
 } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
@@ -116,7 +116,7 @@ export function DisenoUxUiContent() {
 
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold border w-fit"
               style={{ color: "var(--magenta)", borderColor: "rgba(232,117,26,0.3)", background: "rgba(232,117,26,0.08)" }}>
-              <Sparkles size={14} /> {t("Servicio", "Service")}
+              <Heart size={14} /> {t("UX Strategy by MediaLab", "UX Strategy by MediaLab")}
             </div>
 
             <h1 id="uxui-h1" className="font-display font-bold text-4xl md:text-5xl lg:text-6xl leading-[1.08] text-balance">
@@ -130,14 +130,14 @@ export function DisenoUxUiContent() {
               )}
             </p>
 
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mt-2">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 mt-2 w-full sm:w-auto">
               <BookingModal>
-                <button type="button" className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-semibold text-[15px] text-white transition-all active:scale-95 shadow-lg hover:brightness-110"
+                <button type="button" className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-semibold text-[15px] text-white transition-all active:scale-95 shadow-lg hover:brightness-110"
                   style={{ background: "#E8751A", boxShadow: "0 8px 30px rgba(232,117,26,0.35)" }}>
                   {t("Agenda una consulta gratis", "Book a free consultation")}
                 </button>
               </BookingModal>
-              <Link href={localized("/portafolio")} className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium border border-white/15 text-white/75 hover:text-white hover:border-white/30 transition-all">
+              <Link href={localized("/portafolio")} className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-4 rounded-full text-sm font-medium border border-white/15 text-white/75 hover:text-white hover:border-white/30 transition-all">
                 {t("Ver portafolio", "See portfolio")} <ArrowRight size={14} />
               </Link>
             </div>
@@ -191,30 +191,48 @@ export function DisenoUxUiContent() {
               "We don't start with screens. We start by understanding who you're designing for, what they need to feel to move forward, and what holds them back today. That discovery — accelerated with AI — feeds every UX and UI decision. Then we design, prototype, test with users, and optimize on real data."
             )}
           </p>
-          <p className="text-sm text-muted-foreground">
-            {t("¿Tienes una idea sin definir? Empieza por el ", "Have an undefined idea? Start with ")}
-            <Link href={localized("/servicios/discovery-con-ia")} className="text-[var(--magenta)] font-medium hover:underline">
-              {t("discovery de producto con IA", "AI product discovery")}
-            </Link>
-            {t(" o prueba ", " or try ")}
-            <Link href={localized("/")+"#uxbox"} className="text-[var(--magenta)] font-medium hover:underline">UXBox</Link>.
-            {t(" ¿Ya tienes tráfico pero poca conversión? Mira ", " Already have traffic but low conversion? See ")}
-            <Link href={localized("/servicios/cro-saas")} className="text-[var(--magenta)] font-medium hover:underline">{t("CRO para SaaS", "CRO for SaaS")}</Link>.
-          </p>
-          <p className="text-sm text-muted-foreground pt-2">
-            {t("Diseñamos experiencias para industrias de alta exigencia: ", "We design experiences for high-demand industries: ")}
-            <Link href={localized("/industrias/fintech")} className="text-[var(--magenta)] font-medium hover:underline">{t("Fintech", "Fintech")}</Link>
-            {t(", ", ", ")}
-            <Link href={localized("/industrias/banca")} className="text-[var(--magenta)] font-medium hover:underline">{t("Banca", "Banking")}</Link>
-            {t(", ", ", ")}
-            <Link href={localized("/industrias/ecommerce")} className="text-[var(--magenta)] font-medium hover:underline">{t("E-commerce", "E-commerce")}</Link>
-            {t(", ", ", ")}
-            <Link href={localized("/industrias/educacion")} className="text-[var(--magenta)] font-medium hover:underline">{t("Educación", "Education")}</Link>
-            {t(", ", ", ")}
-            <Link href={localized("/industrias/movilidad")} className="text-[var(--magenta)] font-medium hover:underline">{t("Movilidad", "Mobility")}</Link>
-            {t(" y ", " and ")}
-            <Link href={localized("/industrias/startups")} className="text-[var(--magenta)] font-medium hover:underline">{t("Startups", "Startups")}</Link>.
-          </p>
+          <ul className="flex flex-col gap-3 text-sm text-muted-foreground">
+            <li className="flex items-start gap-2.5">
+              <ArrowRight size={14} className="shrink-0 mt-0.5 text-[var(--magenta)]" />
+              <span>
+                {t("¿Tienes una idea sin definir? Empieza por el ", "Have an undefined idea? Start with ")}
+                <Link href={localized("/servicios/discovery-con-ia")} className="text-[var(--magenta)] font-medium underline decoration-[var(--magenta)]/30 hover:decoration-[var(--magenta)] transition-colors">
+                  {t("discovery de producto con IA", "AI product discovery")}
+                </Link>
+              </span>
+            </li>
+            <li className="flex items-start gap-2.5">
+              <ArrowRight size={14} className="shrink-0 mt-0.5 text-[var(--magenta)]" />
+              <span>
+                {t("Genera un brief al instante con ", "Generate an instant brief with ")}
+                <Link href={localized("/")+"#uxbox"} className="text-[var(--magenta)] font-medium underline decoration-[var(--magenta)]/30 hover:decoration-[var(--magenta)] transition-colors">UXBox</Link>
+              </span>
+            </li>
+            <li className="flex items-start gap-2.5">
+              <ArrowRight size={14} className="shrink-0 mt-0.5 text-[var(--magenta)]" />
+              <span>
+                {t("¿Ya tienes tráfico pero poca conversión? Mira ", "Already have traffic but low conversion? See ")}
+                <Link href={localized("/servicios/cro-saas")} className="text-[var(--magenta)] font-medium underline decoration-[var(--magenta)]/30 hover:decoration-[var(--magenta)] transition-colors">{t("CRO para SaaS", "CRO for SaaS")}</Link>
+              </span>
+            </li>
+          </ul>
+          <div className="pt-2">
+            <p className="text-sm text-muted-foreground mb-2.5">{t("Diseñamos experiencias para industrias de alta exigencia:", "We design experiences for high-demand industries:")}</p>
+            <div className="flex flex-wrap gap-2">
+              {[
+                { name: t("Fintech", "Fintech"), href: "/industrias/fintech" },
+                { name: t("Banca", "Banking"), href: "/industrias/banca" },
+                { name: t("E-commerce", "E-commerce"), href: "/industrias/ecommerce" },
+                { name: t("Educación", "Education"), href: "/industrias/educacion" },
+                { name: t("Movilidad", "Mobility"), href: "/industrias/movilidad" },
+                { name: t("Startups", "Startups"), href: "/industrias/startups" },
+              ].map((ind) => (
+                <Link key={ind.name} href={localized(ind.href)} className="px-4 py-2 rounded-full text-sm font-medium border border-border bg-card text-[var(--magenta)] hover:bg-secondary transition-all">
+                  {ind.name}
+                </Link>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
@@ -247,14 +265,14 @@ export function DisenoUxUiContent() {
               "30 minutes, no commitment. Tell us about your product and we'll show you how we'd approach it."
             )}
           </p>
-          <div className="flex flex-col sm:flex-row items-center gap-4">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full sm:w-auto">
             <BookingModal>
-              <button type="button" className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-semibold text-[15px] text-white transition-all active:scale-95 shadow-lg hover:brightness-110"
+              <button type="button" className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-semibold text-[15px] text-white transition-all active:scale-95 shadow-lg hover:brightness-110"
                 style={{ background: "#E8751A" }}>
                 {t("Agenda tu consulta gratuita", "Book your free consultation")} <CheckCircle2 size={16} />
               </button>
             </BookingModal>
-            <Link href={localized("/curso")} className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium border border-border text-foreground hover:bg-secondary transition-all">
+            <Link href={localized("/curso")} className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-4 rounded-full text-sm font-medium border border-border text-foreground hover:bg-secondary transition-all">
               {t("¿Quieres aprender UX + IA? Ver el curso", "Want to learn UX + AI? See the course")} <ArrowRight size={14} />
             </Link>
           </div>
