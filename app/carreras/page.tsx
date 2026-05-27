@@ -22,6 +22,12 @@ export const metadata: Metadata = {
     url: "/carreras",
     siteName: "MediaLab Ingeniería",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Carreras en MediaLab — Diseña el futuro con nosotros",
+    description:
+      "Equipo remoto de diseño UX/UI + IA. Proyectos globales, mentoría y cultura que prioriza tu crecimiento.",
+  },
 }
 
 export default function CarrerasPage() {

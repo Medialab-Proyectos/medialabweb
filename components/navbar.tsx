@@ -141,10 +141,14 @@ export function Navbar() {
           onClick={(e) => {
             if (isHome) {
               e.preventDefault()
+              if (window.location.hash) {
+                window.history.replaceState(null, "", window.location.pathname)
+              }
               window.scrollTo({ top: 0, behavior: "smooth" })
               return
             }
-            sessionStorage.setItem("homeNavBehavior", "top")
+            // Viniendo de una landing: autoriza restaurar la sección guardada
+            sessionStorage.setItem("homeScrollReady", "true")
           }}
         >
           <Image

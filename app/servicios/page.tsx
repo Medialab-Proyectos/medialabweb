@@ -23,6 +23,12 @@ export const metadata: Metadata = {
       "Investigamos cómo piensan tus usuarios, diseñamos lo que necesitan sentir y construimos el producto que tu negocio necesita.",
     url: "/servicios",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Servicios MediaLab — UX/UI, IA y Desarrollo de Producto",
+    description:
+      "Diseño UX/UI conductual, discovery con IA, CRO para SaaS y desarrollo a medida para empresas B2B y B2C.",
+  },
 }
 
 export default function ServiciosPage() {

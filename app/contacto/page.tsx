@@ -23,6 +23,12 @@ export const metadata: Metadata = {
     url: "/contacto",
     siteName: "MediaLab Ingeniería",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Contacto | MediaLab Ingeniería",
+    description:
+      "Cuéntanos qué quieres construir. Respondemos en menos de 24 horas.",
+  },
 }
 
 export default function ContactoPage() {

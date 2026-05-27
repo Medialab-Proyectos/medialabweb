@@ -11,6 +11,13 @@ export const metadata: Metadata = {
       "40+ productos diseñados con datos, psicología del consumidor e IA. Conoce cómo hemos ayudado a empresas a aumentar conversión, retención y satisfacción de usuarios.",
     images: [{ url: "/images/portfolio-hero.png", width: 1200, height: 630 }],
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Portafolio MediaLab | Productos Digitales que Generan Resultados",
+    description:
+      "40+ productos diseñados con UX, IA y psicología del consumidor. Resultados medibles en conversión y retención.",
+    images: ["/images/portfolio-hero.png"],
+  },
   alternates: {
     canonical: "/portafolio",
     languages: {

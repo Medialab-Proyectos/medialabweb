@@ -19,6 +19,12 @@ export const metadata: Metadata = {
     type: "website",
     url: "/blog",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Blog MediaLab — UX, IA y Producto Digital",
+    description:
+      "Ideas sobre UX, IA y psicología del consumidor para diseñadores, PMs y founders.",
+  },
 }
 
 const blogListSchema = {
