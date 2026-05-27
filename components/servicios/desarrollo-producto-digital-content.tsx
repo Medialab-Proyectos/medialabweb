@@ -147,7 +147,7 @@ export function DesarrolloProductoDigitalContent() {
           <div className="lg:col-span-5 flex justify-center w-full">
             <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden border border-white/10 shadow-2xl shadow-black/50 bg-secondary/20">
               <Image
-                src="/images/team-collaboration.png"
+                src="/images/service-dev-team.png"
                 alt={t("Desarrollo de producto digital", "Digital product development")}
                 fill
                 className="object-cover"

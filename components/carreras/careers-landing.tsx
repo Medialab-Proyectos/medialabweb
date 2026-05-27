@@ -207,6 +207,7 @@ export function CareersLanding() {
     if (!phone) newErrors.phone = t("Necesitamos un teléfono para contactarte.", "We need a phone to contact you.")
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
       newErrors.email = t("Ingresa un email válido.", "Enter a valid email.")
+    if (!resume) newErrors.resume = t("El currículum es obligatorio.", "Resume is required.")
     if (!challenge) newErrors.challenge = t("Cuéntanos tu mayor reto en UX.", "Tell us your biggest UX challenge.")
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors)
@@ -837,7 +838,7 @@ export function CareersLanding() {
                     </div>
                     <div className="flex flex-col gap-1.5">
                       <label htmlFor="career-resume" className="text-xs text-white/50 font-medium">
-                        {t("Hoja de vida", "Resume / CV")} <span className="text-white/30">({t("opcional", "optional")})</span>
+                        {t("Currículum", "Resume / CV")} *
                       </label>
                       <div className="relative">
                         <FileText size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30" />
@@ -845,10 +846,12 @@ export function CareersLanding() {
                           id="career-resume"
                           name="resume"
                           type="url"
-                          placeholder={t("Link a tu hoja de vida", "Link to your resume")}
+                          onChange={() => setErrors((p) => ({ ...p, resume: "" }))}
+                          placeholder={t("Link a tu currículum", "Link to your resume")}
                           className="w-full pl-10 pr-4 py-3 rounded-xl bg-white/5 border border-white/20 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[var(--magenta)]/60 focus:ring-1 focus:ring-[var(--magenta)]/30 transition-all"
                         />
                       </div>
+                      {errors.resume && <p className="text-xs text-red-400">{errors.resume}</p>}
                     </div>
                   </div>
 

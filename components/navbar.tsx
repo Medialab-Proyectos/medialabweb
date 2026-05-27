@@ -282,18 +282,26 @@ export function Navbar() {
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="md:hidden bg-background/95 backdrop-blur-md border-b border-border px-6 pb-6 pt-2 flex flex-col gap-4">
+        <div className={`md:hidden backdrop-blur-md border-b px-6 pb-6 pt-2 flex flex-col gap-4 ${
+          forceDarkNav
+            ? "bg-[#0a0a0a]/95 border-white/[0.06]"
+            : "bg-background/95 border-border"
+        }`}>
           {currentLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href.startsWith("#") ? link.href : localized(link.href)}
               title={link.label}
               onClick={() => setMobileOpen(false)}
-              className={`text-base font-medium py-2 border-b border-border last:border-0 flex items-center gap-1.5 ${
+              className={`text-base font-medium py-2 last:border-0 flex items-center gap-1.5 ${
+                forceDarkNav ? "border-b border-white/10" : "border-b border-border"
+              } ${
                 (link as any).uxgreen
                   ? "text-[#00BFA6]"
                   : (link as any).highlight
                   ? "text-[var(--magenta)]"
+                  : forceDarkNav
+                  ? "text-white/80"
                   : "text-foreground"
               }`}
             >
@@ -302,14 +310,14 @@ export function Navbar() {
             </Link>
           ))}
           {mounted && (
-            <div className="flex items-center gap-2 pt-2 border-t border-border">
-              <div className="flex items-center border border-border rounded-full p-0.5 gap-0.5 flex-1">
+            <div className={`flex items-center gap-2 pt-2 border-t ${forceDarkNav ? "border-white/10" : "border-border"}`}>
+              <div className={`flex items-center border rounded-full p-0.5 gap-0.5 flex-1 ${forceDarkNav ? "border-white/20" : "border-border"}`}>
                 <button
                   onClick={() => setLang("es")}
                   className={`flex-1 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
                     lang === "es"
                       ? "bg-[var(--magenta)] text-white"
-                      : "text-muted-foreground"
+                      : forceDarkNav ? "text-white/50" : "text-muted-foreground"
                   }`}
                 >
                   ES
@@ -319,7 +327,7 @@ export function Navbar() {
                   className={`flex-1 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
                     lang === "en"
                       ? "bg-[var(--magenta)] text-white"
-                      : "text-muted-foreground"
+                      : forceDarkNav ? "text-white/50" : "text-muted-foreground"
                   }`}
                 >
                   EN
@@ -334,7 +342,11 @@ export function Navbar() {
               : (lang === "es" ? "Iniciar un proyecto con MediaLab" : "Start a project with MediaLab")
             }
             onClick={() => setMobileOpen(false)}
-            className="mt-2 px-5 py-3 rounded-full text-sm font-semibold bg-foreground text-background text-center hover:bg-[var(--magenta)] hover:text-white transition-all duration-200"
+            className={`mt-2 px-5 py-3 rounded-full text-sm font-semibold text-center transition-all duration-200 ${
+              forceDarkNav
+                ? "bg-white text-black hover:bg-[var(--magenta)] hover:text-white"
+                : "bg-foreground text-background hover:bg-[var(--magenta)] hover:text-white"
+            }`}
           >
             {isCurso
               ? (lang === "es" ? "Inscribirme" : "Enroll now")

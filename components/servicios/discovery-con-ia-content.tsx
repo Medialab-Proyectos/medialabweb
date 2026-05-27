@@ -162,7 +162,7 @@ export function DiscoveryConIAContent() {
           <div className="lg:col-span-5 flex justify-center w-full">
             <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden border border-white/10 shadow-2xl shadow-black/50 bg-secondary/20">
               <Image
-                src="/images/discovery-hero.png"
+                src="/images/service-ai-discovery-team.png"
                 alt={t("Discovery de producto con IA", "AI product discovery")}
                 fill
                 className="object-cover"

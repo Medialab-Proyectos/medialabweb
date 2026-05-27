@@ -140,7 +140,7 @@ export function DisenoUxUiContent() {
           <div className="lg:col-span-5 flex justify-center w-full">
             <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden border border-white/10 shadow-2xl shadow-black/50 bg-secondary/20">
               <Image
-                src="/images/uxui-design-hero.png"
+                src="/images/service-ux-design-team.png"
                 alt={t("Diseño UX/UI con IA y psicología", "UX/UI design with AI and psychology")}
                 fill
                 className="object-cover"
