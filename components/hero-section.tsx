@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { ArrowRight, Sparkles, Package } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 import { BookingModal } from "./booking-modal"
@@ -182,6 +183,28 @@ export function HeroSection() {
           </p>
         </div>
 
+        {/* Ecosystem strip */}
+        <div
+          className={`flex flex-col items-center gap-4 mt-4 transition-all duration-700 ${ready ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
+          style={{ transitionDelay: "400ms" }}
+        >
+          <span className="text-[11px] tracking-[0.15em] uppercase font-semibold dark:text-white/40 text-foreground/40">
+            {t("Nuestro ecosistema", "Our ecosystem")}
+          </span>
+          <div className="flex items-center gap-8 sm:gap-12">
+            <div className="flex flex-col items-center gap-1.5">
+              <Image src="/images/ecosistema/Factory.svg" alt="UXFactory" width={100} height={28} className="h-6 sm:h-7 w-auto dark:brightness-0 dark:invert dark:opacity-50 opacity-60" />
+            </div>
+            <div className="w-px h-6 dark:bg-white/15 bg-foreground/15" aria-hidden="true" />
+            <div className="flex flex-col items-center gap-1.5">
+              <Image src="/images/ecosistema/lab.svg" alt="UXLab" width={100} height={28} className="h-6 sm:h-7 w-auto dark:brightness-0 dark:invert dark:opacity-50 opacity-60" />
+            </div>
+            <div className="w-px h-6 dark:bg-white/15 bg-foreground/15" aria-hidden="true" />
+            <div className="flex flex-col items-center gap-1.5">
+              <Image src="/images/ecosistema/school.svg" alt="UXSchool" width={100} height={28} className="h-6 sm:h-7 w-auto dark:brightness-0 dark:invert dark:opacity-50 opacity-60" />
+            </div>
+          </div>
+        </div>
 
       </div>
 

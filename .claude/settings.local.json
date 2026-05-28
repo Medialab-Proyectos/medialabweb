@@ -53,7 +53,9 @@
       "Bash(grep -l \"article\\\\|<nav\\\\|<section\\\\|<header\\\\|<footer\" \"/c/Users/coben/OneDrive/Desktop/MediLab/Version 1/components/\"*.tsx)",
       "Bash(grep -l \"@type.*Question\\\\|FAQPage\" \"/c/Users/coben/OneDrive/Desktop/MediLab/Version 1/app\"/**/\"page.tsx\")",
       "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\coben\\\\Desktop\\\\sitiomlab\\\\medialabweb\\\\public\" -Filter \"robots.txt\" -ErrorAction SilentlyContinue)",
-      "Bash(Select-Object FullName)"
+      "Bash(Select-Object FullName)",
+      "Bash(find:*)",
+      "Bash(grep -E \"\\\\.tsx$\")"
     ]
   }
 }

@@ -64,9 +64,13 @@ export function DigitalProductsSection() {
       <div className="max-w-7xl mx-auto flex flex-col gap-14">
         {/* Header */}
         <div className="flex flex-col gap-4 max-w-2xl">
-          <span className="text-xs font-semibold tracking-widest uppercase text-[var(--magenta)]">
-            {t("Nuestros propios productos", "Our own products")}
-          </span>
+          <div className="flex items-center gap-3">
+            <Image src="/images/ecosistema/lab.svg" alt="UXLab" width={110} height={30} className="h-7 w-auto dark:brightness-0 dark:invert dark:opacity-60 opacity-70" />
+            <span className="w-px h-5 bg-border" aria-hidden="true" />
+            <span className="text-xs font-semibold tracking-widest uppercase text-[var(--magenta)]">
+              {t("Nuestros propios productos", "Our own products")}
+            </span>
+          </div>
           <h2
             id="products-heading"
             className="font-display font-bold text-3xl md:text-4xl lg:text-5xl leading-tight text-foreground text-balance"

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { useLanguage } from "@/lib/language-context"
 import {
   ArrowRight,
@@ -87,7 +88,9 @@ export function CoursePromoSection() {
             }`}
           >
             {/* Eyebrow */}
-            <div className="inline-flex items-center gap-2 w-fit">
+            <div className="inline-flex items-center gap-3 w-fit">
+              <Image src="/images/ecosistema/school.svg" alt="UXSchool" width={110} height={30} className="h-7 w-auto dark:brightness-0 dark:invert dark:opacity-60 opacity-70" />
+              <span className="w-px h-5 dark:bg-white/15 bg-foreground/15" aria-hidden="true" />
               <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[var(--magenta)]/20 bg-[var(--magenta)]/[0.08]">
                 <Sparkles size={12} style={{ color: "var(--magenta)" }} />
                 <span
