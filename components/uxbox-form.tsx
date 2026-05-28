@@ -480,7 +480,6 @@ export function UXBoxForm() {
                 onChange={(e) => { setIdea(e.target.value); setError("") }}
                 placeholder={t("Describe tu idea en una línea…", "Describe your idea in one line…")}
                 rows={3}
-                autoFocus
                 className={`${inputClass} text-base pr-4`}
               />
             </div>

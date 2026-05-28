@@ -81,19 +81,19 @@ export function AboutSection() {
           {/* Row 1: 3 ecosystem cards — dark bg, colored logos, border */}
           <div className="grid grid-cols-3 gap-4">
             <div className="rounded-2xl p-5 flex flex-col gap-3 bg-[var(--surface-dark)] border border-border">
-              <Image src="/images/ecosistema/Factory.svg" alt="UXFactory" width={120} height={32} className="h-6 w-auto" />
+              <Image src="/images/ecosistema/Factory.svg" alt="UXFactory" width={120} height={32} className="h-5 w-auto dark:brightness-0 dark:invert dark:opacity-50" />
               <p className="text-[11px] text-white/60 leading-relaxed">
                 {t("Diseño de experiencia a la medida para marketing digital y software.", "Custom experience design for digital marketing and software.")}
               </p>
             </div>
             <div className="rounded-2xl p-5 flex flex-col gap-3 bg-[var(--surface-dark)] border border-border">
-              <Image src="/images/ecosistema/lab.svg" alt="UXLab" width={120} height={32} className="h-6 w-auto" />
+              <Image src="/images/ecosistema/lab.svg" alt="UXLab" width={120} height={32} className="h-6 w-auto dark:brightness-0 dark:invert dark:opacity-50" />
               <p className="text-[11px] text-white/60 leading-relaxed">
                 {t("Soluciones propias que mejoran la vida de las personas.", "Own solutions that improve people's lives.")}
               </p>
             </div>
             <div className="rounded-2xl p-5 flex flex-col gap-3 bg-[var(--surface-dark)] border border-border">
-              <Image src="/images/ecosistema/school.svg" alt="UXSchool" width={120} height={32} className="h-6 w-auto" />
+              <Image src="/images/ecosistema/school.svg" alt="UXSchool" width={120} height={32} className="h-6 w-auto dark:brightness-0 dark:invert dark:opacity-50" />
               <p className="text-[11px] text-white/60 leading-relaxed">
                 {t("Programas especializados en diseño de experiencia.", "Specialized experience design programs.")}
               </p>
@@ -102,21 +102,19 @@ export function AboutSection() {
 
           {/* Row 2: UX+IA, Evidencia, Impacto */}
           <div className="grid grid-cols-3 gap-4">
-            <div className="rounded-2xl p-5 flex flex-col gap-2 text-white"
-              style={{ background: "linear-gradient(135deg, var(--magenta), oklch(0.4 0.25 300))" }}>
-              <span className="text-2xl font-display font-bold">{t("UX + IA", "UX + AI")}</span>
-              <p className="text-xs text-white/80 leading-relaxed">
+            <div className="rounded-2xl p-5 flex flex-col gap-2 [background:linear-gradient(135deg,#F3EAFF,#E5D0FF)] dark:[background:linear-gradient(135deg,#F67327,#6F18BF)]">
+              <span className="text-2xl font-display font-bold text-[#390B6A] dark:text-white">{t("UX + IA", "UX + AI")}</span>
+              <p className="text-xs text-[#390B6A]/70 dark:text-white/80 leading-relaxed">
                 {t("Entendemos cómo piensan tus usuarios. La IA nos ayuda a hacerlo en días, no meses.", "We understand how your users think. AI helps us do it in days, not months.")}
               </p>
             </div>
-            <div className="rounded-2xl p-5 bg-[var(--surface-dark)] text-white flex flex-col gap-2">
-              <span className="text-2xl font-display font-bold" style={{ color: "var(--cyan)" }}>{t("Evidencia", "Evidence")}</span>
-              <p className="text-xs text-white/60 leading-relaxed">{t("Cada decisión respaldada por datos reales", "Every decision backed by real data")}</p>
+            <div className="rounded-2xl p-5 flex flex-col gap-2 [background:linear-gradient(135deg,#FFF3EB,#FFE4CC)] dark:[background:linear-gradient(135deg,#F67327,#008294)]">
+              <span className="text-2xl font-display font-bold text-[#8A2800] dark:text-white">{t("Evidencia", "Evidence")}</span>
+              <p className="text-xs text-[#8A2800]/70 dark:text-white/80 leading-relaxed">{t("Cada decisión respaldada por datos reales", "Every decision backed by real data")}</p>
             </div>
-            <div className="rounded-2xl p-5 flex flex-col gap-2"
-              style={{ background: "linear-gradient(135deg, var(--orange), oklch(0.65 0.2 60))" }}>
-              <span className="text-2xl font-display font-bold text-white">{t("Impacto", "Impact")}</span>
-              <p className="text-xs text-white/80 leading-relaxed">{t("Resultados que puedes medir desde el día uno", "Results you can measure from day one")}</p>
+            <div className="rounded-2xl p-5 flex flex-col gap-2 [background:linear-gradient(135deg,#E8F7F9,#CCF0F4)] dark:[background:linear-gradient(135deg,#6F18BF,#008294)]">
+              <span className="text-2xl font-display font-bold text-[#023D4A] dark:text-white">{t("Impacto", "Impact")}</span>
+              <p className="text-xs text-[#023D4A]/70 dark:text-white/80 leading-relaxed">{t("Resultados que puedes medir desde el día uno", "Results you can measure from day one")}</p>
             </div>
           </div>
 

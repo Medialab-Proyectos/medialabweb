@@ -156,6 +156,7 @@ export default function RootLayout({
   return (
     <html lang="es" suppressHydrationWarning>
       <head>
+        <script dangerouslySetInnerHTML={{ __html: `if('scrollRestoration'in history){history.scrollRestoration='manual';}` }} />
         <link rel="alternate" type="text/markdown" href="/llms.txt" title="MediaLab (llms.txt)" />
         <link rel="alternate" type="text/markdown" href="/llms-full.txt" title="MediaLab (llms-full.txt)" />
         <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet" />

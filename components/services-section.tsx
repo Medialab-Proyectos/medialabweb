@@ -304,7 +304,7 @@ export function ServicesSection() {
         {/* Header */}
         <div className="flex flex-col gap-4 max-w-2xl">
           <div className="flex items-center gap-3">
-            <Image src="/images/ecosistema/Factory.svg" alt="UXFactory" width={110} height={30} className="h-7 w-auto dark:brightness-0 dark:invert dark:opacity-60 opacity-70" />
+            <Image src="/images/ecosistema/Factory.svg" alt="UXFactory" width={110} height={30} className="h-5 w-auto dark:brightness-0 dark:invert dark:opacity-60 opacity-70" />
             <span className="w-px h-5 bg-border" aria-hidden="true" />
             <span className="text-xs font-semibold tracking-widest uppercase text-[var(--magenta)]">
               {t("Cómo te ayudamos", "How we help you")}
