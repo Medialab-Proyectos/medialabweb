@@ -122,7 +122,7 @@ export function PortfolioCases() {
       title: t("Plataforma de Capacitación Interactiva", "Interactive Training Platform"),
       client: "Pepsico",
       industry: t("FMCG / Enterprise", "FMCG / Enterprise"),
-      image: "/images/case-fintech.png",
+      image: "/images/pepsico-showcase.png",
       color: "var(--cyan)",
       gradient: "linear-gradient(135deg, #004B93, #0066CC)",
       challenge: t(

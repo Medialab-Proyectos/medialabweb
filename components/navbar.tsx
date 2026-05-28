@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
-import { Menu, X, Moon, Sun, BookOpen, Contrast, Leaf } from "lucide-react"
+import { Menu, X, Moon, Sun, BookOpen, Contrast, Leaf, GraduationCap, Package } from "lucide-react"
 import { useTheme } from "next-themes"
 import { useLanguage } from "@/lib/language-context"
 
@@ -12,16 +12,16 @@ const navLinks = {
   es: [
     { label: "Servicios", href: "/#services" },
     { label: "Portafolio", href: "/portafolio" },
-    { label: "Educación", href: "/curso", highlight: true },
-    { label: "UXBox", href: "/#uxbox" },
+    { label: "Educación", href: "/curso", highlight: true, education: true },
+    { label: "UXBox", href: "/#uxbox", uxbox: true },
     { label: "UXGreen™", href: "/uxgreen", uxgreen: true },
     { label: "Carreras", href: "/carreras" },
   ],
   en: [
     { label: "Services", href: "/#services" },
     { label: "Portfolio", href: "/portafolio" },
-    { label: "Education", href: "/curso", highlight: true },
-    { label: "UXBox", href: "/#uxbox" },
+    { label: "Education", href: "/curso", highlight: true, education: true },
+    { label: "UXBox", href: "/#uxbox", uxbox: true },
     { label: "UXGreen™", href: "/uxgreen", uxgreen: true },
     { label: "Careers", href: "/carreras" },
   ],
@@ -126,7 +126,7 @@ export function Navbar() {
         scrolled
           ? forceDarkNav
             ? "bg-[#0a0a0a]/95 backdrop-blur-md border-b border-white/[0.06] shadow-sm"
-            : "bg-background/90 backdrop-blur-md border-b border-border shadow-sm"
+            : "bg-background/90 backdrop-blur-md border-b border-border/30 shadow-sm"
           : forceDarkNav
           ? "bg-[#0a0a0a]/70 backdrop-blur-md"
           : "bg-transparent"
@@ -186,6 +186,8 @@ export function Navbar() {
               {(link as any).highlight && (
                 <span className="absolute -top-1 -right-1.5 w-1.5 h-1.5 rounded-full bg-[var(--magenta)] animate-pulse" />
               )}
+              {(link as any).education && <GraduationCap size={12} className="inline-block mr-1 -mt-0.5" />}
+              {(link as any).uxbox && <Package size={12} className="inline-block mr-1 -mt-0.5" />}
               {(link as any).uxgreen && <Leaf size={12} className="inline-block mr-1 -mt-0.5" />}
               {link.label}
             </Link>
@@ -321,6 +323,8 @@ export function Navbar() {
                   : "text-foreground"
               }`}
             >
+              {(link as any).education && <GraduationCap size={14} />}
+              {(link as any).uxbox && <Package size={14} />}
               {(link as any).uxgreen && <Leaf size={14} />}
               {link.label}
             </Link>

@@ -336,6 +336,10 @@ export function UXGreenLanding() {
   const [heroVisible, setHeroVisible] = useState(false)
 
   useEffect(() => {
+    // Scroll to top on mount — prevents browser/Next.js restoring a previous scroll position
+    if (!window.location.hash) {
+      window.scrollTo({ top: 0, behavior: "instant" })
+    }
     const t = setTimeout(() => setHeroVisible(true), 80)
     return () => clearTimeout(t)
   }, [])

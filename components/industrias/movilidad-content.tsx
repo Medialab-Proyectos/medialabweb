@@ -2,13 +2,14 @@
 
 import Link from "next/link"
 import {
-  Sparkles, Car, MapPin, Navigation, ShieldCheck, Clock, Zap,
+  Car, MapPin, Navigation, ShieldCheck, Clock, Zap,
   ArrowRight, ChevronRight, CheckCircle2,
 } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { BookingModal } from "@/components/booking-modal"
+import { StickyIndustryBreadcrumb } from "./sticky-industry-breadcrumb"
 
 export function MovilidadContent() {
   const { t, localized } = useLanguage()
@@ -82,23 +83,17 @@ export function MovilidadContent() {
   return (
     <main id="main-content">
       <Navbar />
+      <StickyIndustryBreadcrumb pageEs="Movilidad" pageEn="Mobility" />
 
       {/* Hero */}
-      <section className="relative pt-32 pb-20 px-6 bg-[var(--surface-dark)] text-white overflow-hidden" aria-labelledby="mov-h1">
+      <section className="relative pt-6 pb-20 px-6 bg-[var(--surface-dark)] text-white overflow-hidden" aria-labelledby="mov-h1">
         <div className="absolute -top-24 right-0 w-96 h-96 rounded-full blur-3xl pointer-events-none opacity-25"
           style={{ background: "radial-gradient(circle, #E8751A 0%, transparent 70%)" }} aria-hidden="true" />
         <div className="relative z-10 max-w-4xl mx-auto flex flex-col gap-6">
-          <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-white/50">
-            <Link href={localized("/")} className="hover:text-white">{t("Inicio", "Home")}</Link>
-            <ChevronRight size={12} />
-            <span className="text-white/40">{t("Industrias", "Industries")}</span>
-            <ChevronRight size={12} />
-            <span className="text-white/80">{t("Movilidad", "Mobility")}</span>
-          </nav>
 
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold border w-fit"
             style={{ color: "var(--magenta)", borderColor: "rgba(232,117,26,0.3)", background: "rgba(232,117,26,0.08)" }}>
-            <Sparkles size={14} /> {t("Industria", "Industry")}
+            <Navigation size={14} /> {t("Movilidad sin fricción by MediaLab", "Frictionless mobility by MediaLab")}
           </div>
 
           <h1 id="mov-h1" className="font-display font-bold text-4xl md:text-5xl lg:text-6xl leading-[1.08] text-balance">
@@ -112,14 +107,14 @@ export function MovilidadContent() {
             )}
           </p>
 
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mt-2">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 mt-2">
             <BookingModal>
-              <button type="button" className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-semibold text-[15px] text-white transition-all active:scale-95 shadow-lg hover:brightness-110"
+              <button type="button" className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-semibold text-[15px] text-white transition-all active:scale-95 shadow-lg hover:brightness-110"
                 style={{ background: "#E8751A", boxShadow: "0 8px 30px rgba(232,117,26,0.35)" }}>
                 {t("Hablemos de tu producto de movilidad", "Let's talk about your mobility product")}
               </button>
             </BookingModal>
-            <Link href={localized("/servicios/diseno-ux-ui")} className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium border border-white/15 text-white/75 hover:text-white hover:border-white/30 transition-all">
+            <Link href={localized("/servicios/diseno-ux-ui")} className="w-full sm:w-auto inline-flex items-center gap-2 px-6 py-4 rounded-full text-sm font-medium border border-white/15 text-white/75 hover:text-white hover:border-white/30 transition-all">
               {t("Ver diseño UX/UI", "See UX/UI design")} <ArrowRight size={14} />
             </Link>
           </div>
@@ -187,16 +182,36 @@ export function MovilidadContent() {
               </div>
             ))}
           </div>
-          <p className="text-sm text-muted-foreground pt-2">
-            {t("Mira casos reales en nuestro ", "See real cases in our ")}
-            <Link href={localized("/portafolio")} className="text-[var(--magenta)] font-medium hover:underline">{t("portafolio", "portfolio")}</Link>.
-            {t(" Te ayudamos con nuestros servicios de ", " We help you with our services of ")}
-            <Link href={localized("/servicios/discovery-con-ia")} className="text-[var(--magenta)] font-medium hover:underline">{t("Discovery con IA", "AI Discovery")}</Link>
-            {t(", ", ", ")}
-            <Link href={localized("/servicios/diseno-ux-ui")} className="text-[var(--magenta)] font-medium hover:underline">{t("Diseño UX/UI", "UX/UI Design")}</Link>
-            {t(" y ", " and ")}
-            <Link href={localized("/servicios/desarrollo-producto-digital")} className="text-[var(--magenta)] font-medium hover:underline">{t("Desarrollo de Producto", "Product Development")}</Link>.
-          </p>
+          <ul className="flex flex-col gap-3 text-sm text-muted-foreground pt-2">
+            <li className="flex items-start gap-2.5">
+              <ArrowRight size={14} className="shrink-0 mt-0.5 text-[var(--magenta)]" />
+              <span>
+                {t("Mira casos reales en nuestro ", "See real cases in our ")}
+                <Link href={localized("/portafolio")} className="text-[var(--magenta)] font-medium underline decoration-[var(--magenta)]/30 hover:decoration-[var(--magenta)] transition-colors">{t("portafolio", "portfolio")}</Link>
+              </span>
+            </li>
+            <li className="flex items-start gap-2.5">
+              <ArrowRight size={14} className="shrink-0 mt-0.5 text-[var(--magenta)]" />
+              <span>
+                {t("Valida tu producto de movilidad con ", "Validate your mobility product with ")}
+                <Link href={localized("/servicios/discovery-con-ia")} className="text-[var(--magenta)] font-medium underline decoration-[var(--magenta)]/30 hover:decoration-[var(--magenta)] transition-colors">{t("Discovery con IA", "AI Discovery")}</Link>
+              </span>
+            </li>
+            <li className="flex items-start gap-2.5">
+              <ArrowRight size={14} className="shrink-0 mt-0.5 text-[var(--magenta)]" />
+              <span>
+                {t("Diseña interfaces para el movimiento con ", "Design interfaces for motion with ")}
+                <Link href={localized("/servicios/diseno-ux-ui")} className="text-[var(--magenta)] font-medium underline decoration-[var(--magenta)]/30 hover:decoration-[var(--magenta)] transition-colors">{t("Diseño UX/UI", "UX/UI Design")}</Link>
+              </span>
+            </li>
+            <li className="flex items-start gap-2.5">
+              <ArrowRight size={14} className="shrink-0 mt-0.5 text-[var(--magenta)]" />
+              <span>
+                {t("Construye tu app con ", "Build your app with ")}
+                <Link href={localized("/servicios/desarrollo-producto-digital")} className="text-[var(--magenta)] font-medium underline decoration-[var(--magenta)]/30 hover:decoration-[var(--magenta)] transition-colors">{t("Desarrollo de Producto", "Product Development")}</Link>
+              </span>
+            </li>
+          </ul>
         </div>
       </section>
 
@@ -229,12 +244,14 @@ export function MovilidadContent() {
               "30 minutes, no commitment. We'll show you where your experience creates friction at the real moment of use."
             )}
           </p>
-          <BookingModal>
-            <button type="button" className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-semibold text-[15px] text-white transition-all active:scale-95 shadow-lg hover:brightness-110"
-              style={{ background: "#E8751A" }}>
-              {t("Agenda tu sesión gratuita", "Book your free session")} <CheckCircle2 size={16} />
-            </button>
-          </BookingModal>
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full sm:w-auto">
+            <BookingModal>
+              <button type="button" className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-semibold text-[15px] text-white transition-all active:scale-95 shadow-lg hover:brightness-110"
+                style={{ background: "#E8751A" }}>
+                {t("Agenda tu sesión gratuita", "Book your free session")} <CheckCircle2 size={16} />
+              </button>
+            </BookingModal>
+          </div>
         </div>
       </section>
 

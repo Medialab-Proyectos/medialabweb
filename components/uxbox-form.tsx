@@ -437,10 +437,10 @@ export function UXBoxForm() {
       className="relative py-20 md:py-32 px-6 overflow-hidden bg-[var(--surface-dark)] text-foreground transition-colors duration-300"
       aria-labelledby="uxbox-heading"
     >
-      {/* ambient glows (Dark only) */}
-      <div className="absolute -top-32 right-0 w-[28rem] h-[28rem] rounded-full blur-3xl pointer-events-none opacity-25 ambient-glow"
+      {/* ambient glows (Dark only) — overflow-hidden clips horizontally; vertical position kept inside */}
+      <div className="absolute top-12 -right-40 w-[28rem] h-[28rem] rounded-full blur-[120px] pointer-events-none opacity-20 ambient-glow"
         style={{ background: "radial-gradient(circle, #E8751A 0%, transparent 70%)" }} aria-hidden="true" />
-      <div className="absolute -bottom-32 left-0 w-[28rem] h-[28rem] rounded-full blur-3xl pointer-events-none opacity-15 ambient-glow"
+      <div className="absolute bottom-12 -left-40 w-[28rem] h-[28rem] rounded-full blur-[120px] pointer-events-none opacity-10 ambient-glow"
         style={{ background: "radial-gradient(circle, #2AABB3 0%, transparent 70%)" }} aria-hidden="true" />
       <div className="absolute inset-0 pointer-events-none opacity-[0.04]"
         style={{ backgroundImage: "radial-gradient(circle, var(--dot-color) 1px, transparent 1px)", backgroundSize: "38px 38px" }} aria-hidden="true" />
