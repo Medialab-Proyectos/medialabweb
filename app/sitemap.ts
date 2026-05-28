@@ -42,8 +42,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/blog/discovery-ia", changeFrequency: "monthly", priority: 0.8, en: false },
     { path: "/blog/ux-fintech", changeFrequency: "monthly", priority: 0.8, en: false },
     { path: "/blog/mvp-escala", changeFrequency: "monthly", priority: 0.8, en: false },
-    { path: "/politica-de-privacidad", changeFrequency: "yearly", priority: 0.3, en: false },
-    { path: "/terminos-de-servicio", changeFrequency: "yearly", priority: 0.3, en: false },
   ]
 
   const entries: MetadataRoute.Sitemap = []

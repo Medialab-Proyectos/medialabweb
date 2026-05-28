@@ -98,6 +98,20 @@ export const metadata: Metadata = {
         alt: 'MediaLab Ingeniería — Ingeniería de producto digital: UX, IA, Software y SEO técnico',
         type: 'image/png',
       },
+      {
+        url: '/images/og-image-gallery.png',
+        width: 1200,
+        height: 630,
+        alt: 'MediaLab Ingeniería — Laboratorio de diseño digital y equipo de trabajo',
+        type: 'image/png',
+      },
+      {
+        url: '/images/team-collaboration.png',
+        width: 1200,
+        height: 630,
+        alt: 'Equipo MediaLab colaborando en diseño UX/UI',
+        type: 'image/png',
+      },
     ],
   },
   twitter: {
@@ -157,6 +171,14 @@ export default function RootLayout({
                 'Agencia experta en diseño UX/UI, inteligencia artificial y psicología del consumidor. Creamos productos digitales B2B y B2C que conectan emocionalmente con los usuarios y generan resultados comerciales medibles.',
               url: 'https://medialab.design',
               logo: 'https://medialab.design/images/logo-medialab-400.png',
+              image: [
+                'https://medialab.design/images/og-image.png',
+                'https://medialab.design/images/og-image-gallery.png',
+                'https://medialab.design/images/team-collaboration.png',
+                'https://medialab.design/images/ux-research.png',
+                'https://medialab.design/images/service-ux-design-team.png',
+                'https://medialab.design/images/service-ai-discovery-team.png',
+              ],
               foundingDate: '2020',
               founder: {
                 '@type': 'Person',
@@ -660,6 +682,66 @@ export default function RootLayout({
                 'https://www.linkedin.com/company/medialab-ingenieria',
                 'https://x.com/MediaLabIng',
                 'https://www.instagram.com/medialabingenieria',
+              ],
+            }),
+          }}
+        />
+        {/* ImageGallery Schema — helps Google show image thumbnails in search results */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'ImageGallery',
+              name: 'MediaLab Ingeniería — Laboratorio de Diseño Digital',
+              description: 'Espacios de trabajo, equipo y proyectos de MediaLab Ingeniería. Agencia de diseño UX/UI, IA y desarrollo de productos digitales en Bogotá.',
+              url: 'https://medialab.design',
+              creator: {
+                '@type': 'Organization',
+                name: 'MediaLab Ingeniería',
+                url: 'https://medialab.design',
+              },
+              image: [
+                {
+                  '@type': 'ImageObject',
+                  url: 'https://medialab.design/images/og-image-gallery.png',
+                  name: 'Laboratorio de diseño digital MediaLab',
+                  description: 'Espacio de trabajo del equipo MediaLab: diseño UX/UI, desarrollo de producto y colaboración con IA',
+                  width: 1200,
+                  height: 630,
+                },
+                {
+                  '@type': 'ImageObject',
+                  url: 'https://medialab.design/images/team-collaboration.png',
+                  name: 'Equipo MediaLab en sesión de diseño colaborativo',
+                  description: 'Profesionales de UX, diseño e ingeniería trabajando en proyectos de producto digital',
+                  width: 1200,
+                  height: 630,
+                },
+                {
+                  '@type': 'ImageObject',
+                  url: 'https://medialab.design/images/ux-research.png',
+                  name: 'Investigación UX en MediaLab',
+                  description: 'Sesión de investigación de usuarios y diseño conductual en MediaLab Ingeniería',
+                  width: 1200,
+                  height: 630,
+                },
+                {
+                  '@type': 'ImageObject',
+                  url: 'https://medialab.design/images/service-ux-design-team.png',
+                  name: 'Equipo de diseño UX/UI MediaLab',
+                  description: 'Diseñadores UX/UI trabajando en interfaces y sistemas de diseño',
+                  width: 1200,
+                  height: 630,
+                },
+                {
+                  '@type': 'ImageObject',
+                  url: 'https://medialab.design/images/service-ai-discovery-team.png',
+                  name: 'Discovery de producto con IA',
+                  description: 'Equipo de discovery utilizando inteligencia artificial para acelerar la definición de productos digitales',
+                  width: 1200,
+                  height: 630,
+                },
               ],
             }),
           }}
