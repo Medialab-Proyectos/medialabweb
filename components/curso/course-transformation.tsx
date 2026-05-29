@@ -1,13 +1,10 @@
 "use client"
 
-import { useRef } from "react"
-import { motion, useInView } from "framer-motion"
+import { motion } from "framer-motion"
 import { ArrowRight } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 
 export function CourseTransformation() {
-  const ref = useRef<HTMLDivElement>(null)
-  const inView = useInView(ref, { once: true, margin: "-80px" })
   const { t } = useLanguage()
 
   const pairs = [
@@ -35,8 +32,9 @@ export function CourseTransformation() {
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-foreground/[0.08] to-transparent" />
       </div>
 
-      <div ref={ref} className="relative z-10 max-w-5xl mx-auto px-6 lg:px-8">
-        <motion.div initial={{ opacity: 0, y: 30 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.7 }} className="text-center mb-12">
+      <div className="relative z-10 max-w-5xl mx-auto px-6 lg:px-8">
+        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }} transition={{ duration: 0.7 }} className="text-center mb-12">
           <span className="inline-block text-xs tracking-[0.2em] uppercase mb-4 font-display font-medium" style={{ color: 'var(--cyan)' }}>
             {t("Tu transformación", "Your transformation")}
           </span>
@@ -61,7 +59,8 @@ export function CourseTransformation() {
             <motion.div
               key={i}
               initial={{ opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
+              whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
               transition={{ delay: 0.2 + i * 0.08, duration: 0.5 }}
               className="grid grid-cols-[1fr_auto_1fr] gap-2 md:gap-4 items-center"
             >

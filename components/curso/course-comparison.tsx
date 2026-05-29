@@ -1,13 +1,10 @@
 "use client"
 
-import { useRef } from "react"
-import { motion, useInView } from "framer-motion"
+import { motion } from "framer-motion"
 import { X, Check } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 
 export function CourseComparison() {
-  const ref = useRef<HTMLDivElement>(null)
-  const inView = useInView(ref, { once: true, margin: "-100px" })
   const { t } = useLanguage()
 
   const traditional = [
@@ -35,10 +32,11 @@ export function CourseComparison() {
         <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-foreground/[0.08] to-transparent" />
       </div>
 
-      <div ref={ref} className="relative z-10 max-w-5xl mx-auto px-6 lg:px-8">
+      <div className="relative z-10 max-w-5xl mx-auto px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
           transition={{ duration: 0.7 }}
           className="text-center mb-10"
         >
@@ -56,7 +54,7 @@ export function CourseComparison() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Traditional */}
-          <motion.div initial={{ opacity: 0, x: -30 }} animate={inView ? { opacity: 1, x: 0 } : {}} transition={{ duration: 0.6, delay: 0.2 }}>
+          <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.2 }}>
             <div className="curso-card-danger p-6 md:p-8 rounded-2xl border h-full">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-9 h-9 rounded-xl bg-red-500/15 dark:bg-red-500/10 flex items-center justify-center">
@@ -66,7 +64,7 @@ export function CourseComparison() {
               </div>
               <ul className="space-y-3">
                 {traditional.map((item, i) => (
-                  <motion.li key={i} initial={{ opacity: 0, x: -10 }} animate={inView ? { opacity: 1, x: 0 } : {}} transition={{ delay: 0.3 + i * 0.06 }}
+                  <motion.li key={i} initial={{ opacity: 0, x: -10 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: 0.3 + i * 0.06 }}
                     className="flex items-center gap-3">
                     <X className="w-3.5 h-3.5 text-red-500/70 dark:text-red-400/60 shrink-0" />
                     <span className="text-foreground/65 dark:text-foreground/50 text-sm">{item}</span>
@@ -77,7 +75,7 @@ export function CourseComparison() {
           </motion.div>
 
           {/* MediaLab */}
-          <motion.div initial={{ opacity: 0, x: 30 }} animate={inView ? { opacity: 1, x: 0 } : {}} transition={{ duration: 0.6, delay: 0.4 }}>
+          <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.4 }}>
             <div className="curso-card-highlight p-6 md:p-8 rounded-2xl border h-full">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-9 h-9 rounded-xl bg-[var(--cyan)]/15 flex items-center justify-center">
@@ -90,7 +88,7 @@ export function CourseComparison() {
               </div>
               <ul className="space-y-3">
                 {medialab.map((item, i) => (
-                  <motion.li key={i} initial={{ opacity: 0, x: 10 }} animate={inView ? { opacity: 1, x: 0 } : {}} transition={{ delay: 0.5 + i * 0.06 }}
+                  <motion.li key={i} initial={{ opacity: 0, x: 10 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: 0.5 + i * 0.06 }}
                     className="flex items-center gap-3">
                     <Check className="w-3.5 h-3.5 shrink-0" style={{ color: 'var(--cyan)' }} />
                     <span className="text-foreground/80 dark:text-foreground/70 text-sm">{item}</span>

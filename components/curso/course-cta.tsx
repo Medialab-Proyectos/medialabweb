@@ -1,7 +1,7 @@
 "use client"
 
-import { useRef, useState, useEffect } from "react"
-import { motion, useInView } from "framer-motion"
+import { useState, useEffect } from "react"
+import { motion } from "framer-motion"
 import { Users, Briefcase, Award, MessageCircle, Clock, Shield, Zap, CheckCircle } from "lucide-react"
 import { CourseRegisterForm } from "./course-register-form"
 import { useLanguage } from "@/lib/language-context"
@@ -36,8 +36,6 @@ function useCountdown() {
 }
 
 export function CourseCta() {
-  const ref = useRef<HTMLDivElement>(null)
-  const inView = useInView(ref, { once: true, margin: "-80px" })
   const { t } = useLanguage()
   const countdown = useCountdown()
 
@@ -47,11 +45,12 @@ export function CourseCta() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-[var(--magenta)]/[0.06] dark:bg-[var(--magenta)]/[0.04] rounded-full blur-[150px]" />
       </div>
 
-      <div ref={ref} className="relative z-10 max-w-5xl mx-auto px-6 lg:px-8">
+      <div className="relative z-10 max-w-5xl mx-auto px-6 lg:px-8">
         {/* ── SHARED HEADLINE ── */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
           transition={{ duration: 0.7 }}
           className="text-center mb-8"
         >
@@ -72,7 +71,8 @@ export function CourseCta() {
           {/* LEFT — Pricing card */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
+            whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
             transition={{ duration: 0.7, delay: 0.1 }}
           >
             <div className="curso-card-highlight border rounded-2xl p-6 md:p-7 h-full flex flex-col">
@@ -204,7 +204,8 @@ export function CourseCta() {
           {/* RIGHT — Registration form */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
+            whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
             transition={{ duration: 0.7, delay: 0.2 }}
           >
             <div className="h-full">

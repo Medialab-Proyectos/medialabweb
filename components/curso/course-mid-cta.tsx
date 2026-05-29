@@ -1,7 +1,6 @@
 "use client"
 
-import { useRef } from "react"
-import { motion, useInView } from "framer-motion"
+import { motion } from "framer-motion"
 import Image from "next/image"
 import { useLanguage } from "@/lib/language-context"
 
@@ -18,14 +17,12 @@ interface CourseMidCtaProps {
 }
 
 export function CourseMidCta({ headline, headlineEn, subtext, subtextEn, ctaText, ctaTextEn, ctaHref, variant = "subtle", bgImage }: CourseMidCtaProps) {
-  const ref = useRef<HTMLDivElement>(null)
-  const inView = useInView(ref, { once: true, margin: "-40px" })
   const { t } = useLanguage()
 
   const isPrimary = variant === "primary"
 
   return (
-    <div ref={ref} className="relative overflow-hidden bg-[var(--surface-dark)] text-white -mt-px border-t border-b border-white/[0.05]">
+    <div className="relative overflow-hidden bg-[var(--surface-dark)] text-white -mt-px border-t border-b border-white/[0.05]">
       {/* Glow accent */}
       <div className="absolute inset-0 pointer-events-none">
         <div
@@ -36,7 +33,8 @@ export function CourseMidCta({ headline, headlineEn, subtext, subtextEn, ctaText
 
       <motion.div
         initial={{ opacity: 0, y: 12 }}
-        animate={inView ? { opacity: 1, y: 0 } : {}}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
         transition={{ duration: 0.5 }}
         className="relative z-10 max-w-5xl mx-auto px-6 lg:px-8 py-14 md:py-20"
       >
@@ -44,7 +42,8 @@ export function CourseMidCta({ headline, headlineEn, subtext, subtextEn, ctaText
         {bgImage && (
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
-            animate={inView ? { opacity: 1, scale: 1 } : {}}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.1 }}
             className="relative w-full h-48 md:h-72 lg:h-80 rounded-2xl overflow-hidden mb-8 border border-white/[0.1]"
           >

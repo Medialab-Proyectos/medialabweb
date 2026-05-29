@@ -1,7 +1,7 @@
 "use client"
 
-import { useRef, useState } from "react"
-import { motion, useInView, AnimatePresence } from "framer-motion"
+import { useState } from "react"
+import { motion, AnimatePresence } from "framer-motion"
 import { Search, Layers, ShieldCheck, Brain, Rocket, Users, Repeat, ClipboardCheck, Sparkles, Leaf } from "lucide-react"
 import Image from "next/image"
 import { useLanguage } from "@/lib/language-context"
@@ -13,8 +13,6 @@ const stageStyles: Record<string, { border: string; bg: string; text: string; do
 }
 
 export function CourseMethodology() {
-  const ref = useRef<HTMLDivElement>(null)
-  const inView = useInView(ref, { once: true, margin: "-80px" })
   const [activePhase, setActivePhase] = useState<number | null>(null)
   const { t } = useLanguage()
 
@@ -182,10 +180,11 @@ export function CourseMethodology() {
       <div className="absolute top-1/3 left-1/4 w-[600px] h-[600px] bg-[var(--cyan)]/[0.03] rounded-full blur-[200px]" />
       <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-[var(--magenta)]/[0.03] rounded-full blur-[180px]" />
 
-      <div ref={ref} className="relative z-10 max-w-6xl mx-auto px-6 lg:px-8">
+      <div className="relative z-10 max-w-6xl mx-auto px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
           transition={{ duration: 0.7 }}
           className="text-center mb-8"
         >
@@ -221,7 +220,8 @@ export function CourseMethodology() {
         {/* Workshop image */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
-          animate={inView ? { opacity: 1, scale: 1 } : {}}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.2 }}
           className="relative w-full h-48 md:h-72 lg:h-80 rounded-2xl overflow-hidden mb-8 border border-foreground/[0.1]"
         >
@@ -236,7 +236,8 @@ export function CourseMethodology() {
         {/* Stage pills */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
           transition={{ delay: 0.3, duration: 0.5 }}
           className="flex flex-wrap justify-center gap-3 mb-10 md:mb-14"
         >
@@ -270,7 +271,8 @@ export function CourseMethodology() {
                 <motion.div
                   key={phase.id}
                   initial={{ opacity: 0, y: 30 }}
-                  animate={inView ? { opacity: 1, y: 0 } : {}}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
                   transition={{ delay: 0.1 + i * 0.08, duration: 0.5 }}
                   className={`relative pl-16 md:pl-0 md:grid md:grid-cols-2 md:gap-8 ${isLeft ? '' : 'md:direction-rtl'}`}
                 >

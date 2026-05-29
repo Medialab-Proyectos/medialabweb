@@ -1,7 +1,7 @@
 "use client"
 
-import { useRef, useState, useCallback, useEffect } from "react"
-import { motion, useInView } from "framer-motion"
+import { useState, useCallback, useEffect } from "react"
+import { motion } from "framer-motion"
 import { Linkedin, ExternalLink, ChevronLeft, ChevronRight, Quote } from "lucide-react"
 import Image from "next/image"
 import { useLanguage } from "@/lib/language-context"
@@ -13,8 +13,6 @@ import {
 } from "@/components/ui/carousel"
 
 export function CourseTestimonials() {
-  const ref = useRef<HTMLDivElement>(null)
-  const inView = useInView(ref, { once: true, margin: "-80px" })
   const [api, setApi] = useState<CarouselApi>()
   const [current, setCurrent] = useState(0)
   const [count, setCount] = useState(0)
@@ -98,8 +96,8 @@ export function CourseTestimonials() {
     <section id="testimonios" className="relative py-20 md:py-28 bg-background overflow-hidden">
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[var(--magenta)]/[0.02] rounded-full blur-[200px]" />
 
-      <div ref={ref} className="relative z-10 max-w-6xl mx-auto px-6 lg:px-8">
-        <motion.div initial={{ opacity: 0, y: 30 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.7 }} className="text-center mb-10 md:mb-14">
+      <div className="relative z-10 max-w-6xl mx-auto px-6 lg:px-8">
+        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="text-center mb-10 md:mb-14">
           <span className="inline-block text-xs tracking-[0.2em] uppercase mb-4 font-display" style={{ color: "var(--magenta)" }}>
             {t("Lo que dicen quienes ya lo vivieron", "What those who lived it say")}
           </span>
@@ -114,7 +112,8 @@ export function CourseTestimonials() {
         {/* Carousel */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
           transition={{ delay: 0.2, duration: 0.6 }}
           className="relative"
         >

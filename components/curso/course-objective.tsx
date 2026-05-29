@@ -1,13 +1,10 @@
 "use client"
 
-import { useRef } from "react"
-import { motion, useInView } from "framer-motion"
+import { motion } from "framer-motion"
 import { Layers, Brain, ShieldCheck, TrendingUp } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 
 export function CourseObjective() {
-  const ref = useRef<HTMLDivElement>(null)
-  const inView = useInView(ref, { once: true, margin: "-80px" })
   const { t } = useLanguage()
 
   const pillars = [
@@ -39,11 +36,12 @@ export function CourseObjective() {
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-foreground/[0.06] to-transparent" />
       </div>
 
-      <div ref={ref} className="relative z-10 max-w-5xl mx-auto px-6 lg:px-8">
+      <div className="relative z-10 max-w-5xl mx-auto px-6 lg:px-8">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
           transition={{ duration: 0.7 }}
           className="text-center mb-10"
         >
@@ -68,7 +66,8 @@ export function CourseObjective() {
         {/* Main card */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
           transition={{ delay: 0.2, duration: 0.6 }}
           className="relative rounded-2xl bg-[var(--surface-dark)] border border-[var(--cyan)]/20 shadow-2xl overflow-hidden"
         >
@@ -96,7 +95,8 @@ export function CourseObjective() {
                   <motion.div
                     key={i}
                     initial={{ opacity: 0, y: 15 }}
-                    animate={inView ? { opacity: 1, y: 0 } : {}}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
                     transition={{ delay: 0.3 + i * 0.08, duration: 0.5 }}
                     className="flex flex-col items-center gap-2 p-4 rounded-xl border border-foreground/[0.12] dark:border-white/[0.08] bg-foreground/[0.03] dark:bg-white/[0.03] hover:border-foreground/[0.22] dark:hover:border-white/[0.15] transition-all duration-300"
                   >

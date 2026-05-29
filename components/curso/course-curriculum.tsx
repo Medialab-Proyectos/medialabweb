@@ -1,7 +1,7 @@
 "use client"
 
-import { useRef, useState } from "react"
-import { motion, useInView, AnimatePresence } from "framer-motion"
+import { useState } from "react"
+import { motion, AnimatePresence } from "framer-motion"
 import {
   Search, Layers, ShieldCheck, Brain, Rocket,
   Users, Repeat, ClipboardCheck, Sparkles,
@@ -10,8 +10,6 @@ import {
 import { useLanguage } from "@/lib/language-context"
 
 export function CourseCurriculum() {
-  const ref = useRef<HTMLDivElement>(null)
-  const inView = useInView(ref, { once: true, margin: "-80px" })
   const { t } = useLanguage()
 
   const blocks = [
@@ -190,11 +188,12 @@ export function CourseCurriculum() {
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-foreground/[0.06] to-transparent" />
       </div>
 
-      <div ref={ref} className="relative z-10 max-w-5xl mx-auto px-6 lg:px-8">
+      <div className="relative z-10 max-w-5xl mx-auto px-6 lg:px-8">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
           transition={{ duration: 0.7 }}
           className="text-center mb-12 md:mb-16"
         >
@@ -228,7 +227,8 @@ export function CourseCurriculum() {
               {/* Block header */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
-                animate={inView ? { opacity: 1, y: 0 } : {}}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
                 transition={{ duration: 0.5 }}
                 className="flex items-center gap-4 mb-6"
               >
@@ -247,7 +247,7 @@ export function CourseCurriculum() {
               {/* Modules grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {block.modules.map((mod, i) => (
-                  <ModuleCard key={mod.number} mod={mod} blockColor={block.color} index={i} inView={inView} t={t} />
+                  <ModuleCard key={mod.number} mod={mod} blockColor={block.color} index={i} t={t} />
                 ))}
               </div>
 
@@ -255,7 +255,8 @@ export function CourseCurriculum() {
               {block.id === "bloque1" && (
                 <motion.div
                   initial={{ opacity: 0 }}
-                  animate={inView ? { opacity: 1 } : {}}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
                   transition={{ delay: 0.5, duration: 0.5 }}
                   className="mt-8 p-5 rounded-2xl border border-[var(--cyan)]/10 bg-[var(--cyan)]/[0.03] text-center"
                 >
@@ -273,7 +274,8 @@ export function CourseCurriculum() {
               {block.id === "bloque2" && (
                 <motion.div
                   initial={{ opacity: 0 }}
-                  animate={inView ? { opacity: 1 } : {}}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
                   transition={{ delay: 0.5, duration: 0.5 }}
                   className="mt-8 p-5 rounded-2xl border border-[var(--magenta)]/10 bg-[var(--magenta)]/[0.03] text-center"
                 >
@@ -294,9 +296,9 @@ export function CourseCurriculum() {
   )
 }
 
-function ModuleCard({ mod, blockColor, index, inView, t }: {
+function ModuleCard({ mod, blockColor, index, t }: {
   mod: { icon: any; number: string; title: string; subtitle: string; problem: string; learns: string[]; tools: string[]; deliverable: string; optional?: boolean }
-  blockColor: string; index: number; inView: boolean; t: (es: string, en: string) => string
+  blockColor: string; index: number; t: (es: string, en: string) => string
 }) {
   const [open, setOpen] = useState(false)
   const Icon = mod.icon
@@ -304,7 +306,8 @@ function ModuleCard({ mod, blockColor, index, inView, t }: {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
       transition={{ delay: 0.1 + index * 0.06, duration: 0.5 }}
       className={mod.optional ? "md:col-span-2" : ""}
     >

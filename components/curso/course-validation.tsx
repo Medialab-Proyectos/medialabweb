@@ -1,13 +1,10 @@
 "use client"
 
-import { useRef } from "react"
-import { motion, useInView } from "framer-motion"
+import { motion } from "framer-motion"
 import { GraduationCap, BookOpen, Brain, Shield, HeartHandshake, Microscope, Layers, Zap } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 
 export function CourseValidation() {
-  const ref = useRef<HTMLDivElement>(null)
-  const inView = useInView(ref, { once: true, margin: "-80px" })
   const { t } = useLanguage()
 
   const items = [
@@ -27,8 +24,9 @@ export function CourseValidation() {
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-foreground/[0.08] to-transparent" />
       </div>
 
-      <div ref={ref} className="relative z-10 max-w-5xl mx-auto px-6 lg:px-8">
-        <motion.div initial={{ opacity: 0, y: 30 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.7 }} className="text-center mb-10">
+      <div className="relative z-10 max-w-5xl mx-auto px-6 lg:px-8">
+        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }} transition={{ duration: 0.7 }} className="text-center mb-10">
           <span className="inline-block text-xs tracking-[0.2em] uppercase mb-4 font-display font-medium" style={{ color: 'var(--cyan)' }}>
             {t("Por qué confiar", "Why trust this")}
           </span>
@@ -47,7 +45,8 @@ export function CourseValidation() {
               <motion.div
                 key={i}
                 initial={{ opacity: 0, y: 20 }}
-                animate={inView ? { opacity: 1, y: 0 } : {}}
+                whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
                 transition={{ delay: 0.1 + i * 0.06, duration: 0.5 }}
               >
                 <div className="curso-card p-5 md:p-6 rounded-xl border transition-all duration-300 h-full">

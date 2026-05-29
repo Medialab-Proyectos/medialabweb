@@ -1,13 +1,11 @@
 "use client"
 
-import { useRef, useState } from "react"
-import { motion, useInView, AnimatePresence } from "framer-motion"
+import { useState } from "react"
+import { motion, AnimatePresence } from "framer-motion"
 import { ChevronDown } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 
 export function CourseFaq() {
-  const ref = useRef<HTMLDivElement>(null)
-  const inView = useInView(ref, { once: true, margin: "-80px" })
   const [openIndex, setOpenIndex] = useState<number | null>(null)
   const { t } = useLanguage()
 
@@ -33,8 +31,8 @@ export function CourseFaq() {
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-foreground/[0.08] to-transparent" />
       </div>
 
-      <div ref={ref} className="relative z-10 max-w-3xl mx-auto px-6 lg:px-8">
-        <motion.div initial={{ opacity: 0, y: 30 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.7 }} className="text-center mb-10">
+      <div className="relative z-10 max-w-3xl mx-auto px-6 lg:px-8">
+        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="text-center mb-10">
           <span className="inline-block text-xs tracking-[0.2em] uppercase text-foreground/50 dark:text-foreground/40 mb-4 font-display">{t("Preguntas frecuentes", "FAQ")}</span>
           <h2 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight leading-snug font-display">
             {t("Lo que preguntan los que terminan inscribiéndose.", "What enrollees ask before signing up.")}
@@ -45,7 +43,7 @@ export function CourseFaq() {
           {faqs.map((faq, i) => {
             const isOpen = openIndex === i
             return (
-              <motion.div key={i} initial={{ opacity: 0, y: 12 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ delay: 0.04 + i * 0.03, duration: 0.4 }}>
+              <motion.div key={i} initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.04 + i * 0.03, duration: 0.4 }}>
                 <button
                   onClick={() => setOpenIndex(isOpen ? null : i)}
                   className={`w-full text-left p-4 md:p-5 rounded-xl border transition-all duration-300 ${

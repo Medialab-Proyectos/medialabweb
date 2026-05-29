@@ -1,13 +1,10 @@
 "use client"
 
-import { useRef } from "react"
-import { motion, useInView } from "framer-motion"
+import { motion } from "framer-motion"
 import { Users, MessageSquare, Lightbulb, Handshake, Zap, Globe } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 
 export function CourseCommunity() {
-  const ref = useRef<HTMLDivElement>(null)
-  const inView = useInView(ref, { once: true, margin: "-80px" })
   const { t } = useLanguage()
 
   const communityFeatures = [
@@ -69,8 +66,8 @@ export function CourseCommunity() {
         <div className="absolute bottom-1/3 right-1/4 w-[400px] h-[400px] bg-[var(--magenta)]/[0.03] rounded-full blur-[150px]" />
       </div>
 
-      <div ref={ref} className="relative z-10 max-w-6xl mx-auto px-6 lg:px-8">
-        <motion.div initial={{ opacity: 0, y: 40 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.8 }}>
+      <div className="relative z-10 max-w-6xl mx-auto px-6 lg:px-8">
+        <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
           {/* Header */}
           <div className="text-center mb-16">
             <div className="flex justify-center mb-6">
@@ -109,7 +106,8 @@ export function CourseCommunity() {
                 <motion.div
                   key={i}
                   initial={{ opacity: 0, y: 20 }}
-                  animate={inView ? { opacity: 1, y: 0 } : {}}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
                   transition={{ delay: 0.15 + i * 0.08, duration: 0.5 }}
                   className="group p-5 rounded-xl border curso-card hover:border-[var(--cyan)]/25 transition-all duration-300"
                 >
@@ -124,7 +122,8 @@ export function CourseCommunity() {
           {/* CTA */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
             transition={{ delay: 0.6, duration: 0.5 }}
             className="mt-12 text-center"
           >

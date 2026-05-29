@@ -1,7 +1,6 @@
 "use client"
 
-import { useRef } from "react"
-import { motion, useInView } from "framer-motion"
+import { motion } from "framer-motion"
 import {
   Palette, Monitor, Code2, RocketIcon, User, Users, Frown, Sparkles,
   GraduationCap, Lightbulb, TrendingUp, Megaphone, Brain, PenTool,
@@ -10,8 +9,6 @@ import {
 import { useLanguage } from "@/lib/language-context"
 
 export function CourseAudience() {
-  const ref = useRef<HTMLDivElement>(null)
-  const inView = useInView(ref, { once: true, margin: "-80px" })
   const { t } = useLanguage()
 
   const profiles = [
@@ -42,10 +39,11 @@ export function CourseAudience() {
 
   return (
     <section id="audiencia" className="relative py-20 md:py-28 bg-background overflow-hidden">
-      <div ref={ref} className="relative z-10 max-w-6xl mx-auto px-6 lg:px-8">
+      <div className="relative z-10 max-w-6xl mx-auto px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
           transition={{ duration: 0.7 }}
           className="text-center mb-10"
         >
@@ -69,7 +67,8 @@ export function CourseAudience() {
               <motion.div
                 key={i}
                 initial={{ opacity: 0, y: 20 }}
-                animate={inView ? { opacity: 1, y: 0 } : {}}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
                 transition={{ delay: 0.1 + i * 0.05, duration: 0.5 }}
                 className="group"
               >
@@ -83,7 +82,7 @@ export function CourseAudience() {
           })}
         </div>
 
-        <motion.div initial={{ opacity: 0, y: 30 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ delay: 0.5, duration: 0.6 }}>
+        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.5, duration: 0.6 }}>
           <div className="text-center mb-6">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[var(--cyan)]/25 bg-[var(--cyan)]/[0.08] dark:bg-[var(--cyan)]/[0.06] mb-3">
               <GraduationCap size={14} style={{ color: "var(--cyan)" }} />
@@ -106,7 +105,8 @@ export function CourseAudience() {
                 <motion.div
                   key={i}
                   initial={{ opacity: 0, scale: 0.9 }}
-                  animate={inView ? { opacity: 1, scale: 1 } : {}}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
                   transition={{ delay: 0.6 + i * 0.03, duration: 0.4 }}
                   className="grupo curso-card p-3 rounded-lg border hover:border-[var(--cyan)]/25 transition-all duration-300 text-center"
                 >
