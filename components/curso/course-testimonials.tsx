@@ -65,30 +65,38 @@ export function CourseTestimonials() {
       productUrl: "",
     },
     {
-      name: "Sebastián Vargas",
-      role: t("Desarrollador", "Developer"),
-      project: t("App de Derechos Ciudadanos", "Civic Rights App"),
-      quote: t(
-        "Me ayudó a ver cosas que francamente no hubiera podido ver solo. Las bases teóricas y las leyes de UX hacen toda la diferencia.",
-        "It helped me see things I frankly couldn't have seen on my own. The theoretical foundations and UX laws make all the difference."
+      name: "Jonnathan Joseph Real Vaca",
+      role: t("Publicista Gráfico", "Graphic Advertiser"),
+      project: "MedCheckin",
+      description: t(
+        "App que elimina las filas en centros médicos: detecta la llegada del paciente, confirma su identidad y lo registra automáticamente antes de entrar al edificio.",
+        "App that eliminates queues at medical centers: detects patient arrival, confirms identity, and auto-registers them before entering the building."
       ),
-      result: t("MVP validado con 8 mejoras clave", "MVP validated with 8 key improvements"),
-      image: "/images/case-saas.png",
-      linkedin: "",
-      productUrl: "",
+      quote: t(
+        "El curso me enseñó a pensar en el usuario real, no solo en la funcionalidad. Gracias a eso, MedCheckin resuelve un problema que todos sufrimos pero nadie había atacado bien.",
+        "The course taught me to think about the real user, not just functionality. Thanks to that, MedCheckin solves a problem we all suffer but nobody had tackled well."
+      ),
+      result: t("App funcional con check-in automático", "Functional app with auto check-in"),
+      image: "/images/medcheckin-showcase.png",
+      linkedin: "https://www.linkedin.com/in/jonnathanreal-publicistagrafico/",
+      productUrl: "https://medcheckin.vercel.app/",
     },
     {
-      name: "Nicolás Herrera",
-      role: t("Estudiante", "Student"),
-      project: t("App Social de Eventos", "Social Events App"),
-      quote: t(
-        "La IA te puede recomendar, pero tú eres el que tiene que tener el conocimiento para guiarla. Mi app está sólida en flujo, estructura y usabilidad.",
-        "AI can give you recommendations, but you need the knowledge to guide it. My app is now solid in flow, structure, and usability."
+      name: "Mauricio Rojas",
+      role: "UX/UI Designer",
+      project: "Happy Food",
+      description: t(
+        "App móvil para gestionar el mercado del hogar: organiza productos, controla vencimientos, genera listas de compra y sugiere recetas para reducir desperdicios.",
+        "Mobile app for smart grocery management: organize products, track expirations, generate shopping lists, and suggest recipes to reduce waste."
       ),
-      result: t("Auditoría + rediseño en 2 semanas", "Audit + redesign in 2 weeks"),
-      image: "/images/case-fintech.png",
-      linkedin: "",
-      productUrl: "",
+      quote: t(
+        "Antes diseñaba pantallas bonitas, pero sin estrategia. Ahora entiendo cómo cada decisión de diseño impacta la adopción. Happy Food existe gracias a esa mentalidad.",
+        "Before I designed pretty screens but without strategy. Now I understand how every design decision impacts adoption. Happy Food exists thanks to that mindset."
+      ),
+      result: t("App completa con IA integrada", "Full app with integrated AI"),
+      image: "/images/happyfood-showcase.png",
+      linkedin: "https://www.linkedin.com/in/mauricio-rojas-webmaster/",
+      productUrl: "https://happy-food-za48.vercel.app/",
     },
   ]
 

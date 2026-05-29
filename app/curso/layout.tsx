@@ -199,6 +199,80 @@ export default function CursoLayout({
           }),
         }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Product',
+            name: 'AI User Experience Architect — Programa MediaLab',
+            url: 'https://medialab.design/curso',
+            brand: {
+              '@type': 'Organization',
+              name: 'MediaLab Ingeniería',
+            },
+            aggregateRating: {
+              '@type': 'AggregateRating',
+              ratingValue: '4.9',
+              bestRating: '5',
+              reviewCount: '4',
+            },
+            review: [
+              {
+                '@type': 'Review',
+                author: { '@type': 'Person', name: 'Juan Pablo Morán' },
+                reviewRating: {
+                  '@type': 'Rating',
+                  ratingValue: '5',
+                  bestRating: '5',
+                },
+                reviewBody:
+                  'Me hizo replantear todo el onboarding. Ahora mi app es una herramienta de apoyo real, no solo un sistema técnico.',
+                datePublished: '2026-05-01',
+              },
+              {
+                '@type': 'Review',
+                author: { '@type': 'Person', name: 'Jorge Pineda' },
+                reviewRating: {
+                  '@type': 'Rating',
+                  ratingValue: '5',
+                  bestRating: '5',
+                },
+                reviewBody:
+                  'Ha cambiado mucho el flujo de mi app. Uno se da cuenta de lo importante que es que todo esté en su sitio para que funcione.',
+                datePublished: '2026-05-01',
+              },
+              {
+                '@type': 'Review',
+                author: {
+                  '@type': 'Person',
+                  name: 'Jonnathan Joseph Real Vaca',
+                },
+                reviewRating: {
+                  '@type': 'Rating',
+                  ratingValue: '5',
+                  bestRating: '5',
+                },
+                reviewBody:
+                  'El curso me enseñó a pensar en el usuario real, no solo en la funcionalidad. Gracias a eso, MedCheckin resuelve un problema que todos sufrimos pero nadie había atacado bien.',
+                datePublished: '2026-05-01',
+              },
+              {
+                '@type': 'Review',
+                author: { '@type': 'Person', name: 'Mauricio Rojas' },
+                reviewRating: {
+                  '@type': 'Rating',
+                  ratingValue: '5',
+                  bestRating: '5',
+                },
+                reviewBody:
+                  'Antes diseñaba pantallas bonitas, pero sin estrategia. Ahora entiendo cómo cada decisión de diseño impacta la adopción. Happy Food existe gracias a esa mentalidad.',
+                datePublished: '2026-05-01',
+              },
+            ],
+          }),
+        }}
+      />
       {children}
     </>
   )

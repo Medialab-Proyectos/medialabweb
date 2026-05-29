@@ -27,7 +27,7 @@ import type { Metadata } from "next"
 export const metadata: Metadata = {
   title: "Agencia UX/UI con IA y Psicología del Consumidor | MediaLab Ingeniería",
   description:
-    "Diseñamos productos digitales que las personas aman: UX/UI con IA, discovery de producto acelerado, CRO para SaaS y desarrollo a medida. Bogotá, Colombia.",
+    "Diseñamos productos digitales que las personas aman: UX/UI con IA, UXBox (discovery de producto con IA en días), CRO para SaaS y desarrollo a medida. Bogotá, Colombia.",
   alternates: {
     canonical: "/",
     languages: {
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "MediaLab Ingeniería — UX/UI, IA y Psicología del Consumidor",
     description:
-      "Combinamos investigación de usuarios, diseño conductual e IA para crear experiencias digitales que conectan emocionalmente y convierten.",
+      "Combinamos investigación de usuarios, diseño conductual e IA para crear experiencias digitales que convierten. Prueba UXBox: discovery de producto con IA gratis.",
     url: "/",
     siteName: "MediaLab Ingeniería",
     images: [{ url: "/images/og-main-brand.png", width: 1200, height: 630 }],

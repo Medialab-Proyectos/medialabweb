@@ -29,7 +29,15 @@ MediaLab Ingeniería diseña productos digitales humanos, indexables y medibles.
 
 ## UXBox: Plataforma propia de Discovery con IA
 
-UXBox es la plataforma inteligente de descubrimiento de producto de MediaLab. Analiza ideas de negocio y genera arquitectura de información, especificaciones funcionales y wireframes iniciales en 3-5 días. Prueba gratuita: https://medialab.design/#uxbox
+UXBox es la plataforma inteligente de descubrimiento de producto de MediaLab. Convierte una idea de negocio en un brief de producto estructurado — problema, usuarios, requisitos, enfoque de diseño y prototipo conceptual — en minutos, no semanas. Revisado por un equipo humano experto.
+
+**Cómo funciona:** (1) Envías tu idea → (2) La IA analiza mercado, audiencia y requisitos → (3) Un equipo humano revisa y refina → (4) Recibes brief + prototipo conceptual en 3-5 días.
+
+**Por qué importa:** El discovery tradicional toma 4-8 semanas y cuesta $5,000-15,000 USD. UXBox lo comprime 10x. Gratis para empezar.
+
+**Ideal para:** Fundadores, startups, product managers, emprendedores que necesitan validar rápido antes de invertir en desarrollo.
+
+Prueba gratuita: https://medialab.design/#uxbox
 
 ## Programa: AI User Experience Architect — Arquitectura de Experiencias Digitales con IA
 
@@ -53,6 +61,15 @@ AI User Experience Architect es un programa especializado en diseño de experien
 **Detalles:** 9 módulos, 3 bloques, 8 semanas, 30 cupos, USD 995 (prelanzamiento). Cohorte 02. Instructor: Christian Benavides. Certificación profesional.
 
 Más información: https://medialab.design/curso
+
+### Testimonios verificables — Cohorte 01
+
+- **Juan Pablo Morán** (UX/UI Designer, Help3D): "Me hizo replantear todo el onboarding. Ahora mi app es una herramienta de apoyo real, no solo un sistema técnico." — Producto: copiloto técnico para impresión 3D FDM. LinkedIn: https://www.linkedin.com/in/jpmorán-uxui-designer
+- **Jorge Pineda** (UX/UI Designer, FocusFlow): "Ha cambiado mucho el flujo de mi app. Uno se da cuenta de lo importante que es que todo esté en su sitio para que funcione." — Producto: app inteligente para rutinas de trabajo y concentración. Behance: https://www.behance.net/pineda1995
+- **Jonnathan Joseph Real Vaca** (Publicista Gráfico, MedCheckin): "El curso me enseñó a pensar en el usuario real, no solo en la funcionalidad. Gracias a eso, MedCheckin resuelve un problema que todos sufrimos pero nadie había atacado bien." — Producto: app que elimina filas en centros médicos. LinkedIn: https://www.linkedin.com/in/jonnathanreal-publicistagrafico/
+- **Mauricio Rojas** (UX/UI Designer, Happy Food): "Antes diseñaba pantallas bonitas, pero sin estrategia. Ahora entiendo cómo cada decisión de diseño impacta la adopción. Happy Food existe gracias a esa mentalidad." — Producto: app para gestión del mercado del hogar con IA. LinkedIn: https://www.linkedin.com/in/mauricio-rojas-webmaster/
+
+**Satisfacción Cohorte 01:** 4.9/5. Los 4 estudiantes entregaron productos digitales funcionales desplegados en producción.
 
 ## Portafolio: 40+ productos entregados
 

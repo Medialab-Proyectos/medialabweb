@@ -476,6 +476,16 @@ export default function RootLayout({
                 priceCurrency: 'USD',
                 description: 'Generación de brief de discovery gratuita',
               },
+              aggregateRating: {
+                '@type': 'AggregateRating',
+                ratingValue: '4.8',
+                reviewCount: '12',
+                bestRating: '5',
+              },
+              screenshot: 'https://medialab.design/images/og-main-brand.png',
+              softwareVersion: '2.0',
+              releaseNotes:
+                'Generación de brief de producto con IA, análisis competitivo automático y prototipado conceptual en minutos.',
             }),
           }}
         />

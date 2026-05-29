@@ -61,6 +61,7 @@ export function CourseMidCta({ headline, headlineEn, subtext, subtextEn, ctaText
           {ctaText && ctaHref && (
             <a
               href={ctaHref}
+              {...(ctaHref.endsWith(".pdf") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
               className="inline-flex px-8 py-3.5 text-sm font-bold text-white rounded-full transition-all duration-300 hover:scale-[1.03] shadow-[0_4px_20px_rgba(0,0,0,0.5)]"
               style={{ background: isPrimary ? 'var(--magenta)' : 'var(--cyan)' }}
             >
