@@ -33,8 +33,7 @@ export function CourseTransformation() {
       </div>
 
       <div className="relative z-10 max-w-5xl mx-auto px-6 lg:px-8">
-        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }} transition={{ duration: 0.7 }} className="text-center mb-12">
+        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="text-center mb-12">
           <span className="inline-block text-xs tracking-[0.2em] uppercase mb-4 font-display font-medium" style={{ color: 'var(--cyan)' }}>
             {t("Tu transformación", "Your transformation")}
           </span>
@@ -60,7 +59,7 @@ export function CourseTransformation() {
               key={i}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+              viewport={{ once: true }}
               transition={{ delay: 0.2 + i * 0.08, duration: 0.5 }}
               className="grid grid-cols-[1fr_auto_1fr] gap-2 md:gap-4 items-center"
             >

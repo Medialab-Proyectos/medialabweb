@@ -25,8 +25,7 @@ export function CourseValidation() {
       </div>
 
       <div className="relative z-10 max-w-5xl mx-auto px-6 lg:px-8">
-        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }} transition={{ duration: 0.7 }} className="text-center mb-10">
+        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="text-center mb-10">
           <span className="inline-block text-xs tracking-[0.2em] uppercase mb-4 font-display font-medium" style={{ color: 'var(--cyan)' }}>
             {t("Por qué confiar", "Why trust this")}
           </span>
@@ -46,7 +45,7 @@ export function CourseValidation() {
                 key={i}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+                viewport={{ once: true }}
                 transition={{ delay: 0.1 + i * 0.06, duration: 0.5 }}
               >
                 <div className="curso-card p-5 md:p-6 rounded-xl border transition-all duration-300 h-full">

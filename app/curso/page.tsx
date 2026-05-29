@@ -68,7 +68,7 @@ export default function CursoPage() {
         subtextEn="Download the full curriculum and review it at your pace. 9 modules, tools, deliverables, and everything you'll build."
         ctaText="Descargar currículo en PDF →"
         ctaTextEn="Download curriculum PDF →"
-        ctaHref="/docs/curriculo-arquitecto-ux-ia.pdf"
+        ctaHref="/images/curso/Curso2026.pdf"
         variant="subtle"
       />
 
