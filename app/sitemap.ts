@@ -13,35 +13,36 @@ export default function sitemap(): MetadataRoute.Sitemap {
     changeFrequency: "weekly" | "monthly" | "yearly"
     priority: number
     en: boolean
+    lastModified: string
   }[] = [
-    { path: "", changeFrequency: "weekly", priority: 1.0, en: true },
-    { path: "/servicios", changeFrequency: "monthly", priority: 0.95, en: true },
-    { path: "/servicios/discovery-con-ia", changeFrequency: "monthly", priority: 0.9, en: true },
-    { path: "/servicios/diseno-ux-ui", changeFrequency: "monthly", priority: 0.9, en: true },
-    { path: "/servicios/desarrollo-producto-digital", changeFrequency: "monthly", priority: 0.9, en: true },
-    { path: "/servicios/cro-saas", changeFrequency: "monthly", priority: 0.85, en: true },
-    { path: "/industrias/fintech", changeFrequency: "monthly", priority: 0.85, en: true },
-    { path: "/industrias/startups", changeFrequency: "monthly", priority: 0.85, en: true },
-    { path: "/industrias/banca", changeFrequency: "monthly", priority: 0.8, en: true },
-    { path: "/industrias/educacion", changeFrequency: "monthly", priority: 0.8, en: true },
-    { path: "/industrias/ecommerce", changeFrequency: "monthly", priority: 0.8, en: true },
-    { path: "/industrias/movilidad", changeFrequency: "monthly", priority: 0.8, en: true },
-    { path: "/curso", changeFrequency: "weekly", priority: 0.95, en: true },
-    { path: "/portafolio", changeFrequency: "monthly", priority: 0.9, en: true },
-    { path: "/sobre-nosotros", changeFrequency: "monthly", priority: 0.85, en: true },
-    { path: "/contacto", changeFrequency: "monthly", priority: 0.85, en: true },
-    { path: "/carreras", changeFrequency: "weekly", priority: 0.85, en: true },
-    { path: "/blog", changeFrequency: "weekly", priority: 0.9, en: true },
-    { path: "/recursos/analizador-ux-ia", changeFrequency: "monthly", priority: 0.85, en: true },
-    { path: "/uxgreen", changeFrequency: "monthly", priority: 0.90, en: true },
-    { path: "/blog/arquitectura-percepcion", changeFrequency: "monthly", priority: 0.8, en: false },
-    { path: "/blog/adn-del-significado", changeFrequency: "monthly", priority: 0.8, en: false },
-    { path: "/blog/trono-de-la-decision", changeFrequency: "monthly", priority: 0.8, en: false },
-    { path: "/blog/influencia-sin-erosion", changeFrequency: "monthly", priority: 0.8, en: false },
-    { path: "/blog/psicologia-adopcion", changeFrequency: "monthly", priority: 0.8, en: false },
-    { path: "/blog/discovery-ia", changeFrequency: "monthly", priority: 0.8, en: false },
-    { path: "/blog/ux-fintech", changeFrequency: "monthly", priority: 0.8, en: false },
-    { path: "/blog/mvp-escala", changeFrequency: "monthly", priority: 0.8, en: false },
+    { path: "", changeFrequency: "weekly", priority: 1.0, en: true, lastModified: "2026-05-29" },
+    { path: "/servicios", changeFrequency: "monthly", priority: 0.95, en: true, lastModified: "2026-05-20" },
+    { path: "/servicios/discovery-con-ia", changeFrequency: "monthly", priority: 0.9, en: true, lastModified: "2026-05-20" },
+    { path: "/servicios/diseno-ux-ui", changeFrequency: "monthly", priority: 0.9, en: true, lastModified: "2026-05-20" },
+    { path: "/servicios/desarrollo-producto-digital", changeFrequency: "monthly", priority: 0.9, en: true, lastModified: "2026-05-20" },
+    { path: "/servicios/cro-saas", changeFrequency: "monthly", priority: 0.85, en: true, lastModified: "2026-05-20" },
+    { path: "/industrias/fintech", changeFrequency: "monthly", priority: 0.85, en: true, lastModified: "2026-05-20" },
+    { path: "/industrias/startups", changeFrequency: "monthly", priority: 0.85, en: true, lastModified: "2026-05-20" },
+    { path: "/industrias/banca", changeFrequency: "monthly", priority: 0.8, en: true, lastModified: "2026-05-20" },
+    { path: "/industrias/educacion", changeFrequency: "monthly", priority: 0.8, en: true, lastModified: "2026-05-20" },
+    { path: "/industrias/ecommerce", changeFrequency: "monthly", priority: 0.8, en: true, lastModified: "2026-05-20" },
+    { path: "/industrias/movilidad", changeFrequency: "monthly", priority: 0.8, en: true, lastModified: "2026-05-20" },
+    { path: "/curso", changeFrequency: "weekly", priority: 1.0, en: true, lastModified: "2026-05-29" },
+    { path: "/portafolio", changeFrequency: "monthly", priority: 0.9, en: true, lastModified: "2026-05-20" },
+    { path: "/sobre-nosotros", changeFrequency: "monthly", priority: 0.85, en: true, lastModified: "2026-05-20" },
+    { path: "/contacto", changeFrequency: "monthly", priority: 0.85, en: true, lastModified: "2026-05-20" },
+    { path: "/carreras", changeFrequency: "weekly", priority: 0.85, en: true, lastModified: "2026-05-20" },
+    { path: "/blog", changeFrequency: "weekly", priority: 0.9, en: true, lastModified: "2026-05-25" },
+    { path: "/recursos/analizador-ux-ia", changeFrequency: "monthly", priority: 0.85, en: true, lastModified: "2026-05-20" },
+    { path: "/uxgreen", changeFrequency: "monthly", priority: 0.90, en: true, lastModified: "2026-05-20" },
+    { path: "/blog/arquitectura-percepcion", changeFrequency: "monthly", priority: 0.8, en: false, lastModified: "2026-05-14" },
+    { path: "/blog/adn-del-significado", changeFrequency: "monthly", priority: 0.8, en: false, lastModified: "2026-05-14" },
+    { path: "/blog/trono-de-la-decision", changeFrequency: "monthly", priority: 0.8, en: false, lastModified: "2026-05-14" },
+    { path: "/blog/influencia-sin-erosion", changeFrequency: "monthly", priority: 0.8, en: false, lastModified: "2026-05-14" },
+    { path: "/blog/psicologia-adopcion", changeFrequency: "monthly", priority: 0.8, en: false, lastModified: "2026-05-14" },
+    { path: "/blog/discovery-ia", changeFrequency: "monthly", priority: 0.8, en: false, lastModified: "2026-05-14" },
+    { path: "/blog/ux-fintech", changeFrequency: "monthly", priority: 0.8, en: false, lastModified: "2026-05-14" },
+    { path: "/blog/mvp-escala", changeFrequency: "monthly", priority: 0.8, en: false, lastModified: "2026-05-14" },
   ]
 
   const entries: MetadataRoute.Sitemap = []
@@ -52,10 +53,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       ? { es: esUrl, en: enUrl, "x-default": esUrl }
       : { es: esUrl, "x-default": esUrl }
 
+    const lastModDate = new Date(r.lastModified)
+
     // Spanish (default, no prefix)
     entries.push({
       url: esUrl,
-      lastModified: now,
+      lastModified: lastModDate,
       changeFrequency: r.changeFrequency,
       priority: r.priority,
       alternates: { languages },
@@ -65,7 +68,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     if (r.en) {
       entries.push({
         url: enUrl,
-        lastModified: now,
+        lastModified: lastModDate,
         changeFrequency: r.changeFrequency,
         priority: r.priority * 0.9,
         alternates: { languages },

@@ -21,12 +21,14 @@ export const metadata: Metadata = {
       "Únete a un equipo remoto de diseñadores UX/UI que combinan investigación de usuarios con inteligencia artificial. Vacantes abiertas en Bogotá, Colombia.",
     url: "/carreras",
     siteName: "MediaLab Ingeniería",
+    images: [{ url: "/images/og-careers.png", width: 1200, height: 630, alt: "Carreras MediaLab — Únete al equipo de diseño UX/UI + IA" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Carreras en MediaLab — Diseña el futuro con nosotros",
     description:
       "Equipo remoto de diseño UX/UI + IA. Proyectos globales, mentoría y cultura que prioriza tu crecimiento.",
+    images: ["/images/og-careers.png"],
   },
 }
 

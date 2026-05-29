@@ -18,12 +18,14 @@ export const metadata: Metadata = {
     description: "Artículos firmados sobre diseño consciente, IA aplicada al producto y comportamiento humano.",
     type: "website",
     url: "/blog",
+    images: [{ url: "/images/og-blog.png", width: 1200, height: 630, alt: "Blog MediaLab — UX, IA y Diseño Conductual" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Blog MediaLab — UX, IA y Producto Digital",
     description:
       "Ideas sobre UX, IA y psicología del consumidor para diseñadores, PMs y founders.",
+    images: ["/images/og-blog.png"],
   },
 }
 

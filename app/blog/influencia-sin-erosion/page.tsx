@@ -76,8 +76,9 @@ export default function BlogInfluenciaSinErosionPage() {
       {/* Hero */}
       <div className="relative w-full h-[420px] md:h-[520px] overflow-hidden">
         <Image src="https://images.unsplash.com/photo-1573497620053-ea5300f94f21?q=80&w=1200&auto=format&fit=crop" alt="Investigadora UX en sesión de usabilidad con usuario" fill className="object-cover" priority sizes="100vw" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-        <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-12 max-w-4xl mx-auto">
+        <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-12 max-w-4xl mx-auto dark-hero-text">
           <div className="flex items-center gap-2 mb-4">
             <span className="inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider text-white w-fit" style={{ background: "#2AABB3" }}>
               Diseño Conductual

@@ -1,49 +1,19 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
 import { Layers, Globe, Clock, Users } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
-
-function useCountUp(target: number, duration = 1800, active: boolean) {
-  // Start with target value for SSR/no-JS — animate down from 0 only after hydration
-  const [count, setCount] = useState(target)
-  const hasAnimated = useRef(false)
-
-  useEffect(() => {
-    if (!active || hasAnimated.current) return
-    hasAnimated.current = true
-    setCount(0)
-    let start = 0
-    const step = target / (duration / 16)
-    const timer = setInterval(() => {
-      start += step
-      if (start >= target) {
-        setCount(target)
-        clearInterval(timer)
-      } else {
-        setCount(Math.floor(start))
-      }
-    }, 16)
-    return () => clearInterval(timer)
-  }, [target, duration, active])
-  return count
-}
 
 function MetricCard({
   value,
   suffix,
   label,
   icon: Icon,
-  active,
 }: {
   value: number
   suffix: string
   label: string
   icon: React.ElementType
-  active: boolean
 }) {
-  const count = useCountUp(value, 1600, active)
-
   return (
     <div className="flex flex-col items-center gap-3 p-6 group">
       <div
@@ -53,7 +23,7 @@ function MetricCard({
         <Icon size={22} color="white" strokeWidth={1.75} />
       </div>
       <div className="font-[family-name:var(--font-metrics)] font-bold text-4xl md:text-5xl text-foreground tabular-nums">
-        {count}
+        {value}
         <span className="text-[var(--magenta)]">{suffix}</span>
       </div>
       <p className="text-sm text-muted-foreground text-center font-medium">{label}</p>
@@ -62,18 +32,7 @@ function MetricCard({
 }
 
 export function TrustMetrics() {
-  const ref = useRef<HTMLDivElement>(null)
-  const [active, setActive] = useState(false)
   const { t } = useLanguage()
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setActive(true) },
-      { threshold: 0.3 }
-    )
-    if (ref.current) observer.observe(ref.current)
-    return () => observer.disconnect()
-  }, [])
 
   const metrics = [
     { value: 40, suffix: "+", label: t("Productos entregados en producción", "Products shipped to production"), icon: Layers },
@@ -84,7 +43,6 @@ export function TrustMetrics() {
 
   return (
     <section
-      ref={ref}
       className="py-20 px-6 bg-background border-b border-border"
       aria-label="Trust metrics"
     >
@@ -97,7 +55,7 @@ export function TrustMetrics() {
         </p>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {metrics.map((m) => (
-            <MetricCard key={m.label} {...m} active={active} />
+            <MetricCard key={m.label} {...m} />
           ))}
         </div>
       </div>

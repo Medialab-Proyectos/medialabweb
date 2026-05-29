@@ -54,6 +54,9 @@ export const metadata: Metadata = {
     'MediaLab diseña productos digitales que las personas aman: UX, IA y psicología del consumidor. Aceleramos tu discovery de producto de meses a días.',
   generator: 'Next.js',
   applicationName: 'MediaLab Ingeniería',
+  appleWebApp: {
+    title: 'MediaLab Ingeniería',
+  },
   category: 'Design, Software, Artificial Intelligence, SEO',
   classification: 'UX/UI design agency, product design, software development, technical SEO, AEO/GEO',
   referrer: 'origin-when-cross-origin',
@@ -104,7 +107,7 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: '/images/og-image.png',
+        url: '/images/og-main-brand.png',
         width: 1200,
         height: 630,
         alt: 'MediaLab Ingeniería — Ingeniería de producto digital: UX, IA, Software y SEO técnico',
@@ -132,7 +135,7 @@ export const metadata: Metadata = {
     creator: '@MediaLabIng',
     title: 'Agencia UX con IA y Discovery de Producto | MediaLab Ingeniería',
     description: 'Productos digitales que las personas aman: UX, IA y psicología del consumidor. Discovery de meses a días, validado con criterio humano.',
-    images: ['/images/og-image.png'],
+    images: ['/images/og-main-brand.png'],
   },
   icons: {
     icon: [
@@ -185,7 +188,7 @@ export default function RootLayout({
               url: 'https://medialab.design',
               logo: 'https://medialab.design/images/logo-medialab-400.png',
               image: [
-                'https://medialab.design/images/og-image.png',
+                'https://medialab.design/images/og-main-brand.png',
                 'https://medialab.design/images/og-image-gallery.png',
                 'https://medialab.design/images/team-collaboration.png',
                 'https://medialab.design/images/ux-research.png',
@@ -349,7 +352,7 @@ export default function RootLayout({
               '@type': 'ProfessionalService',
               name: 'MediaLab Ingeniería',
               url: 'https://medialab.design',
-              image: 'https://medialab.design/images/og-image.png',
+              image: 'https://medialab.design/images/og-main-brand.png',
               logo: 'https://medialab.design/images/logo-medialab-400.png',
               description:
                 'Agencia especializada en diseño UX/UI, IA, SEO técnico, CRO, diseño conductual y desarrollo de software para productos digitales B2B y B2C.',
@@ -670,7 +673,7 @@ export default function RootLayout({
                 'Agencia de diseño UX/UI, inteligencia artificial y desarrollo de productos digitales en Bogotá. Especialistas en experiencias B2B y B2C.',
               url: 'https://medialab.design',
               logo: 'https://medialab.design/images/logo-medialab-400.png',
-              image: 'https://medialab.design/images/og-image.png',
+              image: 'https://medialab.design/images/og-main-brand.png',
               telephone: '+57-305-400-9505',
               email: 'info@medialab.design',
               address: {

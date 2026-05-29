@@ -20,6 +20,14 @@ export const metadata: Metadata = {
     url: "/en/contacto",
     siteName: "MediaLab Ingeniería",
     locale: "en_US",
+    images: [{ url: "/images/og-contact.png", width: 1200, height: 630, alt: "Contact MediaLab — Schedule a Free Discovery Session" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Contact | MediaLab Ingeniería",
+    description:
+      "Tell us what you want to build. We reply within 24 hours.",
+    images: ["/images/og-contact.png"],
   },
 }
 

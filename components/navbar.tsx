@@ -41,6 +41,7 @@ export function Navbar() {
   const isCurso = pathname === "/curso" || pathname === "/en/curso"
   const isHome = pathname === "/" || pathname === "/en"
   const isUXGreen = pathname === "/uxgreen" || pathname === "/en/uxgreen"
+  const isBlogArticle = /^\/(en\/)?blog\/.+/.test(pathname)
   // El CTA usa anclas same-page solo donde existen (home: #contact, curso: #registro);
   // en el resto apunta a la página real /contacto para no dejar caminos muertos.
   const ctaHref = isCurso ? "#registro" : isHome ? "#contact" : localized("/contacto")
@@ -60,11 +61,12 @@ export function Navbar() {
         pathname === "/en/curso")) ||
     isUXGreen ||
     pathname === "/carreras" ||
-    pathname === "/en/carreras"
+    pathname === "/en/carreras" ||
+    isBlogArticle
   const overDarkHero = !scrolled && isDarkHero
   // UXGreen always has a dark navbar, even when scrolled in light mode
   const isCarreras = pathname === "/carreras" || pathname === "/en/carreras"
-  const forceDarkNav = isUXGreen || isCarreras
+  const forceDarkNav = isUXGreen || isCarreras || isBlogArticle
   const linkIdle = overDarkHero || forceDarkNav
     ? "text-white/70 hover:text-white"
     : "text-muted-foreground hover:text-foreground"

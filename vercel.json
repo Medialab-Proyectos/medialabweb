@@ -8,6 +8,18 @@
       "has": [{ "type": "host", "value": "www.medialab.design" }],
       "destination": "https://medialab.design/:path",
       "permanent": true
+    },
+    {
+      "source": "/:path(.*)",
+      "has": [{ "type": "host", "value": "medialabingenieria.com" }],
+      "destination": "https://medialab.design/:path",
+      "permanent": true
+    },
+    {
+      "source": "/:path(.*)",
+      "has": [{ "type": "host", "value": "www.medialabingenieria.com" }],
+      "destination": "https://medialab.design/:path",
+      "permanent": true
     }
   ]
 }

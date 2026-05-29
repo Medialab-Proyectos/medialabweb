@@ -48,7 +48,7 @@ export function CourseMidCta({ headline, headlineEn, subtext, subtextEn, ctaText
             transition={{ duration: 0.8, delay: 0.1 }}
             className="relative w-full h-48 md:h-72 lg:h-80 rounded-2xl overflow-hidden mb-8 border border-white/[0.1]"
           >
-            <Image src={bgImage} alt="" fill sizes="100vw" className="object-cover object-center" priority />
+            <Image src={bgImage} alt={t(headline, headlineEn ?? headline)} fill sizes="100vw" className="object-cover object-center" priority />
           </motion.div>
         )}
 

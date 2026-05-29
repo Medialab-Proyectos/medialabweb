@@ -20,9 +20,9 @@ import { StickyCTA } from "@/components/sticky-cta"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Curso AI User Experience Architect — UX con IA en 8 semanas",
+  title: "Curso AI UX Architect — Diseña Productos con IA en 8 Semanas | MediaLab",
   description:
-    "Domina UX, psicología del consumidor e IA en 8 semanas. Conviértete en AI UX Architect y diseña experiencias que las personas aman y los algoritmos priorizan.",
+    "Domina UX, psicología de adopción digital e IA en 8 semanas. Conviértete en AI UX Architect y diseña productos digitales que las personas aman y los algoritmos priorizan.",
   alternates: {
     canonical: "/curso",
     languages: {
@@ -32,18 +32,18 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "Curso AI User Experience Architect | MediaLab Ingeniería",
+    title: "Curso AI UX Architect | MediaLab Ingeniería",
     description:
-      "UX + IA + psicología del consumidor en 8 semanas. Para diseñadores, PMs y founders que quieren crear productos que las personas aman.",
+      "UX + IA + psicología de adopción digital en 8 semanas. Para diseñadores, PMs y founders que quieren crear productos digitales de alto impacto.",
     url: "/curso",
-    images: [{ url: "/images/og-image.png", width: 1200, height: 630 }],
+    images: [{ url: "/images/og-curso.png", width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Curso AI UX Architect — UX con IA en 8 semanas | MediaLab",
     description:
-      "Domina UX, psicología del consumidor e IA. Certifícate como AI User Experience Architect.",
-    images: ["/images/og-image.png"],
+      "Domina UX, psicología de adopción digital e IA. Certifícate como AI UX Architect.",
+    images: ["/images/og-curso.png"],
   },
 }
 

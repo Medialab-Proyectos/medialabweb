@@ -25,6 +25,13 @@ export const metadata: Metadata = {
     description:
       "Investigamos cómo piensan tus usuarios, diseñamos lo que necesitan sentir y construimos el producto que tu negocio necesita. 40+ productos, 7 países, 98% retención de clientes.",
     url: "/sobre-nosotros",
+    images: [{ url: "/images/og-about.png", width: 1200, height: 630, alt: "Sobre MediaLab Ingeniería — Equipo de Producto Digital" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Sobre MediaLab Ingeniería — Diseño con Datos, No Suposiciones",
+    description: "40+ productos, 7 países, 98% retención. Investigamos, diseñamos y construimos productos digitales.",
+    images: ["/images/og-about.png"],
   },
 }
 

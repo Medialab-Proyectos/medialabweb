@@ -41,14 +41,15 @@ export const metadata: Metadata = {
     description:
       "Combinamos investigación de usuarios, diseño conductual e IA para crear experiencias digitales que conectan emocionalmente y convierten.",
     url: "/",
-    images: [{ url: "/images/og-image.png", width: 1200, height: 630 }],
+    siteName: "MediaLab Ingeniería",
+    images: [{ url: "/images/og-main-brand.png", width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",
     title: "MediaLab Ingeniería — UX/UI, IA y Psicología del Consumidor",
     description:
       "Diseñamos productos digitales que las personas aman. UX, IA y psicología del consumidor desde Bogotá para el mundo.",
-    images: ["/images/og-image.png"],
+    images: ["/images/og-main-brand.png"],
   },
 }
 

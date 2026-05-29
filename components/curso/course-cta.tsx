@@ -6,8 +6,8 @@ import { Users, Briefcase, Award, MessageCircle, Clock, Shield, Zap, CheckCircle
 import { CourseRegisterForm } from "./course-register-form"
 import { useLanguage } from "@/lib/language-context"
 
-/* Countdown target: 2026-05-28T23:59:59 COL (UTC-5) */
-const COUNTDOWN_END = new Date("2026-05-28T23:59:59-05:00").getTime()
+/* Countdown target: 2026-07-15T23:59:59 COL (UTC-5) */
+const COUNTDOWN_END = new Date("2026-07-15T23:59:59-05:00").getTime()
 
 function useCountdown() {
   const [timeLeft, setTimeLeft] = useState({ d: 0, h: 0, m: 0, s: 0, expired: false })
@@ -86,7 +86,14 @@ export function CourseCta() {
                 <span className="text-foreground/30 line-through text-lg">$1,500 USD</span>
                 <span className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full text-xs font-bold" style={{ background: 'var(--magenta)', color: 'white' }}>
                   {t("-34% Prelanzamiento", "-34% Pre-launch")}
-                  {!countdown.expired && (
+                  {countdown.expired ? (
+                    <>
+                      <span className="w-px h-3 bg-white/30" />
+                      <span className="font-semibold text-[11px]">
+                        {t("Últimos cupos", "Last spots")}
+                      </span>
+                    </>
+                  ) : (
                     <>
                       <span className="w-px h-3 bg-white/30" />
                       <span className="font-mono tabular-nums text-[11px] font-semibold">
@@ -160,13 +167,15 @@ export function CourseCta() {
                 </p>
               </div>
 
-              {/* Urgency */}
-              <div className="flex items-center gap-2 mb-4">
-                <Clock size={14} className="text-[var(--magenta)] shrink-0" />
-                <p className="text-xs text-foreground/50 dark:text-foreground/38">
-                  <span className="font-semibold" style={{ color: 'var(--magenta)' }}>{t("Cohorte 02", "Cohort 02")}</span>
-                  {t(" — cupos limitados. Precio de prelanzamiento por tiempo limitado.", " — limited seats. Pre-launch price for a limited time.")}
-                </p>
+              {/* Urgency & Scarcity */}
+              <div className="flex flex-col gap-2.5 mb-5">
+                <div className="flex items-center gap-2">
+                  <Clock size={14} className="text-[var(--magenta)] shrink-0" />
+                  <p className="text-xs text-foreground/70 dark:text-foreground/50">
+                    <span className="font-semibold" style={{ color: 'var(--magenta)' }}>{t("Cohorte 02", "Cohort 02")}</span>
+                    {t(" — precio de prelanzamiento por tiempo limitado.", " — pre-launch price for a limited time.")}
+                  </p>
+                </div>
               </div>
 
               {/* WhatsApp */}

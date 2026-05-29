@@ -55,7 +55,8 @@
       "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\coben\\\\Desktop\\\\sitiomlab\\\\medialabweb\\\\public\" -Filter \"robots.txt\" -ErrorAction SilentlyContinue)",
       "Bash(Select-Object FullName)",
       "Bash(find:*)",
-      "Bash(grep -E \"\\\\.tsx$\")"
+      "Bash(grep -E \"\\\\.tsx$\")",
+      "WebFetch(domain:localhost)"
     ]
   }
 }

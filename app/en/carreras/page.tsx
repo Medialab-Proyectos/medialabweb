@@ -21,12 +21,14 @@ export const metadata: Metadata = {
       "Join a remote team of UX/UI designers combining user research with artificial intelligence. Open positions in Bogotá, Colombia.",
     url: "/en/carreras",
     siteName: "MediaLab Ingeniería",
+    images: [{ url: "/images/og-careers.png", width: 1200, height: 630, alt: "Careers MediaLab — Join the UX/UI + AI design team" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Careers at MediaLab — Design the future with us",
     description:
       "Remote UX/UI + AI design team. Global projects, mentorship, and a culture that prioritizes your growth.",
+    images: ["/images/og-careers.png"],
   },
 }
 
