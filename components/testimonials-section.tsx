@@ -147,11 +147,25 @@ export function TestimonialsSection() {
               {testimonials.map((item, i) => (
                 <CarouselItem key={item.author} className="pl-4 md:basis-1/2 lg:basis-1/3">
                   <div
+                    itemScope
+                    itemType="https://schema.org/Review"
                     className={`relative flex flex-col gap-6 p-8 rounded-3xl border border-border bg-card h-full transition-all duration-700 hover:border-[var(--magenta)]/30 hover:shadow-xl ${
                       visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
                     }`}
                     style={{ transitionDelay: `${i * 100}ms` }}
                   >
+                    {/* Semantic Metadata for bots */}
+                    <div itemProp="itemReviewed" itemScope itemType="https://schema.org/LocalBusiness">
+                      <meta itemProp="name" content="MediaLab Ingeniería" />
+                      <meta itemProp="image" content="https://medialab.design/images/og-main-brand.png" />
+                      <meta itemProp="telephone" content="+57-305-400-9505" />
+                      <meta itemProp="address" content="Bogotá, Colombia" />
+                    </div>
+                    <div itemProp="reviewRating" itemScope itemType="https://schema.org/Rating">
+                      <meta itemProp="ratingValue" content="5" />
+                      <meta itemProp="bestRating" content="5" />
+                    </div>
+
                     {/* Quote icon */}
                     <Quote
                       size={32}
@@ -179,7 +193,7 @@ export function TestimonialsSection() {
                     </div>
 
                     {/* Lo que vivieron (cita textual del cliente) */}
-                    <p className="text-base text-foreground leading-relaxed flex-1">
+                    <p itemProp="reviewBody" className="text-base text-foreground leading-relaxed flex-1">
                       &ldquo;{item.quote}&rdquo;
                     </p>
 
@@ -197,7 +211,7 @@ export function TestimonialsSection() {
                     </div>
 
                     {/* Author */}
-                    <div className="flex items-center gap-3 pt-4 border-t border-border">
+                    <div itemProp="author" itemScope itemType="https://schema.org/Person" className="flex items-center gap-3 pt-4 border-t border-border">
                       <div className="w-10 h-10 rounded-full overflow-hidden bg-white flex items-center justify-center shrink-0 border border-border">
                         <Image
                           src={item.logo}
@@ -208,9 +222,12 @@ export function TestimonialsSection() {
                         />
                       </div>
                       <div className="flex flex-col flex-1">
-                        <span className="text-sm font-semibold text-foreground">{item.author}</span>
+                        <span itemProp="name" className="text-sm font-semibold text-foreground">{item.author}</span>
                         <span className="text-xs text-muted-foreground">
-                          {item.role}, {item.company}
+                          <span itemProp="jobTitle">{item.role}</span>,{" "}
+                          <span itemProp="worksFor" itemScope itemType="https://schema.org/Organization">
+                            <span itemProp="name">{item.company}</span>
+                          </span>
                         </span>
                       </div>
                       <a

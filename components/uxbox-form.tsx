@@ -464,8 +464,8 @@ export function UXBoxForm() {
           {phase === "spark" && (
             <p className="text-lg dark:text-white/55 text-muted-foreground max-w-xl leading-relaxed">
               {t(
-                "UXBox analiza tu idea con IA —mercado, competidores, oportunidades UX y módulos— y te entrega un blueprint accionable. Empieza a verlo en segundos.",
-                "UXBox analyzes your idea with AI —market, competitors, UX opportunities, and modules— and delivers an actionable blueprint. Start seeing it in seconds."
+                "UXBox es nuestro Generador de Requerimientos con IA y AI UX Brief Generator. Analiza tu idea —mercado, competidores y oportunidades UX— y te entrega un blueprint accionable en segundos.",
+                "UXBox is our AI Product Discovery tool and AI UX Brief Generator. It analyzes your idea —market, competitors, and UX opportunities— and delivers an actionable blueprint in seconds."
               )}
             </p>
           )}
@@ -473,9 +473,12 @@ export function UXBoxForm() {
 
         {/* ───────── SPARK ───────── */}
         {phase === "spark" && (
-          <form onSubmit={handleSpark} className="flex flex-col gap-4 max-w-xl mx-auto animate-in fade-in duration-500">
+          <form onSubmit={handleSpark} className="flex flex-col gap-4 max-w-xl mx-auto animate-in fade-in duration-500" aria-describedby="spark-desc">
+            <p id="spark-desc" className="sr-only">Formulario de inicio para describir y analizar tu idea de producto digital mediante nuestro generador con IA.</p>
             <div className="relative">
+              <label htmlFor="spark-idea-input" className="sr-only">{t("Describe tu idea en una línea", "Describe your idea in one line")}</label>
               <textarea
+                id="spark-idea-input"
                 value={idea}
                 onChange={(e) => { setIdea(e.target.value); setError("") }}
                 placeholder={t("Describe tu idea en una línea…", "Describe your idea in one line…")}
@@ -483,7 +486,7 @@ export function UXBoxForm() {
                 className={`${inputClass} text-base pr-4`}
               />
             </div>
-            {error && <p className="text-xs text-red-400 font-medium">{error}</p>}
+            {error && <p id="spark-error" className="text-xs text-red-400 font-medium" role="alert">{error}</p>}
             <button type="submit" className="w-full flex items-center justify-center gap-2 py-4 rounded-xl font-semibold text-[15px] text-white transition-all active:scale-95 hover:brightness-110"
               style={{ background: "linear-gradient(90deg, #E8751A, #c65a10)", boxShadow: "0 8px 30px rgba(232,117,26,0.3)" }}>
               <Sparkles size={17} /> {t("Analizar mi idea", "Analyze my idea")}
@@ -532,12 +535,12 @@ export function UXBoxForm() {
 
         {/* ───────── GATE (email) ───────── */}
         {phase === "gate" && (
-          <form onSubmit={handleGate} className="max-w-md mx-auto flex flex-col gap-5 animate-in fade-in duration-500">
+          <form onSubmit={handleGate} className="max-w-md mx-auto flex flex-col gap-5 animate-in fade-in duration-500" aria-describedby="gate-desc">
             <div className="flex flex-col gap-1 text-center">
               <h3 className="font-display font-bold text-xl dark:text-white text-foreground">
                 {retrieveMode ? t("Recupera tu análisis", "Retrieve your analysis") : t("Asegura tu análisis", "Secure your analysis")}
               </h3>
-              <p className="text-sm dark:text-white/55 text-muted-foreground">
+              <p id="gate-desc" className="text-sm dark:text-white/55 text-muted-foreground">
                 {retrieveMode
                   ? t("Ingresa el email con el que guardaste tu idea.", "Enter the email you used to save your idea.")
                   : t("Para no perder este análisis y poder volver cuando quieras.", "So you don't lose this analysis and can return anytime.")}
@@ -545,7 +548,9 @@ export function UXBoxForm() {
             </div>
             <div className="flex items-center gap-2 rounded-xl border dark:border-white/25 border-foreground/20 dark:bg-white/5 bg-foreground/5 px-3">
               <Mail size={16} className="dark:text-white/40 text-foreground/40 shrink-0" />
-              <input type="email" value={email} disabled={loading}
+              <label htmlFor="gate-email-input" className="sr-only">{t("Correo electrónico", "Email address")}</label>
+              <input type="email" id="gate-email-input" value={email} disabled={loading}
+                aria-describedby="gate-error"
                 onChange={(e) => { setEmail(e.target.value); setError("") }}
                 placeholder={t("nombre@empresa.com", "name@company.com")}
                 className="w-full py-3.5 bg-transparent dark:text-white text-foreground placeholder:dark:text-white/35 placeholder:text-foreground/35 focus:outline-none text-sm" required />
@@ -557,7 +562,7 @@ export function UXBoxForm() {
                   <Link href="/politica-de-privacidad" className="underline hover:dark:text-white hover:text-foreground">{t("política de privacidad", "privacy policy")}</Link>.</span>
               </label>
             )}
-            {error && <p className="text-xs text-red-400 font-medium">{error}</p>}
+            {error && <p id="gate-error" className="text-xs text-red-400 font-medium" role="alert">{error}</p>}
             <button type="submit" disabled={loading} className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold text-sm text-white transition-all active:scale-95 disabled:opacity-50"
               style={{ background: "linear-gradient(90deg, #E8751A, #c65a10)" }}>
               {loading
@@ -576,21 +581,23 @@ export function UXBoxForm() {
 
         {/* ───────── OTP ───────── */}
         {phase === "otp" && (
-          <form onSubmit={handleOtp} className="max-w-md mx-auto flex flex-col gap-5 animate-in fade-in duration-500">
+          <form onSubmit={handleOtp} className="max-w-md mx-auto flex flex-col gap-5 animate-in fade-in duration-500" aria-describedby="otp-desc">
             <div className="flex flex-col gap-1 text-center">
               <h3 className="font-display font-bold text-xl dark:text-white text-foreground">{t("Revisa tu correo", "Check your email")}</h3>
-              <p className="text-sm dark:text-white/55 text-muted-foreground">{t("Te envié una llave de 4 dígitos a ", "I sent a 4-digit key to ")}<strong className="dark:text-white text-foreground">{email}</strong></p>
+              <p id="otp-desc" className="text-sm dark:text-white/55 text-muted-foreground">{t("Te envié una llave de 4 dígitos a ", "I sent a 4-digit key to ")}<strong className="dark:text-white text-foreground">{email}</strong></p>
             </div>
             {isDemo && demoPin && (
               <div className="rounded-lg border border-dashed px-4 py-3 text-xs text-center" style={{ borderColor: accentBorder, background: accentBg }}>
                 {t("Modo demo — tu llave es ", "Demo mode — your key is ")}<strong className="text-base tracking-widest" style={{ color: ACCENT }}>{demoPin}</strong>
               </div>
             )}
-            <input type="text" inputMode="numeric" maxLength={4} value={pinInput}
+            <label htmlFor="otp-pin-input" className="sr-only">{t("Código de verificación de 4 dígitos", "4-digit verification code")}</label>
+            <input type="text" id="otp-pin-input" inputMode="numeric" maxLength={4} value={pinInput}
+              aria-describedby="otp-error"
               onChange={(e) => { setPinInput(e.target.value.replace(/\D/g, "")); setError("") }}
               placeholder={t("Ej: 4812", "E.g: 4812")} autoFocus
               className={`${inputClass} text-center tracking-[0.5em] font-bold text-2xl`} required />
-            {error && <p className="text-xs text-red-400 font-medium text-center">{error}</p>}
+            {error && <p id="otp-error" className="text-xs text-red-400 font-medium text-center" role="alert">{error}</p>}
             <div className="flex items-center justify-center gap-4 text-xs">
               <button type="button" onClick={handleResend} disabled={resending} className="flex items-center gap-1.5 dark:text-white/50 text-foreground/50 hover:dark:text-white hover:text-foreground disabled:opacity-50">
                 <RotateCcw size={12} className={resending ? "animate-spin" : ""} /> {resending ? t("Reenviando…", "Resending…") : t("Reenviar llave", "Resend key")}
@@ -628,15 +635,16 @@ export function UXBoxForm() {
                 <Cpu size={14} className="shrink-0 mt-0.5" style={{ color: ACCENT }} />
                 <span>{currentField.ai}</span>
               </div>
-              <label className="font-display font-bold text-lg dark:text-white text-foreground">{currentField.label}</label>
+              <label htmlFor={`feed-${currentField.key}-input`} className="font-display font-bold text-lg dark:text-white text-foreground">{currentField.label}</label>
               <input
-                type="text" value={currentField.value} autoFocus
+                type="text" id={`feed-${currentField.key}-input`} value={currentField.value} autoFocus
+                aria-describedby="feed-error"
                 onChange={(e) => { currentField.set(e.target.value); setError("") }}
                 onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); advanceFeed() } }}
                 placeholder={currentField.placeholder}
                 className={inputClass}
               />
-              {error && <p className="text-xs text-red-400 font-medium">{error}</p>}
+              {error && <p id="feed-error" className="text-xs text-red-400 font-medium" role="alert">{error}</p>}
             </div>
 
             <div className="flex gap-3">

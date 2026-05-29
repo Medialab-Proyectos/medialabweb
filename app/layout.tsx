@@ -81,15 +81,7 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  alternates: {
-    canonical: '/',
-    languages: {
-      'es-CO': '/',
-      'es': '/',
-      'en': '/en',
-      'x-default': '/',
-    },
-  },
+
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
     other: {

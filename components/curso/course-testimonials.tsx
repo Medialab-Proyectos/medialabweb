@@ -62,7 +62,7 @@ export function CourseTestimonials() {
       image: "/images/focusflow-showcase.png",
       linkedin: "",
       behance: "https://www.behance.net/pineda1995",
-      productUrl: "",
+      productUrl: "https://focus-flow-eex9.vercel.app/",
     },
     {
       name: "Jonnathan Joseph Real Vaca",
@@ -133,7 +133,16 @@ export function CourseTestimonials() {
             <CarouselContent className="-ml-4">
               {projects.map((item, i) => (
                 <CarouselItem key={i} className="pl-4 md:basis-1/2 lg:basis-1/3">
-                  <div className="relative h-full rounded-2xl border curso-card overflow-hidden group">
+                  <div itemScope itemType="https://schema.org/Review" className="relative h-full rounded-2xl border curso-card overflow-hidden group">
+                    {/* Semantic Metadata for bots */}
+                    <div itemProp="itemReviewed" itemScope itemType="https://schema.org/Course">
+                      <meta itemProp="name" content="AI User Experience Architect" />
+                    </div>
+                    <div itemProp="reviewRating" itemScope itemType="https://schema.org/Rating">
+                      <meta itemProp="ratingValue" content="5" />
+                      <meta itemProp="bestRating" content="5" />
+                    </div>
+
                     {/* Product image as background */}
                     <div className="relative h-44 overflow-hidden">
                       <Image
@@ -162,7 +171,7 @@ export function CourseTestimonials() {
                     <div className="p-6 flex flex-col gap-4">
                       <div className="flex items-start gap-2">
                         <Quote className="w-4 h-4 shrink-0 mt-0.5" style={{ color: "var(--magenta)", opacity: 0.4 }} />
-                        <p className="text-sm text-foreground/70 leading-relaxed">{item.quote}</p>
+                        <p itemProp="reviewBody" className="text-sm text-foreground/70 leading-relaxed">{item.quote}</p>
                       </div>
 
                       {/* Result badge */}
@@ -171,7 +180,7 @@ export function CourseTestimonials() {
                       </span>
 
                       {/* Author + links */}
-                      <div className="flex items-center gap-3 pt-3 border-t border-foreground/[0.08]">
+                      <div itemProp="author" itemScope itemType="https://schema.org/Person" className="flex items-center gap-3 pt-3 border-t border-foreground/[0.08]">
                         <div
                           className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0"
                           style={{ background: "linear-gradient(135deg, var(--magenta), var(--orange))" }}
@@ -179,8 +188,8 @@ export function CourseTestimonials() {
                           {item.name.split(" ").map(w => w[0]).join("")}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium text-foreground truncate">{item.name}</p>
-                          <p className="text-xs text-foreground/40">{item.role}</p>
+                          <p itemProp="name" className="text-sm font-medium text-foreground truncate">{item.name}</p>
+                          <p itemProp="jobTitle" className="text-xs text-foreground/40">{item.role}</p>
                         </div>
                         <div className="flex items-center gap-2 shrink-0">
                           {item.linkedin && (

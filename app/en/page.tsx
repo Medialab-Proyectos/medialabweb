@@ -18,7 +18,6 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/en",
     languages: {
-      "es-CO": "/",
       "es": "/",
       "en": "/en",
       "x-default": "/",
