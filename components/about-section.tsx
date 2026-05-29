@@ -79,9 +79,9 @@ export function AboutSection() {
           </span>
 
           {/* Row 1: 3 ecosystem cards — dark bg, colored logos, border */}
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="rounded-2xl p-5 flex flex-col gap-3 bg-[var(--surface-dark)] border border-border">
-              <Image src="/images/ecosistema/Factory.svg" alt="UXFactory" width={120} height={32} className="h-5 w-auto dark:brightness-0 dark:invert dark:opacity-50" />
+              <Image src="/images/ecosistema/Factory.svg" alt="UXFactory" width={120} height={32} className="h-8 w-auto dark:brightness-0 dark:invert dark:opacity-50" />
               <p className="text-[11px] text-white/60 leading-relaxed">
                 {t("Diseño de experiencia a la medida para marketing digital y software.", "Custom experience design for digital marketing and software.")}
               </p>
@@ -101,7 +101,7 @@ export function AboutSection() {
           </div>
 
           {/* Row 2: UX+IA, Evidencia, Impacto */}
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="rounded-2xl p-5 flex flex-col gap-2 [background:linear-gradient(135deg,#F3EAFF,#E5D0FF)] dark:[background:linear-gradient(135deg,#F67327,#6F18BF)]">
               <span className="text-2xl font-display font-bold text-[#390B6A] dark:text-white">{t("UX + IA", "UX + AI")}</span>
               <p className="text-xs text-[#390B6A]/70 dark:text-white/80 leading-relaxed">

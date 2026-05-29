@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import { Lato, Poppins } from 'next/font/google'
+import localFont from 'next/font/local'
 import Script from 'next/script'
 import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
@@ -19,6 +20,17 @@ const poppins = Poppins({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
   variable: '--font-poppins',
+})
+
+const jost = localFont({
+  src: [
+    { path: '../public/images/fuentes/jost-latin-400-normal.ttf', weight: '400', style: 'normal' },
+    { path: '../public/images/fuentes/jost-latin-500-normal.ttf', weight: '500', style: 'normal' },
+    { path: '../public/images/fuentes/jost-latin-600-normal.ttf', weight: '600', style: 'normal' },
+    { path: '../public/images/fuentes/jost-latin-700-normal.ttf', weight: '700', style: 'normal' },
+  ],
+  variable: '--font-jost',
+  display: 'swap',
 })
 
 export const viewport: Viewport = {
@@ -748,7 +760,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`${lato.variable} ${poppins.variable} font-sans antialiased`}>
+      <body className={`${lato.variable} ${poppins.variable} ${jost.variable} font-sans antialiased`}>
         <SkipToContent />
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem themes={["light", "dark", "warm", "pure-dark"]}>
           <LanguageProvider>

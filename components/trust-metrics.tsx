@@ -52,7 +52,7 @@ function MetricCard({
       >
         <Icon size={22} color="white" strokeWidth={1.75} />
       </div>
-      <div className="font-display font-bold text-4xl md:text-5xl text-foreground tabular-nums">
+      <div className="font-[family-name:var(--font-metrics)] font-bold text-4xl md:text-5xl text-foreground tabular-nums">
         {count}
         <span className="text-[var(--magenta)]">{suffix}</span>
       </div>

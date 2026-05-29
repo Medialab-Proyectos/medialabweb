@@ -192,7 +192,7 @@ export function HeroSection() {
           </span>
           <div className="flex items-center gap-8 sm:gap-12">
             <div className="flex flex-col items-center gap-1.5">
-              <Image src="/images/ecosistema/Factory.svg" alt="UXFactory" width={100} height={28} className="h-5 sm:h-[22px] w-auto dark:brightness-0 dark:invert dark:opacity-50 opacity-60" />
+              <Image src="/images/ecosistema/Factory.svg" alt="UXFactory" width={100} height={28} className="h-7 sm:h-8 w-auto dark:brightness-0 dark:invert dark:opacity-50 opacity-60" />
             </div>
             <div className="w-px h-6 dark:bg-white/15 bg-foreground/15" aria-hidden="true" />
             <div className="flex flex-col items-center gap-1.5">

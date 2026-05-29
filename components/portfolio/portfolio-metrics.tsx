@@ -39,7 +39,7 @@ function MetricCard({ m, active, i }: { m: Metric; active: boolean; i: number })
       <div className="w-11 h-11 rounded-xl flex items-center justify-center" style={{ background: "linear-gradient(135deg, var(--magenta), var(--orange))" }}>
         <Icon size={20} className="text-white" />
       </div>
-      <div className="font-display font-bold text-3xl md:text-4xl text-foreground tabular-nums">
+      <div className="font-[family-name:var(--font-metrics)] font-bold text-3xl md:text-4xl text-foreground tabular-nums">
         {count}<span className="text-[var(--magenta)]">{m.suffix}</span>
       </div>
       <p className="text-xs text-muted-foreground text-center font-medium">{m.label}</p>
