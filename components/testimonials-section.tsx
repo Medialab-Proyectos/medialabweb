@@ -110,7 +110,7 @@ export function TestimonialsSection() {
   return (
     <section
       ref={ref}
-      className="py-24 px-6 bg-background"
+      className="py-12 md:py-24 px-6 bg-background"
       aria-labelledby="testimonials-heading"
     >
       <div className="max-w-7xl mx-auto flex flex-col gap-14">

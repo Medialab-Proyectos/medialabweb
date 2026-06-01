@@ -3,7 +3,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import { motion } from "framer-motion"
-import { ArrowRight } from "lucide-react"
+import { ArrowRight, Lightbulb } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 
 /**
@@ -18,6 +18,9 @@ export function EntryDoorsSection() {
   const doors = [
     {
       logo: "/images/ecosistema/Factory.svg",
+      image: "/images/door-uxfactory.png",
+      imageAltEs: "Equipo colaborando en desarrollo de producto digital",
+      imageAltEn: "Team collaborating on digital product development",
       audienceEs: "Para empresas",
       audienceEn: "For companies",
       title: "UXFactory",
@@ -30,6 +33,9 @@ export function EntryDoorsSection() {
     },
     {
       logo: "/images/ecosistema/school.svg",
+      image: "/images/door-uxschool.png",
+      imageAltEs: "Profesionales aprendiendo en un espacio moderno",
+      imageAltEn: "Professionals learning in a modern space",
       audienceEs: "Para profesionales",
       audienceEn: "For professionals",
       title: "UXSchool",
@@ -42,6 +48,9 @@ export function EntryDoorsSection() {
     },
     {
       logo: "/images/ecosistema/lab.svg",
+      image: "/images/door-uxlab.png",
+      imageAltEs: "Personas probando apps en un laboratorio creativo",
+      imageAltEn: "People testing apps in a creative lab",
       audienceEs: "Nuestros productos",
       audienceEn: "Our products",
       title: "UXLab",
@@ -72,6 +81,7 @@ export function EntryDoorsSection() {
           </h2>
         </motion.div>
 
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
           {doors.map((door, i) => {
             return (
@@ -89,6 +99,24 @@ export function EntryDoorsSection() {
                   onMouseEnter={(e) => { e.currentTarget.style.borderColor = door.color }}
                   onMouseLeave={(e) => { e.currentTarget.style.borderColor = "" }}
                 >
+                  {/* Imagen de personas por tarjeta */}
+                  <div className="relative w-full h-[120px] md:h-[110px] -mx-6 md:-mx-7 -mt-6 md:-mt-7 mb-5 overflow-hidden rounded-t-2xl" style={{ width: "calc(100% + 48px)", maxWidth: "calc(100% + 48px)" }}>
+                    <Image
+                      src={door.image}
+                      alt={t(door.imageAltEs, door.imageAltEn)}
+                      width={400}
+                      height={180}
+                      className="w-full h-full object-cover object-center"
+                    />
+                    {/* Gradient fade inferior */}
+                    <div
+                      className="absolute inset-0 pointer-events-none"
+                      style={{
+                        background: `linear-gradient(to bottom, transparent 40%, var(--card) 100%)`,
+                      }}
+                    />
+                  </div>
+
                   <Image
                     src={door.logo}
                     alt={door.title}
@@ -116,6 +144,21 @@ export function EntryDoorsSection() {
               </motion.div>
             )
           })}
+        </div>
+
+        {/* UX callout */}
+        <div className="mt-10 md:mt-12 flex items-start gap-4 p-6 md:p-8 rounded-2xl border-l-4 border border-[#E8772E]/30 border-l-[#E8772E] bg-[#E8772E]/[0.06]">
+          <Lightbulb className="w-7 h-7 shrink-0 mt-0.5" style={{ color: "#E8772E" }} aria-hidden="true" />
+          <p className="text-base md:text-lg text-foreground/85 leading-relaxed">
+            {t("A eso se le llama ", "This is what's called ")}
+            <strong className="text-foreground font-bold">
+              {t("diseño de experiencia (UX)", "experience design (UX)")}
+            </strong>
+            {t(
+              ": lograr que tu producto sea claro, fácil y que la gente quiera usarlo. Es la diferencia entre un producto que vende y uno que fracasa.",
+              ": making your product clear, easy, and something people actually want to use. It's the difference between a product that sells and one that fails.",
+            )}
+          </p>
         </div>
       </div>
     </section>

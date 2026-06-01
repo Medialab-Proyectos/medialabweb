@@ -74,7 +74,7 @@ export function CTASection() {
     <section
       id="contact"
       ref={ref}
-      className="py-24 px-3 sm:px-6 bg-background"
+      className="py-12 md:py-24 px-3 sm:px-6 bg-background"
       aria-labelledby="cta-heading"
     >
       <div className="max-w-7xl mx-auto">

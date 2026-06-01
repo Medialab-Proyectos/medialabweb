@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
-import { X, RotateCcw, ArrowRight } from "lucide-react"
+import { X, RotateCcw, ArrowRight, Lightbulb, Building2, TrendingDown, GraduationCap, HelpCircle, MessageCircle } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 
 /**
@@ -32,6 +32,7 @@ interface Message {
 interface PathOption {
   id: string
   emoji: string
+  icon: React.ComponentType<{ size?: number; className?: string }>
   labelEs: string
   labelEn: string
   /** Respuesta del guía (en su personalidad). */
@@ -44,12 +45,15 @@ interface PathOption {
   explainOnly?: boolean
 }
 
+const ADA_LIGHT = "/images/asistente/chat.png"
+const ADA_DARK = "/images/asistente/adablaco.png"
+
 const AVATARS: Record<Guide, Record<Expression, string>> = {
   ada: {
-    smile: "/images/asistente/ada-smile.png",
-    thinking: "/images/asistente/ada-thinking.png",
-    excited: "/images/asistente/ada-excited.png",
-    laptop: "/images/asistente/ada-laptop.png",
+    smile: ADA_LIGHT,
+    thinking: ADA_LIGHT,
+    excited: ADA_LIGHT,
+    laptop: ADA_LIGHT,
   },
   leo: {
     smile: "/images/asistente/leo-smile.png",
@@ -63,6 +67,7 @@ const GRADIENT = "linear-gradient(135deg, #E8772E 0%, #1A8A9E 100%)"
 
 export function AdaLeoAssistant() {
   const { t, localized } = useLanguage()
+  const adaAvatar = ADA_LIGHT
   const [open, setOpen] = useState(false)
   const [teaser, setTeaser] = useState(false)
   const [guide, setGuide] = useState<Guide>("ada")
@@ -76,6 +81,7 @@ export function AdaLeoAssistant() {
     {
       id: "idea",
       emoji: "💡",
+      icon: Lightbulb,
       labelEs: "Tengo una idea pero no sé si funcionará",
       labelEn: "I have an idea but I'm not sure it'll work",
       ada: {
@@ -93,6 +99,7 @@ export function AdaLeoAssistant() {
     {
       id: "empresa",
       emoji: "🏢",
+      icon: Building2,
       labelEs: "Tengo una empresa y quiero un producto digital",
       labelEn: "I have a company and want a digital product",
       ada: {
@@ -110,6 +117,7 @@ export function AdaLeoAssistant() {
     {
       id: "producto",
       emoji: "📉",
+      icon: TrendingDown,
       labelEs: "Ya tengo un producto pero no funciona bien",
       labelEn: "I already have a product but it's not working well",
       ada: {
@@ -127,6 +135,7 @@ export function AdaLeoAssistant() {
     {
       id: "aprender",
       emoji: "🎓",
+      icon: GraduationCap,
       labelEs: "Quiero aprender a crear productos",
       labelEn: "I want to learn how to create products",
       ada: {
@@ -144,6 +153,7 @@ export function AdaLeoAssistant() {
     {
       id: "ux",
       emoji: "🤔",
+      icon: HelpCircle,
       labelEs: "Solo quiero entender qué es esto de UX",
       labelEn: "I just want to understand what this UX thing is",
       ada: {
@@ -214,22 +224,29 @@ export function AdaLeoAssistant() {
     resetConversation(g)
   }
 
+  const [thinking, setThinking] = useState(false)
+
   const handleSelect = (opt: PathOption) => {
     const userText = `${opt.emoji} ${t(opt.labelEs, opt.labelEn)}`
     const guideText = guide === "ada" ? t(opt.ada.es, opt.ada.en) : t(opt.leo.es, opt.leo.en)
 
-    if (opt.explainOnly) {
-      setExpression("laptop")
-      setStage("explain")
-      setActiveCta(null)
-      setMessages((m) => [...m, { role: "user", text: userText }, { role: "guide", text: guideText }])
-      return
-    }
+    // Show user message + thinking indicator
+    setMessages((m) => [...m, { role: "user", text: userText }])
+    setThinking(true)
 
-    setExpression("excited")
-    setStage("result")
-    setActiveCta({ label: t(opt.ctaEs, opt.ctaEn), href: opt.href })
-    setMessages((m) => [...m, { role: "user", text: userText }, { role: "guide", text: guideText }])
+    setTimeout(() => {
+      setThinking(false)
+      if (opt.explainOnly) {
+        setExpression("laptop")
+        setStage("explain")
+        setActiveCta(null)
+      } else {
+        setExpression("excited")
+        setStage("result")
+        setActiveCta({ label: t(opt.ctaEs, opt.ctaEn), href: opt.href })
+      }
+      setMessages((m) => [...m, { role: "guide", text: guideText }])
+    }, 1200)
   }
 
   const guideName = guide === "ada" ? "Ada" : "Leo"
@@ -265,15 +282,15 @@ export function AdaLeoAssistant() {
           type="button"
           onClick={openPanel}
           aria-label={t("Abrir asistente Ada y Leo", "Open Ada & Leo assistant")}
-          className="fixed bottom-20 md:bottom-5 right-4 sm:right-6 z-[60] w-14 h-14 rounded-full shadow-xl overflow-hidden ring-[3px] ring-[#E8751A] ring-offset-2 ring-offset-[var(--background)] hover:scale-105 active:scale-95 transition-transform"
-          style={{ background: GRADIENT }}
+          className="fixed bottom-20 md:bottom-5 right-4 sm:right-6 z-[60] w-16 h-16 rounded-full shadow-xl overflow-hidden ring-[3px] ring-[#E8751A] ring-offset-2 ring-offset-[var(--background)] hover:scale-105 active:scale-95 transition-transform"
         >
           <Image
-            src={AVATARS[guide].smile}
+            src={adaAvatar}
             alt=""
-            width={56}
-            height={56}
-            className="w-full h-full object-cover object-top scale-110 translate-y-0.5"
+            width={200}
+            height={200}
+            className="w-full h-full object-cover object-center scale-[1.95]"
+            unoptimized
           />
         </button>
       )}
@@ -286,62 +303,37 @@ export function AdaLeoAssistant() {
           aria-label={t("Asistente Ada y Leo", "Ada & Leo assistant")}
           className="fixed z-[70] inset-x-0 bottom-0 sm:inset-x-auto sm:bottom-5 sm:right-6 flex flex-col w-full sm:w-[24rem] h-[88dvh] sm:h-[34rem] sm:max-h-[80dvh] rounded-t-3xl sm:rounded-3xl border border-border bg-background shadow-2xl overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-300"
         >
-          {/* Header */}
-          <div className="relative flex items-center gap-3 p-4 text-white" style={{ background: GRADIENT }}>
-            <div className="relative w-11 h-11 rounded-full overflow-hidden ring-2 ring-white/80 shrink-0">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={`${guide}-${expression}`}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ duration: 0.25 }}
-                  className="absolute inset-0"
-                >
-                  <Image
-                    src={AVATARS[guide][expression]}
-                    alt={guideName}
-                    fill
-                    sizes="44px"
-                    className="object-cover object-top scale-110 translate-y-0.5"
-                  />
-                </motion.div>
-              </AnimatePresence>
-            </div>
-            <div className="min-w-0 flex-1">
-              <p className="font-semibold leading-tight font-display">{guideName}</p>
-              <p className="text-[11px] text-white/80 leading-tight">
-                {t("Guía virtual de MediaLab", "MediaLab's virtual guide")}
-              </p>
-            </div>
-            {/* Selector de guía */}
-            <div className="flex items-center gap-0.5 p-0.5 rounded-full bg-white/15 backdrop-blur-sm">
-              {(["ada", "leo"] as Guide[]).map((g) => (
-                <button
-                  key={g}
-                  type="button"
-                  onClick={() => switchGuide(g)}
-                  aria-pressed={guide === g}
-                  className={`px-2.5 py-1 rounded-full text-xs font-semibold transition-colors ${
-                    guide === g ? "bg-white text-[#E8772E]" : "text-white/85 hover:text-white"
-                  }`}
-                >
-                  {g === "ada" ? "Ada" : "Leo"}
-                </button>
-              ))}
-            </div>
+          {/* Top bar naranja + close */}
+          <div className="relative h-10 shrink-0 flex items-center justify-end px-3" style={{ background: GRADIENT }}>
+            <p className="absolute left-3 text-xs text-white/80 font-medium flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#00BFA6] animate-pulse" />
+              {t("En línea", "Online")}
+            </p>
             <button
               type="button"
               onClick={() => setOpen(false)}
               aria-label={t("Cerrar asistente", "Close assistant")}
-              className="p-1.5 rounded-full hover:bg-white/20 transition-colors shrink-0"
+              className="p-1.5 rounded-full hover:bg-white/20 text-white/80 hover:text-white transition-colors"
             >
-              <X size={18} />
+              <X size={16} />
             </button>
           </div>
 
-          {/* Mensajes */}
+          {/* Mensajes + opciones inline */}
           <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-3">
+            {/* Ada intro — visible only on first message (welcome) */}
+            {messages.length === 1 && stage === "menu" && (
+              <div className="flex flex-col items-center gap-3 pt-2 pb-4">
+                <div className="relative w-32 h-32 rounded-full overflow-hidden shadow-lg ring-2 ring-[#E8772E]/30">
+                  <Image src="/images/asistente/chat.png" alt="Ada" fill sizes="128px" className="object-cover object-center scale-110" unoptimized />
+                </div>
+                <div className="text-center">
+                  <p className="font-display font-bold text-lg text-foreground">Ada</p>
+                  <p className="text-xs text-muted-foreground">{t("Tu guía virtual de MediaLab", "Your MediaLab virtual guide")}</p>
+                </div>
+              </div>
+            )}
+
             {messages.map((msg, i) =>
               msg.role === "user" ? (
                 <div key={i} className="flex justify-end">
@@ -350,63 +342,90 @@ export function AdaLeoAssistant() {
                   </div>
                 </div>
               ) : (
-                <div key={i} className="flex justify-start">
-                  <div className="max-w-[85%] rounded-2xl rounded-bl-sm px-3.5 py-2.5 text-sm bg-card border border-border text-foreground/85 shadow-sm">
+                <div key={i} className="flex justify-start gap-2">
+                  <div className="relative w-7 h-7 rounded-full overflow-hidden shrink-0 mt-1">
+                    <Image src={adaAvatar} alt="" fill sizes="28px" className="object-cover object-center scale-125" unoptimized />
+                  </div>
+                  <div className="max-w-[80%] rounded-2xl rounded-bl-sm px-3.5 py-2.5 text-sm bg-card border border-border text-foreground/85 shadow-sm">
                     {msg.text}
                   </div>
                 </div>
               ),
             )}
-          </div>
 
-          {/* Controles */}
-          <div className="border-t border-border p-3 space-y-2 bg-background">
-            {showMenu ? (
-              <div className="space-y-2 max-h-[12rem] overflow-y-auto">
-                {options.map((opt) => (
-                  <button
-                    key={opt.id}
-                    type="button"
-                    onClick={() => handleSelect(opt)}
-                    className="w-full flex items-center gap-2.5 text-left px-3.5 py-2.5 rounded-xl border border-border bg-card hover:border-[#E8772E]/50 hover:bg-[#E8772E]/[0.04] transition-colors text-sm text-foreground/85"
-                  >
-                    <span className="text-base shrink-0" aria-hidden="true">{opt.emoji}</span>
-                    <span className="leading-snug">{t(opt.labelEs, opt.labelEn)}</span>
-                  </button>
-                ))}
-              </div>
-            ) : (
-              <div className="space-y-2">
-                {activeCta && (
-                  <Link
-                    href={localized(activeCta.href)}
-                    onClick={() => setOpen(false)}
-                    className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-semibold text-sm text-white shadow-md hover:brightness-110 transition active:scale-[0.98]"
-                    style={{ background: "#E8751A", boxShadow: "0 8px 30px rgba(232,117,26,0.35)" }}
-                  >
-                    {activeCta.label}
-                    <ArrowRight size={16} />
-                  </Link>
-                )}
-                <div className="flex items-center gap-2">
-                  <Link
-                    href={localized("/contacto")}
-                    onClick={() => setOpen(false)}
-                    className="flex-1 inline-flex items-center justify-center px-3 py-2.5 rounded-xl text-xs font-medium border border-border text-foreground/70 hover:text-foreground hover:border-foreground/30 transition"
-                  >
-                    {t("Hablar con una persona", "Talk to a person")}
-                  </Link>
-                  <button
-                    type="button"
-                    onClick={() => resetConversation()}
-                    className="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl text-xs font-medium border border-border text-foreground/70 hover:text-foreground hover:border-foreground/30 transition"
-                  >
-                    <RotateCcw size={13} />
-                    {t("Empezar de nuevo", "Start over")}
-                  </button>
+            {/* Thinking indicator */}
+            {thinking && (
+              <div className="flex justify-start gap-2">
+                <div className="relative w-7 h-7 rounded-full overflow-hidden shrink-0 mt-1">
+                  <Image src={adaAvatar} alt="" fill sizes="28px" className="object-cover object-center scale-125" unoptimized />
+                </div>
+                <div className="rounded-2xl rounded-bl-sm px-3.5 py-2.5 text-sm bg-card border border-border text-muted-foreground shadow-sm flex items-center gap-1.5">
+                  <span className="flex gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#E8772E] animate-bounce" style={{ animationDelay: "0ms" }} />
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#E8772E] animate-bounce" style={{ animationDelay: "150ms" }} />
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#E8772E] animate-bounce" style={{ animationDelay: "300ms" }} />
+                  </span>
+                  {t("Pensando…", "Thinking…")}
                 </div>
               </div>
             )}
+
+            {/* Options inside chat */}
+            {showMenu && (
+              <div className="space-y-2 pt-1">
+                {options.map((opt) => {
+                  const Icon = opt.icon
+                  return (
+                    <button
+                      key={opt.id}
+                      type="button"
+                      onClick={() => handleSelect(opt)}
+                      className="w-full flex items-center gap-2.5 text-left px-3.5 py-2.5 rounded-2xl border border-border bg-card hover:border-[#E8772E]/40 hover:bg-[#E8772E]/[0.04] hover:shadow-sm transition-all text-sm text-foreground/85"
+                    >
+                      <span className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 bg-[#E8772E]/10">
+                        <Icon size={16} className="text-[#E8772E]" />
+                      </span>
+                      <span className="leading-snug">{t(opt.labelEs, opt.labelEn)}</span>
+                    </button>
+                  )
+                })}
+              </div>
+            )}
+
+            {/* CTA after result */}
+            {!showMenu && activeCta && (
+              <div className="space-y-2 pt-1">
+                <Link
+                  href={localized(activeCta.href)}
+                  onClick={() => setOpen(false)}
+                  className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-2xl font-semibold text-sm text-white shadow-md hover:brightness-110 transition active:scale-[0.98]"
+                  style={{ background: "#E8751A", boxShadow: "0 8px 30px rgba(232,117,26,0.35)" }}
+                >
+                  {activeCta.label}
+                  <ArrowRight size={16} />
+                </Link>
+              </div>
+            )}
+          </div>
+
+          {/* Bottom bar */}
+          <div className="border-t border-border p-3 flex items-center gap-2 bg-secondary/50">
+            <Link
+              href={localized("/contacto")}
+              onClick={() => setOpen(false)}
+              className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl text-xs font-medium border border-border bg-card text-foreground/70 hover:text-foreground hover:border-foreground/30 transition"
+            >
+              <MessageCircle size={13} />
+              {t("Hablar con una persona", "Talk to a person")}
+            </Link>
+            <button
+              type="button"
+              onClick={() => resetConversation()}
+              className="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl text-xs font-medium border border-border bg-card text-foreground/70 hover:text-foreground hover:border-foreground/30 transition"
+            >
+              <RotateCcw size={13} />
+              {t("Empezar de nuevo", "Start over")}
+            </button>
           </div>
         </div>
       )}

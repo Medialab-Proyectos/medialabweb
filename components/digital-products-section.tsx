@@ -58,7 +58,7 @@ export function DigitalProductsSection() {
     <section
       id="products"
       ref={ref}
-      className="py-24 px-6 bg-background"
+      className="py-12 md:py-24 px-6 bg-background"
       aria-labelledby="products-heading"
     >
       <div className="max-w-7xl mx-auto flex flex-col gap-14">

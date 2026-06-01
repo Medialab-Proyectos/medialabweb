@@ -82,7 +82,7 @@ export function BlogSection() {
   const rest = articles.slice(1)
 
   return (
-    <section id="blog" ref={ref} className="py-24 px-6" aria-labelledby="blog-heading">
+    <section id="blog" ref={ref} className="py-12 md:py-24 px-6" aria-labelledby="blog-heading">
       <div className="max-w-7xl mx-auto flex flex-col gap-12">
 
         {/* Header */}

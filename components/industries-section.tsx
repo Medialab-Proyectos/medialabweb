@@ -93,7 +93,7 @@ export function IndustriesSection() {
     <section
       id="industries"
       ref={ref}
-      className="py-24 px-6 bg-background"
+      className="py-12 md:py-24 px-6 bg-background"
       aria-labelledby="industries-heading"
     >
       <div className="max-w-7xl mx-auto flex flex-col gap-12">
@@ -119,12 +119,13 @@ export function IndustriesSection() {
           </p>
         </div>
 
-        {/* Industry cards */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
+        {/* Industry cards — carousel on mobile, grid on desktop */}
+        <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 -mx-6 px-6 sm:mx-0 sm:px-0 sm:overflow-visible sm:grid sm:grid-cols-3 lg:grid-cols-4 md:gap-5" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
           {industries.map((industry, i) => {
             const Icon = industry.icon
             const cardClass = `group relative overflow-hidden rounded-2xl border border-border bg-card
                   hover:border-transparent hover:shadow-2xl transition-all duration-400
+                  min-w-[70%] snap-start sm:min-w-0
                   ${industry.href ? "cursor-pointer" : "cursor-default"}
                   ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`
             const cardStyle = { transitionDelay: `${i * 70}ms`, transitionDuration: "500ms" }

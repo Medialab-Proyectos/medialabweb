@@ -1,6 +1,7 @@
 "use client"
 
-import { ArrowRight, Building2, HeartHandshake, LineChart, SearchCheck, ShieldCheck, UsersRound } from "lucide-react"
+import { useState } from "react"
+import { ArrowRight, Building2, ChevronDown, HeartHandshake, LineChart, SearchCheck, ShieldCheck, UsersRound } from "lucide-react"
 import Link from "next/link"
 import { useLanguage } from "@/lib/language-context"
 
@@ -66,10 +67,11 @@ const pillars = [
 
 export function ExperienceDesignSection() {
   const { lang, t } = useLanguage()
+  const [pillarsOpen, setPillarsOpen] = useState(false)
   return (
     <section
       id="experience-design"
-      className="bg-background px-6 py-24"
+      className="bg-background px-6 py-12 md:py-24"
       aria-labelledby="experience-design-heading"
     >
       <div className="mx-auto flex max-w-7xl flex-col gap-14">
@@ -90,8 +92,8 @@ export function ExperienceDesignSection() {
           </div>
           <p className="text-base leading-relaxed text-muted-foreground">
             {t(
-              "Una interfaz bonita no indexa en Google, no resuelve objeciones y no convierte visitantes en clientes. Lo que sí funciona es diseñar desde la intención de búsqueda del usuario, responder sus miedos con honestidad y hacer que cada interacción se sienta segura. Ese es el puente que construimos.",
-              "A pretty interface doesn't rank on Google, doesn't resolve objections, and doesn't convert visitors into customers. What works is designing from user search intent, answering their fears honestly, and making every interaction feel safe. That's the bridge we build."
+              "Una interfaz bonita no convierte visitantes en clientes. Lo que funciona es diseñar desde la intención del usuario y responder sus miedos con honestidad. Ese es el puente que construimos.",
+              "A pretty interface doesn't convert visitors into customers. What works is designing from user intent and answering their fears honestly. That's the bridge we build."
             )}
           </p>
         </div>
@@ -126,21 +128,44 @@ export function ExperienceDesignSection() {
           })}
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {pillars.map((pillar) => {
-            const Icon = pillar.icon
-            const title = t(pillar.titleEs, pillar.titleEn)
-            const description = t(pillar.descriptionEs, pillar.descriptionEn)
-            return (
-              <div key={pillar.titleEs} className="flex flex-col gap-4 rounded-lg border border-border bg-secondary/35 p-5">
-                <Icon size={22} className="text-[var(--cyan)]" />
-                <div className="flex flex-col gap-2">
-                  <h3 className="font-semibold text-foreground">{title}</h3>
-                  <p className="text-sm leading-relaxed text-muted-foreground">{description}</p>
+        {/* Pillar cards — collapsible on mobile */}
+        <div className="flex flex-col gap-4">
+          {/* Desktop label */}
+          <span className="hidden md:block text-xs font-semibold tracking-widest uppercase text-[var(--cyan)]">
+            {t("Qué logramos", "What we achieve")}
+          </span>
+
+          {/* Mobile toggle */}
+          <button
+            type="button"
+            onClick={() => setPillarsOpen(!pillarsOpen)}
+            className="flex items-center justify-between gap-2 rounded-lg border border-border bg-secondary/35 p-4 text-left md:hidden"
+          >
+            <span className="text-sm font-semibold text-foreground">
+              {t("Qué logramos", "What we achieve")}
+              <span className="ml-2 text-xs font-normal text-muted-foreground">
+                {t("Te encuentran · Te entienden · Te eligen · Se quedan", "They find you · They understand you · They choose you · They stay")}
+              </span>
+            </span>
+            <ChevronDown size={18} className={`text-muted-foreground shrink-0 transition-transform duration-300 ${pillarsOpen ? "rotate-180" : ""}`} />
+          </button>
+
+          <div className={`grid gap-4 md:grid-cols-2 lg:grid-cols-4 ${pillarsOpen ? "grid" : "hidden md:grid"}`}>
+            {pillars.map((pillar) => {
+              const Icon = pillar.icon
+              const title = t(pillar.titleEs, pillar.titleEn)
+              const description = t(pillar.descriptionEs, pillar.descriptionEn)
+              return (
+                <div key={pillar.titleEs} className="flex flex-col gap-4 rounded-lg border border-border bg-secondary/35 p-5">
+                  <Icon size={22} className="text-[var(--cyan)]" />
+                  <div className="flex flex-col gap-2">
+                    <h3 className="font-semibold text-foreground">{title}</h3>
+                    <p className="text-sm leading-relaxed text-muted-foreground">{description}</p>
+                  </div>
                 </div>
-              </div>
-            )
-          })}
+              )
+            })}
+          </div>
         </div>
 
         <div className="flex flex-col items-start justify-between gap-5 border-t border-border pt-8 md:flex-row md:items-center">

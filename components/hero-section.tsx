@@ -111,29 +111,15 @@ export function HeroSection() {
 
       {/* Content */}
       <div className="relative z-10 max-w-5xl mx-auto px-6 text-center flex flex-col items-center gap-8 pt-20 pb-24">
-        {/* Chips — social proof + UXGreen */}
+        {/* Chip — social proof */}
         <div
-          className={`flex flex-wrap justify-center gap-2 transition-all duration-700 ${ready ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+          className={`flex justify-center transition-all duration-700 ${ready ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
           style={{ transitionDelay: "0ms" }}
         >
           <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border dark:border-white/10 border-foreground/10 dark:bg-white/5 bg-foreground/5 backdrop-blur-sm text-xs font-medium dark:text-white/75 text-foreground/75">
             <Sparkles size={12} style={{ color: "var(--magenta)" }} />
             {t("40+ productos en producción · 7 países", "40+ products in production · 7 countries")}
           </div>
-          <Link
-            href="/uxgreen"
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-[#00BFA6]/25 bg-[#00BFA6]/[0.07] backdrop-blur-sm text-xs font-semibold text-[#00BFA6] hover:bg-[#00BFA6]/[0.12] transition-colors"
-          >
-            <Image
-              src="/images/curso/logos/Green%20UX%20v%202.svg"
-              alt=""
-              width={14}
-              height={14}
-              className="opacity-90"
-              unoptimized
-            />
-            {t("UXGreen™ Certificado", "UXGreen™ Certified")}
-          </Link>
         </div>
 
         {/* Headline */}
@@ -193,23 +179,38 @@ export function HeroSection() {
           style={{ transitionDelay: "400ms" }}
         >
           <span className="text-[11px] uppercase tracking-[0.18em] dark:text-white/40 text-foreground/40">
-            {t("Un ecosistema", "One ecosystem")}
+            {t("Somos un ecosistema", "We are one ecosystem")}
           </span>
-          <div className="flex flex-wrap items-center justify-center gap-x-10 md:gap-x-16 gap-y-5">
+          <div className="flex flex-wrap items-center justify-center gap-x-8 sm:gap-x-10 md:gap-x-16 gap-y-5">
             {[
-              { src: "/images/ecosistema/Factory.svg", alt: "UXFactory" },
-              { src: "/images/ecosistema/lab.svg", alt: "UXLab" },
-              { src: "/images/ecosistema/school.svg", alt: "UXSchool" },
-            ].map((logo) => (
-              <Image
-                key={logo.alt}
-                src={logo.src}
-                alt={logo.alt}
-                width={150}
-                height={40}
-                className="h-7 md:h-9 w-auto opacity-65 hover:opacity-95 transition-opacity dark:brightness-0 dark:invert"
-              />
-            ))}
+              { src: "/images/ecosistema/Factory.svg", alt: "UXFactory", href: "" },
+              { src: "/images/ecosistema/lab.svg", alt: "UXLab", href: "" },
+              { src: "/images/ecosistema/school.svg", alt: "UXSchool", href: "" },
+              { src: "/images/curso/logos/UXGENN34.svg", alt: "UXGreen", href: "/uxgreen" },
+              { src: "/images/curso/logos/colorui.fw.png", alt: "ZeroUI", href: "https://www.zeroui.me/" },
+            ].map((logo) =>
+              logo.href ? (
+                <Link key={logo.alt} href={logo.href} target="_blank" rel="noopener noreferrer" className="opacity-65 hover:opacity-95 transition-opacity">
+                  <Image
+                    src={logo.src}
+                    alt={logo.alt}
+                    width={150}
+                    height={40}
+                    className="h-6 sm:h-8 md:h-9 w-auto dark:brightness-0 dark:invert"
+                    unoptimized
+                  />
+                </Link>
+              ) : (
+                <Image
+                  key={logo.alt}
+                  src={logo.src}
+                  alt={logo.alt}
+                  width={150}
+                  height={40}
+                  className="h-6 sm:h-8 md:h-9 w-auto opacity-65 hover:opacity-95 transition-opacity dark:brightness-0 dark:invert"
+                />
+              )
+            )}
           </div>
         </div>
 

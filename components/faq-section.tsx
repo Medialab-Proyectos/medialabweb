@@ -82,7 +82,7 @@ export function FAQSection() {
     <section
       id="faq"
       ref={ref}
-      className="py-24 px-6 bg-background"
+      className="py-12 md:py-24 px-6 bg-background"
       aria-labelledby="faq-heading"
     >
       <div className="max-w-4xl mx-auto flex flex-col gap-12">

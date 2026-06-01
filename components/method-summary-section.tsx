@@ -56,7 +56,7 @@ export function MethodSummarySection() {
   ]
 
   return (
-    <section id="method" className="py-24 px-6 bg-secondary/30" aria-labelledby="method-heading">
+    <section id="method" className="py-12 md:py-24 px-6 bg-secondary/30" aria-labelledby="method-heading">
       <div className="max-w-7xl mx-auto flex flex-col gap-12">
         {/* Header */}
         <div className="flex flex-col gap-4 max-w-2xl">

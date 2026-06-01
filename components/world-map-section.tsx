@@ -31,7 +31,7 @@ export function WorldMapSection() {
   return (
     <section
       ref={ref}
-      className="py-24 px-6 bg-[var(--surface-dark)] text-white overflow-hidden"
+      className="py-12 md:py-24 px-6 bg-[var(--surface-dark)] text-white overflow-hidden"
       aria-labelledby="map-heading"
     >
       <div className="max-w-7xl mx-auto flex flex-col gap-12">

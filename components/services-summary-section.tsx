@@ -55,7 +55,7 @@ export function ServicesSummarySection() {
   ]
 
   return (
-    <section id="services" className="py-24 px-6 bg-secondary/30" aria-labelledby="services-heading">
+    <section id="services" className="py-12 md:py-24 px-6 bg-secondary/30" aria-labelledby="services-heading">
       <div className="max-w-7xl mx-auto flex flex-col gap-12">
         {/* Header */}
         <div className="flex flex-col gap-4 max-w-2xl">
@@ -89,8 +89,8 @@ export function ServicesSummarySection() {
           </p>
         </div>
 
-        {/* Compact service cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5">
+        {/* Compact service cards — carousel on mobile, grid on desktop */}
+        <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 -mx-6 px-6 sm:mx-0 sm:px-0 sm:overflow-visible sm:grid sm:grid-cols-2 lg:grid-cols-4 md:gap-5 scrollbar-hide" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
           {services.map((s, i) => {
             const Icon = s.icon
             return (
@@ -100,6 +100,7 @@ export function ServicesSummarySection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.05 + i * 0.08, duration: 0.5 }}
+                className="min-w-[80%] snap-start sm:min-w-0"
               >
                 <Link
                   href={localized(s.href)}
@@ -132,15 +133,21 @@ export function ServicesSummarySection() {
           })}
         </div>
 
-        {/* Ver todos */}
-        <div>
+        {/* CTAs */}
+        <div className="flex flex-col sm:flex-row gap-3">
           <Link
-            href={localized("/servicios")}
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-sm text-white shadow-lg hover:brightness-110 transition active:scale-[0.98]"
+            href="#contact"
+            className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold text-sm text-white shadow-lg hover:brightness-110 transition active:scale-[0.98]"
             style={{ background: "#E8751A", boxShadow: "0 8px 30px rgba(232,117,26,0.35)" }}
           >
-            {t("Ver todos los servicios", "See all services")}
+            {t("Contáctanos", "Contact us")}
             <ArrowRight size={16} />
+          </Link>
+          <Link
+            href="#uxbox"
+            className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold text-sm border dark:border-white/15 border-foreground/15 dark:text-white/75 text-foreground/75 dark:hover:text-white hover:text-foreground dark:hover:border-white/30 hover:border-foreground/30 dark:hover:bg-white/5 hover:bg-foreground/5 transition-all active:scale-[0.98]"
+          >
+            {t("Probar UXBox gratis", "Try UXBox free")}
           </Link>
         </div>
       </div>

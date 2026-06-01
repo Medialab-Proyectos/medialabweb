@@ -55,7 +55,7 @@ export function UXBoxSection() {
       ref={ref}
       itemScope
       itemType="https://schema.org/WebApplication"
-      className="py-24 px-6 bg-[var(--surface-dark)] text-[var(--surface-dark-fg)] overflow-hidden relative"
+      className="py-12 md:py-24 px-6 bg-[var(--surface-dark)] text-[var(--surface-dark-fg)] overflow-hidden relative"
       aria-labelledby="uxbox-heading"
     >
       {/* Semantic Metadata for bots */}

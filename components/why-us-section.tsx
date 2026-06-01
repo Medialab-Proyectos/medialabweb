@@ -96,7 +96,7 @@ export function WhyUsSection() {
   return (
     <section
       ref={ref}
-      className="py-24 px-6 bg-[var(--surface-dark)] text-[var(--surface-dark-fg)] relative overflow-hidden transition-colors duration-300"
+      className="py-12 md:py-24 px-6 bg-[var(--surface-dark)] text-[var(--surface-dark-fg)] relative overflow-hidden transition-colors duration-300"
       aria-labelledby="why-us-heading"
     >
       {/* Subtle grid bg */}
@@ -133,8 +133,8 @@ export function WhyUsSection() {
           </p>
         </div>
 
-        {/* Cards */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {/* Cards — carousel on mobile, grid on desktop */}
+        <div className="flex gap-5 overflow-x-auto snap-x snap-mandatory pb-4 -mx-6 px-6 sm:mx-0 sm:px-0 sm:overflow-visible sm:grid sm:grid-cols-2 lg:grid-cols-3" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
           {reasons.map((reason, i) => {
             const Icon = reason.icon
             return (
@@ -142,6 +142,7 @@ export function WhyUsSection() {
                 key={reason.title}
                 className={`group flex flex-col gap-4 p-6 rounded-2xl border dark:border-white/10 border-foreground/10 dark:bg-white/5 bg-foreground/5
                   hover:dark:bg-white/8 hover:bg-foreground/8 hover:dark:border-white/20 hover:border-foreground/20 transition-all duration-300 cursor-default
+                  min-w-[80%] snap-start sm:min-w-0
                   ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
                 style={{ transitionDelay: `${i * 80}ms` }}
               >
