@@ -46,10 +46,10 @@ export function ServicesSummarySection() {
     {
       icon: BarChart3,
       color: "var(--cyan)",
-      titleEs: "Más conversión sin gastar más en tráfico",
-      titleEn: "More conversion without spending more on traffic",
-      lineEs: "CRO: más resultados con los visitantes que ya tienes.",
-      lineEn: "CRO: more results from the visitors you already have.",
+      titleEs: "Menos feature factory, más decisiones que mueven métricas",
+      titleEn: "Less feature factory, more decisions that move metrics",
+      lineEs: "CRO para SaaS: convertimos feedback disperso, requests y fricción en prioridades de activación, retención y conversión.",
+      lineEn: "SaaS CRO: we turn scattered feedback, requests, and friction into activation, retention, and conversion priorities.",
       href: "/servicios/cro-saas",
     },
   ]
@@ -143,11 +143,35 @@ export function ServicesSummarySection() {
             {t("Contáctanos", "Contact us")}
             <ArrowRight size={16} />
           </Link>
-          <Link
+          <a
             href="#uxbox"
             className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold text-sm border dark:border-white/15 border-foreground/15 dark:text-white/75 text-foreground/75 dark:hover:text-white hover:text-foreground dark:hover:border-white/30 hover:border-foreground/30 dark:hover:bg-white/5 hover:bg-foreground/5 transition-all active:scale-[0.98]"
           >
             {t("Probar UXBox gratis", "Try UXBox free")}
+          </a>
+        </div>
+
+        <div className="grid md:grid-cols-[1fr_auto] gap-5 items-center rounded-2xl border border-[var(--cyan)]/25 bg-card p-6 md:p-7">
+          <div className="flex flex-col gap-2">
+            <span className="text-xs font-semibold tracking-widest uppercase text-[var(--cyan)]">
+              {t("Prueba de escala", "Proof of scale")}
+            </span>
+            <h3 className="font-display font-bold text-xl text-foreground">
+              {t("Productos que muchas personas pueden usar sin perder claridad.", "Products many people can use without losing clarity.")}
+            </h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              {t(
+                "Pepsico es una muestra de lo que hacemos cuando un producto debe funcionar para muchos usuarios, roles y contextos al mismo tiempo.",
+                "Pepsico is a sample of what we do when a product needs to work for many users, roles, and contexts at the same time."
+              )}
+            </p>
+          </div>
+          <Link
+            href={localized("/portafolio") + "#pepsico"}
+            className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full font-semibold text-sm border border-[var(--cyan)]/30 text-[var(--cyan)] hover:bg-[var(--cyan)]/10 transition-all"
+          >
+            {t("Ver caso Pepsico", "See Pepsico case")}
+            <ArrowRight size={15} />
           </Link>
         </div>
       </div>

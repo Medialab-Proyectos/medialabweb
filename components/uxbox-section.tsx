@@ -51,7 +51,7 @@ export function UXBoxSection() {
 
   return (
     <section
-      id="uxbox"
+      id="uxbox-info"
       ref={ref}
       itemScope
       itemType="https://schema.org/WebApplication"

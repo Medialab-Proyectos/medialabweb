@@ -95,7 +95,7 @@ export function MethodSection() {
     },
     {
       number: "05",
-      label: t("Optimización CRO", "CRO Optimization"),
+      label: t("CRO", "CRO"),
       title: t(
         "Convertir más sin gastar más en tráfico",
         "Convert more without spending more on traffic"
@@ -148,8 +148,9 @@ export function MethodSection() {
 
         {/* Desktop: Step tabs */}
         <div
-          className="hidden md:grid grid-cols-5 gap-2 rounded-xl border border-border bg-background p-2"
+          className="hidden md:grid grid-cols-5 gap-2 rounded-xl border bg-background p-2"
           role="tablist"
+          style={{ borderColor: "var(--method-tabs-border, var(--border))" }}
           aria-label={t("Pasos de la metodología MediaLab", "MediaLab methodology steps")}
         >
           {steps.map((step, i) => {
@@ -221,8 +222,8 @@ export function MethodSection() {
         <div
           id="method-active-panel"
           role="tabpanel"
-          className={`hidden md:grid grid-cols-[0.95fr_1.05fr] rounded-xl border overflow-hidden transition-all duration-500 ${visible ? "opacity-100" : "opacity-0"}`}
-          style={{ background: "var(--card)", borderColor: `${activeData.color}35` }}
+          className={`hidden md:grid grid-cols-[0.95fr_1.05fr] rounded-xl border overflow-hidden transition-all duration-500 h-[420px] ${visible ? "opacity-100" : "opacity-0"}`}
+          style={{ background: "var(--card)", borderColor: "var(--method-tabs-border, var(--border))" }}
         >
 
           {/* Left: visual image */}

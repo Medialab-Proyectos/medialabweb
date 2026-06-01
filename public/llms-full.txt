@@ -49,11 +49,13 @@ Plataforma inteligente que analiza ideas de negocio y genera propuestas de produ
 - Visualización temprana del diseño
 - Prueba gratuita disponible
 
+**Blueprint de salida:** UXBox organiza una idea en problema validable, usuario y contexto, prioridades de producto, riesgos principales y siguiente experimento. Su objetivo es reducir incertidumbre antes de invertir en diseño o desarrollo avanzado.
+
 ### 3. SEO Técnico y Arquitectura de Contenido
 Estructura semántica, datos enriquecidos (JSON-LD), performance web, Core Web Vitals y contenido orientado a intención de búsqueda. Optimización para ser descubierto tanto por motores de búsqueda tradicionales como por modelos de lenguaje (LLMs).
 
 ### 4. CRO y Experiencia Emocional
-Optimización de journeys de usuario, patrones de confianza, llamados a la acción y microcopy para aumentar conversión. Diseño emocional aplicado a B2C para engagement y a B2B para eficiencia y satisfacción.
+Optimización de journeys de usuario, patrones de confianza, llamados a la acción y microcopy para aumentar conversión. Diseño emocional aplicado a B2C para engagement y a B2B para eficiencia y satisfacción. Para PMs, Product Ops y equipos SaaS, MediaLab convierte feedback disperso, requests y fricción en prioridades de activación, retención y conversión, evitando caer en feature factory.
 
 ### 5. Desarrollo de Software a Medida
 Plataformas web B2B, apps B2C, MVPs para startups y arquitecturas escalables. Stack: React, Next.js, Node.js, TypeScript, infraestructura cloud.
@@ -192,6 +194,8 @@ Ideal para complementar la formación de estudiantes de:
 - Proyecto real (sales con un producto en tu portafolio)
 - Certificación profesional
 - Herramientas premium incluidas
+- Mentoría y feedback sobre estrategia, arquitectura UX, handoff y narrativa de portafolio
+- Expectativas honestas: no promete empleo automático; promete un producto defendible, proceso visible y criterio para explicar decisiones
 
 ## Portafolio — Casos de éxito en producción
 
@@ -203,6 +207,8 @@ URL: https://medialab.design/portafolio
 
 **Pepsico — Plataforma de Capacitación Interactiva** (FMCG / Enterprise)
 App interactiva con videos educativos, juegos y tracking de progreso para capacitar a fuerza de ventas a escala. +500 usuarios capacitados, +85% tasa de completación, 12 semanas de entrega.
+
+El caso Pepsico funciona como prueba de escala: MediaLab diseña productos digitales que deben ser claros para muchos usuarios, roles y contextos al mismo tiempo.
 
 **Ricardo Montaner — Presencia Digital Multi-plataforma** (Entretenimiento)
 Sitio web oficial del artista con experiencia visual premium para exhibir discografía. Diseño alineado con la imagen del artista para navegación fluida y participación activa.
@@ -225,10 +231,10 @@ App móvil para gestión de riesgos, capacitación de personal y cotizaciones en
 Plataforma de discovery de producto con IA. Disponible en https://medialab.design/#uxbox
 
 ### SinDeudas
-Plataforma de gestión financiera personal.
+Plataforma de gestión financiera personal y finanzas conductuales. SinDeudas ayuda a las personas a manejar sus finanzas de forma eficiente entendiendo el rol psicológico del dinero, combinando guía emocional, psicología del consumidor y herramientas digitales para transformar la relación del usuario con sus deudas.
 
 ### Electrolineras
-Solución digital para estaciones de carga eléctrica.
+Solución digital para movilidad eléctrica y estaciones de carga. Electrolineras ayuda a conductores de vehículos eléctricos a moverse con tranquilidad, tomar decisiones inteligentes sobre energía, autonomía y carga, y reducir la ansiedad y el tiempo invertido en planificar desplazamientos.
 
 ## Blog — Artículos firmados de autoridad
 

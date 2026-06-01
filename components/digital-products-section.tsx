@@ -27,8 +27,8 @@ export function DigitalProductsSection() {
         "B2C Behavioral Finance Platform"
       ),
       description: t(
-        "Una experiencia B2C diseñada para conectar emocionalmente con personas en situación de deuda. Combina guía emocional, psicología del consumidor y herramientas digitales inteligentes para transformar la relación del usuario con sus finanzas.",
-        "A B2C experience designed to emotionally connect with people in debt. It combines emotional guidance, consumer psychology, and intelligent digital tools to transform the user's relationship with their finances."
+        "Una experiencia B2C diseñada para ayudar a las personas a manejar sus finanzas de forma eficiente, entendiendo el rol psicológico del dinero. Combina guía emocional, psicología del consumidor y herramientas digitales inteligentes para transformar la relación del usuario con sus finanzas y sus deudas.",
+        "A B2C experience designed to help people manage their finances efficiently by understanding the psychological role of money. It combines emotional guidance, consumer psychology, and intelligent digital tools to transform the user's relationship with finances and debt."
       ),
       color: "var(--magenta)",
       gradient: "linear-gradient(135deg, var(--magenta), oklch(0.45 0.24 300))",
@@ -43,8 +43,8 @@ export function DigitalProductsSection() {
         "B2C/B2B App for Electric Charging Network"
       ),
       description: t(
-        "Una aplicación de movilidad sustentable que conecta conductores B2C con estaciones de carga y ofrece a operadores B2B un dashboard de gestión en tiempo real.",
-        "A sustainable mobility app that connects B2C drivers with charging stations and offers B2B operators a real-time management dashboard."
+        "Una aplicación de movilidad sustentable que ayuda a conductores de vehículos eléctricos a moverse con tranquilidad, tomar decisiones inteligentes sobre energía, autonomía y carga, y reducir la ansiedad y el tiempo invertido en planificar desplazamientos.",
+        "A sustainable mobility app that helps electric vehicle drivers move with confidence, make smarter decisions about energy, range, and charging, and reduce the anxiety and time spent planning trips."
       ),
       color: "var(--cyan)",
       gradient: "linear-gradient(135deg, var(--cyan), oklch(0.55 0.18 220))",

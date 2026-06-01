@@ -75,6 +75,12 @@ export function PortfolioMetrics() {
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
           {metrics.map((m, i) => <MetricCard key={m.label} m={m} active={active} i={i} />)}
         </div>
+        <p className="mt-4 max-w-3xl mx-auto text-center text-xs text-muted-foreground leading-relaxed">
+          {t(
+            "Las métricas combinan proyectos propios y clientes con mediciones disponibles. Cuando iniciamos un proyecto nuevo, acordamos la línea base, el periodo de comparación y el indicador principal antes de prometer impacto.",
+            "Metrics combine owned products and client projects with available measurements. When we start a new project, we agree on baseline, comparison period, and primary indicator before promising impact."
+          )}
+        </p>
       </div>
     </section>
   )

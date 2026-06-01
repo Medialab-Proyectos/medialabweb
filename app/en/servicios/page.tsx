@@ -19,6 +19,14 @@ export const metadata: Metadata = {
       "We research how your users think, design what they need to feel, and build the product your business needs.",
     url: "/en/servicios",
     locale: "en_US",
+    images: [{ url: "/images/og-services.png", width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "MediaLab Services — UX/UI, AI, SEO & Development",
+    description:
+      "Behavioral UX/UI design, AI discovery, CRO and software development for B2B and B2C companies.",
+    images: ["/images/og-services.png"],
   },
 }
 

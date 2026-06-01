@@ -58,6 +58,12 @@ export function TrustMetrics() {
             <MetricCard key={m.label} {...m} />
           ))}
         </div>
+        <p className="mt-4 max-w-3xl mx-auto text-center text-xs text-muted-foreground leading-relaxed">
+          {t(
+            "Estas cifras son promedios internos y resultados reportados por clientes en proyectos entregados; en cada propuesta definimos la línea base, la muestra y la métrica que vamos a mover.",
+            "These figures are internal averages and client-reported results from shipped projects; in every proposal we define the baseline, sample, and metric we aim to move."
+          )}
+        </p>
       </div>
     </section>
   )

@@ -159,13 +159,13 @@ export function HeroSection() {
                 {t("Quiero transformar mi producto", "I want to transform my product")}
               </button>
             </BookingModal>
-            <Link
+            <a
               href="#uxbox"
               className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full text-[15px] font-semibold border dark:border-white/15 border-foreground/15 dark:text-white/75 text-foreground/75 dark:hover:text-white hover:text-foreground dark:hover:border-white/30 hover:border-foreground/30 dark:hover:bg-white/5 hover:bg-foreground/5 transition-all duration-200 active:scale-95 w-full sm:w-auto"
             >
               <Package size={15} />
               {t("Probar UXBox gratis", "Try UXBox free")}
-            </Link>
+            </a>
           </div>
           <p className="text-xs dark:text-white/60 text-muted-foreground flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-[#00BFA6] animate-pulse" />

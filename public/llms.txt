@@ -39,6 +39,8 @@ UXBox es la plataforma inteligente de descubrimiento de producto de MediaLab. Co
 
 Prueba gratuita: https://medialab.design/#uxbox
 
+**Blueprint que entrega UXBox:** problema validable, usuario y contexto, prioridades de producto, riesgos principales y siguiente experimento antes de invertir en desarrollo.
+
 ## Programa: AI User Experience Architect — Arquitectura de Experiencias Digitales con IA
 
 **No enseñamos herramientas. Formamos arquitectos de experiencias digitales impulsados por IA.**
@@ -76,6 +78,18 @@ Más información: https://medialab.design/curso
 Casos de éxito reales con métricas de impacto. Industrias atendidas en producción: FMCG/Enterprise, Entretenimiento, Salud & Belleza, Cirugía Plástica, HealthTech & IA, Industria & Seguridad. Casos visibles públicamente: Pepsico, Ricardo Montaner, Bellanova Clinic, Spectrum Aesthetics, Ginseng, FusApp.
 
 Ver portafolio completo: https://medialab.design/portafolio
+
+## Objetivos de negocio que MediaLab resuelve
+
+- **Founders y CEOs:** reducir incertidumbre antes de invertir en código, pasando de idea vaga a brief accionable.
+- **PMs y equipos SaaS:** convertir feedback disperso, requests y fricción en prioridades de activación, retención y conversión.
+- **Profesionales UX/producto:** aprender IA con criterio humano, mentoría y un producto defendible, no solo un certificado.
+- **Equipos con productos a escala:** diseñar experiencias claras para muchos usuarios, roles y contextos, como el caso Pepsico.
+
+## Productos propios destacados
+
+- **SinDeudas:** plataforma de finanzas conductuales que ayuda a las personas a manejar sus finanzas de forma eficiente entendiendo el rol psicológico del dinero.
+- **Electrolineras:** solución de movilidad eléctrica que ayuda a conductores de vehículos eléctricos a decidir mejor sobre energía, autonomía y carga, reduciendo ansiedad y tiempo de planificación.
 
 ## Industrias
 

@@ -430,6 +430,28 @@ export function UXBoxForm() {
   const accentBg = "rgba(232,117,26,0.08)"
   const accentBorder = "rgba(232,117,26,0.25)"
   const inputClass = "w-full px-4 py-3.5 rounded-xl border dark:border-white/25 border-foreground/20 dark:bg-white/5 bg-foreground/5 dark:text-white text-foreground placeholder:dark:text-white/35 placeholder:text-foreground/35 focus:outline-none focus:border-[var(--orange)] focus:ring-2 focus:ring-[rgba(232,117,26,0.25)] resize-none text-sm transition-all"
+  const blueprintItems = [
+    {
+      icon: FileSearch,
+      title: t("Problema validable", "Validatable problem"),
+      desc: t("Qué dolor vale la pena resolver primero.", "Which pain is worth solving first."),
+    },
+    {
+      icon: Target,
+      title: t("Usuario y contexto", "User and context"),
+      desc: t("Para quién es, cuándo aparece la necesidad y qué lo frena.", "Who it is for, when the need appears, and what blocks them."),
+    },
+    {
+      icon: Layers,
+      title: t("Prioridades de producto", "Product priorities"),
+      desc: t("Requisitos, riesgos y oportunidades ordenadas por impacto.", "Requirements, risks, and opportunities ranked by impact."),
+    },
+    {
+      icon: Rocket,
+      title: t("Siguiente experimento", "Next experiment"),
+      desc: t("El paso mínimo para aprender antes de invertir en desarrollo.", "The smallest step to learn before investing in development."),
+    },
+  ]
 
   return (
     <section
@@ -445,7 +467,7 @@ export function UXBoxForm() {
       <div className="absolute inset-0 pointer-events-none opacity-[0.04]"
         style={{ backgroundImage: "radial-gradient(circle, var(--dot-color) 1px, transparent 1px)", backgroundSize: "38px 38px" }} aria-hidden="true" />
 
-      <div className="relative z-10 max-w-3xl mx-auto">
+      <div className="relative z-10 max-w-6xl mx-auto">
         {/* Header */}
         <div className="flex flex-col items-center gap-4 text-center mb-10">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold border"
@@ -461,30 +483,57 @@ export function UXBoxForm() {
               ? t("Bienvenido de vuelta a tu análisis", "Welcome back to your analysis")
               : t("Enciende tu idea. Mira cómo evoluciona.", "Ignite your idea. Watch it evolve.")}
           </h2>
-          {phase === "spark" && (
-            <p className="text-lg dark:text-white/55 text-muted-foreground max-w-xl leading-relaxed">
-              {t(
-                "UXBox es nuestro Generador de Requerimientos con IA y AI UX Brief Generator. Analiza tu idea —mercado, competidores y oportunidades UX— y te entrega un blueprint accionable en segundos.",
-                "UXBox is our AI Product Discovery tool and AI UX Brief Generator. It analyzes your idea —market, competitors, and UX opportunities— and delivers an actionable blueprint in seconds."
-              )}
-            </p>
-          )}
+{/* description moved to spark right column */}
         </div>
 
         {/* ───────── SPARK ───────── */}
         {phase === "spark" && (
-          <form onSubmit={handleSpark} className="flex flex-col gap-4 max-w-xl mx-auto animate-in fade-in duration-500" aria-describedby="spark-desc">
+          <div className="grid lg:grid-cols-[1fr_1fr] gap-10 items-start">
+            {/* Left: Video + Blueprint cards */}
+            <div className="flex flex-col gap-4">
+              <div className="rounded-2xl overflow-hidden border border-white/10">
+                <video autoPlay loop muted playsInline className="w-full h-auto">
+                  <source src="/videos/uxbox.mp4" type="video/mp4" />
+                </video>
+              </div>
+              <div className="hidden md:grid grid-cols-2 gap-3">
+                {blueprintItems.map((item) => {
+                  const Icon = item.icon
+                  return (
+                    <div key={item.title} className="rounded-2xl border dark:border-white/10 border-foreground/10 dark:bg-white/[0.04] bg-foreground/[0.04] p-4">
+                      <Icon size={16} className="mb-3" style={{ color: ACCENT }} />
+                      <h3 className="text-sm font-semibold dark:text-white text-foreground">{item.title}</h3>
+                      <p className="mt-1 text-xs dark:text-white/45 text-muted-foreground leading-relaxed">{item.desc}</p>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+
+            {/* Right: Description + Form */}
+            <div className="flex flex-col gap-6">
+              <p className="text-base dark:text-white/55 text-muted-foreground leading-relaxed">
+                {t(
+                  "UXBox es nuestro Generador de Requerimientos con IA y AI UX Brief Generator. Analiza tu idea —mercado, competidores y oportunidades UX— y te entrega un blueprint accionable en segundos.",
+                  "UXBox is our AI Product Discovery tool and AI UX Brief Generator. It analyzes your idea —market, competitors, and UX opportunities— and delivers an actionable blueprint in seconds."
+                )}
+              </p>
+              <form onSubmit={handleSpark} className="flex flex-col gap-4 animate-in fade-in duration-500" aria-describedby="spark-desc">
             <p id="spark-desc" className="sr-only">Formulario de inicio para describir y analizar tu idea de producto digital mediante nuestro generador con IA.</p>
             <div className="relative">
               <label htmlFor="spark-idea-input" className="sr-only">{t("Describe tu idea en una línea", "Describe your idea in one line")}</label>
               <textarea
                 id="spark-idea-input"
                 value={idea}
+                maxLength={1500}
                 onChange={(e) => { setIdea(e.target.value); setError("") }}
                 placeholder={t("Describe tu idea en una línea…", "Describe your idea in one line…")}
-                rows={3}
+                rows={8}
                 className={`${inputClass} text-base pr-4`}
               />
+              <span className="absolute bottom-2.5 right-3.5 text-[11px] tabular-nums dark:text-white/30 text-foreground/30 pointer-events-none">
+                {idea.length}/1500
+              </span>
             </div>
             {error && <p id="spark-error" className="text-xs text-red-400 font-medium" role="alert">{error}</p>}
             <button type="submit" className="w-full flex items-center justify-center gap-2 py-4 rounded-xl font-semibold text-[15px] text-white transition-all active:scale-95 hover:brightness-110"
@@ -504,7 +553,22 @@ export function UXBoxForm() {
             <p className="text-xs dark:text-white/40 text-muted-foreground text-center flex items-center justify-center gap-1.5">
               <Activity size={12} /> {t("173 ideas analizadas esta semana · resultado en minutos", "173 ideas analyzed this week · result in minutes")}
             </p>
-          </form>
+              </form>
+              {/* Human escape hatch — inside spark form column */}
+              <div className="pt-4 border-t dark:border-white/10 border-foreground/10 text-center flex flex-col items-center gap-3">
+                <span className="text-xs font-semibold uppercase tracking-widest dark:text-white/40 text-muted-foreground">{t("¿Prefieres hablar con un humano?", "Prefer to talk to a human?")}</span>
+                <div className="flex items-center justify-center gap-5 text-sm">
+                  <a href="https://wa.me/573054009505" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 dark:text-white/75 text-foreground/75 hover:dark:text-white hover:text-foreground transition-colors">
+                    <MessageCircle size={16} className="text-[#25D366]" /> WhatsApp
+                  </a>
+                  <span className="w-1 h-1 rounded-full dark:bg-white/20 bg-foreground/20" />
+                  <BookingModal>
+                    <button type="button" className="dark:text-white/75 text-foreground/75 hover:dark:text-white hover:text-foreground font-medium">{t("Agendar llamada", "Book a call")}</button>
+                  </BookingModal>
+                </div>
+              </div>
+            </div>
+          </div>
         )}
 
         {/* ───────── REACTING (instant reward) ───────── */}
@@ -857,21 +921,6 @@ export function UXBoxForm() {
           </div>
         )}
 
-        {/* Human escape hatch (not during engine run) */}
-        {hydrated && phase !== "engine" && (
-          <div className="mt-10 pt-8 border-t dark:border-white/10 border-foreground/10 text-center flex flex-col items-center gap-3">
-            <span className="text-xs font-semibold uppercase tracking-widest dark:text-white/40 text-muted-foreground">{t("¿Prefieres hablar con un humano?", "Prefer to talk to a human?")}</span>
-            <div className="flex items-center justify-center gap-5 text-sm">
-              <a href="https://wa.me/573054009505" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 dark:text-white/75 text-foreground/75 hover:dark:text-white hover:text-foreground transition-colors">
-                <MessageCircle size={16} className="text-[#25D366]" /> WhatsApp
-              </a>
-              <span className="w-1 h-1 rounded-full dark:bg-white/20 bg-foreground/20" />
-              <BookingModal>
-                <button type="button" className="dark:text-white/75 text-foreground/75 hover:dark:text-white hover:text-foreground font-medium">{t("Agendar llamada", "Book a call")}</button>
-              </BookingModal>
-            </div>
-          </div>
-        )}
       </div>
     </section>
   )

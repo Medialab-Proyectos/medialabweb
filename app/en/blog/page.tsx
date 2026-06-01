@@ -19,6 +19,13 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: "/en/blog",
+    images: [{ url: "/images/og-blog.png", width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "MediaLab Blog — UX, AI, and Digital Product",
+    description: "Signed articles on conscious design, AI applied to product, and human behavior.",
+    images: ["/images/og-blog.png"],
   },
 }
 
