@@ -2,7 +2,8 @@
 
 import { useRef, useEffect, useCallback, useState } from "react"
 import { motion, useScroll, useTransform } from "framer-motion"
-import { Users, Star, BookOpen, GraduationCap, Shield } from "lucide-react"
+import { Users, Star, BookOpen, GraduationCap, Shield, Leaf } from "lucide-react"
+import Link from "next/link"
 import { useLanguage } from "@/lib/language-context"
 
 const stagger = {
@@ -413,7 +414,7 @@ export function CourseHero() {
             </motion.p>
 
             {/* CTAs — stacked full-width on mobile, side-by-side on desktop */}
-            <motion.div variants={fadeUp} className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mb-3">
+            <motion.div variants={fadeUp} className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mb-2">
               <a
                 href="#registro"
                 className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-7 py-4 text-sm font-semibold text-white rounded-full transition-all duration-300 hover:scale-[1.03] active:scale-95 shadow-[0_10px_32px_-8px_rgba(232,117,26,0.65)]"
@@ -431,9 +432,14 @@ export function CourseHero() {
               </a>
             </motion.div>
 
+            {/* Price anchor — visible before full scroll */}
+            <motion.p variants={fadeUp} className="text-xs dark:text-white/50 text-muted-foreground mb-4">
+              {t("Desde $124/semana · Pago fraccionado disponible · Garantía semana 1", "From $124/week · Installment plans available · Week 1 guarantee")}
+            </motion.p>
+
             <motion.div variants={fadeUp} className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs dark:text-white/60 text-muted-foreground mb-6">
               <span className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+                <span className="w-1.5 h-1.5 rounded-full bg-[#00BFA6] animate-pulse" />
                 {t("Cohorte 02 · 30 cupos", "Cohort 02 · 30 seats")}
               </span>
               <span className="hidden sm:inline dark:text-white/20 text-foreground/20">|</span>
@@ -443,9 +449,14 @@ export function CourseHero() {
               </span>
               <span className="hidden sm:inline dark:text-white/20 text-foreground/20">|</span>
               <span className="flex items-center gap-1">
-                <Shield className="w-3 h-3 text-green-500" />
+                <Shield className="w-3 h-3 text-[#00BFA6]" />
                 {t("Garantía semana 1", "Week 1 guarantee")}
               </span>
+              <span className="hidden sm:inline dark:text-white/20 text-foreground/20">|</span>
+              <Link href="/uxgreen" className="flex items-center gap-1 text-[#00BFA6] hover:underline">
+                <Leaf className="w-3 h-3" />
+                {t("🌱 UXGreen™ Certified", "🌱 UXGreen™ Certified")}
+              </Link>
             </motion.div>
 
             {/* Role pills */}

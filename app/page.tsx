@@ -4,12 +4,12 @@ import { MarqueeTicker } from "@/components/marquee-ticker"
 import { ClientLogos } from "@/components/client-logos"
 import { TrustMetrics } from "@/components/trust-metrics"
 import { AboutSection } from "@/components/about-section"
-import { ServicesSection } from "@/components/services-section"
+import { ServicesSummarySection } from "@/components/services-summary-section"
 import { ExperienceDesignSection } from "@/components/experience-design-section"
+import { MethodSection } from "@/components/method-section"
 import { UXBoxForm } from "@/components/uxbox-form"
 import { IndustriesSection } from "@/components/industries-section"
 import { WorldPresence } from "@/components/world-presence"
-import { MethodSection } from "@/components/method-section"
 import { TestimonialsSection } from "@/components/testimonials-section"
 import { DigitalProductsSection } from "@/components/digital-products-section"
 import { WhyUsSection } from "@/components/why-us-section"
@@ -20,6 +20,8 @@ import { Footer } from "@/components/footer"
 import { SocialProofBar } from "@/components/social-proof-bar"
 import { StickyCTA } from "@/components/sticky-cta"
 import { MidCTA } from "@/components/mid-cta"
+import { EntryDoorsSection } from "@/components/entry-doors-section"
+import { AdaLeoAssistant } from "@/components/ada-leo-assistant"
 import { CoursePromoSection } from "@/components/course-promo-section"
 import { HomeScrollRestorer } from "@/components/home-scroll-restorer"
 import type { Metadata } from "next"
@@ -82,26 +84,42 @@ export default function Home() {
       <HeroSection />
       <MarqueeTicker />
 
-      {/* — TRUST — */}
+      {/* — ÍNDICE DE DECISIÓN — 3 puertas sobre el pliegue */}
+      <EntryDoorsSection />
+
+      {/* — TRUST — prueba social temprana */}
       <ClientLogos />
       <TrustMetrics />
 
-      {/* — IDENTITY — */}
+      {/* — PROBLEMA / SOLUCIÓN — */}
       <AboutSection />
 
-      {/* — VALUE PROPOSITION — */}
-      <ServicesSection />
-
-      {/* — EXPERIENCE STRATEGY — */}
+      {/* — VALOR — resumen en la home; el detalle vive en /servicios/* */}
+      <ServicesSummarySection />
       <ExperienceDesignSection />
 
-      {/* — METHODOLOGY (transparencia) — */}
+      {/* — CÓMO TRABAJAMOS — método original "5 pasos" con indicadores (tiempo, satisfacción…) */}
       <MethodSection />
 
-      {/* — SOCIAL PROOF — */}
-      <TestimonialsSection />
+      {/* — ACTIVACIÓN — UXBox subido: el CTA del hero ahora encuentra su destino cerca */}
+      <UXBoxForm />
 
-      {/* — MID-FUNNEL CONVERSION — */}
+      {/* — UXSCHOOL destacado — tras mostrar el método y la herramienta */}
+      <CoursePromoSection />
+
+      {/* — CONTEXTO — relevancia sectorial + alcance antes de la prueba */}
+      <IndustriesSection />
+      <WorldPresence />
+
+      {/* — PRUEBA / DESEO (cluster) — testimonios + portafolio UXLab + diferenciadores juntos */}
+      <TestimonialsSection />
+      <DigitalProductsSection />
+      <WhyUsSection />
+
+      {/* — AUTORIDAD / CONTENIDO — */}
+      <BlogSection />
+
+      {/* — EMPUJÓN FINAL — justo antes de objeciones y cierre */}
       <MidCTA
         headline="Cada sprint sin investigación de usuarios es inversión que no regresa"
         headlineEn="Every sprint without user research is investment that doesn't come back"
@@ -109,29 +127,10 @@ export default function Home() {
         subheadlineEn="You've seen how we work. Now imagine that applied to your product. 40+ teams already took the step — what about you?"
       />
 
-      {/* — EDUCATION & TRAINING — */}
-      <CoursePromoSection />
-
-      {/* — INTERACTIVE ENGAGEMENT — */}
-      <UXBoxForm />
-
-      {/* — CONTEXTUAL RELEVANCE — */}
-      <IndustriesSection />
-      <WorldPresence />
-
-      {/* — PORTFOLIO — */}
-      <DigitalProductsSection />
-
-      {/* — REINFORCEMENT — */}
-      <WhyUsSection />
-
-      {/* — CONTENT & AUTHORITY — */}
-      <BlogSection />
-
-      {/* — OBJECTION HANDLING — */}
+      {/* — OBJECIONES — */}
       <FAQSection />
 
-      {/* — FINAL CONVERSION — */}
+      {/* — CIERRE — */}
       <CTASection />
 
       <Footer />
@@ -139,6 +138,9 @@ export default function Home() {
       {/* Engagement overlays */}
       <SocialProofBar />
       <StickyCTA />
+
+      {/* Asistente conversacional Ada & Leo (guía no intrusiva) */}
+      <AdaLeoAssistant />
     </main>
   )
 }

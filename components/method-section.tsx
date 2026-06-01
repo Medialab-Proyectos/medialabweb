@@ -159,10 +159,11 @@ export function MethodSection() {
               <button
                 key={step.number}
                 onClick={() => setActiveStep(i)}
+                onMouseEnter={() => setActiveStep(i)}
                 className={`group relative flex min-h-[124px] flex-col gap-3 rounded-lg border px-4 py-3 text-left transition-all duration-300 cursor-pointer overflow-hidden
                   ${isActive
                     ? "border-transparent bg-card shadow-lg"
-                    : "border-transparent bg-transparent hover:bg-card/70"
+                    : "border-border bg-card/40 hover:bg-card hover:border-foreground/25 hover:-translate-y-0.5"
                   }
                   ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
                 style={{ transitionDelay: `${i * 80}ms` }}

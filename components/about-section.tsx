@@ -1,8 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { ArrowRight } from "lucide-react"
-import Image from "next/image"
+import { ArrowRight, Lightbulb } from "lucide-react"
 import Link from "next/link"
 import { useLanguage } from "@/lib/language-context"
 
@@ -44,21 +43,32 @@ export function AboutSection() {
               {t("porque tu producto no los entiende.", "because your product doesn't understand them.")}
             </span>
           </h2>
-          <p className="text-base text-muted-foreground leading-relaxed">
+          <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
             {t(
-              "Sabes que tu producto tiene potencial. Pero algo no conecta: los usuarios llegan y se van, las conversiones no suben, el equipo diseña sin datos reales. El problema no es tu idea — es que nadie investigó qué necesitan sentir tus usuarios.",
-              "You know your product has potential. But something isn't clicking: users arrive and leave, conversions stay flat, your team designs without real data. The problem isn't your idea — it's that no one researched what your users need to feel."
+              "Tu producto tiene potencial, pero algo no conecta: los usuarios llegan y se van. El problema no es tu idea — es que nadie investigó qué necesitan sentir.",
+              "Your product has potential, but something isn't clicking: users arrive and leave. The problem isn't your idea — it's that no one researched what they need to feel."
             )}
           </p>
-          <p className="text-base text-muted-foreground leading-relaxed">
+          <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
             {t(
-              "En MediaLab Ingeniería empezamos por ahí. Combinamos psicología del consumidor, IA y diseño UX para que cada decisión de tu producto digital esté respaldada por evidencia real. El resultado: productos que la gente quiere usar y negocios que crecen.",
-              "At MediaLab Ingeniería we start there. We combine consumer psychology, AI, and UX design so every digital product decision is backed by real evidence. The result: products people want to use and businesses that grow."
+              "Ahí empezamos: unimos psicología del consumidor, IA y diseño UX para que cada decisión tenga evidencia real. ¿El resultado? Productos que la gente usa y negocios que crecen.",
+              "That's where we start: we combine consumer psychology, AI, and UX design so every decision has real evidence. The result? Products people use and businesses that grow."
             )}
           </p>
-          <p className="text-base font-medium text-foreground leading-relaxed">
-            {t("Emocional. Medible. Humano.", "Emotional. Measurable. Human.")}
-          </p>
+          {/* Qué es UX — explicación humana que conecta el problema con la solución */}
+          <div className="flex items-start gap-3 p-4 rounded-xl border-l-4 border border-[#E8772E]/30 border-l-[#E8772E] bg-[#E8772E]/[0.06]">
+            <Lightbulb className="w-5 h-5 shrink-0 mt-0.5" style={{ color: "#E8772E" }} aria-hidden="true" />
+            <p className="text-sm text-foreground/80 leading-relaxed">
+              {t("A eso se le llama ", "This is what's called ")}
+              <strong className="text-foreground font-semibold">
+                {t("diseño de experiencia (UX)", "experience design (UX)")}
+              </strong>
+              {t(
+                ": lograr que tu producto sea claro, fácil y que la gente quiera usarlo. Es la diferencia entre un producto que vende y uno que fracasa.",
+                ": making your product clear, easy, and something people actually want to use. It's the difference between a product that sells and one that fails.",
+              )}
+            </p>
+          </div>
           <Link
             href="#contact"
             className="group inline-flex items-center gap-2 text-sm font-semibold text-[var(--magenta)] hover:gap-3 transition-all duration-200 w-fit"
@@ -75,30 +85,8 @@ export function AboutSection() {
         >
           {/* Title */}
           <span className="text-xs font-semibold tracking-widest uppercase text-[var(--magenta)]">
-            {t("Somos un ecosistema", "We are an ecosystem")}
+            {t("Nuestro enfoque", "Our approach")}
           </span>
-
-          {/* Row 1: 3 ecosystem cards — dark bg, colored logos, border */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="rounded-2xl p-5 flex flex-col gap-3 bg-[var(--surface-dark)] border border-border">
-              <Image src="/images/ecosistema/Factory.svg" alt="UXFactory" width={120} height={32} className="h-8 w-auto dark:brightness-0 dark:invert dark:opacity-50" />
-              <p className="text-[11px] text-white/60 leading-relaxed">
-                {t("Diseño de experiencia a la medida para marketing digital y software.", "Custom experience design for digital marketing and software.")}
-              </p>
-            </div>
-            <div className="rounded-2xl p-5 flex flex-col gap-3 bg-[var(--surface-dark)] border border-border">
-              <Image src="/images/ecosistema/lab.svg" alt="UXLab" width={120} height={32} className="h-6 w-auto dark:brightness-0 dark:invert dark:opacity-50" />
-              <p className="text-[11px] text-white/60 leading-relaxed">
-                {t("Soluciones propias que mejoran la vida de las personas.", "Own solutions that improve people's lives.")}
-              </p>
-            </div>
-            <div className="rounded-2xl p-5 flex flex-col gap-3 bg-[var(--surface-dark)] border border-border">
-              <Image src="/images/ecosistema/school.svg" alt="UXSchool" width={120} height={32} className="h-6 w-auto dark:brightness-0 dark:invert dark:opacity-50" />
-              <p className="text-[11px] text-white/60 leading-relaxed">
-                {t("Programas especializados en diseño de experiencia.", "Specialized experience design programs.")}
-              </p>
-            </div>
-          </div>
 
           {/* Row 2: UX+IA, Evidencia, Impacto */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -125,8 +113,8 @@ export function AboutSection() {
             </span>
             <p className="text-sm text-muted-foreground">
               {t(
-                "Tres unidades, un mismo propósito: productos que las personas quieren usar — y negocios que crecen gracias a eso.",
-                "Three units, one purpose: products people want to use — and businesses that grow because of it."
+                "Un mismo propósito: productos que las personas quieren usar — y negocios que crecen gracias a eso.",
+                "One purpose: products people want to use — and businesses that grow because of it."
               )}
             </p>
           </div>

@@ -12,7 +12,7 @@ const navLinks = {
   es: [
     { label: "Servicios", href: "/#services" },
     { label: "Portafolio", href: "/portafolio" },
-    { label: "Educación", href: "/curso", highlight: true, education: true },
+    { label: "Curso", href: "/curso", highlight: true, education: true },
     { label: "UXBox", href: "/#uxbox", uxbox: true },
     { label: "UXGreen™", href: "/uxgreen", uxgreen: true },
     { label: "Carreras", href: "/carreras" },
@@ -20,7 +20,7 @@ const navLinks = {
   en: [
     { label: "Services", href: "/#services" },
     { label: "Portfolio", href: "/portafolio" },
-    { label: "Education", href: "/curso", highlight: true, education: true },
+    { label: "Course", href: "/curso", highlight: true, education: true },
     { label: "UXBox", href: "/#uxbox", uxbox: true },
     { label: "UXGreen™", href: "/uxgreen", uxgreen: true },
     { label: "Careers", href: "/carreras" },
@@ -357,6 +357,19 @@ export function Navbar() {
               </div>
             </div>
           )}
+          {/* UXGreen™ block */}
+          <div className={`flex items-start gap-2 p-3 rounded-xl border ${forceDarkNav ? "border-[#00BFA6]/20 bg-[#00BFA6]/[0.06]" : "border-[#00BFA6]/15 bg-[#00BFA6]/[0.04]"}`}>
+            <Leaf size={13} className="text-[#00BFA6] shrink-0 mt-0.5" />
+            <div>
+              <span className="text-xs font-semibold text-[#00BFA6]">UXGreen™</span>
+              <p className={`text-[11px] mt-0.5 leading-snug ${forceDarkNav ? "text-white/50" : "text-muted-foreground"}`}>
+                {lang === "es"
+                  ? "Sitio certificado · Eficiencia digital sostenible."
+                  : "Certified site · Sustainable digital efficiency."}
+              </p>
+            </div>
+          </div>
+
           <Link
             href={ctaHref}
             title={isCurso

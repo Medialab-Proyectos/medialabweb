@@ -15,7 +15,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     en: boolean
     lastModified: string
   }[] = [
-    { path: "", changeFrequency: "weekly", priority: 1.0, en: true, lastModified: "2026-05-29" },
+    { path: "", changeFrequency: "weekly", priority: 1.0, en: true, lastModified: "2026-06-01" },
     { path: "/servicios", changeFrequency: "monthly", priority: 0.95, en: true, lastModified: "2026-05-20" },
     { path: "/servicios/discovery-con-ia", changeFrequency: "monthly", priority: 0.9, en: true, lastModified: "2026-05-20" },
     { path: "/servicios/diseno-ux-ui", changeFrequency: "monthly", priority: 0.9, en: true, lastModified: "2026-05-20" },

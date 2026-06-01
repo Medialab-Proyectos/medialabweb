@@ -11,7 +11,16 @@ export function CTASection() {
   const [submitted, setSubmitted] = useState(false)
   const [sending, setSending] = useState(false)
   const [errors, setErrors] = useState<{ name?: string; email?: string; phone?: string; message?: string }>({})
+  // Escasez honesta: trimestre actual calculado en cliente para que nunca quede obsoleto.
+  // SSR muestra el texto genérico (siempre cierto); al montar se añade el trimestre vigente.
+  const [period, setPeriod] = useState<string | null>(null)
   const { t, localized } = useLanguage()
+
+  useEffect(() => {
+    const now = new Date()
+    const quarter = Math.floor(now.getMonth() / 3) + 1
+    setPeriod(`Q${quarter} ${now.getFullYear()}`)
+  }, [])
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -95,7 +104,11 @@ export function CTASection() {
               {/* Urgency badge */}
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--magenta)]/20 border border-[var(--magenta)]/30 text-sm w-fit">
                 <Clock size={14} className="text-[var(--magenta)]" />
-                <span className="text-white/90 font-medium">{t("Disponibilidad limitada Q3 2026", "Limited availability Q3 2026")}</span>
+                <span className="text-white/90 font-medium">
+                  {period
+                    ? t(`Disponibilidad limitada · ${period}`, `Limited availability · ${period}`)
+                    : t("Disponibilidad limitada", "Limited availability")}
+                </span>
               </div>
 
               <h2

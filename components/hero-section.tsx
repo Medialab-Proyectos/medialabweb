@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { ArrowRight, Sparkles, Package } from "lucide-react"
+import { Sparkles, Package } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 import { BookingModal } from "./booking-modal"
 
@@ -111,25 +111,29 @@ export function HeroSection() {
 
       {/* Content */}
       <div className="relative z-10 max-w-5xl mx-auto px-6 text-center flex flex-col items-center gap-8 pt-20 pb-24">
-        {/* Badge with social proof */}
+        {/* Chips — social proof + UXGreen */}
         <div
-          className={`inline-flex items-center gap-2 sm:gap-3 px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full border dark:border-white/10 border-foreground/10 dark:bg-white/5 bg-foreground/5 backdrop-blur-sm text-xs sm:text-sm font-medium dark:text-white/75 text-foreground/75 transition-all duration-700 ${ready ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+          className={`flex flex-wrap justify-center gap-2 transition-all duration-700 ${ready ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
           style={{ transitionDelay: "0ms" }}
         >
-          <span className="flex items-center gap-1.5 sm:gap-2">
-            <Sparkles size={13} style={{ color: "var(--magenta)" }} />
-            {t("40+ productos que conectan y convierten", "40+ products that connect & convert")}
-          </span>
-          <span className="hidden sm:inline w-px h-4 dark:bg-white/20 bg-foreground/20" aria-hidden="true" />
-          <a
-            href="https://a.co/d/069qLWdY"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hidden sm:inline text-xs font-semibold hover:underline transition-colors"
-            style={{ color: "var(--cyan)" }}
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border dark:border-white/10 border-foreground/10 dark:bg-white/5 bg-foreground/5 backdrop-blur-sm text-xs font-medium dark:text-white/75 text-foreground/75">
+            <Sparkles size={12} style={{ color: "var(--magenta)" }} />
+            {t("40+ productos en producción · 7 países", "40+ products in production · 7 countries")}
+          </div>
+          <Link
+            href="/uxgreen"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-[#00BFA6]/25 bg-[#00BFA6]/[0.07] backdrop-blur-sm text-xs font-semibold text-[#00BFA6] hover:bg-[#00BFA6]/[0.12] transition-colors"
           >
-            {t("Autores de 'Bienvenidos al Zero UI' →", "Authors of 'Welcome to Zero UI' →")}
-          </a>
+            <Image
+              src="/images/curso/logos/Green%20UX%20v%202.svg"
+              alt=""
+              width={14}
+              height={14}
+              className="opacity-90"
+              unoptimized
+            />
+            {t("UXGreen™ Certificado", "UXGreen™ Certified")}
+          </Link>
         </div>
 
         {/* Headline */}
@@ -137,10 +141,11 @@ export function HeroSection() {
           className={`font-display font-bold text-4xl sm:text-5xl md:text-6xl lg:text-[4.5rem] leading-[1.07] text-balance dark:text-white text-foreground transition-all duration-700 ${ready ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
           style={{ transitionDelay: "100ms" }}
         >
-          {t("Productos digitales que las personas ", "Digital products people ")}
-          <span className="bg-clip-text text-transparent" style={{ backgroundImage: "linear-gradient(90deg, #E8751A, #2AABB3)" }}>
-            {t("aman", "love")}
+          {t("Diseñamos ", "We design ")}
+          <span className="bg-clip-text text-transparent" style={{ backgroundImage: "linear-gradient(90deg, #E8772E 0%, #1A8A9E 100%)" }}>
+            {t("productos digitales", "digital products")}
           </span>
+          {t(" que la gente ama", " people love")}
         </h1>
 
         {/* Subheadline */}
@@ -149,8 +154,8 @@ export function HeroSection() {
           style={{ transitionDelay: "200ms" }}
         >
           {t(
-            "Con IA, UX y psicología del consumidor, aceleramos el discovery de producto de meses a días — y lo validamos con criterio humano.",
-            "With AI, UX, and consumer psychology, we accelerate product discovery from months to days — and validate it with human judgment."
+            "Con IA y psicología del consumidor, llevamos tu idea de algo vago a un producto validado con evidencia real — no con suposiciones.",
+            "With AI and consumer psychology, we take your idea from something vague to a product validated with real evidence — not assumptions."
           )}
         </p>
 
@@ -177,31 +182,34 @@ export function HeroSection() {
             </Link>
           </div>
           <p className="text-xs dark:text-white/60 text-muted-foreground flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-            {t("30 min gratis · Sin compromiso · Respuesta en 24h", "30 min free · No commitment · Response in 24h")}
+            <span className="w-1.5 h-1.5 rounded-full bg-[#00BFA6] animate-pulse" />
+            {t("UXBox · tu brief de producto con IA en minutos · 30 min gratis, respuesta en 24h", "UXBox · your AI product brief in minutes · 30 min free, reply within 24h")}
           </p>
         </div>
 
-        {/* Ecosystem strip */}
+        {/* Logos del ecosistema */}
         <div
-          className={`flex flex-col items-center gap-3 transition-all duration-700 ${ready ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
+          className={`flex flex-col items-center gap-5 pt-8 transition-all duration-700 ${ready ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
           style={{ transitionDelay: "400ms" }}
         >
-          <span className="text-[11px] tracking-[0.15em] uppercase font-semibold dark:text-white/40 text-foreground/40">
-            {t("Nuestro ecosistema", "Our ecosystem")}
+          <span className="text-[11px] uppercase tracking-[0.18em] dark:text-white/40 text-foreground/40">
+            {t("Un ecosistema", "One ecosystem")}
           </span>
-          <div className="flex items-center gap-8 sm:gap-12">
-            <div className="flex flex-col items-center gap-1.5">
-              <Image src="/images/ecosistema/Factory.svg" alt="UXFactory" width={100} height={28} className="h-7 sm:h-8 w-auto dark:brightness-0 dark:invert dark:opacity-50 opacity-60" />
-            </div>
-            <div className="w-px h-6 dark:bg-white/15 bg-foreground/15" aria-hidden="true" />
-            <div className="flex flex-col items-center gap-1.5">
-              <Image src="/images/ecosistema/lab.svg" alt="UXLab" width={100} height={28} className="h-6 sm:h-7 w-auto dark:brightness-0 dark:invert dark:opacity-50 opacity-60" />
-            </div>
-            <div className="w-px h-6 dark:bg-white/15 bg-foreground/15" aria-hidden="true" />
-            <div className="flex flex-col items-center gap-1.5">
-              <Image src="/images/ecosistema/school.svg" alt="UXSchool" width={100} height={28} className="h-6 sm:h-7 w-auto dark:brightness-0 dark:invert dark:opacity-50 opacity-60" />
-            </div>
+          <div className="flex flex-wrap items-center justify-center gap-x-10 md:gap-x-16 gap-y-5">
+            {[
+              { src: "/images/ecosistema/Factory.svg", alt: "UXFactory" },
+              { src: "/images/ecosistema/lab.svg", alt: "UXLab" },
+              { src: "/images/ecosistema/school.svg", alt: "UXSchool" },
+            ].map((logo) => (
+              <Image
+                key={logo.alt}
+                src={logo.src}
+                alt={logo.alt}
+                width={150}
+                height={40}
+                className="h-7 md:h-9 w-auto opacity-65 hover:opacity-95 transition-opacity dark:brightness-0 dark:invert"
+              />
+            ))}
           </div>
         </div>
 
