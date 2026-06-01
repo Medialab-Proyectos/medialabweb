@@ -110,9 +110,9 @@ export function AdaLeoAssistant() {
         es: "Entendido. UXFactory: diseñamos y construimos tu producto a la medida, listo para validar y crecer. Aquí está el portafolio para que veas resultados reales:",
         en: "Got it. UXFactory: we design and build your custom product, ready to validate and grow. Here's the portfolio so you see real results:",
       },
-      ctaEs: "Ver portafolio",
-      ctaEn: "See portfolio",
-      href: "/portafolio",
+      ctaEs: "Ver cómo trabajamos",
+      ctaEn: "See how we work",
+      href: "/#method",
     },
     {
       id: "producto",
@@ -130,7 +130,7 @@ export function AdaLeoAssistant() {
       },
       ctaEs: "Quiero un diagnóstico",
       ctaEn: "I want a diagnosis",
-      href: "/servicios",
+      href: "/#services",
     },
     {
       id: "aprender",
@@ -148,7 +148,7 @@ export function AdaLeoAssistant() {
       },
       ctaEs: "Explorar el curso",
       ctaEn: "Explore the course",
-      href: "/curso",
+      href: "/#curso-promo",
     },
     {
       id: "ux",
@@ -189,9 +189,12 @@ export function AdaLeoAssistant() {
     return () => window.clearTimeout(id)
   }, [])
 
-  // Inicializa el saludo al abrir por primera vez.
+  // Inicializa el saludo al abrir y scroll al tope.
   useEffect(() => {
-    if (open && messages.length === 0) resetConversation()
+    if (open) {
+      if (messages.length === 0) resetConversation()
+      setTimeout(() => scrollRef.current?.scrollTo({ top: 0 }), 50)
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open])
 
