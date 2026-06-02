@@ -63,7 +63,12 @@
       "Bash(grep -oE '.{0,260}id=\"how-it-works-heading\"')",
       "PowerShell(Add-Type -AssemblyName System.Drawing; $f = \"C:\\\\Users\\\\coben\\\\Desktop\\\\sitiomlab\\\\medialabweb\\\\public\\\\images\\\\asistente\\\\ada-smile.png\"; $bmp = New-Object System.Drawing.Bitmap $f; \"Tamaño: $\\($bmp.Width\\)x$\\($bmp.Height\\)\"; foreach \\($pt in @\\(@\\(0,0\\),@\\($bmp.Width-1,0\\),@\\(2,2\\),@\\($bmp.Width-1,$bmp.Height-1\\)\\)\\) { $p = $bmp.GetPixel\\($pt[0],$pt[1]\\); \"\\({0,3},{1,3}\\) A={2,3} R={3,3} G={4,3} B={5,3}\" -f $pt[0],$pt[1],$p.A,$p.R,$p.G,$p.B }; $bmp.Dispose\\(\\))",
       "PowerShell(Add-Type -AssemblyName System.Drawing; $f = \"C:\\\\Users\\\\coben\\\\Desktop\\\\sitiomlab\\\\medialabweb\\\\public\\\\images\\\\asistente\\\\ada-smile.png\"; $bmp = New-Object System.Drawing.Bitmap $f; $w = $bmp.Width; $h = $bmp.Height; \"Tamaño: ${w}x${h}\"; $coords = @\\(@\\(0,0\\),@\\(\\($w-1\\),0\\),@\\(2,2\\),@\\(\\($w-1\\),\\($h-1\\)\\),@\\(\\([int]\\($w/2\\)\\),0\\)\\); foreach \\($pt in $coords\\) { $p = $bmp.GetPixel\\([int]$pt[0],[int]$pt[1]\\); \"\\({0,3},{1,3}\\) A={2,3} R={3,3} G={4,3} B={5,3}\" -f $pt[0],$pt[1],$p.A,$p.R,$p.G,$p.B }; $bmp.Dispose\\(\\))",
-      "Bash([ -f \"app/$r/page.tsx\" ])"
+      "Bash([ -f \"app/$r/page.tsx\" ])",
+      "PowerShell(Copy-Item *)",
+      "PowerShell(git fetch *)",
+      "PowerShell(git pull *)",
+      "PowerShell(git checkout *)",
+      "Bash(git check-ignore *)"
     ]
   }
 }
