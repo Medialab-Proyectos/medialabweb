@@ -120,6 +120,8 @@ export function UXBoxForm() {
   const [resending, setResending] = useState(false)
   const [retrieveMode, setRetrieveMode] = useState(false)
   const [showNotFoundPopup, setShowNotFoundPopup] = useState(false)
+  // true cuando el usuario venía a iniciar una idea NUEVA pero su email ya tenía un análisis
+  const [existingNotice, setExistingNotice] = useState(false)
 
   // feed state
   const [feedStep, setFeedStep] = useState(0)
@@ -278,7 +280,10 @@ export function UXBoxForm() {
       if (data.valid) {
         const serverLab = data.lab as Lab | null
         if (serverLab && serverLab.startedAt) {
-          // Retorno cross-device: análisis en marcha; hidratar desde el servidor
+          // Retorno cross-device: análisis en marcha; hidratar desde el servidor.
+          // Si NO venía en modo "recuperar", es que intentó iniciar una idea nueva
+          // con un email que ya tiene propuesta → avisamos que solo hay una por email.
+          setExistingNotice(!retrieveMode)
           const insight = RETURN_INSIGHTS[(serverLab.visits || 0) % RETURN_INSIGHTS.length]
           setReturnInsight(t(insight[0], insight[1]))
           const merged = { ...serverLab, email, visits: (serverLab.visits || 0) + 1 }
@@ -289,6 +294,20 @@ export function UXBoxForm() {
           setPrototype(serverLab.prototype || "")
           setPhase("return")
           fetch("/api/lab", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(merged) }).catch(() => {})
+        } else if (serverLab && serverLab.idea) {
+          // Tiene propuesta guardada (idea + email) pero el motor no arrancó:
+          // reanudar en el feed con lo que ya escribió, en vez de "no encontrado".
+          setExistingNotice(!retrieveMode)
+          const merged = { ...serverLab, email }
+          labRef.current = merged
+          setLab(merged)
+          try { localStorage.setItem(LAB_KEY, JSON.stringify(merged)) } catch {}
+          setProjectName(serverLab.projectName || "")
+          setObjective(serverLab.objective || "")
+          setAudience(serverLab.audience || "")
+          setReferences(serverLab.references || "")
+          setFeedStep(0)
+          setPhase("feed")
         } else if (retrieveMode) {
           setShowNotFoundPopup(true)
           setPinInput(""); setError("")
@@ -397,7 +416,7 @@ export function UXBoxForm() {
     setIdea(""); setEmail(""); setConsent(false); setPinInput(""); setProjectName("")
     setReferences(""); setObjective(""); setAudience(""); setFeedStep(0)
     setBrief(""); setPrototype(""); setError("")
-    setRetrieveMode(false); setShowNotFoundPopup(false)
+    setRetrieveMode(false); setShowNotFoundPopup(false); setExistingNotice(false)
     setPhase("spark")
   }
 
@@ -692,6 +711,17 @@ export function UXBoxForm() {
         {/* ───────── FEED (progressive disclosure) ───────── */}
         {phase === "feed" && (
           <div className="max-w-md mx-auto flex flex-col gap-6 animate-in fade-in duration-500">
+            {existingNotice && (
+              <div className="rounded-xl border p-4 flex items-start gap-2.5" style={{ borderColor: accentBorder, background: accentBg }}>
+                <ShieldCheck size={15} className="shrink-0 mt-0.5" style={{ color: ACCENT }} />
+                <p className="text-xs dark:text-white/70 text-foreground/70 leading-relaxed">
+                  {t(
+                    "Este correo ya tenía una propuesta, así que continuamos donde la dejaste. Solo permitimos una por email; para una idea distinta usa otro correo.",
+                    "This email already had a proposal, so we're continuing where you left off. We allow only one per email; for a different idea use another email.",
+                  )}
+                </p>
+              </div>
+            )}
             {/* progress — step indicators */}
             <div className="flex flex-col gap-2">
               <div className="flex items-center justify-between text-xs dark:text-white/50 text-muted-foreground">
@@ -743,6 +773,22 @@ export function UXBoxForm() {
         {/* ───────── ENGINE + RETURN (timeline) ───────── */}
         {(phase === "engine" || phase === "return") && (
           <div className="max-w-2xl mx-auto flex flex-col gap-8 animate-in fade-in duration-500">
+            {phase === "return" && existingNotice && (
+              <div className="rounded-2xl border p-5 flex items-start gap-3" style={{ borderColor: accentBorder, background: accentBg }}>
+                <ShieldCheck size={16} className="shrink-0 mt-0.5" style={{ color: ACCENT }} />
+                <div>
+                  <p className="text-sm dark:text-white/85 text-foreground font-medium">
+                    {t("Este correo ya tenía un análisis en marcha.", "This email already had an analysis in progress.")}
+                  </p>
+                  <p className="text-sm dark:text-white/55 text-muted-foreground mt-1">
+                    {t(
+                      "Solo permitimos una propuesta activa por email, así que te llevamos a ella. Si quieres analizar una idea distinta, usa otro correo.",
+                      "We allow only one active proposal per email, so we brought you to it. To analyze a different idea, use another email.",
+                    )}
+                  </p>
+                </div>
+              </div>
+            )}
             {phase === "return" && (
               <div className="rounded-2xl border p-5 flex items-start gap-3" style={{ borderColor: accentBorder, background: accentBg }}>
                 <Activity size={16} className="shrink-0 mt-0.5" style={{ color: ACCENT }} />

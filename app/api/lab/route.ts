@@ -9,8 +9,25 @@ export async function POST(req: NextRequest) {
       // Sin sesión (o KV no configurado): no-op silencioso; el cliente usa localStorage.
       return NextResponse.json({ saved: false })
     }
-    const lab = (await req.json()) as StoredLab
-    const ok = await saveLab(email, { ...lab, email })
+    const incoming = (await req.json()) as StoredLab
+    const existing = (await getLab(email)) || {}
+
+    // FUSIÓN, no sobrescritura: un cliente con localStorage vacío no debe poder
+    // borrar `startedAt`/`brief` del lab ya guardado. JSON.stringify omite las
+    // claves `undefined`, así que el spread del entrante solo pisa lo que trae.
+    const merged: StoredLab = { ...existing, ...incoming, email }
+
+    // Campos que son propiedad del SERVIDOR: el cliente no puede degradarlos
+    // (evita reenvíos de correos o reprogramar fases por accidente).
+    merged.lastEmailedStage = Math.max(
+      typeof existing.lastEmailedStage === "number" ? existing.lastEmailedStage : -1,
+      typeof incoming.lastEmailedStage === "number" ? incoming.lastEmailedStage : -1,
+    )
+    merged.phasesScheduled = existing.phasesScheduled || incoming.phasesScheduled || false
+    // `startedAt` nunca se pierde una vez fijado.
+    if (existing.startedAt) merged.startedAt = existing.startedAt
+
+    const ok = await saveLab(email, merged)
     return NextResponse.json({ saved: ok })
   } catch {
     return NextResponse.json({ saved: false }, { status: 500 })
