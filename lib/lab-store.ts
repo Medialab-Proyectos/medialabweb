@@ -21,6 +21,12 @@ export type StoredLab = {
   startedAt?: number
   completedAt?: number
   visits?: number
+  /** idioma del usuario al iniciar — define el idioma de los correos de fase */
+  lang?: "es" | "en"
+  /** índice de la última fase cuyo correo ya se envió (idempotencia). -1 = ninguno */
+  lastEmailedStage?: number
+  /** true cuando ya se encolaron los mensajes diferidos de QStash */
+  phasesScheduled?: boolean
 }
 
 const SESSION_TTL = 60 * 60 * 24 * 30 // 30 días

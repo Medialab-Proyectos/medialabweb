@@ -9,6 +9,7 @@ import {
 } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 import { BookingModal } from "./booking-modal"
+import { doneStageByElapsed, stageReadyAt, PHASES, STAGE_COUNT } from "@/lib/uxbox-phases"
 
 type Phase = "spark" | "reacting" | "gate" | "otp" | "feed" | "engine" | "return"
 
@@ -25,6 +26,8 @@ type Lab = {
   startedAt?: number
   completedAt?: number
   visits?: number
+  lang?: "es" | "en"
+  lastEmailedStage?: number
 }
 
 const LAB_KEY = "uxbox_lab"
@@ -39,6 +42,14 @@ function fmtCountdown(ms: number) {
   const m = Math.floor(total / 60)
   const s = total % 60
   return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`
+}
+
+// Tiempo restante "1h 23m" / "9m" para las fases de larga duración.
+function fmtHM(ms: number) {
+  const totalMin = Math.max(0, Math.ceil(ms / 60000))
+  const h = Math.floor(totalMin / 60)
+  const m = totalMin % 60
+  return h > 0 ? `${h}h ${m}m` : `${m}m`
 }
 
 /* ── Streaming text (typewriter) ── */
@@ -91,7 +102,7 @@ function loadLab(): Lab | null {
 }
 
 export function UXBoxForm() {
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
 
   const [phase, setPhase] = useState<Phase>("spark")
   const [lab, setLab] = useState<Lab>({ idea: "", signals: [] })
@@ -118,16 +129,9 @@ export function UXBoxForm() {
   const [audience, setAudience] = useState("")
 
   // engine state
-  const [activeStage, setActiveStage] = useState(0)
-  const [stageProgress, setStageProgress] = useState(0) // 0-100 progress within current stage
   const [brief, setBrief] = useState("")
   const [prototype, setPrototype] = useState("")
   const [returnInsight, setReturnInsight] = useState("")
-
-  const briefRef = useRef("")
-  const protoRef = useRef("")
-  useEffect(() => { briefRef.current = brief }, [brief])
-  useEffect(() => { protoRef.current = prototype }, [prototype])
 
   const labRef = useRef<Lab>(lab)
   useEffect(() => { labRef.current = lab }, [lab])
@@ -273,8 +277,8 @@ export function UXBoxForm() {
       const data = await res.json()
       if (data.valid) {
         const serverLab = data.lab as Lab | null
-        if (serverLab && serverLab.completedAt) {
-          // Retorno cross-device: hidratar desde el servidor
+        if (serverLab && serverLab.startedAt) {
+          // Retorno cross-device: análisis en marcha; hidratar desde el servidor
           const insight = RETURN_INSIGHTS[(serverLab.visits || 0) % RETURN_INSIGHTS.length]
           setReturnInsight(t(insight[0], insight[1]))
           const merged = { ...serverLab, email, visits: (serverLab.visits || 0) + 1 }
@@ -283,7 +287,6 @@ export function UXBoxForm() {
           try { localStorage.setItem(LAB_KEY, JSON.stringify(merged)) } catch {}
           setBrief(serverLab.brief || "")
           setPrototype(serverLab.prototype || "")
-          setActiveStage(5)
           setPhase("return")
           fetch("/api/lab", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(merged) }).catch(() => {})
         } else if (retrieveMode) {
@@ -339,30 +342,15 @@ export function UXBoxForm() {
     if (feedStep < feedFields.length - 1) {
       setFeedStep((s) => s + 1)
     } else {
-      persist({ projectName, objective, audience, references, startedAt: Date.now() })
+      persist({ projectName, objective, audience, references, startedAt: Date.now(), lang, lastEmailedStage: -1 })
       setPhase("engine")
     }
   }
 
-  // Animate stage progress bar (updates every 100ms within 2300ms stage)
-  const STAGE_DURATION = 2300
-  useEffect(() => {
-    if (phase !== "engine") return
-    setStageProgress(0)
-    const start = Date.now()
-    const id = setInterval(() => {
-      const elapsed = Date.now() - start
-      const pct = Math.min(100, Math.round((elapsed / STAGE_DURATION) * 100))
-      setStageProgress(pct)
-    }, 100)
-    return () => clearInterval(id)
-  }, [phase, activeStage])
-
-  /* ── Engine: run the living timeline ── */
+  /* ── Engine: generate the brief once, then let phases mature in real time ── */
   useEffect(() => {
     if (phase !== "engine") return
     let cancelled = false
-    const timers: ReturnType<typeof setTimeout>[] = []
 
     ;(async () => {
       try {
@@ -374,33 +362,40 @@ export function UXBoxForm() {
           }),
         })
         const data = await res.json()
-        if (!cancelled) { setBrief(data.brief || ""); setPrototype(data.prototype || "") }
+        if (cancelled) return
+        setBrief(data.brief || ""); setPrototype(data.prototype || "")
+        // Persistir el brief en KV para que los correos (blueprint/final) lo incluyan.
+        persist({ brief: data.brief || "", prototype: data.prototype || "" })
       } catch { /* mock fallback handled visually */ }
+      if (cancelled) return
+      // Asegurar que el lab (startedAt + brief) esté guardado en KV, luego
+      // programar los correos diferidos de cada fase con QStash.
+      try {
+        await fetch("/api/lab", {
+          method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(labRef.current),
+        })
+      } catch {}
+      if (cancelled) return
+      fetch("/api/uxbox/schedule-phases", { method: "POST" }).catch(() => {})
     })()
 
-    setActiveStage(0)
-    for (let s = 1; s <= 5; s += 1) {
-      timers.push(setTimeout(() => { if (!cancelled) { setActiveStage(s); setStageProgress(0) } }, s * STAGE_DURATION))
-    }
-    timers.push(setTimeout(() => {
-      if (cancelled) return
-      persist({ brief: briefRef.current, prototype: protoRef.current, completedAt: Date.now() })
-      // notify lead in background (mock-safe; no-op if email not configured)
-      fetch("/api/send-brief-email", {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: lab.email, idea: lab.idea, industry: lab.signals[0] || "", referenceUrls: references, existingBrand: projectName, brief: briefRef.current, prototype: protoRef.current }),
-      }).catch(() => {})
-    }, 5 * STAGE_DURATION + 600))
-
-    return () => { cancelled = true; timers.forEach(clearTimeout) }
+    return () => { cancelled = true }
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase])
+
+  /* ── Catch-up: al entrar al timeline, enviar los correos de las fases ya
+     vencidas que falten (red de seguridad sin QStash o por mensajes perdidos). ── */
+  useEffect(() => {
+    if (phase !== "engine" && phase !== "return") return
+    fetch("/api/uxbox/catch-up", { method: "POST" }).catch(() => {})
   }, [phase])
 
   const resetLab = () => {
     try { localStorage.removeItem(LAB_KEY) } catch {}
     setLab({ idea: "", signals: [] })
     setIdea(""); setEmail(""); setConsent(false); setPinInput(""); setProjectName("")
-    setReferences(""); setObjective(""); setAudience(""); setFeedStep(0); setActiveStage(0)
+    setReferences(""); setObjective(""); setAudience(""); setFeedStep(0)
     setBrief(""); setPrototype(""); setError("")
     setRetrieveMode(false); setShowNotFoundPopup(false)
     setPhase("spark")
@@ -415,6 +410,24 @@ export function UXBoxForm() {
     { icon: Cpu, label: t("Blueprint generado", "Blueprint generated"), time: "~10 min", insight: t("Tu definición de producto está lista.", "Your product definition is ready.") },
     { icon: Rocket, label: t("Listos para hablar", "Ready to talk"), time: "", insight: t("Desbloqueado: agenda con un humano.", "Unlocked: book a session with a human.") },
   ]
+
+  // ── Live timeline: las fases maduran en tiempo real desde startedAt ──
+  const engineStart = lab.startedAt
+  const liveDone = engineStart ? doneStageByElapsed(engineStart, now) : -1 // última fase completada
+  const activeIdx = Math.min(STAGE_COUNT - 1, liveDone + 1) // fase en curso (o final)
+  const allDone = engineStart ? liveDone >= STAGE_COUNT - 1 : false
+  const prevReadyMs = engineStart ? stageReadyAt(engineStart, liveDone) : now // fin de la fase previa
+  const activeDurMs = (PHASES[activeIdx]?.durationMin || 1) * 60 * 1000
+  const activeElapsedMs = Math.max(0, now - prevReadyMs)
+  const activePct = Math.min(100, Math.round((activeElapsedMs / activeDurMs) * 100))
+  const activeRemainMs = Math.max(0, activeDurMs - activeElapsedMs)
+
+  // Registrar la finalización una sola vez (para historial/admin).
+  useEffect(() => {
+    if (!allDone || !engineStart || lab.completedAt) return
+    persist({ completedAt: stageReadyAt(engineStart, STAGE_COUNT - 1) })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [allDone, engineStart])
 
   // ── Deep-dive: matures in real time across visits (Phase 2) ──
   const labStart = lab.startedAt || lab.completedAt || now
@@ -743,9 +756,9 @@ export function UXBoxForm() {
             {/* Timeline */}
             <div className="flex flex-col">
               {stages.map((st, i) => {
-                const done = i < activeStage || (phase === "return")
-                const active = i === activeStage && phase === "engine"
-                const locked = i > activeStage && phase === "engine"
+                const done = i <= liveDone
+                const active = i === activeIdx && !allDone
+                const locked = i > activeIdx
                 const Icon = st.icon
                 return (
                   <div key={st.label} className={`relative flex gap-4 pb-7 ${locked ? "opacity-35 blur-[1px]" : "opacity-100"} transition-all duration-500`}>
@@ -777,20 +790,20 @@ export function UXBoxForm() {
                           ? <div className="mt-1 h-3 w-2/3 rounded dark:bg-white/10 bg-foreground/10 animate-pulse" />
                           : <p className="text-xs dark:text-white/55 text-muted-foreground leading-relaxed">{st.insight}</p>
                       )}
-                      {active && phase === "engine" && (
+                      {active && (
                         <div className="mt-2 flex items-center gap-2">
                           <div className="flex-1 h-1.5 rounded-full dark:bg-white/10 bg-foreground/10 overflow-hidden">
                             <div
                               className="h-full rounded-full"
                               style={{
-                                width: `${stageProgress}%`,
+                                width: `${activePct}%`,
                                 background: "linear-gradient(90deg, #E8751A, #2AABB3)",
-                                transition: "width 100ms linear",
+                                transition: "width 1000ms linear",
                               }}
                             />
                           </div>
-                          <span className="text-[10px] font-mono tabular-nums dark:text-white/40 text-foreground/40 shrink-0" style={{ color: ACCENT }}>
-                            {Math.ceil(((100 - stageProgress) / 100) * (STAGE_DURATION / 1000))}s
+                          <span className="text-[10px] font-mono tabular-nums shrink-0" style={{ color: ACCENT }}>
+                            {fmtHM(activeRemainMs)}
                           </span>
                         </div>
                       )}
@@ -800,8 +813,8 @@ export function UXBoxForm() {
               })}
             </div>
 
-            {/* Blueprint preview */}
-            {(activeStage >= 4 || phase === "return") && brief && (
+            {/* Blueprint preview — solo cuando la fase "blueprint" ya maduró */}
+            {liveDone >= 4 && brief && (
               <div className="rounded-2xl border dark:border-white/10 border-foreground/10 dark:bg-white/5 bg-foreground/5 p-6 flex flex-col gap-3 animate-in fade-in duration-500">
                 <div className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest w-fit" style={{ color: ACCENT }}>
                   <Cpu size={12} /> {t("Tu blueprint", "Your blueprint")}
@@ -818,7 +831,7 @@ export function UXBoxForm() {
             )}
 
             {/* Deep-dive — matures in real time across visits (Phase 2) */}
-            {(activeStage >= 5 || phase === "return") && (
+            {allDone && (
               deepReady ? (
                 <div className="rounded-2xl border p-6 flex flex-col gap-3 animate-in fade-in duration-500" style={{ borderColor: accentBorder, background: accentBg }}>
                   <div className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest w-fit" style={{ color: ACCENT }}>
@@ -855,7 +868,7 @@ export function UXBoxForm() {
             )}
 
             {/* Unlock CTA */}
-            {(activeStage >= 5 || phase === "return") ? (
+            {allDone ? (
               <div className="flex flex-col items-center gap-4 text-center">
                 <p className="text-sm dark:text-white/60 text-muted-foreground">{t("Tu análisis está listo. El siguiente paso es humano.", "Your analysis is ready. The next step is human.")}</p>
                 <BookingModal>
