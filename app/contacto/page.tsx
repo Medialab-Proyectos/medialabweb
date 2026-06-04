@@ -38,6 +38,7 @@ export default function ContactoPage() {
     <main id="main-content">
       <Navbar />
       <div className="pt-20" />
+      <h1 className="sr-only">Contacto — Agenda tu Discovery Gratuito con MediaLab</h1>
       <CTASection />
       <FAQSection />
       <Footer />

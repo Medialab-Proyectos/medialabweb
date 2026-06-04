@@ -9,7 +9,7 @@ import { CTASection } from "@/components/cta-section"
 import { Footer } from "@/components/footer"
 
 export const metadata: Metadata = {
-  title: "Sobre Nosotros — Agencia UX/UI y Productos Digitales",
+  title: "Sobre MediaLab — Diseño UX/UI e IA",
   description:
     "Conoce a MediaLab Ingeniería: agencia de diseño UX/UI, IA y desarrollo de productos digitales fundada en 2020 por Christian Benavides, autor de Zero UI. 40+ productos entregados, 7 países.",
   alternates: {
@@ -40,6 +40,7 @@ export default function SobreNosotrosPage() {
     <main id="main-content">
       <Navbar />
       <div className="pt-20" />
+      <h1 className="sr-only">Sobre Nosotros — MediaLab Ingeniería</h1>
       <AboutSection />
       <TrustMetrics />
       <MethodSection />

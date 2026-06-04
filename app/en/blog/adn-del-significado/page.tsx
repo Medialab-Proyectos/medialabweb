@@ -2,17 +2,10 @@ import type { Metadata } from "next"
 
 export const metadata: Metadata = {
   robots: { index: false, follow: true },
-  title: "The DNA of Meaning: Why Motivation Isn't Enough to Retain Users",
+  title: { absolute: "The DNA of Meaning | MediaLab" },
   description:
     "Motivation starts the action, but meaning sustains the habit. 4 noetic design patterns to create products that transcend. Original article in Spanish.",
-  alternates: {
-    canonical: "/en/blog/adn-del-significado",
-    languages: {
-      es: "/blog/adn-del-significado",
-      en: "/en/blog/adn-del-significado",
-      "x-default": "/blog/adn-del-significado",
-    },
-  },
+
   openGraph: {
     title: "The DNA of Meaning",
     description: "Why some products become identity, and others get abandoned.",

@@ -2,7 +2,7 @@ import { default as CursoPage } from "../../curso/page"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "AI UX Architect Course — Design AI Products in 8 Weeks | MediaLab",
+  title: "AI UX Architect Course",
   description:
     "Master UX, digital adoption psychology, and AI in 8 weeks. Become an AI UX Architect and design digital products people love and algorithms prioritize.",
   alternates: {
@@ -31,4 +31,6 @@ export const metadata: Metadata = {
   },
 }
 
-export default CursoPage
+export default function EnCursoPage() {
+  return <CursoPage lang="en" />
+}

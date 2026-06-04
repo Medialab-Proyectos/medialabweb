@@ -10,14 +10,13 @@ import {
 import { BlogRelatedArticles } from "@/components/blog/blog-related"
 
 export const metadata: Metadata = {
-  title: "Influencia sin Erosión: Cómo Diseñar Comportamiento Sostenible sin Manipular",
+  title: { absolute: "Influencia sin Erosión | MediaLab" },
   description:
     "El comportamiento sostenido no nace de la presión. Nace de una conciencia respetada. Descubre las 4 capas de la acción y el caso del botón de $300 millones.",
   alternates: {
     canonical: "/blog/influencia-sin-erosion",
     languages: {
       es: "/blog/influencia-sin-erosion",
-      en: "/en/blog/influencia-sin-erosion",
       "x-default": "/blog/influencia-sin-erosion",
     },
   },

@@ -1,8 +1,15 @@
 import type { Metadata } from "next"
-import SobreNosotrosPage from "../../sobre-nosotros/page"
+import { Navbar } from "@/components/navbar"
+import { AboutSection } from "@/components/about-section"
+import { TrustMetrics } from "@/components/trust-metrics"
+import { MethodSection } from "@/components/method-section"
+import { WorldPresence } from "@/components/world-presence"
+import { WhyUsSection } from "@/components/why-us-section"
+import { CTASection } from "@/components/cta-section"
+import { Footer } from "@/components/footer"
 
 export const metadata: Metadata = {
-  title: "About Us — UX/UI & Digital Products Agency",
+  title: "About MediaLab — UX/UI & AI Design",
   description:
     "Meet MediaLab Ingeniería: UX/UI design, AI and digital product development agency founded in 2020 by Christian Benavides, author of Zero UI. 40+ products shipped, 7 countries.",
   alternates: {
@@ -30,4 +37,19 @@ export const metadata: Metadata = {
   },
 }
 
-export default SobreNosotrosPage
+export default function EnSobreNosotrosPage() {
+  return (
+    <main id="main-content">
+      <Navbar />
+      <div className="pt-20" />
+      <h1 className="sr-only">About Us — MediaLab Ingeniería</h1>
+      <AboutSection />
+      <TrustMetrics />
+      <MethodSection />
+      <WorldPresence />
+      <WhyUsSection />
+      <CTASection />
+      <Footer />
+    </main>
+  )
+}

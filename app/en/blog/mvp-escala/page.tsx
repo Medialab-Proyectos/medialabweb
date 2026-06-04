@@ -5,14 +5,7 @@ export const metadata: Metadata = {
   title: "From MVP to Scale",
   description:
     "How to design an MVP that not only validates your idea but is also ready to scale without technical debt. Original article in Spanish.",
-  alternates: {
-    canonical: "/en/blog/mvp-escala",
-    languages: {
-      es: "/blog/mvp-escala",
-      en: "/en/blog/mvp-escala",
-      "x-default": "/blog/mvp-escala",
-    },
-  },
+
   openGraph: {
     title: "From MVP to Scale",
     description: "Architecture decisions that matter.",

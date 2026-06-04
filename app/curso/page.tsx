@@ -21,7 +21,7 @@ import { CourseChatAssistant } from "@/components/curso/course-chat-assistant"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Curso AI UX Architect — Diseña Productos con IA en 8 Semanas | MediaLab",
+  title: "Curso AI UX Architect",
   description:
     "Domina UX, psicología de adopción digital e IA en 8 semanas. Conviértete en AI UX Architect y diseña productos digitales que las personas aman y los algoritmos priorizan.",
   alternates: {
@@ -48,10 +48,15 @@ export const metadata: Metadata = {
   },
 }
 
-export default function CursoPage() {
+export default function CursoPage({ lang = "es" }: { lang?: "es" | "en" }) {
   return (
     <main id="main-content" className="overflow-x-hidden">
       <Navbar />
+      {lang === "es" ? (
+        <h1 className="sr-only">Curso de Certificación AI UX Architect — MediaLab</h1>
+      ) : (
+        <h1 className="sr-only">AI UX Architect Certification Course — MediaLab</h1>
+      )}
 
       {/* 1. Hook */}
       <CourseHero />

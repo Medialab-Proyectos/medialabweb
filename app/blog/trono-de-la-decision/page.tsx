@@ -10,14 +10,13 @@ import {
 import { BlogRelatedArticles } from "@/components/blog/blog-related"
 
 export const metadata: Metadata = {
-  title: "El Trono de la Decisión: IA, Autonomía Humana y el Futuro del Diseño Ético",
+  title: { absolute: "El Trono de la Decisión | MediaLab" },
   description:
     "En la era de los agentes de IA, el mayor riesgo no es la privacidad — es la infantilización del usuario. Descubre el Agentic Experience Design (AXD).",
   alternates: {
     canonical: "/blog/trono-de-la-decision",
     languages: {
       es: "/blog/trono-de-la-decision",
-      en: "/en/blog/trono-de-la-decision",
       "x-default": "/blog/trono-de-la-decision",
     },
   },

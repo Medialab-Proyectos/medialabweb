@@ -5,14 +5,7 @@ export const metadata: Metadata = {
   title: "Product Discovery with AI",
   description:
     "How AI is transforming product discovery and shortening definition cycles. Original article in Spanish.",
-  alternates: {
-    canonical: "/en/blog/discovery-ia",
-    languages: {
-      es: "/blog/discovery-ia",
-      en: "/en/blog/discovery-ia",
-      "x-default": "/blog/discovery-ia",
-    },
-  },
+
   openGraph: {
     title: "Product Discovery with AI",
     description: "How AI is transforming product discovery.",

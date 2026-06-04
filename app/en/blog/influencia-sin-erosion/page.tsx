@@ -2,17 +2,10 @@ import type { Metadata } from "next"
 
 export const metadata: Metadata = {
   robots: { index: false, follow: true },
-  title: "Influence Without Erosion: Sustainable Behavioral Design Without Manipulation",
+  title: { absolute: "Influence Without Erosion | MediaLab" },
   description:
     "Sustained behavior isn't born from pressure. It's born from a respected consciousness. Original article in Spanish.",
-  alternates: {
-    canonical: "/en/blog/influencia-sin-erosion",
-    languages: {
-      es: "/blog/influencia-sin-erosion",
-      en: "/en/blog/influencia-sin-erosion",
-      "x-default": "/blog/influencia-sin-erosion",
-    },
-  },
+
   openGraph: {
     title: "Influence Without Erosion",
     description: "Sustainable behavioral design without manipulation.",

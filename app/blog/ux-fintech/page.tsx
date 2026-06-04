@@ -16,7 +16,6 @@ export const metadata: Metadata = {
     canonical: "/blog/ux-fintech",
     languages: {
       es: "/blog/ux-fintech",
-      en: "/en/blog/ux-fintech",
       "x-default": "/blog/ux-fintech",
     },
   },

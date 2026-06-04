@@ -1,8 +1,12 @@
 import type { Metadata } from "next"
-import ServiciosPage from "../../servicios/page"
+import { Navbar } from "@/components/navbar"
+import { ServicesSection } from "@/components/services-section"
+import { ExperienceDesignSection } from "@/components/experience-design-section"
+import { CTASection } from "@/components/cta-section"
+import { Footer } from "@/components/footer"
 
 export const metadata: Metadata = {
-  title: "Services — UX/UI Design, AI & Software Development",
+  title: "UX/UI Design & AI Services",
   description:
     "Behavioral UX/UI design, AI-powered product discovery (UXBox), technical SEO, CRO and custom software development for B2B and B2C companies.",
   alternates: {
@@ -30,4 +34,16 @@ export const metadata: Metadata = {
   },
 }
 
-export default ServiciosPage
+export default function EnServiciosPage() {
+  return (
+    <main id="main-content">
+      <Navbar />
+      <div className="pt-20" />
+      <h1 className="sr-only">UX/UI Design, AI and Software Development Services — MediaLab</h1>
+      <ServicesSection />
+      <ExperienceDesignSection />
+      <CTASection />
+      <Footer />
+    </main>
+  )
+}

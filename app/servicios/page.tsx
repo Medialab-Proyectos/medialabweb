@@ -6,7 +6,7 @@ import { CTASection } from "@/components/cta-section"
 import { Footer } from "@/components/footer"
 
 export const metadata: Metadata = {
-  title: "Servicios — Diseño UX/UI, IA y Desarrollo de Software",
+  title: "Servicios de Diseño UX/UI e IA",
   description:
     "Diseño UX/UI conductual, discovery de producto con IA (UXBox), SEO técnico, CRO y desarrollo de software a medida para empresas B2B y marcas B2C.",
   alternates: {
@@ -38,6 +38,7 @@ export default function ServiciosPage() {
     <main id="main-content">
       <Navbar />
       <div className="pt-20" />
+      <h1 className="sr-only">Servicios de Diseño UX/UI, IA y Desarrollo de Software — MediaLab</h1>
       <ServicesSection />
       <ExperienceDesignSection />
       <CTASection />

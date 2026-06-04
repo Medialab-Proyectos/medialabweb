@@ -16,7 +16,6 @@ export const metadata: Metadata = {
     canonical: "/blog/discovery-ia",
     languages: {
       es: "/blog/discovery-ia",
-      en: "/en/blog/discovery-ia",
       "x-default": "/blog/discovery-ia",
     },
   },

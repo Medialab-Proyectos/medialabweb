@@ -2,17 +2,10 @@ import type { Metadata } from "next"
 
 export const metadata: Metadata = {
   robots: { index: false, follow: true },
-  title: "The Throne of Decision: AI, Human Autonomy, and Ethical Design",
+  title: { absolute: "The Throne of Decision | MediaLab" },
   description:
     "In the age of AI agents, the greatest risk isn't privacy — it's the infantilization of the user. Discover Agentic Experience Design (AXD). Original article in Spanish.",
-  alternates: {
-    canonical: "/en/blog/trono-de-la-decision",
-    languages: {
-      es: "/blog/trono-de-la-decision",
-      en: "/en/blog/trono-de-la-decision",
-      "x-default": "/blog/trono-de-la-decision",
-    },
-  },
+
   openGraph: {
     title: "The Throne of Decision",
     description: "AI, human autonomy, and ethical design in the agentic era.",

@@ -1,5 +1,8 @@
 import type { Metadata } from "next"
-import ContactoPage from "../../contacto/page"
+import { Navbar } from "@/components/navbar"
+import { CTASection } from "@/components/cta-section"
+import { FAQSection } from "@/components/faq-section"
+import { Footer } from "@/components/footer"
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -31,4 +34,15 @@ export const metadata: Metadata = {
   },
 }
 
-export default ContactoPage
+export default function EnContactoPage() {
+  return (
+    <main id="main-content">
+      <Navbar />
+      <div className="pt-20" />
+      <h1 className="sr-only">Contact — Schedule a Free Discovery Session with MediaLab</h1>
+      <CTASection />
+      <FAQSection />
+      <Footer />
+    </main>
+  )
+}

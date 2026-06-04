@@ -16,7 +16,6 @@ export const metadata: Metadata = {
     canonical: "/blog/psicologia-adopcion",
     languages: {
       es: "/blog/psicologia-adopcion",
-      en: "/en/blog/psicologia-adopcion",
       "x-default": "/blog/psicologia-adopcion",
     },
   },

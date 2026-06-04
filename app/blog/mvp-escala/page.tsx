@@ -16,7 +16,6 @@ export const metadata: Metadata = {
     canonical: "/blog/mvp-escala",
     languages: {
       es: "/blog/mvp-escala",
-      en: "/en/blog/mvp-escala",
       "x-default": "/blog/mvp-escala",
     },
   },
