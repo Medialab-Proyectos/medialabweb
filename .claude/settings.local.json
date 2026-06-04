@@ -68,7 +68,8 @@
       "PowerShell(git fetch *)",
       "PowerShell(git pull *)",
       "PowerShell(git checkout *)",
-      "Bash(git check-ignore *)"
+      "Bash(git check-ignore *)",
+      "Bash(npm config:*)"
     ]
   }
 }

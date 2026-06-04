@@ -227,7 +227,7 @@ export function HomeChatAssistant() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
-            className="fixed bottom-36 md:bottom-24 right-4 sm:right-6 z-[60] max-w-[16rem]"
+            className="fixed bottom-24 right-6 z-[60] max-w-[16rem] hidden md:block"
           >
             <div className="relative rounded-2xl rounded-br-sm border border-border bg-card shadow-xl p-3.5 pr-8">
               <button type="button" onClick={dismissTeaser} aria-label={t("Cerrar", "Close")}
