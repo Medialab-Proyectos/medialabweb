@@ -172,6 +172,15 @@ export default function RootLayout({
           })(window,document,'script','dataLayer','GTM-M4P8P6QJ');
         `}</Script>
         {/* End Google Tag Manager */}
+        {/* Google Analytics (gtag.js) */}
+        <Script src="https://www.googletagmanager.com/gtag/js?id=G-MYCY5YNEV9" strategy="afterInteractive" />
+        <Script id="gtag-init" strategy="afterInteractive">{`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-MYCY5YNEV9');
+        `}</Script>
+        {/* End Google Analytics */}
         <script dangerouslySetInnerHTML={{ __html: `if('scrollRestoration'in history){history.scrollRestoration='manual';}` }} />
         <link rel="alternate" type="text/markdown" href="/llms.txt" title="MediaLab (llms.txt)" />
         <link rel="alternate" type="text/markdown" href="/llms-full.txt" title="MediaLab (llms-full.txt)" />
