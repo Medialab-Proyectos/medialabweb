@@ -31,7 +31,7 @@ export function CourseObjective() {
   ]
 
   return (
-    <section id="objetivo" className="relative py-20 md:py-28 bg-background overflow-hidden">
+    <section id="objetivo" className="relative py-14 md:py-20 bg-background overflow-hidden">
       <div className="absolute inset-0">
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-foreground/[0.06] to-transparent" />
       </div>

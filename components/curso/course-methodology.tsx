@@ -176,7 +176,7 @@ export function CourseMethodology() {
   ]
 
   return (
-    <section id="metodologia" className="relative py-20 md:py-28 bg-background overflow-hidden">
+    <section id="metodologia" className="relative py-14 md:py-20 bg-background overflow-hidden">
       <div className="absolute top-1/3 left-1/4 w-[600px] h-[600px] bg-[var(--cyan)]/[0.03] rounded-full blur-[200px]" />
       <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-[var(--magenta)]/[0.03] rounded-full blur-[180px]" />
 
@@ -239,16 +239,14 @@ export function CourseMethodology() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.3, duration: 0.5 }}
-          className="flex flex-wrap justify-center gap-3 mb-10 md:mb-14"
+          className="flex gap-3 overflow-x-auto snap-x snap-mandatory pb-3 no-scrollbar sm:flex-wrap sm:justify-center sm:overflow-visible sm:snap-none sm:pb-0 mb-10 md:mb-14"
         >
           {stages.map((stage, i) => {
             const s = stageStyles[stage.color]
             return (
-              <div key={i} className={`px-4 py-2 rounded-full ${s.border} ${s.bg} border whitespace-nowrap shrink-0`}>
+              <div key={i} className={`px-4 py-2 rounded-full ${s.border} ${s.bg} border whitespace-nowrap shrink-0 snap-center`}>
                 <span className={`text-xs font-medium ${s.text} tracking-wide whitespace-nowrap`}>
-                  <span className="hidden sm:inline">{t("Bloque", "Block")} {String(i + 1).padStart(2, '0')} — </span>
-                  <span className="sm:hidden">{t("B", "B")}{i + 1} · </span>
-                  {stage.label}
+                  {t("Bloque", "Block")} {String(i + 1).padStart(2, '0')} — {stage.label}
                 </span>
               </div>
             )

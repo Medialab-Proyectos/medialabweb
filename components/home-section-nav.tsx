@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { ArrowUp } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 
-export function CourseSectionNav() {
+export function HomeSectionNav() {
   const [active, setActive] = useState("")
   const [visible, setVisible] = useState(false)
   const sectionRefs = useRef<Map<string, IntersectionObserverEntry>>(new Map())
@@ -14,18 +14,16 @@ export function CourseSectionNav() {
   const { t } = useLanguage()
 
   const sections = [
-    { id: "problema", label: t("El Problema", "The Problem") },
-    { id: "objetivo", label: t("Objetivo", "Objective") },
-    { id: "audiencia", label: t("¿Para quién?", "Who's it for?") },
-    { id: "testimonios", label: t("Testimonios", "Testimonials") },
-    { id: "diferencia", label: t("La Diferencia", "The Difference") },
-    { id: "metodologia", label: t("Metodología", "Methodology") },
-    { id: "programa", label: t("Programa", "Program") },
-    { id: "transformacion", label: t("Resultado", "Outcome") },
-    { id: "herramientas", label: t("Herramientas", "Tools") },
+    { id: "about", label: t("Nosotros", "About") },
+    { id: "services", label: t("Servicios", "Services") },
+    { id: "method", label: t("Método", "Method") },
+    { id: "uxbox", label: "UXBox" },
+    { id: "curso-promo", label: t("Curso", "Course") },
+    { id: "industries", label: t("Industrias", "Industries") },
+    { id: "products", label: t("Portafolio", "Portfolio") },
+    { id: "blog", label: "Blog" },
     { id: "faq", label: "FAQ" },
-    { id: "comunidad", label: t("Comunidad", "Community") },
-    { id: "registro", label: t("Reservar", "Reserve") },
+    { id: "contact", label: t("Contacto", "Contact") },
   ]
 
   useEffect(() => {

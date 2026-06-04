@@ -184,7 +184,7 @@ export function CourseCurriculum() {
   ]
 
   return (
-    <section id="programa" className="relative py-20 md:py-28 bg-secondary/40 overflow-hidden">
+    <section id="programa" className="relative py-14 md:py-20 bg-secondary/40 overflow-hidden">
       <div className="absolute inset-0">
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-foreground/[0.06] to-transparent" />
       </div>
@@ -214,7 +214,7 @@ export function CourseCurriculum() {
             href="/images/curso/Curso2026.pdf"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold border border-[var(--cyan)]/30 hover:bg-[var(--cyan)]/10 transition-all duration-300"
+            className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-5 py-2.5 rounded-full text-sm font-semibold border border-[var(--cyan)]/30 hover:bg-[var(--cyan)]/10 transition-all duration-300"
             style={{ color: 'var(--cyan)' }}
           >
             <Download size={16} />
@@ -222,11 +222,39 @@ export function CourseCurriculum() {
           </a>
         </motion.div>
 
-        {/* Blocks */}
+        {/* Block headers — carousel on mobile, row on desktop */}
+        <div className="flex gap-3 overflow-x-auto snap-x snap-mandatory pb-4 mb-8 md:mb-0 md:overflow-visible md:snap-none no-scrollbar md:grid md:grid-cols-3">
+          {blocks.map((block) => (
+            <a
+              key={block.id}
+              href={`#${block.id}`}
+              className="flex-shrink-0 w-[85%] sm:w-auto snap-center md:snap-align-none cursor-pointer"
+              onClick={(e) => {
+                e.preventDefault()
+                document.getElementById(block.id)?.scrollIntoView({ behavior: "smooth", block: "start" })
+              }}
+            >
+              <div className="flex items-center gap-3 p-4 rounded-xl border curso-card hover:border-foreground/20 transition-all duration-300">
+                <div
+                  className="px-3 py-1.5 rounded-full text-[11px] font-semibold tracking-wide uppercase whitespace-nowrap shrink-0"
+                  style={{ background: `color-mix(in srgb, ${block.color} 12%, transparent)`, color: block.color }}
+                >
+                  {block.label}
+                </div>
+                <div className="min-w-0">
+                  <h3 className="text-base font-bold text-foreground font-display truncate">{block.title}</h3>
+                  <p className="text-[11px] text-foreground/40 truncate">{block.subtitle}</p>
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+
+        {/* Blocks content */}
         <div className="space-y-16">
           {blocks.map((block) => (
-            <div key={block.id}>
-              {/* Block header */}
+            <div key={block.id} id={block.id}>
+              {/* Block header — visible on desktop as section anchor */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -235,7 +263,7 @@ export function CourseCurriculum() {
                 className="flex items-center gap-4 mb-6"
               >
                 <div
-                  className="px-3 py-1.5 rounded-full text-[11px] font-semibold tracking-wide uppercase"
+                  className="px-3 py-1.5 rounded-full text-[11px] font-semibold tracking-wide uppercase whitespace-nowrap"
                   style={{ background: `color-mix(in srgb, ${block.color} 12%, transparent)`, color: block.color }}
                 >
                   {block.label}
@@ -325,15 +353,15 @@ function ModuleCard({ mod, blockColor, index, t }: {
             <Icon className="w-5 h-5" style={{ color: blockColor }} />
           </div>
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 mb-1">
-              <span className="text-[10px] font-mono" style={{ color: blockColor }}>{mod.number}</span>
+            <div className="flex items-center gap-2 mb-1 flex-wrap sm:flex-nowrap">
+              <span className="text-[10px] font-mono shrink-0" style={{ color: blockColor }}>{mod.number}</span>
               {mod.optional && (
-                <span className="px-2 py-0.5 rounded-full text-[9px] font-semibold uppercase tracking-wider border border-[var(--uxgreen,#00BFA6)]/30 bg-[var(--uxgreen,#00BFA6)]/10 text-[var(--uxgreen,#00BFA6)]">
+                <span className="px-2 py-0.5 rounded-full text-[9px] font-semibold uppercase tracking-wider border border-[var(--uxgreen,#00BFA6)]/30 bg-[var(--uxgreen,#00BFA6)]/10 text-[var(--uxgreen,#00BFA6)] shrink-0">
                   {t("Opcional", "Optional")}
                 </span>
               )}
-              <span className="text-[10px] text-foreground/20">·</span>
-              <span className="text-[10px] text-foreground/30 truncate">{mod.subtitle}</span>
+              <span className="text-[10px] text-foreground/20 hidden sm:inline">·</span>
+              <span className="text-[10px] text-foreground/30 truncate hidden sm:inline">{mod.subtitle}</span>
             </div>
             <h3 className="text-base font-semibold text-foreground leading-snug">{mod.title}</h3>
             <p className="text-xs text-foreground/40 mt-1.5 italic">&quot;{mod.problem}&quot;</p>

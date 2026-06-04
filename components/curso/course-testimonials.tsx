@@ -101,7 +101,7 @@ export function CourseTestimonials() {
   ]
 
   return (
-    <section id="testimonios" className="relative py-20 md:py-28 bg-background overflow-hidden">
+    <section id="testimonios" className="relative py-14 md:py-20 bg-background overflow-hidden">
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[var(--magenta)]/[0.02] rounded-full blur-[200px]" />
 
       <div className="relative z-10 max-w-6xl mx-auto px-6 lg:px-8">

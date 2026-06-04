@@ -70,27 +70,8 @@ export function CourseProblem() {
           </p>
         </motion.div>
 
-        {/* Mobile: list */}
-        <div className="sm:hidden divide-y divide-foreground/[0.1] dark:divide-foreground/[0.08] border-y border-foreground/[0.1] dark:border-foreground/[0.08]">
-          {quotes.map((quote, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: 0.08 + i * 0.06 }}
-              className="py-4 flex gap-3"
-            >
-              <span className="text-red-500/60 dark:text-red-400/45 font-serif text-2xl leading-none shrink-0 mt-0.5" aria-hidden="true">&ldquo;</span>
-              <div className="flex-1 min-w-0">
-                <p className="text-[15px] text-foreground/90 dark:text-foreground/85 leading-snug italic">{quote.text}</p>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-
-        {/* Desktop: grid */}
-        <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        {/* Mobile: carousel / Desktop: grid */}
+        <div className="flex gap-3 overflow-x-auto snap-x snap-mandatory pb-4 no-scrollbar sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:overflow-visible sm:snap-none sm:pb-0">
           {quotes.map((quote, i) => (
             <motion.div
               key={i}
@@ -98,7 +79,7 @@ export function CourseProblem() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.1 + i * 0.07 }}
-              className="group"
+              className="group flex-shrink-0 w-[75%] sm:w-auto snap-center"
             >
               <div className="curso-card-danger p-4 rounded-xl border h-full flex flex-col transition-all duration-300 hover:shadow-md dark:hover:shadow-none">
                 <span className="text-lg text-red-500/50 dark:text-red-400/35 font-serif leading-none mb-1">&ldquo;</span>

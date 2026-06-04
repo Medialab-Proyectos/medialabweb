@@ -51,7 +51,7 @@ export function CourseValidation() {
   ]
 
   return (
-    <section className="relative py-20 md:py-28 bg-secondary/40 overflow-hidden">
+    <section className="relative py-14 md:py-20 bg-secondary/40 overflow-hidden">
       <div className="absolute inset-0">
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-foreground/[0.08] to-transparent" />
       </div>
@@ -75,7 +75,8 @@ export function CourseValidation() {
           </h2>
         </motion.div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        {/* Cards — carousel on mobile, grid on desktop */}
+        <div className="flex gap-3 overflow-x-auto snap-x snap-mandatory pb-4 no-scrollbar sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:overflow-visible sm:snap-none sm:pb-0">
           {items.map((item, i) => {
             const Icon = item.icon
             return (
@@ -85,6 +86,7 @@ export function CourseValidation() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.1 + i * 0.06, duration: 0.5 }}
+                className="flex-shrink-0 w-[75%] sm:w-auto snap-center"
               >
                 <div className="curso-card p-5 md:p-6 rounded-xl border transition-all duration-300 h-full">
                   <Icon className="w-5 h-5 mb-3 text-foreground/50" />
@@ -96,7 +98,20 @@ export function CourseValidation() {
           })}
         </div>
 
-        <div className="mt-10 grid md:grid-cols-2 gap-4">
+        {/* Title for bottom section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="mt-12 mb-5 text-center"
+        >
+          <h3 className="text-xl md:text-2xl font-bold text-foreground tracking-tight font-display">
+            {t("Y lo más importante", "And most importantly")}
+          </h3>
+        </motion.div>
+
+        <div className="grid md:grid-cols-2 gap-4">
           <div className="curso-card p-6 rounded-2xl border">
             <HeartHandshake className="w-5 h-5 mb-4 text-[var(--cyan)]" />
             <h3 className="text-lg font-semibold text-foreground mb-2">

@@ -1,0 +1,374 @@
+"use client"
+
+import { useEffect, useRef, useState } from "react"
+import Image from "next/image"
+import { motion, AnimatePresence } from "framer-motion"
+import { X, Send, RotateCcw, MessageCircle } from "lucide-react"
+import { useLanguage } from "@/lib/language-context"
+
+/**
+ * Asistente conversacional orientado al curso.
+ * El usuario puede escribir libremente y recibir respuestas
+ * sobre el curso basadas en keywords. También tiene quick-actions.
+ */
+
+interface Message {
+  role: "guide" | "user"
+  text: string
+}
+
+const ADA_OPEN = "/images/asistente/ada-open.png"
+const ADA_BLINK = "/images/asistente/ada-blink.png"
+const GRADIENT = "linear-gradient(135deg, #E8772E 0%, #1A8A9E 100%)"
+
+interface QA {
+  keywords: string[]
+  es: string
+  en: string
+}
+
+const courseQA: QA[] = [
+  {
+    keywords: ["precio", "costo", "cuánto", "cuanto", "inversión", "inversion", "pagar", "price", "cost", "pay", "how much"],
+    es: "El curso tiene un precio de prelanzamiento de $995 USD (precio regular $1,500). Puedes pagarlo desde $89/semana con plan fraccionado. Incluye los 9 módulos, certificación, comunidad de por vida y herramientas premium.",
+    en: "The course has a pre-launch price of $995 USD (regular $1,500). You can pay from $89/week with installment plans. Includes all 9 modules, certification, lifetime community, and premium tools.",
+  },
+  {
+    keywords: ["duración", "duracion", "semanas", "tiempo", "cuánto dura", "cuanto dura", "duration", "weeks", "how long"],
+    es: "El curso dura 8 semanas. Necesitas dedicar entre 6 y 8 horas por semana. Cada módulo construye sobre el anterior, así que al final tienes un producto completo.",
+    en: "The course lasts 8 weeks. You need to dedicate 6-8 hours per week. Each module builds on the previous one, so by the end you have a complete product.",
+  },
+  {
+    keywords: ["garantía", "garantia", "devolucion", "devolución", "reembolso", "guarantee", "refund", "money back"],
+    es: "Sí, tenemos garantía semana 1. Si después de la primera semana sientes que no es para ti, te devolvemos el 100% sin preguntas.",
+    en: "Yes, we have a Week 1 guarantee. If after the first week you feel it's not for you, we refund 100% — no questions asked.",
+  },
+  {
+    keywords: ["módulo", "modulo", "programa", "contenido", "temario", "qué aprendo", "que aprendo", "module", "content", "curriculum", "syllabus", "what will i learn"],
+    es: "Son 9 módulos en 3 bloques: Bloque 1 (Diseño Funcional) — de la idea a un producto técnicamente sólido. Bloque 2 (Diseño para Masas) — engagement, hábitos y adopción. Bloque 3 (Validación Humana) — pruebas reales y IA adaptativa. Puedes descargar el currículo completo en PDF desde la sección de programa.",
+    en: "There are 9 modules in 3 blocks: Block 1 (Functional Design) — from idea to technically solid product. Block 2 (Design for Masses) — engagement, habits, and adoption. Block 3 (Human Validation) — real testing and adaptive AI. You can download the full curriculum PDF from the program section.",
+  },
+  {
+    keywords: ["requisito", "necesito saber", "experiencia previa", "prerequisite", "requirement", "need to know", "prior experience", "principiante", "beginner"],
+    es: "No necesitas experiencia previa en programación. El curso está diseñado para diseñadores, PMs, emprendedores y cualquier persona que quiera crear productos digitales con IA. Lo importante es tener ganas de aprender y construir.",
+    en: "No prior coding experience needed. The course is designed for designers, PMs, entrepreneurs, and anyone who wants to create digital products with AI. What matters is your willingness to learn and build.",
+  },
+  {
+    keywords: ["certificación", "certificacion", "certificado", "diploma", "certificate", "certification"],
+    es: "Sí, recibes una certificación profesional como Arquitecto de Experiencia de Usuario con IA. En este momento estamos activando la certificación con una institución universitaria para la finalización de esta cohorte. Para más detalles, te recomiendo hablar con uno de nuestros asesores.",
+    en: "Yes, you receive a professional certification as AI User Experience Architect. We are currently activating the certification with a university institution for this cohort's completion. For more details, I recommend talking to one of our advisors.",
+  },
+  {
+    keywords: ["herramienta", "tool", "figma", "chatgpt", "claude", "ia", "ai", "software"],
+    es: "Usamos herramientas como Figma, ChatGPT, Claude, Perplexity, UXPilot, Maze y más. Todas las herramientas premium están incluidas en tu acceso. Aprendes a usar IA como copiloto, no como muleta.",
+    en: "We use tools like Figma, ChatGPT, Claude, Perplexity, UXPilot, Maze, and more. All premium tools are included in your access. You learn to use AI as a copilot, not a crutch.",
+  },
+  {
+    keywords: ["comunidad", "community", "grupo", "network", "red", "acceso de por vida", "lifetime"],
+    es: "Al graduarte entras a la comunidad de por vida de MediaLab — discusiones semanales, co-creación, eventos con speakers de la industria, recursos exclusivos y mentoría entre pares. Incluido con tu inscripción.",
+    en: "Upon graduation you join MediaLab's lifetime community — weekly discussions, co-creation, industry speaker events, exclusive resources, and peer mentorship. Included with your enrollment.",
+  },
+  {
+    keywords: ["empleo", "trabajo", "salario", "contratar", "job", "employment", "salary", "hire", "career"],
+    es: "No prometemos empleo automático — eso sería deshonesto. Lo que sí prometemos: un producto real defendible en tu portafolio, un proceso visible y el criterio para explicar por qué diseñaste lo que diseñaste. Eso es lo que te hace contratable.",
+    en: "We don't promise automatic employment — that would be dishonest. What we do promise: a real, defensible product in your portfolio, a visible process, and the judgment to explain why you designed what you designed. That's what makes you hireable.",
+  },
+  {
+    keywords: ["cupo", "inscri", "registro", "cómo me inscribo", "como me inscribo", "enroll", "register", "sign up", "spot", "seat"],
+    es: "Solo hay 30 cupos por cohorte para garantizar atención personalizada. Puedes inscribirte desde la sección de registro más abajo, o hablar con un asesor usando el botón de abajo para resolver dudas antes.",
+    en: "Only 30 spots per cohort to ensure personalized attention. You can sign up from the registration section below, or talk to an advisor using the button below to resolve questions first.",
+  },
+  {
+    keywords: ["whatsapp", "contacto", "hablar", "asesor", "contact", "talk", "advisor", "call"],
+    es: "¡Claro! Puedes hablar directamente con uno de nuestros asesores usando el botón 'Hablar con una persona' aquí abajo. Están disponibles para resolver cualquier duda sobre el curso.",
+    en: "Of course! You can talk directly to one of our advisors using the 'Talk to a person' button below. They're available to answer any question about the course.",
+  },
+  {
+    keywords: ["metodología", "metodologia", "90-10", "90 10", "methodology"],
+    es: "Usamos la metodología 90-10: 90% productividad, 10% esfuerzo. Cada módulo produce entregables reales que reducen retrabajo en equipos técnicos. No es teoría — es construir un producto real paso a paso.",
+    en: "We use the 90-10 methodology: 90% productivity, 10% effort. Each module produces real deliverables that reduce rework for technical teams. It's not theory — it's building a real product step by step.",
+  },
+]
+
+function findResponse(input: string, lang: "es" | "en"): string {
+  const lower = input.toLowerCase()
+  for (const qa of courseQA) {
+    for (const kw of qa.keywords) {
+      if (lower.includes(kw)) {
+        return lang === "es" ? qa.es : qa.en
+      }
+    }
+  }
+  return lang === "es"
+    ? "¡Buena pregunta! Para darte la mejor respuesta, te recomiendo hablar con uno de nuestros asesores — usa el botón 'Hablar con una persona' aquí abajo y te ayudarán con todo."
+    : "Great question! To give you the best answer, I recommend talking to one of our advisors — use the 'Talk to a person' button below and they'll help you with everything."
+}
+
+const quickActions = [
+  { id: "precio", labelEs: "💰 ¿Cuánto cuesta?", labelEn: "💰 How much does it cost?" },
+  { id: "modulos", labelEs: "📚 ¿Qué voy a aprender?", labelEn: "📚 What will I learn?" },
+  { id: "duracion", labelEs: "⏱️ ¿Cuánto dura?", labelEn: "⏱️ How long is it?" },
+  { id: "garantia", labelEs: "🛡️ ¿Tiene garantía?", labelEn: "🛡️ Is there a guarantee?" },
+  { id: "requisitos", labelEs: "🎯 ¿Necesito experiencia?", labelEn: "🎯 Do I need experience?" },
+]
+
+const quickMap: Record<string, string> = {
+  precio: "precio",
+  modulos: "módulo",
+  duracion: "duración",
+  garantia: "garantía",
+  requisitos: "requisito",
+}
+
+export function CourseChatAssistant() {
+  const { t } = useLanguage()
+  const [open, setOpen] = useState(false)
+  const [teaser, setTeaser] = useState(false)
+  const [messages, setMessages] = useState<Message[]>([])
+  const [input, setInput] = useState("")
+  const [thinking, setThinking] = useState(false)
+  const [showQuick, setShowQuick] = useState(true)
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  const lang = t("es", "en") as "es" | "en"
+
+  const welcomeMsg = t(
+    "Hola 👋 Soy Ada, tu guía del curso. Pregúntame lo que quieras — precio, contenido, duración, garantía... ¡estoy aquí para ayudarte!",
+    "Hi 👋 I'm Ada, your course guide. Ask me anything — price, content, duration, guarantee... I'm here to help!"
+  )
+
+  // Teaser
+  useEffect(() => {
+    if (typeof window === "undefined") return
+    if (sessionStorage.getItem("course-chat-dismissed") === "1") return
+    const id = window.setTimeout(() => setTeaser(true), 4000)
+    return () => window.clearTimeout(id)
+  }, [])
+
+  useEffect(() => {
+    if (open) {
+      if (messages.length === 0) {
+        setMessages([{ role: "guide", text: welcomeMsg }])
+        setShowQuick(true)
+      }
+      setTimeout(() => inputRef.current?.focus(), 300)
+    }
+  }, [open])
+
+  useEffect(() => {
+    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" })
+  }, [messages, thinking])
+
+  useEffect(() => {
+    if (!open) return
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(false) }
+    window.addEventListener("keydown", onKey)
+    return () => window.removeEventListener("keydown", onKey)
+  }, [open])
+
+  const openPanel = () => { setTeaser(false); setOpen(true) }
+
+  const dismissTeaser = () => {
+    setTeaser(false)
+    if (typeof window !== "undefined") sessionStorage.setItem("course-chat-dismissed", "1")
+  }
+
+  const sendMessage = (text: string) => {
+    if (!text.trim() || thinking) return
+    setMessages((m) => [...m, { role: "user", text: text.trim() }])
+    setInput("")
+    setShowQuick(false)
+    setThinking(true)
+
+    setTimeout(() => {
+      const response = findResponse(text, lang)
+      setMessages((m) => [...m, { role: "guide", text: response }])
+      setThinking(false)
+    }, 800 + Math.random() * 600)
+  }
+
+  const handleQuickAction = (id: string) => {
+    const action = quickActions.find((a) => a.id === id)
+    if (!action) return
+    const userText = t(action.labelEs, action.labelEn)
+    setMessages((m) => [...m, { role: "user", text: userText }])
+    setShowQuick(false)
+    setThinking(true)
+
+    setTimeout(() => {
+      const response = findResponse(quickMap[id], lang)
+      setMessages((m) => [...m, { role: "guide", text: response }])
+      setThinking(false)
+    }, 800 + Math.random() * 600)
+  }
+
+  const resetConversation = () => {
+    setMessages([{ role: "guide", text: welcomeMsg }])
+    setShowQuick(true)
+    setInput("")
+  }
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    sendMessage(input)
+  }
+
+  return (
+    <>
+      {/* Teaser */}
+      <AnimatePresence>
+        {teaser && !open && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 10 }}
+            className="fixed bottom-36 md:bottom-24 right-4 sm:right-6 z-[60] max-w-[16rem]"
+          >
+            <div className="relative rounded-2xl rounded-br-sm border border-border bg-card shadow-xl p-3.5 pr-8">
+              <button type="button" onClick={dismissTeaser} aria-label={t("Cerrar", "Close")}
+                className="absolute top-1.5 right-1.5 p-1 rounded-full text-foreground/40 hover:text-foreground hover:bg-foreground/5 transition-colors">
+                <X size={14} />
+              </button>
+              <button type="button" onClick={openPanel} className="text-left">
+                <p className="text-sm text-foreground/80 leading-snug">
+                  {t("¿Tienes dudas sobre el curso? Pregúntame 💬", "Questions about the course? Ask me 💬")}
+                </p>
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* FAB */}
+      {!open && (
+        <button type="button" onClick={openPanel}
+          aria-label={t("Abrir chat del curso", "Open course chat")}
+          className="fixed bottom-20 md:bottom-5 right-4 sm:right-6 z-[60] w-16 h-16 rounded-full shadow-xl overflow-hidden ring-[3px] ring-[#E8751A] ring-offset-2 ring-offset-[var(--background)] hover:scale-105 active:scale-95 transition-transform">
+          <Image src={ADA_OPEN} alt="" width={200} height={200}
+            className="w-full h-full object-cover object-center scale-[1.35]" unoptimized />
+        </button>
+      )}
+
+      {/* Panel */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            role="dialog" aria-modal="true"
+            aria-label={t("Chat del curso", "Course chat")}
+            className="fixed z-[70] inset-x-0 bottom-0 sm:inset-x-auto sm:bottom-5 sm:right-6 flex flex-col w-full sm:w-[24rem] h-[88dvh] sm:h-[34rem] sm:max-h-[80dvh] rounded-t-3xl sm:rounded-3xl border border-border bg-background shadow-2xl overflow-hidden"
+          >
+            {/* Top bar */}
+            <div className="relative h-10 shrink-0 flex items-center justify-between px-3" style={{ background: GRADIENT }}>
+              <p className="text-xs text-white/80 font-medium flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#00BFA6] animate-pulse" />
+                Ada · {t("Chat del curso", "Course chat")}
+              </p>
+              <button type="button" onClick={() => setOpen(false)}
+                aria-label={t("Cerrar", "Close")}
+                className="p-1.5 rounded-full hover:bg-white/20 text-white/80 hover:text-white transition-colors">
+                <X size={16} />
+              </button>
+            </div>
+
+            {/* Messages */}
+            <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-3">
+              {/* Ada intro */}
+              {messages.length === 1 && showQuick && (
+                <div className="flex flex-col items-center gap-2 pt-1 pb-3">
+                  <div className="relative w-32 h-32 rounded-full overflow-hidden shadow-lg ring-2 ring-[#E8772E]/30">
+                    <Image src={ADA_OPEN} alt="Ada" fill sizes="128px" className="object-cover object-center scale-[1.1]" unoptimized />
+                  </div>
+                  <p className="text-xs text-muted-foreground">{t("Tu guía del curso", "Your course guide")}</p>
+                </div>
+              )}
+
+              {messages.map((msg, i) =>
+                msg.role === "user" ? (
+                  <div key={i} className="flex justify-end">
+                    <div className="max-w-[80%] rounded-2xl rounded-br-sm px-3.5 py-2.5 text-sm text-white shadow-sm" style={{ background: "#E8772E" }}>
+                      {msg.text}
+                    </div>
+                  </div>
+                ) : (
+                  <div key={i} className="flex justify-start gap-2">
+                    <div className="relative w-9 h-9 rounded-full overflow-hidden shrink-0 mt-1">
+                      <Image src={ADA_OPEN} alt="" fill sizes="36px" className="object-cover object-center scale-[1.15]" unoptimized />
+                    </div>
+                    <div className="max-w-[78%] rounded-2xl rounded-bl-sm px-3.5 py-2.5 text-sm bg-card border border-border text-foreground/85 shadow-sm">
+                      {msg.text}
+                    </div>
+                  </div>
+                ),
+              )}
+
+              {/* Thinking */}
+              {thinking && (
+                <div className="flex justify-start gap-2">
+                  <div className="relative w-9 h-9 rounded-full overflow-hidden shrink-0 mt-1">
+                    <Image src={ADA_OPEN} alt="" fill sizes="36px" className="object-cover object-center scale-[1.15]" unoptimized />
+                  </div>
+                  <div className="rounded-2xl rounded-bl-sm px-3.5 py-2.5 text-sm bg-card border border-border text-muted-foreground shadow-sm flex items-center gap-1.5">
+                    <span className="flex gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#E8772E] animate-bounce" style={{ animationDelay: "0ms" }} />
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#E8772E] animate-bounce" style={{ animationDelay: "150ms" }} />
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#E8772E] animate-bounce" style={{ animationDelay: "300ms" }} />
+                    </span>
+                  </div>
+                </div>
+              )}
+
+              {/* Quick actions */}
+              {showQuick && !thinking && (
+                <div className="space-y-1.5 pt-1">
+                  {quickActions.map((action) => (
+                    <button key={action.id} type="button" onClick={() => handleQuickAction(action.id)}
+                      className="w-full text-left px-3.5 py-2 rounded-xl border border-border bg-card hover:border-[#E8772E]/40 hover:bg-[#E8772E]/[0.04] transition-all text-sm text-foreground/85">
+                      {t(action.labelEs, action.labelEn)}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Input bar */}
+            <div className="border-t border-border p-3 bg-secondary/50">
+              <form onSubmit={handleSubmit} className="flex items-center gap-2">
+                <input
+                  ref={inputRef}
+                  type="text"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  placeholder={t("Escribe tu pregunta...", "Type your question...")}
+                  className="flex-1 px-4 py-2.5 rounded-xl border border-border bg-card text-sm text-foreground placeholder:text-foreground/40 focus:outline-none focus:border-[#E8772E]/50 transition-colors"
+                  disabled={thinking}
+                />
+                <button type="submit" disabled={!input.trim() || thinking}
+                  className="w-10 h-10 rounded-xl flex items-center justify-center text-white shrink-0 transition-all duration-200 disabled:opacity-30"
+                  style={{ background: "#E8772E" }}>
+                  <Send size={16} />
+                </button>
+              </form>
+              <div className="flex items-center justify-between mt-2">
+                <a href="https://wa.me/573054009505?text=Hola%2C%20quiero%20info%20sobre%20el%20curso"
+                  target="_blank" rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-[11px] text-foreground/50 hover:text-foreground/70 transition-colors">
+                  <MessageCircle size={11} />
+                  {t("Hablar con una persona", "Talk to a person")}
+                </a>
+                <button type="button" onClick={resetConversation}
+                  className="inline-flex items-center gap-1 text-[11px] text-foreground/50 hover:text-foreground/70 transition-colors">
+                  <RotateCcw size={11} />
+                  {t("Reiniciar", "Reset")}
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  )
+}

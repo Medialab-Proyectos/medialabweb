@@ -27,7 +27,7 @@ export function CourseTransformation() {
   ]
 
   return (
-    <section id="transformacion" className="relative py-20 md:py-28 bg-secondary/40 overflow-hidden">
+    <section id="transformacion" className="relative py-14 md:py-20 bg-secondary/40 overflow-hidden">
       <div className="absolute inset-0">
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-foreground/[0.08] to-transparent" />
       </div>
@@ -61,12 +61,12 @@ export function CourseTransformation() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.2 + i * 0.08, duration: 0.5 }}
-              className="grid grid-cols-[1fr_auto_1fr] gap-2 md:gap-4 items-center"
+              className="grid grid-cols-[1fr_auto_1fr] gap-2 md:gap-4 items-stretch"
             >
               {/* Before card */}
-              <div className="curso-card-danger p-3 md:p-4 rounded-xl border">
+              <div className="curso-card-danger p-3 md:p-4 rounded-xl border flex flex-col justify-center min-h-[80px]">
                 <p className="text-xs md:text-sm font-medium text-foreground/80 dark:text-foreground/70">{pair.before.label}</p>
-                <p className="text-[11px] md:text-xs text-foreground/55 dark:text-foreground/35 mt-0.5">{pair.before.desc}</p>
+                <p className="text-[10px] md:text-xs text-foreground/55 dark:text-foreground/35 mt-0.5">{pair.before.desc}</p>
               </div>
 
               {/* Arrow */}
@@ -80,9 +80,9 @@ export function CourseTransformation() {
               </div>
 
               {/* After card */}
-              <div className="curso-card-highlight p-3 md:p-4 rounded-xl border">
+              <div className="curso-card-highlight p-3 md:p-4 rounded-xl border flex flex-col justify-center min-h-[80px]">
                 <p className="text-xs md:text-sm font-medium text-foreground">{pair.after.label}</p>
-                <p className="text-[11px] md:text-xs text-foreground/55 dark:text-foreground/40 mt-0.5">{pair.after.desc}</p>
+                <p className="text-[10px] md:text-xs text-foreground/55 dark:text-foreground/40 mt-0.5">{pair.after.desc}</p>
               </div>
             </motion.div>
           ))}

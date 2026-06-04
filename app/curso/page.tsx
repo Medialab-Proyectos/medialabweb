@@ -17,6 +17,7 @@ import { CourseFaq } from "@/components/curso/course-faq"
 import { CourseCta } from "@/components/curso/course-cta"
 import { CourseCommunity } from "@/components/curso/course-community"
 import { StickyCTA } from "@/components/sticky-cta"
+import { CourseChatAssistant } from "@/components/curso/course-chat-assistant"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
@@ -146,6 +147,7 @@ export default function CursoPage() {
 
       <Footer />
       <StickyCTA scrollToId="registro" labelEs="Inscribirme al curso" labelEn="Enroll in the course" />
+      <CourseChatAssistant />
     </main>
   )
 }

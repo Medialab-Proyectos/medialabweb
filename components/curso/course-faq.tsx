@@ -27,7 +27,7 @@ export function CourseFaq() {
   ]
 
   return (
-    <section id="faq" className="relative py-20 md:py-28 bg-secondary/40 overflow-hidden">
+    <section id="faq" className="relative py-14 md:py-20 bg-secondary/40 overflow-hidden">
       <div className="absolute inset-0">
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-foreground/[0.08] to-transparent" />
       </div>

@@ -40,7 +40,7 @@ export function CourseCta() {
   const countdown = useCountdown()
 
   return (
-    <section id="registro" className="relative py-20 md:py-28 bg-background overflow-hidden">
+    <section id="registro" className="relative py-14 md:py-20 bg-background overflow-hidden">
       <div className="absolute inset-0">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-[var(--magenta)]/[0.06] dark:bg-[var(--magenta)]/[0.04] rounded-full blur-[150px]" />
       </div>
@@ -108,7 +108,7 @@ export function CourseCta() {
                 <span className="text-foreground/50 text-base">USD</span>
               </div>
               <p className="text-sm text-foreground/50 mb-5">
-                <span className="font-semibold text-foreground/70 dark:text-foreground/60">$124/</span>
+                <span className="font-semibold text-foreground/70 dark:text-foreground/60">$89/</span>
                 {t("semana · menos que una suscripción a herramientas de IA", "week · less than an AI tools subscription")}
               </p>
 
@@ -181,9 +181,11 @@ export function CourseCta() {
               {/* WhatsApp */}
               <p className="text-xs text-foreground/45 text-center mb-3 leading-relaxed">
                 {t(
-                  "Un experto del área puede guiarte en una mentoría 1 a 1 gratuita o escribirte sobre nuestras masterclasses online cerradas.",
-                  "An area expert can guide you in a free 1-on-1 mentoring session or reach out about our closed online masterclasses."
-                )}
+                  "Un experto del área puede guiarte en una mentoría 1 a 1 gratuita o escribirte sobre nuestras",
+                  "An area expert can guide you in a free 1-on-1 mentoring session or reach out about our exclusive online"
+                )}{" "}
+                <span style={{ color: 'var(--cyan)' }} className="font-semibold">Master Classes</span>{" "}
+                {t("online exclusivas.", ".")}
               </p>
               <a
                 href={t(

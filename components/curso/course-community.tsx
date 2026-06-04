@@ -59,7 +59,7 @@ export function CourseCommunity() {
   ]
 
   return (
-    <section id="comunidad" className="relative py-24 md:py-32 bg-background overflow-hidden">
+    <section id="comunidad" className="relative py-14 md:py-20 bg-background overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0">
         <div className="absolute top-1/2 left-1/3 w-[600px] h-[600px] bg-[var(--cyan)]/[0.04] rounded-full blur-[200px]" />
@@ -90,16 +90,10 @@ export function CourseCommunity() {
                 "When you graduate, you join MediaLab's ongoing UX + AI community — a space to share projects, collaborate on real challenges, and keep growing alongside professionals who think like you."
               )}
             </p>
-            <p className="max-w-xl mx-auto text-sm text-foreground/35 mt-3">
-              {t(
-                "Cada persona que se une hace la comunidad más valiosa para todos. Más perspectivas, más proyectos, más oportunidades.",
-                "Every person who joins makes the community more valuable for everyone. More perspectives, more projects, more opportunities."
-              )}
-            </p>
           </div>
 
-          {/* Features grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {/* Features — carousel on mobile, grid on desktop */}
+          <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 no-scrollbar sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:gap-5 sm:overflow-visible sm:snap-none sm:pb-0">
             {communityFeatures.map((feature, i) => {
               const Icon = feature.icon
               return (
@@ -109,7 +103,7 @@ export function CourseCommunity() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.15 + i * 0.08, duration: 0.5 }}
-                  className="group p-5 rounded-xl border curso-card hover:border-[var(--cyan)]/25 transition-all duration-300"
+                  className="group p-5 rounded-xl border curso-card hover:border-[var(--cyan)]/25 transition-all duration-300 flex-shrink-0 w-[80%] sm:w-auto snap-center"
                 >
                   <Icon size={16} className="text-foreground/40 group-hover:text-[var(--cyan)] transition-colors duration-300 mb-3" />
                   <h3 className="text-sm font-semibold text-foreground mb-1">{feature.title}</h3>

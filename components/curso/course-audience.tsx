@@ -43,7 +43,7 @@ export function CourseAudience() {
   ]
 
   return (
-    <section id="audiencia" className="relative py-20 md:py-28 bg-background overflow-hidden">
+    <section id="audiencia" className="relative py-14 md:py-20 bg-background overflow-hidden">
       <div className="relative z-10 max-w-6xl mx-auto px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}

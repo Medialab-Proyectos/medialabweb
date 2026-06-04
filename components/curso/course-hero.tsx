@@ -2,8 +2,7 @@
 
 import { useRef, useEffect, useCallback, useState } from "react"
 import { motion, useScroll, useTransform } from "framer-motion"
-import { Users, Star, BookOpen, GraduationCap, Shield, Leaf } from "lucide-react"
-import Link from "next/link"
+import { Users, Star, BookOpen, GraduationCap, MessageCircle } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 
 const stagger = {
@@ -374,10 +373,10 @@ export function CourseHero() {
         <div className="absolute inset-0 course-hero-overlay" />
       </div>
 
-      <motion.div style={{ opacity, y }} className="relative z-10 w-full max-w-6xl mx-auto px-6 lg:px-8 pt-28 md:pt-32 pb-16">
-        <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-10 md:gap-16 items-center">
+      <motion.div style={{ opacity, y }} className="relative z-10 w-full max-w-6xl mx-auto px-6 lg:px-8 pt-24 md:pt-32 pb-20 md:pb-16">
+        <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-12 md:gap-16 items-center">
           {/* Left — Text */}
-          <motion.div variants={stagger} initial="hidden" animate="visible">
+          <motion.div variants={stagger} initial="hidden" animate="visible" className="flex flex-col items-center sm:items-start">
             {/* Eyebrow — capsule on desktop, text on mobile */}
             <motion.div variants={fadeUp} className="hidden sm:flex items-center gap-3 mb-6">
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[var(--cyan)]/30 bg-[var(--cyan)]/[0.1]">
@@ -388,8 +387,8 @@ export function CourseHero() {
               </div>
             </motion.div>
 
-            {/* Headline — conciso, escaneable */}
-            <motion.h1 variants={fadeUp} className="text-3xl sm:text-4xl md:text-[2.75rem] lg:text-5xl font-bold tracking-tight leading-[1.1] dark:text-white text-foreground mb-4 font-display">
+            {/* Headline — centrado y más grande en mobile */}
+            <motion.h1 variants={fadeUp} className="text-[2.25rem] sm:text-4xl md:text-[2.75rem] lg:text-5xl font-bold tracking-tight leading-[1.1] dark:text-white text-foreground mb-5 font-display text-center sm:text-left">
               {t("La IA construye.", "AI builds.")}
               <br />
               <span className="bg-gradient-to-r from-[var(--magenta)] to-[var(--cyan)] bg-clip-text text-transparent">
@@ -400,24 +399,24 @@ export function CourseHero() {
               </span>
             </motion.h1>
 
+            {/* Course name — mobile only, debajo del título con más espacio */}
+            <motion.p variants={fadeUp} className="sm:hidden text-xs tracking-[0.10em] uppercase font-semibold mb-8 text-center" style={{ color: 'var(--cyan)' }}>
+              {t("Curso · Arquitecto de Experiencia de Usuario con IA", "Course · AI User Experience Architect")}
+            </motion.p>
+
             {/* Value prop — 2 líneas max */}
-            <motion.p variants={fadeUp} className="text-base md:text-lg dark:text-white/80 text-muted-foreground leading-relaxed mb-4 max-w-md">
+            <motion.p variants={fadeUp} className="text-base md:text-lg dark:text-white/80 text-muted-foreground leading-relaxed mb-8 sm:mb-4 max-w-md text-center sm:text-left">
               {t(
                 "Estructura, valida y optimiza productos digitales funcionales con IA — antes de invertir en desarrollo.",
                 "Structure, validate, and optimize functional digital products with AI — before investing in development."
               )}
             </motion.p>
 
-            {/* Course name — mobile only */}
-            <motion.p variants={fadeUp} className="sm:hidden text-xs tracking-[0.12em] uppercase font-medium mb-5" style={{ color: 'var(--cyan)' }}>
-              {t("Curso · Arquitecto de Experiencia de Usuario con IA", "Course · AI User Experience Architect")}
-            </motion.p>
-
             {/* CTAs — stacked full-width on mobile, side-by-side on desktop */}
-            <motion.div variants={fadeUp} className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mb-2">
+            <motion.div variants={fadeUp} className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 sm:gap-3 mb-4 sm:mb-2 w-full sm:w-auto">
               <a
                 href="#registro"
-                className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-7 py-4 text-sm font-semibold text-white rounded-full transition-all duration-300 hover:scale-[1.03] active:scale-95 shadow-[0_10px_32px_-8px_rgba(232,117,26,0.65)]"
+                className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 text-sm font-semibold text-white rounded-full transition-all duration-300 hover:scale-[1.03] active:scale-95 shadow-[0_10px_32px_-8px_rgba(232,117,26,0.65)]"
                 style={{ background: 'var(--magenta)' }}
               >
                 {t("Inscribirme →", "Enroll now →")}
@@ -426,18 +425,19 @@ export function CourseHero() {
                 href="https://wa.me/573054009505?text=Hola%2C%20quiero%20información%20sobre%20AI%20User%20Experience%20Architect"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-7 py-4 text-sm font-semibold rounded-full transition-all duration-300 hover:scale-[1.03] active:scale-95 border dark:border-[var(--cyan)]/50 border-[var(--cyan)]/30 dark:text-[var(--cyan)] text-teal-800 hover:bg-[var(--cyan)]/15 hover:text-foreground dark:hover:text-[var(--cyan)]"
+                className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 text-sm font-semibold rounded-full transition-all duration-300 hover:scale-[1.03] active:scale-95 border dark:border-[var(--cyan)]/50 border-[var(--cyan)]/30 dark:text-[var(--cyan)] text-teal-800 hover:bg-[var(--cyan)]/15 hover:text-foreground dark:hover:text-[var(--cyan)]"
               >
+                <MessageCircle size={16} />
                 {t("Hablar con un asesor", "Talk to an advisor")}
               </a>
             </motion.div>
 
             {/* Price anchor — visible before full scroll */}
-            <motion.p variants={fadeUp} className="text-xs dark:text-white/50 text-muted-foreground mb-4">
-              {t("Desde $124/semana · Pago fraccionado disponible · Garantía semana 1", "From $124/week · Installment plans available · Week 1 guarantee")}
+            <motion.p variants={fadeUp} className="text-xs dark:text-white/50 text-muted-foreground mb-6 sm:mb-4 text-center sm:text-left">
+              {t("Desde $89/semana · Pago fraccionado disponible · Garantía semana 1", "From $89/week · Installment plans available · Week 1 guarantee")}
             </motion.p>
 
-            <motion.div variants={fadeUp} className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs dark:text-white/60 text-muted-foreground mb-6">
+            <motion.div variants={fadeUp} className="flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-2 text-xs dark:text-white/60 text-muted-foreground mb-6">
               <span className="flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#00BFA6] animate-pulse" />
                 {t("Cohorte 02 · 30 cupos", "Cohort 02 · 30 seats")}
@@ -447,16 +447,6 @@ export function CourseHero() {
                 <Star className="w-3 h-3" style={{ color: 'var(--magenta)' }} />
                 {t("Satisfacción 4.7/5", "4.7/5 satisfaction")}
               </span>
-              <span className="hidden sm:inline dark:text-white/20 text-foreground/20">|</span>
-              <span className="flex items-center gap-1">
-                <Shield className="w-3 h-3 text-[#00BFA6]" />
-                {t("Garantía semana 1", "Week 1 guarantee")}
-              </span>
-              <span className="hidden sm:inline dark:text-white/20 text-foreground/20">|</span>
-              <Link href="/uxgreen" className="flex items-center gap-1 text-[#00BFA6] hover:underline">
-                <Leaf className="w-3 h-3" />
-                {t("🌱 UXGreen™ Certified", "🌱 UXGreen™ Certified")}
-              </Link>
             </motion.div>
 
             {/* Role pills */}

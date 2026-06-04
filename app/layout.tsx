@@ -327,6 +327,14 @@ export default function RootLayout({
               },
               potentialAction: [
                 {
+                  '@type': 'SearchAction',
+                  target: {
+                    '@type': 'EntryPoint',
+                    urlTemplate: 'https://medialab.design/blog?q={search_term_string}',
+                  },
+                  'query-input': 'required name=search_term_string',
+                },
+                {
                   '@type': 'CommunicateAction',
                   target: 'https://medialab.design/#contact',
                   name: 'Agendar llamada de discovery',

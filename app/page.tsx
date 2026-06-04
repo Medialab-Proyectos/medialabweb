@@ -21,7 +21,8 @@ import { SocialProofBar } from "@/components/social-proof-bar"
 import { StickyCTA } from "@/components/sticky-cta"
 import { MidCTA } from "@/components/mid-cta"
 import { EntryDoorsSection } from "@/components/entry-doors-section"
-import { AdaLeoAssistant } from "@/components/ada-leo-assistant"
+import { HomeChatAssistant } from "@/components/home-chat-assistant"
+import { HomeSectionNav } from "@/components/home-section-nav"
 import { CoursePromoSection } from "@/components/course-promo-section"
 import { HomeScrollRestorer } from "@/components/home-scroll-restorer"
 import type { Metadata } from "next"
@@ -82,6 +83,7 @@ export default function Home() {
 
       {/* — AWARENESS — */}
       <HeroSection />
+      <HomeSectionNav />
       <MarqueeTicker />
 
       {/* — ÍNDICE DE DECISIÓN — 3 puertas sobre el pliegue */}
@@ -139,8 +141,8 @@ export default function Home() {
       <SocialProofBar />
       <StickyCTA />
 
-      {/* Asistente conversacional Ada & Leo (guía no intrusiva) */}
-      <AdaLeoAssistant />
+      {/* Asistente conversacional Ada (guía no intrusiva) */}
+      <HomeChatAssistant />
     </main>
   )
 }
