@@ -139,6 +139,7 @@ export function UXBoxForm() {
   const IDEAS_COUNT_KEY = "uxbox_ideas_count"
   const IDEAS_COUNT_BASE = 173
   const [ideasCount, setIdeasCount] = useState(IDEAS_COUNT_BASE)
+  const [ideasFlash, setIdeasFlash] = useState(false)
   useEffect(() => {
     try {
       const stored = localStorage.getItem(IDEAS_COUNT_KEY)
@@ -157,12 +158,19 @@ export function UXBoxForm() {
           try { localStorage.setItem(IDEAS_COUNT_KEY, String(next)) } catch {}
           return next
         })
+        setIdeasFlash(true)
         timerId = tick()
       }, delay)
     }
     let timerId = tick()
     return () => clearTimeout(timerId)
   }, [phase])
+  // Apaga el flash después de la transición
+  useEffect(() => {
+    if (!ideasFlash) return
+    const t = setTimeout(() => setIdeasFlash(false), 600)
+    return () => clearTimeout(t)
+  }, [ideasFlash])
 
   const labRef = useRef<Lab>(lab)
   useEffect(() => { labRef.current = lab }, [lab])
@@ -323,6 +331,15 @@ export function UXBoxForm() {
   const handleSpark = (e: React.FormEvent) => {
     e.preventDefault()
     const trimmed = idea.trim()
+
+    // Máximo 1500 caracteres
+    if (trimmed.length > 1500) {
+      setError(t(
+        "Has superado el límite de 1.500 caracteres. Intenta resumir tu idea.",
+        "You've exceeded the 1,500 character limit. Try summarizing your idea."
+      ))
+      return
+    }
 
     // Mínimo 120 caracteres
     if (trimmed.length < 120) {
@@ -586,7 +603,7 @@ export function UXBoxForm() {
     { icon: Target, label: t("Competidores", "Competitors"), time: "~3 hrs", insight: t("Mapeando jugadores y huecos del espacio…", "Mapping players and gaps in the space…") },
     { icon: Layers, label: t("Oportunidades UX", "UX opportunities"), time: "~2 hrs", insight: t("Encontré ángulos de diferenciación por experiencia.", "I found differentiation angles through experience.") },
     { icon: Cpu, label: t("Blueprint generado", "Blueprint generated"), time: "~10 min", insight: t("Tu definición de producto está lista.", "Your product definition is ready.") },
-    { icon: Rocket, label: t("Listos para hablar", "Ready to talk"), time: "", insight: t("Desbloqueado: agenda con un humano.", "Unlocked: book a session with a human.") },
+    { icon: Rocket, label: t("Siguiente paso: humano", "Next step: human"), time: "", insight: t("Te contactaremos, o agenda una llamada.", "We'll contact you, or book a call.") },
   ]
 
   // ── Live timeline: las fases maduran en tiempo real desde startedAt ──
@@ -722,8 +739,8 @@ export function UXBoxForm() {
                 rows={8}
                 className={`${inputClass} text-base pr-4`}
               />
-              <span className={`absolute bottom-2.5 right-3.5 text-[11px] tabular-nums pointer-events-none ${idea.trim().length < 120 ? "text-orange-400/60" : "dark:text-white/30 text-foreground/30"}`}>
-                {idea.trim().length} {t("caracteres", "chars")}
+              <span className={`absolute bottom-2.5 right-3.5 text-[11px] tabular-nums pointer-events-none ${idea.length >= 1500 ? "text-red-400" : idea.trim().length < 120 ? "text-orange-400/60" : "dark:text-white/30 text-foreground/30"}`}>
+                {idea.length}/1.500 {t("caracteres", "chars")}
               </span>
             </div>
             {error && <p id="spark-error" className="text-xs text-red-400 font-medium" role="alert">{error}</p>}
@@ -742,7 +759,7 @@ export function UXBoxForm() {
               {t("Solo una propuesta activa por email", "Only one active proposal per email")}
             </p>
             <p className="text-xs dark:text-white/40 text-muted-foreground text-center flex items-center justify-center gap-1.5">
-              <Activity size={12} /> {t(`${ideasCount} ideas analizadas esta semana · resultado en minutos`, `${ideasCount} ideas analyzed this week · result in minutes`)}
+              <Activity size={12} /> <span style={{ color: ideasFlash ? "#E8751A" : "inherit", transition: "color 0.5s ease" }}>{ideasCount}</span> {t("ideas analizadas esta semana · resultado en minutos", "ideas analyzed this week · result in minutes")}
             </p>
               </form>
               {/* Human escape hatch — inside spark form column */}
@@ -1045,14 +1062,14 @@ export function UXBoxForm() {
                     </div>
                     <p className="text-sm dark:text-white/70 text-foreground/70 max-w-sm leading-relaxed">
                       {t(
-                        "Te enviaremos el blueprint completo a tu correo electrónico. Si no quieres esperar, agenda una llamada y lo revisamos juntos.",
-                        "We'll send the full blueprint to your email. If you don't want to wait, book a call and we'll review it together."
+                        "Tu análisis está listo. El siguiente paso es humano, te contactaremos por el correo electrónico que nos dejaste, pero si no quieres esperar, agenda una llamada.",
+                        "Your analysis is ready. The next step is human — we'll contact you at the email you left us, but if you don't want to wait, book a call."
                       )}
                     </p>
                     <BookingModal>
                       <button type="button" className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold text-sm text-white transition-all active:scale-95 hover:brightness-110 shadow-lg"
                         style={{ background: "linear-gradient(90deg, #E8751A, #c65a10)", boxShadow: "0 6px 24px rgba(232,117,26,0.35)" }}>
-                        <Rocket size={14} /> {t("Agendar llamada ahora", "Book a call now")}
+                        <Rocket size={14} /> {t("Agenda una llamada", "Book a call")}
                       </button>
                     </BookingModal>
                   </div>
@@ -1097,14 +1114,14 @@ export function UXBoxForm() {
                   </div>
                   <p className="text-sm dark:text-white/70 text-foreground/70 max-w-sm leading-relaxed">
                     {t(
-                      "Te enviaremos los hallazgos completos a tu correo. Si prefieres no esperar, agenda una llamada y los revisamos juntos en tiempo real.",
-                      "We'll send the complete findings to your email. If you'd rather not wait, book a call and we'll review them together in real time."
+                      "Tu análisis está listo. El siguiente paso es humano, te contactaremos por el correo electrónico que nos dejaste, pero si no quieres esperar, agenda una llamada.",
+                      "Your analysis is ready. The next step is human — we'll contact you at the email you left us, but if you don't want to wait, book a call."
                     )}
                   </p>
                   <BookingModal>
                     <button type="button" className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold text-sm text-white transition-all active:scale-95 hover:brightness-110 shadow-lg"
                       style={{ background: "linear-gradient(90deg, #E8751A, #c65a10)", boxShadow: "0 6px 24px rgba(232,117,26,0.35)" }}>
-                      <Rocket size={14} /> {t("Agendar llamada ahora", "Book a call now")}
+                      <Rocket size={14} /> {t("Agenda una llamada", "Book a call")}
                     </button>
                   </BookingModal>
                 </div>
@@ -1114,14 +1131,18 @@ export function UXBoxForm() {
             {/* Unlock CTA */}
             {allDone ? (
               <div className="flex flex-col items-center gap-4 text-center">
-                <p className="text-sm dark:text-white/60 text-muted-foreground">{t("Tu análisis está listo. El siguiente paso es humano.", "Your analysis is ready. The next step is human.")}</p>
+                <p className="text-sm dark:text-white/60 text-muted-foreground">
+                  {t(
+                    "Tu análisis está listo. El siguiente paso es humano, te contactaremos por el correo electrónico que nos dejaste, pero si no quieres esperar, agenda una llamada.",
+                    "Your analysis is ready. The next step is human — we'll contact you at the email you left us, but if you don't want to wait, book a call."
+                  )}
+                </p>
                 <BookingModal>
                   <button type="button" className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-semibold text-[15px] text-white transition-all active:scale-95 shadow-lg hover:brightness-110"
                     style={{ background: "linear-gradient(90deg, #E8751A, #c65a10)" }}>
-                    <Rocket size={16} /> {t("Estamos listos para hablar contigo", "We're ready to talk to you")}
+                    <Rocket size={16} /> {t("Agenda una llamada", "Book a call")}
                   </button>
                 </BookingModal>
-                <button onClick={resetLab} className="text-xs dark:text-white/40 text-muted-foreground hover:dark:text-white hover:text-foreground transition-colors">{t("Analizar otra idea", "Analyze another idea")}</button>
               </div>
             ) : (
               <div className="rounded-xl border dark:border-white/10 border-foreground/10 dark:bg-white/5 bg-foreground/5 px-5 py-4 flex items-center gap-3 text-sm dark:text-white/60 text-muted-foreground">

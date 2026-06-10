@@ -177,12 +177,12 @@ export function phaseEmailCopy(stage: number, lab: PhaseLab, lang: Lang): PhaseE
       }
     case "ready":
       return {
-        subject: pick(lang, `Listos para hablar — ${name}`, `Ready to talk — ${name}`),
-        heading: pick(lang, "Tu análisis está completo", "Your analysis is complete"),
+        subject: pick(lang, `Tu análisis está listo — ${name}`, `Your analysis is ready — ${name}`),
+        heading: pick(lang, "Tu análisis está listo", "Your analysis is ready"),
         lines: [
           pick(lang,
-            `Terminé el análisis completo de <strong>${name}</strong>. El siguiente paso es humano: agendemos una sesión para convertir esto en un plan real.`,
-            `I finished the full analysis for <strong>${name}</strong>. The next step is human: let's book a session to turn this into a real plan.`),
+            `Terminé el análisis completo de <strong>${name}</strong>. El siguiente paso es humano, te contactaremos a este correo, pero si no quieres esperar, agenda una llamada.`,
+            `I finished the full analysis for <strong>${name}</strong>. The next step is human — we'll contact you at this email, but if you don't want to wait, book a call.`),
         ],
         finale: true,
       }

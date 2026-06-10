@@ -156,7 +156,13 @@ export function CourseChatAssistant() {
     }
   }, [open])
 
+  const hasInteracted = useRef(false)
   useEffect(() => {
+    if (!hasInteracted.current) {
+      scrollRef.current?.scrollTo({ top: 0 })
+      if (messages.length > 1) hasInteracted.current = true
+      return
+    }
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" })
   }, [messages, thinking])
 
