@@ -2,7 +2,7 @@
 
 import { useRef, useEffect, useCallback, useState } from "react"
 import { motion, useScroll, useTransform } from "framer-motion"
-import { Users, Star, BookOpen, GraduationCap, MessageCircle } from "lucide-react"
+import { Users, Star, BookOpen, GraduationCap, Download } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 
 const stagger = {
@@ -407,8 +407,8 @@ export function CourseHero() {
             {/* Value prop — 2 líneas max */}
             <motion.p variants={fadeUp} className="text-base md:text-lg dark:text-white/80 text-muted-foreground leading-relaxed mb-8 sm:mb-4 max-w-md text-center sm:text-left">
               {t(
-                "Estructura, valida y optimiza productos digitales funcionales con IA — antes de invertir en desarrollo.",
-                "Structure, validate, and optimize functional digital products with AI — before investing in development."
+                "Aprende a estructurar, validar y optimizar productos digitales funcionales con IA en 8 semanas.",
+                "Learn to structure, validate, and optimize functional digital products with AI in 8 weeks."
               )}
             </motion.p>
 
@@ -422,19 +422,19 @@ export function CourseHero() {
                 {t("Inscribirme →", "Enroll now →")}
               </a>
               <a
-                href="https://wa.me/573054009505?text=Hola%2C%20quiero%20información%20sobre%20AI%20User%20Experience%20Architect"
+                href="/images/curso/Curso2026.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 text-sm font-semibold rounded-full transition-all duration-300 hover:scale-[1.03] active:scale-95 border dark:border-[var(--cyan)]/50 border-[var(--cyan)]/30 dark:text-[var(--cyan)] text-teal-800 hover:bg-[var(--cyan)]/15 hover:text-foreground dark:hover:text-[var(--cyan)]"
               >
-                <MessageCircle size={16} />
-                {t("Hablar con un asesor", "Talk to an advisor")}
+                <Download size={16} />
+                {t("Descargar currículo", "Download curriculum")}
               </a>
             </motion.div>
 
             {/* Price anchor — visible before full scroll */}
             <motion.p variants={fadeUp} className="text-xs dark:text-white/50 text-muted-foreground mb-6 sm:mb-4 text-center sm:text-left">
-              {t("Desde $89/semana · Pago fraccionado disponible · Garantía semana 1", "From $89/week · Installment plans available · Week 1 guarantee")}
+              {t("Desde $89/semana · Horario diurno y nocturno · Garantía semana 1", "From $89/week · Day & evening schedule · Week 1 guarantee")}
             </motion.p>
 
             <motion.div variants={fadeUp} className="flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-2 text-xs dark:text-white/60 text-muted-foreground mb-6">

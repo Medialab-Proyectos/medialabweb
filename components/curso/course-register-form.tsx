@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Send, Loader2, CheckCircle, User, Mail, Phone, Briefcase, Sparkles, MessageSquare } from "lucide-react"
+import { Send, Loader2, CheckCircle, User, Mail, Phone, Briefcase, Sparkles, MessageSquare, Clock } from "lucide-react"
 import { motion } from "framer-motion"
 import { useLanguage } from "@/lib/language-context"
 
@@ -12,6 +12,7 @@ export function CourseRegisterForm() {
   const [phone, setPhone] = useState("")
   const [role, setRole] = useState("")
   const [experience, setExperience] = useState("")
+  const [schedule, setSchedule] = useState("")
   const [motivation, setMotivation] = useState("")
   const [loading, setLoading] = useState(false)
   const [submitted, setSubmitted] = useState(false)
@@ -53,7 +54,7 @@ export function CourseRegisterForm() {
       const res = await fetch("/api/course-register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, phone, role, experience, motivation, lang }),
+        body: JSON.stringify({ name, email, phone, schedule, role, experience, motivation, lang }),
       })
       const data = await res.json()
       if (res.ok && data.success) {
@@ -143,6 +144,25 @@ export function CourseRegisterForm() {
             required
             className="w-full px-3.5 py-3 rounded-xl bg-foreground/[0.05] border border-foreground/[0.08] text-foreground placeholder:text-foreground/25 focus:outline-none focus:border-[var(--magenta)]/40 focus:bg-foreground/[0.07] transition-all duration-200 text-sm"
           />
+        </div>
+
+        {/* Schedule */}
+        <div className="space-y-1.5">
+          <label htmlFor="course-schedule" className="flex items-center gap-1.5 text-xs font-medium text-foreground/60">
+            <Clock size={12} style={{ color: 'var(--cyan)' }} />
+            {t("Horario preferido", "Preferred schedule")} <span className="text-[var(--magenta)]">*</span>
+          </label>
+          <select
+            id="course-schedule"
+            value={schedule}
+            onChange={(e) => setSchedule(e.target.value)}
+            required
+            className="w-full px-3.5 py-3 rounded-xl bg-foreground/[0.05] border border-foreground/[0.08] text-foreground focus:outline-none focus:border-[var(--cyan)]/40 focus:bg-foreground/[0.07] transition-all duration-200 text-sm appearance-none cursor-pointer"
+          >
+            <option value="" className="bg-background">{t("Selecciona un horario", "Select a schedule")}</option>
+            <option value="diurno" className="bg-background">{t("Diurno", "Day")}</option>
+            <option value="nocturno" className="bg-background">{t("Nocturno", "Evening")}</option>
+          </select>
         </div>
 
         {/* Role */}

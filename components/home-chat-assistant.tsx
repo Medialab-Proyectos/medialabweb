@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
-import { X, Send, RotateCcw, MessageCircle } from "lucide-react"
+import { X, Send, RotateCcw, MessageCircle, User, Mail, Phone } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 
 /**
@@ -114,6 +114,7 @@ const quickActions = [
   { id: "servicios", labelEs: "🧩 ¿Qué servicios ofrecen?", labelEn: "🧩 What services do you offer?" },
   { id: "uxbox", labelEs: "📦 ¿Qué es UXBox?", labelEn: "📦 What is UXBox?" },
   { id: "curso", labelEs: "🎓 Quiero aprender UX + IA", labelEn: "🎓 I want to learn UX + AI" },
+  { id: "asesoria", labelEs: "📞 Registrarme a una asesoría 1:1", labelEn: "📞 Book a 1:1 advisory session" },
 ]
 
 const quickMap: Record<string, string> = {
@@ -132,6 +133,11 @@ export function HomeChatAssistant() {
   const [input, setInput] = useState("")
   const [thinking, setThinking] = useState(false)
   const [showQuick, setShowQuick] = useState(true)
+  const [showAsesoriaForm, setShowAsesoriaForm] = useState(false)
+  const [asesoriaName, setAsesoriaName] = useState("")
+  const [asesoriaPhone, setAsesoriaPhone] = useState("")
+  const [asesoriaEmail, setAsesoriaEmail] = useState("")
+  const [asesoriaSending, setAsesoriaSending] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -205,8 +211,21 @@ export function HomeChatAssistant() {
     const userText = t(action.labelEs, action.labelEn)
     setMessages((m) => [...m, { role: "user", text: userText }])
     setShowQuick(false)
-    setThinking(true)
 
+    if (id === "asesoria") {
+      setThinking(true)
+      setTimeout(() => {
+        setMessages((m) => [...m, { role: "guide", text: t(
+          "¡Genial! Completa estos datos y te contactaremos para agendar tu asesoría 1:1.",
+          "Great! Fill in these details and we'll contact you to schedule your 1:1 advisory session."
+        ) }])
+        setThinking(false)
+        setShowAsesoriaForm(true)
+      }, 600)
+      return
+    }
+
+    setThinking(true)
     setTimeout(() => {
       const response = findResponse(quickMap[id], lang)
       setMessages((m) => [...m, { role: "guide", text: response }])
@@ -214,9 +233,37 @@ export function HomeChatAssistant() {
     }, 800 + Math.random() * 600)
   }
 
+  const handleAsesoriaSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!asesoriaName.trim() || !asesoriaPhone.trim() || !asesoriaEmail.trim()) return
+    setAsesoriaSending(true)
+    try {
+      await fetch("/api/asesoria", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: asesoriaName,
+          email: asesoriaEmail,
+          phone: asesoriaPhone,
+          source: "chatbot-home",
+        }),
+      })
+    } catch {}
+    setShowAsesoriaForm(false)
+    setMessages((m) => [...m, { role: "guide", text: t(
+      `¡Listo, ${asesoriaName.split(" ")[0]}! Te contactaremos pronto para agendar tu asesoría 1:1. ¿Tienes alguna otra pregunta?`,
+      `Done, ${asesoriaName.split(" ")[0]}! We'll contact you soon to schedule your 1:1 session. Do you have any other questions?`
+    ) }])
+    setAsesoriaName(""); setAsesoriaPhone(""); setAsesoriaEmail("")
+    setAsesoriaSending(false)
+    setShowQuick(true)
+  }
+
   const resetConversation = () => {
     setMessages([{ role: "guide", text: welcomeMsg }])
     setShowQuick(true)
+    setShowAsesoriaForm(false)
+    setAsesoriaName(""); setAsesoriaPhone(""); setAsesoriaEmail("")
     setInput("")
   }
 
@@ -333,7 +380,7 @@ export function HomeChatAssistant() {
               )}
 
               {/* Quick actions */}
-              {showQuick && !thinking && (
+              {showQuick && !thinking && !showAsesoriaForm && (
                 <div className="space-y-1.5 pt-1">
                   {quickActions.map((action) => (
                     <button key={action.id} type="button" onClick={() => handleQuickAction(action.id)}
@@ -342,6 +389,35 @@ export function HomeChatAssistant() {
                     </button>
                   ))}
                 </div>
+              )}
+
+              {/* Asesoria inline form */}
+              {showAsesoriaForm && !thinking && (
+                <form onSubmit={handleAsesoriaSubmit} className="space-y-2.5 rounded-xl border border-border bg-card p-3.5">
+                  <div className="relative">
+                    <User size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-foreground/30" />
+                    <input type="text" value={asesoriaName} onChange={(e) => setAsesoriaName(e.target.value)}
+                      placeholder={t("Tu nombre", "Your name")} required
+                      className="w-full pl-8 pr-3 py-2 rounded-lg border border-border bg-background text-sm text-foreground placeholder:text-foreground/30 focus:outline-none focus:border-[#E8772E]/50" />
+                  </div>
+                  <div className="relative">
+                    <Mail size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-foreground/30" />
+                    <input type="email" value={asesoriaEmail} onChange={(e) => setAsesoriaEmail(e.target.value)}
+                      placeholder={t("tu@email.com", "your@email.com")} required
+                      className="w-full pl-8 pr-3 py-2 rounded-lg border border-border bg-background text-sm text-foreground placeholder:text-foreground/30 focus:outline-none focus:border-[#E8772E]/50" />
+                  </div>
+                  <div className="relative">
+                    <Phone size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-foreground/30" />
+                    <input type="tel" value={asesoriaPhone} onChange={(e) => setAsesoriaPhone(e.target.value)}
+                      placeholder={t("+57 300 000 0000", "+1 000 000 0000")} required
+                      className="w-full pl-8 pr-3 py-2 rounded-lg border border-border bg-background text-sm text-foreground placeholder:text-foreground/30 focus:outline-none focus:border-[#E8772E]/50" />
+                  </div>
+                  <button type="submit" disabled={asesoriaSending}
+                    className="w-full py-2 rounded-lg text-sm font-semibold text-white transition-all active:scale-95 disabled:opacity-50"
+                    style={{ background: "#E8772E" }}>
+                    {asesoriaSending ? t("Enviando...", "Sending...") : t("Enviar", "Submit")}
+                  </button>
+                </form>
               )}
             </div>
 
@@ -369,8 +445,8 @@ export function HomeChatAssistant() {
                     "https://wa.me/573054009505?text=Hi%2C%20I%20want%20info%20about%20MediaLab"
                   )}
                   target="_blank" rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-[11px] text-foreground/50 hover:text-foreground/70 transition-colors">
-                  <MessageCircle size={11} />
+                  className="inline-flex items-center gap-1.5 text-xs font-medium text-foreground/50 hover:text-foreground/70 transition-colors">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="#25D366" className="shrink-0"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
                   {t("Hablar con una persona", "Talk to a person")}
                 </a>
                 <button type="button" onClick={resetConversation}

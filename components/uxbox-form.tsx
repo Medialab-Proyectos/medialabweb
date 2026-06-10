@@ -1055,23 +1055,11 @@ export function UXBoxForm() {
                       ))}
                     </div>
                   )}
-                  {/* Overlay degradado + CTA */}
-                  <div className="absolute bottom-0 left-0 right-0 pt-24 pb-6 px-6 flex flex-col items-center gap-4 text-center" style={{ background: "linear-gradient(to bottom, transparent, rgba(var(--surface-dark-rgb, 15,15,15), 0.85) 40%, rgba(var(--surface-dark-rgb, 15,15,15), 0.98))" }}>
+                  {/* Overlay degradado */}
+                  <div className="absolute bottom-0 left-0 right-0 pt-24 pb-6 px-6 flex flex-col items-center gap-3 text-center" style={{ background: "linear-gradient(to bottom, transparent, rgba(var(--surface-dark-rgb, 15,15,15), 0.85) 40%, rgba(var(--surface-dark-rgb, 15,15,15), 0.98))" }}>
                     <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest" style={{ color: ACCENT }}>
                       <Lock size={12} /> {t("Contenido reservado", "Reserved content")}
                     </div>
-                    <p className="text-sm dark:text-white/70 text-foreground/70 max-w-sm leading-relaxed">
-                      {t(
-                        "Tu análisis está listo. El siguiente paso es humano, te contactaremos por el correo electrónico que nos dejaste, pero si no quieres esperar, agenda una llamada.",
-                        "Your analysis is ready. The next step is human — we'll contact you at the email you left us, but if you don't want to wait, book a call."
-                      )}
-                    </p>
-                    <BookingModal>
-                      <button type="button" className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold text-sm text-white transition-all active:scale-95 hover:brightness-110 shadow-lg"
-                        style={{ background: "linear-gradient(90deg, #E8751A, #c65a10)", boxShadow: "0 6px 24px rgba(232,117,26,0.35)" }}>
-                        <Rocket size={14} /> {t("Agenda una llamada", "Book a call")}
-                      </button>
-                    </BookingModal>
                   </div>
                 </div>
               )
@@ -1107,23 +1095,11 @@ export function UXBoxForm() {
                     </div>
                   </div>
                 )}
-                {/* Overlay degradado + CTA */}
+                {/* Overlay degradado */}
                 <div className="absolute bottom-0 left-0 right-0 pt-20 pb-6 px-6 flex flex-col items-center gap-3 text-center" style={{ background: "linear-gradient(to bottom, transparent, rgba(var(--surface-dark-rgb, 15,15,15), 0.85) 35%, rgba(var(--surface-dark-rgb, 15,15,15), 0.98))" }}>
                   <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest" style={{ color: ACCENT }}>
                     <Lock size={12} /> {t("Análisis completo reservado", "Full analysis reserved")}
                   </div>
-                  <p className="text-sm dark:text-white/70 text-foreground/70 max-w-sm leading-relaxed">
-                    {t(
-                      "Tu análisis está listo. El siguiente paso es humano, te contactaremos por el correo electrónico que nos dejaste, pero si no quieres esperar, agenda una llamada.",
-                      "Your analysis is ready. The next step is human — we'll contact you at the email you left us, but if you don't want to wait, book a call."
-                    )}
-                  </p>
-                  <BookingModal>
-                    <button type="button" className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold text-sm text-white transition-all active:scale-95 hover:brightness-110 shadow-lg"
-                      style={{ background: "linear-gradient(90deg, #E8751A, #c65a10)", boxShadow: "0 6px 24px rgba(232,117,26,0.35)" }}>
-                      <Rocket size={14} /> {t("Agenda una llamada", "Book a call")}
-                    </button>
-                  </BookingModal>
                 </div>
               </div>
             )}
@@ -1138,11 +1114,14 @@ export function UXBoxForm() {
                   )}
                 </p>
                 <BookingModal>
-                  <button type="button" className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-semibold text-[15px] text-white transition-all active:scale-95 shadow-lg hover:brightness-110"
-                    style={{ background: "linear-gradient(90deg, #E8751A, #c65a10)" }}>
-                    <Rocket size={16} /> {t("Agenda una llamada", "Book a call")}
+                  <button type="button" className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold text-sm text-white transition-all active:scale-95 hover:brightness-110 shadow-lg"
+                    style={{ background: "linear-gradient(90deg, #E8751A, #c65a10)", boxShadow: "0 6px 24px rgba(232,117,26,0.35)" }}>
+                    <Rocket size={14} /> {t("Agenda una llamada", "Book a call")}
                   </button>
                 </BookingModal>
+                <button onClick={resetLab} className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold text-sm dark:text-white/60 text-foreground/60 border dark:border-white/15 border-foreground/15 hover:dark:text-white hover:text-foreground hover:dark:border-white/30 hover:border-foreground/30 transition-all active:scale-95">
+                  {t("Cerrar", "Close")}
+                </button>
               </div>
             ) : (
               <div className="rounded-xl border dark:border-white/10 border-foreground/10 dark:bg-white/5 bg-foreground/5 px-5 py-4 flex items-center gap-3 text-sm dark:text-white/60 text-muted-foreground">

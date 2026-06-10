@@ -5,7 +5,7 @@ const FROM_EMAIL = process.env.FROM_EMAIL || "MediaLab <onboarding@resend.dev>"
 
 export async function POST(req: NextRequest) {
   try {
-    const { name, email, phone, role, experience, motivation, lang = "es" } = await req.json()
+    const { name, email, phone, schedule, role, experience, motivation, lang = "es" } = await req.json()
     const isEn = lang === "en"
 
     if (!name || !email) {
@@ -52,6 +52,10 @@ export async function POST(req: NextRequest) {
     <div class="field">
       <label>Telefono / WhatsApp</label>
       <p>${phone || "No especificado"}</p>
+    </div>
+    <div class="field">
+      <label>Horario preferido</label>
+      <p>${schedule || "No especificado"}</p>
     </div>
     <div class="field">
       <label>Rol profesional</label>
