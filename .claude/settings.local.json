@@ -69,7 +69,10 @@
       "PowerShell(git pull *)",
       "PowerShell(git checkout *)",
       "Bash(git check-ignore *)",
-      "Bash(npm config:*)"
+      "Bash(npm config:*)",
+      "Bash(npx next-image-size:*)",
+      "Bash(identify \"public/images/asistente/ada-open.png\")",
+      "Bash(python3 -c \"from PIL import Image; img=Image.open\\('public/images/asistente/ada-open.png'\\); print\\(img.size\\)\")"
     ]
   }
 }

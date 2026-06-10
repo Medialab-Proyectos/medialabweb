@@ -249,8 +249,8 @@ export function HomeChatAssistant() {
         <button type="button" onClick={openPanel}
           aria-label={t("Abrir chat", "Open chat")}
           className="fixed bottom-20 md:bottom-5 right-4 sm:right-6 z-[60] w-16 h-16 rounded-full shadow-xl overflow-hidden ring-[3px] ring-[#E8751A] ring-offset-2 ring-offset-[var(--background)] hover:scale-105 active:scale-95 transition-transform">
-          <Image src={ADA_OPEN} alt="" width={200} height={200}
-            className="w-full h-full object-cover object-center scale-[1.35]" unoptimized />
+          <Image src={ADA_OPEN} alt="" width={200} height={200} sizes="200px" quality={100}
+            className="w-full h-full object-cover object-center scale-[1.35]" />
         </button>
       )}
 
@@ -284,7 +284,7 @@ export function HomeChatAssistant() {
               {messages.length === 1 && showQuick && (
                 <div className="flex flex-col items-center gap-2 pt-1 pb-3">
                   <div className="relative w-32 h-32 rounded-full overflow-hidden shadow-lg ring-2 ring-[#E8772E]/30">
-                    <Image src={ADA_OPEN} alt="Ada" fill sizes="128px" className="object-cover object-center scale-[1.1]" unoptimized />
+                    <Image src={ADA_OPEN} alt="Ada" fill sizes="256px" quality={100} className="object-cover object-center scale-[1.1]" />
                   </div>
                   <p className="text-xs text-muted-foreground">{t("Tu guía en MediaLab", "Your MediaLab guide")}</p>
                 </div>
@@ -300,7 +300,7 @@ export function HomeChatAssistant() {
                 ) : (
                   <div key={i} className="flex justify-start gap-2">
                     <div className="relative w-9 h-9 rounded-full overflow-hidden shrink-0 mt-1">
-                      <Image src={ADA_OPEN} alt="" fill sizes="36px" className="object-cover object-center scale-[1.15]" unoptimized />
+                      <Image src={ADA_OPEN} alt="" fill sizes="96px" quality={100} className="object-cover object-center scale-[1.15]" />
                     </div>
                     <div className="max-w-[78%] rounded-2xl rounded-bl-sm px-3.5 py-2.5 text-sm bg-card border border-border text-foreground/85 shadow-sm">
                       {msg.text}
@@ -313,7 +313,7 @@ export function HomeChatAssistant() {
               {thinking && (
                 <div className="flex justify-start gap-2">
                   <div className="relative w-9 h-9 rounded-full overflow-hidden shrink-0 mt-1">
-                    <Image src={ADA_OPEN} alt="" fill sizes="36px" className="object-cover object-center scale-[1.15]" unoptimized />
+                    <Image src={ADA_OPEN} alt="" fill sizes="96px" quality={100} className="object-cover object-center scale-[1.15]" />
                   </div>
                   <div className="rounded-2xl rounded-bl-sm px-3.5 py-2.5 text-sm bg-card border border-border text-muted-foreground shadow-sm flex items-center gap-1.5">
                     <span className="flex gap-1">

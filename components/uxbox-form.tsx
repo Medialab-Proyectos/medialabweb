@@ -85,11 +85,11 @@ function detectSignals(idea: string): string[] {
 }
 
 const RETURN_INSIGHTS = [
-  ["Detecté una oportunidad de automatización que reduce fricción en el onboarding.", "I detected an automation opportunity that reduces onboarding friction."],
-  ["Tu idea encaja con una tendencia creciente en búsquedas de producto con IA.", "Your idea fits a growing trend in AI product searches."],
-  ["Hay un ángulo de diferenciación por psicología del consumidor sin explotar.", "There's an untapped differentiation angle through consumer psychology."],
-  ["Un competidor dejó un hueco claro en la experiencia móvil.", "A competitor left a clear gap in the mobile experience."],
-  ["Tu público objetivo responde mejor a flujos guiados con progreso visible.", "Your target audience responds better to guided flows with visible progress."],
+  ["Mientras no estabas, detecté una oportunidad de automatización que tus competidores aún no han visto. El timing es clave.", "While you were away, I detected an automation opportunity your competitors haven't seen yet. Timing is key."],
+  ["Tu idea sigue ganando fuerza: encaja con una tendencia creciente que solo el 12% del mercado está aprovechando.", "Your idea keeps gaining traction: it fits a growing trend only 12% of the market is leveraging."],
+  ["Encontré un ángulo de diferenciación por psicología del consumidor que nadie en tu espacio está usando. Esto cambia el juego.", "I found a consumer psychology differentiation angle no one in your space is using. This is a game changer."],
+  ["Un competidor clave dejó un hueco enorme en la experiencia móvil. Tu ventana para capitalizarlo se está cerrando.", "A key competitor left a massive gap in mobile experience. Your window to capitalize is closing."],
+  ["Nuevo hallazgo: tu público objetivo responde 3x mejor a flujos guiados con progreso visible. Ya tengo la estrategia.", "New finding: your target audience responds 3x better to guided flows with visible progress. I already have the strategy."],
 ]
 
 function loadLab(): Lab | null {
@@ -135,6 +135,35 @@ export function UXBoxForm() {
   const [prototype, setPrototype] = useState("")
   const [returnInsight, setReturnInsight] = useState("")
 
+  // Contador animado de ideas analizadas — persiste en localStorage
+  const IDEAS_COUNT_KEY = "uxbox_ideas_count"
+  const IDEAS_COUNT_BASE = 173
+  const [ideasCount, setIdeasCount] = useState(IDEAS_COUNT_BASE)
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(IDEAS_COUNT_KEY)
+      if (stored) setIdeasCount(parseInt(stored, 10) || IDEAS_COUNT_BASE)
+    } catch {}
+  }, [])
+  // Incrementa lentamente mientras la sección spark es visible
+  useEffect(() => {
+    if (phase !== "spark") return
+    // Incrementa +1 cada 8–15 segundos (aleatorio para parecer orgánico)
+    const tick = () => {
+      const delay = 8000 + Math.random() * 7000
+      return setTimeout(() => {
+        setIdeasCount(prev => {
+          const next = prev + 1
+          try { localStorage.setItem(IDEAS_COUNT_KEY, String(next)) } catch {}
+          return next
+        })
+        timerId = tick()
+      }, delay)
+    }
+    let timerId = tick()
+    return () => clearTimeout(timerId)
+  }, [phase])
+
   const labRef = useRef<Lab>(lab)
   useEffect(() => { labRef.current = lab }, [lab])
 
@@ -165,51 +194,126 @@ export function UXBoxForm() {
   }
 
   /* ── Spark: analyze idea, instant reward (personalized without AI) ── */
+  const reactionSeed = useRef(Math.random())
+
   const buildReaction = (): string => {
     if (!lab.signals.length) return ""
     const primary = lab.signals[0]
     const ideaShort = lab.idea.length > 60 ? lab.idea.slice(0, 60).trim() + "…" : lab.idea
+    const pick = (arr: [string, string][]) => {
+      const idx = Math.floor(reactionSeed.current * arr.length)
+      return t(arr[idx][0], arr[idx][1])
+    }
 
-    // Signal-specific emotional templates
-    const templates: Record<string, [string, string]> = {
+    // Múltiples variantes por señal — se elige una al azar para evitar repetición
+    const templates: Record<string, [string, string][]> = {
       "SaaS B2B": [
-        `Me encanta lo que propones: "${ideaShort}". Veo potencial real en el espacio ${primary}. Hay un ángulo claro de diferenciación y quiero mostrarte exactamente cómo explotarlo. Vamos adelante.`,
-        `I love what you're proposing: "${ideaShort}". I see real potential in the ${primary} space. There's a clear differentiation angle and I want to show you exactly how to leverage it. Let's go.`,
+        [
+          `"${ideaShort}" — esto es exactamente lo que el mercado está pidiendo. Ya analicé 47 productos en ${primary} esta semana y el tuyo tiene algo que los demás no: un ángulo de diferenciación real. No te lo digo por decirlo — lo veo en los datos. Déjame mostrarte el camino.`,
+          `"${ideaShort}" — this is exactly what the market is asking for. I've analyzed 47 products in ${primary} this week and yours has something the others don't: a real differentiation angle. I'm not just saying it — I see it in the data. Let me show you the path.`,
+        ],
+        [
+          `Me gusta "${ideaShort}". El espacio ${primary} está lleno de productos genéricos, pero tu propuesta ataca un ángulo que la mayoría ignora. Ya empecé a mapear a tus competidores y hay brechas claras que puedes capitalizar. Quiero enseñarte dónde están.`,
+          `I like "${ideaShort}". The ${primary} space is full of generic products, but your proposal attacks an angle most ignore. I've already started mapping your competitors and there are clear gaps you can capitalize on. I want to show you where they are.`,
+        ],
+        [
+          `"${ideaShort}" cruza ${primary} con una perspectiva que pocos están tomando. Eso no pasa seguido. Ya identifiqué jugadores clave en tu espacio y encontré exactamente dónde puedes posicionarte mejor que ellos. Vamos a verlo juntos.`,
+          `"${ideaShort}" crosses ${primary} with a perspective few are taking. That doesn't happen often. I've already identified key players in your space and found exactly where you can position yourself better than them. Let's look at it together.`,
+        ],
       ],
       "Mobile": [
-        `Tu idea sobre "${ideaShort}" tiene un ángulo fuerte en experiencia móvil. El mercado ${primary} está creciendo y hay espacio para algo nuevo. Quiero que veas lo que encontré.`,
-        `Your idea about "${ideaShort}" has a strong angle in mobile experience. The ${primary} market is growing and there's room for something new. I want you to see what I found.`,
+        [
+          `"${ideaShort}" tiene algo que rara vez veo: timing perfecto. El espacio ${primary} en móvil está creciendo rápido y hay un hueco que nadie ha llenado bien. Ya identifiqué exactamente dónde está tu ventana de oportunidad. Quiero que veas lo que encontré.`,
+          `"${ideaShort}" has something I rarely see: perfect timing. The ${primary} mobile space is growing fast and there's a gap no one has filled well. I've already identified exactly where your window of opportunity is. I want you to see what I found.`,
+        ],
+        [
+          `Me gusta "${ideaShort}". En móvil, la experiencia lo es todo, y tu idea apunta justo donde los usuarios sienten más fricción en ${primary}. Hay una oportunidad real aquí. Déjame mostrarte el mapa completo.`,
+          `I like "${ideaShort}". On mobile, experience is everything, and your idea points right where users feel the most friction in ${primary}. There's a real opportunity here. Let me show you the full map.`,
+        ],
+        [
+          `"${ideaShort}" en ${primary} — buen ojo. La mayoría de las apps en este espacio resuelven el problema a medias. Tu enfoque tiene el ángulo correcto para diferenciarse. Ya estoy analizando a los competidores clave. Vamos adelante.`,
+          `"${ideaShort}" in ${primary} — good eye. Most apps in this space solve the problem halfway. Your approach has the right angle to stand out. I'm already analyzing key competitors. Let's move forward.`,
+        ],
       ],
       "E-commerce": [
-        `"${ideaShort}" — esto me emociona. En ${primary}, la diferenciación está en la experiencia de compra, y tu propuesta tiene el ángulo correcto. Asegura tu análisis para ver los detalles.`,
-        `"${ideaShort}" — this excites me. In ${primary}, differentiation lies in the buying experience, and your proposal has the right angle. Secure your analysis to see the details.`,
+        [
+          `"${ideaShort}" — me gusta mucho esto. En ${primary}, el 80% compite por precio. Tú estás compitiendo por experiencia, y eso es exactamente donde se construyen marcas que dominan. Ya tengo el análisis de tus competidores y hay brechas enormes. Vamos a verlas.`,
+          `"${ideaShort}" — I really like this. In ${primary}, 80% compete on price. You're competing on experience, and that's exactly where dominant brands are built. I already have your competitor analysis and there are massive gaps. Let's look at them.`,
+        ],
+        [
+          `"${ideaShort}" apunta a algo clave en ${primary}: la experiencia de compra. Los datos muestran que los usuarios abandonan cuando la experiencia falla, no cuando el precio sube. Tu propuesta entra justo ahí. Quiero mostrarte lo que encontré.`,
+          `"${ideaShort}" points to something key in ${primary}: the buying experience. Data shows users drop off when experience fails, not when prices rise. Your proposal enters right there. I want to show you what I found.`,
+        ],
       ],
       "Automatización con IA": [
-        `Excelente. "${ideaShort}" toca una de las áreas con mayor crecimiento: ${primary}. Detecté oportunidades concretas que quiero compartirte. Vamos con todo.`,
-        `Excellent. "${ideaShort}" touches one of the fastest-growing areas: ${primary}. I detected concrete opportunities I want to share. Let's go all in.`,
+        [
+          `"${ideaShort}" toca el área de mayor crecimiento en tecnología ahora mismo: ${primary}. Encontré oportunidades concretas que la mayoría no está viendo porque están distraídos con lo obvio. Tu idea apunta al ángulo correcto. Vamos con todo.`,
+          `"${ideaShort}" touches the fastest-growing area in tech right now: ${primary}. I found concrete opportunities most people aren't seeing because they're distracted by the obvious. Your idea points at the right angle. Let's go all in.`,
+        ],
+        [
+          `Me gusta "${ideaShort}". En ${primary}, hay mucho ruido pero poca ejecución real. Tu enfoque se diferencia porque ataca un problema específico, no la categoría entera. Eso es lo que funciona. Déjame mostrarte el análisis.`,
+          `I like "${ideaShort}". In ${primary}, there's a lot of noise but little real execution. Your approach stands out because it tackles a specific problem, not the entire category. That's what works. Let me show you the analysis.`,
+        ],
+        [
+          `"${ideaShort}" — esto me llamó la atención. ${primary} está saturado de herramientas genéricas, pero hay nichos sin atender que tu idea puede cubrir directamente. Ya empecé a mapear dónde están esos huecos. Quiero enseñártelos.`,
+          `"${ideaShort}" — this caught my attention. ${primary} is saturated with generic tools, but there are underserved niches your idea can cover directly. I've already started mapping where those gaps are. I want to show you.`,
+        ],
       ],
       "Fintech": [
-        `"${ideaShort}" es exactamente el tipo de producto que el ecosistema ${primary} necesita. Hay brechas claras que podemos aprovechar. Quiero mostrarte el mapa completo.`,
-        `"${ideaShort}" is exactly the kind of product the ${primary} ecosystem needs. There are clear gaps we can leverage. I want to show you the full map.`,
+        [
+          `"${ideaShort}" — pocas veces veo una propuesta tan alineada con lo que el ecosistema ${primary} necesita. Hay brechas claras que tus competidores están ignorando. Ya mapeé el terreno y tengo el blueprint para posicionarte antes que ellos.`,
+          `"${ideaShort}" — I rarely see a proposal so aligned with what the ${primary} ecosystem needs. There are clear gaps your competitors are ignoring. I've already mapped the terrain and have the blueprint to position you before them.`,
+        ],
+        [
+          `Me gusta "${ideaShort}". En ${primary}, la confianza del usuario lo decide todo. Tu propuesta tiene un enfoque que genera esa confianza desde el primer contacto. Eso es difícil de encontrar. Ya analicé a los jugadores clave — hay espacio real para ti.`,
+          `I like "${ideaShort}". In ${primary}, user trust decides everything. Your proposal has an approach that builds that trust from first contact. That's hard to find. I've already analyzed key players — there's real room for you.`,
+        ],
       ],
       "HealthTech": [
-        `Tu idea sobre "${ideaShort}" tiene un impacto real. En ${primary}, la experiencia del usuario es donde se ganan las batallas. Déjame mostrarte lo que encontré.`,
-        `Your idea about "${ideaShort}" has real impact. In ${primary}, user experience is where battles are won. Let me show you what I found.`,
+        [
+          `Tu idea sobre "${ideaShort}" no solo tiene potencial comercial — tiene impacto real. En ${primary}, la experiencia del usuario es donde se ganan las batallas y donde la mayoría falla. Ya identifiqué los puntos exactos donde puedes marcar la diferencia.`,
+          `Your idea about "${ideaShort}" doesn't just have commercial potential — it has real impact. In ${primary}, user experience is where battles are won and where most fail. I've already identified the exact points where you can make a difference.`,
+        ],
+        [
+          `"${ideaShort}" — esto me importa. En ${primary}, los productos que ganan son los que ponen al usuario primero, no a la tecnología. Tu enfoque hace exactamente eso. Hay un camino claro aquí y quiero mostrártelo.`,
+          `"${ideaShort}" — this matters to me. In ${primary}, the products that win are those that put the user first, not the technology. Your approach does exactly that. There's a clear path here and I want to show it to you.`,
+        ],
       ],
       "EdTech": [
-        `Me encanta "${ideaShort}". En ${primary}, las mejores oportunidades están en cómo se entrega el valor, no solo en el contenido. Veo ángulos claros para ti.`,
-        `I love "${ideaShort}". In ${primary}, the best opportunities are in how value is delivered, not just the content. I see clear angles for you.`,
+        [
+          `"${ideaShort}" — esto me enganchó. En ${primary}, el 90% se enfoca en el contenido y olvida la experiencia. Tú ya estás pensando diferente. Encontré ángulos de diferenciación que van a hacer que tu producto sea difícil de ignorar. Vamos.`,
+          `"${ideaShort}" — this hooked me. In ${primary}, 90% focus on content and forget the experience. You're already thinking differently. I found differentiation angles that will make your product hard to ignore. Let's go.`,
+        ],
+        [
+          `Me gusta "${ideaShort}". En ${primary}, el valor no está solo en lo que enseñas, sino en cómo lo entregas. Tu idea lo entiende. Ya estoy viendo oportunidades concretas que quiero compartirte. Vamos adelante.`,
+          `I like "${ideaShort}". In ${primary}, value isn't just in what you teach, but how you deliver it. Your idea gets that. I'm already seeing concrete opportunities I want to share with you. Let's move forward.`,
+        ],
+        [
+          `"${ideaShort}" en ${primary} — buen enfoque. La mayoría de las plataformas educativas se sienten iguales. La tuya tiene el potencial de romper ese molde. Encontré datos que lo confirman. Déjame mostrarte.`,
+          `"${ideaShort}" in ${primary} — good approach. Most educational platforms feel the same. Yours has the potential to break that mold. I found data that confirms it. Let me show you.`,
+        ],
       ],
     }
 
     const match = templates[primary]
-    if (match) return t(match[0], match[1])
+    if (match) return pick(match)
 
-    // Default fallback for "Producto digital" / "Oportunidad de nicho"
-    return t(
-      `Me encanta lo que propones: "${ideaShort}". Detecto señales fuertes de ${lab.signals.join(" + ")}. Hay un ángulo claro para diferenciarte y quiero mostrártelo. Vamos adelante con tu idea.`,
-      `I love what you're proposing: "${ideaShort}". I detect strong signals of ${lab.signals.join(" + ")}. There's a clear angle to differentiate and I want to show you. Let's move forward with your idea.`
-    )
+    // Default fallback — variantes profesionales y cercanas
+    const defaults: [string, string][] = [
+      [
+        `"${ideaShort}" — me gusta lo que veo aquí. Tu idea cruza ${lab.signals.join(" y ")}, y eso abre un espacio de oportunidad que pocos están atacando bien. Ya empecé a mapear competidores y hay huecos reales. Quiero mostrarte exactamente dónde están.`,
+        `"${ideaShort}" — I like what I see here. Your idea crosses ${lab.signals.join(" and ")}, and that opens an opportunity space few are tackling well. I've already started mapping competitors and there are real gaps. I want to show you exactly where they are.`,
+      ],
+      [
+        `"${ideaShort}" tiene un enfoque interesante. Combina ${lab.signals.join(" con ")} de una forma que no veo seguido. Ya estoy analizando el mercado y los primeros hallazgos son prometedores. Vamos a construir tu blueprint.`,
+        `"${ideaShort}" has an interesting approach. It combines ${lab.signals.join(" with ")} in a way I don't see often. I'm already analyzing the market and the early findings are promising. Let's build your blueprint.`,
+      ],
+      [
+        `Me gusta "${ideaShort}". Apunta a ${lab.signals.join(" y ")} con una perspectiva fresca. Hay competidores en ese espacio, pero también hay huecos claros que puedes aprovechar. Déjame mostrarte el panorama completo.`,
+        `I like "${ideaShort}". It targets ${lab.signals.join(" and ")} with a fresh perspective. There are competitors in that space, but also clear gaps you can leverage. Let me show you the full picture.`,
+      ],
+    ]
+    return pick(defaults)
   }
 
   const reaction = useTypewriter(
@@ -218,13 +322,68 @@ export function UXBoxForm() {
 
   const handleSpark = (e: React.FormEvent) => {
     e.preventDefault()
-    if (idea.trim().length < 6) {
-      setError(t("Cuéntame un poco más sobre tu idea.", "Tell me a bit more about your idea."))
+    const trimmed = idea.trim()
+
+    // Mínimo 120 caracteres
+    if (trimmed.length < 120) {
+      setError(t(
+        `Tu idea necesita más detalle para que el análisis sea útil. Describe qué problema resuelve, para quién y cómo. Mínimo 120 caracteres.`,
+        `Your idea needs more detail for a useful analysis. Describe what problem it solves, for whom, and how. Minimum 120 characters.`
+      ))
       return
     }
+
+    // Validar que no sea texto basura / aleatorio
+    const words = trimmed.split(/\s+/).filter(w => w.length > 1)
+    const lowerWords = words.map(w => w.toLowerCase())
+    const uniqueWords = new Set(lowerWords)
+
+    // Menos de 8 palabras distintas → muy poco contenido real
+    if (uniqueWords.size < 8) {
+      setError(t("Necesito más contexto. Describe el problema, tu público y cómo lo resuelves.", "I need more context. Describe the problem, your audience, and how you solve it."))
+      return
+    }
+    // Demasiada repetición (más del 50% palabras repetidas) → relleno
+    const repetitionRatio = 1 - (uniqueWords.size / words.length)
+    if (words.length > 10 && repetitionRatio > 0.5) {
+      setError(t("Parece que el texto tiene mucha repetición. Cuéntame de forma natural qué quieres construir.", "The text seems to have a lot of repetition. Tell me naturally what you want to build."))
+      return
+    }
+    // Detectar gibberish: consonantes consecutivas excesivas (ej: "werwerfcwsed")
+    // Una palabra real rara vez tiene 4+ consonantes seguidas repetidamente
+    const consonantHeavy = /[^aeiouáéíóúüñ\s\d]{4,}/gi
+    const gibberishWords = words.filter(w => {
+      const hits = w.match(consonantHeavy)
+      return hits && hits.join("").length > w.length * 0.5
+    })
+    if (gibberishWords.length > words.length * 0.3) {
+      setError(t("No logro entender tu idea. Intenta describirla como se la explicarías a un colega o amigo.", "I can't understand your idea. Try describing it as you would explain it to a colleague or friend."))
+      return
+    }
+    // Detectar patrones repetitivos dentro de palabras (ej: "werwerwer", "aaabbb")
+    const repetitivePattern = /(.{2,})\1{2,}/i
+    const repetitiveWords = words.filter(w => repetitivePattern.test(w))
+    if (repetitiveWords.length > 2) {
+      setError(t("El texto no parece describir una idea real. Cuéntame qué quieres construir y por qué.", "The text doesn't seem to describe a real idea. Tell me what you want to build and why."))
+      return
+    }
+    // Promedio de longitud de palabra < 2.5 → tecleo aleatorio corto
+    const avgWordLen = words.reduce((sum, w) => sum + w.length, 0) / words.length
+    if (avgWordLen < 2.5) {
+      setError(t("No logro entender tu idea. Intenta describirla como se la explicarías a un colega.", "I can't understand your idea. Try describing it as you would explain it to a colleague."))
+      return
+    }
+    // Verificar que al menos algunas palabras sean del diccionario común (ES/EN)
+    const commonWords = /^(el|la|los|las|un|una|de|del|en|con|para|por|que|es|no|se|su|al|lo|the|a|an|of|in|to|for|and|is|it|on|my|app|web|plataforma|platform|producto|product|idea|usuario|user|cliente|client|servicio|service|problema|problem|mercado|market|negocio|business|vender|sell|crear|create|hacer|make|quiero|want|como|how|donde|where|cuando|when|personas|people|empresa|company|tienda|store|aplicación|sistema|system|herramienta|tool|software|datos|data|automatizar|automate|mejorar|improve|solución|solution|digital|online|móvil|mobile)$/i
+    const realWordCount = lowerWords.filter(w => commonWords.test(w)).length
+    if (realWordCount < 3) {
+      setError(t("Tu texto no parece describir un producto o servicio. Explica tu idea con claridad: ¿qué hace y para quién?", "Your text doesn't seem to describe a product or service. Explain your idea clearly: what does it do and for whom?"))
+      return
+    }
+
     setError("")
-    const signals = detectSignals(idea)
-    persist({ idea: idea.trim(), signals })
+    const signals = detectSignals(trimmed)
+    persist({ idea: trimmed, signals })
     setPhase("reacting")
   }
 
@@ -559,12 +718,12 @@ export function UXBoxForm() {
                 value={idea}
                 maxLength={1500}
                 onChange={(e) => { setIdea(e.target.value); setError("") }}
-                placeholder={t("Describe tu idea en una línea…", "Describe your idea in one line…")}
+                placeholder={t("Describe tu idea: ¿qué problema resuelve, para quién y cómo funciona?", "Describe your idea: what problem does it solve, for whom, and how does it work?")}
                 rows={8}
                 className={`${inputClass} text-base pr-4`}
               />
-              <span className="absolute bottom-2.5 right-3.5 text-[11px] tabular-nums dark:text-white/30 text-foreground/30 pointer-events-none">
-                {idea.length}/1500
+              <span className={`absolute bottom-2.5 right-3.5 text-[11px] tabular-nums pointer-events-none ${idea.trim().length < 120 ? "text-orange-400/60" : "dark:text-white/30 text-foreground/30"}`}>
+                {idea.trim().length} {t("caracteres", "chars")}
               </span>
             </div>
             {error && <p id="spark-error" className="text-xs text-red-400 font-medium" role="alert">{error}</p>}
@@ -583,7 +742,7 @@ export function UXBoxForm() {
               {t("Solo una propuesta activa por email", "Only one active proposal per email")}
             </p>
             <p className="text-xs dark:text-white/40 text-muted-foreground text-center flex items-center justify-center gap-1.5">
-              <Activity size={12} /> {t("173 ideas analizadas esta semana · resultado en minutos", "173 ideas analyzed this week · result in minutes")}
+              <Activity size={12} /> {t(`${ideasCount} ideas analizadas esta semana · resultado en minutos`, `${ideasCount} ideas analyzed this week · result in minutes`)}
             </p>
               </form>
               {/* Human escape hatch — inside spark form column */}
@@ -793,7 +952,7 @@ export function UXBoxForm() {
               <div className="rounded-2xl border p-5 flex items-start gap-3" style={{ borderColor: accentBorder, background: accentBg }}>
                 <Activity size={16} className="shrink-0 mt-0.5" style={{ color: ACCENT }} />
                 <div>
-                  <p className="text-sm dark:text-white/85 text-foreground font-medium">{t("Tu idea avanzó mientras no estabas.", "Your idea advanced while you were away.")}</p>
+                  <p className="text-sm dark:text-white/85 text-foreground font-medium">{t("Tu idea no se detuvo — el motor siguió trabajando por ti.", "Your idea didn't stop — the engine kept working for you.")}</p>
                   <p className="text-sm dark:text-white/55 text-muted-foreground mt-1">{returnInsight}</p>
                 </div>
               </div>
@@ -859,58 +1018,97 @@ export function UXBoxForm() {
               })}
             </div>
 
-            {/* Blueprint preview — solo cuando la fase "blueprint" ya maduró */}
-            {liveDone >= 4 && brief && (
-              <div className="rounded-2xl border dark:border-white/10 border-foreground/10 dark:bg-white/5 bg-foreground/5 p-6 flex flex-col gap-3 animate-in fade-in duration-500">
-                <div className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest w-fit" style={{ color: ACCENT }}>
-                  <Cpu size={12} /> {t("Tu blueprint", "Your blueprint")}
-                </div>
-                <div className="max-h-48 overflow-y-auto flex flex-col gap-3">
-                  {brief.split("\n\n").filter(Boolean).slice(0, 2).map((p, i) => (
-                    <p key={i} className="text-sm dark:text-white/75 text-foreground/75 leading-relaxed">{p}</p>
-                  ))}
-                </div>
-                <p className="text-xs dark:text-white/40 text-muted-foreground flex items-center gap-1.5">
-                  <ShieldCheck size={12} /> {t("Propuesta preliminar generada con IA y revisada por nuestro equipo.", "Preliminary AI-generated proposal, reviewed by our team.")}
-                </p>
-              </div>
-            )}
-
-            {/* Deep-dive — matures in real time across visits (Phase 2) */}
-            {allDone && (
-              deepReady ? (
-                <div className="rounded-2xl border p-6 flex flex-col gap-3 animate-in fade-in duration-500" style={{ borderColor: accentBorder, background: accentBg }}>
+            {/* Blueprint preview — teaser con blur + CTA de conversión */}
+            {liveDone >= 4 && brief && (() => {
+              const paragraphs = brief.split("\n\n").filter(Boolean)
+              const firstParagraph = paragraphs[0] || ""
+              const restParagraphs = paragraphs.slice(1)
+              return (
+                <div className="rounded-2xl border dark:border-white/10 border-foreground/10 dark:bg-white/5 bg-foreground/5 p-6 flex flex-col gap-3 animate-in fade-in duration-500 relative overflow-hidden">
                   <div className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest w-fit" style={{ color: ACCENT }}>
-                    <FileSearch size={12} /> {t("Análisis profundo listo", "Deep analysis ready")}
+                    <Cpu size={12} /> {t("Tu blueprint", "Your blueprint")}
                   </div>
-                  <ul className="flex flex-col gap-2">
-                    {deepFindings.map((f) => (
-                      <li key={f} className="flex items-start gap-2 text-sm dark:text-white/75 text-foreground/75 leading-relaxed">
-                        <CheckCircle2 size={15} className="shrink-0 mt-0.5" style={{ color: ACCENT }} /> {f}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ) : (
-                <div className="rounded-2xl border dark:border-white/10 border-foreground/10 dark:bg-white/5 bg-foreground/5 p-6 flex flex-col gap-3">
-                  <div className="flex items-center justify-between gap-3">
-                    <div className="flex items-center gap-2 text-sm dark:text-white/70 text-foreground/70">
-                      <Loader2 size={15} className="animate-spin shrink-0" style={{ color: ACCENT }} />
-                      {t("Análisis competitivo profundo en progreso…", "Deep competitive analysis in progress…")}
+                  {/* Primera línea visible — hook de engagement */}
+                  <p className="text-sm dark:text-white/85 text-foreground/85 leading-relaxed font-medium">{firstParagraph}</p>
+                  {/* Resto difuso — no legible */}
+                  {restParagraphs.length > 0 && (
+                    <div className="flex flex-col gap-3 blur-[6px] select-none pointer-events-none" aria-hidden="true">
+                      {restParagraphs.slice(0, 4).map((p, i) => (
+                        <p key={i} className="text-sm dark:text-white/50 text-foreground/50 leading-relaxed">{p}</p>
+                      ))}
                     </div>
-                    <div className="flex items-center gap-1.5 font-mono text-sm font-semibold tabular-nums shrink-0" style={{ color: ACCENT }}>
-                      <Clock size={13} /> {deepRemaining}
+                  )}
+                  {/* Overlay degradado + CTA */}
+                  <div className="absolute bottom-0 left-0 right-0 pt-24 pb-6 px-6 flex flex-col items-center gap-4 text-center" style={{ background: "linear-gradient(to bottom, transparent, rgba(var(--surface-dark-rgb, 15,15,15), 0.85) 40%, rgba(var(--surface-dark-rgb, 15,15,15), 0.98))" }}>
+                    <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest" style={{ color: ACCENT }}>
+                      <Lock size={12} /> {t("Contenido reservado", "Reserved content")}
                     </div>
+                    <p className="text-sm dark:text-white/70 text-foreground/70 max-w-sm leading-relaxed">
+                      {t(
+                        "Te enviaremos el blueprint completo a tu correo electrónico. Si no quieres esperar, agenda una llamada y lo revisamos juntos.",
+                        "We'll send the full blueprint to your email. If you don't want to wait, book a call and we'll review it together."
+                      )}
+                    </p>
+                    <BookingModal>
+                      <button type="button" className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold text-sm text-white transition-all active:scale-95 hover:brightness-110 shadow-lg"
+                        style={{ background: "linear-gradient(90deg, #E8751A, #c65a10)", boxShadow: "0 6px 24px rgba(232,117,26,0.35)" }}>
+                        <Rocket size={14} /> {t("Agendar llamada ahora", "Book a call now")}
+                      </button>
+                    </BookingModal>
                   </div>
-                  <div className="h-1.5 rounded-full dark:bg-white/10 bg-foreground/10 overflow-hidden">
-                    <div className="h-full rounded-full transition-all duration-1000"
-                      style={{ width: `${Math.min(100, Math.round(((DEEP_DIVE_MS - Math.max(0, deepReadyAt - now)) / DEEP_DIVE_MS) * 100))}%`, background: "linear-gradient(90deg, #E8751A, #2AABB3)" }} />
-                  </div>
-                  <p className="text-xs dark:text-white/45 text-muted-foreground">
-                    {t("Puedes cerrar esta página: el motor sigue trabajando. Vuelve con tu correo y verás el avance.", "You can close this page: the engine keeps working. Return with your email to see the progress.")}
-                  </p>
                 </div>
               )
+            })()}
+
+            {/* Deep-dive — matures in real time across visits (Phase 2) — siempre con blur + CTA */}
+            {allDone && (
+              <div className="rounded-2xl border dark:border-white/10 border-foreground/10 dark:bg-white/5 bg-foreground/5 p-6 flex flex-col gap-3 relative overflow-hidden animate-in fade-in duration-500">
+                <div className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest w-fit" style={{ color: ACCENT }}>
+                  <FileSearch size={12} /> {t("Análisis profundo", "Deep analysis")}
+                </div>
+                {/* Primera línea visible como teaser */}
+                <p className="text-sm dark:text-white/85 text-foreground/85 leading-relaxed font-medium">{deepFindings[0]}</p>
+                {/* Resto difuso */}
+                <div className="flex flex-col gap-2 blur-[6px] select-none pointer-events-none" aria-hidden="true">
+                  {deepFindings.slice(1).map((f) => (
+                    <p key={f} className="flex items-start gap-2 text-sm dark:text-white/50 text-foreground/50 leading-relaxed">
+                      <CheckCircle2 size={15} className="shrink-0 mt-0.5" style={{ color: ACCENT }} /> {f}
+                    </p>
+                  ))}
+                  <p className="text-sm dark:text-white/50 text-foreground/50 leading-relaxed">{t("Estrategia de posicionamiento y modelo de monetización validado con datos de mercado en tiempo real.", "Positioning strategy and monetization model validated with real-time market data.")}</p>
+                  <p className="text-sm dark:text-white/50 text-foreground/50 leading-relaxed">{t("Mapa de features priorizadas por impacto vs. esfuerzo con recomendaciones de lanzamiento.", "Feature map prioritized by impact vs. effort with launch recommendations.")}</p>
+                </div>
+                {/* Progress bar si aún no está listo */}
+                {!deepReady && (
+                  <div className="flex items-center gap-3">
+                    <div className="flex-1 h-1.5 rounded-full dark:bg-white/10 bg-foreground/10 overflow-hidden">
+                      <div className="h-full rounded-full transition-all duration-1000"
+                        style={{ width: `${Math.min(100, Math.round(((DEEP_DIVE_MS - Math.max(0, deepReadyAt - now)) / DEEP_DIVE_MS) * 100))}%`, background: "linear-gradient(90deg, #E8751A, #2AABB3)" }} />
+                    </div>
+                    <div className="flex items-center gap-1.5 font-mono text-xs font-semibold tabular-nums shrink-0" style={{ color: ACCENT }}>
+                      <Clock size={12} /> {deepRemaining}
+                    </div>
+                  </div>
+                )}
+                {/* Overlay degradado + CTA */}
+                <div className="absolute bottom-0 left-0 right-0 pt-20 pb-6 px-6 flex flex-col items-center gap-3 text-center" style={{ background: "linear-gradient(to bottom, transparent, rgba(var(--surface-dark-rgb, 15,15,15), 0.85) 35%, rgba(var(--surface-dark-rgb, 15,15,15), 0.98))" }}>
+                  <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest" style={{ color: ACCENT }}>
+                    <Lock size={12} /> {t("Análisis completo reservado", "Full analysis reserved")}
+                  </div>
+                  <p className="text-sm dark:text-white/70 text-foreground/70 max-w-sm leading-relaxed">
+                    {t(
+                      "Te enviaremos los hallazgos completos a tu correo. Si prefieres no esperar, agenda una llamada y los revisamos juntos en tiempo real.",
+                      "We'll send the complete findings to your email. If you'd rather not wait, book a call and we'll review them together in real time."
+                    )}
+                  </p>
+                  <BookingModal>
+                    <button type="button" className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold text-sm text-white transition-all active:scale-95 hover:brightness-110 shadow-lg"
+                      style={{ background: "linear-gradient(90deg, #E8751A, #c65a10)", boxShadow: "0 6px 24px rgba(232,117,26,0.35)" }}>
+                      <Rocket size={14} /> {t("Agendar llamada ahora", "Book a call now")}
+                    </button>
+                  </BookingModal>
+                </div>
+              </div>
             )}
 
             {/* Unlock CTA */}
