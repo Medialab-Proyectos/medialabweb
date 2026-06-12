@@ -10,12 +10,21 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  return handle(request)
+  let bodySecret = ""
+  try {
+    const body = await request.json() as { secret?: unknown }
+    bodySecret = typeof body.secret === "string" ? body.secret : ""
+  } catch {
+    // Vercel Cron does not send a JSON body.
+  }
+  return handle(request, bodySecret)
 }
 
-async function handle(request: NextRequest) {
+async function handle(request: NextRequest, bodySecret = "") {
   const cronSecret = process.env.CRON_SECRET?.trim()
-  if (cronSecret && request.headers.get("authorization") !== `Bearer ${cronSecret}`) {
+  const headerAuthorized = request.headers.get("authorization") === `Bearer ${cronSecret}`
+  const bodyAuthorized = bodySecret === cronSecret
+  if (cronSecret && !headerAuthorized && !bodyAuthorized) {
     return NextResponse.json({ ok: false, error: "unauthorized" }, { status: 401 })
   }
 
@@ -35,6 +44,7 @@ async function handle(request: NextRequest) {
           reviewed: report.reviewed,
           autoPublished: report.autoPublished,
         },
+        aiAnalysis: report.aiAnalysis,
         articles: {
           count: articles.length,
           items: articles.map((a) => ({ slug: a.slug, seoTitle: a.seoTitle, radarScore: a.radarScore.total })),

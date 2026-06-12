@@ -53,12 +53,22 @@ export async function enrichDailyRadarReportWithAI(
   report: DailyRadarReport,
 ): Promise<DailyRadarReport> {
   const apiKey = process.env.OPENAI_API_KEY?.trim()
-  if (!apiKey) return report
+  const model = process.env.OPENAI_MODEL?.trim() || DEFAULT_MODEL
+  if (!apiKey) {
+    return {
+      ...report,
+      aiAnalysis: {
+        status: "skipped",
+        model,
+        reason: "missing_openai_api_key",
+      },
+    }
+  }
 
   try {
     const client = new OpenAI({ apiKey })
     const response = await client.responses.create({
-      model: process.env.OPENAI_MODEL?.trim() || DEFAULT_MODEL,
+      model,
       instructions: [
         "Eres el analista de Experience Radar de MediaLab.",
         "Analiza experiencia digital, UX, comportamiento, producto e IA; no hagas apuestas ni pronosticos deportivos.",
@@ -83,6 +93,13 @@ export async function enrichDailyRadarReportWithAI(
 
     return {
       ...report,
+      aiAnalysis: {
+        status: "used",
+        model,
+        inputTokens: response.usage?.input_tokens,
+        outputTokens: response.usage?.output_tokens,
+        totalTokens: response.usage?.total_tokens,
+      },
       findingOfTheDay: finding,
       risks,
       opportunities,
@@ -105,6 +122,16 @@ export async function enrichDailyRadarReportWithAI(
     }
   } catch (error) {
     console.warn("Experience Radar AI analysis unavailable; using deterministic report.", error)
-    return report
+    const status = typeof error === "object" && error && "status" in error
+      ? String(error.status)
+      : "unknown"
+    return {
+      ...report,
+      aiAnalysis: {
+        status: "fallback",
+        model,
+        reason: `openai_error_${status}`,
+      },
+    }
   }
 }

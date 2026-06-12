@@ -107,6 +107,14 @@ export interface DailyRadarReport {
   status: EditorialStatus
   reviewed: boolean
   autoPublished: boolean
+  aiAnalysis?: {
+    status: "used" | "skipped" | "fallback"
+    model: string
+    reason?: string
+    inputTokens?: number
+    outputTokens?: number
+    totalTokens?: number
+  }
   title: string
   subtitle: string
   seo: {
