@@ -255,6 +255,42 @@ function whatHappened(label: string, play: ArticlePlaybook): string {
   return `${label} fue uno de los focos de conversación digital del día en el Mundial 2026. El interés no se quedó en la cancha: se trasladó a las plataformas, donde miles de personas intentaban seguir el evento al mismo tiempo. Ahí apareció ${play.hook}, el verdadero protagonista desde la mirada de experiencia. ${play.humanBehavior} En cuestión de minutos, la conversación se llenó de preguntas, reportes y reacciones, y la audiencia saltaba entre pantallas buscando claridad. ${play.digitalPatterns} El patrón se repite en todos los eventos de alta demanda: el resultado deportivo importa, pero la experiencia digital se define en la espera, la claridad de la información y la capacidad de recuperarse de un fallo. Este artículo toma esa señal —lo que la gente buscó y sintió— y la convierte en un aprendizaje accionable para quienes diseñan productos digitales.`
 }
 
+/**
+ * Interpretación por fase y categoría emocional, consciente del FENÓMENO del partido
+ * (el `hook` de la categoría) y de las selecciones. Mejor que el texto genérico de
+ * respaldo de la UI; cuando se conecte el análisis con IA, este texto se reemplazará
+ * por uno con datos aún más específicos (resultado, jugadas, citas reales).
+ */
+function buildInterpretations(label: string, play: ArticlePlaybook): RadarArticle["matchInterpretations"] {
+  const hook = play.hook
+  return {
+    expectativa: {
+      euforia: `Antes del pitazo, la euforia en torno a ${label} se alimenta de la expectativa del evento, todavía sin la tensión de ${hook}.`,
+      confianza: `La afición llega confiada en su relato del partido; aún no aparece ${hook} como factor.`,
+      ansiedad: `La ansiedad previa es baja: la conversación se centra en cómo y dónde seguir ${label}.`,
+      frustracion: `Apenas hay molestia antes del partido; la atención está en la ilusión, no en ${hook}.`,
+      incertidumbre: `La incertidumbre previa es la propia del evento: qué pasará, no cómo se vivirá la experiencia.`,
+      optimismo: `El optimismo domina la previa: las hinchadas proyectan lo mejor para ${label}.`,
+    },
+    realidad: {
+      euforia: `Mientras se vive ${label}, la euforia compite con ${hook}: la emoción positiva y la tensión digital ocurren a la vez.`,
+      confianza: `La confianza se pone a prueba cuando aparece ${hook}. ${play.emotionalReaction}`,
+      ansiedad: `La ansiedad se dispara por ${hook}: ${play.humanBehavior}`,
+      frustracion: `La frustración del momento nace de ${hook}, más que del marcador. ${play.emotionalReaction}`,
+      incertidumbre: `La incertidumbre la marca ${hook}: la audiencia busca una explicación estable en tiempo real.`,
+      optimismo: `El optimismo se sostiene en lo deportivo, pero ${hook} condiciona cómo se vive el partido.`,
+    },
+    percepcion: {
+      euforia: `Con las horas, el recuerdo de ${label} retiene la emoción, aunque ${hook} deja huella en la conversación.`,
+      confianza: `La confianza posterior depende de si ${hook} se resolvió con claridad o quedó como reclamo.`,
+      ansiedad: `Baja la ansiedad: ya hay un relato aceptado de lo que pasó en ${label}.`,
+      frustracion: `La frustración por ${hook} persiste como nota de fondo, lista para reactivarse.`,
+      incertidumbre: `La lectura se estabiliza; queda la duda de si ${hook} se repetirá en el próximo partido.`,
+      optimismo: `El recuerdo proyecta optimismo hacia lo que viene, con ${hook} convertido en aprendizaje.`,
+    },
+  }
+}
+
 /** Construye el pulso de aficionados desde las señales del reporte. */
 function buildFanPulse(report: DailyRadarReport): RadarArticleInput["fanPulse"] {
   const all = report.signals
@@ -348,6 +384,7 @@ export function generateArticlesFromReport(report: DailyRadarReport): RadarArtic
       teams: Array.from(new Set(lead.teams.map(displayTeam))),
       event,
       hook: play.hook,
+      matchInterpretations: buildInterpretations(label, play),
       imageUrl: lead.imageUrl,
       imageAlt: lead.imageAlt,
       imageCredit: lead.imageCredit,

@@ -9,7 +9,7 @@
 
 import { generateRadarArticle, type RadarArticle, type RadarArticleInput } from "./articles"
 import { getStoredRadarArticles } from "./articleStore"
-import { getArticleAvailability } from "./articleAvailability"
+import { getArticleAvailability, compareForFeed } from "./articleAvailability"
 
 function upcomingMatch(input: {
   date: string
@@ -638,7 +638,9 @@ export async function getAllRadarArticles(): Promise<RadarArticle[]> {
   // El agente actualiza partidos concretos; nunca debe borrar del portal los
   // demas encuentros que ya forman parte del calendario editorial.
   const list = stored && stored.length ? [...RADAR_ARTICLE_SEED, ...stored] : RADAR_ARTICLE_SEED
-  return dedupeByMatch(list).sort((a, b) => b.date.localeCompare(a.date))
+  // Orden del feed: EN VIVO primero, luego lo PRÓXIMO (más cercano), y al final los
+  // FINALIZADOS (más reciente primero). Así la destacada es la que se juega ahora.
+  return dedupeByMatch(list).sort((a, b) => compareForFeed(a, b))
 }
 
 /** Notas publicas: solo partidos dentro de las 24 h previas o ya iniciados. */

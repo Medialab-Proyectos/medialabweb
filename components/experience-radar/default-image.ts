@@ -7,7 +7,6 @@
 export const DEFAULT_MATCH_IMAGES = [
   "/images/experience-radar-vs.png",
   "/images/experience-radar-vs2.png",
-  "/images/experience-radar-vs-var2.png",
   "/images/experience-radar-vs2-var1.png",
   "/images/experience-radar-vs2-var2.png",
 ] as const

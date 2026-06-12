@@ -18,6 +18,7 @@ import { StatusPill } from "@/components/experience-radar/status-pill"
 import { categoryLabel } from "@/components/experience-radar/category-labels"
 import { pickDefaultImage } from "@/components/experience-radar/default-image"
 import { getRadarArticleBySlug, getAllRadarArticles } from "@/src/lib/experience-radar/articleData"
+import { resolveMatchStatus } from "@/src/lib/experience-radar/articleAvailability"
 import type { EmotionalRadarValues, RadarArticle } from "@/src/lib/experience-radar/articles"
 
 const SITE = "https://medialab.design"
@@ -120,22 +121,19 @@ export default async function RadarArticlePage({
 
       <article className="mx-auto max-w-3xl px-6 pt-24 pb-16 md:pt-28">
         <div className="flex flex-wrap items-center gap-2 text-xs">
-          <span className="rounded-full border border-border bg-card px-3 py-1 text-card-foreground">
-            {article.event}
-          </span>
+          <span className="rounded-full border border-border bg-card px-3 py-1 text-card-foreground">{article.event}</span>
           <span className="rounded-full bg-[var(--cyan)]/10 px-3 py-1 font-semibold text-[var(--cyan)]">
             {categoryLabel(article.category, "es")}
           </span>
         </div>
 
-        <h1 className="mt-4 text-3xl font-bold leading-tight text-foreground md:text-4xl">
-          {article.seoTitle}
-        </h1>
+        <h1 className="mt-4 text-3xl font-bold leading-tight text-foreground md:text-4xl">{article.seoTitle}</h1>
         <p className="mt-3 text-sm text-muted-foreground">
           {article.teams.join(" vs ")} · {formatDate(article.date)}
           {article.kickoffAt ? ` · ${formatKickoff(article.kickoffAt)}` : ""}
         </p>
 
+        {/* Foto del encuentro (imagen visible, antes del marcador) */}
         <figure className="mt-5 overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
           <div className="relative h-56 md:h-80">
             <NoteImage
@@ -311,18 +309,9 @@ function resolveLessons(article: RadarArticle): Array<{ term: string; explanatio
   })
 }
 
+/** Estado en tiempo real, delegado en la función compartida (misma lógica que el listado). */
 function resolveRuntimeStatus(article: RadarArticle): MatchRuntimeStatus {
-  if (article.matchState === "finalizado") return "finalizado"
-  if (!article.kickoffAt) return article.matchState === "en_vivo" ? "en_vivo" : "previa"
-
-  const kickoff = new Date(article.kickoffAt).getTime()
-  const now = Date.now()
-  const liveWindowMs = 2 * 60 * 60 * 1000
-
-  if (now < kickoff) return "previa"
-  if (now < kickoff + liveWindowMs) return "en_vivo"
-  // Pasada la ventana en vivo el partido ya terminó: nunca quedarse en "en_vivo".
-  return "finalizado"
+  return resolveMatchStatus(article)
 }
 
 function resolveSourceLabels(article: RadarArticle): string[] {

@@ -27,77 +27,98 @@ export function RadarHome() {
 
   return (
     <>
-      {/* ───────────────── HERO ───────────────── */}
-      <section className="relative overflow-hidden bg-[var(--surface-dark)] pt-28 pb-16 md:pt-36 md:pb-24">
+      {/* ───────────────── HERO (estructura tipo home) ───────────────── */}
+      <section className="relative flex min-h-[90vh] flex-col items-center justify-center overflow-hidden bg-[var(--surface-dark)] text-foreground">
+        {/* Rejilla de puntos */}
         <div
-          className="pointer-events-none absolute inset-0 opacity-[0.5]"
-          style={{ backgroundImage: "radial-gradient(var(--dot-color) 1px, transparent 1px)", backgroundSize: "22px 22px" }}
+          className="pointer-events-none absolute inset-0"
+          style={{ backgroundImage: "radial-gradient(circle, var(--dot-color) 1px, transparent 1px)", backgroundSize: "40px 40px" }}
+          aria-hidden
         />
-        {/* Animación de fondo SOLO en desktop (en móvil genera ruido). */}
+        {/* Viñeta */}
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{ background: "radial-gradient(ellipse at center, transparent 40%, var(--vignette-color) 100%)" }}
+          aria-hidden
+        />
+        {/* Halos animados SOLO en desktop */}
         <motion.div
           aria-hidden
-          className="pointer-events-none absolute -left-24 top-16 hidden h-72 w-72 rounded-full border border-[var(--cyan)]/15 md:block"
+          className="pointer-events-none absolute -left-24 top-24 hidden h-72 w-72 rounded-full border border-[var(--cyan)]/15 md:block"
           animate={{ scale: [1, 1.12, 1], opacity: [0.18, 0.38, 0.18] }}
           transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div
           aria-hidden
-          className="pointer-events-none absolute -right-20 bottom-[-9rem] hidden h-96 w-96 rounded-full bg-[var(--magenta)]/[0.06] blur-3xl md:block"
+          className="pointer-events-none absolute -right-20 bottom-[-6rem] hidden h-96 w-96 rounded-full bg-[var(--magenta)]/[0.07] blur-3xl md:block"
           animate={{ x: [0, -28, 0], y: [0, -18, 0], opacity: [0.3, 0.55, 0.3] }}
           transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div
           aria-hidden
-          className="pointer-events-none absolute left-[46%] top-12 hidden h-32 w-32 rounded-full bg-[var(--cyan)]/[0.08] blur-2xl md:block"
+          className="pointer-events-none absolute left-1/3 top-16 hidden h-40 w-40 rounded-full bg-[#E8751A]/[0.08] blur-2xl md:block"
           animate={{ y: [0, 24, 0], scale: [1, 1.18, 1] }}
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
         />
-        <div className="mx-auto grid max-w-7xl items-center gap-10 px-6 md:grid-cols-2">
-          <div className="relative z-10">
-            <span className="inline-flex items-center gap-2 rounded-full border border-[var(--cyan)]/30 bg-[var(--cyan)]/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-[var(--cyan)]">
-              <ScanLine size={13} /> {t("Señales · Emoción · Comportamiento", "Signals · Emotion · Behavior")}
+        {/* Barrido de radar animado, sutil, centrado detrás del titular */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute left-1/2 top-1/2 w-[min(120vw,820px)] max-w-none -translate-x-1/2 -translate-y-1/2 opacity-[0.14] md:opacity-[0.22]"
+        >
+          <RadarSweep className="h-auto w-full" />
+        </div>
+
+        <div className="relative z-10 mx-auto flex max-w-5xl flex-col items-center gap-8 px-6 pt-28 pb-20 text-center">
+          {/* Chip */}
+          <div className="inline-flex items-center gap-1.5 rounded-full border border-foreground/10 bg-foreground/5 px-3.5 py-1.5 text-xs font-medium text-foreground/75 backdrop-blur-sm dark:border-white/10 dark:bg-white/5 dark:text-white/75">
+            <ScanLine size={13} style={{ color: "var(--cyan)" }} />
+            {t("Señales · Emoción · Comportamiento humano", "Signals · Emotion · Human behavior")}
+          </div>
+
+          {/* Titular */}
+          <h1 className="font-display text-5xl font-bold leading-[1.04] text-balance text-foreground sm:text-6xl md:text-7xl lg:text-[5.5rem] dark:text-white">
+            Experience{" "}
+            <span
+              className="bg-clip-text text-transparent"
+              style={{ backgroundImage: "linear-gradient(90deg, #E8772E 0%, #1A8A9E 100%)" }}
+            >
+              Radar
             </span>
-            <h1 className="mt-4 text-5xl font-extrabold leading-[1.03] tracking-tight md:text-6xl">Experience Radar</h1>
-            <p className="mt-5 max-w-xl text-lg font-medium leading-relaxed text-foreground/90 md:text-xl">
-              {t(
-                "Un radar de señales, emociones y comportamiento humano para entender cómo reaccionan las personas ante grandes eventos.",
-                "A radar of signals, emotions, and human behavior to understand how people react to major events.",
-              )}
-            </p>
-            <p className="mt-3 max-w-xl text-sm font-medium text-foreground/80">
-              {t("No seguimos el marcador. Analizamos la experiencia.", "We don't follow the score. We analyze the experience.")}
-            </p>
+          </h1>
 
-            <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-              <Link
-                href={localized("/experience-radar/mundial-2026")}
-                className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 py-3 text-sm font-semibold text-background transition-colors hover:bg-[var(--magenta)] hover:text-white sm:w-auto"
-              >
-                {t("Ver análisis del Mundial 2026", "View World Cup 2026 analysis")} <ArrowRight size={16} />
-              </Link>
-              <Link
-                href="#especiales"
-                className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-border px-5 py-3 text-sm font-semibold text-foreground transition-colors hover:border-[var(--cyan)]/50 sm:w-auto"
-              >
-                {t("Ver especiales", "See specials")}
-              </Link>
-            </div>
+          {/* Subtítulo */}
+          <p className="max-w-2xl text-lg leading-relaxed text-pretty text-muted-foreground md:text-xl dark:text-white/65">
+            {t(
+              "Un radar de señales, emociones y comportamiento humano para entender cómo reaccionan las personas ante grandes eventos. No seguimos el marcador: analizamos la experiencia.",
+              "A radar of signals, emotions and human behavior to understand how people react to major events. We don't follow the score: we analyze the experience.",
+            )}
+          </p>
 
-            <p className="mt-6 max-w-md text-xs leading-relaxed text-muted-foreground">
-              {t(
-                "Contenido editorial e investigativo independiente. No somos patrocinadores oficiales del torneo.",
-                "Independent editorial and research content. We are not official sponsors of the tournament.",
-              )}
-            </p>
+          {/* CTAs (mismo estilo que la home) */}
+          <div className="flex w-full flex-col items-stretch gap-4 sm:w-auto sm:flex-row sm:items-center">
+            <Link
+              href={localized("/experience-radar/mundial-2026")}
+              className="inline-flex w-full items-center justify-center gap-2.5 rounded-full px-8 py-4 text-[15px] font-semibold text-[#fff] shadow-lg transition-all duration-200 hover:brightness-110 active:scale-95 sm:w-auto"
+              style={{ background: "#E8751A", boxShadow: "0 8px 30px rgba(232,117,26,0.35)" }}
+            >
+              {t("Ver análisis del Mundial 2026", "View World Cup 2026 analysis")} <ArrowRight size={16} />
+            </Link>
+            <a
+              href="#especiales"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-foreground/15 px-8 py-4 text-[15px] font-semibold text-foreground/75 transition-all duration-200 hover:border-foreground/30 hover:bg-foreground/5 hover:text-foreground active:scale-95 sm:w-auto dark:border-white/15 dark:text-white/75 dark:hover:border-white/30 dark:hover:bg-white/5 dark:hover:text-white"
+            >
+              {t("Ver especiales", "See specials")}
+            </a>
           </div>
 
-          {/* Radar SOLO en desktop: en móvil se oculta por completo (no aporta y hace ruido). */}
-          <div className="relative z-10 mx-auto hidden w-full max-w-sm md:block">
-            <RadarSweep className="h-auto w-full" />
-            <p className="mt-4 text-center text-sm font-medium text-muted-foreground">
-              {t("El Mundial como laboratorio de comportamiento digital.", "The World Cup as a digital behavior lab.")}
-            </p>
-          </div>
+          {/* Línea editorial */}
+          <p className="flex items-center gap-2 text-xs text-muted-foreground dark:text-white/60">
+            <span className="h-1.5 w-1.5 rounded-full bg-[var(--magenta)] motion-safe:animate-pulse" />
+            {t(
+              "Contenido editorial independiente · No somos patrocinadores oficiales del torneo.",
+              "Independent editorial content · We are not official sponsors of the tournament.",
+            )}
+          </p>
         </div>
       </section>
 

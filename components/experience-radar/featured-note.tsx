@@ -7,7 +7,7 @@ import type { RadarArticle } from "@/src/lib/experience-radar/articles"
 import { NoteImage } from "./note-image"
 import { StatusPill } from "./status-pill"
 import { categoryLabel } from "./category-labels"
-import { getArticleAvailability } from "@/src/lib/experience-radar/articleAvailability"
+import { getArticleAvailability, resolveMatchStatus } from "@/src/lib/experience-radar/articleAvailability"
 
 /**
  * "Nota principal" del portal: la nota más reciente, destacada como bloque grande.
@@ -48,7 +48,7 @@ export function FeaturedNote({ article }: { article: RadarArticle }) {
             className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
             loading="eager"
           />
-          <StatusPill status={article.matchState} className="absolute right-3 top-3" />
+          <StatusPill status={resolveMatchStatus(article)} className="absolute right-3 top-3" />
           <span className="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-black/60 px-3 py-1 text-xs font-semibold text-[#fff] backdrop-blur-sm">
             <Star size={12} className="text-[var(--cyan)]" /> {t("Nota principal", "Main note")}
           </span>

@@ -2,8 +2,8 @@
   "id": "experience-radar-2026-06-12",
   "agentName": "ExperienceRadarDailyAgent",
   "date": "2026-06-12",
-  "generatedAt": "2026-06-12T02:22:09.181Z",
-  "updatedAt": "2026-06-12T02:22:09.186Z",
+  "generatedAt": "2026-06-12T17:26:31.839Z",
+  "updatedAt": "2026-06-12T17:26:31.841Z",
   "status": "draft",
   "reviewed": false,
   "autoPublished": false,
@@ -11,10 +11,10 @@
   "subtitle": "Lo que el dia inaugural del Mundial revela sobre comportamiento digital, ansiedad de usuarios y experiencias de alto trafico.",
   "seo": {
     "title": "México y Sudáfrica se vuelve a encontrar en un partido inaugural: resultado, resumen y polemica desde Experience Radar",
-    "description": "Resultado o hecho principal, resumen, conversacion de aficionados e insight UX de MediaLab. 58/100. El score resume la salud de la experiencia digital observada: claridad, confianza, continuidad, carga cognitiva y recuperacion.",
+    "description": "Resultado o hecho principal, resumen, conversacion de aficionados e insight UX de MediaLab. 56/100. El score resume la salud de la experiencia digital observada: claridad, confianza, continuidad, carga cognitiva y recuperacion.",
     "openGraph": {
       "title": "México y Sudáfrica se vuelve a encontrar en un partido inaugural: resultado, resumen y polemica desde Experience Radar",
-      "description": "Resultado o hecho principal, resumen, conversacion de aficionados e insight UX de MediaLab. 58/100. El score resume la salud de la experiencia digital observada: claridad, confianza, continuidad, carga cognitiva y recuperacion.",
+      "description": "Resultado o hecho principal, resumen, conversacion de aficionados e insight UX de MediaLab. 56/100. El score resume la salud de la experiencia digital observada: claridad, confianza, continuidad, carga cognitiva y recuperacion.",
       "type": "article",
       "url": "https://medialab.design/experience-radar"
     },
@@ -36,7 +36,7 @@
       "@context": "https://schema.org",
       "@type": "Article",
       "headline": "México y Sudáfrica se vuelve a encontrar en un partido inaugural: resultado, resumen y polemica desde Experience Radar",
-      "description": "Resultado o hecho principal, resumen, conversacion de aficionados e insight UX de MediaLab. 58/100. El score resume la salud de la experiencia digital observada: claridad, confianza, continuidad, carga cognitiva y recuperacion.",
+      "description": "Resultado o hecho principal, resumen, conversacion de aficionados e insight UX de MediaLab. 56/100. El score resume la salud de la experiencia digital observada: claridad, confianza, continuidad, carga cognitiva y recuperacion.",
       "datePublished": "2026-06-12",
       "dateModified": "2026-06-12",
       "author": {
@@ -69,10 +69,8 @@
     "resultOrMainFact": "México y Sudáfrica se vuelve a encontrar en un partido inaugural",
     "matchSummary": "A un día de que México vuelva a verse las caras con una selección africana en una Copa del Mundo, el historial mundialista frente a representantes de la Confederación africana de futbol muestra una rivalidad corta, pero llena de partidos complejos para el Tri. A lo largo de su historia, México ha enfrentado en cuatro...",
     "controversyOrHighlight": "Con música de cumbia y el apoyo de su afición, la selección de Colombia llegó este miércoles a Guadalajara donde tendrá su campamento base de cara a los partidos de la fase de grupos del Mundial 2026. Decenas de personas con banderas, camisetas del equipo, trompetas y los típicos sombreros ‘vueltiao’ esperaron por var...",
-    "statements": [
-      "I tried to update it"
-    ],
-    "mainTrend": "north korea world cup",
+    "statements": [],
+    "mainTrend": "selección de fútbol de brasil",
     "dominantConversation": "La conversacion dominante se lee desde High Traffic: Caidas percibidas, frustracion masiva y abandono.",
     "fanConversation": "La conversacion dominante se lee desde High Traffic: Caidas percibidas, frustracion masiva y abandono."
   },
@@ -83,7 +81,7 @@
     "whatFansSay": "La conversacion dominante se lee desde High Traffic: Caidas percibidas, frustracion masiva y abandono.",
     "medialabInsight": "El alto trafico convierte el UX en arquitectura visible: latencia, espera y degradacion definen la marca.",
     "productDesignApplication": "Combinar pruebas de carga con pruebas de comprension de mensajes bajo espera.",
-    "experienceRadarScore": "58/100. El score resume la salud de la experiencia digital observada: claridad, confianza, continuidad, carga cognitiva y recuperacion.",
+    "experienceRadarScore": "56/100. El score resume la salud de la experiencia digital observada: claridad, confianza, continuidad, carga cognitiva y recuperacion.",
     "ctaCourseUx": {
       "title": "⚽ Aprende UX observando el Mundial",
       "body": "Los eventos deportivos mas grandes del mundo son laboratorios de comportamiento humano.",
@@ -111,17 +109,17 @@
           "sourceName": "Latingoles"
         },
         {
+          "title": "We can all agree its bad💀",
+          "url": "https://itunes.apple.com/us/rss/customerreviews/id=756904853/sortBy=mostRecent/json",
+          "sourceName": "Apple App Store reviews"
+        },
+        {
           "title": "Not good",
           "url": "https://itunes.apple.com/us/rss/customerreviews/id=756904853/sortBy=mostRecent/json",
           "sourceName": "Apple App Store reviews"
         },
         {
-          "title": "Worst app I have",
-          "url": "https://itunes.apple.com/us/rss/customerreviews/id=317469184/sortBy=mostRecent/json",
-          "sourceName": "Apple App Store reviews"
-        },
-        {
-          "title": "Super SLOW",
+          "title": "Other apps do it better",
           "url": "https://itunes.apple.com/us/rss/customerreviews/id=317469184/sortBy=mostRecent/json",
           "sourceName": "Apple App Store reviews"
         }
@@ -180,8 +178,13 @@
           "sourceName": "Apple App Store reviews"
         },
         {
-          "title": "Worst app I have",
+          "title": "Skipping Forward",
           "url": "https://itunes.apple.com/us/rss/customerreviews/id=317469184/sortBy=mostRecent/json",
+          "sourceName": "Apple App Store reviews"
+        },
+        {
+          "title": "Be ready to deal with problem after problem",
+          "url": "https://itunes.apple.com/us/rss/customerreviews/id=1446075923/sortBy=mostRecent/json",
           "sourceName": "Apple App Store reviews"
         },
         {
@@ -207,6 +210,11 @@
       "recommendation": "Crear una matriz de mensajes confiables para estados normales, pico y fallo.",
       "evidence": [
         {
+          "title": "Yoel Bárcenas, figura en Mazatlán se pone a punto para su debut con Panamá",
+          "url": "https://latingoles.com/yoel-barcenas-figura-en-mazatlan-se-pone-a-punto-para-su-debut-con-panama/",
+          "sourceName": "Latingoles"
+        },
+        {
           "title": "Contexto oficial del Mundial 2026 validado",
           "url": "https://www.fifa.com/es/tournaments/mens/worldcup/canadamexicousa2026",
           "sourceName": "FIFA oficial"
@@ -225,11 +233,6 @@
           "title": "scammers",
           "url": "https://itunes.apple.com/us/rss/customerreviews/id=1129523589/sortBy=mostRecent/json",
           "sourceName": "Apple App Store reviews"
-        },
-        {
-          "title": "Another Sports Scam - Avoid",
-          "url": "https://itunes.apple.com/us/rss/customerreviews/id=317469184/sortBy=mostRecent/json",
-          "sourceName": "Apple App Store reviews"
         }
       ],
       "impactScore": 88
@@ -244,6 +247,21 @@
       "recommendation": "Validar los flujos criticos en dispositivos de gama media y redes inestables.",
       "evidence": [
         {
+          "title": "The world cup website is absolute trash on mobile. What is your preferred site for game stats, updates, videos?",
+          "url": "https://www.reddit.com/r/worldcup/comments/1u41gly/the_world_cup_website_is_absolute_trash_on_mobile/",
+          "sourceName": "Reddit RSS público"
+        },
+        {
+          "title": "We can all agree its bad💀",
+          "url": "https://itunes.apple.com/us/rss/customerreviews/id=756904853/sortBy=mostRecent/json",
+          "sourceName": "Apple App Store reviews"
+        },
+        {
+          "title": "Regularly lost bracket progress",
+          "url": "https://itunes.apple.com/us/rss/customerreviews/id=756904853/sortBy=mostRecent/json",
+          "sourceName": "Apple App Store reviews"
+        },
+        {
           "title": "Name on Playzone",
           "url": "https://itunes.apple.com/us/rss/customerreviews/id=756904853/sortBy=mostRecent/json",
           "sourceName": "Apple App Store reviews"
@@ -252,24 +270,31 @@
           "title": "Fantasy",
           "url": "https://itunes.apple.com/us/rss/customerreviews/id=756904853/sortBy=mostRecent/json",
           "sourceName": "Apple App Store reviews"
+        }
+      ],
+      "impactScore": 84
+    },
+    {
+      "id": "insight-ticketing",
+      "title": "Ticketing y percepcion de justicia",
+      "category": "Ticketing",
+      "insight": "La fila virtual define la percepcion de justicia; el usuario tolera esperar si entiende que conserva su lugar.",
+      "risk": "Ansiedad, abandono de compra y percepcion de arbitrariedad.",
+      "opportunity": "Mostrar posicion, tiempo estimado, reglas y continuidad de sesion.",
+      "recommendation": "Probar ticketing con picos simulados y mensajes de error accionables.",
+      "evidence": [
+        {
+          "title": "Yoel Bárcenas, figura en Mazatlán se pone a punto para su debut con Panamá",
+          "url": "https://latingoles.com/yoel-barcenas-figura-en-mazatlan-se-pone-a-punto-para-su-debut-con-panama/",
+          "sourceName": "Latingoles"
         },
         {
-          "title": "Not good",
-          "url": "https://itunes.apple.com/us/rss/customerreviews/id=756904853/sortBy=mostRecent/json",
-          "sourceName": "Apple App Store reviews"
-        },
-        {
-          "title": "Not responsive",
-          "url": "https://itunes.apple.com/us/rss/customerreviews/id=756904853/sortBy=mostRecent/json",
-          "sourceName": "Apple App Store reviews"
-        },
-        {
-          "title": "Fantastic",
+          "title": "Disappointing",
           "url": "https://itunes.apple.com/us/rss/customerreviews/id=756904853/sortBy=mostRecent/json",
           "sourceName": "Apple App Store reviews"
         }
       ],
-      "impactScore": 84
+      "impactScore": 82
     },
     {
       "id": "insight-ux",
@@ -296,11 +321,6 @@
           "sourceName": "Apple App Store reviews"
         },
         {
-          "title": "Scrolling doesn’t work",
-          "url": "https://itunes.apple.com/us/rss/customerreviews/id=756904853/sortBy=mostRecent/json",
-          "sourceName": "Apple App Store reviews"
-        },
-        {
           "title": "Payment options",
           "url": "https://itunes.apple.com/us/rss/customerreviews/id=1129523589/sortBy=mostRecent/json",
           "sourceName": "Apple App Store reviews"
@@ -309,21 +329,41 @@
       "impactScore": 80
     },
     {
-      "id": "insight-ticketing",
-      "title": "Ticketing y percepcion de justicia",
-      "category": "Ticketing",
-      "insight": "La fila virtual define la percepcion de justicia; el usuario tolera esperar si entiende que conserva su lugar.",
-      "risk": "Ansiedad, abandono de compra y percepcion de arbitrariedad.",
-      "opportunity": "Mostrar posicion, tiempo estimado, reglas y continuidad de sesion.",
-      "recommendation": "Probar ticketing con picos simulados y mensajes de error accionables.",
+      "id": "insight-ia",
+      "title": "IA con trazabilidad, no con exceso de confianza",
+      "category": "IA",
+      "insight": "La IA solo suma valor cuando comunica fuentes, limites y nivel de certeza.",
+      "risk": "Respuestas confiadas pero imprecisas pueden erosionar confianza.",
+      "opportunity": "Disenar asistentes con citas visibles, fallback humano y estados de incertidumbre.",
+      "recommendation": "Anclar respuestas a fuentes verificadas y separar datos oficiales de interpretaciones.",
       "evidence": [
         {
-          "title": "Disappointing",
-          "url": "https://itunes.apple.com/us/rss/customerreviews/id=756904853/sortBy=mostRecent/json",
-          "sourceName": "Apple App Store reviews"
+          "title": "Yoel Bárcenas, figura en Mazatlán se pone a punto para su debut con Panamá",
+          "url": "https://latingoles.com/yoel-barcenas-figura-en-mazatlan-se-pone-a-punto-para-su-debut-con-panama/",
+          "sourceName": "Latingoles"
+        },
+        {
+          "title": "BRASIL Y UNA GRAN PRUEBA El debut ante Marruecos exigirá fuerte el pentacampeón",
+          "url": "https://latingoles.com/brasil-y-una-gran-prueba-el-debut-ante-marruecos-exigira-fuerte-el-pentacampeon/",
+          "sourceName": "Latingoles"
+        },
+        {
+          "title": "HISTÓRICO EN EL AZTECA: colombiano Quiñones y mexicano Jiménez rompen la maldición de México",
+          "url": "https://latingoles.com/historico-en-el-azteca-colombiano-quinones-y-mexicano-jimenez-rompen-la-maldicion-de-mexico/",
+          "sourceName": "Latingoles"
+        },
+        {
+          "title": "¡DE MEXICÓ AL MUNDO! Pedro Vite, juega su primer mundial con Ecuador",
+          "url": "https://latingoles.com/de-mexico-al-mundo-pedro-vite-juega-su-primer-mundial-con-ecuador/",
+          "sourceName": "Latingoles"
+        },
+        {
+          "title": "NUEVO EN TUZOS Pachuca anuncia a Benjamín Mora como su nuevo entrenador",
+          "url": "https://latingoles.com/el-pachuca-anuncia-a-benjamin-mora-como-su-nuevo-entrenador/",
+          "sourceName": "Latingoles"
         }
       ],
-      "impactScore": 79
+      "impactScore": 78
     },
     {
       "id": "insight-fan-experience",
@@ -345,56 +385,19 @@
           "sourceName": "Latingoles"
         },
         {
-          "title": "Fantasy",
-          "url": "https://itunes.apple.com/us/rss/customerreviews/id=756904853/sortBy=mostRecent/json",
-          "sourceName": "Apple App Store reviews"
+          "title": "Tartan Army visits Kearny, NJ - Series about fans representing their home nations here for the World Cup",
+          "url": "https://www.reddit.com/r/worldcup/comments/1u3w0eh/tartan_army_visits_kearny_nj_series_about_fans/",
+          "sourceName": "Reddit RSS público"
         },
         {
-          "title": "Fantastic",
-          "url": "https://itunes.apple.com/us/rss/customerreviews/id=756904853/sortBy=mostRecent/json",
-          "sourceName": "Apple App Store reviews"
+          "title": "Canadian fans before the match against Bosnia today",
+          "url": "https://www.reddit.com/r/soccer/comments/1u40a7d/canadian_fans_before_the_match_against_bosnia/",
+          "sourceName": "Reddit RSS público"
         },
         {
-          "title": "Annoying",
-          "url": "https://itunes.apple.com/us/rss/customerreviews/id=317469184/sortBy=mostRecent/json",
-          "sourceName": "Apple App Store reviews"
-        }
-      ],
-      "impactScore": 78
-    },
-    {
-      "id": "insight-ia",
-      "title": "IA con trazabilidad, no con exceso de confianza",
-      "category": "IA",
-      "insight": "La IA solo suma valor cuando comunica fuentes, limites y nivel de certeza.",
-      "risk": "Respuestas confiadas pero imprecisas pueden erosionar confianza.",
-      "opportunity": "Disenar asistentes con citas visibles, fallback humano y estados de incertidumbre.",
-      "recommendation": "Anclar respuestas a fuentes verificadas y separar datos oficiales de interpretaciones.",
-      "evidence": [
-        {
-          "title": "HISTÓRICO EN EL AZTECA: colombiano Quiñones y mexicano Jiménez rompen la maldición de México",
-          "url": "https://latingoles.com/historico-en-el-azteca-colombiano-quinones-y-mexicano-jimenez-rompen-la-maldicion-de-mexico/",
-          "sourceName": "Latingoles"
-        },
-        {
-          "title": "¡DE MEXICÓ AL MUNDO! Pedro Vite, juega su primer mundial con Ecuador",
-          "url": "https://latingoles.com/de-mexico-al-mundo-pedro-vite-juega-su-primer-mundial-con-ecuador/",
-          "sourceName": "Latingoles"
-        },
-        {
-          "title": "NUEVO EN TUZOS Pachuca anuncia a Benjamín Mora como su nuevo entrenador",
-          "url": "https://latingoles.com/el-pachuca-anuncia-a-benjamin-mora-como-su-nuevo-entrenador/",
-          "sourceName": "Latingoles"
-        },
-        {
-          "title": "DESAPARECIDOS Familias en México desafían cerco del Mundial a horas de la inauguración",
-          "url": "https://latingoles.com/familias-de-desaparecidos-en-mexico-desafian-cerco-del-mundial-a-horas-de-la-inauguracion/",
-          "sourceName": "Latingoles"
-        },
-        {
-          "title": "¡CINCO CLAVES! Mundial 2026 de arranque",
-          "url": "https://latingoles.com/el-dia-1-del-mundial-en-5-claves/",
-          "sourceName": "Latingoles"
+          "title": "[Eurosport] Gianni Infantino, His Mysterious Ties to the United States, and the \"Fifagate\" Scandal",
+          "url": "https://www.reddit.com/r/soccer/comments/1u3yjcs/eurosport_gianni_infantino_his_mysterious_ties_to/",
+          "sourceName": "Reddit RSS público"
         }
       ],
       "impactScore": 78
@@ -421,12 +424,13 @@
     "Crear una matriz de mensajes confiables para estados normales, pico y fallo.",
     "Validar los flujos criticos en dispositivos de gama media y redes inestables."
   ],
-  "worldExperienceIndex": 58,
+  "worldExperienceIndex": 56,
   "note": {
     "executiveSummary": "MediaLab convierte senales verificables del ecosistema Mundial en aprendizajes de UX, producto e IA. Esta nota no narra partidos: observa friccion, ansiedad, confianza y recuperacion en experiencias digitales de alta demanda.",
     "analyzedSignals": [
       "Latingoles: 20 senales",
       "FIFA oficial: 3 senales",
+      "Reddit RSS público: 30 senales",
       "Google Trends vía Trendgetter: 2 senales",
       "Apple App Store reviews: 50 senales"
     ],
@@ -437,10 +441,10 @@
       "Los errores no destruyen la experiencia por existir; la destruyen cuando no explican como recuperarse.",
       "La confianza se construye con consistencia: fuente, estado, confirmacion y recuperacion deben decir lo mismo.",
       "El movil concentra sesiones cortas, redes variables y multitarea; la continuidad pesa mas que la completitud.",
-      "La demanda de informacion en tiempo real revela que la claridad supera a cualquier capa visual cuando el usuario esta ansioso.",
       "La fila virtual define la percepcion de justicia; el usuario tolera esperar si entiende que conserva su lugar.",
-      "La conversacion social muestra necesidades emocionales: pertenencia, certeza y control de la atencion.",
-      "La IA solo suma valor cuando comunica fuentes, limites y nivel de certeza."
+      "La demanda de informacion en tiempo real revela que la claridad supera a cualquier capa visual cuando el usuario esta ansioso.",
+      "La IA solo suma valor cuando comunica fuentes, limites y nivel de certeza.",
+      "La conversacion social muestra necesidades emocionales: pertenencia, certeza y control de la atencion."
     ],
     "detectedRisks": [
       "Caidas percibidas, frustracion masiva y abandono.",
@@ -471,7 +475,7 @@
         "url": "https://latingoles.com/wp-json/wp/v2/posts?per_page=20&_embed=1",
         "ok": true,
         "itemCount": 20,
-        "checkedAt": "2026-06-12T02:22:08.860Z"
+        "checkedAt": "2026-06-12T17:26:31.836Z"
       },
       {
         "id": "fifa-https-www-fifa-com-es-tournaments-mens-worldcup-canadamexicousa2026",
@@ -481,7 +485,7 @@
         "ok": true,
         "itemCount": 1,
         "note": "Usado solo para validar calendario, partidos y contexto oficial. No se usan logos ni patrocinio.",
-        "checkedAt": "2026-06-12T02:22:08.364Z"
+        "checkedAt": "2026-06-12T17:26:31.620Z"
       },
       {
         "id": "fifa-https-www-fifa-com-es-tournaments-mens-worldcup-canadamexicousa2026-scores-fixtures",
@@ -491,7 +495,7 @@
         "ok": true,
         "itemCount": 1,
         "note": "Usado solo para validar calendario, partidos y contexto oficial. No se usan logos ni patrocinio.",
-        "checkedAt": "2026-06-12T02:22:08.521Z"
+        "checkedAt": "2026-06-12T17:26:31.637Z"
       },
       {
         "id": "fifa-https-www-fifa-com-es-tournaments-mens-worldcup-canadamexicousa2026-standings",
@@ -501,17 +505,17 @@
         "ok": true,
         "itemCount": 1,
         "note": "Usado solo para validar calendario, partidos y contexto oficial. No se usan logos ni patrocinio.",
-        "checkedAt": "2026-06-12T02:22:08.560Z"
+        "checkedAt": "2026-06-12T17:26:31.639Z"
       },
       {
         "id": "reddit-rss",
         "name": "Reddit RSS público",
         "type": "reddit",
         "url": "https://www.reddit.com/r/soccer/new.rss",
-        "ok": false,
-        "itemCount": 0,
-        "note": "Reddit limitó temporalmente el RSS. Configura OAuth para mayor estabilidad.",
-        "checkedAt": "2026-06-12T02:22:08.972Z"
+        "ok": true,
+        "itemCount": 30,
+        "note": "Respaldo RSS sin credenciales; la API OAuth oficial sigue siendo la fuente preferida.",
+        "checkedAt": "2026-06-12T17:26:31.665Z"
       },
       {
         "id": "google-trends-trendgetter",
@@ -521,7 +525,7 @@
         "ok": true,
         "itemCount": 2,
         "note": "Integración basada en Zivsteve/trendgetter (MIT) y el RSS público de Google Trends.",
-        "checkedAt": "2026-06-12T02:22:09.178Z"
+        "checkedAt": "2026-06-12T17:26:31.637Z"
       },
       {
         "id": "apple-reviews-fifa-app",
@@ -530,7 +534,7 @@
         "url": "https://itunes.apple.com/us/rss/customerreviews/id=756904853/sortBy=mostRecent/json",
         "ok": true,
         "itemCount": 10,
-        "checkedAt": "2026-06-12T02:22:08.513Z"
+        "checkedAt": "2026-06-12T17:26:31.623Z"
       },
       {
         "id": "apple-reviews-dazn",
@@ -539,7 +543,7 @@
         "url": "https://itunes.apple.com/us/rss/customerreviews/id=1129523589/sortBy=mostRecent/json",
         "ok": true,
         "itemCount": 10,
-        "checkedAt": "2026-06-12T02:22:08.537Z"
+        "checkedAt": "2026-06-12T17:26:31.639Z"
       },
       {
         "id": "apple-reviews-espn",
@@ -548,7 +552,7 @@
         "url": "https://itunes.apple.com/us/rss/customerreviews/id=317469184/sortBy=mostRecent/json",
         "ok": true,
         "itemCount": 10,
-        "checkedAt": "2026-06-12T02:22:08.558Z"
+        "checkedAt": "2026-06-12T17:26:31.653Z"
       },
       {
         "id": "apple-reviews-disney",
@@ -557,7 +561,7 @@
         "url": "https://itunes.apple.com/us/rss/customerreviews/id=1446075923/sortBy=mostRecent/json",
         "ok": true,
         "itemCount": 10,
-        "checkedAt": "2026-06-12T02:22:08.580Z"
+        "checkedAt": "2026-06-12T17:26:31.666Z"
       },
       {
         "id": "apple-reviews-directv",
@@ -566,7 +570,7 @@
         "url": "https://itunes.apple.com/us/rss/customerreviews/id=1136238277/sortBy=mostRecent/json",
         "ok": true,
         "itemCount": 10,
-        "checkedAt": "2026-06-12T02:22:08.604Z"
+        "checkedAt": "2026-06-12T17:26:31.667Z"
       },
       {
         "id": "google-play-reviews",
@@ -576,11 +580,87 @@
         "ok": false,
         "itemCount": 0,
         "note": "Google Play no expone una API publica oficial de reviews para este uso. Conectar una libreria/API permitida o carga autorizada antes de activar.",
-        "checkedAt": "2026-06-12T02:22:08.604Z"
+        "checkedAt": "2026-06-12T17:26:31.667Z"
       }
     ]
   },
   "signals": [
+    {
+      "id": "lat-697479-https-latingoles-com-yoel-barcenas-figura-en-mazatlan-se-pone-a-punto-para-su-debut",
+      "sourceType": "latingoles",
+      "sourceName": "Latingoles",
+      "sourceUrl": "https://latingoles.com/wp-json/wp/v2/posts?per_page=20&_embed=1",
+      "title": "Yoel Bárcenas, figura en Mazatlán se pone a punto para su debut con Panamá",
+      "summary": "El mediocampista que fue uno de los destacados del club mexicano Mazatlán FC, fue una de las gratas sorpresas de la lista final de Panamá en esta copa del mundo que se avecina. Con más de 50 juegos oficiales en el balompié azteca, el canalero se perfila como uno de los posibles titulares en ese [&hellip;]",
+      "url": "https://latingoles.com/yoel-barcenas-figura-en-mazatlan-se-pone-a-punto-para-su-debut-con-panama/",
+      "imageUrl": "https://latingoles.com/wp-content/uploads/2025/09/rss-efe5479da658466c2fca265d1787ec7e026fc68ae89w.jpg",
+      "imageAlt": "alt Liga MX",
+      "imageCredit": "Latingoles",
+      "imageSourceUrl": "https://latingoles.com/yoel-barcenas-figura-en-mazatlan-se-pone-a-punto-para-su-debut-con-panama/",
+      "publishedAt": "2026-06-12T17:04:14",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
+      "category": "MUNDIAL DE FÚTBOL",
+      "country": "CO",
+      "players": [],
+      "teams": [],
+      "tags": [
+        "MUNDIAL DE FÚTBOL",
+        "Brasil",
+        "Canadá",
+        "Chile",
+        "Colombia",
+        "Croacia",
+        "Ecuador",
+        "EE.UU.",
+        "España",
+        "Ghana",
+        "Inglaterra",
+        "México",
+        "Paraguay",
+        "Uruguay",
+        "Panama"
+      ],
+      "classifications": [
+        "Ticketing",
+        "Trust",
+        "IA"
+      ]
+    },
+    {
+      "id": "lat-697472-https-latingoles-com-brasil-y-una-gran-prueba-el-debut-ante-marruecos-exigira-fuert",
+      "sourceType": "latingoles",
+      "sourceName": "Latingoles",
+      "sourceUrl": "https://latingoles.com/wp-json/wp/v2/posts?per_page=20&_embed=1",
+      "title": "BRASIL Y UNA GRAN PRUEBA El debut ante Marruecos exigirá fuerte el pentacampeón",
+      "summary": "Brasil y Marruecos protagonizan este sábado el primer gran duelo del Mundial 2026 en el MetLife de Nueva Jersey, el estadio de la final, donde se pondrán frente a frente la selección más laureada y la más prometedora, esta última golpeada por dos sensibles bajas de última hora. Son las dos grandes favoritas de un [&he...",
+      "url": "https://latingoles.com/brasil-y-una-gran-prueba-el-debut-ante-marruecos-exigira-fuerte-el-pentacampeon/",
+      "imageUrl": "https://latingoles.com/wp-content/uploads/2026/05/rss-efed1600b90cd80413019582c8dd32b35d4c50e0075w.jpg",
+      "imageAlt": "El jugador de la selección de Brasil Casemiro habla en una rueda de prensa este jueves, en el centro de entrenamiento de Granja Comar, en Teresópolis (Brasil). EFE/ Antonio Lacerda",
+      "imageCredit": "Latingoles",
+      "imageSourceUrl": "https://latingoles.com/brasil-y-una-gran-prueba-el-debut-ante-marruecos-exigira-fuerte-el-pentacampeon/",
+      "publishedAt": "2026-06-12T11:50:59",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
+      "category": "MUNDIAL DE FÚTBOL",
+      "country": "US",
+      "players": [],
+      "teams": [
+        "brasil",
+        "marruecos"
+      ],
+      "tags": [
+        "MUNDIAL DE FÚTBOL",
+        "Ancelotti",
+        "Brasil",
+        "Copa Mundo",
+        "Estados Unidos",
+        "Marruecos",
+        "Mundial 2026",
+        "Estados Unidos"
+      ],
+      "classifications": [
+        "IA"
+      ]
+    },
     {
       "id": "lat-697469-https-latingoles-com-historico-en-el-azteca-colombiano-quinones-y-mexicano-jimenez-",
       "sourceType": "latingoles",
@@ -590,8 +670,11 @@
       "summary": "México venció 2-0 a Sudáfrica en el partido inaugural del Mundial 2026 y rompió una histórica maldición en los debuts mundialistas, con goles del colombiano naturalizado mexicano Quiñones y del mexicano Jiménez en una noche marcada por el dominio del Tri, tres expulsiones y la fiesta de más de 80.000 aficionados en el...",
       "url": "https://latingoles.com/historico-en-el-azteca-colombiano-quinones-y-mexicano-jimenez-rompen-la-maldicion-de-mexico/",
       "imageUrl": "https://latingoles.com/wp-content/uploads/2026/06/mexico.jpg",
+      "imageAlt": "HISTÓRICO EN EL AZTECA: colombiano Quiñones y mexicano Jiménez rompen la maldición de México",
+      "imageCredit": "Latingoles",
+      "imageSourceUrl": "https://latingoles.com/historico-en-el-azteca-colombiano-quinones-y-mexicano-jimenez-rompen-la-maldicion-de-mexico/",
       "publishedAt": "2026-06-11T23:06:18",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
       "category": "MUNDIAL DE FÚTBOL",
       "country": "CO",
       "players": [],
@@ -631,8 +714,11 @@
       "summary": "El mediocampista Pedro Vite, quien viene de ser una de las figuras en el pasado torneo clausura mexicano, llega a la selección de Ecuador, de primero ganarse un juego en la titular para así soñar por qué no, en levantar la copa del mundo. El actual jugador de los Pumas, es actualmente el subcampeón de [&hellip;]",
       "url": "https://latingoles.com/de-mexico-al-mundo-pedro-vite-juega-su-primer-mundial-con-ecuador/",
       "imageUrl": "https://latingoles.com/wp-content/uploads/2025/07/rss-efe2aba3d2f6ed775f2167bf48de92d9deec0014aaaw.jpg",
+      "imageAlt": "Imagen de archivo de Pedro Vite (d) de Ecuador. EFE/ Jonathan Miranda Vanegas",
+      "imageCredit": "Latingoles",
+      "imageSourceUrl": "https://latingoles.com/de-mexico-al-mundo-pedro-vite-juega-su-primer-mundial-con-ecuador/",
       "publishedAt": "2026-06-11T18:18:03",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
       "category": "MUNDIAL DE FÚTBOL",
       "country": "CO",
       "players": [],
@@ -664,8 +750,11 @@
       "summary": "El Pachuca mexicano anunció este miércoles a Benjamín Mora como su nuevo entrenador para el Apertura 2026 que arrancará en julio próximo. «La mente es lo más poderoso que el ser humano tiene. Me puedo adaptar muy fácil a las necesidades de donde esté», dijo el timonel en su video de presentación, que fue publicado [&h...",
       "url": "https://latingoles.com/el-pachuca-anuncia-a-benjamin-mora-como-su-nuevo-entrenador/",
       "imageUrl": "https://latingoles.com/wp-content/uploads/2026/06/rss-efe0f539a4708dfd2c20ccf039c17b3b216d136dfe5w.jpg",
+      "imageAlt": "Fotografía donde aparece el entrenador, Benjamín Mora. EFE/ Felipe Gutiérrez",
+      "imageCredit": "Latingoles",
+      "imageSourceUrl": "https://latingoles.com/el-pachuca-anuncia-a-benjamin-mora-como-su-nuevo-entrenador/",
       "publishedAt": "2026-06-11T12:09:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
       "category": "FÚTBOL MÉXICO",
       "country": "MX",
       "players": [],
@@ -694,8 +783,11 @@
       "summary": "Miles de manifestantes fueron contenidos este miércoles por la noche por un fuerte operativo policial cuando intentaban avanzar hacia el Estadio Ciudad de México (Estadio Azteca), donde en unas horas se celebrará la inauguración del Mundial 2026, en busca de visibilizar la situación que enfrenta el país con más de 133...",
       "url": "https://latingoles.com/familias-de-desaparecidos-en-mexico-desafian-cerco-del-mundial-a-horas-de-la-inauguracion/",
       "imageUrl": "https://latingoles.com/wp-content/uploads/2026/06/rss-efe1551e25b4fe15e63411494393b3b506c6f29037fw.jpg",
+      "imageAlt": "Personas sostienen carteles durante una protesta este miércoles, previo a la inauguración de la Copa Mundial de Fútbol de la FIFA 2026, en Ciudad de México (México). Miles de mani...",
+      "imageCredit": "Latingoles",
+      "imageSourceUrl": "https://latingoles.com/familias-de-desaparecidos-en-mexico-desafian-cerco-del-mundial-a-horas-de-la-inauguracion/",
       "publishedAt": "2026-06-11T11:40:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
       "category": "MUNDIAL DE FÚTBOL",
       "country": "MX",
       "players": [],
@@ -726,8 +818,11 @@
       "summary": "El Mundial 2026 comienza hoy en México, entérate de cinco claves de arranque: 1 – México-Sudáfrica, el inicio del Mundial más grande Nunca tantas selecciones se enfrentaron en la fase final de una Copa del Mundo. 48 equipos y 104 partidos transforman esta edición en el Mundial más grande jamás visto, cuyo comienzo ser...",
       "url": "https://latingoles.com/el-dia-1-del-mundial-en-5-claves/",
       "imageUrl": "https://latingoles.com/wp-content/uploads/2026/06/rss-efe039a5ed2b1a5cbd31f22ae6701452585faa5ceccw.jpg",
+      "imageAlt": "Johan Vásquez de México celebra un gol el pasado 4 de junio, en un partido amistoso entre México y Serbia previo a la Copa Mundial de Fútbol, en el estadio Nemesio Diez en Toluca...",
+      "imageCredit": "Latingoles",
+      "imageSourceUrl": "https://latingoles.com/el-dia-1-del-mundial-en-5-claves/",
       "publishedAt": "2026-06-11T11:30:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
       "category": "MUNDIAL DE FÚTBOL",
       "country": "MX",
       "players": [],
@@ -755,8 +850,11 @@
       "summary": "Con música de cumbia y el apoyo de su afición, la selección de Colombia llegó este miércoles a Guadalajara donde tendrá su campamento base de cara a los partidos de la fase de grupos del Mundial 2026. Decenas de personas con banderas, camisetas del equipo, trompetas y los típicos sombreros ‘vueltiao’ esperaron por var...",
       "url": "https://latingoles.com/la-seleccion-de-colombia-llega-a-guadalajara-en-ambiente-festivo-promovido-por-su-aficion/",
       "imageUrl": "https://latingoles.com/wp-content/uploads/2026/06/rss-efeb9bd5d7f883dc9cfa28188528d5e8536dd02840fw.jpg",
+      "imageAlt": "Aficionados de Colombia posan este miércoles a las afueras del estadio Ciudad de México a un día de la inauguración del Mundial de la FIFA 2026 entre las selecciones de México y S...",
+      "imageCredit": "Latingoles",
+      "imageSourceUrl": "https://latingoles.com/la-seleccion-de-colombia-llega-a-guadalajara-en-ambiente-festivo-promovido-por-su-aficion/",
       "publishedAt": "2026-06-11T11:09:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
       "category": "MUNDIAL DE FÚTBOL",
       "country": "CO",
       "players": [],
@@ -788,8 +886,11 @@
       "summary": "Con la disputa de los últimos amistosos previos al inicio este jueves del Mundial 2026 con el encuentro entre México y Sudáfrica en el estadio Azteca, Argentina encabeza la clasificación de la FIFA ligeramente más despegada de sus perseguidoras, España y Francia. Estos partidos preparatorios han permitido al conjunto...",
       "url": "https://latingoles.com/argentina-se-despega-ligeramente-de-espana-y-francia-a-las-puertas-del-mundial/",
       "imageUrl": "https://latingoles.com/wp-content/uploads/2026/06/rss-efee053a382b36dcfa797ffe3cdfcd68d113eb00f7fw.jpg",
+      "imageAlt": "Lautaro Martínez (i) de Argentina disputa un balón con Kervin Arriaga de Honduras el pasado 6 de junio, en un partido amistoso previo al Mundial de la FIFA 2026 entre Argentina y...",
+      "imageCredit": "Latingoles",
+      "imageSourceUrl": "https://latingoles.com/argentina-se-despega-ligeramente-de-espana-y-francia-a-las-puertas-del-mundial/",
       "publishedAt": "2026-06-11T09:20:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
       "category": "MUNDIAL DE FÚTBOL",
       "country": "AR",
       "players": [],
@@ -822,8 +923,11 @@
       "summary": "Myung-bo, seleccionador de Corea del Sur, afirmó este miércoles que su equipo aspira terminar en el primer lugar del grupo A del Mundial, a pesar de que México es el favorito. «México es una potencia muy fuerte, además, son el equipo local, con lo que tienen esa ventaja como nosotros lo experimentamos en el Mundial [&...",
       "url": "https://latingoles.com/corea-del-sur-aspira-al-liderato-del-grupo-a-a-pesar-de-que-mexico-es-favorito/",
       "imageUrl": "https://latingoles.com/wp-content/uploads/2026/06/rss-efe6c0e5c0700b2b8a21b6094f046456b33aa8b26e8w.jpg",
+      "imageAlt": "El seleccionador de Corea del Sur, Hong Myung-bo (2-i), habla junto al jugador Son Heung-min (2-d) en una rueda de prensa este miércoles, en Guadalajara, (México). EFE/ Francisco...",
+      "imageCredit": "Latingoles",
+      "imageSourceUrl": "https://latingoles.com/corea-del-sur-aspira-al-liderato-del-grupo-a-a-pesar-de-que-mexico-es-favorito/",
       "publishedAt": "2026-06-11T06:20:43",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
       "category": "MUNDIAL DE FÚTBOL",
       "country": "MX",
       "players": [],
@@ -853,8 +957,11 @@
       "summary": "A menos de 24 horas de que ruede el balón en el partido inaugural de la Copa del Mundo en Ciudad de México, este miércoles fue inaugurada la exposición ‘Cuando España jugó en México. Historias de goles, migración y hermandad’, una muestra que repasa la huella de futbolistas españoles en el país y cómo el [&hellip;]",
       "url": "https://latingoles.com/cuando-espana-jugo-en-mexico-la-muestra-sobre-la-hermandad-futbolistica-hispanomexicana/",
       "imageUrl": "https://latingoles.com/wp-content/uploads/2026/06/rss-efee99ad410155b2a28cb452df674b89b7701bdcccdw.jpg",
+      "imageAlt": "El presidente de la Real Federación Española de Fútbol, Rafael Louzán (c), recorre la exposición ‘Cuando España jugó en México’ este miércoles, en Ciudad de México (México). EFE/...",
+      "imageCredit": "Latingoles",
+      "imageSourceUrl": "https://latingoles.com/cuando-espana-jugo-en-mexico-la-muestra-sobre-la-hermandad-futbolistica-hispanomexicana/",
       "publishedAt": "2026-06-11T01:20:46",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
       "category": "MÁS QUE FÚTBOL",
       "country": "MX",
       "players": [],
@@ -883,8 +990,11 @@
       "summary": "A un día del inicio del Mundial, negocios, supervisores de bares y restaurantes ubicados en Paseo de la Reforma, una de las avenidas más transitadas de Ciudad de México, sede del partido inaugural del torneo, han retirado imágenes y carteles alusivos al campeonato por temor a ser sancionados con multas o clausuras tem...",
       "url": "https://latingoles.com/negocios-mexicanos-apagan-la-fiesta-mundialista-por-miedo-a-sanciones/",
       "imageUrl": "https://latingoles.com/wp-content/uploads/2026/06/rss-efe145904c3eb26919248c4cbc4acee08c47e6a6144w.jpg",
+      "imageAlt": "Fotografía que muestra la fachada de un bar este miércoles, en Ciudad de México (México). EFE/ Mario Guzmán",
+      "imageCredit": "Latingoles",
+      "imageSourceUrl": "https://latingoles.com/negocios-mexicanos-apagan-la-fiesta-mundialista-por-miedo-a-sanciones/",
       "publishedAt": "2026-06-11T01:20:44",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
       "category": "MÁS QUE FÚTBOL",
       "country": "MX",
       "players": [],
@@ -914,8 +1024,11 @@
       "summary": "La presidenta de México, Claudia Sheinbaum, recibió este miércoles en Palacio Nacional al presidente de la FIFA, Gianni Infantino, en la víspera de la inauguración del Mundial 2026 en Ciudad de México. «En Palacio Nacional, recibí al presidente de la FIFA, Gianni Infantino, así como a representantes de federaciones y...",
       "url": "https://latingoles.com/sheinbaum-da-cordial-bienvenida-a-infantino-en-palacio-nacional-antes-de-la-inauguracion/",
       "imageUrl": "https://latingoles.com/wp-content/uploads/2026/06/rss-efe09c88ff21d9058324823e6653c6e39b9694a078fw.jpg",
+      "imageAlt": "Fotografía cedida por la Presidencia de México de la mandataria mexicana Claudia Sheinbaum (c-i) develando el trofeo del Mundial de Fútbol FIFA 2026 junto al presidente del organi...",
+      "imageCredit": "Latingoles",
+      "imageSourceUrl": "https://latingoles.com/sheinbaum-da-cordial-bienvenida-a-infantino-en-palacio-nacional-antes-de-la-inauguracion/",
       "publishedAt": "2026-06-11T01:20:43",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
       "category": "MUNDIAL DE FÚTBOL",
       "country": "MX",
       "players": [],
@@ -944,8 +1057,11 @@
       "summary": "Portugal venció este miércoles a Nigeria por 2-1 en el que fue el último partido de preparación de la selección dirigida por el español Roberto Martínez antes de partir hacia el Mundial de 2026. Con la vista puesta en su arranque mundialista el próximo día 17 frente a la República Democrática del Congo, Martínez decid...",
       "url": "https://latingoles.com/no-anoto-cr7-portugal-vence-a-nigeria-y-marcha-hacia-el-mundial/",
       "imageUrl": "https://latingoles.com/wp-content/uploads/2026/06/rss-efef6a6984fc21bd406e9ea54aaea86628a6a99d491w.jpg",
+      "imageAlt": "El portugués Bruno Fernandes celebra tras marcar un gol durante el partido amistoso internacional de fútbol entre Portugal y Chile, celebrado en el Estadio Nacional de Oeiras. EFE...",
+      "imageCredit": "Latingoles",
+      "imageSourceUrl": "https://latingoles.com/no-anoto-cr7-portugal-vence-a-nigeria-y-marcha-hacia-el-mundial/",
       "publishedAt": "2026-06-10T23:00:13",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
       "category": "AMISTOSO",
       "players": [],
       "teams": [],
@@ -974,8 +1090,11 @@
       "summary": "El seleccionador mexicano, Javier Vasco Aguirre, aseguró este miércoles que su equipo tiene las condiciones para vivir mañana un gran día en la inauguración del Mundial, aunque con respeto a su oponente, Sudáfrica. «El equipo ha crecido, y está la mesa puesta para un buen inicio del Mundial. Puede ser un gran día para...",
       "url": "https://latingoles.com/tenemos-con-que-vasco-aguirre-cree-en-mexico-para-triunfar-ante-sudafrica/",
       "imageUrl": "https://latingoles.com/wp-content/uploads/2026/06/rss-efe538940a4d37d413ce2eb0abd714e6887efaec12ew.jpg",
+      "imageAlt": "Foto tomado el 22 de mayo al seleccionador de México, Javier Aguirre, quien este domingo divulgó su lista de 26 convocados para el Mundial y de inmediato recibió críticas de la af...",
+      "imageCredit": "Latingoles",
+      "imageSourceUrl": "https://latingoles.com/tenemos-con-que-vasco-aguirre-cree-en-mexico-para-triunfar-ante-sudafrica/",
       "publishedAt": "2026-06-10T22:57:19",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
       "category": "MUNDIAL DE FÚTBOL",
       "country": "MX",
       "players": [],
@@ -1008,8 +1127,11 @@
       "summary": "La Selección Colombia ya se instaló en su sede mundialista elegida, la ciudad de Guadalajara.",
       "url": "https://latingoles.com/aterrizaron-colombia-se-instala-en-guadalajara-para-disputar-el-mundial-2026/",
       "imageUrl": "https://latingoles.com/wp-content/uploads/2026/06/Colombia.jpg",
+      "imageAlt": "alt ATERRIZARON: Colombia se instala en Guadalajara para disputar el Mundial",
+      "imageCredit": "Latingoles",
+      "imageSourceUrl": "https://latingoles.com/aterrizaron-colombia-se-instala-en-guadalajara-para-disputar-el-mundial-2026/",
       "publishedAt": "2026-06-10T22:02:41",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
       "category": "MUNDIAL DE FÚTBOL",
       "country": "CO",
       "players": [],
@@ -1038,8 +1160,11 @@
       "summary": "Irán criticó este miércoles a Estados Unidos por lo que calificó como un trato humillante y discriminatorio contra algunas naciones participantes en el Mundial de fútbol 2026, mientras que alabó la hospitalidad de México como anfitrión de la gran cita deportiva, de la que también es sede Canadá. “La Copa Mundial está...",
       "url": "https://latingoles.com/iran-critica-a-eeuu-por-su-trato-humillante-en-el-mundial-mientras-alaba-a-mexico/",
       "imageUrl": "https://latingoles.com/wp-content/uploads/2026/06/rss-efe90754a2f0815d31721690d1da9cb9b7433ac6c06w.jpg",
+      "imageAlt": "Imagen del portavoz del Ministerio iraní de Exteriores, Ismail Bagaei en foto de archivo de Abedin Taherkenareh",
+      "imageCredit": "Latingoles",
+      "imageSourceUrl": "https://latingoles.com/iran-critica-a-eeuu-por-su-trato-humillante-en-el-mundial-mientras-alaba-a-mexico/",
       "publishedAt": "2026-06-10T21:19:33",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
       "category": "MUNDIAL DE FÚTBOL",
       "country": "MX",
       "players": [],
@@ -1069,8 +1194,11 @@
       "summary": "Henry Martín, capitán del América de México, y el guardameta Ángel Malagón fueron los encargados este miércoles de dar la bienvenida al uruguayo Guillermo Almada como nuevo entrenador del equipo. «Bienvenido al Club América. Juntemos esfuerzos y luchemos con grandeza por nuestros objetivos», fue el mensaje en redes so...",
       "url": "https://latingoles.com/martin-y-malagon-dan-la-bienvenida-al-uruguayo-guillermo-almada-nuevo-dt-del-america/",
       "imageUrl": "https://latingoles.com/wp-content/uploads/2026/06/rss-efe97638b810de8f1dac86caa8216b4fc58e9a45eabw.jpg",
+      "imageAlt": "Henry Martin (i) de América disputa un balón con Manuel Capasso de Atlas, en un partido de la Liga MX entre América y Atlas en el estadio Banorte en Ciudad de México (México). Ima...",
+      "imageCredit": "Latingoles",
+      "imageSourceUrl": "https://latingoles.com/martin-y-malagon-dan-la-bienvenida-al-uruguayo-guillermo-almada-nuevo-dt-del-america/",
       "publishedAt": "2026-06-10T21:19:23",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
       "category": "FÚTBOL MÉXICO",
       "country": "MX",
       "players": [],
@@ -1101,8 +1229,11 @@
       "summary": "Exjugadores como el brasileño Gilberto Silva o el costarricense Paulo Wanchope, y entrenadores como Jurgen Klinsmann, analizarán en tiempo real los partidos del Mundial desde un ‘búnker’ en el sur de Florida, donde la FIFA instaló un centro de alta tecnología para radiografiar el desarrollo táctico del torneo. Surfsid...",
       "url": "https://latingoles.com/la-fifa-crea-un-bunker-tactico-para-radiografiar-el-mundial-en-tiempo-real-desde-florida/",
       "imageUrl": "https://latingoles.com/wp-content/uploads/2026/06/rss-efebfe86f3b94d6e11e8ede2d8e7f48889f480d4253w.jpg",
+      "imageAlt": "Fotografía cedida por la FIFA donde aparecen los miembros del Grupo de Estudios Técnicos (TSG) de la FIFA para el Mundial 2026, desde la izquierda, Gilberto Silva, Jayne Ludlow, P...",
+      "imageCredit": "Latingoles",
+      "imageSourceUrl": "https://latingoles.com/la-fifa-crea-un-bunker-tactico-para-radiografiar-el-mundial-en-tiempo-real-desde-florida/",
       "publishedAt": "2026-06-10T21:19:22",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
       "category": "MÁS QUE FÚTBOL",
       "country": "US",
       "players": [],
@@ -1133,8 +1264,11 @@
       "summary": "A un día de que México vuelva a verse las caras con una selección africana en una Copa del Mundo, el historial mundialista frente a representantes de la Confederación africana de futbol muestra una rivalidad corta, pero llena de partidos complejos para el Tri. A lo largo de su historia, México ha enfrentado en cuatro...",
       "url": "https://latingoles.com/mexico-y-sudafrica-se-vuelve-a-encontrar-en-un-partido-inaugural/",
       "imageUrl": "https://latingoles.com/wp-content/uploads/2026/06/rss-efefe702b5f1c7be2bfa0fd5a40f3b324966bf8aff4w.jpg",
+      "imageAlt": "alt México",
+      "imageCredit": "Latingoles",
+      "imageSourceUrl": "https://latingoles.com/mexico-y-sudafrica-se-vuelve-a-encontrar-en-un-partido-inaugural/",
       "publishedAt": "2026-06-10T20:50:39",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
       "category": "MUNDIAL DE FÚTBOL",
       "country": "MX",
       "players": [],
@@ -1158,72 +1292,6 @@
       ]
     },
     {
-      "id": "lat-697227-https-latingoles-com-panama-se-pone-como-meta-pasar-la-fase-de-grupos-lo-conseguira",
-      "sourceType": "latingoles",
-      "sourceName": "Latingoles",
-      "sourceUrl": "https://latingoles.com/wp-json/wp/v2/posts?per_page=20&_embed=1",
-      "title": "¿AVANZAR? Panamá se pone como meta pasar la fase de grupos",
-      "summary": "El técnico español Thomas Christensen, quien está al mando de la selección de Panamá se pone como meta hacer historia y pasar por primera vez en los mundiales a los canaleros a los 16vos de final. Con la nómina más importantes de esta década, la selección Centroamérica tendrá que enfrentar a Ghana, Croacia y la [&hell...",
-      "url": "https://latingoles.com/panama-se-pone-como-meta-pasar-la-fase-de-grupos-lo-conseguira/",
-      "imageUrl": "https://latingoles.com/wp-content/uploads/2025/11/rss-efecac840e307457c1001c1c4bfbee7fffb100f61daw.jpg",
-      "publishedAt": "2026-06-10T19:46:43",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
-      "category": "MUNDIAL DE FÚTBOL",
-      "country": "CO",
-      "players": [],
-      "teams": [],
-      "tags": [
-        "MUNDIAL DE FÚTBOL",
-        "Brasil",
-        "Canadá",
-        "Chile",
-        "Colombia",
-        "EE.UU.",
-        "España",
-        "México",
-        "Paraguay",
-        "Perú",
-        "Uruguay",
-        "Venezuela",
-        "Panama"
-      ],
-      "classifications": [
-        "IA"
-      ]
-    },
-    {
-      "id": "lat-697185-https-latingoles-com-mexico-obligado-a-un-buen-comienzo-ante-sudafrica-en-partido-q",
-      "sourceType": "latingoles",
-      "sourceName": "Latingoles",
-      "sourceUrl": "https://latingoles.com/wp-json/wp/v2/posts?per_page=20&_embed=1",
-      "title": "PREVIA México, obligado buen comienzo ante Sudáfrica, en apertura del Mundial",
-      "summary": "La selección de México recibirá mañana a Sudáfrica en la inauguración de la Copa Mundial de fútbol, en un partido clave para ambos cuadros, pero sobre todo para los anfitriones, obligados a tener una buena presentación que ilusione a su afición. El seleccionador mexicano, Javier ‘Vasco’ Aguirre, sufrió en los últimos...",
-      "url": "https://latingoles.com/mexico-obligado-a-un-buen-comienzo-ante-sudafrica-en-partido-que-inaugurara-el-mundial/",
-      "imageUrl": "https://latingoles.com/wp-content/uploads/2026/06/rss-efe30cf341024fad4a6d31975892aa3ee4765484f0bw.jpg",
-      "publishedAt": "2026-06-10T19:32:22",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
-      "category": "MUNDIAL DE FÚTBOL",
-      "country": "MX",
-      "players": [],
-      "teams": [
-        "méxico",
-        "sudáfrica"
-      ],
-      "tags": [
-        "MUNDIAL DE FÚTBOL",
-        "Azteca",
-        "Copa Mundo",
-        "Inauguración",
-        "México",
-        "Mundial 2026",
-        "Sudáfrica",
-        "México"
-      ],
-      "classifications": [
-        "IA"
-      ]
-    },
-    {
       "id": "fifa-context-https-www-fifa-com-es-tournaments-mens-worldcup-canadamexicousa2026",
       "sourceType": "fifa",
       "sourceName": "FIFA oficial",
@@ -1231,8 +1299,8 @@
       "title": "Contexto oficial del Mundial 2026 validado",
       "summary": "Fuente oficial consultada para contrastar calendario, fixtures o standings sin convertir el contenido en cobertura deportiva.",
       "url": "https://www.fifa.com/es/tournaments/mens/worldcup/canadamexicousa2026",
-      "publishedAt": "2026-06-12T02:22:08.136Z",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "publishedAt": "2026-06-12T17:26:31.618Z",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
       "category": "Contexto oficial",
       "players": [],
       "teams": [],
@@ -1255,8 +1323,8 @@
       "title": "Contexto oficial del Mundial 2026 validado",
       "summary": "Fuente oficial consultada para contrastar calendario, fixtures o standings sin convertir el contenido en cobertura deportiva.",
       "url": "https://www.fifa.com/es/tournaments/mens/worldcup/canadamexicousa2026/scores-fixtures",
-      "publishedAt": "2026-06-12T02:22:08.136Z",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "publishedAt": "2026-06-12T17:26:31.618Z",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
       "category": "Contexto oficial",
       "players": [],
       "teams": [],
@@ -1279,8 +1347,8 @@
       "title": "Contexto oficial del Mundial 2026 validado",
       "summary": "Fuente oficial consultada para contrastar calendario, fixtures o standings sin convertir el contenido en cobertura deportiva.",
       "url": "https://www.fifa.com/es/tournaments/mens/worldcup/canadamexicousa2026/standings",
-      "publishedAt": "2026-06-12T02:22:08.136Z",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "publishedAt": "2026-06-12T17:26:31.618Z",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
       "category": "Contexto oficial",
       "players": [],
       "teams": [],
@@ -1296,26 +1364,865 @@
       ]
     },
     {
-      "id": "trend-us-north-korea-world-cup-0",
+      "id": "reddit-rss-worldcup-t3-1u41oic",
+      "sourceType": "reddit",
+      "sourceName": "Reddit RSS público",
+      "sourceUrl": "https://www.reddit.com/r/worldcup/new.rss",
+      "title": "Ecuador cutting beer tax during the World Cup is the most Ecuador thing ever",
+      "summary": "[object Object]",
+      "url": "https://www.reddit.com/r/worldcup/comments/1u41oic/ecuador_cutting_beer_tax_during_the_world_cup_is/",
+      "publishedAt": "2026-06-12T17:21:10+00:00",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
+      "category": "Conversación de usuarios",
+      "players": [],
+      "teams": [],
+      "tags": [
+        "worldcup",
+        "Reddit RSS"
+      ],
+      "subreddit": "worldcup",
+      "score": 0,
+      "highlightedComments": [],
+      "repeatedComplaints": [],
+      "frequentQuestions": [],
+      "sentiment": "neutral",
+      "classifications": [
+        "Streaming"
+      ]
+    },
+    {
+      "id": "reddit-rss-worldcup-t3-1u41nqy",
+      "sourceType": "reddit",
+      "sourceName": "Reddit RSS público",
+      "sourceUrl": "https://www.reddit.com/r/worldcup/new.rss",
+      "title": "Ex-Arsenal player Thomas Partey denied access to Canada for the World Cup",
+      "summary": "[object Object]",
+      "url": "https://www.reddit.com/r/worldcup/comments/1u41nqy/exarsenal_player_thomas_partey_denied_access_to/",
+      "publishedAt": "2026-06-12T17:20:24+00:00",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
+      "category": "Conversación de usuarios",
+      "players": [],
+      "teams": [
+        "Canada"
+      ],
+      "tags": [
+        "worldcup",
+        "Reddit RSS"
+      ],
+      "subreddit": "worldcup",
+      "score": 0,
+      "highlightedComments": [],
+      "repeatedComplaints": [],
+      "frequentQuestions": [],
+      "sentiment": "neutral",
+      "classifications": [
+        "Streaming"
+      ]
+    },
+    {
+      "id": "reddit-rss-worldcup-t3-1u41gly",
+      "sourceType": "reddit",
+      "sourceName": "Reddit RSS público",
+      "sourceUrl": "https://www.reddit.com/r/worldcup/new.rss",
+      "title": "The world cup website is absolute trash on mobile. What is your preferred site for game stats, updates, videos?",
+      "summary": "[object Object]",
+      "url": "https://www.reddit.com/r/worldcup/comments/1u41gly/the_world_cup_website_is_absolute_trash_on_mobile/",
+      "publishedAt": "2026-06-12T17:13:27+00:00",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
+      "category": "Conversación de usuarios",
+      "players": [],
+      "teams": [],
+      "tags": [
+        "worldcup",
+        "Reddit RSS"
+      ],
+      "subreddit": "worldcup",
+      "score": 0,
+      "highlightedComments": [],
+      "repeatedComplaints": [],
+      "frequentQuestions": [],
+      "sentiment": "neutral",
+      "classifications": [
+        "Streaming",
+        "Mobile Experience"
+      ]
+    },
+    {
+      "id": "reddit-rss-worldcup-t3-1u41f0q",
+      "sourceType": "reddit",
+      "sourceName": "Reddit RSS público",
+      "sourceUrl": "https://www.reddit.com/r/worldcup/new.rss",
+      "title": "Thomas Partey denied entry to Canada, unable to play Ghana’s World Cup opener",
+      "summary": "[object Object]",
+      "url": "https://www.reddit.com/r/worldcup/comments/1u41f0q/thomas_partey_denied_entry_to_canada_unable_to/",
+      "publishedAt": "2026-06-12T17:11:53+00:00",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
+      "category": "Conversación de usuarios",
+      "players": [],
+      "teams": [
+        "Canada"
+      ],
+      "tags": [
+        "worldcup",
+        "Reddit RSS"
+      ],
+      "subreddit": "worldcup",
+      "score": 0,
+      "highlightedComments": [],
+      "repeatedComplaints": [],
+      "frequentQuestions": [],
+      "sentiment": "neutral",
+      "classifications": [
+        "Streaming"
+      ]
+    },
+    {
+      "id": "reddit-rss-worldcup-t3-1u41dku",
+      "sourceType": "reddit",
+      "sourceName": "Reddit RSS público",
+      "sourceUrl": "https://www.reddit.com/r/worldcup/new.rss",
+      "title": "Saw a patriotic goose in Mexico today during world cup crazy stuff going on here",
+      "summary": "[object Object]",
+      "url": "https://www.reddit.com/r/worldcup/comments/1u41dku/saw_a_patriotic_goose_in_mexico_today_during/",
+      "publishedAt": "2026-06-12T17:10:28+00:00",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
+      "category": "Conversación de usuarios",
+      "players": [],
+      "teams": [
+        "Mexico"
+      ],
+      "tags": [
+        "worldcup",
+        "Reddit RSS"
+      ],
+      "subreddit": "worldcup",
+      "score": 0,
+      "highlightedComments": [],
+      "repeatedComplaints": [],
+      "frequentQuestions": [],
+      "sentiment": "neutral",
+      "classifications": [
+        "Streaming"
+      ]
+    },
+    {
+      "id": "reddit-rss-worldcup-t3-1u410r2",
+      "sourceType": "reddit",
+      "sourceName": "Reddit RSS público",
+      "sourceUrl": "https://www.reddit.com/r/worldcup/new.rss",
+      "title": "ChillzOnDaBeat - World Cup Time (Official Video) #WorldCupTime #WorldCup2026 #FIFAWorldCup #Football #Soccer #Canada2026 #USA2026 #Mexico2026 #FootballMusic #SoccerMusic #SportsAn...",
+      "summary": "[object Object]",
+      "url": "https://www.reddit.com/r/worldcup/comments/1u410r2/chillzondabeat_world_cup_time_official_video/",
+      "publishedAt": "2026-06-12T16:57:57+00:00",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
+      "category": "Conversación de usuarios",
+      "players": [],
+      "teams": [
+        "Mexico",
+        "Canada",
+        "USA"
+      ],
+      "tags": [
+        "worldcup",
+        "Reddit RSS"
+      ],
+      "subreddit": "worldcup",
+      "score": 0,
+      "highlightedComments": [],
+      "repeatedComplaints": [],
+      "frequentQuestions": [],
+      "sentiment": "neutral",
+      "classifications": [
+        "Streaming",
+        "IA"
+      ]
+    },
+    {
+      "id": "reddit-rss-worldcup-t3-1u40ryv",
+      "sourceType": "reddit",
+      "sourceName": "Reddit RSS público",
+      "sourceUrl": "https://www.reddit.com/r/worldcup/new.rss",
+      "title": "Comics Jamel Johnson and Ryan Conner preview the World Cup group stage",
+      "summary": "[object Object]",
+      "url": "https://www.reddit.com/r/worldcup/comments/1u40ryv/comics_jamel_johnson_and_ryan_conner_preview_the/",
+      "publishedAt": "2026-06-12T16:49:00+00:00",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
+      "category": "Conversación de usuarios",
+      "players": [],
+      "teams": [],
+      "tags": [
+        "worldcup",
+        "Reddit RSS"
+      ],
+      "subreddit": "worldcup",
+      "score": 0,
+      "highlightedComments": [],
+      "repeatedComplaints": [],
+      "frequentQuestions": [],
+      "sentiment": "neutral",
+      "classifications": [
+        "Streaming"
+      ]
+    },
+    {
+      "id": "reddit-rss-worldcup-t3-1u40rsh",
+      "sourceType": "reddit",
+      "sourceName": "Reddit RSS público",
+      "sourceUrl": "https://www.reddit.com/r/worldcup/new.rss",
+      "title": "Only 2 out of the 9 most populated countries are represented in the World Cup 🤯",
+      "summary": "[object Object]",
+      "url": "https://www.reddit.com/r/worldcup/comments/1u40rsh/only_2_out_of_the_9_most_populated_countries_are/",
+      "publishedAt": "2026-06-12T16:48:49+00:00",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
+      "category": "Conversación de usuarios",
+      "players": [],
+      "teams": [],
+      "tags": [
+        "worldcup",
+        "Reddit RSS"
+      ],
+      "subreddit": "worldcup",
+      "score": 0,
+      "highlightedComments": [],
+      "repeatedComplaints": [],
+      "frequentQuestions": [],
+      "sentiment": "neutral",
+      "classifications": [
+        "Streaming"
+      ]
+    },
+    {
+      "id": "reddit-rss-worldcup-t3-1u40fta",
+      "sourceType": "reddit",
+      "sourceName": "Reddit RSS público",
+      "sourceUrl": "https://www.reddit.com/r/worldcup/new.rss",
+      "title": "World Cup 2026 FIFA Team Rankings List Question?????",
+      "summary": "[object Object]",
+      "url": "https://www.reddit.com/r/worldcup/comments/1u40fta/world_cup_2026_fifa_team_rankings_list_question/",
+      "publishedAt": "2026-06-12T16:36:43+00:00",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
+      "category": "Conversación de usuarios",
+      "players": [],
+      "teams": [],
+      "tags": [
+        "worldcup",
+        "Reddit RSS"
+      ],
+      "subreddit": "worldcup",
+      "score": 0,
+      "highlightedComments": [],
+      "repeatedComplaints": [],
+      "frequentQuestions": [],
+      "sentiment": "neutral",
+      "classifications": [
+        "Streaming"
+      ]
+    },
+    {
+      "id": "reddit-rss-worldcup-t3-1u407w0",
+      "sourceType": "reddit",
+      "sourceName": "Reddit RSS público",
+      "sourceUrl": "https://www.reddit.com/r/worldcup/new.rss",
+      "title": "Americans claiming their Norwegian heritage in World Cup",
+      "summary": "[object Object]",
+      "url": "https://www.reddit.com/r/worldcup/comments/1u407w0/americans_claiming_their_norwegian_heritage_in/",
+      "publishedAt": "2026-06-12T16:28:56+00:00",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
+      "category": "Conversación de usuarios",
+      "players": [],
+      "teams": [],
+      "tags": [
+        "worldcup",
+        "Reddit RSS"
+      ],
+      "subreddit": "worldcup",
+      "score": 0,
+      "highlightedComments": [],
+      "repeatedComplaints": [],
+      "frequentQuestions": [],
+      "sentiment": "neutral",
+      "classifications": [
+        "Streaming",
+        "IA"
+      ]
+    },
+    {
+      "id": "reddit-rss-worldcup-t3-1u4068g",
+      "sourceType": "reddit",
+      "sourceName": "Reddit RSS público",
+      "sourceUrl": "https://www.reddit.com/r/worldcup/new.rss",
+      "title": "Guess the 16 teams that won’t make it through the groups at the World Cup…",
+      "summary": "[object Object]",
+      "url": "https://www.reddit.com/r/worldcup/comments/1u4068g/guess_the_16_teams_that_wont_make_it_through_the/",
+      "publishedAt": "2026-06-12T16:27:18+00:00",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
+      "category": "Conversación de usuarios",
+      "players": [],
+      "teams": [],
+      "tags": [
+        "worldcup",
+        "Reddit RSS"
+      ],
+      "subreddit": "worldcup",
+      "score": 0,
+      "highlightedComments": [],
+      "repeatedComplaints": [],
+      "frequentQuestions": [],
+      "sentiment": "neutral",
+      "classifications": [
+        "Streaming"
+      ]
+    },
+    {
+      "id": "reddit-rss-worldcup-t3-1u4053x",
+      "sourceType": "reddit",
+      "sourceName": "Reddit RSS público",
+      "sourceUrl": "https://www.reddit.com/r/worldcup/new.rss",
+      "title": "Best and worst World Cup jerseys: Where do South Korea, France and Mexico rank?",
+      "summary": "[object Object]",
+      "url": "https://www.reddit.com/r/worldcup/comments/1u4053x/best_and_worst_world_cup_jerseys_where_do_south/",
+      "publishedAt": "2026-06-12T16:26:11+00:00",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
+      "category": "Conversación de usuarios",
+      "players": [],
+      "teams": [
+        "Mexico",
+        "France"
+      ],
+      "tags": [
+        "worldcup",
+        "Reddit RSS"
+      ],
+      "subreddit": "worldcup",
+      "score": 0,
+      "highlightedComments": [],
+      "repeatedComplaints": [],
+      "frequentQuestions": [],
+      "sentiment": "neutral",
+      "classifications": [
+        "Streaming"
+      ]
+    },
+    {
+      "id": "reddit-rss-worldcup-t3-1u3zrp4",
+      "sourceType": "reddit",
+      "sourceName": "Reddit RSS público",
+      "sourceUrl": "https://www.reddit.com/r/worldcup/new.rss",
+      "title": "Ronaldo or your country for the World Cup Final? I am taking Ronaldo",
+      "summary": "[object Object]",
+      "url": "https://www.reddit.com/r/worldcup/comments/1u3zrp4/ronaldo_or_your_country_for_the_world_cup_final_i/",
+      "publishedAt": "2026-06-12T16:13:06+00:00",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
+      "category": "Conversación de usuarios",
+      "players": [],
+      "teams": [],
+      "tags": [
+        "worldcup",
+        "Reddit RSS"
+      ],
+      "subreddit": "worldcup",
+      "score": 0,
+      "highlightedComments": [],
+      "repeatedComplaints": [],
+      "frequentQuestions": [],
+      "sentiment": "neutral",
+      "classifications": [
+        "Streaming"
+      ]
+    },
+    {
+      "id": "reddit-rss-worldcup-t3-1u3zpgd",
+      "sourceType": "reddit",
+      "sourceName": "Reddit RSS público",
+      "sourceUrl": "https://www.reddit.com/r/worldcup/new.rss",
+      "title": "On This Day in World Cup History - June 12th by the Numbers",
+      "summary": "[object Object]",
+      "url": "https://www.reddit.com/r/worldcup/comments/1u3zpgd/on_this_day_in_world_cup_history_june_12th_by_the/",
+      "publishedAt": "2026-06-12T16:10:50+00:00",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
+      "category": "Conversación de usuarios",
+      "players": [],
+      "teams": [],
+      "tags": [
+        "worldcup",
+        "Reddit RSS"
+      ],
+      "subreddit": "worldcup",
+      "score": 0,
+      "highlightedComments": [],
+      "repeatedComplaints": [],
+      "frequentQuestions": [],
+      "sentiment": "neutral",
+      "classifications": [
+        "Streaming"
+      ]
+    },
+    {
+      "id": "reddit-rss-worldcup-t3-1u3yo86",
+      "sourceType": "reddit",
+      "sourceName": "Reddit RSS público",
+      "sourceUrl": "https://www.reddit.com/r/worldcup/new.rss",
+      "title": "If your country isn’t in the World Cup who are you supporting?",
+      "summary": "[object Object]",
+      "url": "https://www.reddit.com/r/worldcup/comments/1u3yo86/if_your_country_isnt_in_the_world_cup_who_are_you/",
+      "publishedAt": "2026-06-12T15:34:33+00:00",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
+      "category": "Conversación de usuarios",
+      "players": [],
+      "teams": [],
+      "tags": [
+        "worldcup",
+        "Reddit RSS"
+      ],
+      "subreddit": "worldcup",
+      "score": 0,
+      "highlightedComments": [],
+      "repeatedComplaints": [],
+      "frequentQuestions": [],
+      "sentiment": "neutral",
+      "classifications": [
+        "Streaming"
+      ]
+    },
+    {
+      "id": "reddit-rss-worldcup-t3-1u3ykcg",
+      "sourceType": "reddit",
+      "sourceName": "Reddit RSS público",
+      "sourceUrl": "https://www.reddit.com/r/worldcup/new.rss",
+      "title": "Twitch streamer went to the Mexico vs South Africa Game",
+      "summary": "[object Object]",
+      "url": "https://www.reddit.com/r/worldcup/comments/1u3ykcg/twitch_streamer_went_to_the_mexico_vs_south/",
+      "publishedAt": "2026-06-12T15:30:36+00:00",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
+      "category": "Conversación de usuarios",
+      "players": [],
+      "teams": [
+        "Mexico"
+      ],
+      "tags": [
+        "worldcup",
+        "Reddit RSS"
+      ],
+      "subreddit": "worldcup",
+      "score": 0,
+      "highlightedComments": [],
+      "repeatedComplaints": [],
+      "frequentQuestions": [],
+      "sentiment": "neutral",
+      "classifications": [
+        "Streaming"
+      ]
+    },
+    {
+      "id": "reddit-rss-worldcup-t3-1u3yji1",
+      "sourceType": "reddit",
+      "sourceName": "Reddit RSS público",
+      "sourceUrl": "https://www.reddit.com/r/worldcup/new.rss",
+      "title": "Which World Cup 2026 Stadium Would You Most Like to Visit?",
+      "summary": "[object Object]",
+      "url": "https://www.reddit.com/r/worldcup/comments/1u3yji1/which_world_cup_2026_stadium_would_you_most_like/",
+      "publishedAt": "2026-06-12T15:29:52+00:00",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
+      "category": "Conversación de usuarios",
+      "players": [],
+      "teams": [],
+      "tags": [
+        "worldcup",
+        "Reddit RSS"
+      ],
+      "subreddit": "worldcup",
+      "score": 0,
+      "highlightedComments": [],
+      "repeatedComplaints": [],
+      "frequentQuestions": [],
+      "sentiment": "neutral",
+      "classifications": [
+        "Streaming"
+      ]
+    },
+    {
+      "id": "reddit-rss-worldcup-t3-1u3xxoj",
+      "sourceType": "reddit",
+      "sourceName": "Reddit RSS público",
+      "sourceUrl": "https://www.reddit.com/r/worldcup/new.rss",
+      "title": "World Cup reporter leaves live broadcast to get a picture with Shakira",
+      "summary": "[object Object]",
+      "url": "https://www.reddit.com/r/worldcup/comments/1u3xxoj/world_cup_reporter_leaves_live_broadcast_to_get_a/",
+      "publishedAt": "2026-06-12T15:08:01+00:00",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
+      "category": "Conversación de usuarios",
+      "players": [],
+      "teams": [],
+      "tags": [
+        "worldcup",
+        "Reddit RSS"
+      ],
+      "subreddit": "worldcup",
+      "score": 0,
+      "highlightedComments": [],
+      "repeatedComplaints": [],
+      "frequentQuestions": [],
+      "sentiment": "neutral",
+      "classifications": [
+        "Streaming"
+      ]
+    },
+    {
+      "id": "reddit-rss-worldcup-t3-1u3wd13",
+      "sourceType": "reddit",
+      "sourceName": "Reddit RSS público",
+      "sourceUrl": "https://www.reddit.com/r/worldcup/new.rss",
+      "title": "England Football Team gear up for the World Cup with a Cricket session",
+      "summary": "[object Object]",
+      "url": "https://www.reddit.com/r/worldcup/comments/1u3wd13/england_football_team_gear_up_for_the_world_cup/",
+      "publishedAt": "2026-06-12T14:09:48+00:00",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
+      "category": "Conversación de usuarios",
+      "players": [],
+      "teams": [],
+      "tags": [
+        "worldcup",
+        "Reddit RSS"
+      ],
+      "subreddit": "worldcup",
+      "score": 0,
+      "highlightedComments": [],
+      "repeatedComplaints": [],
+      "frequentQuestions": [],
+      "sentiment": "neutral",
+      "classifications": [
+        "Streaming"
+      ]
+    },
+    {
+      "id": "reddit-rss-worldcup-t3-1u3w23n",
+      "sourceType": "reddit",
+      "sourceName": "Reddit RSS público",
+      "sourceUrl": "https://www.reddit.com/r/worldcup/new.rss",
+      "title": "World Cup reporter leaves live broadcast to get a picture with Shakira and it’s so iconic",
+      "summary": "[object Object]",
+      "url": "https://www.reddit.com/r/worldcup/comments/1u3w23n/world_cup_reporter_leaves_live_broadcast_to_get_a/",
+      "publishedAt": "2026-06-12T13:58:41+00:00",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
+      "category": "Conversación de usuarios",
+      "players": [],
+      "teams": [],
+      "tags": [
+        "worldcup",
+        "Reddit RSS"
+      ],
+      "subreddit": "worldcup",
+      "score": 0,
+      "highlightedComments": [],
+      "repeatedComplaints": [],
+      "frequentQuestions": [],
+      "sentiment": "neutral",
+      "classifications": [
+        "Streaming"
+      ]
+    },
+    {
+      "id": "reddit-rss-worldcup-t3-1u3w0eh",
+      "sourceType": "reddit",
+      "sourceName": "Reddit RSS público",
+      "sourceUrl": "https://www.reddit.com/r/worldcup/new.rss",
+      "title": "Tartan Army visits Kearny, NJ - Series about fans representing their home nations here for the World Cup",
+      "summary": "[object Object]",
+      "url": "https://www.reddit.com/r/worldcup/comments/1u3w0eh/tartan_army_visits_kearny_nj_series_about_fans/",
+      "publishedAt": "2026-06-12T13:56:54+00:00",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
+      "category": "Conversación de usuarios",
+      "players": [],
+      "teams": [],
+      "tags": [
+        "worldcup",
+        "Reddit RSS"
+      ],
+      "subreddit": "worldcup",
+      "score": 0,
+      "highlightedComments": [],
+      "repeatedComplaints": [],
+      "frequentQuestions": [],
+      "sentiment": "neutral",
+      "classifications": [
+        "Streaming",
+        "Fan Experience"
+      ]
+    },
+    {
+      "id": "reddit-rss-soccer-t3-1u41phs",
+      "sourceType": "reddit",
+      "sourceName": "Reddit RSS público",
+      "sourceUrl": "https://www.reddit.com/r/soccer/new.rss",
+      "title": "[World Cup 2026 Preview] USA: The Hosts, The Hype, and The High-Line Headaches (8/48)",
+      "summary": "[object Object]",
+      "url": "https://www.reddit.com/r/soccer/comments/1u41phs/world_cup_2026_preview_usa_the_hosts_the_hype_and/",
+      "publishedAt": "2026-06-12T17:22:10+00:00",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
+      "category": "Conversación de usuarios",
+      "players": [],
+      "teams": [
+        "USA"
+      ],
+      "tags": [
+        "soccer",
+        "Reddit RSS"
+      ],
+      "subreddit": "soccer",
+      "score": 0,
+      "highlightedComments": [],
+      "repeatedComplaints": [],
+      "frequentQuestions": [],
+      "sentiment": "neutral",
+      "classifications": [
+        "Streaming"
+      ]
+    },
+    {
+      "id": "reddit-rss-soccer-t3-1u414gk",
+      "sourceType": "reddit",
+      "sourceName": "Reddit RSS público",
+      "sourceUrl": "https://www.reddit.com/r/soccer/new.rss",
+      "title": "Mexicans dancing and singing GANGNAM STYLE with the Koreans in Mexico after South Korea's victory in the World Cup",
+      "summary": "[object Object]",
+      "url": "https://www.reddit.com/r/soccer/comments/1u414gk/mexicans_dancing_and_singing_gangnam_style_with/",
+      "publishedAt": "2026-06-12T17:01:30+00:00",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
+      "category": "Conversación de usuarios",
+      "players": [],
+      "teams": [
+        "Mexico"
+      ],
+      "tags": [
+        "soccer",
+        "Reddit RSS"
+      ],
+      "subreddit": "soccer",
+      "score": 0,
+      "highlightedComments": [],
+      "repeatedComplaints": [],
+      "frequentQuestions": [],
+      "sentiment": "neutral",
+      "classifications": [
+        "Streaming"
+      ]
+    },
+    {
+      "id": "reddit-rss-soccer-t3-1u40zou",
+      "sourceType": "reddit",
+      "sourceName": "Reddit RSS público",
+      "sourceUrl": "https://www.reddit.com/r/soccer/new.rss",
+      "title": "[The Athletic] Thomas Partey will play no part in Ghana’s first World Cup game in Toronto as he has been denied entry to Canada.",
+      "summary": "[object Object]",
+      "url": "https://www.reddit.com/r/soccer/comments/1u40zou/the_athletic_thomas_partey_will_play_no_part_in/",
+      "publishedAt": "2026-06-12T16:56:55+00:00",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
+      "category": "Conversación de usuarios",
+      "players": [],
+      "teams": [
+        "Canada"
+      ],
+      "tags": [
+        "soccer",
+        "Reddit RSS"
+      ],
+      "subreddit": "soccer",
+      "score": 0,
+      "highlightedComments": [],
+      "repeatedComplaints": [],
+      "frequentQuestions": [],
+      "sentiment": "neutral",
+      "classifications": [
+        "Streaming"
+      ]
+    },
+    {
+      "id": "reddit-rss-soccer-t3-1u40a7d",
+      "sourceType": "reddit",
+      "sourceName": "Reddit RSS público",
+      "sourceUrl": "https://www.reddit.com/r/soccer/new.rss",
+      "title": "Canadian fans before the match against Bosnia today",
+      "summary": "[object Object]",
+      "url": "https://www.reddit.com/r/soccer/comments/1u40a7d/canadian_fans_before_the_match_against_bosnia/",
+      "publishedAt": "2026-06-12T16:31:11+00:00",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
+      "category": "Conversación de usuarios",
+      "players": [],
+      "teams": [],
+      "tags": [
+        "soccer",
+        "Reddit RSS"
+      ],
+      "subreddit": "soccer",
+      "score": 0,
+      "highlightedComments": [],
+      "repeatedComplaints": [],
+      "frequentQuestions": [],
+      "sentiment": "neutral",
+      "classifications": [
+        "Streaming",
+        "Fan Experience",
+        "IA"
+      ]
+    },
+    {
+      "id": "reddit-rss-soccer-t3-1u4037z",
+      "sourceType": "reddit",
+      "sourceName": "Reddit RSS público",
+      "sourceUrl": "https://www.reddit.com/r/soccer/new.rss",
+      "title": "[Politico Magazine] The Epic Story of How Trump Seized the World Cup",
+      "summary": "[object Object]",
+      "url": "https://www.reddit.com/r/soccer/comments/1u4037z/politico_magazine_the_epic_story_of_how_trump/",
+      "publishedAt": "2026-06-12T16:24:29+00:00",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
+      "category": "Conversación de usuarios",
+      "players": [],
+      "teams": [],
+      "tags": [
+        "soccer",
+        "Reddit RSS"
+      ],
+      "subreddit": "soccer",
+      "score": 0,
+      "highlightedComments": [],
+      "repeatedComplaints": [],
+      "frequentQuestions": [],
+      "sentiment": "neutral",
+      "classifications": [
+        "Streaming"
+      ]
+    },
+    {
+      "id": "reddit-rss-soccer-t3-1u3yjcs",
+      "sourceType": "reddit",
+      "sourceName": "Reddit RSS público",
+      "sourceUrl": "https://www.reddit.com/r/soccer/new.rss",
+      "title": "[Eurosport] Gianni Infantino, His Mysterious Ties to the United States, and the \"Fifagate\" Scandal",
+      "summary": "[object Object]",
+      "url": "https://www.reddit.com/r/soccer/comments/1u3yjcs/eurosport_gianni_infantino_his_mysterious_ties_to/",
+      "publishedAt": "2026-06-12T15:29:43+00:00",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
+      "category": "Conversación de usuarios",
+      "players": [],
+      "teams": [],
+      "tags": [
+        "soccer",
+        "Reddit RSS"
+      ],
+      "subreddit": "soccer",
+      "score": 0,
+      "highlightedComments": [],
+      "repeatedComplaints": [],
+      "frequentQuestions": [],
+      "sentiment": "neutral",
+      "classifications": [
+        "Streaming",
+        "Fan Experience",
+        "IA"
+      ]
+    },
+    {
+      "id": "reddit-rss-soccer-t3-1u3yjc2",
+      "sourceType": "reddit",
+      "sourceName": "Reddit RSS público",
+      "sourceUrl": "https://www.reddit.com/r/soccer/new.rss",
+      "title": "[@F_edits] World Cup stadiums that are closest to a McDonald’s",
+      "summary": "[object Object]",
+      "url": "https://www.reddit.com/r/soccer/comments/1u3yjc2/f_edits_world_cup_stadiums_that_are_closest_to_a/",
+      "publishedAt": "2026-06-12T15:29:42+00:00",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
+      "category": "Conversación de usuarios",
+      "players": [],
+      "teams": [],
+      "tags": [
+        "soccer",
+        "Reddit RSS"
+      ],
+      "subreddit": "soccer",
+      "score": 0,
+      "highlightedComments": [],
+      "repeatedComplaints": [],
+      "frequentQuestions": [],
+      "sentiment": "neutral",
+      "classifications": [
+        "Streaming"
+      ]
+    },
+    {
+      "id": "reddit-rss-soccer-t3-1u3ybz4",
+      "sourceType": "reddit",
+      "sourceName": "Reddit RSS público",
+      "sourceUrl": "https://www.reddit.com/r/soccer/new.rss",
+      "title": "World Cup Atmosphere from the Commentators Desk",
+      "summary": "[object Object]",
+      "url": "https://www.reddit.com/r/soccer/comments/1u3ybz4/world_cup_atmosphere_from_the_commentators_desk/",
+      "publishedAt": "2026-06-12T15:22:22+00:00",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
+      "category": "Conversación de usuarios",
+      "players": [],
+      "teams": [],
+      "tags": [
+        "soccer",
+        "Reddit RSS"
+      ],
+      "subreddit": "soccer",
+      "score": 0,
+      "highlightedComments": [],
+      "repeatedComplaints": [],
+      "frequentQuestions": [],
+      "sentiment": "neutral",
+      "classifications": [
+        "Streaming"
+      ]
+    },
+    {
+      "id": "reddit-rss-football-t3-1u3zf6l",
+      "sourceType": "reddit",
+      "sourceName": "Reddit RSS público",
+      "sourceUrl": "https://www.reddit.com/r/football/new.rss",
+      "title": "I wanna become a pro footballer I'm 18 is it too late for me?",
+      "summary": "[object Object]",
+      "url": "https://www.reddit.com/r/football/comments/1u3zf6l/i_wanna_become_a_pro_footballer_im_18_is_it_too/",
+      "publishedAt": "2026-06-12T16:01:01+00:00",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
+      "category": "Conversación de usuarios",
+      "players": [],
+      "teams": [],
+      "tags": [
+        "football",
+        "Reddit RSS"
+      ],
+      "subreddit": "football",
+      "score": 0,
+      "highlightedComments": [],
+      "repeatedComplaints": [],
+      "frequentQuestions": [],
+      "sentiment": "neutral",
+      "classifications": [
+        "Streaming"
+      ]
+    },
+    {
+      "id": "trend-us-selecci-n-de-f-tbol-de-brasil-0",
       "sourceType": "google-trends",
       "sourceName": "Google Trends vía Trendgetter",
       "sourceUrl": "https://trendgetter.vercel.app/api/google/topics",
-      "title": "Tendencia creciente: north korea world cup",
+      "title": "Tendencia creciente: selección de fútbol de brasil",
       "summary": "Interés de búsqueda aproximado: 500+.",
       "url": "https://trends.google.com/trending/rss?geo=US",
-      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNVInsW5UsWjIW8cwCqmGIZO1loJviMGN1LsZ8ivV_fYoL1ttBpIIDjGd2HHY",
-      "publishedAt": "2026-06-12T02:00:00.000Z",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "imageUrl": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcR13y5Dd9PlxcEbk1rGU_ClRawkJOgQfpH46qqwqDaR77vcFn7wOCV7HjbLwss",
+      "publishedAt": "2026-06-12T17:00:00.000Z",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
       "category": "Tendencia de búsqueda",
       "country": "US",
       "players": [],
       "teams": [],
       "tags": [
-        "north korea world cup",
+        "selección de fútbol de brasil",
         "Google Trends",
         "US"
       ],
-      "term": "north korea world cup",
+      "term": "selección de fútbol de brasil",
       "relativeVolume": 100,
       "rising": true,
       "relatedQueries": [],
@@ -1324,30 +2231,82 @@
       ]
     },
     {
-      "id": "trend-mx-club-de-f-tbol-cruz-azul-1",
+      "id": "trend-ca-toronto-stadium-1",
       "sourceType": "google-trends",
       "sourceName": "Google Trends vía Trendgetter",
       "sourceUrl": "https://trendgetter.vercel.app/api/google/topics",
-      "title": "Tendencia creciente: club de fútbol cruz azul",
-      "summary": "Interés de búsqueda aproximado: 2000+.",
-      "url": "https://trends.google.com/trending/rss?geo=MX",
-      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSe6GVH0e5ys_mNGfH6HCgTLLXcOsPdFkfb3gGeX4H8N4l9BnNt8x4jLOQVJE",
-      "publishedAt": "2026-06-12T00:00:00.000Z",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "title": "Tendencia creciente: toronto stadium",
+      "summary": "Interés de búsqueda aproximado: 10000+.",
+      "url": "https://trends.google.com/trending/rss?geo=CA",
+      "imageUrl": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRXMwvqPOpGis8qFovghAEkE3wPrqd_E_W_JzJ1aJxj32vEPCli2h8ks6yWB_0",
+      "publishedAt": "2026-06-12T16:50:00.000Z",
+      "detectedAt": "2026-06-12T17:26:31.618Z",
       "category": "Tendencia de búsqueda",
-      "country": "MX",
+      "country": "CA",
       "players": [],
       "teams": [],
       "tags": [
-        "club de fútbol cruz azul",
+        "toronto stadium",
         "Google Trends",
-        "MX"
+        "CA"
       ],
-      "term": "club de fútbol cruz azul",
-      "relativeVolume": 60,
+      "term": "toronto stadium",
+      "relativeVolume": 75,
       "rising": true,
       "relatedQueries": [],
       "classifications": [
+        "IA"
+      ]
+    },
+    {
+      "id": "review-fifa-app-14168237704-2026-06-10t18-57-46-07-00",
+      "sourceType": "app-review",
+      "sourceName": "Apple App Store reviews",
+      "sourceUrl": "https://itunes.apple.com/us/rss/customerreviews/id=756904853/sortBy=mostRecent/json",
+      "title": "We can all agree its bad💀",
+      "summary": "Its slow and doesn’t autosave data. Refreshes itself too often and dont get me started on the archaic user interface 🤦‍♂️",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/id=756904853/sortBy=mostRecent/json",
+      "publishedAt": "2026-06-10T18:57:46-07:00",
+      "detectedAt": "2026-06-12T17:26:31.619Z",
+      "category": "Review de app",
+      "country": "US",
+      "players": [],
+      "teams": [],
+      "tags": [
+        "FIFA App",
+        "app review"
+      ],
+      "app": "FIFA App",
+      "rating": 1,
+      "reportedProblem": "High traffic",
+      "classifications": [
+        "Mobile Experience",
+        "High Traffic",
+        "IA"
+      ]
+    },
+    {
+      "id": "review-fifa-app-14167062297-2026-06-10t11-33-48-07-00",
+      "sourceType": "app-review",
+      "sourceName": "Apple App Store reviews",
+      "sourceUrl": "https://itunes.apple.com/us/rss/customerreviews/id=756904853/sortBy=mostRecent/json",
+      "title": "Regularly lost bracket progress",
+      "summary": "Should have not been released. FIFA demonstrates once again that money does not buy quality.",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/id=756904853/sortBy=mostRecent/json",
+      "publishedAt": "2026-06-10T11:33:48-07:00",
+      "detectedAt": "2026-06-12T17:26:31.619Z",
+      "category": "Review de app",
+      "country": "US",
+      "players": [],
+      "teams": [],
+      "tags": [
+        "FIFA App",
+        "app review"
+      ],
+      "app": "FIFA App",
+      "rating": 1,
+      "classifications": [
+        "Mobile Experience",
         "IA"
       ]
     },
@@ -1360,7 +2319,7 @@
       "summary": "Please update so that we could change our names on the playzone",
       "url": "https://itunes.apple.com/us/rss/customerreviews/id=756904853/sortBy=mostRecent/json",
       "publishedAt": "2026-06-08T16:25:03-07:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "detectedAt": "2026-06-12T17:26:31.619Z",
       "category": "Review de app",
       "country": "US",
       "players": [],
@@ -1384,7 +2343,7 @@
       "summary": "Playing fantasy is super fun",
       "url": "https://itunes.apple.com/us/rss/customerreviews/id=756904853/sortBy=mostRecent/json",
       "publishedAt": "2026-06-08T15:43:07-07:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "detectedAt": "2026-06-12T17:26:31.619Z",
       "category": "Review de app",
       "country": "US",
       "players": [],
@@ -1409,7 +2368,7 @@
       "summary": "I hate this app. Very slow glitchy and hard to navigate",
       "url": "https://itunes.apple.com/us/rss/customerreviews/id=756904853/sortBy=mostRecent/json",
       "publishedAt": "2026-06-07T20:29:37-07:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "detectedAt": "2026-06-12T17:26:31.619Z",
       "category": "Review de app",
       "country": "US",
       "players": [],
@@ -1436,7 +2395,7 @@
       "summary": "The app doesn’t work. It doesn’t let me scroll through any article.",
       "url": "https://itunes.apple.com/us/rss/customerreviews/id=756904853/sortBy=mostRecent/json",
       "publishedAt": "2026-06-07T09:12:55-07:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "detectedAt": "2026-06-12T17:26:31.619Z",
       "category": "Review de app",
       "country": "US",
       "players": [],
@@ -1460,7 +2419,7 @@
       "summary": "I got kylian mbappe on my fantasy team and now I’m happy",
       "url": "https://itunes.apple.com/us/rss/customerreviews/id=756904853/sortBy=mostRecent/json",
       "publishedAt": "2026-06-04T08:04:37-07:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "detectedAt": "2026-06-12T17:26:31.619Z",
       "category": "Review de app",
       "country": "US",
       "players": [],
@@ -1486,7 +2445,7 @@
       "summary": "This app was build with zero consideration to user experience. Especially the ticket exploring option. FIFA, do better!",
       "url": "https://itunes.apple.com/us/rss/customerreviews/id=756904853/sortBy=mostRecent/json",
       "publishedAt": "2026-06-04T03:26:21-07:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "detectedAt": "2026-06-12T17:26:31.619Z",
       "category": "Review de app",
       "country": "US",
       "players": [],
@@ -1514,7 +2473,7 @@
       "summary": "Anything with filters is not intuitive. Developers to pay more attention to the loss of user filters eg. getting filters lost once to go back to a list. This must be more widely tested for real world experience!",
       "url": "https://itunes.apple.com/us/rss/customerreviews/id=756904853/sortBy=mostRecent/json",
       "publishedAt": "2026-06-03T12:29:47-07:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "detectedAt": "2026-06-12T17:26:31.619Z",
       "category": "Review de app",
       "country": "US",
       "players": [],
@@ -1539,7 +2498,7 @@
       "summary": "^see above",
       "url": "https://itunes.apple.com/us/rss/customerreviews/id=756904853/sortBy=mostRecent/json",
       "publishedAt": "2026-05-31T22:14:24-07:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "detectedAt": "2026-06-12T17:26:31.619Z",
       "category": "Review de app",
       "country": "US",
       "players": [],
@@ -1555,56 +2514,6 @@
       ]
     },
     {
-      "id": "review-fifa-app-14125906855-2026-05-30t21-21-52-07-00",
-      "sourceType": "app-review",
-      "sourceName": "Apple App Store reviews",
-      "sourceUrl": "https://itunes.apple.com/us/rss/customerreviews/id=756904853/sortBy=mostRecent/json",
-      "title": "Worst app I’ve ever seen",
-      "summary": "I don’t know how to describe it but it to bad",
-      "url": "https://itunes.apple.com/us/rss/customerreviews/id=756904853/sortBy=mostRecent/json",
-      "publishedAt": "2026-05-30T21:21:52-07:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
-      "category": "Review de app",
-      "country": "US",
-      "players": [],
-      "teams": [],
-      "tags": [
-        "FIFA App",
-        "app review"
-      ],
-      "app": "FIFA App",
-      "rating": 1,
-      "classifications": [
-        "Streaming",
-        "Mobile Experience"
-      ]
-    },
-    {
-      "id": "review-fifa-app-14121775631-2026-05-29t19-52-13-07-00",
-      "sourceType": "app-review",
-      "sourceName": "Apple App Store reviews",
-      "sourceUrl": "https://itunes.apple.com/us/rss/customerreviews/id=756904853/sortBy=mostRecent/json",
-      "title": "Scrolling doesn’t work",
-      "summary": "I can’t scroll on any of the pages, so I can’t even enjoy the experience",
-      "url": "https://itunes.apple.com/us/rss/customerreviews/id=756904853/sortBy=mostRecent/json",
-      "publishedAt": "2026-05-29T19:52:13-07:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
-      "category": "Review de app",
-      "country": "US",
-      "players": [],
-      "teams": [],
-      "tags": [
-        "FIFA App",
-        "app review"
-      ],
-      "app": "FIFA App",
-      "rating": 1,
-      "classifications": [
-        "Mobile Experience",
-        "UX"
-      ]
-    },
-    {
       "id": "review-dazn-14155187318-2026-06-07t09-31-34-07-00",
       "sourceType": "app-review",
       "sourceName": "Apple App Store reviews",
@@ -1613,7 +2522,7 @@
       "summary": "I was trying to watch a main fight and have to get a subscription in order to buy the fight. On top of that. I am required to be on a subscription for a year. We are in 2026, Contracts are obsolete.",
       "url": "https://itunes.apple.com/us/rss/customerreviews/id=1129523589/sortBy=mostRecent/json",
       "publishedAt": "2026-06-07T09:31:34-07:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "detectedAt": "2026-06-12T17:26:31.619Z",
       "category": "Review de app",
       "country": "US",
       "players": [],
@@ -1639,7 +2548,7 @@
       "summary": "I already paid 4 months for ONE fight! I just keep forgetting to cancel. When I try to cancel, they say don’t worry it’s already cancelled, but you’re gonna have to keep paying monthly until May 2027! That is absurd!",
       "url": "https://itunes.apple.com/us/rss/customerreviews/id=1129523589/sortBy=mostRecent/json",
       "publishedAt": "2026-06-06T09:12:13-07:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "detectedAt": "2026-06-12T17:26:31.619Z",
       "category": "Review de app",
       "country": "US",
       "players": [],
@@ -1665,7 +2574,7 @@
       "summary": "Quit asking me everyday for a review. This is a good app you do not need to troll for affirmation every time",
       "url": "https://itunes.apple.com/us/rss/customerreviews/id=1129523589/sortBy=mostRecent/json",
       "publishedAt": "2026-06-03T13:55:21-07:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "detectedAt": "2026-06-12T17:26:31.619Z",
       "category": "Review de app",
       "country": "US",
       "players": [],
@@ -1690,7 +2599,7 @@
       "summary": "Horrible experience trying to cancel my subscription, getting charged over $600 a year for a app I don’t use, even though I’m trying to cancel.",
       "url": "https://itunes.apple.com/us/rss/customerreviews/id=1129523589/sortBy=mostRecent/json",
       "publishedAt": "2026-06-03T04:32:01-07:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "detectedAt": "2026-06-12T17:26:31.619Z",
       "category": "Review de app",
       "country": "US",
       "players": [],
@@ -1716,7 +2625,7 @@
       "summary": "I feel robbed",
       "url": "https://itunes.apple.com/us/rss/customerreviews/id=1129523589/sortBy=mostRecent/json",
       "publishedAt": "2026-06-01T22:48:14-07:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "detectedAt": "2026-06-12T17:26:31.619Z",
       "category": "Review de app",
       "country": "US",
       "players": [],
@@ -1740,7 +2649,7 @@
       "summary": "Customer service rude and they don’t help cancer patients!",
       "url": "https://itunes.apple.com/us/rss/customerreviews/id=1129523589/sortBy=mostRecent/json",
       "publishedAt": "2026-06-01T13:24:53-07:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "detectedAt": "2026-06-12T17:26:31.619Z",
       "category": "Review de app",
       "country": "US",
       "players": [],
@@ -1764,7 +2673,7 @@
       "summary": "scamming cancelled month before got charged for next month and couldn’t get refund",
       "url": "https://itunes.apple.com/us/rss/customerreviews/id=1129523589/sortBy=mostRecent/json",
       "publishedAt": "2026-05-31T11:13:36-07:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "detectedAt": "2026-06-12T17:26:31.619Z",
       "category": "Review de app",
       "country": "US",
       "players": [],
@@ -1789,7 +2698,7 @@
       "summary": "Cost to much not enough good boxing fights",
       "url": "https://itunes.apple.com/us/rss/customerreviews/id=1129523589/sortBy=mostRecent/json",
       "publishedAt": "2026-05-30T16:34:10-07:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "detectedAt": "2026-06-12T17:26:31.619Z",
       "category": "Review de app",
       "country": "US",
       "players": [],
@@ -1814,7 +2723,7 @@
       "summary": "during boxing live events if you're not watching in real time the video can error out and you'll lose your place in the video. its hard to keep a bookmark on the fights it may not always save your watch time. Its decent but can use more stability improvements.",
       "url": "https://itunes.apple.com/us/rss/customerreviews/id=1129523589/sortBy=mostRecent/json",
       "publishedAt": "2026-05-30T16:34:10-07:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "detectedAt": "2026-06-12T17:26:31.619Z",
       "category": "Review de app",
       "country": "US",
       "players": [],
@@ -1841,7 +2750,7 @@
       "summary": "Too expensive",
       "url": "https://itunes.apple.com/us/rss/customerreviews/id=1129523589/sortBy=mostRecent/json",
       "publishedAt": "2026-05-30T06:37:41-07:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "detectedAt": "2026-06-12T17:26:31.619Z",
       "category": "Review de app",
       "country": "US",
       "players": [],
@@ -1857,6 +2766,238 @@
       ]
     },
     {
+      "id": "review-espn-14168510661-2026-06-10t20-53-28-07-00",
+      "sourceType": "app-review",
+      "sourceName": "Apple App Store reviews",
+      "sourceUrl": "https://itunes.apple.com/us/rss/customerreviews/id=317469184/sortBy=mostRecent/json",
+      "title": "Skipping Forward",
+      "summary": "Every time I’ve had to watch an NBA Finals game on the ESPN app it keeps skipping forward! This is the worst streaming service I have EVER used. Especially when the stream stops, freezes then crashes just in the last minute of the game. Then you go to try and launch the stream again and you can see the final score. I...",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/id=317469184/sortBy=mostRecent/json",
+      "publishedAt": "2026-06-10T20:53:28-07:00",
+      "detectedAt": "2026-06-12T17:26:31.619Z",
+      "category": "Review de app",
+      "country": "US",
+      "players": [],
+      "teams": [],
+      "tags": [
+        "ESPN",
+        "app review"
+      ],
+      "app": "ESPN",
+      "rating": 1,
+      "reportedProblem": "Streaming",
+      "classifications": [
+        "Streaming",
+        "Mobile Experience",
+        "Error Recovery",
+        "IA"
+      ]
+    },
+    {
+      "id": "review-espn-14168422743-2026-06-10t20-14-28-07-00",
+      "sourceType": "app-review",
+      "sourceName": "Apple App Store reviews",
+      "sourceUrl": "https://itunes.apple.com/us/rss/customerreviews/id=317469184/sortBy=mostRecent/json",
+      "title": "No sirve",
+      "summary": "No deja ver los partidos en vivo a pesar de pagar la suscripción",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/id=317469184/sortBy=mostRecent/json",
+      "publishedAt": "2026-06-10T20:14:28-07:00",
+      "detectedAt": "2026-06-12T17:26:31.619Z",
+      "category": "Review de app",
+      "country": "US",
+      "players": [],
+      "teams": [],
+      "tags": [
+        "ESPN",
+        "app review"
+      ],
+      "app": "ESPN",
+      "rating": 1,
+      "classifications": [
+        "Streaming",
+        "Mobile Experience"
+      ]
+    },
+    {
+      "id": "review-espn-14168419805-2026-06-10t20-13-09-07-00",
+      "sourceType": "app-review",
+      "sourceName": "Apple App Store reviews",
+      "sourceUrl": "https://itunes.apple.com/us/rss/customerreviews/id=317469184/sortBy=mostRecent/json",
+      "title": "1 hour on the phone to cancel and refund",
+      "summary": "Absolute nightmare to deal with. I’ve been through the Disney+ app and two different agents. Never a customer again.",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/id=317469184/sortBy=mostRecent/json",
+      "publishedAt": "2026-06-10T20:13:09-07:00",
+      "detectedAt": "2026-06-12T17:26:31.619Z",
+      "category": "Review de app",
+      "country": "US",
+      "players": [],
+      "teams": [],
+      "tags": [
+        "ESPN",
+        "app review"
+      ],
+      "app": "ESPN",
+      "rating": 1,
+      "classifications": [
+        "Streaming",
+        "Mobile Experience",
+        "IA"
+      ]
+    },
+    {
+      "id": "review-espn-14168382465-2026-06-10t19-57-13-07-00",
+      "sourceType": "app-review",
+      "sourceName": "Apple App Store reviews",
+      "sourceUrl": "https://itunes.apple.com/us/rss/customerreviews/id=317469184/sortBy=mostRecent/json",
+      "title": "Not good",
+      "summary": "It never connects it. I already spoke to our provider, but it. It them.",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/id=317469184/sortBy=mostRecent/json",
+      "publishedAt": "2026-06-10T19:57:13-07:00",
+      "detectedAt": "2026-06-12T17:26:31.619Z",
+      "category": "Review de app",
+      "country": "US",
+      "players": [],
+      "teams": [],
+      "tags": [
+        "ESPN",
+        "app review"
+      ],
+      "app": "ESPN",
+      "rating": 1,
+      "classifications": [
+        "Streaming",
+        "Mobile Experience"
+      ]
+    },
+    {
+      "id": "review-espn-14168339849-2026-06-10t19-39-16-07-00",
+      "sourceType": "app-review",
+      "sourceName": "Apple App Store reviews",
+      "sourceUrl": "https://itunes.apple.com/us/rss/customerreviews/id=317469184/sortBy=mostRecent/json",
+      "title": "To much politics",
+      "summary": "Can we just have sports with out politics please.",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/id=317469184/sortBy=mostRecent/json",
+      "publishedAt": "2026-06-10T19:39:16-07:00",
+      "detectedAt": "2026-06-12T17:26:31.619Z",
+      "category": "Review de app",
+      "country": "US",
+      "players": [],
+      "teams": [],
+      "tags": [
+        "ESPN",
+        "app review"
+      ],
+      "app": "ESPN",
+      "rating": 1,
+      "classifications": [
+        "Mobile Experience"
+      ]
+    },
+    {
+      "id": "review-espn-14168165044-2026-06-10t18-28-38-07-00",
+      "sourceType": "app-review",
+      "sourceName": "Apple App Store reviews",
+      "sourceUrl": "https://itunes.apple.com/us/rss/customerreviews/id=317469184/sortBy=mostRecent/json",
+      "title": "Robbing me for what reason",
+      "summary": "Yall need to add a email verification system, how can y’all be this big and not have one.",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/id=317469184/sortBy=mostRecent/json",
+      "publishedAt": "2026-06-10T18:28:38-07:00",
+      "detectedAt": "2026-06-12T17:26:31.619Z",
+      "category": "Review de app",
+      "country": "US",
+      "players": [],
+      "teams": [],
+      "tags": [
+        "ESPN",
+        "app review"
+      ],
+      "app": "ESPN",
+      "rating": 1,
+      "classifications": [
+        "Streaming",
+        "Mobile Experience",
+        "IA"
+      ]
+    },
+    {
+      "id": "review-espn-14168103522-2026-06-10t18-04-08-07-00",
+      "sourceType": "app-review",
+      "sourceName": "Apple App Store reviews",
+      "sourceUrl": "https://itunes.apple.com/us/rss/customerreviews/id=317469184/sortBy=mostRecent/json",
+      "title": "Other apps do it better",
+      "summary": "Still slow and you are unable to hide sports you are not interested in seeing. If I don’t want to see a certain league doesn’t matter, it will pop up and you have to scroll scroll scroll to find the teams and leagues you have favorited. It is also very hard to find the stats you are looking for in the app. Simple thin...",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/id=317469184/sortBy=mostRecent/json",
+      "publishedAt": "2026-06-10T18:04:08-07:00",
+      "detectedAt": "2026-06-12T17:26:31.619Z",
+      "category": "Review de app",
+      "country": "US",
+      "players": [],
+      "teams": [],
+      "tags": [
+        "ESPN",
+        "app review"
+      ],
+      "app": "ESPN",
+      "rating": 2,
+      "reportedProblem": "High traffic",
+      "classifications": [
+        "Streaming",
+        "Mobile Experience",
+        "High Traffic",
+        "IA"
+      ]
+    },
+    {
+      "id": "review-espn-14167798481-2026-06-10t16-01-08-07-00",
+      "sourceType": "app-review",
+      "sourceName": "Apple App Store reviews",
+      "sourceUrl": "https://itunes.apple.com/us/rss/customerreviews/id=317469184/sortBy=mostRecent/json",
+      "title": "Background battery drain after fresh install",
+      "summary": "Issues has persisted for months without a fix.",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/id=317469184/sortBy=mostRecent/json",
+      "publishedAt": "2026-06-10T16:01:08-07:00",
+      "detectedAt": "2026-06-12T17:26:31.619Z",
+      "category": "Review de app",
+      "country": "US",
+      "players": [],
+      "teams": [],
+      "tags": [
+        "ESPN",
+        "app review"
+      ],
+      "app": "ESPN",
+      "rating": 1,
+      "classifications": [
+        "Mobile Experience",
+        "IA"
+      ]
+    },
+    {
+      "id": "review-espn-14167056327-2026-06-10t11-31-51-07-00",
+      "sourceType": "app-review",
+      "sourceName": "Apple App Store reviews",
+      "sourceUrl": "https://itunes.apple.com/us/rss/customerreviews/id=317469184/sortBy=mostRecent/json",
+      "title": "nba",
+      "summary": "i’d like to watch the game but I can’t believe you’re gonna charge me $40 to watch the game",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/id=317469184/sortBy=mostRecent/json",
+      "publishedAt": "2026-06-10T11:31:51-07:00",
+      "detectedAt": "2026-06-12T17:26:31.619Z",
+      "category": "Review de app",
+      "country": "US",
+      "players": [],
+      "teams": [],
+      "tags": [
+        "ESPN",
+        "app review"
+      ],
+      "app": "ESPN",
+      "rating": 2,
+      "classifications": [
+        "Streaming",
+        "Mobile Experience"
+      ]
+    },
+    {
       "id": "review-espn-14166043414-2026-06-10t06-25-32-07-00",
       "sourceType": "app-review",
       "sourceName": "Apple App Store reviews",
@@ -1865,7 +3006,7 @@
       "summary": "Stop pushing notifications for sports and leagues I am not interested in and do not follow. I have my account/feed curated for a reason and at your suggestion so use that info then.",
       "url": "https://itunes.apple.com/us/rss/customerreviews/id=317469184/sortBy=mostRecent/json",
       "publishedAt": "2026-06-10T06:25:32-07:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "detectedAt": "2026-06-12T17:26:31.619Z",
       "category": "Review de app",
       "country": "US",
       "players": [],
@@ -1882,235 +3023,155 @@
       ]
     },
     {
-      "id": "review-espn-14166031989-2026-06-10t06-22-09-07-00",
+      "id": "review-disney--14168411065-2026-06-10t20-09-23-07-00",
       "sourceType": "app-review",
       "sourceName": "Apple App Store reviews",
-      "sourceUrl": "https://itunes.apple.com/us/rss/customerreviews/id=317469184/sortBy=mostRecent/json",
-      "title": "Uninstalled",
-      "summary": "I only use theScore 🐐",
-      "url": "https://itunes.apple.com/us/rss/customerreviews/id=317469184/sortBy=mostRecent/json",
-      "publishedAt": "2026-06-10T06:22:09-07:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "sourceUrl": "https://itunes.apple.com/us/rss/customerreviews/id=1446075923/sortBy=mostRecent/json",
+      "title": "PASSWORDS",
+      "summary": "tell me why i always gotta change my password every SINGLE TIME I TRY TO LOG IN THIS IS SO ANNOYING",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/id=1446075923/sortBy=mostRecent/json",
+      "publishedAt": "2026-06-10T20:09:23-07:00",
+      "detectedAt": "2026-06-12T17:26:31.619Z",
       "category": "Review de app",
       "country": "US",
       "players": [],
       "teams": [],
       "tags": [
-        "ESPN",
+        "Disney+",
         "app review"
       ],
-      "app": "ESPN",
-      "rating": 1,
+      "app": "Disney+",
+      "rating": 3,
       "classifications": [
+        "Streaming",
         "Mobile Experience"
       ]
     },
     {
-      "id": "review-espn-14164519516-2026-06-09t19-54-36-07-00",
+      "id": "review-disney--14168074615-2026-06-10t17-52-35-07-00",
       "sourceType": "app-review",
       "sourceName": "Apple App Store reviews",
-      "sourceUrl": "https://itunes.apple.com/us/rss/customerreviews/id=317469184/sortBy=mostRecent/json",
-      "title": "Another Sports Scam - Avoid",
-      "summary": "Disney continues to chip away at their subscriber’s wallets as if they are infinitely deep. What was once an acceptable deal (Disney+Espn+Hulu) bundle is now just an advert hollow shell of a platform that doesn’t let you actually watch anything. Shame on Disney and ESPN for making everything worse and more expensive f...",
-      "url": "https://itunes.apple.com/us/rss/customerreviews/id=317469184/sortBy=mostRecent/json",
-      "publishedAt": "2026-06-09T19:54:36-07:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "sourceUrl": "https://itunes.apple.com/us/rss/customerreviews/id=1446075923/sortBy=mostRecent/json",
+      "title": "Age limit",
+      "summary": "I used to like Disney+ but now sense my kids can’t be able to watch shows on Disney+ on long drives or plane rides it’s so annoying",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/id=1446075923/sortBy=mostRecent/json",
+      "publishedAt": "2026-06-10T17:52:35-07:00",
+      "detectedAt": "2026-06-12T17:26:31.619Z",
       "category": "Review de app",
       "country": "US",
       "players": [],
       "teams": [],
       "tags": [
-        "ESPN",
+        "Disney+",
         "app review"
       ],
-      "app": "ESPN",
+      "app": "Disney+",
       "rating": 1,
       "classifications": [
         "Streaming",
-        "Mobile Experience",
-        "Trust"
+        "Mobile Experience"
       ]
     },
     {
-      "id": "review-espn-14164503352-2026-06-09t19-47-47-07-00",
+      "id": "review-disney--14168013753-2026-06-10t17-28-13-07-00",
       "sourceType": "app-review",
       "sourceName": "Apple App Store reviews",
-      "sourceUrl": "https://itunes.apple.com/us/rss/customerreviews/id=317469184/sortBy=mostRecent/json",
-      "title": "Worst app I have",
-      "summary": "Slow, laggy, doesn’t load, score delays, can’t pull up articles, ads freeze and cause crashes, buggy, gets worse and worse and worse.",
-      "url": "https://itunes.apple.com/us/rss/customerreviews/id=317469184/sortBy=mostRecent/json",
-      "publishedAt": "2026-06-09T19:47:47-07:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "sourceUrl": "https://itunes.apple.com/us/rss/customerreviews/id=1446075923/sortBy=mostRecent/json",
+      "title": "Worst Streaming Service of ALL Time",
+      "summary": "Good shows, horrible streaming service",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/id=1446075923/sortBy=mostRecent/json",
+      "publishedAt": "2026-06-10T17:28:13-07:00",
+      "detectedAt": "2026-06-12T17:26:31.619Z",
       "category": "Review de app",
       "country": "US",
       "players": [],
       "teams": [],
       "tags": [
-        "ESPN",
+        "Disney+",
         "app review"
       ],
-      "app": "ESPN",
+      "app": "Disney+",
       "rating": 1,
-      "reportedProblem": "Error recovery",
+      "reportedProblem": "Streaming",
       "classifications": [
         "Streaming",
+        "Mobile Experience"
+      ]
+    },
+    {
+      "id": "review-disney--14167834547-2026-06-10t16-15-42-07-00",
+      "sourceType": "app-review",
+      "sourceName": "Apple App Store reviews",
+      "sourceUrl": "https://itunes.apple.com/us/rss/customerreviews/id=1446075923/sortBy=mostRecent/json",
+      "title": "Be ready to deal with problem after problem",
+      "summary": "I have had problems after problems with the app. I got stuck in a sign in loop on my tv that would ask me to sign in from my phone, after doing so it just wouldn’t sign in on the TV. I had to do a factory reset to fix that because there isn’t a manual sign in option. After finally signing in shows and movies would pla...",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/id=1446075923/sortBy=mostRecent/json",
+      "publishedAt": "2026-06-10T16:15:42-07:00",
+      "detectedAt": "2026-06-12T17:26:31.619Z",
+      "category": "Review de app",
+      "country": "US",
+      "players": [],
+      "teams": [],
+      "tags": [
+        "Disney+",
+        "app review"
+      ],
+      "app": "Disney+",
+      "rating": 1,
+      "reportedProblem": "Login",
+      "classifications": [
         "Mobile Experience",
-        "High Traffic",
         "Error Recovery"
       ]
     },
     {
-      "id": "review-espn-14164446543-2026-06-09t19-24-14-07-00",
+      "id": "review-disney--14167545645-2026-06-10t14-21-50-07-00",
       "sourceType": "app-review",
       "sourceName": "Apple App Store reviews",
-      "sourceUrl": "https://itunes.apple.com/us/rss/customerreviews/id=317469184/sortBy=mostRecent/json",
-      "title": "Great app to keep you updated but needs customization.",
-      "summary": "The app is great in keeping you updated with the most relevant sports news and updates, but lacks the customization. One thing I would like to see is the option to opt out of updates for both sports and sports teams that I don’t follow.",
-      "url": "https://itunes.apple.com/us/rss/customerreviews/id=317469184/sortBy=mostRecent/json",
-      "publishedAt": "2026-06-09T19:24:14-07:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "sourceUrl": "https://itunes.apple.com/us/rss/customerreviews/id=1446075923/sortBy=mostRecent/json",
+      "title": "dude it sucks now",
+      "summary": "dude it’s so confusing now now that the next button what happened to being able to start over an episode it sucks now put it back the way it was before",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/id=1446075923/sortBy=mostRecent/json",
+      "publishedAt": "2026-06-10T14:21:50-07:00",
+      "detectedAt": "2026-06-12T17:26:31.619Z",
       "category": "Review de app",
       "country": "US",
       "players": [],
       "teams": [],
       "tags": [
-        "ESPN",
+        "Disney+",
         "app review"
       ],
-      "app": "ESPN",
+      "app": "Disney+",
+      "rating": 2,
+      "classifications": [
+        "Streaming",
+        "Mobile Experience"
+      ]
+    },
+    {
+      "id": "review-disney--14167134574-2026-06-10t11-57-40-07-00",
+      "sourceType": "app-review",
+      "sourceName": "Apple App Store reviews",
+      "sourceUrl": "https://itunes.apple.com/us/rss/customerreviews/id=1446075923/sortBy=mostRecent/json",
+      "title": "Good movies, but not for everyone!",
+      "summary": "MANY movies are not in Spanish, so at least put subtitles in the language, practically all good movies have only one language, take it into account!",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/id=1446075923/sortBy=mostRecent/json",
+      "publishedAt": "2026-06-10T11:57:40-07:00",
+      "detectedAt": "2026-06-12T17:26:31.619Z",
+      "category": "Review de app",
+      "country": "US",
+      "players": [],
+      "teams": [],
+      "tags": [
+        "Disney+",
+        "app review"
+      ],
+      "app": "Disney+",
       "rating": 4,
       "classifications": [
-        "Mobile Experience",
-        "IA"
-      ]
-    },
-    {
-      "id": "review-espn-14164429862-2026-06-09t19-17-27-07-00",
-      "sourceType": "app-review",
-      "sourceName": "Apple App Store reviews",
-      "sourceUrl": "https://itunes.apple.com/us/rss/customerreviews/id=317469184/sortBy=mostRecent/json",
-      "title": "This app has fake good reviews don’t believe them",
-      "summary": "It’s a bad app that doesn’t do what it’s intended to do.",
-      "url": "https://itunes.apple.com/us/rss/customerreviews/id=317469184/sortBy=mostRecent/json",
-      "publishedAt": "2026-06-09T19:17:27-07:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
-      "category": "Review de app",
-      "country": "US",
-      "players": [],
-      "teams": [],
-      "tags": [
-        "ESPN",
-        "app review"
-      ],
-      "app": "ESPN",
-      "rating": 1,
-      "classifications": [
-        "Mobile Experience"
-      ]
-    },
-    {
-      "id": "review-espn-14164329767-2026-06-09t18-37-03-07-00",
-      "sourceType": "app-review",
-      "sourceName": "Apple App Store reviews",
-      "sourceUrl": "https://itunes.apple.com/us/rss/customerreviews/id=317469184/sortBy=mostRecent/json",
-      "title": "Super SLOW",
-      "summary": "Very slow loading scores. Fails to show the sports/teams I’ve favored. Shows everything",
-      "url": "https://itunes.apple.com/us/rss/customerreviews/id=317469184/sortBy=mostRecent/json",
-      "publishedAt": "2026-06-09T18:37:03-07:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
-      "category": "Review de app",
-      "country": "US",
-      "players": [],
-      "teams": [],
-      "tags": [
-        "ESPN",
-        "app review"
-      ],
-      "app": "ESPN",
-      "rating": 1,
-      "reportedProblem": "High traffic",
-      "classifications": [
-        "Streaming",
-        "Mobile Experience",
-        "High Traffic",
-        "IA"
-      ]
-    },
-    {
-      "id": "review-espn-14164123454-2026-06-09t17-14-42-07-00",
-      "sourceType": "app-review",
-      "sourceName": "Apple App Store reviews",
-      "sourceUrl": "https://itunes.apple.com/us/rss/customerreviews/id=317469184/sortBy=mostRecent/json",
-      "title": "Bad on iPad",
-      "summary": "Every time you go to use this app, you have to restart it at least once. It completely loses your authentication between sessions, and then when you do log in, it wants to you log in with a TV provider. If you’re an ESPN+ subscriber, there’s no option, so you can log in with Hulu or Spectrum or something, and it doesn...",
-      "url": "https://itunes.apple.com/us/rss/customerreviews/id=317469184/sortBy=mostRecent/json",
-      "publishedAt": "2026-06-09T17:14:42-07:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
-      "category": "Review de app",
-      "country": "US",
-      "players": [],
-      "teams": [],
-      "tags": [
-        "ESPN",
-        "app review"
-      ],
-      "app": "ESPN",
-      "rating": 1,
-      "classifications": [
         "Streaming",
         "Mobile Experience"
-      ]
-    },
-    {
-      "id": "review-espn-14164036236-2026-06-09t16-39-17-07-00",
-      "sourceType": "app-review",
-      "sourceName": "Apple App Store reviews",
-      "sourceUrl": "https://itunes.apple.com/us/rss/customerreviews/id=317469184/sortBy=mostRecent/json",
-      "title": "ESPN",
-      "summary": "Shouldn’t charge to watch sports. Worlds greedy enough and we can’t even enjoy sports events without paying.",
-      "url": "https://itunes.apple.com/us/rss/customerreviews/id=317469184/sortBy=mostRecent/json",
-      "publishedAt": "2026-06-09T16:39:17-07:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
-      "category": "Review de app",
-      "country": "US",
-      "players": [],
-      "teams": [],
-      "tags": [
-        "ESPN",
-        "app review"
-      ],
-      "app": "ESPN",
-      "rating": 1,
-      "classifications": [
-        "Streaming",
-        "Mobile Experience"
-      ]
-    },
-    {
-      "id": "review-espn-14163559838-2026-06-09t13-34-16-07-00",
-      "sourceType": "app-review",
-      "sourceName": "Apple App Store reviews",
-      "sourceUrl": "https://itunes.apple.com/us/rss/customerreviews/id=317469184/sortBy=mostRecent/json",
-      "title": "Notification Spam",
-      "summary": "No matter the combination of setting, I am always getting spammed with notifications. I’m never using this app again.",
-      "url": "https://itunes.apple.com/us/rss/customerreviews/id=317469184/sortBy=mostRecent/json",
-      "publishedAt": "2026-06-09T13:34:16-07:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
-      "category": "Review de app",
-      "country": "US",
-      "players": [],
-      "teams": [],
-      "tags": [
-        "ESPN",
-        "app review"
-      ],
-      "app": "ESPN",
-      "rating": 1,
-      "classifications": [
-        "Streaming",
-        "Mobile Experience",
-        "Fan Experience",
-        "IA"
       ]
     },
     {
@@ -2122,7 +3183,7 @@
       "summary": "Full of content and the selection is wonderful however the streaming service itself is one of the worst on the market. Most of the time the skip intro or skip credits buttons are broken. If they start speaking in a different language or even a made up language you have to put general subtitles on which is ridiculous....",
       "url": "https://itunes.apple.com/us/rss/customerreviews/id=1446075923/sortBy=mostRecent/json",
       "publishedAt": "2026-06-10T09:20:32-07:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "detectedAt": "2026-06-12T17:26:31.619Z",
       "category": "Review de app",
       "country": "US",
       "players": [],
@@ -2149,7 +3210,7 @@
       "summary": "I was watching a show and then out of no where Disney basically logged me out and now it logs me out and it keeps saying sorry try again later and no matter what I do it doesn’t work on my phone.",
       "url": "https://itunes.apple.com/us/rss/customerreviews/id=1446075923/sortBy=mostRecent/json",
       "publishedAt": "2026-06-10T09:20:28-07:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "detectedAt": "2026-06-12T17:26:31.619Z",
       "category": "Review de app",
       "country": "US",
       "players": [],
@@ -2175,7 +3236,7 @@
       "summary": "I love the app and all the amazing shows on here, but if we are all being honest,there are WAY too many ads. Everytime I open the app, ad, every 10 mins, ad, everytime I fast forward, ad. I don't need to pay to be able to not have to watch a GLP 1 pill for weight loss ad every 10 minutes.",
       "url": "https://itunes.apple.com/us/rss/customerreviews/id=1446075923/sortBy=mostRecent/json",
       "publishedAt": "2026-06-10T08:32:50-07:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "detectedAt": "2026-06-12T17:26:31.619Z",
       "category": "Review de app",
       "country": "US",
       "players": [],
@@ -2200,7 +3261,7 @@
       "summary": "You pay for a monthly subscription and then you still get commercials every 5 mins on a show. BS!! Very annoying.",
       "url": "https://itunes.apple.com/us/rss/customerreviews/id=1446075923/sortBy=mostRecent/json",
       "publishedAt": "2026-06-09T23:18:37-07:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "detectedAt": "2026-06-12T17:26:31.619Z",
       "category": "Review de app",
       "country": "US",
       "players": [],
@@ -2218,147 +3279,75 @@
       ]
     },
     {
-      "id": "review-disney--14164724400-2026-06-09t21-24-12-07-00",
+      "id": "review-directv-14168095534-2026-06-10t18-00-59-07-00",
       "sourceType": "app-review",
       "sourceName": "Apple App Store reviews",
-      "sourceUrl": "https://itunes.apple.com/us/rss/customerreviews/id=1446075923/sortBy=mostRecent/json",
-      "title": "Question",
-      "summary": "I open my app and it just stays on the app symbol stopped working since last update.",
-      "url": "https://itunes.apple.com/us/rss/customerreviews/id=1446075923/sortBy=mostRecent/json",
-      "publishedAt": "2026-06-09T21:24:12-07:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "sourceUrl": "https://itunes.apple.com/us/rss/customerreviews/id=1136238277/sortBy=mostRecent/json",
+      "title": "Terrible UI",
+      "summary": "Awful UI, consistent price increases with no increase in value provided. Trash",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/id=1136238277/sortBy=mostRecent/json",
+      "publishedAt": "2026-06-10T18:00:59-07:00",
+      "detectedAt": "2026-06-12T17:26:31.619Z",
       "category": "Review de app",
       "country": "US",
       "players": [],
       "teams": [],
       "tags": [
-        "Disney+",
+        "DirecTV",
         "app review"
       ],
-      "app": "Disney+",
+      "app": "DirecTV",
       "rating": 1,
       "classifications": [
         "Mobile Experience"
       ]
     },
     {
-      "id": "review-disney--14164360128-2026-06-09t18-49-14-07-00",
+      "id": "review-directv-14167728957-2026-06-10t15-33-11-07-00",
       "sourceType": "app-review",
       "sourceName": "Apple App Store reviews",
-      "sourceUrl": "https://itunes.apple.com/us/rss/customerreviews/id=1446075923/sortBy=mostRecent/json",
-      "title": "SharePlay",
-      "summary": "SharePlay method is terrible",
-      "url": "https://itunes.apple.com/us/rss/customerreviews/id=1446075923/sortBy=mostRecent/json",
-      "publishedAt": "2026-06-09T18:49:14-07:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "sourceUrl": "https://itunes.apple.com/us/rss/customerreviews/id=1136238277/sortBy=mostRecent/json",
+      "title": "Mrs",
+      "summary": "I do love streaming DTV. Wish it wasn’t so costly.",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/id=1136238277/sortBy=mostRecent/json",
+      "publishedAt": "2026-06-10T15:33:11-07:00",
+      "detectedAt": "2026-06-12T17:26:31.619Z",
       "category": "Review de app",
       "country": "US",
       "players": [],
       "teams": [],
       "tags": [
-        "Disney+",
+        "DirecTV",
         "app review"
       ],
-      "app": "Disney+",
-      "rating": 1,
-      "classifications": [
-        "Mobile Experience"
-      ]
-    },
-    {
-      "id": "review-disney--14164307972-2026-06-09t18-28-24-07-00",
-      "sourceType": "app-review",
-      "sourceName": "Apple App Store reviews",
-      "sourceUrl": "https://itunes.apple.com/us/rss/customerreviews/id=1446075923/sortBy=mostRecent/json",
-      "title": "Don’t buy",
-      "summary": "50% commercials. Commercials stop until you get back m, if you change screens",
-      "url": "https://itunes.apple.com/us/rss/customerreviews/id=1446075923/sortBy=mostRecent/json",
-      "publishedAt": "2026-06-09T18:28:24-07:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
-      "category": "Review de app",
-      "country": "US",
-      "players": [],
-      "teams": [],
-      "tags": [
-        "Disney+",
-        "app review"
-      ],
-      "app": "Disney+",
-      "rating": 1,
-      "classifications": [
-        "Mobile Experience",
-        "IA"
-      ]
-    },
-    {
-      "id": "review-disney--14164018306-2026-06-09t16-31-58-07-00",
-      "sourceType": "app-review",
-      "sourceName": "Apple App Store reviews",
-      "sourceUrl": "https://itunes.apple.com/us/rss/customerreviews/id=1446075923/sortBy=mostRecent/json",
-      "title": "I tried to update it",
-      "summary": "So it said I need to update it but then I press the link and it said I don’t need to update",
-      "url": "https://itunes.apple.com/us/rss/customerreviews/id=1446075923/sortBy=mostRecent/json",
-      "publishedAt": "2026-06-09T16:31:58-07:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
-      "category": "Review de app",
-      "country": "US",
-      "players": [],
-      "teams": [],
-      "tags": [
-        "Disney+",
-        "app review"
-      ],
-      "app": "Disney+",
-      "rating": 4,
-      "classifications": [
-        "Mobile Experience",
-        "IA"
-      ]
-    },
-    {
-      "id": "review-disney--14163974324-2026-06-09t16-14-15-07-00",
-      "sourceType": "app-review",
-      "sourceName": "Apple App Store reviews",
-      "sourceUrl": "https://itunes.apple.com/us/rss/customerreviews/id=1446075923/sortBy=mostRecent/json",
-      "title": "Austan Sullivan Martin",
-      "summary": "I LOVE DISNEY+!!🧡📱⌚️",
-      "url": "https://itunes.apple.com/us/rss/customerreviews/id=1446075923/sortBy=mostRecent/json",
-      "publishedAt": "2026-06-09T16:14:15-07:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
-      "category": "Review de app",
-      "country": "US",
-      "players": [],
-      "teams": [],
-      "tags": [
-        "Disney+",
-        "app review"
-      ],
-      "app": "Disney+",
+      "app": "DirecTV",
       "rating": 5,
+      "reportedProblem": "Streaming",
       "classifications": [
+        "Streaming",
         "Mobile Experience"
       ]
     },
     {
-      "id": "review-disney--14163172167-2026-06-09t11-22-24-07-00",
+      "id": "review-directv-14166674243-2026-06-10t09-31-15-07-00",
       "sourceType": "app-review",
       "sourceName": "Apple App Store reviews",
-      "sourceUrl": "https://itunes.apple.com/us/rss/customerreviews/id=1446075923/sortBy=mostRecent/json",
-      "title": "descendants",
-      "summary": "The new descendants is so WIERD!!!🤮",
-      "url": "https://itunes.apple.com/us/rss/customerreviews/id=1446075923/sortBy=mostRecent/json",
-      "publishedAt": "2026-06-09T11:22:24-07:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "sourceUrl": "https://itunes.apple.com/us/rss/customerreviews/id=1136238277/sortBy=mostRecent/json",
+      "title": "CBS",
+      "summary": "Why has this not been resolved yet. I pay to have this station.",
+      "url": "https://itunes.apple.com/us/rss/customerreviews/id=1136238277/sortBy=mostRecent/json",
+      "publishedAt": "2026-06-10T09:31:15-07:00",
+      "detectedAt": "2026-06-12T17:26:31.619Z",
       "category": "Review de app",
       "country": "US",
       "players": [],
       "teams": [],
       "tags": [
-        "Disney+",
+        "DirecTV",
         "app review"
       ],
-      "app": "Disney+",
-      "rating": 2,
+      "app": "DirecTV",
+      "rating": 3,
       "classifications": [
         "Mobile Experience"
       ]
@@ -2372,7 +3361,7 @@
       "summary": "Horrible",
       "url": "https://itunes.apple.com/us/rss/customerreviews/id=1136238277/sortBy=mostRecent/json",
       "publishedAt": "2026-06-10T06:04:48-07:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "detectedAt": "2026-06-12T17:26:31.619Z",
       "category": "Review de app",
       "country": "US",
       "players": [],
@@ -2396,7 +3385,7 @@
       "summary": "Only runs for about an hour at a time before timing out. It happens so often that it’s a genuine issue.",
       "url": "https://itunes.apple.com/us/rss/customerreviews/id=1136238277/sortBy=mostRecent/json",
       "publishedAt": "2026-06-10T04:58:51-07:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "detectedAt": "2026-06-12T17:26:31.619Z",
       "category": "Review de app",
       "country": "US",
       "players": [],
@@ -2420,7 +3409,7 @@
       "summary": "Great Source of Entertainment and News with Streaming and Unlimited Streaming DVR. I follow Politics. DirecTV is the most affordable service w/Cspan! They have a Broad Variety of Channels and You can do a Ton of Online DVR Recording! Suggested Improvement: concerning the “Mix Channels” like the “News Mix Channel”, I w...",
       "url": "https://itunes.apple.com/us/rss/customerreviews/id=1136238277/sortBy=mostRecent/json",
       "publishedAt": "2026-06-09T20:29:21-07:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "detectedAt": "2026-06-12T17:26:31.619Z",
       "category": "Review de app",
       "country": "US",
       "players": [],
@@ -2447,7 +3436,7 @@
       "summary": "Not able to watch Golden Knights",
       "url": "https://itunes.apple.com/us/rss/customerreviews/id=1136238277/sortBy=mostRecent/json",
       "publishedAt": "2026-06-09T19:09:47-07:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "detectedAt": "2026-06-12T17:26:31.619Z",
       "category": "Review de app",
       "country": "US",
       "players": [],
@@ -2472,7 +3461,7 @@
       "summary": "On an Apple TV, selecting any live channel soft-locks the app, making it unresponsive on a blank screen with no error messaging. I have to AirPlay live channels from the DirecTV app on my iPhone to my TV. This is unacceptable. Apple needs to pull this app off of their store.",
       "url": "https://itunes.apple.com/us/rss/customerreviews/id=1136238277/sortBy=mostRecent/json",
       "publishedAt": "2026-06-09T17:03:51-07:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "detectedAt": "2026-06-12T17:26:31.619Z",
       "category": "Review de app",
       "country": "US",
       "players": [],
@@ -2500,7 +3489,7 @@
       "summary": "I tried to tap to full screen panoramic mode but was unable to - everything else is great,",
       "url": "https://itunes.apple.com/us/rss/customerreviews/id=1136238277/sortBy=mostRecent/json",
       "publishedAt": "2026-06-09T15:41:13-07:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "detectedAt": "2026-06-12T17:26:31.619Z",
       "category": "Review de app",
       "country": "US",
       "players": [],
@@ -2525,7 +3514,7 @@
       "summary": "My stream is frozen again which means I have to wait for it to magically fix itself and I have missed the entire Stanley Cup finale and NBA finale for a product that I cannot count on working like it is supposed to.",
       "url": "https://itunes.apple.com/us/rss/customerreviews/id=1136238277/sortBy=mostRecent/json",
       "publishedAt": "2026-06-09T10:07:17-07:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
+      "detectedAt": "2026-06-12T17:26:31.619Z",
       "category": "Review de app",
       "country": "US",
       "players": [],
@@ -2542,82 +3531,6 @@
         "Mobile Experience",
         "IA"
       ]
-    },
-    {
-      "id": "review-directv-14162730742-2026-06-09t09-04-23-07-00",
-      "sourceType": "app-review",
-      "sourceName": "Apple App Store reviews",
-      "sourceUrl": "https://itunes.apple.com/us/rss/customerreviews/id=1136238277/sortBy=mostRecent/json",
-      "title": "Good app",
-      "summary": "I enjoy the fact that I can watch both local and cable channels",
-      "url": "https://itunes.apple.com/us/rss/customerreviews/id=1136238277/sortBy=mostRecent/json",
-      "publishedAt": "2026-06-09T09:04:23-07:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
-      "category": "Review de app",
-      "country": "US",
-      "players": [],
-      "teams": [],
-      "tags": [
-        "DirecTV",
-        "app review"
-      ],
-      "app": "DirecTV",
-      "rating": 5,
-      "classifications": [
-        "Streaming",
-        "Mobile Experience",
-        "IA"
-      ]
-    },
-    {
-      "id": "review-directv-14161196022-2026-06-08t23-52-27-07-00",
-      "sourceType": "app-review",
-      "sourceName": "Apple App Store reviews",
-      "sourceUrl": "https://itunes.apple.com/us/rss/customerreviews/id=1136238277/sortBy=mostRecent/json",
-      "title": "Signs out all time",
-      "summary": "Today I had to change my password because the password I used was 1 year old. Get real",
-      "url": "https://itunes.apple.com/us/rss/customerreviews/id=1136238277/sortBy=mostRecent/json",
-      "publishedAt": "2026-06-08T23:52:27-07:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
-      "category": "Review de app",
-      "country": "US",
-      "players": [],
-      "teams": [],
-      "tags": [
-        "DirecTV",
-        "app review"
-      ],
-      "app": "DirecTV",
-      "rating": 3,
-      "classifications": [
-        "Mobile Experience"
-      ]
-    },
-    {
-      "id": "review-directv-14160704953-2026-06-08t20-08-44-07-00",
-      "sourceType": "app-review",
-      "sourceName": "Apple App Store reviews",
-      "sourceUrl": "https://itunes.apple.com/us/rss/customerreviews/id=1136238277/sortBy=mostRecent/json",
-      "title": "NBA Finals",
-      "summary": "I’m paying close to $200 a month for DirecTV and they have a blackout with local ABC affiliate/Scripps in San Diego. I will be canceling, and urge everyone to avoid DirecTV",
-      "url": "https://itunes.apple.com/us/rss/customerreviews/id=1136238277/sortBy=mostRecent/json",
-      "publishedAt": "2026-06-08T20:08:44-07:00",
-      "detectedAt": "2026-06-12T02:22:08.136Z",
-      "category": "Review de app",
-      "country": "US",
-      "players": [],
-      "teams": [],
-      "tags": [
-        "DirecTV",
-        "app review"
-      ],
-      "app": "DirecTV",
-      "rating": 1,
-      "classifications": [
-        "Streaming",
-        "Mobile Experience",
-        "IA"
-      ]
     }
   ],
   "sources": [
@@ -2628,7 +3541,7 @@
       "url": "https://latingoles.com/wp-json/wp/v2/posts?per_page=20&_embed=1",
       "ok": true,
       "itemCount": 20,
-      "checkedAt": "2026-06-12T02:22:08.860Z"
+      "checkedAt": "2026-06-12T17:26:31.836Z"
     },
     {
       "id": "fifa-https-www-fifa-com-es-tournaments-mens-worldcup-canadamexicousa2026",
@@ -2638,7 +3551,7 @@
       "ok": true,
       "itemCount": 1,
       "note": "Usado solo para validar calendario, partidos y contexto oficial. No se usan logos ni patrocinio.",
-      "checkedAt": "2026-06-12T02:22:08.364Z"
+      "checkedAt": "2026-06-12T17:26:31.620Z"
     },
     {
       "id": "fifa-https-www-fifa-com-es-tournaments-mens-worldcup-canadamexicousa2026-scores-fixtures",
@@ -2648,7 +3561,7 @@
       "ok": true,
       "itemCount": 1,
       "note": "Usado solo para validar calendario, partidos y contexto oficial. No se usan logos ni patrocinio.",
-      "checkedAt": "2026-06-12T02:22:08.521Z"
+      "checkedAt": "2026-06-12T17:26:31.637Z"
     },
     {
       "id": "fifa-https-www-fifa-com-es-tournaments-mens-worldcup-canadamexicousa2026-standings",
@@ -2658,17 +3571,17 @@
       "ok": true,
       "itemCount": 1,
       "note": "Usado solo para validar calendario, partidos y contexto oficial. No se usan logos ni patrocinio.",
-      "checkedAt": "2026-06-12T02:22:08.560Z"
+      "checkedAt": "2026-06-12T17:26:31.639Z"
     },
     {
       "id": "reddit-rss",
       "name": "Reddit RSS público",
       "type": "reddit",
       "url": "https://www.reddit.com/r/soccer/new.rss",
-      "ok": false,
-      "itemCount": 0,
-      "note": "Reddit limitó temporalmente el RSS. Configura OAuth para mayor estabilidad.",
-      "checkedAt": "2026-06-12T02:22:08.972Z"
+      "ok": true,
+      "itemCount": 30,
+      "note": "Respaldo RSS sin credenciales; la API OAuth oficial sigue siendo la fuente preferida.",
+      "checkedAt": "2026-06-12T17:26:31.665Z"
     },
     {
       "id": "google-trends-trendgetter",
@@ -2678,7 +3591,7 @@
       "ok": true,
       "itemCount": 2,
       "note": "Integración basada en Zivsteve/trendgetter (MIT) y el RSS público de Google Trends.",
-      "checkedAt": "2026-06-12T02:22:09.178Z"
+      "checkedAt": "2026-06-12T17:26:31.637Z"
     },
     {
       "id": "apple-reviews-fifa-app",
@@ -2687,7 +3600,7 @@
       "url": "https://itunes.apple.com/us/rss/customerreviews/id=756904853/sortBy=mostRecent/json",
       "ok": true,
       "itemCount": 10,
-      "checkedAt": "2026-06-12T02:22:08.513Z"
+      "checkedAt": "2026-06-12T17:26:31.623Z"
     },
     {
       "id": "apple-reviews-dazn",
@@ -2696,7 +3609,7 @@
       "url": "https://itunes.apple.com/us/rss/customerreviews/id=1129523589/sortBy=mostRecent/json",
       "ok": true,
       "itemCount": 10,
-      "checkedAt": "2026-06-12T02:22:08.537Z"
+      "checkedAt": "2026-06-12T17:26:31.639Z"
     },
     {
       "id": "apple-reviews-espn",
@@ -2705,7 +3618,7 @@
       "url": "https://itunes.apple.com/us/rss/customerreviews/id=317469184/sortBy=mostRecent/json",
       "ok": true,
       "itemCount": 10,
-      "checkedAt": "2026-06-12T02:22:08.558Z"
+      "checkedAt": "2026-06-12T17:26:31.653Z"
     },
     {
       "id": "apple-reviews-disney",
@@ -2714,7 +3627,7 @@
       "url": "https://itunes.apple.com/us/rss/customerreviews/id=1446075923/sortBy=mostRecent/json",
       "ok": true,
       "itemCount": 10,
-      "checkedAt": "2026-06-12T02:22:08.580Z"
+      "checkedAt": "2026-06-12T17:26:31.666Z"
     },
     {
       "id": "apple-reviews-directv",
@@ -2723,7 +3636,7 @@
       "url": "https://itunes.apple.com/us/rss/customerreviews/id=1136238277/sortBy=mostRecent/json",
       "ok": true,
       "itemCount": 10,
-      "checkedAt": "2026-06-12T02:22:08.604Z"
+      "checkedAt": "2026-06-12T17:26:31.667Z"
     },
     {
       "id": "google-play-reviews",
@@ -2733,7 +3646,7 @@
       "ok": false,
       "itemCount": 0,
       "note": "Google Play no expone una API publica oficial de reviews para este uso. Conectar una libreria/API permitida o carga autorizada antes de activar.",
-      "checkedAt": "2026-06-12T02:22:08.604Z"
+      "checkedAt": "2026-06-12T17:26:31.667Z"
     }
   ]
 }

@@ -44,12 +44,6 @@ export function NoteImage({
         className={className}
         loading={loading}
       />
-      {remoteSrc && !remoteLoaded && (
-        <span
-          aria-hidden
-          className="absolute inset-0 animate-pulse bg-gradient-to-r from-muted/85 via-muted-foreground/20 to-muted/85"
-        />
-      )}
       {remoteSrc && (
         <img
           src={remoteSrc}

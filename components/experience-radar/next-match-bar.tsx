@@ -17,10 +17,17 @@ export function NextMatchBar({ updatedAt }: { updatedAt?: string }) {
   useEffect(() => {
     const tick = () => {
       const now = new Date()
-      // 4:00 y 11:00 a.m. Colombia = 09:00 y 16:00 UTC.
-      const targets = [9, 16].map((hour) => {
+      // 4 actualizaciones diarias (hora Colombia → UTC, UTC-5):
+      //  11:00 a. m. = 16:00 · 4:30 p. m. = 21:30 · 6:00 p. m. = 23:00 · 11:30 p. m. = 04:30
+      const schedule = [
+        [16, 0],
+        [21, 30],
+        [23, 0],
+        [4, 30],
+      ]
+      const targets = schedule.map(([hour, minute]) => {
         const target = new Date(now)
-        target.setUTCHours(hour, 0, 0, 0)
+        target.setUTCHours(hour, minute, 0, 0)
         if (target.getTime() <= now.getTime()) target.setUTCDate(target.getUTCDate() + 1)
         return target
       })
