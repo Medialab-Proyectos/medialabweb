@@ -8,3 +8,10 @@ node_modules/
 .next/
 .env*.local
 .DS_Store
+
+# Build artifacts
+tsconfig.tsbuildinfo
+
+# Local tool/editor settings
+.claude/settings.local.json
+.qwen/
