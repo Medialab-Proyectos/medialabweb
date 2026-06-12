@@ -62,14 +62,172 @@ function upcomingMatch(input: {
 }
 
 const ARTICLE_INPUTS: RadarArticleInput[] = [
-  upcomingMatch({
+  {
+    category: "Fan Experience",
     date: "2026-06-12",
     kickoffAt: "2026-06-12T19:00:00.000Z",
     slug: "canada-bosnia-herzegovina-mundial-2026",
+    matchState: "finalizado",
+    updateState: "ready",
+    imageAlt: "Canadá vs Bosnia y Herzegovina — empate 1-1 en BMO Field, Mundial 2026",
+    matchScore: {
+      home: "Canadá",
+      away: "Bosnia y Herzegovina",
+      homeGoals: 1,
+      awayGoals: 1,
+      detail: "Bosnia: Lukić (1ª mitad). Canadá: Cyle Larin 78'. Empate y primer punto de Canadá en la historia de los Mundiales.",
+    },
+    matchSummary:
+      "Canadá rescató un 1-1 ante Bosnia y Herzegovina en BMO Field y sumó su PRIMER punto en la historia de los Mundiales (había perdido los seis partidos de 1986 y 2022). Bosnia se adelantó con el primer gol internacional de Lukić; Canadá empató con Cyle Larin (78'). El mismo marcador se vivió de forma opuesta: fiesta para el anfitrión, decepción para Bosnia.",
+    matchPhases: {
+      // Antes: ilusión nerviosa del anfitrión en su estreno en casa.
+      expectativa: { euforia: 64, confianza: 56, ansiedad: 58, frustracion: 26, incertidumbre: 56, optimismo: 66 },
+      // Durante: tensión con el 0-1 y alivio con el empate sobre el tramo final.
+      realidad: { euforia: 64, confianza: 54, ansiedad: 76, frustracion: 58, incertidumbre: 66, optimismo: 64 },
+      // Después: el empate se ENCUADRA como hito histórico para Canadá → euforia.
+      percepcion: { euforia: 80, confianza: 72, ansiedad: 34, frustracion: 30, incertidumbre: 34, optimismo: 82 },
+    },
+    matchInterpretations: {
+      expectativa: {
+        euforia: "Canadá llegó ilusionada a su estreno en casa, con la energía de jugar un Mundial como anfitrión.",
+        confianza: "Confianza moderada: ganas de competir, pero con el peso de no haber sumado nunca en un Mundial.",
+        ansiedad: "Ansiedad alta por el debut en casa y por romper una racha histórica de derrotas.",
+        frustracion: "Baja antes del pitazo; dominaba la ilusión del estreno.",
+        incertidumbre: "Incógnita real sobre el nivel del equipo frente a una Bosnia ordenada.",
+        optimismo: "Optimismo prudente, apoyado en el empuje del público local.",
+      },
+      realidad: {
+        euforia: "La euforia llegó con el empate de Larin (78'): el público pasó del silencio a la celebración en segundos.",
+        confianza: "La confianza cayó con el 0-1 y se recuperó al empatar; el relato pasó de 'otra vez no' a 'al menos un punto'.",
+        ansiedad: "El pico de ansiedad fue ir por detrás en casa, con la racha histórica pesando sobre cada minuto.",
+        frustracion: "La frustración del gol de Bosnia fue intensa; el empate la convirtió en alivio.",
+        incertidumbre: "Mientras el marcador estuvo en contra, la duda de 'sumaremos algún día' volvió a aparecer.",
+        optimismo: "El gol del empate reconstruyó el optimismo: un punto en casa se sintió como un avance real.",
+      },
+      percepcion: {
+        euforia: "El recuerdo es de fiesta: un empate se celebra como triunfo cuando tu referencia es no haber sumado nunca.",
+        confianza: "Queda confianza: 'ya sabemos lo que es sumar en un Mundial'. El punto rompe un techo psicológico.",
+        ansiedad: "Baja con fuerza: el hito histórico disuelve la presión acumulada.",
+        frustracion: "Para Canadá casi desaparece; para Bosnia crece, porque iban ganando.",
+        incertidumbre: "Se reduce la incertidumbre identitaria del equipo: ya tiene un primer logro en el torneo.",
+        optimismo: "El optimismo se dispara de cara al grupo: el primer punto cambia la forma de mirar lo que viene.",
+      },
+    },
+    teamApproach: [
+      {
+        team: "Canadá",
+        expectedEmotion: "Ilusión nerviosa por debutar como anfitrión.",
+        dominantConversation: "Soñar con sumar por primera vez en un Mundial, en casa.",
+        fanConfidence: "Confianza moderada, con el peso de una racha histórica de derrotas.",
+        mainNarrative: "El anfitrión que quiere escribir una primera página positiva.",
+        howTheyArrived: "Por detrás en el marcador tras el gol de Bosnia en la primera mitad.",
+        whatHappened: "Empataron con Cyle Larin (78') y lograron su PRIMER punto mundialista.",
+        expectationVsReality: "Un empate que, por su historia, se vivió como un triunfo y un alivio enorme.",
+      },
+      {
+        team: "Bosnia y Herzegovina",
+        expectedEmotion: "Expectativa de dar el golpe ante un anfitrión con presión.",
+        dominantConversation: "Aprovechar el debut para sumar de visitante.",
+        fanConfidence: "Confianza de competir de igual a igual.",
+        mainNarrative: "Sorprender y arrancar con buen pie el grupo.",
+        howTheyArrived: "Golpearon primero con el debut goleador de Lukić y acariciaron el triunfo.",
+        whatHappened: "Se dejaron empatar sobre el cierre y sintieron el 1-1 como dos puntos perdidos.",
+        expectationVsReality: "Estuvieron a minutos de ganar; el mismo empate les supo a decepción.",
+      },
+    ],
+    lessons: [
+      { term: "Punto de referencia", explanation: "El valor de un resultado es relativo a una expectativa, no absoluto: un empate es triunfo para quien nunca sumó y decepción para quien iba ganando.", phase: "despues" },
+      { term: "Efecto de encuadre", explanation: "El mismo dato cambia de significado según cómo se enmarque: '1-1' o 'primer punto histórico' producen emociones opuestas.", phase: "despues" },
+      { term: "Aversión a la pérdida", explanation: "Bosnia sintió más el punto perdido (iban ganando) que Canadá el punto ganado: perder duele más que ganar lo mismo alegra.", phase: "despues" },
+    ],
     teams: ["Canadá", "Bosnia y Herzegovina"],
-    group: "Grupo B",
-    officialUrl: "https://www.fifa.com/en/match-centre/match/17/285023/289273/400021449?date=2026-06-12",
-  }),
+    event: "Mundial 2026 — Grupo B",
+    hook: "El primer punto de Canadá en la historia de los Mundiales",
+    seoTitle:
+      "Canadá 1-1 Bosnia: resultado, resumen y el primer punto histórico del anfitrión en el Mundial 2026",
+    quickSummary:
+      "Canadá empató 1-1 con Bosnia y Herzegovina en su estreno como anfitrión y sumó su PRIMER punto en la historia de los Mundiales tras seis derrotas en 1986 y 2022. Bosnia se adelantó con el gol de Lukić y Cyle Larin igualó (78'). El partido es un caso claro de cómo el mismo resultado se vive como triunfo o como decepción según el punto de referencia de cada hinchada.",
+    whatHappened:
+      "En BMO Field, Toronto, Canadá debutaba como anfitrión cargando una estadística incómoda: ningún punto en sus dos Mundiales previos (1986 y 2022), seis partidos y seis derrotas. Bosnia y Herzegovina golpeó primero, con el primer gol internacional de Lukić que puso el 0-1 antes del descanso y silenció a un estadio expectante. Durante buena parte del segundo tiempo, la afición local revivió el fantasma de la racha. La reacción llegó con Cyle Larin, que entró desde el banco y empató en el 78' para desatar la celebración. El 1-1 final dejó dos lecturas opuestas: para Canadá, un punto histórico que se festejó como una victoria; para Bosnia, dos puntos que se escaparon teniendo el partido controlado. La conversación digital reflejó ese contraste de marcos: euforia y orgullo de un lado, frustración del otro, ante exactamente el mismo marcador.",
+    keyPlays: [
+      "Primer gol internacional de Lukić para el 0-1 de Bosnia (1ª mitad).",
+      "Ingreso de Cyle Larin desde el banco y empate en el 78'.",
+      "Canadá rompe su racha y suma su primer punto mundialista.",
+    ],
+    controversies: [
+      "Canadá lamentó la fragilidad defensiva en el gol de Bosnia.",
+      "Bosnia se reprochó no haber cerrado un partido que ganaba.",
+    ],
+    statements: [
+      "La afición canadiense celebró el punto como un hito, más que el nivel de juego.",
+      "El entorno de Bosnia vivió el empate como una oportunidad perdida.",
+    ],
+    fanPulse: {
+      concerns: ["¿Por qué concedimos el primer gol?", "¿Alcanza este nivel para competir el grupo?", "¿Cómo llega Canadá al próximo partido?"],
+      emotions: ["Tensión con el 0-1", "Alivio con el empate", "Orgullo por el primer punto"],
+      frustrations: ["El bache defensivo del gol de Bosnia.", "El miedo a repetir la racha de derrotas."],
+      enthusiasm: ["Festejo por el hito histórico en casa.", "Ilusión renovada para el resto del grupo."],
+      sources: [
+        { name: "Reddit — r/soccer (match thread)", url: "https://www.reddit.com/r/soccer/", kind: "conversacion" },
+        { name: "Google Trends — picos de búsqueda en vivo", url: "https://trends.google.com/trends/", kind: "tendencia" },
+      ],
+    },
+    mediaLabInsight: {
+      humanBehavior:
+        "No juzgamos un resultado en absoluto, sino respecto a un punto de referencia. El mismo 1-1 es un triunfo para quien nunca había sumado y una decepción para quien iba ganando: la expectativa define la emoción.",
+      cognitiveBiases: [
+        "Punto de referencia: el valor percibido es relativo a una expectativa, no absoluto.",
+        "Efecto de encuadre: '1-1' vs 'primer punto histórico' producen reacciones opuestas.",
+        "Aversión a la pérdida: a Bosnia le dolió más el punto perdido que a Canadá le alegró el ganado.",
+      ],
+      emotionalReaction:
+        "La carga emocional no la dio el marcador, sino la distancia entre lo esperado y lo logrado por cada hinchada.",
+      digitalPatterns:
+        "Dos conversaciones paralelas con el mismo dato: celebración e hito de un lado, frustración y autocrítica del otro.",
+    },
+    productApplications: [
+      {
+        sector: "Producto digital",
+        application:
+          "El mismo resultado se siente como éxito o fracaso según la expectativa que fijaste: encuadrar y anclar bien las expectativas cambia la satisfacción percibida sin cambiar el producto.",
+      },
+      {
+        sector: "Fintech",
+        application:
+          "Un rendimiento o un reembolso parcial se vive distinto según el punto de referencia mostrado: comunicar el marco correcto evita que un resultado neutro se perciba como pérdida.",
+      },
+      {
+        sector: "SaaS / Onboarding",
+        application:
+          "Ancla metas alcanzables al inicio: un avance modesto se siente como logro si la referencia está bien puesta, y eso sostiene la activación.",
+      },
+    ],
+    emotionalRadar: { euforia: 80, confianza: 72, ansiedad: 40, frustracion: 32, incertidumbre: 36, optimismo: 82 },
+    collectiveByTeam: [
+      {
+        team: "Canadá",
+        mood: "Orgullo y alivio por el primer punto",
+        behaviorEffect:
+          "Llegan al próximo partido envalentonados: el techo psicológico roto eleva la confianza pública, la participación y la narrativa de 'ya sumamos, ahora vamos por más'.",
+      },
+      {
+        team: "Bosnia y Herzegovina",
+        mood: "Frustración por dejar escapar la victoria",
+        behaviorEffect:
+          "Llegan con autocrítica: la conversación se centra en cerrar partidos y en no repetir el desenlace, con más cautela que euforia.",
+      },
+    ],
+    scoreFactors: { emotionalImpact: 84, digitalConversation: 80, virality: 82, userInterest: 84 },
+    uxFinding:
+      "La satisfacción no depende del resultado absoluto sino de la expectativa con la que se compara. Fijar el punto de referencia adecuado puede convertir un resultado neutro en una experiencia percibida como un triunfo.",
+    aiSummary:
+      "Canadá empató 1-1 con Bosnia y Herzegovina en el Mundial 2026 y logró su primer punto histórico tras seis derrotas en sus dos participaciones previas: Lukić adelantó a Bosnia y Cyle Larin igualó (78'). Experience Radar de MediaLab lo analiza desde el comportamiento: por el punto de referencia y el efecto de encuadre, el mismo marcador se vivió como triunfo (Canadá) y como decepción (Bosnia). Para productos digitales —fintech, SaaS, producto— la lección es que la satisfacción es relativa a la expectativa: encuadrar y anclar bien las expectativas cambia el valor percibido sin cambiar el resultado.",
+    sources: [
+      { name: "FIFA — reporte oficial Canadá 1-1 Bosnia y Herzegovina", url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026", kind: "oficial" },
+      { name: "ESPN — Canadá logra su primer punto mundialista", url: "https://www.espn.com/soccer/match/_/gameId/760416/bosnia-herzegovina-canada", kind: "referencia" },
+      { name: "Reddit r/soccer — hilo posterior del partido", url: "https://www.reddit.com/r/soccer/", kind: "conversacion" },
+    ],
+  },
   upcomingMatch({
     date: "2026-06-12",
     kickoffAt: "2026-06-13T01:00:00.000Z",
