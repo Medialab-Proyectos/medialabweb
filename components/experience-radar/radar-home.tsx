@@ -28,7 +28,7 @@ export function RadarHome() {
   return (
     <>
       {/* ───────────────── HERO (estructura tipo home) ───────────────── */}
-      <section className="relative flex min-h-[90vh] flex-col items-center justify-center overflow-hidden bg-[var(--surface-dark)] text-foreground">
+      <section className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-background text-foreground">
         {/* Rejilla de puntos */}
         <div
           className="pointer-events-none absolute inset-0"
@@ -63,7 +63,7 @@ export function RadarHome() {
         {/* Barrido de radar animado, sutil, centrado detrás del titular */}
         <div
           aria-hidden
-          className="pointer-events-none absolute left-1/2 top-1/2 w-[min(120vw,820px)] max-w-none -translate-x-1/2 -translate-y-1/2 opacity-[0.14] md:opacity-[0.22]"
+          className="pointer-events-none absolute left-1/2 top-1/2 w-[min(82vw,540px)] max-w-none -translate-x-1/2 -translate-y-1/2 opacity-[0.16] md:opacity-[0.24]"
         >
           <RadarSweep className="h-auto w-full" />
         </div>

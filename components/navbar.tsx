@@ -44,10 +44,11 @@ export function Navbar() {
   const isHome = pathname === "/" || pathname === "/en"
   const isUXGreen = pathname === "/uxgreen" || pathname === "/en/uxgreen"
   const isBlogArticle = /^\/(en\/)?blog\/.+/.test(pathname)
-  // Experience Radar tiene heroes oscuros permanentes: el navbar debe ir oscuro
-  // siempre (también en modo claro) para no dejar un borde blanco arriba.
-  const isExperienceRadar =
-    pathname.startsWith("/experience-radar") || pathname.startsWith("/en/experience-radar")
+  // Solo el ESPECIAL (índice) tiene hero oscuro permanente → navbar oscuro ahí.
+  // El landing del radar y las notas usan layout adaptable: navbar normal (claro
+  // en modo claro), si no la barra se ve negra sobre fondo claro.
+  const isExperienceRadarEspecial =
+    pathname === "/experience-radar/mundial-2026" || pathname === "/en/experience-radar/world-cup-2026"
   const isExperienceRadarNote =
     /^\/(en\/)?experience-radar\/(mundial-2026|world-cup-2026)\/[^/]+$/.test(pathname)
   // El CTA usa anclas same-page solo donde existen (home: #contact, curso: #registro);
@@ -74,7 +75,7 @@ export function Navbar() {
   const overDarkHero = !scrolled && isDarkHero
   // UXGreen always has a dark navbar, even when scrolled in light mode
   const isCarreras = pathname === "/carreras" || pathname === "/en/carreras"
-  const forceDarkNav = isUXGreen || isCarreras || isBlogArticle || (isExperienceRadar && !isExperienceRadarNote)
+  const forceDarkNav = isUXGreen || isCarreras || isBlogArticle || isExperienceRadarEspecial
   const linkIdle = overDarkHero || forceDarkNav
     ? "text-white/70 hover:text-white"
     : "text-muted-foreground hover:text-foreground"
