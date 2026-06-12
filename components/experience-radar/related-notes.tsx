@@ -37,7 +37,7 @@ export function RelatedNotes({ notes }: { notes: RelatedNote[] }) {
                 className="group block h-full overflow-hidden rounded-2xl border border-border bg-card transition-colors hover:border-[var(--cyan)]"
               >
                 <div className="relative">
-                  <NoteImage src={n.image} alt={n.title} className="h-32 w-full object-cover" />
+                  <NoteImage src={n.image} seed={n.slug} alt={n.title} className="h-32 w-full object-cover" />
                   {n.badge && (
                     <span className="absolute left-2 top-2 rounded-full bg-black/55 px-2.5 py-0.5 text-[10px] font-semibold text-[#fff] backdrop-blur-sm">
                       {n.badge}

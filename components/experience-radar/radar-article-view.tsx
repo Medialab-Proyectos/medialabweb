@@ -9,7 +9,7 @@ import type { DailyRadarReport } from "@/src/lib/experience-radar"
 import { RadarSweep } from "./radar-visuals"
 import { SpanishRadarDashboard } from "./spanish-radar-dashboard"
 
-const GENERIC_IMAGE = "/images/experience-radar-vs.png"
+const GENERIC_IMAGE = "/images/experience-radar-vs2.png"
 
 const SOURCE_ORDER: Record<string, number> = {
   fifa: 0,

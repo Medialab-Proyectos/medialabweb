@@ -27,7 +27,7 @@ export async function fetchLatingoles(
   try {
     const response = await fetch(LATINGOLES_POSTS, {
       headers: { Accept: "application/json" },
-      next: { revalidate: 60 * 30 },
+      cache: "no-store",
     })
 
     if (!response.ok) throw new Error(`Latingoles WP API ${response.status}`)
@@ -243,6 +243,8 @@ const TEAM_ALIASES: Array<[string, string[]]> = [
   ["méxico", ["mexico", "méxico"]],
   ["canadá", ["canada", "canadá"]],
   ["estados unidos", ["usa", "estados unidos", "united states"]],
+  ["bosnia y herzegovina", ["bosnia", "bosnia y herzegovina", "bosnia and herzegovina"]],
+  ["paraguay", ["paraguay"]],
   ["españa", ["espana", "españa", "spain"]],
   ["francia", ["francia", "france"]],
   ["sudáfrica", ["sudafrica", "sudáfrica", "south africa"]],

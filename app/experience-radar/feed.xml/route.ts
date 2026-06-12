@@ -1,9 +1,9 @@
-import { getAllRadarArticles } from "@/src/lib/experience-radar/articleData"
+import { getVisibleRadarArticles } from "@/src/lib/experience-radar/articleData"
 
 const SITE = "https://medialab.design"
 
 export async function GET() {
-  const articles = await getAllRadarArticles()
+  const articles = await getVisibleRadarArticles()
   const items = articles
     .map(
       (article) => `

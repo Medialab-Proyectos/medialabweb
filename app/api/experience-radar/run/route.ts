@@ -1,19 +1,24 @@
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 import { runExperienceRadarDailyAgent } from "@/src/lib/experience-radar"
 import { generateAndStoreArticlesFromReport } from "@/src/lib/experience-radar/generateArticles"
 
 export const dynamic = "force-dynamic"
 export const maxDuration = 60
 
-export async function GET() {
-  return handle()
+export async function GET(request: NextRequest) {
+  return handle(request)
 }
 
-export async function POST() {
-  return handle()
+export async function POST(request: NextRequest) {
+  return handle(request)
 }
 
-async function handle() {
+async function handle(request: NextRequest) {
+  const cronSecret = process.env.CRON_SECRET?.trim()
+  if (cronSecret && request.headers.get("authorization") !== `Bearer ${cronSecret}`) {
+    return NextResponse.json({ ok: false, error: "unauthorized" }, { status: 401 })
+  }
+
   try {
     const report = await runExperienceRadarDailyAgent()
 

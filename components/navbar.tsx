@@ -44,6 +44,12 @@ export function Navbar() {
   const isHome = pathname === "/" || pathname === "/en"
   const isUXGreen = pathname === "/uxgreen" || pathname === "/en/uxgreen"
   const isBlogArticle = /^\/(en\/)?blog\/.+/.test(pathname)
+  // Experience Radar tiene heroes oscuros permanentes: el navbar debe ir oscuro
+  // siempre (también en modo claro) para no dejar un borde blanco arriba.
+  const isExperienceRadar =
+    pathname.startsWith("/experience-radar") || pathname.startsWith("/en/experience-radar")
+  const isExperienceRadarNote =
+    /^\/(en\/)?experience-radar\/(mundial-2026|world-cup-2026)\/[^/]+$/.test(pathname)
   // El CTA usa anclas same-page solo donde existen (home: #contact, curso: #registro);
   // en el resto apunta a la página real /contacto para no dejar caminos muertos.
   const ctaHref = isCurso ? "#registro" : isHome ? "#contact" : localized("/contacto")
@@ -68,7 +74,7 @@ export function Navbar() {
   const overDarkHero = !scrolled && isDarkHero
   // UXGreen always has a dark navbar, even when scrolled in light mode
   const isCarreras = pathname === "/carreras" || pathname === "/en/carreras"
-  const forceDarkNav = isUXGreen || isCarreras || isBlogArticle
+  const forceDarkNav = isUXGreen || isCarreras || isBlogArticle || (isExperienceRadar && !isExperienceRadarNote)
   const linkIdle = overDarkHero || forceDarkNav
     ? "text-white/70 hover:text-white"
     : "text-muted-foreground hover:text-foreground"
@@ -130,9 +136,11 @@ export function Navbar() {
         scrolled
           ? forceDarkNav
             ? "bg-[#0a0a0a]/95 backdrop-blur-md border-b border-white/[0.06] shadow-sm"
-            : "bg-background/90 backdrop-blur-md border-b border-border/30 shadow-sm"
+            : isExperienceRadarNote
+              ? "bg-background/95 backdrop-blur-md shadow-sm"
+              : "bg-background/90 backdrop-blur-md border-b border-border/30 shadow-sm"
           : forceDarkNav
-          ? "bg-[#0a0a0a]/70 backdrop-blur-md"
+          ? "bg-[#0a0a0a]/95 backdrop-blur-md"
           : "bg-transparent"
       }`}
     >

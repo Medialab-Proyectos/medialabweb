@@ -2,11 +2,11 @@ import type { Metadata } from "next"
 import { Footer } from "@/components/footer"
 import { Navbar } from "@/components/navbar"
 import { getLatestDailyRadarReport } from "@/src/lib/experience-radar"
-import { getAllRadarArticles } from "@/src/lib/experience-radar/articleData"
+import { getVisibleRadarArticles } from "@/src/lib/experience-radar/articleData"
 import { EspecialHero } from "@/components/experience-radar/especial-hero"
-import { FeaturedNote } from "@/components/experience-radar/featured-note"
 import { EspecialesGrid } from "@/components/experience-radar/especiales-grid"
 import { RadarFloatingMenu } from "@/components/experience-radar/radar-floating-menu"
+import { NextMatchBar } from "@/components/experience-radar/next-match-bar"
 
 /**
  * Página 2 — PORTAL del especial "Mundial 2026".
@@ -39,13 +39,13 @@ export async function generateMetadata(): Promise<Metadata> {
       description: "Resultados y previas verificadas convertidas en aprendizajes de UX, producto y comportamiento humano.",
       type: "website",
       url: "https://medialab.design/experience-radar/mundial-2026",
-      images: [{ url: "/images/experience-radar-vs.png", alt: "Experience Radar - Especial Mundial 2026" }],
+      images: [{ url: "/images/experience-radar-vs2.png", alt: "Experience Radar - Especial Mundial 2026" }],
     },
     twitter: {
       card: "summary_large_image",
       title: "Mundial 2026 desde la experiencia humana | Experience Radar",
       description: "Resultados y previas verificadas convertidas en aprendizajes de UX, producto y comportamiento humano.",
-      images: ["/images/experience-radar-vs.png"],
+      images: ["/images/experience-radar-vs2.png"],
     },
     robots: { index: true, follow: true },
   }
@@ -58,7 +58,7 @@ export default async function ExperienceRadarMundialPage({
 }) {
   const { q } = (await searchParams) ?? {}
   const report = await getLatestDailyRadarReport()
-  const all = await getAllRadarArticles()
+  const all = await getVisibleRadarArticles()
 
   const query = (q ?? "").trim().toLowerCase()
   const articles = query
@@ -66,9 +66,6 @@ export default async function ExperienceRadarMundialPage({
         [a.seoTitle, a.teams.join(" "), a.event, a.hook].join(" ").toLowerCase().includes(query),
       )
     : all
-
-  const featured = articles[0]
-  const rest = articles.slice(1)
 
   return (
     <main className="min-h-screen bg-background text-foreground">
@@ -78,13 +75,13 @@ export default async function ExperienceRadarMundialPage({
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildCollectionSchema(articles)) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildFaqSchema()) }} />
 
-      <EspecialHero updatedAt={report?.updatedAt} />
+      <div className="bg-neutral-950 pt-16 md:pt-20">
+        <NextMatchBar updatedAt={report?.updatedAt} />
+        <EspecialHero updatedAt={report?.updatedAt} />
+      </div>
 
-      {featured ? (
-        <>
-          <FeaturedNote article={featured} />
-          <EspecialesGrid articles={rest} />
-        </>
+      {articles.length ? (
+        <EspecialesGrid articles={articles} />
       ) : (
         <section className="mx-auto max-w-3xl px-6 py-16">
           {query ? (
@@ -103,7 +100,7 @@ export default async function ExperienceRadarMundialPage({
               <h2 className="text-2xl font-bold">Todavía no hay notas del especial</h2>
               <p className="mt-3 text-muted-foreground">
                 Ejecuta manualmente el agente desde <code>/api/experience-radar/run</code>.
-                En Vercel también correrá todos los días a las 6:00 AM de Colombia.
+                En Vercel correrá todos los días a las 4:00 AM y 11:00 AM de Colombia.
               </p>
             </>
           )}
@@ -115,7 +112,7 @@ export default async function ExperienceRadarMundialPage({
   )
 }
 
-function buildCollectionSchema(articles: Awaited<ReturnType<typeof getAllRadarArticles>>) {
+function buildCollectionSchema(articles: Awaited<ReturnType<typeof getVisibleRadarArticles>>) {
   return {
     "@context": "https://schema.org",
     "@type": "CollectionPage",

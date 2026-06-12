@@ -73,7 +73,7 @@ export function RadarCtaCards() {
         </div>
         <div className="relative w-full h-32 sm:w-28 sm:h-28 shrink-0 overflow-hidden rounded-xl bg-black/10 order-1 sm:order-2 self-start">
           <Image
-            src="/images/radar-uxschool-futbol-v2.png"
+            src="/images/radar-uxschool-futbol-v3.png"
             alt="UX School Mundial 2026"
             fill
             sizes="(max-width: 640px) 100vw, 112px"
@@ -110,7 +110,7 @@ export function RadarCtaCards() {
         </div>
         <div className="relative w-full h-32 sm:w-28 sm:h-28 shrink-0 overflow-hidden rounded-xl bg-black/10 order-1 sm:order-2 self-start">
           <Image
-            src="/images/radar-uxbox-futbol-v2.png"
+            src="/images/radar-uxbox-futbol-v3.png"
             alt="UXBox Mundial 2026"
             fill
             sizes="(max-width: 640px) 100vw, 112px"

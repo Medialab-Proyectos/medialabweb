@@ -19,6 +19,8 @@ import {
   type RadarArticleInput,
 } from "./articles"
 import { saveRadarArticles } from "./articleStore"
+import { getAllRadarArticles } from "./articleData"
+import { MATCH_NOTE_ACCESS_WINDOW_MS } from "./articleAvailability"
 import type {
   DailyRadarReport,
   ExperienceSignal,
@@ -212,6 +214,10 @@ const TEAM_DISPLAY: Record<string, string> = {
   "méxico": "México",
   canada: "Canadá",
   usa: "USA",
+  "estados unidos": "Estados Unidos",
+  paraguay: "Paraguay",
+  bosnia: "Bosnia y Herzegovina",
+  "bosnia y herzegovina": "Bosnia y Herzegovina",
   espana: "España",
   "españa": "España",
   francia: "Francia",
@@ -313,16 +319,12 @@ function deriveScoreFactors(lead: ExperienceSignal, report: DailyRadarReport) {
 export function generateArticlesFromReport(report: DailyRadarReport): RadarArticle[] {
   const fanPulse = buildFanPulse(report)
   const date = report.date
-  const generatedAt = new Date(report.generatedAt).getTime()
-  const maxSignalAge = 24 * 60 * 60 * 1000
 
   // Leads: señales noticiosas con equipos detectados, deduplicadas por par de equipos.
   const seenPairs = new Set<string>()
   const leads = report.signals.filter((s) => {
     if (s.sourceType !== "latingoles" || !s.teams || s.teams.length !== 2) return false
-    if (!/\b(vence|venció|derrota|derrotó|empata|empató|gana|ganó|resultado|final)\b/i.test(s.title)) return false
-    const publishedAt = new Date(s.publishedAt).getTime()
-    if (!Number.isFinite(publishedAt) || generatedAt - publishedAt > maxSignalAge) return false
+    if (!/\b(vence|venció|derrota|derrotó|empata|empató|gana|ganó|resultado|final|previa|partido|enfrenta|juega|jugará|debut)\b/i.test(s.title)) return false
     const key = Array.from(new Set(s.teams.map((t) => t.toLowerCase()))).sort().join("-")
     if (seenPairs.has(key)) return false
     seenPairs.add(key)
@@ -338,6 +340,9 @@ export function generateArticlesFromReport(report: DailyRadarReport): RadarArtic
     return {
       category,
       date,
+      matchState: /\b(vence|venció|derrota|derrotó|empata|empató|gana|ganó|resultado|final)\b/i.test(lead.title)
+        ? "finalizado"
+        : "previa",
       slug: `${label} ${category} ${date}`,
       seoTitle: `${label}: ${play.headline}`,
       teams: Array.from(new Set(lead.teams.map(displayTeam))),
@@ -354,15 +359,15 @@ export function generateArticlesFromReport(report: DailyRadarReport): RadarArtic
       statements: take(lead.frequentQuestions, 3),
       fanPulse,
       mediaLabInsight: {
-        humanBehavior: play.humanBehavior,
+        humanBehavior: report.article.medialabInsight || play.humanBehavior,
         cognitiveBiases: play.cognitiveBiases,
         emotionalReaction: play.emotionalReaction,
         digitalPatterns: play.digitalPatterns,
       },
       productApplications: play.productApplications,
       scoreFactors: deriveScoreFactors(lead, report),
-      uxFinding: play.uxFinding,
-      aiSummary: aiSummary(label, category, play),
+      uxFinding: report.findingOfTheDay || play.uxFinding,
+      aiSummary: report.article.aiSummary || aiSummary(label, category, play),
       sources: [
         { name: lead.sourceName, url: lead.url, kind: "referencia" as const },
         ...report.sources
@@ -388,8 +393,77 @@ function take(arr: string[] | undefined, n: number): string[] {
 export async function generateAndStoreArticlesFromReport(
   report: DailyRadarReport,
 ): Promise<RadarArticle[]> {
-  const articles = generateArticlesFromReport(report)
-  if (articles.length === 0) return []
-  await saveRadarArticles(articles)
-  return articles
+  const generated = generateArticlesFromReport(report)
+  const existing = await getAllRadarArticles()
+  const nowMs = new Date(report.generatedAt).getTime()
+
+  const articles = generated.flatMap((article) => {
+    const fixture = existing.find((candidate) => sameTeams(candidate.teams, article.teams))
+    if (!fixture?.kickoffAt) return []
+
+    const kickoff = new Date(fixture.kickoffAt).getTime()
+    if (!Number.isFinite(kickoff)) return []
+
+    const beforeKickoff = nowMs < kickoff
+    const insidePreviewWindow = beforeKickoff && kickoff - nowMs <= MATCH_NOTE_ACCESS_WINDOW_MS
+    const ready = fixture.updateState !== "updating"
+    const hasPreviewAnalysis = fixture.matchState === "previa" && ready
+    const hasFinalAnalysis = fixture.matchState === "finalizado" && ready
+    const addsLatingolesImage = Boolean(article.imageUrl && !fixture.imageUrl)
+
+    if (beforeKickoff && (!insidePreviewWindow || (hasPreviewAnalysis && !addsLatingolesImage))) return []
+    if (!beforeKickoff && (article.matchState !== "finalizado" || (hasFinalAnalysis && !addsLatingolesImage))) return []
+
+    return [{
+      ...article,
+      id: fixture.id,
+      slug: fixture.slug,
+      date: fixture.date,
+      kickoffAt: fixture.kickoffAt,
+      matchState: beforeKickoff ? "previa" as const : "finalizado" as const,
+      updateState: "ready" as const,
+      publishedAt: fixture.publishedAt,
+      updatedAt: report.generatedAt,
+    }]
+  })
+
+  const imageUpdates = existing.flatMap((fixture) => {
+    const signal = report.signals.find((candidate) =>
+      candidate.sourceType === "latingoles" &&
+      Boolean(candidate.imageUrl) &&
+      sameTeams(candidate.teams, fixture.teams),
+    )
+    if (!signal?.imageUrl || fixture.imageUrl === signal.imageUrl) return []
+
+    const sourceExists = fixture.sources.some((source) => source.url === signal.url)
+    return [{
+      ...fixture,
+      imageUrl: signal.imageUrl,
+      imageAlt: signal.imageAlt || signal.title,
+      imageCredit: signal.imageCredit || "Latingoles",
+      imageSourceUrl: signal.imageSourceUrl || signal.url,
+      sources: sourceExists
+        ? fixture.sources
+        : [{ name: signal.sourceName, url: signal.url, kind: "referencia" as const }, ...fixture.sources],
+      updatedAt: report.generatedAt,
+    }]
+  })
+
+  const updates = mergeArticleUpdates(imageUpdates, articles)
+  if (updates.length === 0) return []
+  await saveRadarArticles(updates)
+  return updates
+}
+
+function sameTeams(left: string[], right: string[]): boolean {
+  const normalize = (teams: string[]) => teams.map((team) => team.trim().toLowerCase()).sort().join("|")
+  return normalize(left) === normalize(right)
+}
+
+function mergeArticleUpdates(base: RadarArticle[], preferred: RadarArticle[]): RadarArticle[] {
+  const key = (article: RadarArticle) =>
+    [...article.teams].map((team) => team.trim().toLowerCase()).sort().join("|")
+  const merged = new Map(base.map((article) => [key(article), article]))
+  for (const article of preferred) merged.set(key(article), article)
+  return [...merged.values()]
 }

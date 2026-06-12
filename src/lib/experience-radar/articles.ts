@@ -123,6 +123,9 @@ export interface RadarArticle {
    */
   matchState?: "previa" | "en_vivo" | "finalizado"
 
+  /** Bloquea temporalmente una nota mientras se completa su actualizacion. */
+  updateState?: "ready" | "updating"
+
   /**
    * Hora oficial de inicio en ISO 8601. Permite decidir si la nota sigue en previa,
    * si está en vivo o si ya puede pasar a fase posterior sin depender solo de la fecha.

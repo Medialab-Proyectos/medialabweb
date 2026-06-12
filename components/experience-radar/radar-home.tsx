@@ -1,10 +1,18 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { motion } from "framer-motion"
 import { ScanLine, ArrowRight, Radio, Archive } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 import { RadarSweep } from "./radar-visuals"
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel"
 
 /**
  * Página 1 de Experience Radar: HERO + sección "Especiales".
@@ -83,10 +91,9 @@ export function RadarHome() {
             </p>
           </div>
 
-          <div className="relative z-10 mx-auto w-full max-w-sm">
-            {/* Móvil: radar estático (sin ruido). Desktop: animación ligera. */}
-            <RadarSweep className="h-auto w-full md:hidden" motionless />
-            <RadarSweep className="hidden h-auto w-full md:block" />
+          {/* Radar SOLO en desktop: en móvil se oculta por completo (no aporta y hace ruido). */}
+          <div className="relative z-10 mx-auto hidden w-full max-w-sm md:block">
+            <RadarSweep className="h-auto w-full" />
             <p className="mt-4 text-center text-sm font-medium text-muted-foreground">
               {t("El Mundial como laboratorio de comportamiento digital.", "The World Cup as a digital behavior lab.")}
             </p>
@@ -105,8 +112,10 @@ export function RadarHome() {
           </h2>
         </div>
 
-        <div className="mt-7 grid gap-5 md:grid-cols-2">
+        <Carousel opts={{ align: "start" }} className="mt-7">
+          <CarouselContent>
           {/* Card 1 · Especial Mundial 2026 (EN VIVO) */}
+          <CarouselItem className="md:basis-1/2">
           <motion.div
             initial={{ opacity: 0, y: 14 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -115,52 +124,82 @@ export function RadarHome() {
           >
             <Link
               href={localized("/experience-radar/mundial-2026")}
-              className="group flex h-full flex-col rounded-2xl border border-[var(--cyan)]/30 bg-card p-6 transition-colors hover:border-[var(--cyan)]/70"
+              className="group flex h-full flex-col overflow-hidden rounded-2xl border border-[var(--cyan)]/30 bg-card transition-colors hover:border-[var(--cyan)]/70 hover:shadow-lg hover:shadow-[var(--cyan)]/[0.02]"
             >
-              <span className="inline-flex w-fit items-center gap-1.5 rounded-full bg-[var(--magenta)]/10 px-3 py-1 text-xs font-bold uppercase tracking-wide text-[var(--magenta)]">
-                <Radio size={12} className="motion-safe:animate-pulse" /> {t("En vivo", "Live")}
-              </span>
-              <h3 className="mt-4 text-xl font-bold group-hover:text-[var(--cyan)]">
-                {t("Especial Mundial 2026", "World Cup 2026 Special")}
-              </h3>
-              <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">
-                {t(
-                  "El Mundial explicado desde noticias, emociones, sesgos cognitivos, IA y comportamiento de los aficionados.",
-                  "The World Cup explained through news, emotions, cognitive biases, AI and fan behavior.",
-                )}
-              </p>
-              <span className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--cyan)]">
-                {t("Ver análisis y notas", "View analysis and notes")}
-                <ArrowRight size={15} className="transition-transform group-hover:translate-x-0.5" />
-              </span>
+              <div className="relative h-44 w-full overflow-hidden">
+                <Image
+                  src="/images/radar-event-mundial.png"
+                  alt={t("Especial Mundial 2026", "World Cup 2026 Special")}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 500px"
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                <span className="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full bg-[var(--magenta)] px-3 py-1 text-xs font-bold uppercase tracking-wide text-white shadow-md">
+                  <Radio size={12} className="motion-safe:animate-pulse" /> {t("En vivo", "Live")}
+                </span>
+              </div>
+              <div className="flex flex-1 flex-col p-6">
+                <h3 className="text-xl font-bold group-hover:text-[var(--cyan)] transition-colors">
+                  {t("Especial Mundial 2026", "World Cup 2026 Special")}
+                </h3>
+                <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">
+                  {t(
+                    "El Mundial explicado desde noticias, emociones, sesgos cognitivos, IA y comportamiento de los aficionados.",
+                    "The World Cup explained through news, emotions, cognitive biases, AI and fan behavior.",
+                  )}
+                </p>
+                <span className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--cyan)]">
+                  {t("Ver análisis y notas", "View analysis and notes")}
+                  <ArrowRight size={15} className="transition-transform group-hover:translate-x-0.5" />
+                </span>
+              </div>
             </Link>
           </motion.div>
+          </CarouselItem>
 
           {/* Card 2 · Especiales de archivo */}
+          <CarouselItem className="md:basis-1/2">
           <motion.div
             initial={{ opacity: 0, y: 14 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.35, delay: 0.05 }}
-            className="flex h-full flex-col rounded-2xl border border-dashed border-border bg-card/40 p-6"
+            className="flex h-full flex-col overflow-hidden rounded-2xl border border-dashed border-border bg-card/40"
           >
-            <span className="inline-flex w-fit items-center gap-1.5 rounded-full border border-border px-3 py-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-              <Archive size={12} /> {t("Archivo", "Archive")}
-            </span>
-            <h3 className="mt-4 text-xl font-bold text-foreground/80">
-              {t("Especiales de archivo", "Archived specials")}
-            </h3>
-            <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">
-              {t(
-                "Aquí se guardarán los especiales de otros grandes eventos a medida que el radar los analice y archive.",
-                "Specials from other major events will be stored here as the radar analyzes and archives them.",
-              )}
-            </p>
-            <span className="mt-5 text-xs font-medium text-muted-foreground">
-              {t("Próximamente", "Coming soon")}
-            </span>
+            <div className="relative h-44 w-full overflow-hidden opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
+              <Image
+                src="/images/radar-event-archivo.png"
+                alt={t("Especiales de archivo", "Archived specials")}
+                fill
+                sizes="(max-width: 768px) 100vw, 500px"
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+              <span className="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full border border-border bg-black/60 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white backdrop-blur-sm">
+                <Archive size={12} /> {t("Archivo", "Archive")}
+              </span>
+            </div>
+            <div className="flex flex-1 flex-col p-6">
+              <h3 className="text-xl font-bold text-foreground/80">
+                {t("Especiales de archivo", "Archived specials")}
+              </h3>
+              <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">
+                {t(
+                  "Aquí se guardarán los especiales de otros grandes eventos a medida que el radar los analice y archive.",
+                  "Specials from other major events will be stored here as the radar analyzes and archives them.",
+                )}
+              </p>
+              <span className="mt-5 text-xs font-medium text-muted-foreground">
+                {t("Próximamente", "Coming soon")}
+              </span>
+            </div>
           </motion.div>
-        </div>
+          </CarouselItem>
+          </CarouselContent>
+          <CarouselPrevious className="-top-11 left-auto right-11" />
+          <CarouselNext className="-top-11 right-0" />
+        </Carousel>
       </section>
     </>
   )

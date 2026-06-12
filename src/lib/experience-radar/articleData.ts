@@ -9,8 +9,75 @@
 
 import { generateRadarArticle, type RadarArticle, type RadarArticleInput } from "./articles"
 import { getStoredRadarArticles } from "./articleStore"
+import { getArticleAvailability } from "./articleAvailability"
+
+function upcomingMatch(input: {
+  date: string
+  kickoffAt: string
+  slug: string
+  teams: [string, string]
+  group: string
+  officialUrl: string
+}): RadarArticleInput {
+  const label = input.teams.join(" vs ")
+  return {
+    category: "Fan Experience",
+    date: input.date,
+    kickoffAt: input.kickoffAt,
+    slug: input.slug,
+    matchState: "previa",
+    updateState: "ready",
+    seoTitle: `${label}: previa y expectativa del Mundial 2026`,
+    teams: input.teams,
+    event: `Mundial 2026 — ${input.group}`,
+    hook: `La expectativa de las hinchadas antes de ${label}`,
+    quickSummary: `${label} ya está dentro de la ventana de 24 horas del Experience Radar. Esta nota previa reúne el contexto oficial del partido y observa la expectativa, la confianza y la conversación de ambas hinchadas antes del inicio.`,
+    whatHappened: `El partido todavía no ha comenzado. Experience Radar activa esta nota exactamente dentro de las 24 horas previas para registrar cómo evolucionan la expectativa, la ansiedad informativa y las narrativas colectivas alrededor de ${label}. Después del encuentro, la misma nota se actualizará con el análisis final.`,
+    keyPlays: ["El partido aún no comienza; este bloque se actualizará después del encuentro."],
+    controversies: [],
+    statements: ["Horario y encuentro contrastados con el calendario oficial de FIFA."],
+    fanPulse: {
+      concerns: ["Horario y disponibilidad del partido", "Alineaciones y estado de los equipos", "Expectativa antes del debut"],
+      emotions: ["Expectativa", "Ansiedad previa", "Sentido de pertenencia"],
+      frustrations: ["Información dispersa antes del partido"],
+      enthusiasm: ["Inicio de la participación de ambas selecciones"],
+      sources: [{ name: `FIFA — ${label}`, url: input.officialUrl, kind: "oficial" }],
+    },
+    mediaLabInsight: {
+      humanBehavior: "En las horas previas, la audiencia convierte información incompleta en expectativas firmes y busca señales que reduzcan la incertidumbre.",
+      cognitiveBiases: ["Sesgo de optimismo", "Prueba social", "Efecto de disponibilidad"],
+      emotionalReaction: "La cercanía del inicio eleva simultáneamente la emoción y la necesidad de información confiable.",
+      digitalPatterns: "Aumentan las búsquedas de horario, alineación, transmisión y noticias recientes de los equipos.",
+    },
+    productApplications: [
+      { sector: "Producto digital", application: "Mostrar estado, hora y próxima actualización reduce la incertidumbre antes de un evento importante." },
+      { sector: "Streaming", application: "Preparar acceso y mensajes de capacidad antes del pico evita fricción en los minutos previos." },
+    ],
+    emotionalRadar: { euforia: 70, confianza: 62, ansiedad: 58, frustracion: 24, incertidumbre: 55, optimismo: 68 },
+    scoreFactors: { emotionalImpact: 76, digitalConversation: 70, virality: 66, userInterest: 82 },
+    uxFinding: "La experiencia comienza antes del evento: reducir incertidumbre y mantener visible la próxima actualización protege la confianza.",
+    aiSummary: `${label} entra en la ventana de análisis de 24 horas del Experience Radar. La nota observa expectativa, ansiedad informativa y conversación digital antes del inicio, usando el calendario oficial como referencia. Tras el partido, esta misma URL se actualizará con el análisis final de comportamiento, emociones y aprendizajes para productos digitales.`,
+    sources: [{ name: `FIFA — ${label}`, url: input.officialUrl, kind: "oficial" }],
+  }
+}
 
 const ARTICLE_INPUTS: RadarArticleInput[] = [
+  upcomingMatch({
+    date: "2026-06-12",
+    kickoffAt: "2026-06-12T19:00:00.000Z",
+    slug: "canada-bosnia-herzegovina-mundial-2026",
+    teams: ["Canadá", "Bosnia y Herzegovina"],
+    group: "Grupo B",
+    officialUrl: "https://www.fifa.com/en/match-centre/match/17/285023/289273/400021449?date=2026-06-12",
+  }),
+  upcomingMatch({
+    date: "2026-06-12",
+    kickoffAt: "2026-06-13T01:00:00.000Z",
+    slug: "estados-unidos-paraguay-mundial-2026",
+    teams: ["Estados Unidos", "Paraguay"],
+    group: "Grupo D",
+    officialUrl: "https://www.fifa.com/en/match-centre/match/17/285023/289273/400021458",
+  }),
   // ───────────────────────── Artículo 1 ─────────────────────────
   {
     category: "Trust",
@@ -251,6 +318,9 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
     kickoffAt: "2026-06-12T02:00:00.000Z",
     slug: "corea-del-sur-chequia-resultado-resumen-caida-transmision",
     matchState: "finalizado",
+    imageUrl: "https://latingoles.com/wp-content/uploads/2026/06/rss-efe6c0e5c0700b2b8a21b6094f046456b33aa8b26e8w.jpg",
+    imageCredit: "Latingoles",
+    imageSourceUrl: "https://latingoles.com/corea-del-sur-aspira-al-liderato-del-grupo-a-a-pesar-de-que-mexico-es-favorito/",
     matchScore: {
       home: "Corea del Sur",
       away: "Chequia",
@@ -565,8 +635,16 @@ function dedupeByMatch(list: RadarArticle[]): RadarArticle[] {
  */
 export async function getAllRadarArticles(): Promise<RadarArticle[]> {
   const stored = await getStoredRadarArticles()
-  const list = stored && stored.length ? stored : RADAR_ARTICLE_SEED
+  // El agente actualiza partidos concretos; nunca debe borrar del portal los
+  // demas encuentros que ya forman parte del calendario editorial.
+  const list = stored && stored.length ? [...RADAR_ARTICLE_SEED, ...stored] : RADAR_ARTICLE_SEED
   return dedupeByMatch(list).sort((a, b) => b.date.localeCompare(a.date))
+}
+
+/** Notas publicas: solo partidos dentro de las 24 h previas o ya iniciados. */
+export async function getVisibleRadarArticles(now: Date = new Date()): Promise<RadarArticle[]> {
+  const all = await getAllRadarArticles()
+  return all.filter((article) => getArticleAvailability(article, now).visible)
 }
 
 /** Busca un artículo por slug (store con fallback al seed). */

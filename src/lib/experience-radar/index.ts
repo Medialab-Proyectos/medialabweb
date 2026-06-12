@@ -1,4 +1,5 @@
 import { classifySignals } from "./classifySignals"
+import { enrichDailyRadarReportWithAI } from "./aiAnalysis"
 import { fetchAppReviews } from "./fetchAppReviews"
 import { fetchFifa } from "./fetchFifa"
 import { fetchGoogleTrends } from "./fetchGoogleTrends"
@@ -18,6 +19,7 @@ export * from "./fetchReddit"
 export * from "./fetchGoogleTrends"
 export * from "./fetchAppReviews"
 export * from "./classifySignals"
+export * from "./aiAnalysis"
 export * from "./generateDailyInsight"
 export * from "./scoreExperienceIndex"
 export * from "./publishInsight"
@@ -51,6 +53,7 @@ export async function runExperienceRadarDailyAgent(
 
   const classifiedSignals = classifySignals(filteredSignals)
 
-  const report = generateDailyInsight(classifiedSignals, sources)
+  const baseReport = generateDailyInsight(classifiedSignals, sources)
+  const report = await enrichDailyRadarReportWithAI(baseReport)
   return publishInsight(report)
 }

@@ -1,42 +1,69 @@
 "use client"
 
 import { useEffect, useState } from "react"
-
-const FALLBACK = "/images/experience-radar-vs.png"
+import { pickDefaultImage } from "./default-image"
 
 /**
  * Imagen de nota con respaldo robusto: si la URL real (p. ej. de Latingoles) falla
- * o no carga en Vercel/móvil, cae al `vs.png` local. Evita imágenes rotas.
+ * o no carga en Vercel/móvil, cae a una imagen por defecto local. Evita imágenes
+ * rotas. Si no se pasa `fallback`, se elige una por defecto ESTABLE según `seed`.
  */
 export function NoteImage({
   src,
   alt,
   className,
   loading = "lazy",
-  fallback = FALLBACK,
+  seed,
+  fallback,
 }: {
   src?: string
   alt: string
   className?: string
   loading?: "eager" | "lazy"
+  /** Semilla (p. ej. slug del partido) para elegir una imagen por defecto estable. */
+  seed?: string
   fallback?: string
 }) {
-  const [current, setCurrent] = useState(src || fallback)
+  const resolvedFallback = fallback ?? pickDefaultImage(seed)
+  const [remoteFailed, setRemoteFailed] = useState(false)
+  const [remoteLoaded, setRemoteLoaded] = useState(false)
+  const remoteSrc = src && src !== resolvedFallback && !remoteFailed ? src : null
 
   // Si cambia la fuente (navegación cliente), reintenta con la nueva.
   useEffect(() => {
-    setCurrent(src || fallback)
-  }, [src, fallback])
+    setRemoteFailed(false)
+    setRemoteLoaded(false)
+  }, [src])
 
   return (
-    <img
-      src={current}
-      alt={alt}
-      className={className}
-      loading={loading}
-      onError={() => {
-        if (current !== fallback) setCurrent(fallback)
-      }}
-    />
+    <span className="relative block h-full w-full overflow-hidden">
+      <img
+        src={resolvedFallback}
+        alt={remoteSrc ? "" : alt}
+        aria-hidden={remoteSrc ? true : undefined}
+        className={className}
+        loading={loading}
+      />
+      {remoteSrc && !remoteLoaded && (
+        <span
+          aria-hidden
+          className="absolute inset-0 animate-pulse bg-gradient-to-r from-muted/85 via-muted-foreground/20 to-muted/85"
+        />
+      )}
+      {remoteSrc && (
+        <img
+          src={remoteSrc}
+          alt={alt}
+          referrerPolicy={remoteSrc.includes("latingoles.com") ? "no-referrer" : undefined}
+          className={`absolute inset-0 ${className ?? ""} transition-opacity duration-300 ${remoteLoaded ? "opacity-100" : "opacity-0"}`}
+          loading={loading}
+          onLoad={() => setRemoteLoaded(true)}
+          onError={() => {
+            setRemoteLoaded(false)
+            setRemoteFailed(true)
+          }}
+        />
+      )}
+    </span>
   )
 }

@@ -18,9 +18,21 @@ const LOCAL_DIR = path.join(process.cwd(), ".data")
 const LOCAL_FILE = path.join(LOCAL_DIR, "experience-radar-articles.json")
 
 export async function saveRadarArticles(articles: RadarArticle[]): Promise<RadarArticle[]> {
-  const savedToKv = await saveToKv(articles)
-  if (!savedToKv) await saveLocal(articles)
-  return articles
+  const current = (await getStoredRadarArticles()) ?? []
+  const merged = mergeByMatch(current, articles)
+  const savedToKv = await saveToKv(merged)
+  if (!savedToKv) await saveLocal(merged)
+  return merged
+}
+
+function mergeByMatch(current: RadarArticle[], incoming: RadarArticle[]): RadarArticle[] {
+  const key = (article: RadarArticle) => {
+    const teams = [...article.teams].map((team) => team.trim().toLowerCase()).sort().join("|")
+    return `${teams}::${article.date}`
+  }
+  const merged = new Map(current.map((article) => [key(article), article]))
+  for (const article of incoming) merged.set(key(article), article)
+  return [...merged.values()]
 }
 
 export async function getStoredRadarArticles(): Promise<RadarArticle[] | null> {

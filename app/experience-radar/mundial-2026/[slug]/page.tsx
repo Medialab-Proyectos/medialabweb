@@ -15,12 +15,13 @@ import { RadarFloatingMenu } from "@/components/experience-radar/radar-floating-
 import { RelatedNotes, type RelatedNote } from "@/components/experience-radar/related-notes"
 import { NoteImage } from "@/components/experience-radar/note-image"
 import { StatusPill } from "@/components/experience-radar/status-pill"
+import { categoryLabel } from "@/components/experience-radar/category-labels"
+import { pickDefaultImage } from "@/components/experience-radar/default-image"
 import { getRadarArticleBySlug, getAllRadarArticles } from "@/src/lib/experience-radar/articleData"
 import type { EmotionalRadarValues, RadarArticle } from "@/src/lib/experience-radar/articles"
 
 const SITE = "https://medialab.design"
 const BASE = "/experience-radar/mundial-2026"
-const GENERIC_IMAGE = "/images/experience-radar-vs.png"
 
 // Los artículos provienen del store del agente diario (con fallback al seed), por
 // lo que la ruta es dinámica en lugar de prerenderizada en build.
@@ -36,7 +37,7 @@ export async function generateMetadata({
   if (!article) return { title: "Artículo no encontrado | Experience Radar" }
 
   const url = `${SITE}${BASE}/${article.slug}`
-  const image = article.imageUrl || `${SITE}${GENERIC_IMAGE}`
+  const image = article.imageUrl || `${SITE}${pickDefaultImage(article.slug)}`
   return {
     title: article.seoTitle,
     description: article.metaDescription,
@@ -91,7 +92,7 @@ export default async function RadarArticlePage({
         slug: a.slug,
         title: a.seoTitle,
         teams: a.teams.join(" vs "),
-        image: a.imageUrl || GENERIC_IMAGE,
+        image: a.imageUrl || pickDefaultImage(a.slug),
         badge: s === "previa" ? "Previa" : s === "en_vivo" ? "En vivo" : "Finalizado",
       }
     })
@@ -119,34 +120,39 @@ export default async function RadarArticlePage({
 
       <article className="mx-auto max-w-3xl px-6 pt-24 pb-16 md:pt-28">
         <div className="flex flex-wrap items-center gap-2 text-xs">
-          <span className="rounded-full border border-border px-3 py-1">{article.event}</span>
+          <span className="rounded-full border border-border bg-card px-3 py-1 text-card-foreground">
+            {article.event}
+          </span>
+          <span className="rounded-full bg-[var(--cyan)]/10 px-3 py-1 font-semibold text-[var(--cyan)]">
+            {categoryLabel(article.category, "es")}
+          </span>
         </div>
 
-        {/* Título SEO */}
-        <h1 className="mt-4 text-3xl font-bold leading-tight md:text-4xl">{article.seoTitle}</h1>
+        <h1 className="mt-4 text-3xl font-bold leading-tight text-foreground md:text-4xl">
+          {article.seoTitle}
+        </h1>
         <p className="mt-3 text-sm text-muted-foreground">
           {article.teams.join(" vs ")} · {formatDate(article.date)}
           {article.kickoffAt ? ` · ${formatKickoff(article.kickoffAt)}` : ""}
         </p>
-        {/* Foto del encuentro */}
-        <figure className="mt-5 overflow-hidden rounded-2xl border border-border bg-card">
-          {/* Las superposiciones se anclan SOLO a la imagen (no al pie de foto). */}
-          <div className="relative">
+
+        <figure className="mt-5 overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+          <div className="relative h-56 md:h-80">
             <NoteImage
               src={article.imageUrl}
+              seed={article.slug}
               alt={article.imageAlt || `${article.teams.join(" vs ")} — ${article.seoTitle}`}
-              className="h-56 w-full object-cover object-[center_22%] md:h-80"
+              className="h-full w-full object-cover object-[center_22%]"
               loading="eager"
             />
-            {/* Estado asociado a la imagen (etiqueta editorial), no compite con el título. */}
             <StatusPill status={status} className="absolute left-3 top-3 z-10" />
             {article.kickoffAt && status !== "finalizado" && (
-              <div className="absolute bottom-3 left-3 right-3 md:bottom-4 md:left-4 md:right-auto md:max-w-sm">
+              <div className="absolute bottom-3 left-3 right-3 z-10 md:bottom-4 md:left-4 md:right-auto md:max-w-sm">
                 <MatchCountdown kickoffAt={article.kickoffAt} overlay />
               </div>
             )}
           </div>
-          <figcaption className="px-4 py-2 text-[11px] text-muted-foreground">
+          <figcaption className="border-t border-border px-4 py-2 text-[11px] text-muted-foreground">
             {article.imageSourceUrl ? (
               <Link href={article.imageSourceUrl} target="_blank" rel="noopener noreferrer nofollow" className="hover:text-foreground">
                 {article.imageCredit || "Imagen editorial de la fuente"}. Referencia enlazada, no patrocinada.
@@ -157,8 +163,6 @@ export default async function RadarArticlePage({
           </figcaption>
         </figure>
 
-        {/* ── Nota viva: el radar (Bloque 2) controla resumen, "cómo llegan/llegaron/
-            llegarán" y "lo que estamos aprendiendo" según la fase seleccionada ── */}
         <MatchNote
           status={status}
           matchScore={article.matchScore}
@@ -359,7 +363,7 @@ function JsonLd({
   lessons: Array<{ term: string; explanation: string }>
 }) {
   const url = `${SITE}${BASE}/${article.slug}`
-  const image = article.imageUrl || `${SITE}${GENERIC_IMAGE}`
+  const image = article.imageUrl || `${SITE}${pickDefaultImage(article.slug)}`
 
   // El "Resumen para IA" (aiSummary) ya no se muestra al usuario: vive aquí, en el
   // abstract del NewsArticle, que es el canal para motores de IA / GEO.

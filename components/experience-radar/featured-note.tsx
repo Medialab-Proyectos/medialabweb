@@ -1,11 +1,13 @@
 "use client"
 
 import Link from "next/link"
-import { ArrowRight, Star } from "lucide-react"
+import { ArrowRight, Clock3, RefreshCw, Star } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 import type { RadarArticle } from "@/src/lib/experience-radar/articles"
 import { NoteImage } from "./note-image"
 import { StatusPill } from "./status-pill"
+import { categoryLabel } from "./category-labels"
+import { getArticleAvailability } from "@/src/lib/experience-radar/articleAvailability"
 
 /**
  * "Nota principal" del portal: la nota más reciente, destacada como bloque grande.
@@ -14,7 +16,8 @@ import { StatusPill } from "./status-pill"
  * en la Fase 4 (capa IA). Mobile-first.
  */
 export function FeaturedNote({ article }: { article: RadarArticle }) {
-  const { t, localized } = useLanguage()
+  const { t, lang, localized } = useLanguage()
+  const availability = getArticleAvailability(article)
 
   const formattedDate = new Intl.DateTimeFormat(t("es-CO", "en-US"), {
     day: "2-digit",
@@ -29,12 +32,18 @@ export function FeaturedNote({ article }: { article: RadarArticle }) {
       </p>
 
       <Link
-        href={localized(`/experience-radar/mundial-2026/${article.slug}`)}
-        className="group mt-3 grid overflow-hidden rounded-2xl border border-border bg-card transition-colors hover:border-[var(--cyan)]/60 md:grid-cols-2"
+        href={availability.accessible ? localized(`/experience-radar/mundial-2026/${article.slug}`) : "#"}
+        aria-disabled={!availability.accessible}
+        tabIndex={availability.accessible ? undefined : -1}
+        onClick={availability.accessible ? undefined : (event) => event.preventDefault()}
+        className={`group mt-3 grid overflow-hidden rounded-2xl border border-border bg-card transition-colors md:grid-cols-2 ${
+          availability.accessible ? "hover:border-[var(--cyan)]/60" : "cursor-not-allowed opacity-75"
+        }`}
       >
         <div className="relative h-52 w-full overflow-hidden md:h-full md:min-h-[280px]">
           <NoteImage
             src={article.imageUrl}
+            seed={article.slug}
             alt={article.seoTitle}
             className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
             loading="eager"
@@ -47,7 +56,7 @@ export function FeaturedNote({ article }: { article: RadarArticle }) {
 
         <div className="flex flex-col p-6 md:p-8">
           <div className="flex flex-wrap items-center gap-2 text-xs">
-            <span className="rounded-full bg-[var(--cyan)]/10 px-3 py-1 font-semibold text-[var(--cyan)]">{article.category}</span>
+            <span className="rounded-full bg-[var(--cyan)]/10 px-3 py-1 font-semibold text-[var(--cyan)]">{categoryLabel(article.category, lang)}</span>
             <span className="text-muted-foreground">{formattedDate}</span>
           </div>
 
@@ -59,10 +68,19 @@ export function FeaturedNote({ article }: { article: RadarArticle }) {
           </p>
 
           <div className="mt-auto flex items-center justify-between pt-5">
-            <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--cyan)]">
-              {t("Leer análisis", "Read analysis")}
-              <ArrowRight size={15} className="transition-transform group-hover:translate-x-0.5" />
-            </span>
+            {availability.accessible ? (
+              <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--cyan)]">
+                {t("Leer análisis", "Read analysis")}
+                <ArrowRight size={15} className="transition-transform group-hover:translate-x-0.5" />
+              </span>
+            ) : (
+              <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-muted-foreground">
+                {availability.reason === "updating" ? <RefreshCw size={15} /> : <Clock3 size={15} />}
+                {availability.reason === "updating"
+                  ? t("Nota en actualización", "Note being updated")
+                  : t("Disponible 24 horas antes", "Available 24 hours before kickoff")}
+              </span>
+            )}
             <span className="text-xs text-muted-foreground">
               {t("Radar Score", "Radar Score")} <strong className="text-foreground">{article.radarScore.total}</strong>/100
             </span>

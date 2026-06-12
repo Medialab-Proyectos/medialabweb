@@ -1,0 +1,38 @@
+name: Experience Radar cron
+
+# Dispara el agente diario de Experience Radar 4 veces al día (cron externo gratis,
+# sin necesidad de Vercel Pro). Golpea el mismo endpoint que el cron de Vercel.
+# Las horas están en UTC; Colombia = UTC-5.
+on:
+  schedule:
+    - cron: "0 16 * * *"   # 11:00 a. m. CO — previa del partido de las 2 p. m.
+    - cron: "30 21 * * *"  #  4:30 p. m. CO — análisis posterior
+    - cron: "0 23 * * *"   #  6:00 p. m. CO — previa del partido de las 9 p. m.
+    - cron: "30 4 * * *"   # 11:30 p. m. CO — análisis final nocturno
+  workflow_dispatch: {}    # permite dispararlo a mano para probar
+
+# Evita corridas solapadas si alguna se atrasa.
+concurrency:
+  group: experience-radar-cron
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Experience Radar daily agent
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          code=$(curl -sS -o /tmp/radar.json -w "%{http_code}" \
+            -X POST "https://medialab.design/api/experience-radar/run" \
+            -H "Authorization: Bearer ${CRON_SECRET}" \
+            -H "Content-Type: application/json" \
+            --max-time 120)
+          echo "HTTP ${code}"
+          cat /tmp/radar.json || true
+          echo ""
+          if [ "${code}" -lt 200 ] || [ "${code}" -ge 300 ]; then
+            echo "::error::El endpoint respondió HTTP ${code}"
+            exit 1
+          fi
