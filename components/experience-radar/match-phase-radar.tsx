@@ -215,7 +215,7 @@ export function MatchPhaseRadar({
   }, [viewMode, status, t])
 
   return (
-    <div className="rounded-2xl border border-border bg-card p-5 md:p-7">
+    <div className="rounded-2xl border border-border bg-gradient-to-b from-card to-[var(--cyan)]/[0.03] p-5 md:p-7">
       <div>
         <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-[var(--cyan)]">
           <Gauge size={14} /> {t("Radar del partido", "Match radar")}
@@ -224,7 +224,8 @@ export function MatchPhaseRadar({
         <p className="mt-1 text-sm text-muted-foreground">{subtitleText}</p>
       </div>
 
-      <div className="mt-5 flex flex-wrap gap-2">
+      {/* En móvil las fases se deslizan horizontalmente (no se apilan). */}
+      <div className="mt-5 flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {PHASES.map((p) => {
           const disabled = !phases[p.key]
           const isActive = viewMode === p.key
@@ -240,7 +241,7 @@ export function MatchPhaseRadar({
               key={p.key}
               onClick={() => !disabled && setViewMode(p.key)}
               disabled={disabled}
-              className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-all ${
+              className={`inline-flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium transition-all ${
                 isActive
                   ? "text-white shadow-md"
                   : disabled
@@ -306,11 +307,12 @@ export function MatchPhaseRadar({
           <p className="text-xs font-bold uppercase tracking-wide text-muted-foreground">
             {t("Interpretación por categoría", "Category interpretation")}
           </p>
-          <div className="mt-3 grid gap-3 sm:grid-cols-2">
+          {/* En móvil las tarjetas por categoría se deslizan; en desktop quedan en grilla. */}
+          <div className="mt-3 flex gap-3 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:grid sm:grid-cols-2 sm:overflow-visible">
             {AXES.map((axis) => {
               const value = phases[activePhase.key]?.[axis.key] ?? 0
               return (
-                <div key={axis.key} className="rounded-lg border border-border/70 p-3">
+                <div key={axis.key} className="min-w-[82%] shrink-0 rounded-lg border border-border/70 p-3 sm:min-w-0">
                   <div className="flex items-center justify-between gap-3">
                     <p className="flex items-center gap-1.5 text-sm font-semibold">
                       {t(axis.es, axis.en)}
@@ -324,7 +326,7 @@ export function MatchPhaseRadar({
                             <Info size={13} />
                           </button>
                         </TooltipTrigger>
-                        <TooltipContent side="top" sideOffset={6} className="max-w-64 leading-relaxed">
+                        <TooltipContent side="top" sideOffset={6} className="max-w-64 border border-border bg-popover leading-relaxed text-popover-foreground">
                           {axis.help}
                         </TooltipContent>
                       </Tooltip>

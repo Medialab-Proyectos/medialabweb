@@ -93,7 +93,7 @@ export function MatchNote({
 
   return (
     <>
-      <section className="mt-8 rounded-2xl border border-border bg-card p-5">
+      <section className="mt-8 rounded-2xl border border-border bg-gradient-to-br from-card via-card to-[var(--cyan)]/[0.06] p-5">
         {status === "finalizado" && matchScore && <Scoreboard score={matchScore} />}
         {status !== "finalizado" && (
           <div className="mb-4 flex items-center gap-2 rounded-xl border border-[#f4a261]/40 bg-[#f4a261]/10 p-3 text-xs text-[#c65a10] dark:text-[#f4a261]">
@@ -125,16 +125,22 @@ export function MatchNote({
         />
       </section>
 
-      <section className="mt-10">
+      <section className="mt-10 rounded-2xl border border-border bg-gradient-to-br from-[var(--magenta)]/[0.05] to-transparent p-5 md:p-6">
         <h2 className="flex items-center gap-2 text-2xl font-bold">
           <Users size={20} className="shrink-0 text-[var(--cyan)]" /> {fanSectionTitle}
         </h2>
-        <p className="mt-2 text-sm text-muted-foreground">{fanSectionIntro}</p>
-        <div className="mt-4 grid gap-4 sm:grid-cols-2">
-          {teamApproach.map((team) => (
-            <FanApproachCard key={team.team} team={team} phase={phase} />
-          ))}
-        </div>
+        {/* En móvil se deslizan como carrusel; en desktop quedan 2-up sin scroll. */}
+        <Carousel opts={{ align: "start", dragFree: true }} className="mt-4">
+          <CarouselContent className="-ml-3">
+            {teamApproach.map((team) => (
+              <CarouselItem key={team.team} className="basis-[88%] pl-3 sm:basis-1/2">
+                <FanApproachCard team={team} phase={phase} />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </Carousel>
+        {/* Mensaje de apoyo como nota al pie, en letra pequeña. */}
+        <p className="mt-4 text-xs italic leading-relaxed text-muted-foreground/80">{fanSectionIntro}</p>
       </section>
 
       {lessons.length > 0 && <LessonsCarousel lessons={lessons} status={status} />}
@@ -152,10 +158,10 @@ function Scoreboard({ score }: { score: MatchScoreData }) {
         <Trophy size={18} className="text-[#F59E0B]" />
         <span className="text-xs font-semibold uppercase tracking-wide text-foreground">Marcador final</span>
       </div>
-      <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3">
-        <ScoreTeam name={score.home} goals={score.homeGoals} isWinner={homeWins} align="left" />
-        <span className="rounded-lg border border-border bg-card px-2 py-1 text-sm font-bold text-muted-foreground">vs</span>
-        <ScoreTeam name={score.away} goals={score.awayGoals} isWinner={awayWins} align="right" />
+      <div className="grid grid-cols-[1fr_auto_1fr] items-stretch gap-2 sm:gap-3">
+        <ScoreTeam name={score.home} goals={score.homeGoals} isWinner={homeWins} />
+        <span className="flex items-center justify-center text-sm font-bold text-muted-foreground">vs</span>
+        <ScoreTeam name={score.away} goals={score.awayGoals} isWinner={awayWins} />
       </div>
       {score.detail && (
         <p className="mt-3 rounded-lg border border-border bg-card px-3 py-2 text-xs leading-relaxed text-muted-foreground">
@@ -184,30 +190,23 @@ function ScoreTeam({
   name,
   goals,
   isWinner,
-  align,
 }: {
   name: string
   goals: number
   isWinner: boolean
-  align: "left" | "right"
 }) {
   return (
     <div
-      className={`flex items-center gap-3 rounded-xl border p-3 ${
-        align === "right" ? "justify-end text-right" : ""
-      } ${
+      className={`flex min-w-0 flex-col items-center gap-1.5 rounded-xl border p-3 text-center ${
         isWinner
           ? "border-[#22C55E]/50 bg-[#22C55E]/10 text-foreground"
           : "border-border bg-card text-muted-foreground"
       }`}
     >
-      {align === "left" && <TeamFlag team={name} />}
-      <div>
-        <p className="text-sm font-bold">{name}</p>
-        {isWinner && <p className="text-[10px] font-semibold uppercase tracking-wide text-[#16A34A]">Ganador</p>}
-      </div>
-      <span className="text-3xl font-black tabular-nums">{goals}</span>
-      {align === "right" && <TeamFlag team={name} />}
+      <TeamFlag team={name} />
+      <p className="w-full break-words text-xs font-bold leading-tight sm:text-sm">{name}</p>
+      <span className="text-2xl font-black tabular-nums text-foreground sm:text-3xl">{goals}</span>
+      {isWinner && <span className="text-[10px] font-semibold uppercase tracking-wide text-[#16A34A]">Ganador</span>}
     </div>
   )
 }
@@ -235,7 +234,7 @@ function FanApproachCard({ team, phase }: { team: TeamApproachData; phase: Radar
   const filled = rows.filter((r) => r.value)
 
   return (
-    <div className="rounded-xl border border-border bg-card p-4">
+    <div className="h-full rounded-xl border border-border bg-card p-4">
       <p className="flex items-center justify-between text-sm font-bold">
         <span className="inline-flex items-center gap-2">
           <TeamFlag team={team.team} small />
@@ -246,8 +245,8 @@ function FanApproachCard({ team, phase }: { team: TeamApproachData; phase: Radar
       <dl className="mt-2 space-y-2.5">
         {filled.map((r) => (
           <div key={r.label}>
-            <dt className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground/70">{r.label}</dt>
-            <dd className="mt-0.5 text-sm leading-relaxed text-muted-foreground">{r.value}</dd>
+            <dt className="text-[11px] font-bold uppercase tracking-wide text-[var(--cyan)]">{r.label}</dt>
+            <dd className="mt-0.5 text-sm leading-relaxed text-foreground/80">{r.value}</dd>
           </div>
         ))}
       </dl>
@@ -265,7 +264,15 @@ function TeamFlag({ team, small = false }: { team: string; small?: boolean }) {
       </span>
     )
   }
-  return <span className={`fi fi-${code} ${size} shrink-0 rounded-[3px] shadow-sm`} aria-label={`Bandera de ${team}`} />
+  // flagcdn vía <img>: confiable en Vercel/móvil, sin depender del CSS de flag-icons.
+  return (
+    <img
+      src={`https://flagcdn.com/${code}.svg`}
+      alt={`Bandera de ${team}`}
+      className={`${size} shrink-0 rounded-[3px] object-cover shadow-sm`}
+      loading="lazy"
+    />
+  )
 }
 
 function teamFlagCode(value: string): string | undefined {
@@ -328,7 +335,7 @@ function LessonsCarousel({
   }, [api])
 
   return (
-    <section className="mt-10">
+    <section className="mt-10 rounded-2xl border border-border bg-gradient-to-br from-[#E8751A]/[0.05] to-transparent p-5 md:p-6">
       <div>
         <h2 className="flex items-center gap-2 text-2xl font-bold">
           <Lightbulb size={20} className="shrink-0 text-[var(--cyan)]" /> Lo que hemos aprendido

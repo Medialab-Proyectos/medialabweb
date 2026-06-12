@@ -4,8 +4,7 @@ import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 import type { RadarArticle } from "@/src/lib/experience-radar/articles"
-
-const GENERIC_IMAGE = "/images/experience-radar-vs.png"
+import { NoteImage } from "./note-image"
 
 /**
  * Portal "Especiales": notas con imagen, tipo portal de noticias. La más reciente
@@ -33,11 +32,10 @@ export function EspecialesGrid({ articles }: { articles: RadarArticle[] }) {
             className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition-colors hover:border-[var(--cyan)]/50"
           >
             <div className="relative h-40 w-full overflow-hidden">
-              <img
-                src={a.imageUrl || GENERIC_IMAGE}
+              <NoteImage
+                src={a.imageUrl}
                 alt={a.seoTitle}
                 className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-                loading="lazy"
               />
               <span className="absolute left-3 top-3 rounded-full bg-black/55 px-2.5 py-1 text-[11px] font-semibold text-white backdrop-blur-sm">
                 {a.category}

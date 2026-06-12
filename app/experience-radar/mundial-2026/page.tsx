@@ -50,9 +50,21 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
-export default async function ExperienceRadarMundialPage() {
+export default async function ExperienceRadarMundialPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ q?: string }>
+}) {
+  const { q } = (await searchParams) ?? {}
   const report = await getLatestDailyRadarReport()
-  const articles = await getAllRadarArticles()
+  const all = await getAllRadarArticles()
+
+  const query = (q ?? "").trim().toLowerCase()
+  const articles = query
+    ? all.filter((a) =>
+        [a.seoTitle, a.teams.join(" "), a.event, a.hook].join(" ").toLowerCase().includes(query),
+      )
+    : all
 
   const featured = articles[0]
   const rest = articles.slice(1)
@@ -73,11 +85,26 @@ export default async function ExperienceRadarMundialPage() {
         </>
       ) : (
         <section className="mx-auto max-w-3xl px-6 py-16">
-          <h2 className="text-2xl font-bold">Todavía no hay notas del especial</h2>
-          <p className="mt-3 text-muted-foreground">
-            Ejecuta manualmente el agente desde <code>/api/experience-radar/run</code>.
-            En Vercel también correrá todos los días a las 6:00 AM de Colombia.
-          </p>
+          {query ? (
+            <>
+              <h2 className="text-2xl font-bold">Sin resultados para «{q}»</h2>
+              <p className="mt-3 text-muted-foreground">
+                No encontramos notas que coincidan con tu búsqueda.{" "}
+                <a href="/experience-radar/mundial-2026" className="font-semibold text-[var(--cyan)] hover:underline">
+                  Ver todas las notas
+                </a>
+                .
+              </p>
+            </>
+          ) : (
+            <>
+              <h2 className="text-2xl font-bold">Todavía no hay notas del especial</h2>
+              <p className="mt-3 text-muted-foreground">
+                Ejecuta manualmente el agente desde <code>/api/experience-radar/run</code>.
+                En Vercel también correrá todos los días a las 6:00 AM de Colombia.
+              </p>
+            </>
+          )}
         </section>
       )}
 

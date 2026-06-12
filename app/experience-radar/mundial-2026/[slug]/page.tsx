@@ -11,7 +11,10 @@ import { MatchNote } from "@/components/experience-radar/match-note"
 import { type MatchPhases, type MatchRuntimeStatus } from "@/components/experience-radar/match-phase-radar"
 import { FanSimulator } from "@/components/experience-radar/fan-simulator"
 import { MatchCountdown } from "@/components/experience-radar/match-countdown"
-import { getRadarArticleBySlug } from "@/src/lib/experience-radar/articleData"
+import { RadarFloatingMenu } from "@/components/experience-radar/radar-floating-menu"
+import { RelatedNotes, type RelatedNote } from "@/components/experience-radar/related-notes"
+import { NoteImage } from "@/components/experience-radar/note-image"
+import { getRadarArticleBySlug, getAllRadarArticles } from "@/src/lib/experience-radar/articleData"
 import type { EmotionalRadarValues, RadarArticle } from "@/src/lib/experience-radar/articles"
 
 const SITE = "https://medialab.design"
@@ -77,6 +80,21 @@ export default async function RadarArticlePage({
   const summary = article.matchSummary || article.quickSummary
   const sourceLabels = resolveSourceLabels(article)
 
+  // Notas relacionadas (resto del especial) para el carrusel del final.
+  const related: RelatedNote[] = (await getAllRadarArticles())
+    .filter((a) => a.slug !== article.slug)
+    .slice(0, 8)
+    .map((a) => {
+      const s = resolveRuntimeStatus(a)
+      return {
+        slug: a.slug,
+        title: a.seoTitle,
+        teams: a.teams.join(" vs "),
+        image: a.imageUrl || GENERIC_IMAGE,
+        badge: s === "previa" ? "Previa" : s === "en_vivo" ? "En vivo" : "Finalizado",
+      }
+    })
+
   // Datos por equipo + proyección a futuro (cómo llegarán) desde la conciencia colectiva.
   const teamApproach = approach.map((a) => {
     const c = article.collectiveByTeam?.find((x) => x.team === a.team)
@@ -95,20 +113,16 @@ export default async function RadarArticlePage({
   return (
     <main className="min-h-screen bg-background text-foreground">
       <Navbar />
+      <RadarFloatingMenu />
       <JsonLd article={article} summary={summary} lessons={lessons} />
 
       <article className="mx-auto max-w-3xl px-6 pt-28 pb-16 md:pt-36">
-        {/* Migas + meta editorial */}
-        <nav className="text-xs text-muted-foreground" aria-label="Ruta de navegación">
-          <Link href="/experience-radar" className="hover:text-foreground">Experience Radar</Link>
-          <span aria-hidden> / </span>
-          <Link href={BASE} className="hover:text-foreground">Especial Mundial 2026</Link>
-        </nav>
-
-        <div className="mt-4 flex flex-wrap items-center gap-2 text-xs">
-          <span className="rounded-full bg-[var(--cyan)]/10 px-3 py-1 font-semibold text-[var(--cyan)]">{article.category}</span>
+        <div className="flex flex-wrap items-center gap-2 text-xs">
           <span className="rounded-full border border-border px-3 py-1">{article.event}</span>
-          <StateBadge status={status} />
+          {/* En móvil la pildora de estado se oculta para no competir con el titular. */}
+          <span className="hidden sm:inline-flex">
+            <StateBadge status={status} />
+          </span>
         </div>
 
         {/* Título SEO */}
@@ -119,13 +133,13 @@ export default async function RadarArticlePage({
         </p>
         {/* Foto del encuentro */}
         <figure className="relative mt-6 overflow-hidden rounded-2xl border border-border bg-card">
-          <img
-            src={article.imageUrl || GENERIC_IMAGE}
+          <NoteImage
+            src={article.imageUrl}
             alt={article.imageAlt || `${article.teams.join(" vs ")} — ${article.seoTitle}`}
             className="h-56 w-full object-cover object-[center_22%] md:h-80"
             loading="eager"
           />
-          {article.kickoffAt && (
+          {article.kickoffAt && status !== "finalizado" && (
             <div className="absolute bottom-12 left-3 right-3 md:left-5 md:right-auto md:max-w-md">
               <MatchCountdown kickoffAt={article.kickoffAt} overlay />
             </div>
@@ -193,6 +207,8 @@ export default async function RadarArticlePage({
           </p>
         </details>
       </article>
+
+      <RelatedNotes notes={related} />
 
       <Footer />
     </main>
@@ -298,7 +314,8 @@ function resolveRuntimeStatus(article: RadarArticle): MatchRuntimeStatus {
 
   if (now < kickoff) return "previa"
   if (now < kickoff + liveWindowMs) return "en_vivo"
-  return article.matchScore ? "finalizado" : "en_vivo"
+  // Pasada la ventana en vivo el partido ya terminó: nunca quedarse en "en_vivo".
+  return "finalizado"
 }
 
 function resolveSourceLabels(article: RadarArticle): string[] {

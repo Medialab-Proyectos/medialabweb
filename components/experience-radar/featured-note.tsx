@@ -4,8 +4,7 @@ import Link from "next/link"
 import { ArrowRight, Star } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 import type { RadarArticle } from "@/src/lib/experience-radar/articles"
-
-const GENERIC_IMAGE = "/images/experience-radar-vs.png"
+import { NoteImage } from "./note-image"
 
 /**
  * "Nota principal" del portal: la nota más reciente, destacada como bloque grande.
@@ -33,8 +32,8 @@ export function FeaturedNote({ article }: { article: RadarArticle }) {
         className="group mt-3 grid overflow-hidden rounded-2xl border border-border bg-card transition-colors hover:border-[var(--cyan)]/60 md:grid-cols-2"
       >
         <div className="relative h-52 w-full overflow-hidden md:h-full md:min-h-[280px]">
-          <img
-            src={article.imageUrl || GENERIC_IMAGE}
+          <NoteImage
+            src={article.imageUrl}
             alt={article.seoTitle}
             className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
             loading="eager"

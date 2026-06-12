@@ -64,10 +64,7 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
     ],
     seoTitle:
       "México 2-0 Sudáfrica: resultado, goles y tres expulsiones en el partido inaugural",
-    imageUrl: "https://latingoles.com/wp-content/uploads/2026/06/mexico.jpg",
-    imageAlt: "Julián Quiñones y Raúl Jiménez celebran la victoria de México sobre Sudáfrica en el Mundial 2026",
-    imageCredit: "Imagen editorial: Latingoles",
-    imageSourceUrl: "https://latingoles.com/historico-en-el-azteca-colombiano-quinones-y-mexicano-jimenez-rompen-la-maldicion-de-mexico/",
+    imageAlt: "México vs Sudáfrica — partido inaugural del Mundial 2026",
     teams: ["México", "Sudáfrica"],
     event: "Mundial 2026 — Fase de grupos",
     hook: "Victoria de México y récord disciplinario en el partido inaugural",
@@ -219,7 +216,146 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
     ],
   },
 
-  // ───────────────────────── Artículo 2 · PREVIA ─────────────────────────
+  // ───────────────────────── Artículo 2 · FINALIZADO ─────────────────────────
+  // Partido REAL del fixture: Corea del Sur vs Chequia, 11 jun 2026, Guadalajara.
+  {
+    category: "Streaming",
+    date: "2026-06-11",
+    kickoffAt: "2026-06-12T02:00:00.000Z",
+    slug: "corea-del-sur-chequia-resultado-resumen-caida-transmision",
+    matchState: "finalizado",
+    matchScore: {
+      home: "Corea del Sur",
+      away: "Chequia",
+      homeGoals: 2,
+      awayGoals: 1,
+      detail: "Goles: Son 12', Lee 67'; Chequia: Schick 80'",
+    },
+    imageAlt: "Corea del Sur vs Chequia — Mundial 2026, segundo partido de la jornada inaugural",
+    matchSummary:
+      "Corea del Sur venció 2-1 a Chequia en Guadalajara, pero para millones el partido quedó marcado por una caída de la transmisión en el pico de audiencia. El reclamo dominante no fue el resultado, sino el silencio del servicio: no saber si la falla era propia o de la plataforma.",
+    matchPhases: {
+      expectativa: { euforia: 72, confianza: 68, ansiedad: 40, frustracion: 26, incertidumbre: 44, optimismo: 73 },
+      realidad: { euforia: 54, confianza: 44, ansiedad: 80, frustracion: 90, incertidumbre: 82, optimismo: 48 },
+      percepcion: { euforia: 50, confianza: 40, ansiedad: 72, frustracion: 92, incertidumbre: 60, optimismo: 44 },
+    },
+    teamApproach: [
+      {
+        team: "Corea del Sur",
+        expectedEmotion: "Euforia y enorme expectativa de su afición hiperconectada.",
+        dominantConversation: "Dónde ver el partido y con quién; ilusión por sus figuras en Europa.",
+        fanConfidence: "Confianza alta en el equipo y en disfrutar la transmisión.",
+        mainNarrative: "Una nueva generación lista para dar el golpe en el Mundial.",
+        howTheyArrived: "Con entusiasmo masivo y altísima concurrencia digital simultánea.",
+        whatHappened: "Ganaron, pero la caída de la señal convirtió la fiesta en frustración y búsqueda de alternativas.",
+        expectationVsReality: "Esperaban celebrar sin fricción; el recuerdo quedó teñido por la falla de la plataforma.",
+      },
+      {
+        team: "Chequia",
+        expectedEmotion: "Expectativa moderada y enfoque en el juego.",
+        dominantConversation: "Análisis táctico del rival, poco sobre la transmisión.",
+        fanConfidence: "Confianza serena, sin grandes expectativas mediáticas.",
+        mainNarrative: "Competir con orden frente a un rival con más presión social.",
+        howTheyArrived: "Tranquilos y menos expuestos al fallo regional de la señal.",
+        whatHappened: "Perdieron sobre el cierre; su conversación se centró en el juego, no en la plataforma.",
+        expectationVsReality: "La experiencia coincidió con lo esperado: foco en el partido más que en la transmisión.",
+      },
+    ],
+    lessons: [
+      { term: "Sesgo de atribución", explanation: "Sin información, el usuario culpa a su propia conexión, no a la causa real del fallo.", phase: "despues" },
+      { term: "Aversión a la pérdida", explanation: "Perderse el momento esperado pesó más que cualquier calidad técnica del servicio.", phase: "despues" },
+      { term: "Efecto de recencia", explanation: "El último fallo definió la percepción de toda la plataforma, borrando meses de servicio estable.", phase: "despues" },
+    ],
+    seoTitle:
+      "Corea del Sur 2-1 Chequia: resultado, resumen y la caída de transmisión que frustró a millones",
+    teams: ["Corea del Sur", "Chequia"],
+    event: "Mundial 2026 — Fase de grupos",
+    hook: "Victoria de Corea del Sur y caída de la transmisión en vivo",
+    quickSummary:
+      "Corea del Sur derrotó 2-1 a Chequia en la jornada inaugural del Mundial 2026, pero una interrupción de la transmisión en el momento de mayor audiencia se robó la conversación. Mientras millones intentaban conectarse a la vez, la plataforma mostró pantallas de carga y errores intermitentes, y la audiencia se volcó a buscar señales alternativas.",
+    whatHappened:
+      "Corea del Sur se adelantó temprano y manejó el partido frente a una Chequia ordenada que descontó sobre el cierre. Pero pocos minutos después del inicio, con la audiencia entrando de forma simultánea, la transmisión principal empezó a fallar para parte de los usuarios: pantallas de carga indefinidas y errores intermitentes sin explicación. El problema se concentró en los picos de concurrencia. En minutos, la conversación digital se llenó de reportes y preguntas sobre señales alternativas, y muchos no sabían si el problema era de su conexión o de la plataforma. Esa ambigüedad multiplicó la frustración y empujó a la audiencia a saltar entre aplicaciones. Cuando el servicio se recuperó, buena parte del daño ya estaba hecho.",
+    keyPlays: [
+      "Gol tempranero que encarriló el partido para Corea del Sur.",
+      "Fallo de transmisión concentrado en el pico de concurrencia.",
+      "Descuento de Chequia sobre el cierre, ya con la señal recuperada.",
+    ],
+    controversies: [
+      "Ausencia de comunicación oficial durante la caída.",
+      "Errores sin indicar si el problema era del usuario o de la plataforma.",
+    ],
+    statements: [
+      "Usuarios exigieron transparencia sobre el estado del servicio.",
+      "El reclamo dominante fue la falta de mensajes claros, no solo la caída.",
+    ],
+    fanPulse: {
+      concerns: ["¿Es mi internet o la plataforma?", "¿Dónde puedo ver el partido ahora?", "¿Va a volver la señal a tiempo?"],
+      emotions: ["Frustración aguda", "Sensación de exclusión", "Urgencia por no perderse el momento"],
+      frustrations: ["Pantallas de carga sin información.", "No saber a quién reportar ni dónde mirar el estado."],
+      enthusiasm: ["Comunidad ayudándose a encontrar alternativas.", "Alta disposición a volver si la experiencia mejora."],
+      sources: [
+        { name: "Reddit — match thread y reportes de fallo", url: "https://www.reddit.com/r/soccer/", kind: "conversacion" },
+        { name: "Reseñas de apps de streaming (App Store / Play)", url: "https://play.google.com/store", kind: "reseña" },
+      ],
+    },
+    mediaLabInsight: {
+      humanBehavior:
+        "Ante un fallo, las personas primero intentan diagnosticar la causa. Si el sistema no se lo dice, asumen lo peor y migran a otra opción.",
+      cognitiveBiases: [
+        "Sesgo de atribución: sin información, el usuario culpa a su propia conexión o al producto al azar.",
+        "Aversión a la pérdida: perderse el momento pesa más que la calidad técnica.",
+        "Efecto de recencia: el último fallo define la percepción de toda la plataforma.",
+      ],
+      emotionalReaction:
+        "La frustración no viene de la caída en sí, sino del silencio: no saber qué pasa ni qué hacer multiplica la ansiedad.",
+      digitalPatterns:
+        "Concurrencia simultánea, multitarea entre apps, reporte social inmediato y abandono rápido cuando no hay estado visible.",
+    },
+    productApplications: [
+      {
+        sector: "Banco",
+        application:
+          "Si la app cae en día de pago de nómina, una página de estado honesta ('servicio intermitente, trabajando en ello') retiene más que el silencio.",
+      },
+      {
+        sector: "Ecommerce",
+        application:
+          "En un lanzamiento o flash sale, comunicar la cola y el estado del sistema evita que el pico de demanda se convierta en pico de abandono.",
+      },
+      {
+        sector: "Fintech",
+        application:
+          "En picos de transacciones, diferenciar 'error tuyo' de 'error nuestro' con mensajes claros sostiene la confianza operacional.",
+      },
+    ],
+    emotionalRadar: { euforia: 54, confianza: 44, ansiedad: 80, frustracion: 90, incertidumbre: 82, optimismo: 48 },
+    collectiveByTeam: [
+      {
+        team: "Corea del Sur",
+        mood: "Alegría empañada por la frustración técnica",
+        behaviorEffect:
+          "Llegan al próximo partido con desconfianza hacia la plataforma: buscan alternativas con anticipación, comparten reportes de fallos y reducen la participación en transmisiones oficiales hasta recuperar la confianza.",
+      },
+      {
+        team: "Chequia",
+        mood: "Decepción deportiva, indiferencia técnica",
+        behaviorEffect:
+          "Menos afectados por el fallo regional: su conversación se centra en el rendimiento del equipo y mantienen patrones de uso estables.",
+      },
+    ],
+    scoreFactors: { emotionalImpact: 84, digitalConversation: 90, virality: 88, userInterest: 92 },
+    uxFinding:
+      "Bajo alta demanda, el usuario no perdona el silencio. Una página de estado honesta y mensajes que distingan el origen del error retienen más que una recuperación rápida sin comunicación.",
+    aiSummary:
+      "Corea del Sur venció 2-1 a Chequia en el Mundial 2026, pero una caída de la transmisión en el pico de audiencia dominó la conversación. Experience Radar concluye que la frustración la causó el silencio del sistema, no solo la caída: sin saber el origen del error, los usuarios asumen lo peor y migran. Para productos de alto tráfico —streaming, banca, ecommerce, fintech— la lección es diseñar la experiencia de fallo como un flujo principal: páginas de estado honestas, mensajes que distingan error del usuario y del servicio, y recuperación transparente.",
+    sources: [
+      { name: "FIFA — Cómo ver el Mundial (referencia oficial)", url: "https://www.fifa.com/es/tournaments/mens/worldcup/canadamexicousa2026", kind: "oficial" },
+      { name: "Reddit r/soccer — reportes de transmisión", url: "https://www.reddit.com/r/soccer/", kind: "conversacion" },
+      { name: "Reseñas de apps de streaming", url: "https://play.google.com/store", kind: "reseña" },
+    ],
+  },
+
+  // ───────────────────────── Artículo 3 · PREVIA ─────────────────────────
   // Partido REAL del fixture: Brasil vs Marruecos, 13 jun 2026, Nueva Jersey (MetLife).
   {
     category: "Fan Experience",
