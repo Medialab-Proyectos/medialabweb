@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import {
   PolarAngleAxis,
   PolarGrid,
@@ -71,19 +71,34 @@ const AXES = [
 
 type AxisKey = (typeof AXES)[number]["key"]
 
+/** Interpretación editorial por fase → categoría. La escribe el agente con datos reales. */
+export type MatchInterpretations = Partial<Record<RadarViewMode, Partial<Record<AxisKey, string>>>>
+
 function WrappedTick(props: {
   x?: number
   y?: number
   textAnchor?: string
   payload?: { value?: string }
+  onSelect?: (label: string) => void
+  activeLabel?: string | null
 }) {
-  const { x = 0, y = 0, textAnchor = "middle", payload } = props
+  const { x = 0, y = 0, textAnchor = "middle", payload, onSelect, activeLabel } = props
   const anchor = textAnchor as "start" | "middle" | "end"
   const value = String(payload?.value ?? "")
   const lines = value.length > 9 ? splitTwo(value) : [value]
   const help = axisHelpForLabel(value)
+  const isActive = !!activeLabel && value === activeLabel
   return (
-    <text x={x} y={y} textAnchor={anchor} fill="var(--muted-foreground)" fontSize={11} style={{ cursor: "help" }}>
+    <text
+      x={x}
+      y={y}
+      textAnchor={anchor}
+      fill={isActive ? "var(--cyan)" : "var(--muted-foreground)"}
+      fontSize={11}
+      fontWeight={isActive ? 700 : 400}
+      style={{ cursor: onSelect ? "pointer" : "help" }}
+      onClick={onSelect ? () => onSelect(value) : undefined}
+    >
       {help && <title>{help}</title>}
       {lines.map((line, i) => (
         <tspan key={line} x={x} dy={i === 0 ? (lines.length > 1 ? "-0.2em" : "0.32em") : "1.1em"}>
@@ -156,12 +171,15 @@ export function MatchPhaseRadar({
   status,
   sourceLabels,
   matchLabel,
+  interpretations,
   onPhaseChange,
 }: {
   phases: MatchPhases
   status: MatchRuntimeStatus
   sourceLabels?: string[]
   matchLabel?: string
+  /** Interpretación editorial por fase y categoría (del artículo). Respaldo: texto genérico. */
+  interpretations?: MatchInterpretations
   onPhaseChange?: (phase: RadarViewMode) => void
 }) {
   const { t } = useLanguage()
@@ -170,6 +188,29 @@ export function MatchPhaseRadar({
   const chartPhases = useMemo(() => PHASES.filter((p) => phases[p.key]), [phases])
   const activePhase = chartPhases.find((p) => p.key === viewMode) ?? chartPhases[0]
   const label = matchLabel ?? "este partido"
+
+  // Categoría seleccionada al tocar un eje del radar: resalta y desplaza su tarjeta.
+  const [activeAxis, setActiveAxis] = useState<AxisKey | null>(null)
+  const cardRefs = useRef<Record<string, HTMLDivElement | null>>({})
+  const labelToKey = useMemo(() => {
+    const map: Record<string, AxisKey> = {}
+    AXES.forEach((a) => {
+      map[t(a.es, a.en)] = a.key
+    })
+    return map
+  }, [t])
+  const activeLabel = useMemo(() => {
+    const a = AXES.find((x) => x.key === activeAxis)
+    return a ? t(a.es, a.en) : null
+  }, [activeAxis, t])
+  const selectAxis = (clickedLabel: string) => {
+    const key = labelToKey[clickedLabel]
+    if (!key) return
+    setActiveAxis(key)
+    requestAnimationFrame(() => {
+      cardRefs.current[key]?.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" })
+    })
+  }
 
   useEffect(() => {
     onPhaseChange?.(viewMode)
@@ -262,7 +303,7 @@ export function MatchPhaseRadar({
         <ResponsiveContainer width="100%" height="100%">
           <RadarChart data={chartData} outerRadius="72%" margin={{ top: 16, right: 44, bottom: 12, left: 44 }}>
             <PolarGrid stroke="var(--border)" />
-            <PolarAngleAxis dataKey="k" tick={<WrappedTick />} />
+            <PolarAngleAxis dataKey="k" tick={<WrappedTick onSelect={selectAxis} activeLabel={activeLabel} />} />
             <PolarRadiusAxis domain={[0, 100]} tick={false} axisLine={false} />
             <ChartTooltip
               cursor={false}
@@ -303,16 +344,30 @@ export function MatchPhaseRadar({
       </div>
 
       {activePhase && phases[activePhase.key] && (
-        <div className="mt-5 rounded-xl border border-border bg-background/70 p-4">
+        <div className="mt-6 border-t border-border pt-5">
           <p className="text-xs font-bold uppercase tracking-wide text-muted-foreground">
             {t("Interpretación por categoría", "Category interpretation")}
           </p>
+          <p className="mt-1 text-[11px] text-muted-foreground/70">
+            {t("Toca una categoría en el radar para resaltar su interpretación.", "Tap a category on the radar to highlight its interpretation.")}
+          </p>
           {/* En móvil las tarjetas por categoría se deslizan; en desktop quedan en grilla. */}
-          <div className="mt-3 flex gap-3 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:grid sm:grid-cols-2 sm:overflow-visible">
+          <div className="mt-3 flex items-start gap-3 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:grid sm:grid-cols-2 sm:items-start sm:overflow-visible">
             {AXES.map((axis) => {
               const value = phases[activePhase.key]?.[axis.key] ?? 0
+              const isActive = activeAxis === axis.key
               return (
-                <div key={axis.key} className="min-w-[82%] shrink-0 rounded-lg border border-border/70 p-3 sm:min-w-0">
+                <div
+                  key={axis.key}
+                  ref={(el) => {
+                    cardRefs.current[axis.key] = el
+                  }}
+                  className={`w-[82%] shrink-0 rounded-lg border p-4 transition-colors sm:w-auto ${
+                    isActive
+                      ? "border-[var(--cyan)] bg-[var(--cyan)]/[0.05] ring-1 ring-[var(--cyan)]/40"
+                      : "border-border/70"
+                  }`}
+                >
                   <div className="flex items-center justify-between gap-3">
                     <p className="flex items-center gap-1.5 text-sm font-semibold">
                       {t(axis.es, axis.en)}
@@ -336,17 +391,13 @@ export function MatchPhaseRadar({
                     </span>
                   </div>
                   <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
-                    {interpretAxis(axis.key, Number(value), viewMode, label)}
+                    {interpretations?.[viewMode]?.[axis.key] ??
+                      interpretAxis(axis.key, Number(value), viewMode, label)}
                   </p>
                 </div>
               )
             })}
           </div>
-          {!!sourceLabels?.length && (
-            <p className="mt-4 border-t border-border pt-3 text-[11px] leading-relaxed text-muted-foreground">
-              Referencias: <span className="font-medium text-foreground/80">{sourceLabels.slice(0, 3).join(" · ")}</span>
-            </p>
-          )}
         </div>
       )}
 

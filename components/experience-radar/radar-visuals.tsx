@@ -12,9 +12,11 @@ import { motion, useReducedMotion } from "framer-motion"
 const ACCENT = "#E8751A"
 const TEAL = "#2AABB3"
 
-/** Barrido de radar concéntrico con señales animadas. Decorativo. */
-export function RadarSweep({ className = "" }: { className?: string }) {
-  const reduce = useReducedMotion()
+/** Barrido de radar concéntrico con señales animadas. Decorativo.
+ *  `motionless` fuerza la versión estática (p. ej. en móvil, donde la animación
+ *  genera ruido y no comunica valor). */
+export function RadarSweep({ className = "", motionless = false }: { className?: string; motionless?: boolean }) {
+  const reduce = useReducedMotion() || motionless
   const rings = [1, 0.72, 0.46, 0.24]
   const blips = [
     { cx: 78, cy: 60, r: 2.6, delay: 0 },

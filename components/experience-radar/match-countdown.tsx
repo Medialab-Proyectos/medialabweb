@@ -23,7 +23,7 @@ export function MatchCountdown({ kickoffAt, overlay = false }: { kickoffAt: stri
   if (remaining <= 0) {
     return (
       <div className={overlay
-        ? "inline-flex items-center gap-2 rounded-full border border-white/25 bg-black/65 px-4 py-2 text-sm font-semibold text-white shadow-lg backdrop-blur-md"
+        ? "inline-flex w-fit max-w-full items-center gap-2 rounded-full border border-white/25 bg-black/80 px-4 py-2 text-sm font-semibold text-[#fff] shadow-lg backdrop-blur-md"
         : "mt-4 inline-flex items-center gap-2 rounded-xl border border-[#F97316]/40 bg-[#F97316]/10 px-4 py-2 text-sm font-semibold text-[#F97316]"}>
         <Clock3 size={16} /> {isLive ? "Partido en vivo" : "El partido ya comenzó"}
       </div>
@@ -38,12 +38,12 @@ export function MatchCountdown({ kickoffAt, overlay = false }: { kickoffAt: stri
 
   return (
     <div className={overlay
-      ? "rounded-xl border border-white/20 bg-black/65 px-4 py-3 text-white shadow-xl backdrop-blur-md"
+      ? "inline-block w-fit max-w-full rounded-xl border border-white/20 bg-black/80 px-3 py-2 text-[#fff] shadow-xl backdrop-blur-md"
       : "mt-4 rounded-xl border border-[var(--cyan)]/30 bg-[var(--cyan)]/[0.06] px-4 py-3"}>
-      <p className={`flex items-center gap-2 text-xs font-semibold uppercase tracking-wide ${overlay ? "text-white/80" : "text-[var(--cyan)]"}`}>
-        <Clock3 size={14} /> El partido comienza en
+      <p className={`flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide ${overlay ? "text-[#fff]" : "text-[var(--cyan)]"}`}>
+        <Clock3 size={13} /> El partido comienza en
       </p>
-      <div className="mt-2 flex flex-wrap items-baseline gap-x-4 gap-y-1 tabular-nums" aria-live="polite">
+      <div className="mt-1.5 flex flex-wrap items-baseline gap-x-3 gap-y-1 tabular-nums" aria-live="polite">
         {days > 0 && <TimeUnit value={days} label={days === 1 ? "día" : "días"} overlay={overlay} />}
         <TimeUnit value={hours} label="h" overlay={overlay} />
         <TimeUnit value={minutes} label="min" overlay={overlay} />
@@ -55,8 +55,8 @@ export function MatchCountdown({ kickoffAt, overlay = false }: { kickoffAt: stri
 
 function TimeUnit({ value, label, overlay }: { value: number; label: string; overlay: boolean }) {
   return (
-    <span className={`text-sm ${overlay ? "text-white/70" : "text-muted-foreground"}`}>
-      <strong className={`text-xl ${overlay ? "text-white" : "text-foreground"}`}>{String(value).padStart(2, "0")}</strong> {label}
+    <span className={`text-xs ${overlay ? "text-[#fff]/80" : "text-muted-foreground"}`}>
+      <strong className={`text-base sm:text-lg ${overlay ? "text-[#fff]" : "text-foreground"}`}>{String(value).padStart(2, "0")}</strong> {label}
     </span>
   )
 }

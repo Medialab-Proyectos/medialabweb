@@ -83,7 +83,7 @@ export function RadarArticleView({ report }: { report: DailyRadarReport }) {
               onError={() => setImgSrc(GENERIC_IMAGE)}
             />
             {hasTrendBuzz && (
-              <span className="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-black/55 px-3 py-1 text-xs font-medium text-white backdrop-blur-sm">
+              <span className="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-black/55 px-3 py-1 text-xs font-medium text-[#fff] backdrop-blur-sm">
                 <TrendingUp size={13} /> {t("Miles de fans buscaron esto hoy", "Thousands of fans searched this today")}
               </span>
             )}

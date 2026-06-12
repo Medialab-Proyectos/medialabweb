@@ -165,6 +165,17 @@ export interface RadarArticle {
   }
 
   /**
+   * Interpretación editorial por fase y categoría emocional (la ESCRIBE el agente con
+   * datos REALES del partido: resultado, jugadas, polémicas y lo que dice la gente).
+   * Debe ser específica, no genérica. Si falta una entrada, la UI usa un texto de
+   * respaldo derivado del valor numérico. Estructura: fase → categoría → texto.
+   *   matchInterpretations.realidad.frustracion = "La bronca no fue por el 2-1 sino por…"
+   */
+  matchInterpretations?: Partial<
+    Record<"expectativa" | "realidad" | "percepcion", Partial<Record<keyof EmotionalRadarValues, string>>>
+  >
+
+  /**
    * Bloque 3 — cómo llegaban los equipos. Cambia según el estado: en "previa" se
    * muestran los campos ANTES; en "finalizado", los campos DESPUÉS. Si falta, la
    * UI deriva un respaldo de `collectiveByTeam` / `teams`.

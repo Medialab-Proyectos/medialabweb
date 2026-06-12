@@ -5,6 +5,7 @@ import { ArrowRight } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 import type { RadarArticle } from "@/src/lib/experience-radar/articles"
 import { NoteImage } from "./note-image"
+import { StatusPill } from "./status-pill"
 
 /**
  * Portal "Especiales": notas con imagen, tipo portal de noticias. La más reciente
@@ -37,7 +38,8 @@ export function EspecialesGrid({ articles }: { articles: RadarArticle[] }) {
                 alt={a.seoTitle}
                 className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
               />
-              <span className="absolute left-3 top-3 rounded-full bg-black/55 px-2.5 py-1 text-[11px] font-semibold text-white backdrop-blur-sm">
+              <StatusPill status={a.matchState} className="absolute right-3 top-3" />
+              <span className="absolute left-3 top-3 rounded-full bg-black/55 px-2.5 py-1 text-[11px] font-semibold text-[#fff] backdrop-blur-sm">
                 {a.category}
               </span>
             </div>

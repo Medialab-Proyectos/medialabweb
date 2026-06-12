@@ -39,7 +39,7 @@ export function RelatedNotes({ notes }: { notes: RelatedNote[] }) {
                 <div className="relative">
                   <NoteImage src={n.image} alt={n.title} className="h-32 w-full object-cover" />
                   {n.badge && (
-                    <span className="absolute left-2 top-2 rounded-full bg-black/55 px-2.5 py-0.5 text-[10px] font-semibold text-white backdrop-blur-sm">
+                    <span className="absolute left-2 top-2 rounded-full bg-black/55 px-2.5 py-0.5 text-[10px] font-semibold text-[#fff] backdrop-blur-sm">
                       {n.badge}
                     </span>
                   )}

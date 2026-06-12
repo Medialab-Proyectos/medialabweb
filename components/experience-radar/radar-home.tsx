@@ -25,31 +25,32 @@ export function RadarHome() {
           className="pointer-events-none absolute inset-0 opacity-[0.5]"
           style={{ backgroundImage: "radial-gradient(var(--dot-color) 1px, transparent 1px)", backgroundSize: "22px 22px" }}
         />
+        {/* Animación de fondo SOLO en desktop (en móvil genera ruido). */}
         <motion.div
           aria-hidden
-          className="pointer-events-none absolute -left-24 top-16 h-72 w-72 rounded-full border border-[var(--cyan)]/15"
+          className="pointer-events-none absolute -left-24 top-16 hidden h-72 w-72 rounded-full border border-[var(--cyan)]/15 md:block"
           animate={{ scale: [1, 1.12, 1], opacity: [0.18, 0.38, 0.18] }}
           transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div
           aria-hidden
-          className="pointer-events-none absolute -right-20 bottom-[-9rem] h-96 w-96 rounded-full bg-[var(--magenta)]/[0.06] blur-3xl"
+          className="pointer-events-none absolute -right-20 bottom-[-9rem] hidden h-96 w-96 rounded-full bg-[var(--magenta)]/[0.06] blur-3xl md:block"
           animate={{ x: [0, -28, 0], y: [0, -18, 0], opacity: [0.3, 0.55, 0.3] }}
           transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div
           aria-hidden
-          className="pointer-events-none absolute left-[46%] top-12 h-32 w-32 rounded-full bg-[var(--cyan)]/[0.08] blur-2xl"
+          className="pointer-events-none absolute left-[46%] top-12 hidden h-32 w-32 rounded-full bg-[var(--cyan)]/[0.08] blur-2xl md:block"
           animate={{ y: [0, 24, 0], scale: [1, 1.18, 1] }}
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
         />
         <div className="mx-auto grid max-w-7xl items-center gap-10 px-6 md:grid-cols-2">
           <div className="relative z-10">
-            <span className="inline-flex items-center gap-2 rounded-full border border-[var(--cyan)]/30 bg-[var(--cyan)]/10 px-3 py-1 text-xs font-semibold text-[var(--cyan)]">
-              <ScanLine size={13} /> Experience Radar
+            <span className="inline-flex items-center gap-2 rounded-full border border-[var(--cyan)]/30 bg-[var(--cyan)]/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-[var(--cyan)]">
+              <ScanLine size={13} /> {t("Señales · Emoción · Comportamiento", "Signals · Emotion · Behavior")}
             </span>
-            <h1 className="mt-4 text-4xl font-bold leading-[1.05] tracking-tight md:text-6xl">Experience Radar</h1>
-            <p className="mt-5 max-w-xl text-base text-muted-foreground md:text-lg">
+            <h1 className="mt-4 text-5xl font-extrabold leading-[1.03] tracking-tight md:text-6xl">Experience Radar</h1>
+            <p className="mt-5 max-w-xl text-lg font-medium leading-relaxed text-foreground/90 md:text-xl">
               {t(
                 "Un radar de señales, emociones y comportamiento humano para entender cómo reaccionan las personas ante grandes eventos.",
                 "A radar of signals, emotions, and human behavior to understand how people react to major events.",
@@ -59,16 +60,16 @@ export function RadarHome() {
               {t("No seguimos el marcador. Analizamos la experiencia.", "We don't follow the score. We analyze the experience.")}
             </p>
 
-            <div className="mt-7 flex flex-wrap gap-3">
+            <div className="mt-7 flex flex-col gap-3 sm:flex-row">
               <Link
                 href={localized("/experience-radar/mundial-2026")}
-                className="inline-flex items-center gap-2 rounded-full bg-foreground px-5 py-3 text-sm font-semibold text-background transition-colors hover:bg-[var(--magenta)] hover:text-white"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 py-3 text-sm font-semibold text-background transition-colors hover:bg-[var(--magenta)] hover:text-white sm:w-auto"
               >
                 {t("Ver análisis del Mundial 2026", "View World Cup 2026 analysis")} <ArrowRight size={16} />
               </Link>
               <Link
                 href="#especiales"
-                className="inline-flex items-center gap-2 rounded-full border border-border px-5 py-3 text-sm font-semibold text-foreground transition-colors hover:border-[var(--cyan)]/50"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-border px-5 py-3 text-sm font-semibold text-foreground transition-colors hover:border-[var(--cyan)]/50 sm:w-auto"
               >
                 {t("Ver especiales", "See specials")}
               </Link>
@@ -83,7 +84,9 @@ export function RadarHome() {
           </div>
 
           <div className="relative z-10 mx-auto w-full max-w-sm">
-            <RadarSweep className="h-auto w-full" />
+            {/* Móvil: radar estático (sin ruido). Desktop: animación ligera. */}
+            <RadarSweep className="h-auto w-full md:hidden" motionless />
+            <RadarSweep className="hidden h-auto w-full md:block" />
             <p className="mt-4 text-center text-sm font-medium text-muted-foreground">
               {t("El Mundial como laboratorio de comportamiento digital.", "The World Cup as a digital behavior lab.")}
             </p>

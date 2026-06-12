@@ -24,14 +24,14 @@ export function RadarFloatingMenu() {
   }
 
   const itemClass =
-    "inline-flex h-10 w-10 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-[var(--cyan)]/10 hover:text-[var(--cyan)]"
+    "inline-flex h-10 w-10 items-center justify-center rounded-full text-foreground/80 transition-colors hover:bg-[var(--cyan)]/15 hover:text-[var(--cyan)]"
 
   return (
     <div className="fixed bottom-5 right-5 z-40 flex flex-col items-end gap-2">
       {searchOpen && (
         <form
           onSubmit={submit}
-          className="flex items-center gap-1 rounded-full border border-border bg-card/95 p-1.5 pl-4 shadow-lg backdrop-blur"
+          className="flex items-center gap-1 rounded-full border border-border/60 bg-card/80 p-1.5 pl-4 shadow-2xl ring-1 ring-black/5 backdrop-blur-md"
         >
           <input
             autoFocus
@@ -47,14 +47,14 @@ export function RadarFloatingMenu() {
         </form>
       )}
 
-      <div className="flex items-center gap-1 rounded-full border border-border bg-card/95 p-1.5 shadow-lg backdrop-blur">
-        <Link href="/experience-radar" aria-label="Inicio del Radar" title="Inicio del Radar" className={itemClass}>
+      <div className="flex items-center gap-1 rounded-full border border-border/60 bg-card/80 p-1.5 shadow-2xl ring-1 ring-black/5 backdrop-blur-md">
+        <Link href="/experience-radar" aria-label="Inicio Experience Radar" title="Inicio Experience Radar" className={itemClass}>
           <Radar size={18} />
         </Link>
         <Link
           href="/experience-radar/mundial-2026"
-          aria-label="Todas las notas"
-          title="Todas las notas"
+          aria-label="Volver al especial"
+          title="Volver al especial"
           className={itemClass}
         >
           <Newspaper size={18} />

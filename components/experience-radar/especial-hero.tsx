@@ -29,7 +29,7 @@ export function EspecialHero({ updatedAt }: { updatedAt?: string }) {
   ]
 
   return (
-    <section className="relative overflow-hidden border-b border-border bg-[var(--surface-dark)] pt-28 pb-12 md:pt-32 md:pb-16">
+    <section className="relative overflow-hidden border-b border-border bg-[var(--surface-dark)] pt-24 pb-8 md:pt-28 md:pb-12">
       <div
         className="pointer-events-none absolute inset-0 opacity-[0.4]"
         style={{ backgroundImage: "radial-gradient(var(--dot-color) 1px, transparent 1px)", backgroundSize: "22px 22px" }}

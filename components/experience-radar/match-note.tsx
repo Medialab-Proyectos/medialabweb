@@ -1,16 +1,12 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
-import { ArrowLeft, ArrowRight, ArrowUpRight, Clock, Lightbulb, Trophy, Users } from "lucide-react"
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  type CarouselApi,
-} from "@/components/ui/carousel"
+import { useMemo, useState } from "react"
+import { ArrowUpRight, Clock, Lightbulb, Trophy, Users } from "lucide-react"
+import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel"
 import {
   MatchPhaseRadar,
   type MatchPhases,
+  type MatchInterpretations,
   type MatchRuntimeStatus,
   type RadarViewMode,
 } from "./match-phase-radar"
@@ -42,6 +38,7 @@ export interface MatchNoteProps {
   block1: { expectativa: string; realidad: string; percepcion: string }
   teamApproach: TeamApproachData[]
   lessons: Array<{ term: string; explanation: string; phase?: "antes" | "despues" }>
+  interpretations?: MatchInterpretations
   sourceLabels?: string[]
 }
 
@@ -52,6 +49,7 @@ export function MatchNote({
   block1,
   teamApproach,
   lessons,
+  interpretations,
   sourceLabels,
 }: MatchNoteProps) {
   const [phase, setPhase] = useState<RadarViewMode>("expectativa")
@@ -121,11 +119,12 @@ export function MatchNote({
           status={status}
           sourceLabels={sourceLabels}
           matchLabel={matchLabel}
+          interpretations={interpretations}
           onPhaseChange={setPhase}
         />
       </section>
 
-      <section className="mt-10 rounded-2xl border border-border bg-gradient-to-br from-[var(--magenta)]/[0.05] to-transparent p-5 md:p-6">
+      <section className="mt-10">
         <h2 className="flex items-center gap-2 text-2xl font-bold">
           <Users size={20} className="shrink-0 text-[var(--cyan)]" /> {fanSectionTitle}
         </h2>
@@ -143,6 +142,7 @@ export function MatchNote({
         <p className="mt-4 text-xs italic leading-relaxed text-muted-foreground/80">{fanSectionIntro}</p>
       </section>
 
+      {/* Lo que hemos aprendido — bajo "cómo llegan las hinchadas", sin caja contenedora. */}
       {lessons.length > 0 && <LessonsCarousel lessons={lessons} status={status} />}
     </>
   )
@@ -153,18 +153,17 @@ function Scoreboard({ score }: { score: MatchScoreData }) {
   const awayWins = score.awayGoals > score.homeGoals
 
   return (
-    <div className="mb-4 rounded-xl border border-border bg-background p-4 shadow-sm">
-      <div className="mb-3 flex items-center gap-2">
-        <Trophy size={18} className="text-[#F59E0B]" />
-        <span className="text-xs font-semibold uppercase tracking-wide text-foreground">Marcador final</span>
+    <div className="mb-5 border-b border-border pb-5">
+      <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+        <Trophy size={16} className="text-[#F59E0B]" /> Marcador final
       </div>
-      <div className="grid grid-cols-[1fr_auto_1fr] items-stretch gap-2 sm:gap-3">
+      <div className="mt-3 grid grid-cols-[1fr_auto_1fr] items-center gap-3">
         <ScoreTeam name={score.home} goals={score.homeGoals} isWinner={homeWins} />
-        <span className="flex items-center justify-center text-sm font-bold text-muted-foreground">vs</span>
+        <span className="text-sm font-bold text-muted-foreground/50">vs</span>
         <ScoreTeam name={score.away} goals={score.awayGoals} isWinner={awayWins} />
       </div>
       {score.detail && (
-        <p className="mt-3 rounded-lg border border-border bg-card px-3 py-2 text-xs leading-relaxed text-muted-foreground">
+        <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
           <ScoreDetail detail={score.detail} />
         </p>
       )}
@@ -196,16 +195,20 @@ function ScoreTeam({
   isWinner: boolean
 }) {
   return (
-    <div
-      className={`flex min-w-0 flex-col items-center gap-1.5 rounded-xl border p-3 text-center ${
-        isWinner
-          ? "border-[#22C55E]/50 bg-[#22C55E]/10 text-foreground"
-          : "border-border bg-card text-muted-foreground"
-      }`}
-    >
+    <div className="flex min-w-0 flex-col items-center gap-1.5 text-center">
       <TeamFlag team={name} />
-      <p className="w-full break-words text-xs font-bold leading-tight sm:text-sm">{name}</p>
-      <span className="text-2xl font-black tabular-nums text-foreground sm:text-3xl">{goals}</span>
+      <p
+        className={`w-full break-words text-xs font-bold leading-tight sm:text-sm ${
+          isWinner ? "text-foreground" : "text-muted-foreground"
+        }`}
+      >
+        {name}
+      </p>
+      <span
+        className={`text-3xl font-black tabular-nums sm:text-4xl ${isWinner ? "text-[var(--cyan)]" : "text-foreground"}`}
+      >
+        {goals}
+      </span>
       {isWinner && <span className="text-[10px] font-semibold uppercase tracking-wide text-[#16A34A]">Ganador</span>}
     </div>
   )
@@ -301,16 +304,13 @@ function teamFlagCode(value: string): string | undefined {
   }[key]
 }
 
-function LessonsCarousel({
+export function LessonsCarousel({
   lessons,
   status,
 }: {
   lessons: Array<{ term: string; explanation: string; phase?: "antes" | "despues" }>
   status: MatchRuntimeStatus
 }) {
-  const [api, setApi] = useState<CarouselApi>()
-  const [index, setIndex] = useState(0)
-
   const normalized = useMemo(
     () =>
       lessons.map((lesson) => ({
@@ -320,92 +320,41 @@ function LessonsCarousel({
     [lessons, status],
   )
 
-  useEffect(() => {
-    if (!api) return
-
-    const updateIndex = () => setIndex(api.selectedScrollSnap())
-    updateIndex()
-    api.on("select", updateIndex)
-    api.on("reInit", updateIndex)
-
-    return () => {
-      api.off("select", updateIndex)
-      api.off("reInit", updateIndex)
-    }
-  }, [api])
+  if (!normalized.length) return null
 
   return (
-    <section className="mt-10 rounded-2xl border border-border bg-gradient-to-br from-[#E8751A]/[0.05] to-transparent p-5 md:p-6">
-      <div>
-        <h2 className="flex items-center gap-2 text-2xl font-bold">
-          <Lightbulb size={20} className="shrink-0 text-[var(--cyan)]" /> Lo que hemos aprendido
-        </h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Biblioteca viva de aprendizajes. Crece con nuevas señales y diferencia cada hallazgo por el momento en que aparece.
-        </p>
-      </div>
+    <section className="mt-10">
+      <h2 className="flex items-center gap-2 text-2xl font-bold">
+        <Lightbulb size={20} className="shrink-0 text-[var(--cyan)]" /> Lo que hemos aprendido
+      </h2>
 
-      <div className="relative mt-4">
-        {normalized.length ? (
-          <>
-            <Carousel
-              opts={{ align: "start", dragFree: true, loop: normalized.length > 1 }}
-              setApi={setApi}
-              className="w-full"
-            >
-              <CarouselContent className="-ml-3">
-                {normalized.map((lesson, cardIndex) => (
-                  <CarouselItem
-                    key={`${lesson.term}-${cardIndex}`}
-                    className="pl-3 sm:basis-1/2 lg:basis-1/3 xl:basis-1/4"
+      {/* Mismo comportamiento que el resto de carruseles: deslizar (swipe), sin flechas. */}
+      <Carousel opts={{ align: "start", dragFree: true }} className="mt-4">
+        <CarouselContent className="-ml-3">
+          {normalized.map((lesson, i) => (
+            <CarouselItem key={`${lesson.term}-${i}`} className="basis-[88%] pl-3 sm:basis-1/2 lg:basis-1/3">
+              <article className="h-full rounded-xl border border-border bg-card p-4">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span
+                    className={`rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-[#fff] ${
+                      lesson.phase === "antes" ? "bg-[var(--cyan)]" : "bg-[var(--magenta)]"
+                    }`}
                   >
-                    <article
-                      className="h-full min-h-[170px] rounded-xl border border-border bg-card p-4"
-                    >
-                    <div className="flex flex-wrap items-center gap-2">
-                      <span
-                        className={`rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-white ${
-                          lesson.phase === "antes" ? "bg-[var(--cyan)]" : "bg-[var(--magenta)]"
-                        }`}
-                      >
-                        {lesson.phase === "antes" ? "Antes" : "Después"}
-                      </span>
-                      <p className="text-sm font-bold text-[var(--magenta)]">{lesson.term}</p>
-                    </div>
-                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{lesson.explanation}</p>
-                    </article>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-            </Carousel>
-            {normalized.length > 1 && (
-              <div className="mt-4 flex items-center justify-center gap-3">
-                <button
-                  onClick={() => api?.scrollPrev()}
-                  className="absolute left-2 top-[85px] z-10 inline-flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-card/95 text-muted-foreground shadow-lg backdrop-blur-sm transition-colors hover:text-foreground md:-left-4"
-                  aria-label="Aprendizaje anterior"
-                >
-                  <ArrowLeft size={15} />
-                </button>
-                <span className="text-xs font-medium text-muted-foreground">
-                  {index + 1} / {normalized.length}
-                </span>
-                <button
-                  onClick={() => api?.scrollNext()}
-                  className="absolute right-2 top-[85px] z-10 inline-flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-card/95 text-muted-foreground shadow-lg backdrop-blur-sm transition-colors hover:text-foreground md:-right-4"
-                  aria-label="Siguiente aprendizaje"
-                >
-                  <ArrowRight size={15} />
-                </button>
-              </div>
-            )}
-          </>
-        ) : (
-          <p className="text-sm leading-relaxed text-muted-foreground">
-            Todavía no hay aprendizajes en esta pestaña. Cuando el partido aporte señales nuevas, esta biblioteca se ampliará aquí.
-          </p>
-        )}
-      </div>
+                    {lesson.phase === "antes" ? "Antes" : "Después"}
+                  </span>
+                  <p className="text-sm font-bold text-[var(--magenta)]">{lesson.term}</p>
+                </div>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{lesson.explanation}</p>
+              </article>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+      </Carousel>
+
+      {/* Comentario de cierre de la sección, en letra pequeña. */}
+      <p className="mt-4 text-xs italic leading-relaxed text-muted-foreground/80">
+        Biblioteca viva de aprendizajes. Crece con nuevas señales y diferencia cada hallazgo por el momento en que aparece.
+      </p>
     </section>
   )
 }

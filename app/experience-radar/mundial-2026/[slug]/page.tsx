@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import {
-  ExternalLink, ChevronDown, BookOpen, Clock, CheckCircle2,
+  ExternalLink, ChevronDown, BookOpen,
 } from "lucide-react"
 import { Footer } from "@/components/footer"
 import { Navbar } from "@/components/navbar"
@@ -14,6 +14,7 @@ import { MatchCountdown } from "@/components/experience-radar/match-countdown"
 import { RadarFloatingMenu } from "@/components/experience-radar/radar-floating-menu"
 import { RelatedNotes, type RelatedNote } from "@/components/experience-radar/related-notes"
 import { NoteImage } from "@/components/experience-radar/note-image"
+import { StatusPill } from "@/components/experience-radar/status-pill"
 import { getRadarArticleBySlug, getAllRadarArticles } from "@/src/lib/experience-radar/articleData"
 import type { EmotionalRadarValues, RadarArticle } from "@/src/lib/experience-radar/articles"
 
@@ -116,13 +117,9 @@ export default async function RadarArticlePage({
       <RadarFloatingMenu />
       <JsonLd article={article} summary={summary} lessons={lessons} />
 
-      <article className="mx-auto max-w-3xl px-6 pt-28 pb-16 md:pt-36">
+      <article className="mx-auto max-w-3xl px-6 pt-24 pb-16 md:pt-28">
         <div className="flex flex-wrap items-center gap-2 text-xs">
           <span className="rounded-full border border-border px-3 py-1">{article.event}</span>
-          {/* En móvil la pildora de estado se oculta para no competir con el titular. */}
-          <span className="hidden sm:inline-flex">
-            <StateBadge status={status} />
-          </span>
         </div>
 
         {/* Título SEO */}
@@ -132,18 +129,23 @@ export default async function RadarArticlePage({
           {article.kickoffAt ? ` · ${formatKickoff(article.kickoffAt)}` : ""}
         </p>
         {/* Foto del encuentro */}
-        <figure className="relative mt-6 overflow-hidden rounded-2xl border border-border bg-card">
-          <NoteImage
-            src={article.imageUrl}
-            alt={article.imageAlt || `${article.teams.join(" vs ")} — ${article.seoTitle}`}
-            className="h-56 w-full object-cover object-[center_22%] md:h-80"
-            loading="eager"
-          />
-          {article.kickoffAt && status !== "finalizado" && (
-            <div className="absolute bottom-12 left-3 right-3 md:left-5 md:right-auto md:max-w-md">
-              <MatchCountdown kickoffAt={article.kickoffAt} overlay />
-            </div>
-          )}
+        <figure className="mt-5 overflow-hidden rounded-2xl border border-border bg-card">
+          {/* Las superposiciones se anclan SOLO a la imagen (no al pie de foto). */}
+          <div className="relative">
+            <NoteImage
+              src={article.imageUrl}
+              alt={article.imageAlt || `${article.teams.join(" vs ")} — ${article.seoTitle}`}
+              className="h-56 w-full object-cover object-[center_22%] md:h-80"
+              loading="eager"
+            />
+            {/* Estado asociado a la imagen (etiqueta editorial), no compite con el título. */}
+            <StatusPill status={status} className="absolute left-3 top-3 z-10" />
+            {article.kickoffAt && status !== "finalizado" && (
+              <div className="absolute bottom-3 left-3 right-3 md:bottom-4 md:left-4 md:right-auto md:max-w-sm">
+                <MatchCountdown kickoffAt={article.kickoffAt} overlay />
+              </div>
+            )}
+          </div>
           <figcaption className="px-4 py-2 text-[11px] text-muted-foreground">
             {article.imageSourceUrl ? (
               <Link href={article.imageSourceUrl} target="_blank" rel="noopener noreferrer nofollow" className="hover:text-foreground">
@@ -164,6 +166,7 @@ export default async function RadarArticlePage({
           block1={block1}
           teamApproach={teamApproach}
           lessons={lessons}
+          interpretations={article.matchInterpretations}
           sourceLabels={sourceLabels}
         />
 
@@ -328,28 +331,6 @@ function resolveSourceLabels(article: RadarArticle): string[] {
 }
 
 /* ───────────────── Subcomponentes (server) ───────────────── */
-
-function StateBadge({ status }: { status: MatchRuntimeStatus }) {
-  if (status === "previa") {
-    return (
-      <span className="inline-flex items-center gap-1.5 rounded-full border border-[#f4a261]/50 bg-[#f4a261]/10 px-3 py-1 font-semibold text-[#c65a10] dark:text-[#f4a261]">
-        <Clock size={12} /> Previa · disponible 2–3 h antes
-      </span>
-    )
-  }
-  if (status === "en_vivo") {
-    return (
-      <span className="inline-flex items-center gap-1.5 rounded-full border border-[#F97316]/50 bg-[#F97316]/10 px-3 py-1 font-semibold text-[#F97316]">
-        <Clock size={12} /> En vivo · consolidando señales
-      </span>
-    )
-  }
-  return (
-    <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--cyan)]/40 bg-[var(--cyan)]/10 px-3 py-1 font-semibold text-[var(--cyan)]">
-      <CheckCircle2 size={12} /> Partido finalizado
-    </span>
-  )
-}
 
 function formatDate(value: string): string {
   return new Intl.DateTimeFormat("es-CO", { dateStyle: "long", timeZone: "America/Bogota" }).format(

@@ -35,6 +35,33 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
       // Después: el recuerdo amplifica la frustración (sesgo de recencia).
       percepcion: { euforia: 88, confianza: 82, ansiedad: 48, frustracion: 42, incertidumbre: 32, optimismo: 86 },
     },
+    // Interpretación específica por fase/categoría (datos reales + lo que dice la gente).
+    matchInterpretations: {
+      expectativa: {
+        euforia: "Antes del pitazo, la euforia venía de la ilusión del debut en casa y del favoritismo sobre Sudáfrica.",
+        confianza: "La afición llegó confiada: anfitrión, Azteca lleno y un rival al que se daba por inferior.",
+        ansiedad: "La tensión previa era baja; la conversación giraba más sobre la fiesta que sobre el riesgo.",
+        frustracion: "Apenas asomaba molestia: solo dudas sobre el once titular y el calor del mediodía.",
+        incertidumbre: "Pocas preguntas abiertas: el relato dominante daba por hecho el triunfo local.",
+        optimismo: "Optimismo alto, alimentado por jugar la inauguración del Mundial en casa.",
+      },
+      realidad: {
+        euforia: "El 2-0 con goles de Quiñones y Jiménez encendió al Azteca: la conversación se llenó de orgullo por 'romper la maldición' del debut.",
+        confianza: "La ventaja dio un relato claro —'México controló'—, aunque las tres expulsiones abrieron el debate de si fue dominio o partido roto.",
+        ansiedad: "Cada expulsión y revisión del VAR disparó búsquedas de '¿por qué la roja?' por encima del propio marcador.",
+        frustracion: "La molestia dominante no fue el resultado sino el criterio arbitral: muchos sintieron las tres expulsiones desproporcionadas.",
+        incertidumbre: "Quedó la duda de si el nivel se sostiene once contra once; la goleada convivió con un juego desordenado por las tarjetas.",
+        optimismo: "Ganar la inauguración en casa disparó la ilusión de avanzar; la afición ya proyecta el siguiente partido.",
+      },
+      percepcion: {
+        euforia: "Con los días, el recuerdo se queda con la fiesta del 2-0 y los goleadores, más que con el desorden disciplinario.",
+        confianza: "El resultado consolidó un relato positivo del anfitrión de cara al grupo.",
+        ansiedad: "Baja la urgencia informativa: ya hay una explicación aceptada de lo que pasó.",
+        frustracion: "La indignación por el arbitraje persiste como nota de fondo, lista para reactivarse a la próxima jugada dudosa.",
+        incertidumbre: "La lectura se estabiliza: 'ganamos cómodos pese al lío de tarjetas'.",
+        optimismo: "El recuerdo del debut alimenta una expectativa alta para el próximo encuentro.",
+      },
+    },
     teamApproach: [
       {
         team: "México",
@@ -238,6 +265,33 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
       expectativa: { euforia: 72, confianza: 68, ansiedad: 40, frustracion: 26, incertidumbre: 44, optimismo: 73 },
       realidad: { euforia: 54, confianza: 44, ansiedad: 80, frustracion: 90, incertidumbre: 82, optimismo: 48 },
       percepcion: { euforia: 50, confianza: 40, ansiedad: 72, frustracion: 92, incertidumbre: 60, optimismo: 44 },
+    },
+    // Interpretación específica por fase/categoría (datos reales + lo que dice la gente).
+    matchInterpretations: {
+      expectativa: {
+        euforia: "La hinchada coreana llegó eufórica por ver a Son y a su generación debutar en el Mundial.",
+        confianza: "Confianza alta en el equipo, con la expectativa de imponerse a Chequia.",
+        ansiedad: "La ansiedad previa era logística: a qué hora y en qué plataforma ver el partido.",
+        frustracion: "Casi nula antes del pitazo; la ilusión dominaba la conversación.",
+        incertidumbre: "Pocas dudas sobre el equipo; la única incógnita era la transmisión.",
+        optimismo: "Optimismo marcado por el envión de la generación de Son.",
+      },
+      realidad: {
+        euforia: "El 2-1 con goles de Son y Lee encendió a la hinchada, pero la euforia compitió con la bronca por no poder ver el partido.",
+        confianza: "La victoria dio un relato positivo del equipo; la desconfianza se trasladó a la plataforma de transmisión, no al juego.",
+        ansiedad: "El pico de ansiedad no fue el marcador: fue '¿es mi internet o la app?' durante la caída de la señal.",
+        frustracion: "La frustración dominante vino del silencio del servicio durante el corte, más que del descuento de Chequia.",
+        incertidumbre: "La duda fue si la plataforma aguantaría el resto del torneo; el resultado fue claro, la experiencia no.",
+        optimismo: "Gana Corea y eso ilusiona, pero la afición llega al próximo partido con un plan B por si la señal vuelve a fallar.",
+      },
+      percepcion: {
+        euforia: "El recuerdo mezcla la alegría del triunfo con la anécdota del 'partido que no se pudo ver'.",
+        confianza: "Queda confianza en el equipo, pero la plataforma arrastra una reputación dañada por el último fallo.",
+        ansiedad: "Persiste una ansiedad anticipada: el miedo a que la señal vuelva a caer en el próximo partido.",
+        frustracion: "El efecto de recencia fija la caída como lo más memorable, por encima del 2-1.",
+        incertidumbre: "Baja la incertidumbre deportiva; sube la duda sobre dónde ver con seguridad el siguiente encuentro.",
+        optimismo: "El optimismo deportivo convive con la cautela: ver el próximo partido con alternativas listas.",
+      },
     },
     teamApproach: [
       {

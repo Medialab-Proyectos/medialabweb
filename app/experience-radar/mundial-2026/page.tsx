@@ -6,6 +6,7 @@ import { getAllRadarArticles } from "@/src/lib/experience-radar/articleData"
 import { EspecialHero } from "@/components/experience-radar/especial-hero"
 import { FeaturedNote } from "@/components/experience-radar/featured-note"
 import { EspecialesGrid } from "@/components/experience-radar/especiales-grid"
+import { RadarFloatingMenu } from "@/components/experience-radar/radar-floating-menu"
 
 /**
  * Página 2 — PORTAL del especial "Mundial 2026".
@@ -72,6 +73,7 @@ export default async function ExperienceRadarMundialPage({
   return (
     <main className="min-h-screen bg-background text-foreground">
       <Navbar />
+      <RadarFloatingMenu />
 
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildCollectionSchema(articles)) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildFaqSchema()) }} />
