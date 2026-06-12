@@ -15,6 +15,7 @@ const navLinks = {
     { label: "Curso", href: "/curso", highlight: true, education: true },
     { label: "UXBox", href: "/#uxbox", uxbox: true },
     { label: "UXGreen™", href: "/uxgreen", uxgreen: true },
+    { label: "Experience Radar", href: "/experience-radar", radar: true },
     { label: "Carreras", href: "/carreras" },
   ],
   en: [
@@ -23,6 +24,7 @@ const navLinks = {
     { label: "Course", href: "/curso", highlight: true, education: true },
     { label: "UXBox", href: "/#uxbox", uxbox: true },
     { label: "UXGreen™", href: "/uxgreen", uxgreen: true },
+    { label: "Experience Radar", href: "/experience-radar", radar: true },
     { label: "Careers", href: "/carreras" },
   ],
 }

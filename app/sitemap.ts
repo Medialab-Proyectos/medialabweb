@@ -1,6 +1,7 @@
 import { MetadataRoute } from "next"
+import { getAllRadarArticles } from "@/src/lib/experience-radar/articleData"
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://medialab.design"
   const now = new Date()
 
@@ -76,5 +77,35 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }
   }
 
-  return entries
+  const radarRoutes: MetadataRoute.Sitemap = [
+    {
+      url: `${baseUrl}/experience-radar`,
+      lastModified: now,
+      changeFrequency: "daily",
+      priority: 0.9,
+      alternates: {
+        languages: {
+          es: `${baseUrl}/experience-radar`,
+          en: `${baseUrl}/en/experience-radar`,
+          "x-default": `${baseUrl}/experience-radar`,
+        },
+      },
+    },
+    {
+      url: `${baseUrl}/experience-radar/mundial-2026`,
+      lastModified: now,
+      changeFrequency: "daily",
+      priority: 0.95,
+    },
+  ]
+
+  const articles = await getAllRadarArticles()
+  const articleEntries: MetadataRoute.Sitemap = articles.map((article) => ({
+    url: `${baseUrl}/experience-radar/mundial-2026/${article.slug}`,
+    lastModified: new Date(article.updatedAt || article.date),
+    changeFrequency: article.matchState === "finalizado" ? "weekly" : "hourly",
+    priority: article.matchState === "finalizado" ? 0.9 : 0.95,
+  }))
+
+  return [...entries, ...radarRoutes, ...articleEntries]
 }

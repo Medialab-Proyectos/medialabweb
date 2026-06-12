@@ -8,6 +8,31 @@ const nextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      // Experience Radar: migración /articulos → /mundial-2026 (especial Mundial 2026).
+      {
+        source: '/experience-radar/articulos',
+        destination: '/experience-radar/mundial-2026',
+        permanent: true,
+      },
+      {
+        source: '/experience-radar/articulos/:slug',
+        destination: '/experience-radar/mundial-2026/:slug',
+        permanent: true,
+      },
+      {
+        source: '/en/experience-radar/articulos',
+        destination: '/en/experience-radar/world-cup-2026',
+        permanent: true,
+      },
+      {
+        source: '/en/experience-radar/articulos/:slug',
+        destination: '/en/experience-radar/world-cup-2026/:slug',
+        permanent: true,
+      },
+    ]
+  },
   async headers() {
     return [
       {

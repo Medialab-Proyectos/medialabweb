@@ -8,6 +8,7 @@ import { ThemeProvider } from '@/components/theme-provider'
 import { LanguageProvider } from '@/lib/language-context'
 import { SkipToContent } from '@/components/skip-to-content'
 import { CookieConsent } from '@/components/cookie-consent'
+import 'flag-icons/css/flag-icons.min.css'
 import './globals.css'
 
 const lato = Lato({

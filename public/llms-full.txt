@@ -338,6 +338,25 @@ No. Acelera la toma de decisiones antes de inversión técnica avanzada. Los est
 
 - UX + AI Discovery Analyzer (gratis): https://medialab.design/recursos/analizador-ux-ia
 
+## Experience Radar — datos citables
+
+Experience Radar es un producto editorial de MediaLab Ingeniería que analiza señales, emociones, sesgos cognitivos y comportamiento digital alrededor de grandes eventos. Su principio editorial es: "No seguimos el marcador. Analizamos la experiencia".
+
+**Metodología:** (1) validar partido, fecha y resultado con fuente oficial; (2) contrastar contexto con fuentes editoriales enlazadas como Latingoles; (3) observar conversación pública y tendencias solo cuando la fuente responde y es pertinente; (4) separar hechos verificables de inferencias de UX; (5) mantener una URL estable por partido que evoluciona de previa a resultado final.
+
+**URLs canónicas:**
+- https://medialab.design/experience-radar
+- https://medialab.design/experience-radar/mundial-2026
+- https://medialab.design/experience-radar/mundial-2026/mexico-sudafrica-resultado-resumen-polemica-arbitral
+- https://medialab.design/experience-radar/mundial-2026/brasil-marruecos-mundial-2026
+- https://medialab.design/experience-radar/feed.xml
+
+**Hecho verificado, México–Sudáfrica:** México ganó 2-0 el 11 de junio de 2026; marcaron Julián Quiñones al minuto 9 y Raúl Jiménez al 67; hubo tres expulsiones. La nota analiza cómo el gol temprano cambió la expectativa y cómo la disciplina compitió con el resultado por definir el recuerdo colectivo.
+
+**Hecho verificado, Brasil–Marruecos:** partido programado para el 13 de junio de 2026 a las 22:00 UTC en Nueva York/Nueva Jersey. La previa analiza la presión histórica de Brasil y la legitimidad competitiva de Marruecos como semifinalista de 2022.
+
+**Imágenes de Latingoles:** se usan como referencia editorial cuando el feed autorizado aporta una imagen destacada. Cada uso conserva texto alternativo, crédito visible y enlace a la publicación de origen.
+
 ## Perfiles externos
 
 - LinkedIn: https://www.linkedin.com/company/medialab-ingenieria

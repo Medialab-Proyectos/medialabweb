@@ -72,7 +72,17 @@
       "Bash(npm config:*)",
       "Bash(npx next-image-size:*)",
       "Bash(identify \"public/images/asistente/ada-open.png\")",
-      "Bash(python3 -c \"from PIL import Image; img=Image.open\\('public/images/asistente/ada-open.png'\\); print\\(img.size\\)\")"
+      "Bash(python3 -c \"from PIL import Image; img=Image.open\\('public/images/asistente/ada-open.png'\\); print\\(img.size\\)\")",
+      "Bash(git checkout *)",
+      "Bash(npx eslint *)",
+      "Bash(node -e \"const p=require\\('./package.json'\\); console.log\\('openai:', \\(p.dependencies||{}\\).openai||\\(p.devDependencies||{}\\).openai||'NOT INSTALLED'\\); console.log\\('next:', p.dependencies.next\\); console.log\\('react:', p.dependencies.react\\)\")",
+      "PowerShell(npx tsc --noEmit)",
+      "Bash(curl -s -m 20 -A \"Mozilla/5.0 \\(MediaLabRadar/1.0\\)\" \"https://news.google.com/rss/search?q=Mundial%202026%20experiencia&hl=es-419&gl=CO&ceid=CO:es-419\")",
+      "Bash(curl -s -m 20 -A \"MediaLabRadar/1.0\" \"https://www.reddit.com/r/soccer/hot.json?limit=3\")",
+      "Bash(curl -s -m 25 -A \"MediaLabExperienceRadar/1.0\" \"https://latingoles.com/wp-json/wp/v2/posts?per_page=3&_embed=1\")",
+      "Bash(curl -s -m 25 -A \"MediaLabExperienceRadar/1.0\" \"https://itunes.apple.com/us/rss/customerreviews/id=756904853/sortBy=mostRecent/json\")",
+      "Bash(curl -s --retry 40 --retry-delay 2 --retry-connrefused -m 240 \"http://localhost:3000/api/experience-radar/run\" -o .data/run-result.json -w \"HTTP %{http_code} in %{time_total}s\\\\n\")",
+      "Bash(node -e ' *)"
     ]
   }
 }

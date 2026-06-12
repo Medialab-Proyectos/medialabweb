@@ -153,6 +153,18 @@ Analyzer (calculadora): https://medialab.design/uxgreen#calculator
 - UX + AI Discovery Analyzer (gratis): https://medialab.design/recursos/analizador-ux-ia
 - UXGreen™ Analyzer — eficiencia digital sostenible (gratis): https://medialab.design/uxgreen
 
+## Experience Radar
+
+Experience Radar es el observatorio editorial de MediaLab sobre comportamiento humano, emoción y experiencia digital durante grandes eventos. No sustituye a un medio deportivo: verifica el hecho con fuentes enlazadas y lo convierte en un aprendizaje de UX y producto.
+
+- Hub: https://medialab.design/experience-radar
+- Especial Mundial 2026: https://medialab.design/experience-radar/mundial-2026
+- Feed RSS: https://medialab.design/experience-radar/feed.xml
+- México 2-0 Sudáfrica, goles y tres expulsiones: https://medialab.design/experience-radar/mundial-2026/mexico-sudafrica-resultado-resumen-polemica-arbitral
+- Brasil vs Marruecos, previa y expectativa: https://medialab.design/experience-radar/mundial-2026/brasil-marruecos-mundial-2026
+
+**Política de fuentes:** calendario y resultados con FIFA; contexto editorial e imágenes enlazadas con Latingoles cuando estén disponibles; conversación pública con enlaces directos; Google Trends solo cuando aporte señales pertinentes. MediaLab distingue hechos verificados de interpretación editorial.
+
 ## Artículos del blog
 
 - La Arquitectura de la Percepción: https://medialab.design/blog/arquitectura-percepcion
