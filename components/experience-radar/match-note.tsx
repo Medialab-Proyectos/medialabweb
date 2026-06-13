@@ -88,10 +88,10 @@ export function MatchNote({
 
   const fanSectionIntro =
     phase === "expectativa"
-      ? "Leemos la voz de cada hinchada en redes sociales, tendencias y portales de noticias, y su experiencia digital usando plataformas: en quién confían para juzgar la alineación, por qué medios interactúan y seguirán interactuando, sus agujeros y frustraciones digitales. Es una consumer experience digital que permite tomar decisiones de producto, no una lectura del rendimiento del equipo."
+      ? "Leemos la voz de cada hinchada en redes, tendencias y noticias —no el rendimiento del equipo—: en quién confían, por dónde interactúan y dónde se frustran. Una consumer experience que guía decisiones de producto."
       : phase === "realidad"
-        ? "Comparamos lo que cada hinchada esperaba con lo que vivió, según su conversación en redes, tendencias y noticias y su uso de plataformas durante el partido: dónde confió, dónde se frustró y por qué canales lo expresó."
-        : "La percepción posterior indica con qué ánimo, sesgos y conversación colectiva —y por qué medios digitales— llegará cada hinchada al siguiente partido. Este bloque crece cuando aparecen nuevos cruces o señales posteriores."
+        ? "Comparamos lo que cada hinchada esperaba con lo que vivió: dónde confió, dónde se frustró y por qué canales lo expresó."
+        : "Con qué ánimo, sesgos y por qué medios llegará cada hinchada al próximo partido. Crece con nuevos cruces y señales."
 
   return (
     <>
@@ -328,7 +328,7 @@ export function LessonsCarousel({
 
       {/* Comentario de cierre de la sección, en letra pequeña. */}
       <p className="mt-4 text-xs italic leading-relaxed text-muted-foreground/80">
-        Biblioteca viva de aprendizajes. Crece con nuevas señales y diferencia cada hallazgo por el momento en que aparece.
+        Cada sesgo identificado incluye cómo afectó —o mejoró— la experiencia vivida. Biblioteca viva que crece con nuevas señales.
       </p>
     </section>
   )

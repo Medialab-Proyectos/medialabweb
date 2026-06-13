@@ -298,10 +298,10 @@ export function MatchPhaseRadar({
         <p className="mt-1 text-sm text-muted-foreground">{subtitleText}</p>
       </div>
 
-      {/* Banderas de las 2 hinchadas ARRIBA de la gráfica: tocar una cambia el radar a la
-          lectura de esa hinchada. Las fases se controlan desde la barra inferior. */}
+      {/* Banderas de las 2 hinchadas (círculos de selección) ARRIBA de la gráfica: tocar
+          una cambia el radar a la lectura de esa hinchada. Las fases van en la barra inferior. */}
       {teamOptions.length > 1 && (
-        <div className="mt-4 flex items-center justify-center gap-2">
+        <div className="mt-4 flex items-center justify-center gap-3">
           {teamOptions.map((opt) => {
             const isActive = teamFilter === opt.team
             return (
@@ -312,13 +312,13 @@ export function MatchPhaseRadar({
                 aria-pressed={isActive}
                 aria-label={opt.team}
                 title={opt.team}
-                className={`inline-flex h-9 w-9 items-center justify-center rounded-full transition-all ${
+                className={`inline-flex items-center justify-center rounded-full p-0.5 transition-all ${
                   isActive
-                    ? "scale-110 ring-2 ring-[var(--cyan)]"
+                    ? "scale-110 ring-2 ring-[var(--cyan)] ring-offset-2 ring-offset-card"
                     : "opacity-55 grayscale hover:opacity-100 hover:grayscale-0"
                 }`}
               >
-                <TeamFlag team={opt.team} />
+                <TeamFlag team={opt.team} circle />
               </button>
             )
           })}

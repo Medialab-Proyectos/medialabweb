@@ -51,21 +51,21 @@ export function NextMatchBar({ updatedAt }: { updatedAt?: string }) {
     : null
 
   return (
-    <div className="sticky top-16 z-40 border-b border-border bg-background/95 backdrop-blur-sm dark:border-white/10 dark:bg-neutral-900/95 md:top-20">
+    <div className="sticky top-16 z-40 border-b border-border bg-background/95 backdrop-blur-sm md:top-20">
       <div className="mx-auto flex max-w-5xl flex-wrap items-center gap-x-5 gap-y-1 px-6 py-2 text-xs">
         <span className="inline-flex shrink-0 items-center gap-1.5 font-semibold text-[var(--magenta)]">
           <Radio size={13} className="motion-safe:animate-pulse" />
           {t("Radar en vivo", "Radar live")}
         </span>
-        <span className="inline-flex shrink-0 items-center gap-1.5 text-foreground/70 dark:text-[#fff]/70">
+        <span className="inline-flex shrink-0 items-center gap-1.5 text-foreground/70">
           <Clock size={12} />
           {t("Próximo análisis en", "Next analysis in")}{" "}
-          <strong className="tabular-nums text-foreground dark:text-[#fff]">{countdown}</strong>
+          <strong className="tabular-nums text-foreground">{countdown}</strong>
         </span>
         {updated && (
-          <span className="hidden shrink-0 items-center gap-1.5 text-foreground/70 sm:inline-flex dark:text-[#fff]/70">
+          <span className="hidden shrink-0 items-center gap-1.5 text-foreground/70 sm:inline-flex">
             <RefreshCw size={12} />
-            {t("Última actualización", "Last update")}: <span className="text-foreground dark:text-[#fff]">{updated}</span>
+            {t("Última actualización", "Last update")}: <span className="text-foreground">{updated}</span>
           </span>
         )}
       </div>

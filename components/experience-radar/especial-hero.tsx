@@ -29,7 +29,7 @@ export function EspecialHero({ updatedAt }: { updatedAt?: string }) {
   ]
 
   return (
-    <section className="relative overflow-hidden bg-background pt-10 pb-8 text-foreground dark:bg-neutral-950 dark:text-[#fff] md:pt-14 md:pb-12">
+    <section className="relative overflow-hidden bg-background pt-10 pb-8 text-foreground md:pt-14 md:pb-12">
       <div className="relative z-10 mx-auto max-w-5xl px-6">
         <div className="flex flex-wrap items-center gap-3">
           <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--magenta)] px-3 py-1 text-xs font-bold uppercase tracking-wide text-[#fff] shadow-sm">
@@ -40,13 +40,13 @@ export function EspecialHero({ updatedAt }: { updatedAt?: string }) {
           </span>
         </div>
 
-        <h1 className="mt-4 max-w-3xl text-3xl font-extrabold leading-[1.07] tracking-tight text-foreground dark:text-[#fff] md:text-5xl">
+        <h1 className="mt-4 max-w-3xl text-3xl font-extrabold leading-[1.07] tracking-tight text-foreground md:text-5xl">
           {t(
             "El Mundial 2026, leído como comportamiento humano",
             "The 2026 World Cup, read as human behavior",
           )}
         </h1>
-        <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground dark:text-slate-200 md:text-lg">
+        <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground md:text-lg">
           {t(
             "El evento deportivo más visto del planeta —48 selecciones, sedes en tres países y una audiencia global estimada en miles de millones de personas— se vuelve el mayor laboratorio de emoción y conversación digital de la historia. Aquí no seguimos el marcador: leemos noticias, emociones y sesgos para entender cómo reaccionan las personas.",
             "The most-watched sporting event on the planet —48 teams, venues across three countries and a global audience estimated in the billions— becomes the largest lab of emotion and digital conversation in history. Here we don't follow the score: we read news, emotions and biases to understand how people react.",
@@ -57,21 +57,21 @@ export function EspecialHero({ updatedAt }: { updatedAt?: string }) {
           {stats.map((s) => (
             <div
               key={s.label}
-              className="inline-flex items-center gap-2.5 rounded-2xl border border-border bg-card px-4 py-2.5 dark:border-white/10 dark:bg-white/5"
+              className="inline-flex items-center gap-2.5 rounded-2xl border border-border bg-card px-4 py-2.5 shadow-sm dark:border-white/12"
             >
               <s.icon size={16} className="text-[var(--cyan)]" />
               <span className="text-sm">
-                <strong className="font-bold text-foreground dark:text-[#fff]">{s.value}</strong>{" "}
-                <span className="text-muted-foreground dark:text-[#fff]/60">{s.label}</span>
+                <strong className="font-bold text-foreground">{s.value}</strong>{" "}
+                <span className="text-muted-foreground">{s.label}</span>
               </span>
             </div>
           ))}
         </div>
 
         {updated && (
-          <p className="mt-6 inline-flex items-center gap-1.5 text-xs text-muted-foreground dark:text-[#fff]/60">
+          <p className="mt-6 inline-flex items-center gap-1.5 text-xs text-muted-foreground">
             <RefreshCw size={12} /> {t("Última actualización del radar", "Radar last updated")}:{" "}
-            <span className="text-foreground dark:text-[#fff]">{updated}</span>
+            <span className="text-foreground">{updated}</span>
           </p>
         )}
       </div>

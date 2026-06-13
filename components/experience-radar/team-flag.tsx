@@ -3,13 +3,23 @@
  * el filtro de banderas del radar. Usa flagcdn vía <img> (confiable en Vercel/móvil,
  * sin depender del CSS de flag-icons). Si no hay código, muestra las 2 primeras letras.
  */
-export function TeamFlag({ team, small = false }: { team: string; small?: boolean }) {
+export function TeamFlag({
+  team,
+  small = false,
+  circle = false,
+}: {
+  team: string
+  small?: boolean
+  /** Recorta la bandera en círculo (para selectores de hinchada). */
+  circle?: boolean
+}) {
   const code = teamFlagCode(team)
-  const size = small ? "h-4 w-6" : "h-6 w-9"
+  const size = circle ? "h-9 w-9" : small ? "h-4 w-6" : "h-6 w-9"
+  const shape = circle ? "rounded-full" : "rounded-[3px]"
   if (!code) {
     return (
       <span
-        className={`${size} inline-flex shrink-0 items-center justify-center rounded-[3px] border border-border bg-muted text-[9px] font-bold uppercase text-muted-foreground`}
+        className={`${size} ${shape} inline-flex shrink-0 items-center justify-center border border-border bg-muted text-[9px] font-bold uppercase text-muted-foreground`}
       >
         {team.slice(0, 2)}
       </span>
@@ -19,7 +29,7 @@ export function TeamFlag({ team, small = false }: { team: string; small?: boolea
     <img
       src={`https://flagcdn.com/${code}.svg`}
       alt={`Bandera de ${team}`}
-      className={`${size} shrink-0 rounded-[3px] object-cover shadow-sm`}
+      className={`${size} ${shape} shrink-0 object-cover shadow-sm`}
       loading="lazy"
     />
   )

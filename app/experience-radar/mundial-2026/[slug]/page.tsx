@@ -312,26 +312,33 @@ function resolveTeamPhases(article: RadarArticle, phases: MatchPhases): TeamPhas
   })
 }
 
-/** Sesgo [-0.6, 0.6] por hinchada: hash del nombre (para distinguir) + ánimo colectivo. */
+/**
+ * Sesgo [-0.7, 0.7] por hinchada, DOMINADO por el ánimo colectivo (la voz del fan en
+ * redes y medios). El hash del nombre solo desempata cuando no hay señal de ánimo, para
+ * que las dos hinchadas no muestren un radar idéntico.
+ */
 function teamLean(team: string, mood: string): number {
-  let h = 0
-  for (let i = 0; i < team.length; i++) h = (h * 31 + team.charCodeAt(i)) % 1000
-  let lean = (h / 1000) * 0.8 - 0.4
   const text = mood.toLowerCase()
-  if (/(ilusi|conf[ií]a|optimis|favorit|eufor|alegr|entusias)/.test(text)) lean += 0.2
-  if (/(preocupa|frustra|ansiedad|duda|nervios|temor|crisis|tristeza)/.test(text)) lean -= 0.2
-  return Math.max(-0.6, Math.min(0.6, lean))
+  let lean = 0
+  if (/(ilusi|conf[ií]a|optimis|favorit|eufor|alegr|entusias|orgullo|aliv|fiesta|hito|envalenton)/.test(text)) lean += 0.5
+  if (/(preocupa|frustra|ansiedad|duda|nervios|temor|crisis|tristeza|decepci|golpe|autocr[ií]t|tocad|presi[óo]n)/.test(text)) lean -= 0.5
+  if (lean === 0) {
+    let h = 0
+    for (let i = 0; i < team.length; i++) h = (h * 31 + team.charCodeAt(i)) % 1000
+    lean = (h / 1000) * 0.6 - 0.3
+  }
+  return Math.max(-0.7, Math.min(0.7, lean))
 }
 
 /** Aplica el sesgo de una hinchada al radar combinado (sube ánimo positivo, baja tensión). */
 function leanEmotional(e: EmotionalRadarValues, lean: number): EmotionalRadarValues {
   return {
-    euforia: clampScore(e.euforia * (1 + 0.14 * lean)),
-    confianza: clampScore(e.confianza * (1 + 0.16 * lean)),
-    ansiedad: clampScore(e.ansiedad * (1 - 0.14 * lean)),
-    frustracion: clampScore(e.frustracion * (1 - 0.16 * lean)),
-    incertidumbre: clampScore(e.incertidumbre * (1 - 0.1 * lean)),
-    optimismo: clampScore(e.optimismo * (1 + 0.15 * lean)),
+    euforia: clampScore(e.euforia * (1 + 0.3 * lean)),
+    confianza: clampScore(e.confianza * (1 + 0.32 * lean)),
+    ansiedad: clampScore(e.ansiedad * (1 - 0.3 * lean)),
+    frustracion: clampScore(e.frustracion * (1 - 0.36 * lean)),
+    incertidumbre: clampScore(e.incertidumbre * (1 - 0.22 * lean)),
+    optimismo: clampScore(e.optimismo * (1 + 0.32 * lean)),
   }
 }
 
