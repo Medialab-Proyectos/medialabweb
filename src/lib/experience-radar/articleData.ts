@@ -363,6 +363,7 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
     sources: [
       { name: "ESPN — USA 4-1 Paraguay (Final Score)", url: "https://www.espn.com/soccer/match/_/gameId/760417/paraguay-united-states", kind: "referencia" },
       { name: "CBS Sports — Balogun brace en el debut de EE. UU.", url: "https://www.cbssports.com/soccer/news/usa-paraguay-live-updates-world-cup-2026-score-result/live/", kind: "referencia" },
+      { name: "Telemundo — Estados Unidos 4-1 Paraguay (en vivo)", url: "https://www.telemundo.com/noticias/noticias-telemundo/internacional/live-blog/mundial-2026-en-vivo-hoy-estados-unidos-vs-paraguay-resultados-goles-y-rcna349762", kind: "referencia" },
       { name: "FIFA — Mundial 2026 (centro del torneo)", url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026", kind: "oficial" },
     ],
   },
@@ -803,12 +804,12 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
     seoTitle:
       "Brasil vs Marruecos: previa, expectativa y por qué este partido paraliza al Mundial 2026",
     teams: ["Brasil", "Marruecos"],
-    event: "Mundial 2026 — Fase de grupos",
+    event: "Mundial 2026 — Grupo C",
     hook: "El debut más esperado de la primera fecha",
     quickSummary:
-      "Antes de Brasil–Marruecos, el interés está marcado por el peso histórico de Brasil y el recuerdo de Marruecos como semifinalista de 2022. Esta nota registra la expectativa editorial previa; tras el partido se actualizará con resultado, conversación y percepción observables.",
+      "Antes de Brasil–Marruecos (Grupo C, 13 de junio en MetLife), el interés está marcado por el peso histórico de Brasil y un antecedente que pesa: Marruecos —semifinalista en 2022— ya venció a Brasil por primera vez en su historia (2-1, amistoso en Tánger, marzo de 2023). Esta nota registra la expectativa previa; tras el partido se actualizará con resultado, conversación y percepción observables.",
     whatHappened:
-      "El partido aún no se juega. FIFA confirma el horario y el escenario, y su previa destaca el cruce entre el cinco veces campeón y una selección marroquí que llegó a semifinales en 2022. AP también registra una expectativa alta en Brasil y dudas sobre el estado físico de Neymar. Este marco emocional condicionará cómo ambas hinchadas interpreten las primeras jugadas.",
+      "El partido aún no se juega. FIFA confirma horario y escenario (MetLife, Nueva Jersey) y presenta el cruce entre el cinco veces campeón y una selección marroquí que llegó a semifinales en 2022. La memoria reciente alimenta el morbo: en la fase de grupos de Francia 1998 Brasil se impuso 3-0, pero en marzo de 2023 Marruecos rompió los libros de historia y venció 2-1 a Brasil por primera vez, en Tánger. A eso se suman las dudas sobre el estado físico de Neymar. Ese marco emocional —favoritismo histórico contra legitimidad reciente— condicionará cómo ambas hinchadas interpreten las primeras jugadas.",
     keyPlays: [
       "Aún sin jugarse: se actualizará tras el partido.",
     ],
@@ -883,6 +884,7 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
       { name: "FIFA — centro de partido Brasil vs Marruecos", url: "https://www.fifa.com/en/match-centre/match/17/285023/289273/400021456", kind: "oficial" },
       { name: "FIFA — previa Brasil vs Marruecos", url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/brazil-morocco-preview-live-stream-team-news-tickets", kind: "oficial" },
       { name: "AP — expectativa de Brasil y estado de Neymar", url: "https://apnews.com/article/brazil-world-cup-neymar-ancelotti-ebdba3dcbf32124a38b388775cc20b38", kind: "referencia" },
+      { name: "WinSports — calendario y cobertura del Mundial 2026", url: "https://www.winsports.co/futbol-internacional/noticias/copa-mundial-de-la-fifa-2026-mira-el-calendario-completo-437848", kind: "referencia" },
     ],
   },
 
@@ -893,7 +895,7 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
     kickoffAt: "2026-06-13T23:00:00.000Z",
     slug: "catar-suiza-mundial-2026",
     teams: ["Catar", "Suiza"],
-    group: "Fase de grupos",
+    group: "Grupo B",
     officialUrl: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/scores-fixtures",
   }),
   upcomingMatch({
@@ -901,7 +903,7 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
     kickoffAt: "2026-06-14T05:00:00.000Z",
     slug: "haiti-escocia-mundial-2026",
     teams: ["Haití", "Escocia"],
-    group: "Fase de grupos",
+    group: "Grupo C",
     officialUrl: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/scores-fixtures",
   }),
   upcomingMatch({

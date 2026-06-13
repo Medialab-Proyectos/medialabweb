@@ -298,36 +298,35 @@ export function MatchPhaseRadar({
         <p className="mt-1 text-sm text-muted-foreground">{subtitleText}</p>
       </div>
 
-      {/* Gráfica del radar con las dos banderas (sin nombre) en el centro: tocar una
-          cambia el radar a la lectura de esa hinchada. Las fases se controlan desde la
-          barra inferior. Alto reducido para evitar el exceso de espacio en responsive. */}
-      <div className="relative mt-4 h-[240px] w-full md:h-[300px]">
-        {teamOptions.length > 1 && (
-          <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
-            <div className="pointer-events-auto flex items-center gap-2 rounded-full border border-border bg-card/90 px-2 py-1.5 shadow-lg ring-1 ring-black/10 backdrop-blur-sm dark:border-white/15">
-              {teamOptions.map((opt) => {
-                const isActive = teamFilter === opt.team
-                return (
-                  <button
-                    key={opt.team}
-                    type="button"
-                    onClick={() => setTeamFilter(opt.team)}
-                    aria-pressed={isActive}
-                    aria-label={opt.team}
-                    title={opt.team}
-                    className={`inline-flex h-9 w-9 items-center justify-center rounded-full transition-all ${
-                      isActive
-                        ? "scale-110 ring-2 ring-[var(--cyan)]"
-                        : "opacity-55 grayscale hover:opacity-100 hover:grayscale-0"
-                    }`}
-                  >
-                    <TeamFlag team={opt.team} />
-                  </button>
-                )
-              })}
-            </div>
-          </div>
-        )}
+      {/* Banderas de las 2 hinchadas ARRIBA de la gráfica: tocar una cambia el radar a la
+          lectura de esa hinchada. Las fases se controlan desde la barra inferior. */}
+      {teamOptions.length > 1 && (
+        <div className="mt-4 flex items-center justify-center gap-2">
+          {teamOptions.map((opt) => {
+            const isActive = teamFilter === opt.team
+            return (
+              <button
+                key={opt.team}
+                type="button"
+                onClick={() => setTeamFilter(opt.team)}
+                aria-pressed={isActive}
+                aria-label={opt.team}
+                title={opt.team}
+                className={`inline-flex h-9 w-9 items-center justify-center rounded-full transition-all ${
+                  isActive
+                    ? "scale-110 ring-2 ring-[var(--cyan)]"
+                    : "opacity-55 grayscale hover:opacity-100 hover:grayscale-0"
+                }`}
+              >
+                <TeamFlag team={opt.team} />
+              </button>
+            )
+          })}
+        </div>
+      )}
+
+      {/* Alto reducido para evitar el exceso de espacio en responsive. */}
+      <div className="mt-2 h-[240px] w-full md:h-[300px]">
         <ResponsiveContainer width="100%" height="100%">
           <RadarChart data={chartData} outerRadius="82%" margin={{ top: 4, right: 44, bottom: 2, left: 44 }}>
             <PolarGrid stroke="var(--border)" />
