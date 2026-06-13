@@ -194,17 +194,15 @@ export function MatchPhaseRadar({
   teamPhases?: TeamPhaseRadar[]
 }) {
   const { t } = useLanguage()
-  // La fase puede venir de un contexto compartido (barra inferior de la nota) o, en su
-  // ausencia, de un estado local. Así el radar y la barra de fases quedan sincronizados.
+  // La fase la controla la barra inferior de la nota (contexto compartido). Sin contexto
+  // (otras páginas) muestra la expectativa por defecto.
   const phaseCtx = useRadarPhase()
-  const [localMode, setLocalMode] = useState<RadarViewMode>("expectativa")
-  const viewMode = phaseCtx ? phaseCtx.phase : localMode
-  const setViewMode = phaseCtx ? phaseCtx.setPhase : setLocalMode
+  const viewMode: RadarViewMode = phaseCtx?.phase ?? "expectativa"
 
-  // Filtro de banderas: null = "Ambas" (lectura combinada); si hay equipo, el radar
+  // Filtro de banderas: por defecto la primera hinchada. Al tocar una bandera, el radar
   // muestra la lectura de ESA hinchada (cae a la combinada si falta su dato).
-  const [teamFilter, setTeamFilter] = useState<string | null>(null)
   const teamOptions = teamPhases ?? []
+  const [teamFilter, setTeamFilter] = useState<string | null>(teamOptions[0]?.team ?? null)
   const activePhases = useMemo<MatchPhases>(() => {
     if (!teamFilter) return phases
     const tp = teamOptions.find((t) => t.team === teamFilter)?.phases
@@ -291,7 +289,7 @@ export function MatchPhaseRadar({
   }, [viewMode, t])
 
   return (
-    <div className="rounded-2xl border border-border bg-gradient-to-b from-card to-[var(--cyan)]/[0.03] p-5 md:p-7">
+    <div className="rounded-2xl border border-border bg-gradient-to-b from-card to-[var(--cyan)]/[0.03] p-5 shadow-sm dark:border-white/12 md:p-7">
       <div>
         <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-[var(--cyan)]">
           <Gauge size={14} /> {t("Radar del partido", "Match radar")}
@@ -300,83 +298,38 @@ export function MatchPhaseRadar({
         <p className="mt-1 text-sm text-muted-foreground">{subtitleText}</p>
       </div>
 
-      {/* Filtro por país: banderas de las 2 hinchadas + "Ambas". Filtra el radar por hinchada. */}
-      {teamOptions.length > 0 && (
-        <div className="mt-4 flex flex-wrap items-center gap-2">
-          <span className="text-[11px] font-bold uppercase tracking-wide text-muted-foreground">
-            {t("Filtrar por hinchada", "Filter by fans")}
-          </span>
-          <button
-            type="button"
-            onClick={() => setTeamFilter(null)}
-            aria-pressed={teamFilter === null}
-            className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors ${
-              teamFilter === null
-                ? "border-[var(--cyan)] bg-[var(--cyan)]/10 text-[var(--cyan)]"
-                : "border-border text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            {t("Ambas", "Both")}
-          </button>
-          {teamOptions.map((opt) => {
-            const isActive = teamFilter === opt.team
-            return (
-              <button
-                key={opt.team}
-                type="button"
-                onClick={() => setTeamFilter(opt.team)}
-                aria-pressed={isActive}
-                className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors ${
-                  isActive
-                    ? "border-[var(--cyan)] bg-[var(--cyan)]/10 text-[var(--cyan)]"
-                    : "border-border text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                <TeamFlag team={opt.team} small />
-                {opt.team}
-              </button>
-            )
-          })}
-        </div>
-      )}
-
-      {/* En móvil las fases se deslizan horizontalmente (no se apilan). */}
-      <div className="mt-5 flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        {PHASES.map((p) => {
-          const disabled = !phases[p.key]
-          const isActive = viewMode === p.key
-          const suffix =
-            disabled && p.key === "realidad" && status === "en_vivo"
-              ? "En vivo"
-              : disabled && p.key === "percepcion"
-                ? "Después"
-                : undefined
-
-          return (
-            <button
-              key={p.key}
-              onClick={() => !disabled && setViewMode(p.key)}
-              disabled={disabled}
-              className={`inline-flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium transition-all ${
-                isActive
-                  ? "text-white shadow-md"
-                  : disabled
-                    ? "cursor-not-allowed border border-border bg-muted/50 text-muted-foreground/50"
-                    : "border border-border bg-background text-muted-foreground hover:bg-muted"
-              }`}
-              style={isActive ? { backgroundColor: p.color } : undefined}
-            >
-              <p.icon size={14} />
-              {t(p.es, p.en)}
-              {suffix && <span className="rounded-full bg-background/70 px-2 py-0.5 text-[10px]">{suffix}</span>}
-            </button>
-          )
-        })}
-      </div>
-
-      <div className="mt-4 h-[300px] w-full md:h-[340px]">
+      {/* Gráfica del radar con las dos banderas (sin nombre) en el centro: tocar una
+          cambia el radar a la lectura de esa hinchada. Las fases se controlan desde la
+          barra inferior. Alto reducido para evitar el exceso de espacio en responsive. */}
+      <div className="relative mt-4 h-[240px] w-full md:h-[300px]">
+        {teamOptions.length > 1 && (
+          <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
+            <div className="pointer-events-auto flex items-center gap-2 rounded-full border border-border bg-card/90 px-2 py-1.5 shadow-lg ring-1 ring-black/10 backdrop-blur-sm dark:border-white/15">
+              {teamOptions.map((opt) => {
+                const isActive = teamFilter === opt.team
+                return (
+                  <button
+                    key={opt.team}
+                    type="button"
+                    onClick={() => setTeamFilter(opt.team)}
+                    aria-pressed={isActive}
+                    aria-label={opt.team}
+                    title={opt.team}
+                    className={`inline-flex h-9 w-9 items-center justify-center rounded-full transition-all ${
+                      isActive
+                        ? "scale-110 ring-2 ring-[var(--cyan)]"
+                        : "opacity-55 grayscale hover:opacity-100 hover:grayscale-0"
+                    }`}
+                  >
+                    <TeamFlag team={opt.team} />
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        )}
         <ResponsiveContainer width="100%" height="100%">
-          <RadarChart data={chartData} outerRadius="72%" margin={{ top: 16, right: 44, bottom: 12, left: 44 }}>
+          <RadarChart data={chartData} outerRadius="82%" margin={{ top: 4, right: 44, bottom: 2, left: 44 }}>
             <PolarGrid stroke="var(--border)" />
             <PolarAngleAxis dataKey="k" tick={<WrappedTick onSelect={selectAxis} activeLabel={activeLabel} />} />
             <PolarRadiusAxis domain={[0, 100]} tick={false} axisLine={false} />

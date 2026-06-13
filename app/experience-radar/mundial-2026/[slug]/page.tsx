@@ -13,12 +13,10 @@ import { FanSimulator } from "@/components/experience-radar/fan-simulator"
 import { MatchCountdown } from "@/components/experience-radar/match-countdown"
 import { RadarPhaseProvider } from "@/components/experience-radar/radar-phase-context"
 import { RadarPhaseBar } from "@/components/experience-radar/radar-phase-bar"
-import { ShareNote } from "@/components/experience-radar/share-note"
 import { RadarNewsletter } from "@/components/experience-radar/radar-newsletter"
 import { RelatedNotes, type RelatedNote } from "@/components/experience-radar/related-notes"
 import { NoteImage } from "@/components/experience-radar/note-image"
 import { StatusPill } from "@/components/experience-radar/status-pill"
-import { categoryLabel } from "@/components/experience-radar/category-labels"
 import { pickDefaultImage } from "@/components/experience-radar/default-image"
 import { getRadarArticleBySlug, getAllRadarArticles } from "@/src/lib/experience-radar/articleData"
 import { resolveMatchStatus } from "@/src/lib/experience-radar/articleAvailability"
@@ -124,15 +122,12 @@ export default async function RadarArticlePage({
     <RadarPhaseProvider available={availablePhases}>
     <main className="min-h-screen bg-background text-foreground">
       <Navbar />
-      <RadarPhaseBar />
+      <RadarPhaseBar shareTitle={article.seoTitle} />
       <JsonLd article={article} summary={summary} lessons={lessons} />
 
       <article className="mx-auto max-w-3xl px-6 pt-24 pb-24 md:pt-28">
         <div className="flex flex-wrap items-center gap-2 text-xs">
           <span className="rounded-full border border-border bg-card px-3 py-1 text-card-foreground">{article.event}</span>
-          <span className="rounded-full bg-[var(--cyan)]/10 px-3 py-1 font-semibold text-[var(--cyan)]">
-            {categoryLabel(article.category, "es")}
-          </span>
         </div>
 
         <h1 className="mt-4 text-3xl font-bold leading-tight text-foreground md:text-4xl">{article.seoTitle}</h1>
@@ -170,8 +165,6 @@ export default async function RadarArticlePage({
           </figcaption>
         </figure>
 
-        <ShareNote url={`${SITE}${BASE}/${article.slug}`} title={article.seoTitle} />
-
         <MatchNote
           status={status}
           matchScore={article.matchScore}
@@ -191,11 +184,11 @@ export default async function RadarArticlePage({
           </section>
         )}
 
+        {/* Suscripción: va DESPUÉS del simulador ── */}
+        <RadarNewsletter />
+
         {/* ── CTA final integrado ── */}
         <RadarCtaCards />
-
-        {/* Suscripción: deja tu correo y te avisamos de nuevas notas ── */}
-        <RadarNewsletter />
 
         {/* Fuentes consultadas — acordeón colapsado */}
         <details className="group mt-10 rounded-2xl border border-border p-5">

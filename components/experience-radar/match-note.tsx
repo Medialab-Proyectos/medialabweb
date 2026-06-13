@@ -95,8 +95,10 @@ export function MatchNote({
 
   return (
     <>
-      <section className="mt-8 rounded-2xl border border-border bg-gradient-to-br from-card via-card to-[var(--cyan)]/[0.06] p-5">
-        {status === "finalizado" && matchScore && <Scoreboard score={matchScore} />}
+      <section className="mt-8 rounded-2xl border border-border bg-gradient-to-br from-card via-card to-[var(--cyan)]/[0.06] p-5 shadow-sm dark:border-white/12">
+        {/* Tras un partido finalizado SIEMPRE viene el marcador (placeholder si falta el dato). */}
+        {status === "finalizado" &&
+          (matchScore ? <Scoreboard score={matchScore} /> : <ScorePending label={matchLabel} />)}
         {status !== "finalizado" && (
           <div className="mb-4 flex items-center gap-2 rounded-xl border border-[#f4a261]/40 bg-[#f4a261]/10 p-3 text-xs text-[#c65a10] dark:text-[#f4a261]">
             <Clock size={14} />
@@ -150,6 +152,21 @@ export function MatchNote({
       {/* Lo que hemos aprendido — bajo "cómo llegan las hinchadas", sin caja contenedora. */}
       {lessons.length > 0 && <LessonsCarousel lessons={lessons} status={status} />}
     </>
+  )
+}
+
+/** Marcador pendiente: el partido terminó pero el dato aún no llega del agente. */
+function ScorePending({ label }: { label: string }) {
+  return (
+    <div className="mb-5 border-b border-border pb-5">
+      <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+        <Trophy size={16} className="text-[#F59E0B]" /> Marcador final
+      </div>
+      <p className="mt-3 text-sm text-muted-foreground">
+        <strong className="text-foreground">{label}</strong> — marcador por confirmar. La nota se actualiza en cuanto
+        el agente verifica el resultado oficial.
+      </p>
+    </div>
   )
 }
 
@@ -242,7 +259,7 @@ function FanApproachCard({ team, phase }: { team: TeamApproachData; phase: Radar
   const filled = rows.filter((r) => r.value)
 
   return (
-    <div className="h-full rounded-xl border border-border bg-card p-4">
+    <div className="h-full rounded-xl border border-border bg-card p-4 shadow-sm dark:border-white/12">
       <p className="flex items-center justify-between text-sm font-bold">
         <span className="inline-flex items-center gap-2">
           <TeamFlag team={team.team} small />
@@ -291,7 +308,7 @@ export function LessonsCarousel({
         <CarouselContent className="-ml-3">
           {normalized.map((lesson, i) => (
             <CarouselItem key={`${lesson.term}-${i}`} className="basis-[88%] pl-3 sm:basis-1/2 lg:basis-1/3">
-              <article className="h-full rounded-xl border border-border bg-card p-4">
+              <article className="h-full rounded-xl border border-border bg-card p-4 shadow-sm dark:border-white/12">
                 <div className="flex flex-wrap items-center gap-2">
                   <span
                     className={`rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-[#fff] ${

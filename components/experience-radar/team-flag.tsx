@@ -66,5 +66,7 @@ export function teamFlagCode(value: string): string | undefined {
     iran: "ir", arabiasaudita: "sa", saudiarabia: "sa",
     costarica: "cr", panama: "pa", honduras: "hn",
     noruega: "no", dinamarca: "dk", serbia: "rs", austria: "at",
+    curazao: "cw", curacao: "cw",
+    costademarfil: "ci", cotedivoire: "ci",
   }[key]
 }

@@ -7,13 +7,12 @@ import { useLanguage } from "@/lib/language-context"
 import type { RadarArticle } from "@/src/lib/experience-radar/articles"
 import { NoteImage } from "./note-image"
 import { StatusPill } from "./status-pill"
-import { categoryLabel } from "./category-labels"
 import { getArticleAvailability, resolveMatchStatus, compareForFeed } from "@/src/lib/experience-radar/articleAvailability"
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel"
 
-/** Día editorial en zona Colombia (YYYY-MM-DD), seguro ante husos. */
+/** Día (YYYY-MM-DD) en la zona LOCAL de quien abre la página. */
 function dayKey(value: Date): string {
-  return new Intl.DateTimeFormat("en-CA", { timeZone: "America/Bogota" }).format(value)
+  return new Intl.DateTimeFormat("en-CA").format(value)
 }
 
 /** Agrupa por día (date), días de más reciente a más antiguo; dentro del día:
@@ -55,7 +54,6 @@ export function EspecialesGrid({ articles }: { articles: RadarArticle[] }) {
       weekday: "long",
       day: "numeric",
       month: "long",
-      timeZone: "America/Bogota",
     }).format(new Date(`${date}T12:00:00`))
 
   return (
@@ -123,7 +121,6 @@ function NoteCard({ article: a }: { article: RadarArticle }) {
         month: "short",
         hour: "2-digit",
         minute: "2-digit",
-        timeZone: "America/Bogota",
       }).format(new Date(availability.availableAt))
     : null
 
@@ -131,7 +128,6 @@ function NoteCard({ article: a }: { article: RadarArticle }) {
     ? new Intl.DateTimeFormat(lang === "es" ? "es-CO" : "en-US", {
         hour: "2-digit",
         minute: "2-digit",
-        timeZone: "America/Bogota",
       }).format(new Date(a.kickoffAt))
     : null
 
@@ -141,7 +137,7 @@ function NoteCard({ article: a }: { article: RadarArticle }) {
       aria-disabled={!availability.accessible}
       tabIndex={availability.accessible ? undefined : -1}
       onClick={availability.accessible ? undefined : (event) => event.preventDefault()}
-      className={`group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card transition-colors ${
+      className={`group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-colors dark:border-white/12 ${
         availability.accessible ? "hover:border-[var(--cyan)]/50" : "cursor-not-allowed opacity-75"
       }`}
     >
@@ -153,9 +149,6 @@ function NoteCard({ article: a }: { article: RadarArticle }) {
           className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
         />
         <StatusPill status={resolveMatchStatus(a)} className="absolute right-3 top-3" />
-        <span className="absolute left-3 top-3 rounded-full bg-black/55 px-2.5 py-1 text-[11px] font-semibold text-[#fff] backdrop-blur-sm">
-          {categoryLabel(a.category, lang)}
-        </span>
       </div>
       <div className="flex flex-1 flex-col p-4">
         <h3 className="text-sm font-bold leading-snug group-hover:text-[var(--cyan)]">{a.seoTitle}</h3>

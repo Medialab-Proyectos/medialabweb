@@ -1,7 +1,6 @@
 import type { RadarArticle } from "./articles"
 
 export const MATCH_NOTE_ACCESS_WINDOW_MS = 24 * 60 * 60 * 1000
-const ESTIMATED_MATCH_DURATION_MS = 3 * 60 * 60 * 1000
 // Ventana real "en vivo": 90' + entretiempo + descuento + margen ≈ 2 h 15 min.
 // Pasada esta hora el partido ya terminó, aunque el agente aún no lo marque.
 const LIVE_WINDOW_MS = 135 * 60 * 1000
@@ -79,18 +78,16 @@ export function getArticleAvailability(
 
   const availableAt = new Date(kickoff - MATCH_NOTE_ACCESS_WINDOW_MS)
   if (now.getTime() < availableAt.getTime()) {
+    // El partido se MUESTRA en el calendario, pero la nota aún no es accesible.
     return {
-      visible: false,
+      visible: true,
       accessible: false,
       availableAt: availableAt.toISOString(),
       reason: "scheduled",
     }
   }
 
-  const analysisDue = now.getTime() >= kickoff + ESTIMATED_MATCH_DURATION_MS
-  if (analysisDue && article.matchState !== "finalizado") {
-    return { visible: false, accessible: false, reason: "updating" }
-  }
-
+  // Dentro de la ventana, en vivo o finalizado: la nota es accesible con el contenido
+  // disponible (previa o final). Ya no se oculta un finalizado a la espera del análisis.
   return { visible: true, accessible: true, availableAt: availableAt.toISOString() }
 }

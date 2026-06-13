@@ -9,7 +9,7 @@
 
 import { generateRadarArticle, type RadarArticle, type RadarArticleInput } from "./articles"
 import { getStoredRadarArticles } from "./articleStore"
-import { getArticleAvailability, compareForFeed } from "./articleAvailability"
+import { compareForFeed } from "./articleAvailability"
 
 function upcomingMatch(input: {
   date: string
@@ -228,14 +228,144 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
       { name: "Reddit r/soccer — hilo posterior del partido", url: "https://www.reddit.com/r/soccer/", kind: "conversacion" },
     ],
   },
-  upcomingMatch({
+  // ─────────────── Estados Unidos 4-1 Paraguay · FINALIZADO (datos reales) ───────────────
+  {
+    category: "Fan Experience",
     date: "2026-06-12",
     kickoffAt: "2026-06-13T01:00:00.000Z",
     slug: "estados-unidos-paraguay-mundial-2026",
+    matchState: "finalizado",
+    updateState: "ready",
+    matchScore: {
+      home: "Estados Unidos",
+      away: "Paraguay",
+      homeGoals: 4,
+      awayGoals: 1,
+      detail: "EE. UU.: autogol de Bobadilla 7', Folarin Balogun 31' y 45'+, Gio Reyna. Paraguay: Mauricio. Posesión 63-37 y 17 remates a 8 para el anfitrión.",
+    },
+    imageAlt: "Estados Unidos 4-1 Paraguay — debut del anfitrión en el Mundial 2026, Los Ángeles",
+    matchSummary:
+      "Estados Unidos arrancó su Mundial como local con un contundente 4-1 ante Paraguay en Los Ángeles. Un autogol tempranero de Bobadilla (7') encarriló el partido, Folarin Balogun firmó un doblete en la primera mitad y Gio Reyna cerró la goleada; Mauricio marcó el descuento. Más que el resultado, lo relevante es cómo un debut dominante dispara la euforia y, con ella, una expectativa difícil de sostener.",
+    matchPhases: {
+      expectativa: { euforia: 66, confianza: 60, ansiedad: 54, frustracion: 28, incertidumbre: 58, optimismo: 64 },
+      realidad: { euforia: 86, confianza: 80, ansiedad: 40, frustracion: 30, incertidumbre: 32, optimismo: 84 },
+      percepcion: { euforia: 90, confianza: 86, ansiedad: 30, frustracion: 24, incertidumbre: 26, optimismo: 90 },
+    },
+    teamApproach: [
+      {
+        team: "Estados Unidos",
+        expectedEmotion: "Ansiedad de anfitrión: presión por validar el proyecto en casa.",
+        dominantConversation: "Dudas sobre el nivel real del equipo frente a una Sudamérica incómoda.",
+        fanConfidence: "Confianza contenida, marcada por años de altibajos de la selección.",
+        mainNarrative: "El anfitrión que necesita un debut convincente para ilusionar al país.",
+        howTheyArrived: "Con la presión del estreno y el autogol tempranero a favor que aflojó la tensión.",
+        whatHappened: "El doblete de Balogun y el cierre de Reyna convirtieron la ansiedad en fiesta: 4-1 y sensación de poderío.",
+        expectationVsReality: "Esperaban un debut exigente y se llevaron una goleada que disparó la euforia por encima de lo previsto.",
+      },
+      {
+        team: "Paraguay",
+        expectedEmotion: "Confianza competitiva apoyada en su solidez sudamericana.",
+        dominantConversation: "Aguantar al anfitrión y golpear en las transiciones.",
+        fanConfidence: "Confianza serena, sin sobrevender el debut.",
+        mainNarrative: "Equipo ordenado que esperaba dar pelea de igual a igual.",
+        howTheyArrived: "Golpeados por el autogol temprano y desbordados por el ritmo local.",
+        whatHappened: "El 0-4 dejó al margen su plan; el gol de Mauricio fue apenas un consuelo estadístico.",
+        expectationVsReality: "La expectativa de competir se transformó en una derrota dura que obliga a recomponer el ánimo.",
+      },
+    ],
+    lessons: [
+      { term: "Efecto halo", explanation: "Un primer gran resultado tiñe toda la percepción: tras el 4-1, cada virtud del equipo se magnifica y los defectos se minimizan.", phase: "despues" },
+      { term: "Anclaje de expectativas", explanation: "Una goleada de debut fija un listón alto: el próximo partido se juzgará contra ese 4-1, no contra la realidad.", phase: "despues" },
+      { term: "Exceso de confianza", explanation: "El riesgo de un arranque dominante es que la euforia se confunda con certeza y relaje la exigencia del siguiente reto.", phase: "despues" },
+    ],
+    seoTitle:
+      "Estados Unidos 4-1 Paraguay: resultado, goles y el debut soñado del anfitrión en el Mundial 2026",
     teams: ["Estados Unidos", "Paraguay"],
-    group: "Grupo D",
-    officialUrl: "https://www.fifa.com/en/match-centre/match/17/285023/289273/400021458",
-  }),
+    event: "Mundial 2026 — Grupo D",
+    hook: "El debut goleador del anfitrión y la euforia que dispara",
+    quickSummary:
+      "Estados Unidos goleó 4-1 a Paraguay en su debut como anfitrión del Mundial 2026, en Los Ángeles. Un autogol de Bobadilla (7') abrió el camino, Folarin Balogun marcó dos veces en la primera mitad y Gio Reyna selló la goleada; Mauricio descontó. Experience Radar observa cómo un arranque dominante dispara la euforia colectiva y, con ella, una expectativa que el equipo deberá sostener.",
+    whatHappened:
+      "El anfitrión necesitaba un debut tranquilizador y lo consiguió de la forma más cómoda. A los siete minutos, un autogol de Damián Bobadilla puso el 1-0 y desactivó la ansiedad inicial del estadio. Folarin Balogun tomó el protagonismo con un doblete en la primera mitad —un gran remate al 31' y otro sobre el cierre del primer tiempo— y Gio Reyna redondeó la goleada con un disparo con el exterior del pie. Paraguay, superado en posesión (63-37) y en remates (17 a 8), apenas pudo descontar con Mauricio. La conversación digital pasó de la cautela previa al entusiasmo desbordado: el debut soñado del anfitrión. La lectura de experiencia no es el marcador en sí, sino el cambio de marco emocional: un arranque dominante reescribe las expectativas de toda una afición en noventa minutos.",
+    keyPlays: [
+      "Autogol de Damián Bobadilla al 7' para el 1-0 de Estados Unidos.",
+      "Doblete de Folarin Balogun en la primera mitad (31' y cierre del primer tiempo).",
+      "Gol de Gio Reyna para el 4-0 y descuento de Mauricio para Paraguay.",
+    ],
+    controversies: [
+      "El autogol tempranero condicionó por completo el plan de Paraguay.",
+      "El nivel real del anfitrión queda por confirmar ante un rival que se desordenó pronto.",
+    ],
+    statements: [
+      "La afición estadounidense celebró el doblete de Balogun como la confirmación de su '9'.",
+      "El entorno de Paraguay pidió calma: el 4-1 no debería definir todo el grupo.",
+    ],
+    fanPulse: {
+      concerns: ["¿Es tan bueno este equipo o Paraguay se desarmó solo?", "¿Aguantará el nivel ante rivales más ordenados?", "¿Cómo gestionar la euforia hacia el próximo partido?"],
+      emotions: ["Alivio con el gol tempranero", "Euforia con el doblete de Balogun", "Orgullo de anfitrión"],
+      frustrations: ["La duda de fondo sobre el nivel real del rival.", "El miedo a que la euforia infle expectativas."],
+      enthusiasm: ["La irrupción goleadora de Balogun.", "Un debut de local que ilusiona a todo el país."],
+      sources: [
+        { name: "Reddit — r/soccer (match thread)", url: "https://www.reddit.com/r/ussoccer/", kind: "conversacion" },
+        { name: "Google Trends — picos de búsqueda en vivo", url: "https://trends.google.com/trends/", kind: "tendencia" },
+      ],
+    },
+    mediaLabInsight: {
+      humanBehavior:
+        "Una primera impresión potente reordena toda la percepción posterior: tras un debut goleador, la afición proyecta esa imagen sobre todo lo que viene y eleva el listón con el que juzgará al equipo.",
+      cognitiveBiases: [
+        "Efecto halo: un gran resultado magnifica las virtudes y oculta las dudas.",
+        "Anclaje: el 4-1 se vuelve la referencia con la que se medirá el próximo partido.",
+        "Exceso de confianza: la euforia puede confundirse con certeza y relajar la exigencia.",
+      ],
+      emotionalReaction:
+        "La euforia del debut no nace solo del marcador, sino del contraste con la ansiedad previa del anfitrión: cuanto mayor era la presión, mayor el desahogo.",
+      digitalPatterns:
+        "Explosión de búsquedas del goleador, clips del doblete y conversación que salta de la cautela a la euforia en cuestión de minutos.",
+    },
+    productApplications: [
+      {
+        sector: "SaaS / Onboarding",
+        application:
+          "Una primera experiencia excelente fija el estándar con el que el usuario juzgará todo lo demás: cuida el debut, pero no prometas un nivel que no puedas sostener después.",
+      },
+      {
+        sector: "Ecommerce",
+        application:
+          "Un primer pedido impecable ancla expectativas altas; gestionar la consistencia evita que la segunda compra se perciba como un bajón.",
+      },
+      {
+        sector: "Producto digital",
+        application:
+          "El efecto halo de un buen lanzamiento ayuda a la adopción, pero infla expectativas: comunica el roadmap para que la euforia no se convierta en decepción.",
+      },
+    ],
+    emotionalRadar: { euforia: 90, confianza: 86, ansiedad: 32, frustracion: 26, incertidumbre: 28, optimismo: 90 },
+    collectiveByTeam: [
+      {
+        team: "Estados Unidos",
+        mood: "Euforia y orgullo de anfitrión",
+        behaviorEffect:
+          "Llegan al próximo partido con confianza disparada y alta participación pública; el riesgo es el exceso de optimismo y un listón difícil de igualar.",
+      },
+      {
+        team: "Paraguay",
+        mood: "Golpe anímico tras una derrota dura",
+        behaviorEffect:
+          "Llegan obligados a recomponer: la conversación se centra en separar el 4-1 del resto del grupo y en recuperar confianza.",
+      },
+    ],
+    scoreFactors: { emotionalImpact: 86, digitalConversation: 84, virality: 86, userInterest: 90 },
+    uxFinding:
+      "Una primera impresión sobresaliente ancla las expectativas del usuario: define el estándar con el que juzgará todo lo siguiente. El reto no es impresionar una vez, sino sostener el nivel que esa primera vez prometió.",
+    aiSummary:
+      "Estados Unidos goleó 4-1 a Paraguay en su debut como anfitrión del Mundial 2026 (Los Ángeles): autogol de Bobadilla (7'), doblete de Folarin Balogun y gol de Gio Reyna; Mauricio descontó. Experience Radar de MediaLab lo analiza desde el comportamiento: por el efecto halo y el anclaje, un debut dominante reordena la percepción de toda la afición y eleva el listón para el próximo partido. Para productos digitales —SaaS, ecommerce, producto— la lección es que una primera impresión potente fija el estándar de juicio: el reto no es impresionar una vez, sino sostener el nivel prometido.",
+    sources: [
+      { name: "ESPN — USA 4-1 Paraguay (Final Score)", url: "https://www.espn.com/soccer/match/_/gameId/760417/paraguay-united-states", kind: "referencia" },
+      { name: "CBS Sports — Balogun brace en el debut de EE. UU.", url: "https://www.cbssports.com/soccer/news/usa-paraguay-live-updates-world-cup-2026-score-result/live/", kind: "referencia" },
+      { name: "FIFA — Mundial 2026 (centro del torneo)", url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026", kind: "oficial" },
+    ],
+  },
   // ───────────────────────── Artículo 1 ─────────────────────────
   {
     category: "Trust",
@@ -755,6 +885,57 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
       { name: "AP — expectativa de Brasil y estado de Neymar", url: "https://apnews.com/article/brazil-world-cup-neymar-ancelotti-ebdba3dcbf32124a38b388775cc20b38", kind: "referencia" },
     ],
   },
+
+  // ─────────── Calendario: próximos partidos (previas, sin marcador inventado) ───────────
+  // Fixtures verificados (FIFA/ESPN). Horarios convertidos a UTC desde la hora del este.
+  upcomingMatch({
+    date: "2026-06-13",
+    kickoffAt: "2026-06-13T23:00:00.000Z",
+    slug: "catar-suiza-mundial-2026",
+    teams: ["Catar", "Suiza"],
+    group: "Fase de grupos",
+    officialUrl: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/scores-fixtures",
+  }),
+  upcomingMatch({
+    date: "2026-06-14",
+    kickoffAt: "2026-06-14T05:00:00.000Z",
+    slug: "haiti-escocia-mundial-2026",
+    teams: ["Haití", "Escocia"],
+    group: "Fase de grupos",
+    officialUrl: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/scores-fixtures",
+  }),
+  upcomingMatch({
+    date: "2026-06-14",
+    kickoffAt: "2026-06-14T08:00:00.000Z",
+    slug: "australia-turquia-mundial-2026",
+    teams: ["Australia", "Turquía"],
+    group: "Fase de grupos",
+    officialUrl: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/scores-fixtures",
+  }),
+  upcomingMatch({
+    date: "2026-06-14",
+    kickoffAt: "2026-06-14T21:00:00.000Z",
+    slug: "alemania-curazao-mundial-2026",
+    teams: ["Alemania", "Curazao"],
+    group: "Fase de grupos",
+    officialUrl: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/scores-fixtures",
+  }),
+  upcomingMatch({
+    date: "2026-06-14",
+    kickoffAt: "2026-06-15T00:00:00.000Z",
+    slug: "paises-bajos-japon-mundial-2026",
+    teams: ["Países Bajos", "Japón"],
+    group: "Fase de grupos",
+    officialUrl: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/scores-fixtures",
+  }),
+  upcomingMatch({
+    date: "2026-06-14",
+    kickoffAt: "2026-06-15T03:00:00.000Z",
+    slug: "costa-de-marfil-ecuador-mundial-2026",
+    teams: ["Costa de Marfil", "Ecuador"],
+    group: "Fase de grupos",
+    officialUrl: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/scores-fixtures",
+  }),
 ]
 
 /**
@@ -804,10 +985,14 @@ export async function getAllRadarArticles(): Promise<RadarArticle[]> {
   return dedupeByMatch(list).sort((a, b) => compareForFeed(a, b))
 }
 
-/** Notas publicas: solo partidos dentro de las 24 h previas o ya iniciados. */
-export async function getVisibleRadarArticles(now: Date = new Date()): Promise<RadarArticle[]> {
-  const all = await getAllRadarArticles()
-  return all.filter((article) => getArticleAvailability(article, now).visible)
+/**
+ * Notas del portal: se muestran TODOS los partidos del calendario (en vivo, próximos
+ * y finalizados). La tarjeta usa `getArticleAvailability` para decidir si la nota ya es
+ * accesible (clic) o aparece como "Próximamente"/"En actualización"; pero el partido
+ * siempre se ve. La hora se muestra en la zona local de quien abre la página.
+ */
+export async function getVisibleRadarArticles(): Promise<RadarArticle[]> {
+  return getAllRadarArticles()
 }
 
 /** Busca un artículo por slug (store con fallback al seed). */
