@@ -3,12 +3,14 @@
 import { useMemo, useState } from "react"
 import { ArrowUpRight, Clock, Lightbulb, Trophy, Users } from "lucide-react"
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel"
+import { TeamFlag } from "./team-flag"
 import {
   MatchPhaseRadar,
   type MatchPhases,
   type MatchInterpretations,
   type MatchRuntimeStatus,
   type RadarViewMode,
+  type TeamPhaseRadar,
 } from "./match-phase-radar"
 
 export interface TeamApproachData {
@@ -40,6 +42,7 @@ export interface MatchNoteProps {
   lessons: Array<{ term: string; explanation: string; phase?: "antes" | "despues" }>
   interpretations?: MatchInterpretations
   sourceLabels?: string[]
+  teamPhases?: TeamPhaseRadar[]
 }
 
 export function MatchNote({
@@ -51,6 +54,7 @@ export function MatchNote({
   lessons,
   interpretations,
   sourceLabels,
+  teamPhases,
 }: MatchNoteProps) {
   const [phase, setPhase] = useState<RadarViewMode>("expectativa")
   const matchLabel = matchScore
@@ -84,10 +88,10 @@ export function MatchNote({
 
   const fanSectionIntro =
     phase === "expectativa"
-      ? "No leemos el rendimiento del equipo: leemos el ánimo con el que cada hinchada entra al partido, su conversación dominante y el nivel de confianza que proyecta."
+      ? "Leemos la voz de cada hinchada en redes sociales, tendencias y portales de noticias, y su experiencia digital usando plataformas: en quién confían para juzgar la alineación, por qué medios interactúan y seguirán interactuando, sus agujeros y frustraciones digitales. Es una consumer experience digital que permite tomar decisiones de producto, no una lectura del rendimiento del equipo."
       : phase === "realidad"
-        ? "La comparación muestra qué esperaba cada hinchada y qué terminó viviendo cuando el partido puso a prueba ese relato."
-        : "La percepción posterior indica con qué ánimo, sesgos y conversación colectiva llegará cada hinchada al siguiente partido. Este bloque crecerá cuando existan nuevos cruces o señales posteriores."
+        ? "Comparamos lo que cada hinchada esperaba con lo que vivió, según su conversación en redes, tendencias y noticias y su uso de plataformas durante el partido: dónde confió, dónde se frustró y por qué canales lo expresó."
+        : "La percepción posterior indica con qué ánimo, sesgos y conversación colectiva —y por qué medios digitales— llegará cada hinchada al siguiente partido. Este bloque crece cuando aparecen nuevos cruces o señales posteriores."
 
   return (
     <>
@@ -121,6 +125,7 @@ export function MatchNote({
           matchLabel={matchLabel}
           interpretations={interpretations}
           onPhaseChange={setPhase}
+          teamPhases={teamPhases}
         />
       </section>
 
@@ -255,71 +260,6 @@ function FanApproachCard({ team, phase }: { team: TeamApproachData; phase: Radar
       </dl>
     </div>
   )
-}
-
-function TeamFlag({ team, small = false }: { team: string; small?: boolean }) {
-  const code = teamFlagCode(team)
-  const size = small ? "h-4 w-6" : "h-6 w-9"
-  if (!code) {
-    return (
-      <span className={`${size} inline-flex shrink-0 items-center justify-center rounded-[3px] border border-border bg-muted text-[9px] font-bold uppercase text-muted-foreground`}>
-        {team.slice(0, 2)}
-      </span>
-    )
-  }
-  // flagcdn vía <img>: confiable en Vercel/móvil, sin depender del CSS de flag-icons.
-  return (
-    <img
-      src={`https://flagcdn.com/${code}.svg`}
-      alt={`Bandera de ${team}`}
-      className={`${size} shrink-0 rounded-[3px] object-cover shadow-sm`}
-      loading="lazy"
-    />
-  )
-}
-
-function teamFlagCode(value: string): string | undefined {
-  const key = value
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/\s+/g, "")
-    .toLowerCase()
-  return {
-    // Anfitriones
-    mexico: "mx", canada: "ca", estadosunidos: "us", usa: "us",
-    // En el fixture / datos actuales
-    sudafrica: "za", southafrica: "za",
-    coreadelsur: "kr", corea: "kr", southkorea: "kr",
-    chequia: "cz", republicacheca: "cz", czechia: "cz",
-    catar: "qa", qatar: "qa",
-    suiza: "ch", switzerland: "ch",
-    brasil: "br", brazil: "br",
-    marruecos: "ma", morocco: "ma",
-    haiti: "ht",
-    escocia: "gb-sct", scotland: "gb-sct",
-    australia: "au",
-    turquia: "tr", turkiye: "tr", turkey: "tr",
-    bosnia: "ba", bosniayherzegovina: "ba",
-    paraguay: "py",
-    japon: "jp", japan: "jp",
-    polonia: "pl", poland: "pl",
-    argentina: "ar", colombia: "co",
-    espana: "es", spain: "es",
-    francia: "fr", france: "fr",
-    // Otras selecciones comunes del Mundial
-    alemania: "de", germany: "de",
-    inglaterra: "gb-eng", england: "gb-eng",
-    portugal: "pt",
-    paisesbajos: "nl", holanda: "nl", netherlands: "nl",
-    italia: "it", italy: "it",
-    uruguay: "uy", ecuador: "ec",
-    croacia: "hr", croatia: "hr",
-    belgica: "be", belgium: "be",
-    senegal: "sn", ghana: "gh", nigeria: "ng", egipto: "eg",
-    iran: "ir", arabiasaudita: "sa", saudiarabia: "sa",
-    costarica: "cr", panama: "pa", honduras: "hn",
-    noruega: "no", dinamarca: "dk", serbia: "rs", austria: "at",
-  }[key]
 }
 
 export function LessonsCarousel({

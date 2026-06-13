@@ -14,13 +14,17 @@
 
 import {
   generateRadarArticle,
+  type EmotionalRadarValues,
   type ProductApplication,
   type RadarArticle,
   type RadarArticleInput,
+  type TeamRadar,
 } from "./articles"
 import { saveRadarArticles } from "./articleStore"
 import { getAllRadarArticles } from "./articleData"
 import { MATCH_NOTE_ACCESS_WINDOW_MS } from "./articleAvailability"
+import { fetchTeamsContext, winSportsReference, type TeamContext } from "./fetchTeamContext"
+import { summarizeMatch } from "./summarizeMatch"
 import type {
   DailyRadarReport,
   ExperienceSignal,
@@ -434,7 +438,11 @@ export async function generateAndStoreArticlesFromReport(
   const existing = await getAllRadarArticles()
   const nowMs = new Date(report.generatedAt).getTime()
 
-  const articles = generated.flatMap((article) => {
+  // Idempotencia: solo se analizan PREVIAS y FINALES aún no completadas. La marca
+  // analyzedPreviaAt/analyzedFinalAt es independiente de `matchState` (los seeds vienen
+  // como "previa" sin análisis real). Si la fase ya está completa, no se re-analiza,
+  // salvo para incorporar una imagen nueva de Latingoles.
+  const candidates = generated.flatMap((article) => {
     const fixture = existing.find((candidate) => sameTeams(candidate.teams, article.teams))
     if (!fixture?.kickoffAt) return []
 
@@ -443,26 +451,23 @@ export async function generateAndStoreArticlesFromReport(
 
     const beforeKickoff = nowMs < kickoff
     const insidePreviewWindow = beforeKickoff && kickoff - nowMs <= MATCH_NOTE_ACCESS_WINDOW_MS
-    const ready = fixture.updateState !== "updating"
-    const hasPreviewAnalysis = fixture.matchState === "previa" && ready
-    const hasFinalAnalysis = fixture.matchState === "finalizado" && ready
     const addsLatingolesImage = Boolean(article.imageUrl && !fixture.imageUrl)
+    const previaDone = Boolean(fixture.analyzedPreviaAt)
+    const finalDone = Boolean(fixture.analyzedFinalAt)
 
-    if (beforeKickoff && (!insidePreviewWindow || (hasPreviewAnalysis && !addsLatingolesImage))) return []
-    if (!beforeKickoff && (article.matchState !== "finalizado" || (hasFinalAnalysis && !addsLatingolesImage))) return []
+    if (beforeKickoff && (!insidePreviewWindow || (previaDone && !addsLatingolesImage))) return []
+    if (!beforeKickoff && (article.matchState !== "finalizado" || (finalDone && !addsLatingolesImage))) return []
 
-    return [{
-      ...article,
-      id: fixture.id,
-      slug: fixture.slug,
-      date: fixture.date,
-      kickoffAt: fixture.kickoffAt,
-      matchState: beforeKickoff ? "previa" as const : "finalizado" as const,
-      updateState: "ready" as const,
-      publishedAt: fixture.publishedAt,
-      updatedAt: report.generatedAt,
-    }]
+    return [{ article, fixture, beforeKickoff }]
   })
+
+  // Enriquecimiento (IA + contexto Wikipedia/WinSports + radar por hinchada) solo de las
+  // fases que sí se van a (re)escribir, para no gastar llamadas en partidos ya cubiertos.
+  const articles = await Promise.all(
+    candidates.map(({ article, fixture, beforeKickoff }) =>
+      enrichArticle(article, fixture, beforeKickoff, report),
+    ),
+  )
 
   const imageUpdates = existing.flatMap((fixture) => {
     const signal = report.signals.find((candidate) =>
@@ -490,6 +495,159 @@ export async function generateAndStoreArticlesFromReport(
   if (updates.length === 0) return []
   await saveRadarArticles(updates)
   return updates
+}
+
+/**
+ * Enriquece una nota antes de persistirla: resumen IA por partido (con respaldo
+ * determinista coherente que usa contexto de Wikipedia/WinSports), radar por hinchada
+ * (`teamRadars`) y marcas de idempotencia por fase. Tolerante a fallos de red/IA.
+ */
+async function enrichArticle(
+  article: RadarArticle,
+  fixture: RadarArticle,
+  beforeKickoff: boolean,
+  report: DailyRadarReport,
+): Promise<RadarArticle> {
+  const status = beforeKickoff ? ("previa" as const) : ("finalizado" as const)
+
+  const teamContext = await fetchTeamsContext(article.teams)
+
+  const relSignals = report.signals
+    .filter((s) => s.teams?.length && sameTeams(s.teams, article.teams))
+    .slice(0, 6)
+    .map((s) => ({ title: s.title, summary: (s.summary ?? "").slice(0, 400), source: s.sourceName }))
+
+  const ai = await summarizeMatch({
+    label: article.teams.join(" vs "),
+    teams: article.teams,
+    event: article.event,
+    status,
+    hook: article.hook,
+    category: article.category,
+    signals: relSignals,
+    teamContext,
+  })
+
+  const fallback = deterministicSummaries(article, teamContext)
+  const quickSummary = ai?.quickSummary || fallback.quickSummary
+  const matchSummary = ai?.matchSummary || fallback.matchSummary
+
+  const contextSources = [
+    ...teamContext
+      .filter((c) => c.sourceUrl)
+      .map((c) => ({ name: `${c.sourceName}: ${c.team}`, url: c.sourceUrl as string, kind: "referencia" as const })),
+    { ...winSportsReference(), kind: "referencia" as const },
+  ]
+  const sources = dedupeSources([...article.sources, ...contextSources])
+
+  return {
+    ...article,
+    id: fixture.id,
+    slug: fixture.slug,
+    date: fixture.date,
+    kickoffAt: fixture.kickoffAt,
+    matchState: status,
+    updateState: "ready" as const,
+    quickSummary,
+    matchSummary,
+    teamRadars: buildTeamRadars(article),
+    sources,
+    analyzedPreviaAt: status === "previa" ? report.generatedAt : fixture.analyzedPreviaAt,
+    analyzedFinalAt: status === "finalizado" ? report.generatedAt : fixture.analyzedFinalAt,
+    publishedAt: fixture.publishedAt,
+    updatedAt: report.generatedAt,
+  }
+}
+
+/** Primera oración de un texto (para recortar extractos largos de Wikipedia). */
+function oneSentence(text: string): string {
+  const i = text.indexOf(". ")
+  return i > 0 ? text.slice(0, i + 1) : text
+}
+
+/** Respaldo determinista coherente cuando no hay IA: incorpora el contexto de equipos. */
+function deterministicSummaries(
+  article: RadarArticle,
+  context: TeamContext[],
+): { quickSummary: string; matchSummary: string } {
+  const ctxLine = context.length
+    ? " " + context.map((c) => `${c.team}: ${oneSentence(c.summary)}`).join(" ")
+    : ""
+  const label = article.teams.join(" vs ")
+  const matchSummary =
+    `${label} concentró la atención del Mundial 2026 desde la mirada de experiencia, más allá del marcador.${ctxLine} ` +
+    "Aquí leemos cómo reaccionan las hinchadas: su conversación en redes y noticias, su confianza y su frustración digital."
+  return { quickSummary: article.quickSummary, matchSummary }
+}
+
+function dedupeSources(sources: RadarArticle["sources"]): RadarArticle["sources"] {
+  const seen = new Set<string>()
+  return sources.filter((s) => {
+    if (!s.url || seen.has(s.url)) return false
+    seen.add(s.url)
+    return true
+  })
+}
+
+/* ── Radar por hinchada (teamRadars): derivado del score con sesgo por equipo ── */
+
+function emotionalFromScore(rs: RadarArticle["radarScore"]): EmotionalRadarValues {
+  return {
+    euforia: clamp(rs.userInterest * 0.7),
+    confianza: clamp(100 - rs.emotionalImpact * 0.6),
+    ansiedad: clamp(rs.emotionalImpact),
+    frustracion: clamp(rs.emotionalImpact * 0.9),
+    incertidumbre: clamp(rs.digitalConversation),
+    optimismo: clamp(100 - rs.virality * 0.5),
+  }
+}
+
+/** Sesgo determinista [-0.4, 0.4] por nombre de selección (distingue las dos hinchadas). */
+function teamLean(team: string): number {
+  let h = 0
+  for (let i = 0; i < team.length; i++) h = (h * 31 + team.charCodeAt(i)) % 1000
+  return (h / 1000) * 0.8 - 0.4
+}
+
+function leanEmotional(e: EmotionalRadarValues, lean: number): EmotionalRadarValues {
+  return {
+    euforia: clamp(e.euforia * (1 + 0.14 * lean)),
+    confianza: clamp(e.confianza * (1 + 0.16 * lean)),
+    ansiedad: clamp(e.ansiedad * (1 - 0.14 * lean)),
+    frustracion: clamp(e.frustracion * (1 - 0.16 * lean)),
+    incertidumbre: clamp(e.incertidumbre * (1 - 0.1 * lean)),
+    optimismo: clamp(e.optimismo * (1 + 0.15 * lean)),
+  }
+}
+
+/** Proyección al próximo partido: más ánimo positivo, menos tensión. */
+function projectPredicted(e: EmotionalRadarValues): EmotionalRadarValues {
+  return {
+    euforia: clamp(e.euforia * 1.04),
+    confianza: clamp(e.confianza * 1.06),
+    ansiedad: clamp(e.ansiedad * 0.88),
+    frustracion: clamp(e.frustracion * 0.85),
+    incertidumbre: clamp(e.incertidumbre * 0.8),
+    optimismo: clamp(e.optimismo * 1.08),
+  }
+}
+
+function avgEmotional(e: EmotionalRadarValues): number {
+  const vals = Object.values(e)
+  return clamp(vals.reduce((a, b) => a + b, 0) / vals.length)
+}
+
+function buildTeamRadars(article: RadarArticle): TeamRadar[] {
+  const combined = article.emotionalRadar ?? emotionalFromScore(article.radarScore)
+  return article.teams.map((team) => {
+    const current = leanEmotional(combined, teamLean(team))
+    const predicted = projectPredicted(current)
+    return {
+      team,
+      current: { score: avgEmotional(current), emotional: current },
+      predicted: { score: avgEmotional(predicted), emotional: predicted },
+    }
+  })
 }
 
 function sameTeams(left: string[], right: string[]): boolean {

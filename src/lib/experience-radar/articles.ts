@@ -127,6 +127,15 @@ export interface RadarArticle {
   updateState?: "ready" | "updating"
 
   /**
+   * Marcas de idempotencia del agente: ISO del momento en que se completó el análisis
+   * de CADA fase. Si una fase ya tiene marca, el agente NO la vuelve a analizar (solo
+   * procesa previas y finales aún sin completar). Independiente de `matchState`, que
+   * en los seeds ya viene como "previa" sin análisis real.
+   */
+  analyzedPreviaAt?: string
+  analyzedFinalAt?: string
+
+  /**
    * Hora oficial de inicio en ISO 8601. Permite decidir si la nota sigue en previa,
    * si está en vivo o si ya puede pasar a fase posterior sin depender solo de la fecha.
    */

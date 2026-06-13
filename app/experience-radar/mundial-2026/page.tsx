@@ -75,7 +75,7 @@ export default async function ExperienceRadarMundialPage({
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildCollectionSchema(articles)) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildFaqSchema()) }} />
 
-      <div className="bg-neutral-950 pt-16 md:pt-20">
+      <div className="bg-background pt-16 dark:bg-neutral-950 md:pt-20">
         <NextMatchBar updatedAt={report?.updatedAt} />
         <EspecialHero updatedAt={report?.updatedAt} />
       </div>

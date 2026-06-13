@@ -8,10 +8,13 @@ import { Footer } from "@/components/footer"
 import { Navbar } from "@/components/navbar"
 import { RadarCtaCards } from "@/components/experience-radar/radar-cta-cards"
 import { MatchNote } from "@/components/experience-radar/match-note"
-import { type MatchPhases, type MatchRuntimeStatus } from "@/components/experience-radar/match-phase-radar"
+import { type MatchPhases, type MatchRuntimeStatus, type RadarViewMode, type TeamPhaseRadar } from "@/components/experience-radar/match-phase-radar"
 import { FanSimulator } from "@/components/experience-radar/fan-simulator"
 import { MatchCountdown } from "@/components/experience-radar/match-countdown"
-import { RadarFloatingMenu } from "@/components/experience-radar/radar-floating-menu"
+import { RadarPhaseProvider } from "@/components/experience-radar/radar-phase-context"
+import { RadarPhaseBar } from "@/components/experience-radar/radar-phase-bar"
+import { ShareNote } from "@/components/experience-radar/share-note"
+import { RadarNewsletter } from "@/components/experience-radar/radar-newsletter"
 import { RelatedNotes, type RelatedNote } from "@/components/experience-radar/related-notes"
 import { NoteImage } from "@/components/experience-radar/note-image"
 import { StatusPill } from "@/components/experience-radar/status-pill"
@@ -78,6 +81,10 @@ export default async function RadarArticlePage({
   const status = resolveRuntimeStatus(article)
   const isPreview = status === "previa"
   const phases = resolveMatchPhases(article, status)
+  const availablePhases = (["expectativa", "realidad", "percepcion"] as const).filter(
+    (k) => phases[k],
+  ) as RadarViewMode[]
+  const teamPhases = resolveTeamPhases(article, phases)
   const approach = resolveTeamApproach(article)
   const lessons = resolveLessons(article)
   const summary = article.matchSummary || article.quickSummary
@@ -114,12 +121,13 @@ export default async function RadarArticlePage({
       }
 
   return (
+    <RadarPhaseProvider available={availablePhases}>
     <main className="min-h-screen bg-background text-foreground">
       <Navbar />
-      <RadarFloatingMenu />
+      <RadarPhaseBar />
       <JsonLd article={article} summary={summary} lessons={lessons} />
 
-      <article className="mx-auto max-w-3xl px-6 pt-24 pb-16 md:pt-28">
+      <article className="mx-auto max-w-3xl px-6 pt-24 pb-24 md:pt-28">
         <div className="flex flex-wrap items-center gap-2 text-xs">
           <span className="rounded-full border border-border bg-card px-3 py-1 text-card-foreground">{article.event}</span>
           <span className="rounded-full bg-[var(--cyan)]/10 px-3 py-1 font-semibold text-[var(--cyan)]">
@@ -133,14 +141,15 @@ export default async function RadarArticlePage({
           {article.kickoffAt ? ` · ${formatKickoff(article.kickoffAt)}` : ""}
         </p>
 
-        {/* Foto del encuentro (imagen visible, antes del marcador) */}
+        {/* Foto del encuentro (imagen visible, antes del marcador). Alto reducido y foco
+            superior para no cortar la cabeza de los jugadores en imágenes aleatorias. */}
         <figure className="mt-5 overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
-          <div className="relative h-56 md:h-80">
+          <div className="relative h-40 md:h-56">
             <NoteImage
               src={article.imageUrl}
               seed={article.slug}
               alt={article.imageAlt || `${article.teams.join(" vs ")} — ${article.seoTitle}`}
-              className="h-full w-full object-cover object-[center_22%]"
+              className="h-full w-full object-cover object-top"
               loading="eager"
             />
             <StatusPill status={status} className="absolute left-3 top-3 z-10" />
@@ -161,6 +170,8 @@ export default async function RadarArticlePage({
           </figcaption>
         </figure>
 
+        <ShareNote url={`${SITE}${BASE}/${article.slug}`} title={article.seoTitle} />
+
         <MatchNote
           status={status}
           matchScore={article.matchScore}
@@ -170,6 +181,7 @@ export default async function RadarArticlePage({
           lessons={lessons}
           interpretations={article.matchInterpretations}
           sourceLabels={sourceLabels}
+          teamPhases={teamPhases}
         />
 
         {/* ── BLOQUE 5 · Simulador (solo finalizado) ── */}
@@ -181,6 +193,9 @@ export default async function RadarArticlePage({
 
         {/* ── CTA final integrado ── */}
         <RadarCtaCards />
+
+        {/* Suscripción: deja tu correo y te avisamos de nuevas notas ── */}
+        <RadarNewsletter />
 
         {/* Fuentes consultadas — acordeón colapsado */}
         <details className="group mt-10 rounded-2xl border border-border p-5">
@@ -217,6 +232,7 @@ export default async function RadarArticlePage({
 
       <Footer />
     </main>
+    </RadarPhaseProvider>
   )
 }
 
@@ -276,6 +292,54 @@ function resolveMatchPhases(article: RadarArticle, status: MatchRuntimeStatus): 
   const expectativa = projectExpectation(realidad)
   if (status === "previa" || status === "en_vivo") return { expectativa }
   return { expectativa, realidad, percepcion: projectPerception(realidad) }
+}
+
+/**
+ * Radar por hinchada para el filtro de banderas. Si la nota trae `teamRadars` (lo
+ * puebla el agente), lo usa; si no, deriva la lectura de cada hinchada del radar
+ * combinado con un sesgo determinista por equipo y por su ánimo colectivo. Es una
+ * proyección editorial (no pronóstico de marcador), coherente con el resto del módulo.
+ */
+function resolveTeamPhases(article: RadarArticle, phases: MatchPhases): TeamPhaseRadar[] {
+  return article.teams.map((team) => {
+    const tr = article.teamRadars?.find((x) => x.team === team)
+    if (tr) {
+      const realidad = tr.current.emotional
+      const built: MatchPhases = { expectativa: projectExpectation(realidad) }
+      if (phases.realidad) built.realidad = realidad
+      if (phases.percepcion) built.percepcion = tr.predicted.emotional
+      return { team, phases: built }
+    }
+    const collective = article.collectiveByTeam?.find((c) => c.team === team)
+    const lean = teamLean(team, `${collective?.mood ?? ""} ${collective?.behaviorEffect ?? ""}`)
+    const built: MatchPhases = { expectativa: leanEmotional(phases.expectativa, lean) }
+    if (phases.realidad) built.realidad = leanEmotional(phases.realidad, lean)
+    if (phases.percepcion) built.percepcion = leanEmotional(phases.percepcion, lean)
+    return { team, phases: built }
+  })
+}
+
+/** Sesgo [-0.6, 0.6] por hinchada: hash del nombre (para distinguir) + ánimo colectivo. */
+function teamLean(team: string, mood: string): number {
+  let h = 0
+  for (let i = 0; i < team.length; i++) h = (h * 31 + team.charCodeAt(i)) % 1000
+  let lean = (h / 1000) * 0.8 - 0.4
+  const text = mood.toLowerCase()
+  if (/(ilusi|conf[ií]a|optimis|favorit|eufor|alegr|entusias)/.test(text)) lean += 0.2
+  if (/(preocupa|frustra|ansiedad|duda|nervios|temor|crisis|tristeza)/.test(text)) lean -= 0.2
+  return Math.max(-0.6, Math.min(0.6, lean))
+}
+
+/** Aplica el sesgo de una hinchada al radar combinado (sube ánimo positivo, baja tensión). */
+function leanEmotional(e: EmotionalRadarValues, lean: number): EmotionalRadarValues {
+  return {
+    euforia: clampScore(e.euforia * (1 + 0.14 * lean)),
+    confianza: clampScore(e.confianza * (1 + 0.16 * lean)),
+    ansiedad: clampScore(e.ansiedad * (1 - 0.14 * lean)),
+    frustracion: clampScore(e.frustracion * (1 - 0.16 * lean)),
+    incertidumbre: clampScore(e.incertidumbre * (1 - 0.1 * lean)),
+    optimismo: clampScore(e.optimismo * (1 + 0.15 * lean)),
+  }
 }
 
 /** Cómo llegaban los equipos (Bloque 3): usa el de la nota; si falta, deriva de collectiveByTeam. */

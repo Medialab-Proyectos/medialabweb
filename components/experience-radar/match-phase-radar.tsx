@@ -14,11 +14,19 @@ import { Brain, Gauge, Info, Target, Zap } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import type { EmotionalRadarValues } from "@/src/lib/experience-radar/articles"
+import { useRadarPhase } from "./radar-phase-context"
+import { TeamFlag } from "./team-flag"
 
 export interface MatchPhases {
   expectativa: EmotionalRadarValues
   realidad?: EmotionalRadarValues
   percepcion?: EmotionalRadarValues
+}
+
+/** Radar emocional por fase de UNA hinchada, para el filtro de banderas del radar. */
+export interface TeamPhaseRadar {
+  team: string
+  phases: MatchPhases
 }
 
 export type RadarViewMode = "expectativa" | "realidad" | "percepcion"
@@ -173,6 +181,7 @@ export function MatchPhaseRadar({
   matchLabel,
   interpretations,
   onPhaseChange,
+  teamPhases,
 }: {
   phases: MatchPhases
   status: MatchRuntimeStatus
@@ -181,13 +190,32 @@ export function MatchPhaseRadar({
   /** Interpretación editorial por fase y categoría (del artículo). Respaldo: texto genérico. */
   interpretations?: MatchInterpretations
   onPhaseChange?: (phase: RadarViewMode) => void
+  /** Radar por hinchada para el filtro de banderas (Ambas / selección A / selección B). */
+  teamPhases?: TeamPhaseRadar[]
 }) {
   const { t } = useLanguage()
-  const [viewMode, setViewMode] = useState<RadarViewMode>("expectativa")
+  // La fase puede venir de un contexto compartido (barra inferior de la nota) o, en su
+  // ausencia, de un estado local. Así el radar y la barra de fases quedan sincronizados.
+  const phaseCtx = useRadarPhase()
+  const [localMode, setLocalMode] = useState<RadarViewMode>("expectativa")
+  const viewMode = phaseCtx ? phaseCtx.phase : localMode
+  const setViewMode = phaseCtx ? phaseCtx.setPhase : setLocalMode
 
+  // Filtro de banderas: null = "Ambas" (lectura combinada); si hay equipo, el radar
+  // muestra la lectura de ESA hinchada (cae a la combinada si falta su dato).
+  const [teamFilter, setTeamFilter] = useState<string | null>(null)
+  const teamOptions = teamPhases ?? []
+  const activePhases = useMemo<MatchPhases>(() => {
+    if (!teamFilter) return phases
+    const tp = teamOptions.find((t) => t.team === teamFilter)?.phases
+    return tp ?? phases
+  }, [teamFilter, teamOptions, phases])
+
+  // La disponibilidad de fases (botones) usa la lectura combinada; los valores usan
+  // la lectura activa (combinada o por hinchada).
   const chartPhases = useMemo(() => PHASES.filter((p) => phases[p.key]), [phases])
   const activePhase = chartPhases.find((p) => p.key === viewMode) ?? chartPhases[0]
-  const label = matchLabel ?? "este partido"
+  const label = teamFilter ? `la hinchada de ${teamFilter}` : matchLabel ?? "este partido"
 
   // Categoría seleccionada al tocar un eje del radar: resalta y desplaza su tarjeta.
   const [activeAxis, setActiveAxis] = useState<AxisKey | null>(null)
@@ -220,12 +248,12 @@ export function MatchPhaseRadar({
     return AXES.map((axis) => {
       const row: Record<string, string | number> = { k: t(axis.es, axis.en) }
       chartPhases.forEach((p) => {
-        const values = phases[p.key]
+        const values = activePhases[p.key]
         if (values) row[p.key] = values[axis.key]
       })
       return row
     })
-  }, [chartPhases, phases, t])
+  }, [chartPhases, activePhases, t])
 
   const titleText = useMemo(() => {
     switch (viewMode) {
@@ -245,15 +273,22 @@ export function MatchPhaseRadar({
   const subtitleText = useMemo(() => {
     switch (viewMode) {
       case "expectativa":
-        return status === "previa"
-          ? t("Lectura previa de conversación, señales oficiales y expectativa de las hinchadas.", "Pre-match reading of conversation, official signals and fan expectation.")
-          : t("La expectativa con la que las hinchadas llegaron al partido.", "The expectation fans brought into the match.")
+        return t(
+          "Lectura construida desde la voz de los fanáticos en redes sociales, tendencias y portales de noticias, y desde su experiencia digital usando plataformas: con qué ánimo llega cada hinchada al partido.",
+          "Read from the voice of fans on social media, trends and news portals, and from their digital experience using platforms: the mood each fanbase brings into the match.",
+        )
       case "realidad":
-        return t("Lo que el partido provocó mientras ocurría o justo después de terminar.", "What the match triggered while it unfolded or right after it ended.")
+        return t(
+          "Lo que el partido provocó según la conversación de las hinchadas en redes, tendencias y noticias mientras ocurría o al terminar.",
+          "What the match triggered according to fan conversation across social media, trends and news while it unfolded or right after it ended.",
+        )
       case "percepcion":
-        return t("La forma en que la experiencia queda fijada en el recuerdo colectivo.", "How the experience settles into collective memory.")
+        return t(
+          "Cómo queda la experiencia en el recuerdo colectivo y con qué ánimo llegará cada hinchada al próximo partido, leído desde sus redes, medios y uso digital.",
+          "How the experience settles into collective memory and the mood each fanbase will carry into the next match, read from their social media, outlets and digital use.",
+        )
     }
-  }, [viewMode, status, t])
+  }, [viewMode, t])
 
   return (
     <div className="rounded-2xl border border-border bg-gradient-to-b from-card to-[var(--cyan)]/[0.03] p-5 md:p-7">
@@ -264,6 +299,46 @@ export function MatchPhaseRadar({
         <h2 className="mt-1 text-2xl font-bold md:text-3xl">{titleText}</h2>
         <p className="mt-1 text-sm text-muted-foreground">{subtitleText}</p>
       </div>
+
+      {/* Filtro por país: banderas de las 2 hinchadas + "Ambas". Filtra el radar por hinchada. */}
+      {teamOptions.length > 0 && (
+        <div className="mt-4 flex flex-wrap items-center gap-2">
+          <span className="text-[11px] font-bold uppercase tracking-wide text-muted-foreground">
+            {t("Filtrar por hinchada", "Filter by fans")}
+          </span>
+          <button
+            type="button"
+            onClick={() => setTeamFilter(null)}
+            aria-pressed={teamFilter === null}
+            className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors ${
+              teamFilter === null
+                ? "border-[var(--cyan)] bg-[var(--cyan)]/10 text-[var(--cyan)]"
+                : "border-border text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            {t("Ambas", "Both")}
+          </button>
+          {teamOptions.map((opt) => {
+            const isActive = teamFilter === opt.team
+            return (
+              <button
+                key={opt.team}
+                type="button"
+                onClick={() => setTeamFilter(opt.team)}
+                aria-pressed={isActive}
+                className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors ${
+                  isActive
+                    ? "border-[var(--cyan)] bg-[var(--cyan)]/10 text-[var(--cyan)]"
+                    : "border-border text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <TeamFlag team={opt.team} small />
+                {opt.team}
+              </button>
+            )
+          })}
+        </div>
+      )}
 
       {/* En móvil las fases se deslizan horizontalmente (no se apilan). */}
       <div className="mt-5 flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
@@ -343,18 +418,21 @@ export function MatchPhaseRadar({
         </ResponsiveContainer>
       </div>
 
-      {activePhase && phases[activePhase.key] && (
+      {activePhase && activePhases[activePhase.key] && (
         <div className="mt-6 border-t border-border pt-5">
           <p className="text-xs font-bold uppercase tracking-wide text-muted-foreground">
             {t("Interpretación por categoría", "Category interpretation")}
           </p>
           <p className="mt-1 text-[11px] text-muted-foreground/70">
-            {t("Toca una categoría en el radar para resaltar su interpretación.", "Tap a category on the radar to highlight its interpretation.")}
+            {t(
+              "Cada categoría se interpreta desde la voz de los fanáticos en redes, tendencias y noticias, y su experiencia digital usando plataformas. Toca una para resaltar su lectura.",
+              "Each category is read from the voice of fans on social media, trends and news, and their digital experience using platforms. Tap one to highlight its reading.",
+            )}
           </p>
           {/* En móvil las tarjetas por categoría se deslizan; en desktop quedan en grilla. */}
           <div className="mt-3 flex items-start gap-3 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:grid sm:grid-cols-2 sm:items-start sm:overflow-visible">
             {AXES.map((axis) => {
-              const value = phases[activePhase.key]?.[axis.key] ?? 0
+              const value = activePhases[activePhase.key]?.[axis.key] ?? 0
               const isActive = activeAxis === axis.key
               return (
                 <div
