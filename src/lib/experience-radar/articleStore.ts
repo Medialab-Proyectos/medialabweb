@@ -31,7 +31,26 @@ function mergeByMatch(current: RadarArticle[], incoming: RadarArticle[]): RadarA
     return `${teams}::${article.date}`
   }
   const merged = new Map(current.map((article) => [key(article), article]))
-  for (const article of incoming) merged.set(key(article), article)
+  for (const article of incoming) {
+    const articleKey = key(article)
+    const existing = merged.get(articleKey)
+
+    // El generador no asigna fotos automáticamente. Una imagen entrante es, por tanto,
+    // una corrección editorial explícita y puede reparar el store; si la actualización
+    // no trae imagen, conserva la foto ya localizada.
+    if (existing?.imageUrl && !article.imageUrl) {
+      merged.set(articleKey, {
+        ...article,
+        imageUrl: existing.imageUrl,
+        imageAlt: existing.imageAlt,
+        imageCredit: existing.imageCredit,
+        imageSourceUrl: existing.imageSourceUrl,
+      })
+      continue
+    }
+
+    merged.set(articleKey, article)
+  }
   return [...merged.values()]
 }
 

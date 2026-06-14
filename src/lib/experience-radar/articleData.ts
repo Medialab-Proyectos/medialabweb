@@ -207,16 +207,19 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
     slug: "canada-bosnia-herzegovina-mundial-2026",
     matchState: "finalizado",
     updateState: "ready",
+    imageUrl: "/images/experience-radar/mundial-2026/canada-bosnia.jpg",
     imageAlt: "Canadá vs Bosnia y Herzegovina — empate 1-1 en BMO Field, Mundial 2026",
+    imageCredit: "Win Sports",
+    imageSourceUrl: "https://www.winsports.co/futbol-internacional/noticias/en-vivo-canada-vs-bosnia-minuto-a-minuto-y-goles-copa-mundial-de-la-fifa-438126",
     matchScore: {
       home: "Canadá",
       away: "Bosnia y Herzegovina",
       homeGoals: 1,
       awayGoals: 1,
-      detail: "Bosnia: Lukić (1ª mitad). Canadá: Cyle Larin 78'. Empate y primer punto de Canadá en la historia de los Mundiales.",
+      detail: "Bosnia y Herzegovina: Jovo Lukić 21'. Canadá: Cyle Larin 78'. Asistencia: Promise David. 43.002 asistentes en Toronto Stadium.",
     },
     matchSummary:
-      "Canadá rescató un 1-1 ante Bosnia y Herzegovina en BMO Field y sumó su PRIMER punto en la historia de los Mundiales (había perdido los seis partidos de 1986 y 2022). Bosnia se adelantó con el primer gol internacional de Lukić; Canadá empató con Cyle Larin (78'). El mismo marcador se vivió de forma opuesta: fiesta para el anfitrión, decepción para Bosnia.",
+      "Canadá rescató un 1-1 ante Bosnia y Herzegovina en Toronto Stadium y sumó su primer punto en la historia de los Mundiales. Jovo Lukić abrió el marcador de cabeza al 21' y Cyle Larin, dos minutos después de entrar, igualó al 78' tras pase de Promise David. Canadá tuvo 61% de posesión, 13 remates y dos balones salvados sobre la línea; Bosnia convirtió su fortaleza aérea en una ventaja que no pudo cerrar.",
     matchPhases: {
       // Antes: ilusión nerviosa del anfitrión en su estreno en casa.
       expectativa: { euforia: 64, confianza: 56, ansiedad: 58, frustracion: 26, incertidumbre: 56, optimismo: 66 },
@@ -261,6 +264,11 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
         howTheyArrived: "Por detrás en el marcador tras el gol de Bosnia en la primera mitad.",
         whatHappened: "Empataron con Cyle Larin (78') y lograron su PRIMER punto mundialista.",
         expectationVsReality: "Un empate que, por su historia, se vivió como un triunfo y un alivio enorme.",
+        userExperience: {
+          expectativa: "En r/CanadaSoccer, la previa mezcló predicciones de 1-0 o 1-1, coordinación de watch parties y preguntas sobre entradas y transmisión. El debut en casa se consumía como un acontecimiento nacional, no como un partido más.",
+          realidad: "El hilo de partido pasó del temor de repetir la historia tras el 0-1 a compartir compulsivamente el gol de Larin. En X, «Canada Earns First World Cup Point» se convirtió en tendencia y los clips oficiales concentraron la conversación alrededor del minuto 78.",
+          percepcion: "El post-partido dividió a la afición entre orgullo histórico y sensación de que Canadá debió ganar: el hilo específico de r/CanadaSoccer superó los 700 comentarios y reencuadró el empate como piso, no como techo.",
+        },
       },
       {
         team: "Bosnia y Herzegovina",
@@ -271,6 +279,11 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
         howTheyArrived: "Golpearon primero con el debut goleador de Lukić y acariciaron el triunfo.",
         whatHappened: "Se dejaron empatar sobre el cierre y sintieron el 1-1 como dos puntos perdidos.",
         expectationVsReality: "Estuvieron a minutos de ganar; el mismo empate les supo a decepción.",
+        userExperience: {
+          expectativa: "Videos de aficionados bosnios ocupando calles de Toronto y reuniones en Sarajevo reforzaron una experiencia de diáspora: jugar fuera de casa se sintió también como una toma simbólica de la ciudad anfitriona.",
+          realidad: "El gol de Lukić disparó videos de celebración en Sarajevo; después, los hilos internacionales se concentraron en la resistencia defensiva, las salvadas sobre la línea y el desgaste físico para sostener la ventaja.",
+          percepcion: "La conversación bosnia quedó entre satisfacción por competir y amargura por perder el control al final. El punto se evaluó contra haber ido 1-0 durante 57 minutos, no contra la dificultad previa del debut.",
+        },
       },
     ],
     lessons: [
@@ -284,21 +297,22 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
     seoTitle:
       "Canadá 1-1 Bosnia: resultado, resumen y el primer punto histórico del anfitrión en el Mundial 2026",
     quickSummary:
-      "Canadá empató 1-1 con Bosnia y Herzegovina en su estreno como anfitrión y sumó su PRIMER punto en la historia de los Mundiales tras seis derrotas en 1986 y 2022. Bosnia se adelantó con el gol de Lukić y Cyle Larin igualó (78'). El partido es un caso claro de cómo el mismo resultado se vive como triunfo o como decepción según el punto de referencia de cada hinchada.",
+      "Canadá empató 1-1 con Bosnia y Herzegovina y logró su primer punto mundialista. Lukić marcó al 21' y Larin igualó al 78', dos minutos después de entrar. Canadá dominó 61%-39% la posesión y remató 13 veces, pero necesitó un final de alto impacto para transformar la frustración en orgullo. X, r/CanadaSoccer y r/soccer mostraron dos lecturas simultáneas: hito histórico y oportunidad perdida.",
     whatHappened:
-      "En BMO Field, Toronto, Canadá debutaba como anfitrión cargando una estadística incómoda: ningún punto en sus dos Mundiales previos (1986 y 2022), seis partidos y seis derrotas. Bosnia y Herzegovina golpeó primero, con el primer gol internacional de Lukić que puso el 0-1 antes del descanso y silenció a un estadio expectante. Durante buena parte del segundo tiempo, la afición local revivió el fantasma de la racha. La reacción llegó con Cyle Larin, que entró desde el banco y empató en el 78' para desatar la celebración. El 1-1 final dejó dos lecturas opuestas: para Canadá, un punto histórico que se festejó como una victoria; para Bosnia, dos puntos que se escaparon teniendo el partido controlado. La conversación digital reflejó ese contraste de marcos: euforia y orgullo de un lado, frustración del otro, ante exactamente el mismo marcador.",
+      "Bosnia golpeó al 21': Vasić ejecutó el córner, Kolašinac prolongó y Jovo Lukić cabeceó el 0-1. Canadá acumuló 61% de posesión, nueve córners y 13 remates, pero su recorrido estuvo dominado por la fricción: Jonathan David y Oluwaseyi desperdiciaron opciones y Kolašinac y Katić salvaron dos acciones sobre la línea. Jesse Marsch cambió el ataque al 76'; dos minutos después Promise David asistió a Cyle Larin para el 1-1. Ante 43.002 personas, el final convirtió una actuación frustrante en el primer punto mundialista de Canadá. El partido también produjo una novedad reglamentaria compartida ampliamente: el árbitro Facundo Tello sancionó a Kolašinac por exceder el límite de cinco segundos en un saque de banda, primera aplicación de esa regla en el torneo.",
     keyPlays: [
-      "Primer gol internacional de Lukić para el 0-1 de Bosnia (1ª mitad).",
-      "Ingreso de Cyle Larin desde el banco y empate en el 78'.",
-      "Canadá rompe su racha y suma su primer punto mundialista.",
+      "21': Lukić cabecea el 0-1 después de la prolongación de Kolašinac en un córner de Vasić.",
+      "53': Kolašinac despeja sobre la línea y envía al travesaño una ocasión que ya superaba al guardameta Vasilj.",
+      "78': Larin controla el pase de Promise David, gira y marca el 1-1 dos minutos después de ingresar.",
     ],
     controversies: [
-      "Canadá lamentó la fragilidad defensiva en el gol de Bosnia.",
-      "Bosnia se reprochó no haber cerrado un partido que ganaba.",
+      "Facundo Tello revirtió un saque de banda de Bosnia porque Kolašinac excedió el nuevo límite de cinco segundos; fue la primera aplicación mundialista difundida de la regla.",
+      "Canadá reclamó una colisión entre Nikola Vasilj y Tani Oluwaseyi, pero la jugada no produjo penal; no hubo una decisión arbitral que alterara el marcador.",
     ],
     statements: [
-      "La afición canadiense celebró el punto como un hito, más que el nivel de juego.",
-      "El entorno de Bosnia vivió el empate como una oportunidad perdida.",
+      "Major League Soccer describió el gol de Larin como «one of the biggest goals in Canada history» en su publicación posterior al partido.",
+      "Jesse Marsch destacó que los suplentes tuvieron un «big impact», especialmente Larin, según su rueda de prensa posterior.",
+      "Sergej Barbarez dijo quedar con un sabor amargo pese a estar satisfecho con el rendimiento general de Bosnia (beIN Sports).",
     ],
     fanPulse: {
       concerns: ["¿Por qué concedimos el primer gol?", "¿Alcanza este nivel para competir el grupo?", "¿Cómo llega Canadá al próximo partido?"],
@@ -306,8 +320,9 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
       frustrations: ["El bache defensivo del gol de Bosnia.", "El miedo a repetir la racha de derrotas."],
       enthusiasm: ["Festejo por el hito histórico en casa.", "Ilusión renovada para el resto del grupo."],
       sources: [
-        { name: "Reddit — r/soccer (match thread)", url: "https://www.reddit.com/r/soccer/", kind: "conversacion" },
-        { name: "Google Trends — picos de búsqueda en vivo", url: "https://trends.google.com/trends/", kind: "tendencia" },
+        { name: "X — tendencia Canada Earns First World Cup Point", url: "https://x.com/i/trending/2065707467984572545", kind: "tendencia" },
+        { name: "Reddit r/CanadaSoccer — post-partido", url: "https://www.reddit.com/r/CanadaSoccer/comments/1u47hbf/postmatch_thread_bosniaherzegovina_vs_canada_fifa/", kind: "conversacion" },
+        { name: "Reddit r/soccer — post-partido y estadísticas", url: "https://www.reddit.com/r/soccer/comments/1u47h37/post_match_thread_canada_1_1_bosniaherzegovina/", kind: "conversacion" },
       ],
     },
     mediaLabInsight: {
@@ -321,7 +336,7 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
       emotionalReaction:
         "La carga emocional no la dio el marcador, sino la distancia entre lo esperado y lo logrado por cada hinchada.",
       digitalPatterns:
-        "Dos conversaciones paralelas con el mismo dato: celebración e hito de un lado, frustración y autocrítica del otro.",
+        "En Canadá, X concentró el hito en el gol de Larin y Reddit añadió una capa crítica sobre definición y ranking. En Bosnia, los videos de aficionados en Toronto y Sarajevo dieron visibilidad a la diáspora antes de que el empate desplazara la conversación hacia los dos puntos perdidos.",
     },
     productApplications: [
       {
@@ -385,11 +400,17 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
     uxFinding:
       "La satisfacción no depende del resultado absoluto sino de la expectativa con la que se compara. Fijar el punto de referencia adecuado puede convertir un resultado neutro en una experiencia percibida como un triunfo.",
     aiSummary:
-      "Canadá empató 1-1 con Bosnia y Herzegovina en el Mundial 2026 y logró su primer punto histórico tras seis derrotas en sus dos participaciones previas: Lukić adelantó a Bosnia y Cyle Larin igualó (78'). Experience Radar de MediaLab lo analiza desde el comportamiento: por el punto de referencia y el efecto de encuadre, el mismo marcador se vivió como triunfo (Canadá) y como decepción (Bosnia). Para productos digitales —fintech, SaaS, producto— la lección es que la satisfacción es relativa a la expectativa: encuadrar y anclar bien las expectativas cambia el valor percibido sin cambiar el resultado.",
+      "Canadá empató 1-1 con Bosnia y Herzegovina y consiguió su primer punto mundialista: Lukić marcó al 21' y Larin al 78'. Canadá tuvo 61% de posesión y 13 remates, pero dos salvadas sobre la línea prolongaron la frustración hasta el pico emocional del final. X convirtió el gol en tendencia y los hilos específicos de Reddit discutieron tanto el hito como las ocasiones desperdiciadas. El caso muestra cómo la regla pico-fin y el punto de referencia permiten que un empate sea simultáneamente memoria histórica para Canadá y pérdida para Bosnia.",
     sources: [
-      { name: "FIFA — reporte oficial Canadá 1-1 Bosnia y Herzegovina", url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026", kind: "oficial" },
+      { name: "FIFA — reporte oficial Canadá 1-1 Bosnia y Herzegovina", url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/canada-bosnia-and-herzegovina-highlights-match-report", kind: "oficial" },
+      { name: "FIFA — reporte completo y estadísticas", url: "https://fdp.fifa.org/assetspublic/ce281/r12458/pdf/FullTimeMatchReport-English.pdf", kind: "oficial" },
       { name: "ESPN — Canadá logra su primer punto mundialista", url: "https://www.espn.com/soccer/match/_/gameId/760416/bosnia-herzegovina-canada", kind: "referencia" },
-      { name: "Reddit r/soccer — hilo posterior del partido", url: "https://www.reddit.com/r/soccer/", kind: "conversacion" },
+      { name: "Win Sports — Canadá y Bosnia se repartieron puntos", url: "https://www.winsports.co/futbol-internacional/noticias/en-vivo-canada-vs-bosnia-minuto-a-minuto-y-goles-copa-mundial-de-la-fifa-438126", kind: "referencia" },
+      { name: "Latingoles — Canadá empata con Bosnia en Toronto", url: "https://latingoles.com/tropiezo-en-el-debut-canada-empata-con-bosnia-como-anfitrion-en-toronto/", kind: "referencia" },
+      { name: "The Guardian — minuto a minuto y reacción", url: "https://www.theguardian.com/football/live/2026/jun/12/canada-v-bosnia-and-herzegovina-world-cup-2026-live", kind: "referencia" },
+      { name: "X — tendencia sobre el primer punto de Canadá", url: "https://x.com/i/trending/2065707467984572545", kind: "tendencia" },
+      { name: "Reddit r/CanadaSoccer — post-partido", url: "https://www.reddit.com/r/CanadaSoccer/comments/1u47hbf/postmatch_thread_bosniaherzegovina_vs_canada_fifa/", kind: "conversacion" },
+      { name: "Reddit r/soccer — post-partido", url: "https://www.reddit.com/r/soccer/comments/1u47h37/post_match_thread_canada_1_1_bosniaherzegovina/", kind: "conversacion" },
     ],
   },
   // ─────────────── Estados Unidos 4-1 Paraguay · FINALIZADO (datos reales) ───────────────
@@ -400,6 +421,9 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
     slug: "estados-unidos-paraguay-mundial-2026",
     matchState: "finalizado",
     updateState: "ready",
+    imageUrl: "/images/experience-radar/mundial-2026/estados-unidos-paraguay.jpg",
+    imageCredit: "Win Sports",
+    imageSourceUrl: "https://www.winsports.co/futbol-internacional/noticias/en-vivo-estados-unidos-vs-paraguay-minuto-a-minuto-y-goles-copa-mundial-de-la-fifa-438190",
     matchScore: {
       home: "Estados Unidos",
       away: "Paraguay",
@@ -566,6 +590,9 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
     kickoffAt: "2026-06-11T19:00:00.000Z",
     slug: "mexico-sudafrica-resultado-resumen-polemica-arbitral",
     matchState: "finalizado",
+    imageUrl: "/images/experience-radar/mundial-2026/mexico-sudafrica.jpg",
+    imageCredit: "Win Sports",
+    imageSourceUrl: "https://www.winsports.co/futbol-internacional/noticias/en-vivo-mexico-vs-sudafrica-minuto-a-minuto-y-goles-copa-mundial-de-la-fifa-2026-437905",
     matchScore: {
       home: "México",
       away: "Sudáfrica",
@@ -799,9 +826,9 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
     kickoffAt: "2026-06-12T02:00:00.000Z",
     slug: "corea-del-sur-chequia-resultado-remontada-mundial-2026",
     matchState: "finalizado",
-    imageUrl: "https://latingoles.com/wp-content/uploads/2026/06/rss-efe6c0e5c0700b2b8a21b6094f046456b33aa8b26e8w.jpg",
-    imageCredit: "Latingoles",
-    imageSourceUrl: "https://latingoles.com/corea-del-sur-aspira-al-liderato-del-grupo-a-a-pesar-de-que-mexico-es-favorito/",
+    imageUrl: "/images/experience-radar/mundial-2026/corea-del-sur-chequia.jpg",
+    imageCredit: "Win Sports",
+    imageSourceUrl: "https://www.winsports.co/futbol-internacional/noticias/en-vivo-corea-vs-chequia-minuto-a-minuto-y-goles-copa-mundial-de-la-fifa-437986",
     matchScore: {
       home: "Corea del Sur",
       away: "Chequia",
@@ -1504,13 +1531,116 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
   }),
   // 14 jun 2026 (hora ET): Alemania–Curazao 1pm, Países Bajos–Japón 4pm, Costa de Marfil–
   // Ecuador 7pm, Suecia–Túnez 10pm. UTC = ET + 4h (EDT). Verificado con el fixture oficial.
-  upcomingMatch({
+  finishedMatch({
     date: "2026-06-14",
     kickoffAt: "2026-06-14T17:00:00.000Z",
     slug: "alemania-curazao-mundial-2026",
-    teams: ["Alemania", "Curazao"],
-    group: "Fase de grupos",
-    officialUrl: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/scores-fixtures",
+    group: "Grupo E",
+    home: "Alemania",
+    away: "Curazao",
+    homeGoals: 7,
+    awayGoals: 1,
+    scoreDetail: "Alemania: Felix Nmecha 6', Nico Schlotterbeck 38', Kai Havertz 45+4' (penal) y 88', Jamal Musiala 47', Nathaniel Brown 68', Deniz Undav 78'. Curazao: Livano Comenencia 21'.",
+    seoTitle: "Alemania 7-1 Curazao: una goleada y un gol que Curazao recordará para siempre",
+    hook: "El marcador fue alemán; el momento más humano perteneció al debutante",
+    matchSummary: "Alemania goleó 7-1 a Curazao en Houston, pero el partido tuvo dos memorias. La potencia europea repartió siete goles y disipó la ansiedad de sus últimas eliminaciones tempranas; Curazao, la nación más pequeña en disputar un Mundial, celebró con Comenencia (21') el primer gol de su historia en el torneo.",
+    quickSummary: "Alemania venció 7-1 a Curazao con doblete de Havertz y goles de Nmecha, Schlotterbeck, Musiala, Brown y Undav. Comenencia empató momentáneamente al 21' y marcó el primer gol mundialista de Curazao. En digital, el 7-1 activó comparaciones con Brasil 2014, pero los videos más emocionales fueron el gol caribeño, las lágrimas de Dick Advocaat y la reacción orgullosa de sus aficionados.",
+    whatHappened: "Nmecha adelantó a Alemania al 6', pero Comenencia respondió al 21' con un remate desviado que igualó el partido y produjo el mayor pico emocional de Curazao. La resistencia duró hasta el 38', cuando Schlotterbeck marcó de cabeza; Havertz hizo el 3-1 de penal en el 45+4'. Musiala anotó 69 segundos después del descanso y Brown (68'), Undav (78') y Havertz (88') llevaron el marcador al 7-1. Alemania convirtió el susto en demostración de profundidad; Curazao perdió por seis, pero salió con una escena fundacional que no depende del resultado final.",
+    keyPlays: [
+      "21': Livano Comenencia empata 1-1 y marca el primer gol de Curazao en una Copa del Mundo.",
+      "45+4': Havertz convierte el penal para el 3-1 justo antes del descanso y rompe la resistencia emocional del debutante.",
+      "47': Musiala anota 69 segundos después de la reanudación; el partido pasa de competitivo a goleada.",
+      "88': Havertz completa su doblete y fija el 7-1 que dispara comparaciones digitales con Alemania-Brasil de 2014.",
+    ],
+    controversies: [
+      "El penal del 45+4' terminó de inclinar el partido, aunque las crónicas no registraron una polémica arbitral decisiva.",
+      "La conversación debatió si el 7-1 debía leerse como fortaleza alemana o como una desigualdad inevitable entre una potencia y el país más pequeño que ha jugado un Mundial.",
+    ],
+    statements: [
+      "Dick Advocaat había pedido antes del partido: «No estén nerviosos» y aseguró que Curazao intentaría hacerle la vida difícil a Alemania (FOX/AP).",
+      "Squawka destacó en X que Curazao, con unos 158.000 habitantes, marcó en su primer partido mundialista ante un tetracampeón.",
+      "The Guardian definió el empate de Comenencia como el momento del partido pese al resultado final.",
+    ],
+    combined: {
+      expectativa: { euforia: 68, confianza: 70, ansiedad: 58, frustracion: 24, incertidumbre: 50, optimismo: 72 },
+      realidad: { euforia: 82, confianza: 84, ansiedad: 54, frustracion: 38, incertidumbre: 30, optimismo: 82 },
+      percepcion: { euforia: 84, confianza: 86, ansiedad: 28, frustracion: 34, incertidumbre: 24, optimismo: 84 },
+    },
+    teamsData: [
+      {
+        team: "Alemania",
+        expectedEmotion: "Confianza con ansiedad por las eliminaciones en fase de grupos de 2018 y 2022.",
+        dominantConversation: "Ganar no bastaba: se esperaba una actuación que confirmara que Alemania volvió a ser candidata.",
+        fanConfidence: "Alta ante el rival, pero condicionada por los fantasmas recientes del torneo.",
+        mainNarrative: "La potencia que necesitaba eliminar cualquier duda desde el debut.",
+        howTheyArrived: "Con enorme favoritismo y presión por evitar otro inicio traumático.",
+        whatHappened: "Recibieron el 1-1 histórico, reaccionaron antes del descanso y terminaron repartiendo siete goles.",
+        expectationVsReality: "El susto inicial elevó el alivio: la goleada terminó validando profundidad, reacción y contundencia.",
+        userExperience: {
+          expectativa: "En foros alemanes y r/soccer, el foco no era si Alemania ganaría sino cuánto tardaría en dominar y si el equipo había superado sus fracasos mundialistas recientes.",
+          realidad: "El 1-1 activó bromas y ansiedad durante 17 minutos; después, los clips de Musiala, Havertz y los cambios ofensivos desplazaron la conversación hacia la amplitud del plantel.",
+          percepcion: "El 7-1 reactivó inevitablemente memes de Brasil 2014. Aun así, parte de la afición mantuvo cautela: golear a Curazao no resuelve cómo responderá Alemania ante rivales de élite.",
+        },
+        mood: "Alivio, confianza y cautela tras una goleada esperada",
+        behaviorEffect: "La goleada reduce el ruido sobre los últimos Mundiales y eleva la expectativa para el duelo con Costa de Marfil.",
+        current: { euforia: 88, confianza: 90, ansiedad: 24, frustracion: 16, incertidumbre: 22, optimismo: 88 },
+        predicted: { euforia: 78, confianza: 84, ansiedad: 42, frustracion: 24, incertidumbre: 38, optimismo: 84 },
+      },
+      {
+        team: "Curazao",
+        expectedEmotion: "Orgullo, asombro y libertad por disputar el primer Mundial de su historia.",
+        dominantConversation: "Ser el país más pequeño del torneo y demostrar que el debut tenía valor más allá del marcador.",
+        fanConfidence: "Baja para ganar, alta para competir con valentía y producir un momento histórico.",
+        mainNarrative: "La isla que ya había ganado visibilidad antes de patear el balón.",
+        howTheyArrived: "Con Dick Advocaat emocionado, una diáspora movilizada y nada que perder ante un tetracampeón.",
+        whatHappened: "Comenencia empató 1-1 y escribió el primer gol del país; luego la diferencia técnica produjo seis goles más.",
+        expectationVsReality: "La derrota fue más amplia de lo deseado, pero el objetivo emocional de dejar una huella se cumplió en el minuto 21.",
+        userExperience: {
+          expectativa: "La previa digital giró alrededor del tamaño de la isla, la edad récord de Advocaat y el orgullo de la diáspora neerlandesa y caribeña. La clasificación ya funcionaba como celebración identitaria.",
+          realidad: "El clip del 1-1 se compartió como una victoria instantánea; en Reddit, usuarios pasaron de la sorpresa a celebrar que Curazao al menos había marcado, incluso mientras crecía la goleada.",
+          percepcion: "Las imágenes de Advocaat secándose las lágrimas y de un aficionado reaccionando al séptimo gol convivieron con orgullo. La memoria colectiva se ancló en Comenencia, no en los seis goles de diferencia.",
+        },
+        mood: "Dolor por la goleada y orgullo intacto por el primer gol",
+        behaviorEffect: "La hinchada puede sostener el vínculo si el equipo y los medios encuadran el debut alrededor del hito, sin negar la necesidad de ajustar defensivamente.",
+        current: { euforia: 44, confianza: 34, ansiedad: 68, frustracion: 76, incertidumbre: 62, optimismo: 46 },
+        predicted: { euforia: 50, confianza: 42, ansiedad: 62, frustracion: 58, incertidumbre: 58, optimismo: 54 },
+      },
+    ],
+    lessons: [
+      { term: "Regla pico-fin", explanation: "Curazao recibió siete goles, pero su pico emocional fue el 1-1 histórico. Un momento intenso puede dominar el recuerdo de una experiencia objetivamente adversa." },
+      { term: "Efecto de encuadre", explanation: "El mismo 7-1 puede titularse como humillación o como debut con primer gol mundialista. El marco no cambia los datos, pero sí la capacidad de recuperarse." },
+      { term: "Adaptación hedónica", explanation: "Alemania pasó rápidamente de celebrar a exigir ocho goles y rivales más fuertes; cuando el éxito se vuelve esperado, cada nuevo logro aporta menos satisfacción." },
+    ],
+    humanBehavior: "En experiencias asimétricas, cada audiencia usa una métrica distinta: Alemania midió dominio y candidatura; Curazao midió pertenencia, visibilidad y un primer gol. Diseñar una sola definición de éxito habría ignorado a la mitad de la audiencia.",
+    cognitiveBiases: ["Regla pico-fin", "Efecto de encuadre", "Adaptación hedónica", "Comparación social con Brasil 2014"],
+    emotionalReaction: "Alemania pasó del breve miedo al alivio y luego a la normalización de la goleada. Curazao vivió euforia pura durante el 1-1, seguida de dolor, humor defensivo y orgullo por haber dejado una marca.",
+    digitalPatterns: "El 7-1 produjo memes de Brasil 2014 y demanda de un octavo gol; el contenido más compartido de Curazao fue el tanto de Comenencia, las lágrimas de Advocaat y las reacciones de aficionados, señales de identidad antes que de rendimiento.",
+    productApplications: [
+      { sector: "Producto digital", application: "Define éxito por segmento: el usuario experto y el nuevo no evalúan el mismo recorrido con la misma vara." },
+      { sector: "Onboarding", application: "Un primer logro pequeño y visible puede sostener la motivación incluso si el usuario falla después; celebra el hito sin ocultar la fricción." },
+      { sector: "Analítica", application: "No resumas una experiencia con una sola métrica agregada. El 7-1 explica el rendimiento, pero no explica por qué Curazao recordará el partido con orgullo." },
+    ],
+    fanPulse: {
+      concerns: ["¿La goleada alemana se sostendrá ante rivales más fuertes?", "¿Cómo se recupera Curazao defensivamente?", "¿Puede el primer gol convertirse en confianza para los siguientes partidos?"],
+      emotions: ["Alivio alemán", "Orgullo curazoleño", "Asombro por el 1-1", "Fatiga y frustración durante la goleada"],
+      frustrations: ["Curazao concedió dos goles en momentos psicológicos críticos: antes y después del descanso.", "Alemania permitió un empate que reactivó dudas durante el primer tiempo."],
+      enthusiasm: ["Primer gol mundialista de Curazao.", "Doblete de Havertz y profundidad ofensiva alemana.", "Celebración de una nación de unos 158.000 habitantes."],
+    },
+    uxFinding: "Una experiencia no tiene una sola definición de éxito. Reconocer el primer logro del usuario puede preservar orgullo, vínculo y continuidad incluso dentro de un resultado global adverso.",
+    aiSummary: "Alemania goleó 7-1 a Curazao con tantos de Nmecha, Schlotterbeck, Havertz (dos), Musiala, Brown y Undav. Comenencia marcó al 21' el primer gol mundialista de Curazao y convirtió un partido desigual en una memoria fundacional. La regla pico-fin y el efecto de encuadre explican por qué Alemania recuerda una demostración de fuerza mientras Curazao conserva orgullo dentro de la derrota. Para productos digitales, la lección es segmentar la definición de éxito y hacer visible el primer logro.",
+    imageUrl: "https://i.guim.co.uk/img/media/4d92d3c23965214465413a16d409c7e4bb6bdbbd/438_0_3942_3154/master/3942.jpg?width=1200&height=630&quality=85&auto=format&fit=crop&precrop=40:21,offset-x50,offset-y0&overlay-align=bottom%2Cleft&overlay-width=100p&overlay-base64=L2ltZy9zdGF0aWMvb3ZlcmxheXMvdGctZGVmYXVsdC5wbmc&enable=upscale&s=25b9375441902a629fdab0ca9a7bf40c",
+    imageAlt: "Alemania y Curazao durante el debut mundialista del conjunto caribeño en Houston",
+    imageCredit: "The Guardian",
+    imageSourceUrl: "https://www.theguardian.com/football/2026/jun/14/germany-curacao-world-cup-match-report",
+    sources: [
+      { name: "FIFA — Alemania vs Curazao", url: "https://www.fifa.com/en/match-centre/match/17/285023/289273/400021464", kind: "oficial" },
+      { name: "ESPN — Alemania 7-1 Curazao", url: "https://www.espn.com/soccer/match/_/gameId/760422/curacao-germany", kind: "referencia" },
+      { name: "The Guardian — Alemania 7-1 Curazao", url: "https://www.theguardian.com/football/live/2026/jun/14/germany-v-curacao-world-cup-2026-live", kind: "referencia" },
+      { name: "AP — crónica Alemania 7-1 Curazao", url: "https://www.wral.com/news/ap/c6e9f-germany-surges-to-a-3-1-halftime-lead-as-curacao-nets-its-1st-world-cup-goal/", kind: "referencia" },
+      { name: "Reddit r/soccer — gol histórico de Comenencia", url: "https://www.reddit.com/r/soccer/comments/1u5r15s/germany_1_1_curacao_l_comenencia_21/", kind: "conversacion" },
+      { name: "Reddit r/soccer — reacción de un aficionado de Curazao", url: "https://www.reddit.com/r/soccer/comments/1u5tk4n/a_curacao_fans_reaction_to_germanys_seventh_goal/", kind: "conversacion" },
+      { name: "X — conversación sobre el primer gol de Curazao", url: "https://x.com/Squawka", kind: "tendencia" },
+    ],
   }),
   upcomingMatch({
     date: "2026-06-14",
@@ -1577,6 +1707,11 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
  * agente diario todavía no ha generado y persistido artículos en el store.
  */
 export const RADAR_ARTICLE_SEED: RadarArticle[] = ARTICLE_INPUTS.map(generateRadarArticle)
+const LOCKED_SEED_IMAGES = new Map(
+  RADAR_ARTICLE_SEED
+    .filter((article) => Boolean(article.imageUrl))
+    .map((article) => [article.slug, article]),
+)
 
 /**
  * Identidad de PARTIDO: equipos (sin orden) + fecha. Una previa y su finalizado del
@@ -1599,9 +1734,28 @@ function dedupeByMatch(list: RadarArticle[]): RadarArticle[] {
     const key = matchKey(a)
     const cur = best.get(key)
     const wins = !cur || rank(a) > rank(cur) || (rank(a) === rank(cur) && (a.updatedAt ?? "") >= (cur.updatedAt ?? ""))
-    if (wins) best.set(key, a)
+    if (wins) {
+      best.set(key, cur?.imageUrl && !a.imageUrl ? preserveImage(a, cur) : a)
+    } else if (cur && !cur.imageUrl && a.imageUrl) {
+      best.set(key, preserveImage(cur, a))
+    }
   }
   return [...best.values()]
+}
+
+function preserveImage(article: RadarArticle, source: RadarArticle): RadarArticle {
+  return {
+    ...article,
+    imageUrl: source.imageUrl,
+    imageAlt: source.imageAlt,
+    imageCredit: source.imageCredit,
+    imageSourceUrl: source.imageSourceUrl,
+  }
+}
+
+function applyLockedSeedImage(article: RadarArticle): RadarArticle {
+  const locked = LOCKED_SEED_IMAGES.get(article.slug)
+  return locked?.imageUrl ? preserveImage(article, locked) : article
 }
 
 /**
@@ -1616,7 +1770,7 @@ export async function getAllRadarArticles(): Promise<RadarArticle[]> {
   const list = stored && stored.length ? [...RADAR_ARTICLE_SEED, ...stored] : RADAR_ARTICLE_SEED
   // Orden del feed: EN VIVO primero, luego lo PRÓXIMO (más cercano), y al final los
   // FINALIZADOS (más reciente primero). Así la destacada es la que se juega ahora.
-  return dedupeByMatch(list).sort((a, b) => compareForFeed(a, b))
+  return dedupeByMatch(list).map(applyLockedSeedImage).sort((a, b) => compareForFeed(a, b))
 }
 
 /**

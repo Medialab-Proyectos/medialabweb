@@ -389,10 +389,6 @@ export function generateArticlesFromReport(report: DailyRadarReport): RadarArtic
       event,
       hook: play.hook,
       matchInterpretations: buildInterpretations(label, play),
-      imageUrl: lead.imageUrl,
-      imageAlt: lead.imageAlt,
-      imageCredit: lead.imageCredit,
-      imageSourceUrl: lead.imageSourceUrl,
       quickSummary: quickSummary(label, event, play),
       whatHappened: whatHappened(label, play),
       keyPlays: [],
@@ -440,8 +436,7 @@ export async function generateAndStoreArticlesFromReport(
 
   // Idempotencia: solo se analizan PREVIAS y FINALES aún no completadas. La marca
   // analyzedPreviaAt/analyzedFinalAt es independiente de `matchState` (los seeds vienen
-  // como "previa" sin análisis real). Si la fase ya está completa, no se re-analiza,
-  // salvo para incorporar una imagen nueva de Latingoles.
+  // como "previa" sin análisis real). Si la fase ya está completa, no se re-analiza.
   const candidates = generated.flatMap((article) => {
     const fixture = existing.find((candidate) => sameTeams(candidate.teams, article.teams))
     if (!fixture?.kickoffAt) return []
@@ -451,12 +446,11 @@ export async function generateAndStoreArticlesFromReport(
 
     const beforeKickoff = nowMs < kickoff
     const insidePreviewWindow = beforeKickoff && kickoff - nowMs <= MATCH_NOTE_ACCESS_WINDOW_MS
-    const addsLatingolesImage = Boolean(article.imageUrl && !fixture.imageUrl)
     const previaDone = Boolean(fixture.analyzedPreviaAt)
     const finalDone = Boolean(fixture.analyzedFinalAt)
 
-    if (beforeKickoff && (!insidePreviewWindow || (previaDone && !addsLatingolesImage))) return []
-    if (!beforeKickoff && (article.matchState !== "finalizado" || (finalDone && !addsLatingolesImage))) return []
+    if (beforeKickoff && (!insidePreviewWindow || previaDone)) return []
+    if (!beforeKickoff && (article.matchState !== "finalizado" || finalDone)) return []
 
     return [{ article, fixture, beforeKickoff }]
   })
@@ -469,32 +463,7 @@ export async function generateAndStoreArticlesFromReport(
     ),
   )
 
-  const latingolesWithImage = report.signals.filter(
-    (candidate) => candidate.sourceType === "latingoles" && Boolean(candidate.imageUrl) && candidate.teams?.length,
-  )
-  const imageUpdates = existing.flatMap((fixture) => {
-    // Prioriza una imagen del MISMO partido (ambos equipos); si no hay, una que
-    // comparta al menos un equipo (sigue siendo relacionada) antes que la genérica.
-    const signal =
-      latingolesWithImage.find((candidate) => sameTeams(candidate.teams, fixture.teams)) ??
-      latingolesWithImage.find((candidate) => sharesTeam(candidate.teams, fixture.teams))
-    if (!signal?.imageUrl || fixture.imageUrl === signal.imageUrl) return []
-
-    const sourceExists = fixture.sources.some((source) => source.url === signal.url)
-    return [{
-      ...fixture,
-      imageUrl: signal.imageUrl,
-      imageAlt: signal.imageAlt || signal.title,
-      imageCredit: signal.imageCredit || "Latingoles",
-      imageSourceUrl: signal.imageSourceUrl || signal.url,
-      sources: sourceExists
-        ? fixture.sources
-        : [{ name: signal.sourceName, url: signal.url, kind: "referencia" as const }, ...fixture.sources],
-      updatedAt: report.generatedAt,
-    }]
-  })
-
-  const updates = mergeArticleUpdates(imageUpdates, articles)
+  const updates = articles
   if (updates.length === 0) return []
   await saveRadarArticles(updates)
   return updates
@@ -545,6 +514,10 @@ async function enrichArticle(
 
   return {
     ...article,
+    imageUrl: fixture.imageUrl,
+    imageAlt: fixture.imageAlt,
+    imageCredit: fixture.imageCredit,
+    imageSourceUrl: fixture.imageSourceUrl,
     id: fixture.id,
     slug: fixture.slug,
     date: fixture.date,
@@ -656,19 +629,4 @@ function buildTeamRadars(article: RadarArticle): TeamRadar[] {
 function sameTeams(left: string[], right: string[]): boolean {
   const normalize = (teams: string[]) => teams.map((team) => team.trim().toLowerCase()).sort().join("|")
   return normalize(left) === normalize(right)
-}
-
-/** ¿Comparten al menos un equipo? Para usar una imagen relacionada cuando no hay match exacto. */
-function sharesTeam(left: string[], right: string[]): boolean {
-  const norm = (team: string) => team.trim().toLowerCase()
-  const set = new Set(left.map(norm))
-  return right.some((team) => set.has(norm(team)))
-}
-
-function mergeArticleUpdates(base: RadarArticle[], preferred: RadarArticle[]): RadarArticle[] {
-  const key = (article: RadarArticle) =>
-    [...article.teams].map((team) => team.trim().toLowerCase()).sort().join("|")
-  const merged = new Map(base.map((article) => [key(article), article]))
-  for (const article of preferred) merged.set(key(article), article)
-  return [...merged.values()]
 }
