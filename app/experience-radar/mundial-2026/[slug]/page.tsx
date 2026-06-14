@@ -26,6 +26,10 @@ import type { EmotionalRadarValues, RadarArticle } from "@/src/lib/experience-ra
 const SITE = "https://medialab.design"
 const BASE = "/experience-radar/mundial-2026"
 
+function absoluteSiteUrl(value: string): string {
+  return value.startsWith("http://") || value.startsWith("https://") ? value : `${SITE}${value}`
+}
+
 // Los artículos provienen del store del agente diario (con fallback al seed), por
 // lo que la ruta es dinámica en lugar de prerenderizada en build.
 export const dynamic = "force-dynamic"
@@ -48,7 +52,7 @@ export async function generateMetadata({
   }
 
   const url = `${SITE}${BASE}/${article.slug}`
-  const image = article.imageUrl || `${SITE}${pickMatchImage(article.slug, article.teams)}`
+  const image = absoluteSiteUrl(article.imageUrl || pickMatchImage(article.slug, article.teams))
   return {
     title: article.seoTitle,
     description: article.metaDescription,
@@ -461,7 +465,7 @@ function JsonLd({
   lessons: Array<{ term: string; explanation: string }>
 }) {
   const url = `${SITE}${BASE}/${article.slug}`
-  const image = article.imageUrl || `${SITE}${pickMatchImage(article.slug, article.teams)}`
+  const image = absoluteSiteUrl(article.imageUrl || pickMatchImage(article.slug, article.teams))
 
   // El "Resumen para IA" (aiSummary) ya no se muestra al usuario: vive aquí, en el
   // abstract del NewsArticle, que es el canal para motores de IA / GEO.
@@ -476,7 +480,7 @@ function JsonLd({
       url: image,
       caption: article.imageAlt || article.seoTitle,
       creditText: article.imageCredit,
-      creator: article.imageCredit ? { "@type": "Organization", name: "Latingoles" } : undefined,
+      creator: article.imageCredit ? { "@type": "Organization", name: article.imageCredit } : undefined,
       copyrightNotice: article.imageCredit,
       associatedArticle: article.imageSourceUrl,
     },
