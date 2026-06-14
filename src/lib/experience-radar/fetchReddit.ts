@@ -2,7 +2,7 @@ import { RADAR_SEARCH_TERMS, makeId, sanitizeText, sourceUsage } from "./sources
 import type { ExperienceSignal, FetchContext, SourceUsage } from "./types"
 import { XMLParser } from "fast-xml-parser"
 
-const SUBREDDITS = ["worldcup", "soccer", "football"]
+const SUBREDDITS = ["worldcup", "soccer", "football", "CanadaSoccer", "Aleague"]
 
 type RedditListing = {
   data?: {
@@ -123,10 +123,19 @@ async function fetchRedditRss(context: FetchContext, detectedAt: string): Promis
   const parser = new XMLParser({ ignoreAttributes: false })
   const signals: ExperienceSignal[] = []
   const relevantSignals: ExperienceSignal[] = []
+  const searchTerms = (context.terms?.length ? context.terms : ["Mundial 2026", "World Cup 2026"])
+    .filter(Boolean)
+    .slice(0, 4)
 
   for (const subreddit of SUBREDDITS) {
-    try {
-      const feedUrl = `https://www.reddit.com/r/${subreddit}/new.rss`
+    const feedUrls = [
+      ...searchTerms.map(
+        (term) => `https://www.reddit.com/r/${subreddit}/search.rss?q=${encodeURIComponent(term)}&restrict_sr=on&sort=new&t=week`,
+      ),
+      `https://www.reddit.com/r/${subreddit}/new.rss`,
+    ]
+
+    for (const feedUrl of feedUrls) try {
       const response = await fetch(feedUrl, {
         headers: { "User-Agent": process.env.REDDIT_USER_AGENT ?? "MediaLabExperienceRadar/1.0" },
         next: { revalidate: 60 * 15 },
@@ -258,7 +267,11 @@ function detectQuestions(text: string): string[] {
 }
 
 function detectTeams(text: string): string[] {
-  const teams = ["Argentina", "Brasil", "Colombia", "Mexico", "Canada", "USA", "France", "Spain"]
+  const teams = [
+    "Argentina", "Brasil", "Colombia", "Mexico", "Canada", "USA", "France", "Spain",
+    "Bosnia", "Qatar", "Switzerland", "Scotland", "Haiti", "Australia", "Türkiye",
+    "Germany", "Curaçao", "Netherlands", "Japan", "Ecuador", "Tunisia", "Sweden",
+  ]
   const lower = text.toLowerCase()
   return teams.filter((team) => lower.includes(team.toLowerCase()))
 }

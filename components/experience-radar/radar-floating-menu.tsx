@@ -1,21 +1,39 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { Radar, Newspaper, Search, X } from "lucide-react"
+import { Radar, Newspaper, Search, X, Bell, BellRing, BellOff, Loader2 } from "lucide-react"
+import { useRadarPush } from "./use-radar-push"
+
+const SEEN_KEY = "radar:seenUpdate"
 
 /**
  * Menú flotante del Experience Radar (reemplaza la miga de pan). Acceso rápido a:
  *  - Inicio del Radar (`/experience-radar`)
  *  - Todas las notas del especial (`/experience-radar/mundial-2026`)
  *  - Buscador: navega al listado con `?q=` para filtrar las notas.
+ *  - Campana "avísame": activa las notificaciones push; muestra un punto rojo cuando hay
+ *    un análisis más nuevo que el último visto (según `latestUpdatedAt`).
  * Fijo abajo-derecha, sobre el contenido, en móvil y desktop.
  */
-export function RadarFloatingMenu() {
+export function RadarFloatingMenu({ latestUpdatedAt }: { latestUpdatedAt?: string }) {
   const router = useRouter()
   const [searchOpen, setSearchOpen] = useState(false)
   const [q, setQ] = useState("")
+  const { state, enable } = useRadarPush({ autoPrompt: true })
+  const [hasNew, setHasNew] = useState(false)
+
+  // Punto rojo "hay algo nuevo": el último análisis es más reciente que el último visto.
+  useEffect(() => {
+    if (!latestUpdatedAt) return
+    try {
+      const seen = localStorage.getItem(SEEN_KEY)
+      setHasNew(!seen || new Date(latestUpdatedAt).getTime() > new Date(seen).getTime())
+    } catch {
+      // sin localStorage (modo privado, etc.): no mostramos el punto.
+    }
+  }, [latestUpdatedAt])
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -23,8 +41,27 @@ export function RadarFloatingMenu() {
     router.push(`/experience-radar/mundial-2026${term ? `?q=${encodeURIComponent(term)}` : ""}`)
   }
 
+  // Tap en la campana: marca como visto (quita el punto) y, si no está activo, pide permiso.
+  const onBell = () => {
+    try {
+      if (latestUpdatedAt) localStorage.setItem(SEEN_KEY, latestUpdatedAt)
+    } catch {
+      // ignora si no hay localStorage
+    }
+    setHasNew(false)
+    if (state === "idle") void enable()
+  }
+
   const itemClass =
-    "inline-flex h-10 w-10 items-center justify-center rounded-full text-foreground/80 transition-colors hover:bg-[var(--cyan)]/15 hover:text-[var(--cyan)]"
+    "relative inline-flex h-10 w-10 items-center justify-center rounded-full text-foreground/80 transition-colors hover:bg-[var(--cyan)]/15 hover:text-[var(--cyan)]"
+
+  const showBell = state !== "loading" && state !== "unsupported"
+  const bellTitle =
+    state === "blocked"
+      ? "Notificaciones bloqueadas en este navegador"
+      : state === "subscribed"
+        ? "Notificaciones activadas"
+        : "Avísame de cada nuevo análisis"
 
   return (
     <div className="fixed bottom-5 right-5 z-40 flex flex-col items-end gap-2">
@@ -69,6 +106,33 @@ export function RadarFloatingMenu() {
         >
           {searchOpen ? <X size={18} /> : <Search size={18} />}
         </button>
+
+        {showBell && (
+          <button
+            type="button"
+            onClick={onBell}
+            disabled={state === "working"}
+            aria-label={bellTitle}
+            title={bellTitle}
+            className={`${itemClass} disabled:opacity-60 ${state === "subscribed" ? "text-[var(--magenta)]" : ""}`}
+          >
+            {state === "working" ? (
+              <Loader2 size={18} className="animate-spin" />
+            ) : state === "blocked" ? (
+              <BellOff size={18} />
+            ) : state === "subscribed" ? (
+              <BellRing size={18} />
+            ) : (
+              <Bell size={18} />
+            )}
+            {hasNew && (
+              <span
+                aria-hidden
+                className="absolute right-2 top-2 h-2.5 w-2.5 rounded-full bg-[#DC2626] ring-2 ring-card"
+              />
+            )}
+          </button>
+        )}
       </div>
     </div>
   )

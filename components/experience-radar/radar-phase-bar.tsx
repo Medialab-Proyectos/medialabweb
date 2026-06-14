@@ -2,9 +2,10 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { Target, Zap, Brain, Share2, Check, Newspaper } from "lucide-react"
+import { Target, Zap, Brain, Share2, Check, Newspaper, Bell, BellRing, BellOff, Loader2 } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 import { useRadarPhase } from "./radar-phase-context"
+import { useRadarPush } from "./use-radar-push"
 import type { RadarViewMode } from "./match-phase-radar"
 
 /**
@@ -31,8 +32,37 @@ export function RadarPhaseBar({ shareTitle }: { shareTitle: string }) {
   const { t, localized } = useLanguage()
   const ctx = useRadarPhase()
   const [copied, setCopied] = useState(false)
+  const { state: pushState, enable } = useRadarPush()
+  const [notice, setNotice] = useState<string | null>(null)
   if (!ctx) return null
   const { phase, setPhase, available } = ctx
+
+  const flash = (msg: string) => {
+    setNotice(msg)
+    setTimeout(() => setNotice(null), 2800)
+  }
+
+  // Campana "avísame": si ya están activas, lo avisa; si están bloqueadas, explica; si no,
+  // pide permiso y suscribe.
+  const onBell = () => {
+    if (pushState === "subscribed") {
+      flash(t("Ya se encuentran activas las notificaciones", "Notifications are already on"))
+      return
+    }
+    if (pushState === "blocked") {
+      flash(t("Están bloqueadas en este navegador. Actívalas desde los permisos del sitio.", "Blocked in this browser. Enable them from the site permissions."))
+      return
+    }
+    void enable()
+  }
+
+  const showBell = pushState !== "loading" && pushState !== "unsupported"
+  const bellLabel =
+    pushState === "subscribed"
+      ? t("Notificaciones activadas", "Notifications on")
+      : pushState === "blocked"
+        ? t("Notificaciones bloqueadas", "Notifications blocked")
+        : t("Avísame de cada nuevo análisis", "Notify me of each new analysis")
 
   const share = async () => {
     const url = typeof window !== "undefined" ? window.location.href : ""
@@ -55,6 +85,11 @@ export function RadarPhaseBar({ shareTitle }: { shareTitle: string }) {
 
   return (
     <div className="fixed inset-x-0 bottom-4 z-40 flex justify-center px-3">
+      {notice && (
+        <div className="pointer-events-none absolute bottom-full left-1/2 mb-2 -translate-x-1/2 whitespace-nowrap rounded-full bg-foreground px-3 py-1.5 text-xs font-semibold text-background shadow-lg">
+          {notice}
+        </div>
+      )}
       <div className="flex max-w-[calc(100vw-1.5rem)] items-center gap-1 overflow-x-auto rounded-full border border-border bg-card/95 p-1.5 shadow-2xl ring-1 ring-black/10 backdrop-blur-md dark:border-white/15 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {PHASE_ITEMS.map(({ key, es, en, icon: Icon, color }) => {
           const disabled = !available.includes(key)
@@ -104,6 +139,34 @@ export function RadarPhaseBar({ shareTitle }: { shareTitle: string }) {
           <Newspaper size={15} />
           <span className="hidden sm:inline">{t("Especial", "Special")}</span>
         </Link>
+
+        {showBell && (
+          <button
+            type="button"
+            onClick={onBell}
+            disabled={pushState === "working"}
+            title={bellLabel}
+            aria-label={bellLabel}
+            className={`${pill} disabled:opacity-60 ${
+              pushState === "subscribed"
+                ? "text-[var(--magenta)]"
+                : "text-foreground/80 hover:bg-[var(--magenta)]/15 hover:text-[var(--magenta)]"
+            }`}
+          >
+            {pushState === "working" ? (
+              <Loader2 size={15} className="animate-spin" />
+            ) : pushState === "blocked" ? (
+              <BellOff size={15} />
+            ) : pushState === "subscribed" ? (
+              <BellRing size={15} />
+            ) : (
+              <Bell size={15} />
+            )}
+            <span className="hidden sm:inline">
+              {pushState === "subscribed" ? t("Activadas", "On") : t("Avísame", "Notify me")}
+            </span>
+          </button>
+        )}
       </div>
     </div>
   )

@@ -22,6 +22,9 @@ export function PushOptIn() {
   const [error, setError] = useState<string | null>(null)
 
   // Al montar: detecta soporte y si YA hay una suscripción activa (no re-pide permiso).
+  // Si no la hay y el permiso sigue sin decidir, PIDE el permiso automáticamente (sin que
+  // el usuario toque el botón). Ojo: Firefox y Safari (iPhone) IGNORAN esta petición si no
+  // hubo un gesto del usuario; en esos navegadores queda el botón "Activar" como respaldo.
   useEffect(() => {
     let active = true
     ;(async () => {
@@ -36,7 +39,14 @@ export function PushOptIn() {
       try {
         const reg = await navigator.serviceWorker.getRegistration()
         const existing = reg ? await reg.pushManager.getSubscription() : null
-        if (active) setState(existing ? "subscribed" : "idle")
+        if (!active) return
+        if (existing) {
+          setState("subscribed")
+          return
+        }
+        setState("idle")
+        // Auto-petición: solo si el permiso aún no se ha decidido ("default").
+        if (Notification.permission === "default") void enable()
       } catch {
         if (active) setState("idle")
       }
@@ -44,6 +54,8 @@ export function PushOptIn() {
     return () => {
       active = false
     }
+    // enable es estable (no depende de props/estado cambiante); auto-pedir solo al montar.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const enable = async () => {

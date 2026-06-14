@@ -29,6 +29,8 @@ export type ExperienceSourceType =
   | "latingoles"
   | "fifa"
   | "reddit"
+  | "x"
+  | "winsports"
   | "google-trends"
   | "app-review"
   | "manual"

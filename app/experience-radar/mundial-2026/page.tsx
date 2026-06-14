@@ -7,7 +7,6 @@ import { EspecialHero } from "@/components/experience-radar/especial-hero"
 import { EspecialesGrid } from "@/components/experience-radar/especiales-grid"
 import { RadarFloatingMenu } from "@/components/experience-radar/radar-floating-menu"
 import { NextMatchBar } from "@/components/experience-radar/next-match-bar"
-import { PushOptIn } from "@/components/experience-radar/push-optin"
 
 /**
  * Página 2 — PORTAL del especial "Mundial 2026".
@@ -68,10 +67,14 @@ export default async function ExperienceRadarMundialPage({
       )
     : all
 
+  const latestUpdatedAt =
+    report?.updatedAt ??
+    [...articles].map((a) => a.updatedAt).filter(Boolean).sort().at(-1)
+
   return (
     <main className="min-h-screen bg-background text-foreground">
       <Navbar />
-      <RadarFloatingMenu />
+      <RadarFloatingMenu latestUpdatedAt={latestUpdatedAt} />
 
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildCollectionSchema(articles)) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildFaqSchema()) }} />
@@ -107,11 +110,6 @@ export default async function ExperienceRadarMundialPage({
           )}
         </section>
       )}
-
-      {/* Opt-in de notificaciones push: el usuario decide si quiere avisos en su dispositivo. */}
-      <div className="mx-auto max-w-5xl px-6 pb-16">
-        <PushOptIn />
-      </div>
 
       <Footer />
     </main>

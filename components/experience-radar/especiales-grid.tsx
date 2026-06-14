@@ -164,12 +164,16 @@ function NoteCard({ article: a, isLatestAnalyzed = false }: { article: RadarArti
           alt={a.seoTitle}
           className="h-full w-full object-cover object-[center_20%] transition-transform duration-300 group-hover:scale-[1.03]"
         />
-        {isLatestAnalyzed && (
+        {/* Una sola píldora por tarjeta: la nota recién evaluada muestra "Último
+            analizado" (se mueve a la nota más nueva tras cada corrida del agente); el
+            resto muestra su estado. Así no se solapa con "Partido analizado". */}
+        {isLatestAnalyzed ? (
           <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-[var(--magenta)] px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-[#fff] shadow-md ring-1 ring-black/10">
             <Sparkles size={12} /> {t("Último analizado", "Latest analyzed")}
           </span>
+        ) : (
+          <StatusPill status={resolveMatchStatus(a)} placeholder={a.placeholder} className="absolute right-3 top-3" />
         )}
-        <StatusPill status={resolveMatchStatus(a)} placeholder={a.placeholder} className="absolute right-3 top-3" />
       </div>
       <div className="flex flex-1 flex-col p-4">
         <h3 className="text-sm font-bold leading-snug group-hover:text-[var(--cyan)]">{a.seoTitle}</h3>

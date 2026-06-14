@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server"
 import { runExperienceRadarDailyAgent } from "@/src/lib/experience-radar"
 import { generateAndStoreArticlesFromReport } from "@/src/lib/experience-radar/generateArticles"
+import { getAllRadarArticles } from "@/src/lib/experience-radar/articleData"
+import { notifyNewlyPublishedArticles } from "@/src/lib/experience-radar/notifyPublishedArticles"
 
 export const dynamic = "force-dynamic"
 export const maxDuration = 60
@@ -35,6 +37,12 @@ async function handle(request: NextRequest, bodySecret = "") {
     // SEO (10 secciones) y los persiste. Modo seguro heredado: draft / reviewed:false.
     const articles = await generateAndStoreArticlesFromReport(report)
 
+    // Envío AUTOMÁTICO de push: tras persistir, avisa de las notas que recién quedaron
+    // accesibles (en vivo/finalizado) y no se habían notificado. Best-effort: si falla,
+    // no rompe la corrida. Se evalúa el universo completo (no solo lo reescrito hoy) para
+    // cubrir notas que se vuelven accesibles solo por el paso del tiempo (kickoff).
+    const notify = await notifyNewlyPublishedArticles(await getAllRadarArticles())
+
     return NextResponse.json(
       {
         ok: true,
@@ -49,6 +57,7 @@ async function handle(request: NextRequest, bodySecret = "") {
           count: articles.length,
           items: articles.map((a) => ({ slug: a.slug, seoTitle: a.seoTitle, radarScore: a.radarScore.total })),
         },
+        push: { notified: notify.notified.length, slugs: notify.notified, result: notify.push, error: notify.error },
         report,
       },
       { headers: { "Cache-Control": "no-store" } },

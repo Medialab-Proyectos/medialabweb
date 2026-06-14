@@ -14,7 +14,6 @@ import { MatchCountdown } from "@/components/experience-radar/match-countdown"
 import { RadarPhaseProvider } from "@/components/experience-radar/radar-phase-context"
 import { RadarPhaseBar } from "@/components/experience-radar/radar-phase-bar"
 import { RadarNewsletter } from "@/components/experience-radar/radar-newsletter"
-import { PushOptIn } from "@/components/experience-radar/push-optin"
 import { RelatedNotes, type RelatedNote } from "@/components/experience-radar/related-notes"
 import { NoteImage } from "@/components/experience-radar/note-image"
 import { StatusPill } from "@/components/experience-radar/status-pill"
@@ -107,7 +106,8 @@ export default async function RadarArticlePage({
   const sourceLabels = resolveSourceLabels(article)
 
   // Notas relacionadas (resto del especial) para el carrusel del final.
-  const related: RelatedNote[] = (await getAllRadarArticles())
+  const allArticles = await getAllRadarArticles()
+  const related: RelatedNote[] = allArticles
     .filter((a) => a.slug !== article.slug)
     .slice(0, 8)
     .map((a) => {
@@ -208,9 +208,6 @@ export default async function RadarArticlePage({
 
         {/* Suscripción: va DESPUÉS del simulador ── */}
         <RadarNewsletter />
-
-        {/* Opt-in de notificaciones push: avisos de nuevos análisis en el dispositivo. */}
-        <PushOptIn />
 
         {/* ── CTA final integrado ── */}
         <RadarCtaCards />

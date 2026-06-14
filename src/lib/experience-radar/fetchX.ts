@@ -14,6 +14,9 @@
  * completo); el agente parafrasea y enlaza como referencia.
  */
 
+import { makeId, sanitizeText, sourceUsage } from "./sources"
+import type { ExperienceSignal, FetchContext, SourceUsage } from "./types"
+
 export interface XSignal {
   id: string
   text: string
@@ -70,5 +73,70 @@ export async function fetchXSignals(query: string, maxResults = 10): Promise<XSi
   } catch (error) {
     console.warn("Experience Radar X search unavailable.", error)
     return []
+  }
+}
+
+export async function fetchX(
+  context: FetchContext = {},
+): Promise<{ signals: ExperienceSignal[]; source: SourceUsage }> {
+  const detectedAt = (context.now ?? new Date()).toISOString()
+  const token = process.env.X_BEARER_TOKEN?.trim()
+  if (!token) {
+    return {
+      signals: [],
+      source: sourceUsage({
+        id: "x-api-missing",
+        name: "X API v2",
+        type: "x",
+        url: "https://developer.x.com/en/docs/x-api",
+        ok: false,
+        itemCount: 0,
+        note: "X no fue consultado: falta X_BEARER_TOKEN.",
+      }),
+    }
+  }
+
+  const queries = (context.terms?.length ? context.terms : ["Mundial 2026", "World Cup 2026"])
+    .filter(Boolean)
+    .slice(0, 4)
+  const collected: ExperienceSignal[] = []
+
+  for (const query of queries) {
+    const posts = await fetchXSignals(query, 20)
+    for (const post of posts) {
+      collected.push({
+        id: makeId("x", [post.id]),
+        sourceType: "x",
+        sourceName: "X API v2",
+        sourceUrl: `https://x.com/search?q=${encodeURIComponent(query)}`,
+        title: sanitizeText(post.text, 180),
+        summary: sanitizeText(post.text, 320),
+        url: post.url,
+        publishedAt: detectedAt,
+        detectedAt,
+        category: "Conversación de usuarios",
+        players: [],
+        teams: [],
+        tags: [query, "X", `likes:${post.likes ?? 0}`, `reposts:${post.reposts ?? 0}`],
+        score: (post.likes ?? 0) + (post.reposts ?? 0) * 2,
+        classifications: [],
+      })
+    }
+  }
+
+  const signals = Array.from(new Map(collected.map((signal) => [signal.url, signal])).values())
+    .sort((a, b) => (b.score ?? 0) - (a.score ?? 0))
+    .slice(0, 40)
+
+  return {
+    signals,
+    source: sourceUsage({
+      id: "x-api",
+      name: "X API v2",
+      type: "x",
+      url: "https://api.x.com/2/tweets/search/recent",
+      ok: true,
+      itemCount: signals.length,
+    }),
   }
 }

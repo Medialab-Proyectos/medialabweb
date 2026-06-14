@@ -2,7 +2,7 @@ import { hasProhibitedContent, makeId, sanitizeText, sourceUsage } from "./sourc
 import type { ExperienceSignal, FetchContext, SourceUsage } from "./types"
 
 const LATINGOLES_POSTS =
-  "https://latingoles.com/wp-json/wp/v2/posts?per_page=20&_embed=1"
+  "https://latingoles.com/wp-json/wp/v2/posts?per_page=100&_embed=1"
 
 type WordpressPost = {
   id: number
@@ -25,10 +25,14 @@ export async function fetchLatingoles(
   const detectedAt = (context.now ?? new Date()).toISOString()
 
   try {
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(), 8000)
     const response = await fetch(LATINGOLES_POSTS, {
-      headers: { Accept: "application/json" },
+      headers: { Accept: "application/json", "User-Agent": "MediaLabExperienceRadar/1.0" },
       cache: "no-store",
+      signal: controller.signal,
     })
+    clearTimeout(timeout)
 
     if (!response.ok) throw new Error(`Latingoles WP API ${response.status}`)
     const posts = (await response.json()) as WordpressPost[]
