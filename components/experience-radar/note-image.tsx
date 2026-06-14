@@ -29,13 +29,11 @@ export function NoteImage({
 }) {
   const resolvedFallback = fallback ?? pickMatchImage(seed, teams)
   const [remoteFailed, setRemoteFailed] = useState(false)
-  const [remoteLoaded, setRemoteLoaded] = useState(false)
   const remoteSrc = src && src !== resolvedFallback && !remoteFailed ? src : null
 
   // Si cambia la fuente (navegación cliente), reintenta con la nueva.
   useEffect(() => {
     setRemoteFailed(false)
-    setRemoteLoaded(false)
   }, [src])
 
   return (
@@ -52,13 +50,9 @@ export function NoteImage({
           src={remoteSrc}
           alt={alt}
           referrerPolicy={remoteSrc.includes("latingoles.com") ? "no-referrer" : undefined}
-          className={`absolute inset-0 ${className ?? ""} transition-opacity duration-300 ${remoteLoaded ? "opacity-100" : "opacity-0"}`}
+          className={`absolute inset-0 ${className ?? ""}`}
           loading={loading}
-          onLoad={() => setRemoteLoaded(true)}
-          onError={() => {
-            setRemoteLoaded(false)
-            setRemoteFailed(true)
-          }}
+          onError={() => setRemoteFailed(true)}
         />
       )}
     </span>
