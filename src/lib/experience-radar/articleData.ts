@@ -217,6 +217,32 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
           "Llegan con autocrítica: la conversación se centra en cerrar partidos y en no repetir el desenlace, con más cautela que euforia.",
       },
     ],
+    teamRadars: [
+      {
+        team: "Canadá",
+        // Empate vivido como hito histórico (primer punto): euforia y orgullo altos.
+        current: {
+          score: 80,
+          emotional: { euforia: 80, confianza: 72, ansiedad: 34, frustracion: 28, incertidumbre: 34, optimismo: 82 },
+        },
+        predicted: {
+          score: 74,
+          emotional: { euforia: 72, confianza: 74, ansiedad: 42, frustracion: 32, incertidumbre: 42, optimismo: 80 },
+        },
+      },
+      {
+        team: "Bosnia y Herzegovina",
+        // Iban ganando y se dejaron empatar: el 1-1 supo a dos puntos perdidos.
+        current: {
+          score: 46,
+          emotional: { euforia: 30, confianza: 40, ansiedad: 60, frustracion: 70, incertidumbre: 58, optimismo: 40 },
+        },
+        predicted: {
+          score: 52,
+          emotional: { euforia: 42, confianza: 48, ansiedad: 54, frustracion: 54, incertidumbre: 52, optimismo: 50 },
+        },
+      },
+    ],
     scoreFactors: { emotionalImpact: 84, digitalConversation: 80, virality: 82, userInterest: 84 },
     uxFinding:
       "La satisfacción no depende del resultado absoluto sino de la expectativa con la que se compara. Fijar el punto de referencia adecuado puede convertir un resultado neutro en una experiencia percibida como un triunfo.",
@@ -353,6 +379,34 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
         mood: "Golpe anímico tras una derrota dura",
         behaviorEffect:
           "Llegan obligados a recomponer: la conversación se centra en separar el 4-1 del resto del grupo y en recuperar confianza.",
+      },
+    ],
+    teamRadars: [
+      {
+        team: "Estados Unidos",
+        // Durante/después: euforia del 4-1, confianza disparada, casi nula frustración.
+        current: {
+          score: 86,
+          emotional: { euforia: 90, confianza: 86, ansiedad: 30, frustracion: 22, incertidumbre: 26, optimismo: 90 },
+        },
+        // Próximo partido: confianza alta con riesgo de exceso; algo más de ansiedad.
+        predicted: {
+          score: 76,
+          emotional: { euforia: 76, confianza: 80, ansiedad: 42, frustracion: 28, incertidumbre: 42, optimismo: 82 },
+        },
+      },
+      {
+        team: "Paraguay",
+        // Durante/después de la goleada: tristeza y frustración altas, casi sin euforia.
+        current: {
+          score: 38,
+          emotional: { euforia: 16, confianza: 24, ansiedad: 72, frustracion: 84, incertidumbre: 66, optimismo: 26 },
+        },
+        // Próximo partido: intentan recomponer; sube algo la confianza, baja la euforia rota.
+        predicted: {
+          score: 48,
+          emotional: { euforia: 34, confianza: 44, ansiedad: 60, frustracion: 58, incertidumbre: 56, optimismo: 46 },
+        },
       },
     ],
     scoreFactors: { emotionalImpact: 86, digitalConversation: 84, virality: 86, userInterest: 90 },
@@ -759,6 +813,32 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
           "Llegan tocados anímicamente: la conversación se centra en cómo cerrar partidos y en no repetir el desenlace, con más autocrítica que ilusión.",
       },
     ],
+    teamRadars: [
+      {
+        team: "Corea del Sur",
+        // Remontada épica: euforia y optimismo disparados tras el sufrimiento.
+        current: {
+          score: 88,
+          emotional: { euforia: 90, confianza: 82, ansiedad: 36, frustracion: 26, incertidumbre: 30, optimismo: 90 },
+        },
+        predicted: {
+          score: 80,
+          emotional: { euforia: 80, confianza: 80, ansiedad: 44, frustracion: 30, incertidumbre: 40, optimismo: 84 },
+        },
+      },
+      {
+        team: "Chequia",
+        // Iban ganando y lo perdieron sobre el cierre: frustración y tristeza altas.
+        current: {
+          score: 40,
+          emotional: { euforia: 22, confianza: 30, ansiedad: 68, frustracion: 80, incertidumbre: 62, optimismo: 30 },
+        },
+        predicted: {
+          score: 48,
+          emotional: { euforia: 38, confianza: 46, ansiedad: 58, frustracion: 56, incertidumbre: 54, optimismo: 46 },
+        },
+      },
+    ],
     scoreFactors: { emotionalImpact: 90, digitalConversation: 86, virality: 88, userInterest: 88 },
     uxFinding:
       "El recuerdo de una experiencia lo define su pico emocional y su final, no su promedio. Recuperarse bien de un bajón puede dejar mejor recuerdo —y más lealtad— que una experiencia plana sin fricción.",
@@ -890,25 +970,27 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
 
   // ─────────── Calendario: próximos partidos (previas, sin marcador inventado) ───────────
   // Fixtures verificados (FIFA/ESPN). Horarios convertidos a UTC desde la hora del este.
+  // ── Sábado 13 de junio: Catar-Suiza (3pm ET), Brasil-Marruecos (6pm), Haití-Escocia
+  //    (9pm) y Australia-Turquía (12am ET / 9pm en Vancouver). Las 4 del día. ──
   upcomingMatch({
     date: "2026-06-13",
-    kickoffAt: "2026-06-13T23:00:00.000Z",
+    kickoffAt: "2026-06-13T19:00:00.000Z",
     slug: "catar-suiza-mundial-2026",
     teams: ["Catar", "Suiza"],
     group: "Grupo B",
     officialUrl: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/scores-fixtures",
   }),
   upcomingMatch({
-    date: "2026-06-14",
-    kickoffAt: "2026-06-14T05:00:00.000Z",
+    date: "2026-06-13",
+    kickoffAt: "2026-06-14T01:00:00.000Z",
     slug: "haiti-escocia-mundial-2026",
     teams: ["Haití", "Escocia"],
     group: "Grupo C",
     officialUrl: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/scores-fixtures",
   }),
   upcomingMatch({
-    date: "2026-06-14",
-    kickoffAt: "2026-06-14T08:00:00.000Z",
+    date: "2026-06-13",
+    kickoffAt: "2026-06-14T04:00:00.000Z",
     slug: "australia-turquia-mundial-2026",
     teams: ["Australia", "Turquía"],
     group: "Fase de grupos",

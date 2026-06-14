@@ -129,8 +129,23 @@ function splitTwo(value: string): string[] {
   return [value]
 }
 
+/** Nombre del eje con artículo, para frases naturales. */
+const AXIS_NOUN: Record<AxisKey, string> = {
+  euforia: "la euforia",
+  confianza: "la confianza",
+  ansiedad: "la ansiedad",
+  frustracion: "la frustración",
+  incertidumbre: "la incertidumbre",
+  optimismo: "el optimismo",
+}
+
+/**
+ * Interpretación breve y FIEL al valor: explica qué sintió la hinchada y por qué, leído de
+ * su reacción en redes. Pensada para lectura rápida; los valores bajos describen lo negativo
+ * (p. ej. una goleada en contra → euforia baja = tristeza), no lo positivo.
+ */
 function interpretAxis(axis: AxisKey, value: number, phase: RadarViewMode, matchLabel: string): string {
-  const level = value >= 75 ? "alto" : value >= 50 ? "medio" : "bajo"
+  const level: "alta" | "media" | "baja" = value >= 65 ? "alta" : value >= 40 ? "media" : "baja"
   const moment =
     phase === "expectativa"
       ? "antes del partido"
@@ -138,40 +153,40 @@ function interpretAxis(axis: AxisKey, value: number, phase: RadarViewMode, match
         ? "durante el partido"
         : "después del partido"
 
-  const meanings: Record<AxisKey, Record<string, string>> = {
+  const why: Record<AxisKey, Record<"alta" | "media" | "baja", string>> = {
     euforia: {
-      alto: `En ${matchLabel}, la euforia está alta (${value}/100) ${moment} porque predominan señales de celebración, orgullo y pertenencia.`,
-      medio: `En ${matchLabel}, la euforia está en punto medio (${value}/100) ${moment} porque hay energía positiva, pero comparte espacio con dudas o cautela.`,
-      bajo: `En ${matchLabel}, la euforia está baja (${value}/100) ${moment} porque la conversación se mueve más por tensión o análisis que por celebración.`,
+      alta: "la conversación se llenó de celebración, orgullo y ganas de compartir el momento.",
+      media: "hubo alegría, pero mezclada con dudas o cautela.",
+      baja: "casi no hubo celebración: la conversación fue más de bronca o tristeza.",
     },
     confianza: {
-      alto: `En ${matchLabel}, la confianza se ve alta (${value}/100) ${moment} porque las hinchadas tienen un relato claro para explicar lo que pasa.`,
-      medio: `En ${matchLabel}, la confianza está a medias (${value}/100) ${moment} porque el relato existe, pero puede cambiar si aparece una jugada polémica.`,
-      bajo: `En ${matchLabel}, la confianza está baja (${value}/100) ${moment} porque las dudas pesan más y la gente busca confirmación antes de cerrar una opinión.`,
+      alta: "la hinchada tenía un relato claro y se sentía segura de su equipo.",
+      media: "el relato existía, pero podía quebrarse en cualquier jugada.",
+      baja: "pesaron las dudas y la búsqueda de explicaciones antes de opinar.",
     },
     ansiedad: {
-      alto: `En ${matchLabel}, la ansiedad está alta (${value}/100) ${moment} porque aparecen más dudas, repeticiones y necesidad de explicación rápida.`,
-      medio: `En ${matchLabel}, la ansiedad está contenida (${value}/100) ${moment} porque hay tensión, aunque no define toda la experiencia.`,
-      bajo: `En ${matchLabel}, la ansiedad está baja (${value}/100) ${moment} porque la audiencia parece tener menos urgencia por verificar cada detalle.`,
+      alta: "muchas dudas y necesidad de confirmar qué estaba pasando, jugada a jugada.",
+      media: "hubo tensión, sin llegar a dominar toda la experiencia.",
+      baja: "poca urgencia: la hinchada vivió el momento con relativa calma.",
     },
     frustracion: {
-      alto: `En ${matchLabel}, la frustración está alta (${value}/100) ${moment} porque el foco se va hacia lo que salió mal, confundió o pareció injusto.`,
-      medio: `En ${matchLabel}, la frustración es moderada (${value}/100) ${moment} porque hay molestia, pero todavía convive con otras lecturas.`,
-      bajo: `En ${matchLabel}, la frustración está baja (${value}/100) ${moment} porque hay más espacio para una lectura tranquila del partido.`,
+      alta: "el foco se fue hacia lo que salió mal, confundió o se sintió injusto.",
+      media: "hubo molestia, pero convivió con otras lecturas.",
+      baja: "poca molestia: quedó espacio para una lectura tranquila.",
     },
     incertidumbre: {
-      alto: `En ${matchLabel}, la incertidumbre está alta (${value}/100) ${moment} porque todavía falta una explicación que la mayoría pueda aceptar.`,
-      medio: `En ${matchLabel}, la incertidumbre es media (${value}/100) ${moment} porque hay preguntas abiertas, aunque el relato principal se entiende.`,
-      bajo: `En ${matchLabel}, la incertidumbre está baja (${value}/100) ${moment} porque la audiencia tiene una lectura más estable de lo ocurrido.`,
+      alta: "faltaba una explicación que la mayoría pudiera aceptar.",
+      media: "quedaron preguntas abiertas, aunque el relato principal se entendía.",
+      baja: "la hinchada cerró una lectura estable de lo ocurrido.",
     },
     optimismo: {
-      alto: `En ${matchLabel}, el optimismo está alto (${value}/100) ${moment} porque la conversación mira hacia continuidad, mejora o revancha positiva.`,
-      medio: `En ${matchLabel}, el optimismo es medio (${value}/100) ${moment} porque hay expectativa, pero depende de cómo evolucione el relato.`,
-      bajo: `En ${matchLabel}, el optimismo está bajo (${value}/100) ${moment} porque lo que viene se mira con más prudencia que entusiasmo.`,
+      alta: "la conversación miró hacia adelante con ilusión y revancha.",
+      media: "hubo expectativa, pero prudente y condicionada.",
+      baja: "lo que viene se miró con desánimo o mucha cautela.",
     },
   }
 
-  return meanings[axis][level]
+  return `En ${matchLabel}, ${AXIS_NOUN[axis]} fue ${level} (${value}/100) ${moment}: ${why[axis][level]}`
 }
 
 export function MatchPhaseRadar({
@@ -272,18 +287,18 @@ export function MatchPhaseRadar({
     switch (viewMode) {
       case "expectativa":
         return t(
-          "Lectura construida desde la voz de los fanáticos en redes sociales, tendencias y portales de noticias, y desde su experiencia digital usando plataformas: con qué ánimo llega cada hinchada al partido.",
-          "Read from the voice of fans on social media, trends and news portals, and from their digital experience using platforms: the mood each fanbase brings into the match.",
+          "Antes del partido: con qué ánimo llega cada hinchada, según su conversación en redes y noticias.",
+          "Before the match: the mood each fanbase brings in, from their conversation on social media and news.",
         )
       case "realidad":
         return t(
-          "Lo que el partido provocó según la conversación de las hinchadas en redes, tendencias y noticias mientras ocurría o al terminar.",
-          "What the match triggered according to fan conversation across social media, trends and news while it unfolded or right after it ended.",
+          "Durante el partido: qué sintió cada hinchada y por qué, leído de su reacción real en redes.",
+          "During the match: what each fanbase felt and why, read from their real reaction on social media.",
         )
       case "percepcion":
         return t(
-          "Cómo queda la experiencia en el recuerdo colectivo y con qué ánimo llegará cada hinchada al próximo partido, leído desde sus redes, medios y uso digital.",
-          "How the experience settles into collective memory and the mood each fanbase will carry into the next match, read from their social media, outlets and digital use.",
+          "Después del partido: cómo quedó el recuerdo y con qué ánimo va al próximo, según lo que escriben.",
+          "After the match: how the memory settles and the mood heading into the next one, from what fans write.",
         )
     }
   }, [viewMode, t])
@@ -421,8 +436,12 @@ export function MatchPhaseRadar({
                     </span>
                   </div>
                   <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
-                    {interpretations?.[viewMode]?.[axis.key] ??
-                      interpretAxis(axis.key, Number(value), viewMode, label)}
+                    {/* Con una hinchada seleccionada, la lectura sale del valor mostrado (fiel a
+                        su radar). Sin filtro, usa la interpretación editorial combinada de la nota. */}
+                    {teamFilter
+                      ? interpretAxis(axis.key, Number(value), viewMode, label)
+                      : interpretations?.[viewMode]?.[axis.key] ??
+                        interpretAxis(axis.key, Number(value), viewMode, label)}
                   </p>
                 </div>
               )
