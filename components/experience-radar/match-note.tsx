@@ -1,8 +1,9 @@
 "use client"
 
 import { useMemo, useState } from "react"
-import { ArrowUpRight, Clock, Lightbulb, Trophy, Users } from "lucide-react"
+import { ArrowUpRight, Clock, Lightbulb, Route, Smartphone, Trophy, Users } from "lucide-react"
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel"
+import type { EmotionalRadarValues } from "@/src/lib/experience-radar/articles"
 import { TeamFlag } from "./team-flag"
 import {
   MatchPhaseRadar,
@@ -147,6 +148,9 @@ export function MatchNote({
         </Carousel>
         {/* Mensaje de apoyo como nota al pie, en letra pequeña. */}
         <p className="mt-4 text-xs italic leading-relaxed text-muted-foreground/80">{fanSectionIntro}</p>
+
+        {/* Journey emocional del hincha: se completa al cambiar de fase en la barra. */}
+        <FanJourney phases={phases} current={phase} />
       </section>
 
       {/* Lo que hemos aprendido — bajo "cómo llegan las hinchadas", sin caja contenedora. */}
@@ -163,8 +167,8 @@ function ScorePending({ label }: { label: string }) {
         <Trophy size={16} className="text-[#F59E0B]" /> Marcador final
       </div>
       <p className="mt-3 text-sm text-muted-foreground">
-        <strong className="text-foreground">{label}</strong> — marcador por confirmar. La nota se actualiza en cuanto
-        el agente verifica el resultado oficial.
+        <strong className="text-foreground">{label}</strong> — nuestro equipo está analizando los datos del partido.
+        La lectura completa se habilita apenas confirmemos el resultado oficial.
       </p>
     </div>
   )
@@ -275,6 +279,103 @@ function FanApproachCard({ team, phase }: { team: TeamApproachData; phase: Radar
           </div>
         ))}
       </dl>
+
+      {/* Lectura UX / comportamiento digital del momento (patrón observado, no del marcador). */}
+      <div className="mt-3 flex items-start gap-2 rounded-lg border border-border/70 bg-muted/40 p-2.5">
+        <Smartphone size={14} className="mt-0.5 shrink-0 text-[var(--magenta)]" />
+        <div>
+          <p className="text-[10px] font-bold uppercase tracking-wide text-[var(--magenta)]">UX · uso de dispositivos</p>
+          <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground">{UX_BEHAVIOR[phase]}</p>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/**
+ * Lectura de experiencia/uso de dispositivos por fase. Son patrones DOCUMENTADOS del
+ * consumo de fútbol en digital (no datos inventados de este partido): sirven para mirar
+ * el evento con ojos de UX y diseño comportamental.
+ */
+const UX_BEHAVIOR: Record<RadarViewMode, string> = {
+  expectativa:
+    "Segunda pantalla activa y móvil primero: buscan horario, alineación y dónde ver. Pico de notificaciones y multitarea entre apps.",
+  realidad:
+    "En el gol escriben a medias por la euforia (texto cortado, mayúsculas, emojis); molestan los anuncios que tapan la pantalla en móvil y aparecen gestos de zoom para revisar la jugada.",
+  percepcion:
+    "Circulan clips y memes, vuelven a la repetición y la conversación migra a hilos y stories; la opinión se enfría y se ordena.",
+}
+
+/* ── Journey emocional del hincha (Antes · Durante · Predicción) ── */
+
+const EMOTION_LABEL: Record<keyof EmotionalRadarValues, string> = {
+  euforia: "Euforia",
+  confianza: "Confianza",
+  ansiedad: "Ansiedad",
+  frustracion: "Frustración",
+  incertidumbre: "Incertidumbre",
+  optimismo: "Optimismo",
+}
+
+/** Emoción dominante (la de mayor valor) de una fase, para resumir el momento. */
+function dominantEmotion(v?: EmotionalRadarValues): { label: string; value: number } | null {
+  if (!v) return null
+  const entries = Object.entries(v) as Array<[keyof EmotionalRadarValues, number]>
+  const top = entries.sort((a, b) => b[1] - a[1])[0]
+  return { label: EMOTION_LABEL[top[0]], value: top[1] }
+}
+
+const JOURNEY_STEPS: Array<{ key: RadarViewMode; label: string }> = [
+  { key: "expectativa", label: "Antes" },
+  { key: "realidad", label: "Durante" },
+  { key: "percepcion", label: "Predicción" },
+]
+
+function FanJourney({ phases, current }: { phases: MatchPhases; current: RadarViewMode }) {
+  const currentIdx = JOURNEY_STEPS.findIndex((s) => s.key === current)
+  return (
+    <div className="mt-6 rounded-2xl border border-border bg-card p-4 shadow-sm dark:border-white/12">
+      <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-muted-foreground">
+        <Route size={14} className="text-[var(--cyan)]" /> Journey emocional del hincha
+      </p>
+      <div className="mt-3 grid grid-cols-3 gap-2">
+        {JOURNEY_STEPS.map((step, i) => {
+          const dom = dominantEmotion(phases[step.key])
+          const isCurrent = step.key === current
+          const reached = i <= currentIdx && !!dom
+          return (
+            <div
+              key={step.key}
+              className={`rounded-xl border p-3 text-center transition-colors ${
+                isCurrent
+                  ? "border-[var(--cyan)] bg-[var(--cyan)]/[0.06]"
+                  : reached
+                    ? "border-[var(--cyan)]/30"
+                    : "border-border/60 opacity-70"
+              }`}
+            >
+              <span
+                className={`mx-auto flex h-6 w-6 items-center justify-center rounded-full text-[11px] font-bold ${
+                  reached ? "bg-[var(--cyan)] text-white" : "bg-muted text-muted-foreground"
+                }`}
+              >
+                {i + 1}
+              </span>
+              <p className="mt-1.5 text-[11px] font-semibold">{step.label}</p>
+              {dom ? (
+                <p className="mt-0.5 text-[11px] leading-tight text-muted-foreground">
+                  {dom.label} <span className="tabular-nums">{dom.value}</span>
+                </p>
+              ) : (
+                <p className="mt-0.5 text-[11px] text-muted-foreground/60">—</p>
+              )}
+            </div>
+          )
+        })}
+      </div>
+      <p className="mt-3 text-[11px] italic leading-relaxed text-muted-foreground/80">
+        Cambia entre Antes · Durante · Predicción en la barra inferior para ver cómo se completa el recorrido emocional.
+      </p>
     </div>
   )
 }

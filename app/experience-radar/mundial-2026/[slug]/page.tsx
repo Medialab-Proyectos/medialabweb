@@ -78,7 +78,11 @@ export default async function RadarArticlePage({
 
   const status = resolveRuntimeStatus(article)
   const isPreview = status === "previa"
-  const phases = resolveMatchPhases(article, status)
+  // Partido finalizado pero SIN marcador confirmado: el análisis aún no está listo, así
+  // que solo se habilita "Antes" (no Durante/Predicción con datos derivados/vacíos).
+  const analysisPending = status === "finalizado" && !article.matchScore
+  const resolvedPhases = resolveMatchPhases(article, status)
+  const phases = analysisPending ? { expectativa: resolvedPhases.expectativa } : resolvedPhases
   const availablePhases = (["expectativa", "realidad", "percepcion"] as const).filter(
     (k) => phases[k],
   ) as RadarViewMode[]
@@ -99,7 +103,7 @@ export default async function RadarArticlePage({
         title: a.seoTitle,
         teams: a.teams.join(" vs "),
         image: a.imageUrl || pickDefaultImage(a.slug),
-        badge: s === "previa" ? "Previa" : s === "en_vivo" ? "En vivo" : "Finalizado",
+        badge: s === "previa" ? "Previa analizada" : s === "en_vivo" ? "Analizando" : "Fin analizado",
       }
     })
 
@@ -138,13 +142,13 @@ export default async function RadarArticlePage({
 
         {/* Foto del encuentro (imagen visible, antes del marcador). Alto reducido y foco
             superior para no cortar la cabeza de los jugadores en imágenes aleatorias. */}
-        <figure className="mt-5 overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
-          <div className="relative h-40 md:h-56">
+        <figure className="mt-5 overflow-hidden rounded-2xl border border-border bg-muted shadow-sm">
+          <div className="relative h-48 bg-muted md:h-64">
             <NoteImage
               src={article.imageUrl}
               seed={article.slug}
               alt={article.imageAlt || `${article.teams.join(" vs ")} — ${article.seoTitle}`}
-              className="h-full w-full object-cover object-top"
+              className="h-full w-full object-contain"
               loading="eager"
             />
             <StatusPill status={status} className="absolute left-3 top-3 z-10" />

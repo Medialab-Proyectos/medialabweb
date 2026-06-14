@@ -127,6 +127,13 @@ export interface RadarArticle {
   updateState?: "ready" | "updating"
 
   /**
+   * Marcador de calendario SIN análisis real todavía: el partido se muestra en el
+   * listado (para no perder el calendario), pero la nota NO se abre. Mejor no abrir una
+   * nota vacía: cuando el equipo/agente la analiza, deja de ser placeholder.
+   */
+  placeholder?: boolean
+
+  /**
    * Marcas de idempotencia del agente: ISO del momento en que se completó el análisis
    * de CADA fase. Si una fase ya tiene marca, el agente NO la vuelve a analizar (solo
    * procesa previas y finales aún sin completar). Independiente de `matchState`, que

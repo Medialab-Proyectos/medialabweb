@@ -148,7 +148,7 @@ function NoteCard({ article: a }: { article: RadarArticle }) {
           alt={a.seoTitle}
           className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
         />
-        <StatusPill status={resolveMatchStatus(a)} className="absolute right-3 top-3" />
+        <StatusPill status={resolveMatchStatus(a)} placeholder={a.placeholder} className="absolute right-3 top-3" />
       </div>
       <div className="flex flex-1 flex-col p-4">
         <h3 className="text-sm font-bold leading-snug group-hover:text-[var(--cyan)]">{a.seoTitle}</h3>
@@ -164,10 +164,16 @@ function NoteCard({ article: a }: { article: RadarArticle }) {
           </span>
         ) : (
           <span className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-muted-foreground">
-            {availability.reason === "updating" ? <RefreshCw size={13} /> : <Clock3 size={13} />}
+            {availability.reason === "updating" || availability.reason === "preparing" ? (
+              <RefreshCw size={13} />
+            ) : (
+              <Clock3 size={13} />
+            )}
             {availability.reason === "updating"
               ? t("Nota en actualización", "Note being updated")
-              : t(`Disponible ${availableLabel}`, `Available ${availableLabel}`)}
+              : availability.reason === "preparing"
+                ? t("Análisis en preparación", "Analysis in preparation")
+                : t(`Disponible ${availableLabel}`, `Available ${availableLabel}`)}
           </span>
         )}
       </div>

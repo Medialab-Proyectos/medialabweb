@@ -10,7 +10,19 @@ import {
   ResponsiveContainer,
   Tooltip as ChartTooltip,
 } from "recharts"
-import { Brain, Gauge, Info, Target, Zap } from "lucide-react"
+import {
+  Activity,
+  Brain,
+  Frown,
+  Gauge,
+  HelpCircle,
+  Info,
+  PartyPopper,
+  ShieldCheck,
+  Sparkles,
+  Target,
+  Zap,
+} from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import type { EmotionalRadarValues } from "@/src/lib/experience-radar/articles"
@@ -43,36 +55,42 @@ const AXES = [
     key: "euforia",
     es: "Euforia",
     en: "Euphoria",
+    icon: PartyPopper,
     help: "Señales de celebración, orgullo, pertenencia y ganas de amplificar el momento.",
   },
   {
     key: "confianza",
     es: "Confianza",
     en: "Trust",
+    icon: ShieldCheck,
     help: "Qué tan claro y estable se siente el relato para las hinchadas.",
   },
   {
     key: "ansiedad",
     es: "Ansiedad",
     en: "Anxiety",
+    icon: Activity,
     help: "Necesidad de confirmar qué está pasando: reglas, repeticiones, horarios, decisiones o contexto.",
   },
   {
     key: "frustracion",
     es: "Frustración",
     en: "Frustration",
+    icon: Frown,
     help: "Molestia por expectativa incumplida, ambigüedad, rendimiento o decisiones discutidas.",
   },
   {
     key: "incertidumbre",
     es: "Incertidumbre",
     en: "Uncertainty",
+    icon: HelpCircle,
     help: "Cuánto le falta a la audiencia para construir una explicación estable del partido.",
   },
   {
     key: "optimismo",
     es: "Optimismo",
     en: "Optimism",
+    icon: Sparkles,
     help: "Cómo se proyecta lo que viene: continuidad, mejora, revancha o prudencia.",
   },
 ] as const
@@ -155,38 +173,39 @@ function interpretAxis(axis: AxisKey, value: number, phase: RadarViewMode, match
 
   const why: Record<AxisKey, Record<"alta" | "media" | "baja", string>> = {
     euforia: {
-      alta: "la conversación se llenó de celebración, orgullo y ganas de compartir el momento.",
-      media: "hubo alegría, pero mezclada con dudas o cautela.",
-      baja: "casi no hubo celebración: la conversación fue más de bronca o tristeza.",
+      alta: "explotó la celebración: oleada de publicaciones, emojis y videos compartidos.",
+      media: "hubo festejo, pero medido y mezclado con cautela.",
+      baja: "casi no se celebró: predominaron mensajes de bronca o el silencio.",
     },
     confianza: {
-      alta: "la hinchada tenía un relato claro y se sentía segura de su equipo.",
-      media: "el relato existía, pero podía quebrarse en cualquier jugada.",
-      baja: "pesaron las dudas y la búsqueda de explicaciones antes de opinar.",
+      alta: "la hinchada defendía un relato claro y respondía segura a las críticas.",
+      media: "el relato se sostenía, pero temblaba con cada jugada.",
+      baja: "muchas dudas: la gente buscaba explicaciones antes de opinar.",
     },
     ansiedad: {
-      alta: "muchas dudas y necesidad de confirmar qué estaba pasando, jugada a jugada.",
-      media: "hubo tensión, sin llegar a dominar toda la experiencia.",
-      baja: "poca urgencia: la hinchada vivió el momento con relativa calma.",
+      alta: "consultas en vivo constantes: «¿cómo va?», repeticiones y verificación jugada a jugada.",
+      media: "tensión presente, sin tomarse toda la conversación.",
+      baja: "se siguió el partido con calma, sin urgencia por confirmar.",
     },
     frustracion: {
-      alta: "el foco se fue hacia lo que salió mal, confundió o se sintió injusto.",
-      media: "hubo molestia, pero convivió con otras lecturas.",
-      baja: "poca molestia: quedó espacio para una lectura tranquila.",
+      alta: "la conversación se cargó de quejas por lo que salió mal o pareció injusto.",
+      media: "molestia puntual, mezclada con otras lecturas.",
+      baja: "pocas quejas; el tono general fue tranquilo.",
     },
     incertidumbre: {
-      alta: "faltaba una explicación que la mayoría pudiera aceptar.",
-      media: "quedaron preguntas abiertas, aunque el relato principal se entendía.",
-      baja: "la hinchada cerró una lectura estable de lo ocurrido.",
+      alta: "nadie cerraba una explicación común: relatos en disputa.",
+      media: "quedaban dudas, aunque el relato principal se entendía.",
+      baja: "lectura ya estable y compartida de lo ocurrido.",
     },
     optimismo: {
-      alta: "la conversación miró hacia adelante con ilusión y revancha.",
-      media: "hubo expectativa, pero prudente y condicionada.",
-      baja: "lo que viene se miró con desánimo o mucha cautela.",
+      alta: "la conversación miró al próximo partido con ilusión y revancha.",
+      media: "expectativa prudente, condicionada a lo que venga.",
+      baja: "lo que viene se miró con desánimo o resignación.",
     },
   }
 
-  return `En ${matchLabel}, ${AXIS_NOUN[axis]} fue ${level} (${value}/100) ${moment}: ${why[axis][level]}`
+  const noun = `${AXIS_NOUN[axis][0].toUpperCase()}${AXIS_NOUN[axis].slice(1)}`
+  return `${noun} fue ${level} ${moment}: ${why[axis][level]}`
 }
 
 export function MatchPhaseRadar({
@@ -415,6 +434,7 @@ export function MatchPhaseRadar({
                 >
                   <div className="flex items-center justify-between gap-3">
                     <p className="flex items-center gap-1.5 text-sm font-semibold">
+                      <axis.icon size={15} style={{ color: activePhase.color }} className="shrink-0" />
                       {t(axis.es, axis.en)}
                       <Tooltip>
                         <TooltipTrigger asChild>

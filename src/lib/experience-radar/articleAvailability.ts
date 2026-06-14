@@ -55,7 +55,7 @@ export interface ArticleAvailability {
   visible: boolean
   accessible: boolean
   availableAt?: string
-  reason?: "scheduled" | "updating"
+  reason?: "scheduled" | "updating" | "preparing"
 }
 
 /**
@@ -69,6 +69,11 @@ export function getArticleAvailability(
 ): ArticleAvailability {
   if (article.updateState === "updating") {
     return { visible: false, accessible: false, reason: "updating" }
+  }
+
+  // Placeholder de calendario: el partido se MUESTRA, pero la nota no se abre (sin datos).
+  if (article.placeholder) {
+    return { visible: true, accessible: false, reason: "preparing" }
   }
 
   if (!article.kickoffAt) return { visible: false, accessible: false }
