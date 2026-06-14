@@ -48,9 +48,23 @@ PASOS:
    - humanBehavior, cognitiveBiases[], emotionalReaction, digitalPatterns.
    - productApplications[], fanPulse {concerns, emotions, frustrations, enthusiasm}.
    - sources[] con name, url y kind reales (las que de verdad consultaste).
-   - imageUrl/imageCredit/imageSourceUrl SOLO si la imagen es real y enlazable de un medio
-     reconocido. Si no hay, NO pongas imageUrl: el sistema usa el respaldo (imagen de
-     anfitrión para México/EE. UU./Canadá si juegan; si no, una del pool aleatorio).
+   - IMÁGENES: antes de tocar una nota, revisa su `imageUrl`, `imageCredit` e
+     `imageSourceUrl` actuales. Si ya tiene una imagen aprobada, CONSÉRVALA exactamente:
+     actualizar el análisis, marcador o fuentes NUNCA autoriza cambiar la foto.
+   - Solo busca imagen cuando la nota NO tenga una. Usa una fotografía real del partido
+     procedente de una fuente autorizada (por ejemplo Win Sports o Latingoles), verifica
+     visualmente que corresponda a los equipos y descarga una copia en
+     `public/images/experience-radar/mundial-2026/`. `imageUrl` debe apuntar a la ruta local
+     `/images/experience-radar/mundial-2026/<slug-corto>.jpg`; conserva el crédito y la URL
+     de la noticia original en `imageCredit` e `imageSourceUrl`.
+   - NO uses hotlink como `imageUrl`: una URL externa puede responder 409/403 o bloquearse
+     por referer y hacer que aparezca el respaldo aunque la foto exista. Comprueba que el
+     archivo descargado sea una imagen válida, no HTML, y que tenga tamaño/dimensiones
+     razonables. Si no consigues una foto verificable, deja `imageUrl` vacío; el sistema
+     escogerá un respaldo local estable según el slug.
+   - Las imágenes declaradas en `RADAR_ARTICLE_SEED` quedan bloqueadas por slug mediante
+     `LOCKED_SEED_IMAGES`. No elimines ese bloqueo ni permitas que el store, el scraping,
+     X, Reddit, Latingoles o una ejecución posterior del generador las sobrescriban.
 
 4) ELIMINACIÓN: si una selección de la nota ya quedó fuera del Mundial (sin más partidos),
    agrega su nombre a eliminatedTeams en esa nota, para que NO se habilite el pronóstico.
@@ -61,16 +75,38 @@ CUMPLIMIENTO (obligatorio):
    - El pronóstico es lectura de ánimo colectivo, NO predicción de marcador ni cuota.
    - Corrige cualquier dato fabricado que encuentres por uno verificado.
 
-AL TERMINAR: corre `npx tsc --noEmit`, dime qué partidos actualizaste, el marcador
-verificado de cada uno y las fuentes que usaste.
+AL TERMINAR:
+   - Corre `npx tsc --noEmit` y `npm run build`.
+   - Verifica que cada ruta local de imagen responda HTTP 200 y `Content-Type: image/*`.
+   - Comprueba en el HTML de `/experience-radar/mundial-2026` que cada partido conserve su
+     ruta local y que la imagen real NO tenga `opacity-0`. El componente `NoteImage` debe
+     mostrar la imagen real inmediatamente y usar el fallback solo después de `onError`.
+   - Si publicas cambios, confirma que producción ya entrega las rutas locales antes de
+     decir que terminó. Incógnito no corrige un cambio que todavía no fue desplegado.
+   - Dime qué partidos actualizaste, el marcador verificado, las fuentes usadas y cuáles
+     imágenes nuevas agregaste o cuáles preservaste sin cambios.
 ```
 
 ---
 
 ## Notas de implementación (referencia rápida)
 
-- **Imágenes de anfitrión**: `radar-uxschool-futbol-mexico/usa/canada.png` se usan solo en
-  partidos de ese equipo y solo como respaldo (no están en el pool aleatorio).
+- **Imágenes editoriales fijas**: las fotos aprobadas viven en
+  `public/images/experience-radar/mundial-2026/` y se referencian desde
+  `src/lib/experience-radar/articleData.ts`. Actualmente están fijadas las de México vs
+  Sudáfrica, Corea del Sur vs Chequia, Estados Unidos vs Paraguay, Canadá vs Bosnia y los
+  cuatro partidos del sábado 13: Catar vs Suiza, Brasil vs Marruecos, Haití vs Escocia y
+  Australia vs Turquía.
+- **Respaldo sin imagen**: `pickMatchImage(seed)` elige una imagen local del pool de forma
+  estable. Solo se usa cuando la nota no tiene foto o cuando el navegador dispara
+  `onError`; nunca debe reemplazar preventivamente una imagen aprobada.
+- **Protección al actualizar**: `generateArticles.ts` toma la imagen exclusivamente de la
+  ficha existente del partido; `articleStore.ts` preserva la imagen anterior cuando una
+  actualización llega sin imagen; `getAllRadarArticles()` reaplica la imagen bloqueada del
+  seed por slug para neutralizar datos antiguos o incompletos guardados en KV/`.data`.
+- **Render de imagen**: `components/experience-radar/note-image.tsx` no debe ocultar la
+  imagen real esperando hidratación. No restaures la lógica `opacity-0` + `onLoad`, porque
+  una imagen en caché puede cargar antes de hidratar React y quedar invisible para siempre.
 - **Estados de la nota**: `previa` no es accesible hasta que el partido pasa a en vivo /
   finalizado. El marcador hace que se trate como finalizado aunque el agente no lo marque.
 - **userExperience**: se llena dentro de cada equipo en `teamsData` del `finishedMatch(...)`.
@@ -85,8 +121,19 @@ verificado de cada uno y las fuentes que usaste.
 ## Notificaciones push (Web Push)
 
 El usuario puede activar avisos de "nuevo análisis" en su dispositivo (botón en la página
-del especial). Llega aunque el sitio esté cerrado. El envío es **manual** (igual que las
-actualizaciones).
+del especial). Llega aunque el sitio esté cerrado. Hay **dos formas de enviar**:
+
+- **Automático al publicar** (lo normal): cada vez que corre el agente
+  (`/api/experience-radar/run`), al terminar avisa de las notas que recién quedaron
+  accesibles (en vivo/finalizado) y no se habían notificado antes. 1 nota → push con su
+  título y enlace a la nota; ≥2 notas → un solo push "Hay N análisis nuevos" al índice
+  (evita spam). Lleva el control de slugs ya notificados en KV/`.data`, así que no
+  repite. Best-effort: si falla el push, NO rompe la corrida del agente.
+- **Manual** (puntual): el `curl` de abajo, por si quieres mandar un aviso a la medida.
+
+> Apple/iPhone: el push web solo funciona si el usuario añadió el sitio a la pantalla de
+> inicio (PWA, iOS 16.4+); en una pestaña normal de Safari el opt-in no aparece. En
+> Android/Chrome funciona en pestaña normal.
 
 ### 1. Generar claves VAPID (una sola vez)
 ```bash
@@ -106,7 +153,8 @@ CRON_SECRET=<tu secreto>                                # ya debería existir
 > suscripciones en producción hace falta **Vercel KV** (`KV_REST_API_URL`,
 > `KV_REST_API_TOKEN`); sin KV solo se guardan en `.data` local (efímero en Vercel).
 
-### 3. Enviar el push después de actualizar las notas
+### 3. Enviar un push MANUAL (opcional)
+El automático ya cubre el caso normal; usa esto solo para un aviso a la medida.
 ```bash
 curl -X POST "https://medialab.design/api/experience-radar/push/send" \
   -H "Authorization: Bearer $CRON_SECRET" \
@@ -114,10 +162,15 @@ curl -X POST "https://medialab.design/api/experience-radar/push/send" \
   -d '{"title":"Nuevo análisis del Mundial","body":"Ya está el de <partido>","url":"/experience-radar/mundial-2026/<slug>"}'
 ```
 Responde `{ ok, sent, failed, total }`. Las suscripciones caducadas (404/410) se limpian solas.
+Nota: el manual NO marca slugs como notificados, así que un push manual sobre una nota que
+luego se publique podría sumarse al automático.
 
 ### Archivos
 - `public/sw.js` — service worker (push + clic).
 - `components/experience-radar/push-optin.tsx` — opt-in (valida si ya está activo).
 - `src/lib/experience-radar/pushStore.ts` — guarda suscripciones (KV/.data).
+- `src/lib/experience-radar/pushSend.ts` — envío reutilizable (`sendRadarPush`), compartido por el manual y el automático.
+- `src/lib/experience-radar/notifyPublishedArticles.ts` — envío AUTOMÁTICO al publicar (`notifyNewlyPublishedArticles`); control de slugs notificados.
 - `app/api/experience-radar/push/subscribe/route.ts` — alta/baja (POST/DELETE).
-- `app/api/experience-radar/push/send/route.ts` — envío seguro (POST + Bearer CRON_SECRET).
+- `app/api/experience-radar/push/send/route.ts` — envío manual (POST + Bearer CRON_SECRET).
+- `app/api/experience-radar/run/route.ts` — agente diario; dispara el push automático al terminar.
