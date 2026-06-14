@@ -8,9 +8,9 @@ export type MatchStatus = "previa" | "en_vivo" | "finalizado"
 // Etiquetas de ANÁLISIS (no de resultado), cortas: "Previa en análisis" / "Partido
 // analizado". Estilo glass (translúcido + blur) para que se vea la imagen por detrás.
 const MAP: Record<MatchStatus, { label: string; cls: string }> = {
-  previa: { label: "Previa en análisis", cls: "bg-[#F59E0B]/85 text-black backdrop-blur-md" },
-  en_vivo: { label: "En vivo", cls: "bg-[var(--magenta)]/85 text-[#fff] backdrop-blur-md" },
-  finalizado: { label: "Partido analizado", cls: "bg-[var(--cyan)]/85 text-black backdrop-blur-md" },
+  previa: { label: "Previa en análisis", cls: "bg-[#F59E0B]/70 text-black backdrop-blur-md" },
+  en_vivo: { label: "En vivo", cls: "bg-[var(--magenta)]/70 text-[#fff] backdrop-blur-md" },
+  finalizado: { label: "Partido analizado", cls: "bg-[var(--cyan)]/70 text-black backdrop-blur-md" },
 }
 
 export function StatusPill({
@@ -24,11 +24,11 @@ export function StatusPill({
   className?: string
 }) {
   const s = placeholder
-    ? { label: "Próximamente", cls: "bg-black/40 text-white backdrop-blur-md" }
+    ? { label: "Próximamente", cls: "bg-black/35 text-white backdrop-blur-md" }
     : MAP[status ?? "finalizado"] ?? MAP.finalizado
   return (
     <span
-      className={`inline-flex items-center rounded-full border border-white/25 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide shadow-md ${s.cls} ${className}`}
+      className={`inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide shadow-sm ${s.cls} ${className}`}
     >
       {s.label}
     </span>

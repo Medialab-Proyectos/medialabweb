@@ -123,7 +123,7 @@ export default async function RadarArticlePage({
       }
 
   return (
-    <RadarPhaseProvider available={availablePhases}>
+    <RadarPhaseProvider available={availablePhases} teams={article.teams}>
     <main className="min-h-screen bg-background text-foreground">
       <Navbar />
       <RadarPhaseBar shareTitle={article.seoTitle} />
@@ -293,6 +293,26 @@ function resolveMatchPhases(article: RadarArticle, status: MatchRuntimeStatus): 
   return { expectativa, realidad, percepcion: projectPerception(realidad) }
 }
 
+/** Rival de la jornada 2 por selección (fixture verificado FIFA/ESPN), para el pronóstico. */
+const NEXT_OPPONENT: Record<string, string> = {
+  "México": "Corea del Sur",
+  "Corea del Sur": "México",
+  "Sudáfrica": "Chequia",
+  "Chequia": "Sudáfrica",
+  "Canadá": "Catar",
+  "Catar": "Canadá",
+  "Suiza": "Bosnia y Herzegovina",
+  "Bosnia y Herzegovina": "Suiza",
+  "Estados Unidos": "Australia",
+  "Australia": "Estados Unidos",
+  "Escocia": "Marruecos",
+  "Marruecos": "Escocia",
+  "Brasil": "Haití",
+  "Haití": "Brasil",
+  "Turquía": "Paraguay",
+  "Paraguay": "Turquía",
+}
+
 /**
  * Radar por hinchada para el filtro de banderas. Si la nota trae `teamRadars` (lo
  * puebla el agente), lo usa; si no, deriva la lectura de cada hinchada del radar
@@ -301,20 +321,21 @@ function resolveMatchPhases(article: RadarArticle, status: MatchRuntimeStatus): 
  */
 function resolveTeamPhases(article: RadarArticle, phases: MatchPhases): TeamPhaseRadar[] {
   return article.teams.map((team) => {
+    const nextOpponent = NEXT_OPPONENT[team]
     const tr = article.teamRadars?.find((x) => x.team === team)
     if (tr) {
       const realidad = tr.current.emotional
       const built: MatchPhases = { expectativa: projectExpectation(realidad) }
       if (phases.realidad) built.realidad = realidad
       if (phases.percepcion) built.percepcion = tr.predicted.emotional
-      return { team, phases: built }
+      return { team, phases: built, nextOpponent }
     }
     const collective = article.collectiveByTeam?.find((c) => c.team === team)
     const lean = teamLean(team, `${collective?.mood ?? ""} ${collective?.behaviorEffect ?? ""}`)
     const built: MatchPhases = { expectativa: leanEmotional(phases.expectativa, lean) }
     if (phases.realidad) built.realidad = leanEmotional(phases.realidad, lean)
     if (phases.percepcion) built.percepcion = leanEmotional(phases.percepcion, lean)
-    return { team, phases: built }
+    return { team, phases: built, nextOpponent }
   })
 }
 

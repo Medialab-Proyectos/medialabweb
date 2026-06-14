@@ -39,6 +39,8 @@ export interface MatchPhases {
 export interface TeamPhaseRadar {
   team: string
   phases: MatchPhases
+  /** Rival del próximo partido de esta selección (para la predicción del hincha). */
+  nextOpponent?: string
 }
 
 export type RadarViewMode = "expectativa" | "realidad" | "percepcion"
@@ -233,10 +235,12 @@ export function MatchPhaseRadar({
   const phaseCtx = useRadarPhase()
   const viewMode: RadarViewMode = phaseCtx?.phase ?? "expectativa"
 
-  // Filtro de banderas: por defecto la primera hinchada. Al tocar una bandera, el radar
-  // muestra la lectura de ESA hinchada (cae a la combinada si falta su dato).
+  // Filtro de banderas: la hinchada seleccionada se comparte con el journey vía contexto;
+  // sin contexto (otras páginas) usa estado local. Por defecto, la primera hinchada.
   const teamOptions = teamPhases ?? []
-  const [teamFilter, setTeamFilter] = useState<string | null>(teamOptions[0]?.team ?? null)
+  const [localTeam, setLocalTeam] = useState<string | null>(teamOptions[0]?.team ?? null)
+  const teamFilter = phaseCtx ? phaseCtx.team : localTeam
+  const setTeamFilter = phaseCtx ? phaseCtx.setTeam : setLocalTeam
   const activePhases = useMemo<MatchPhases>(() => {
     if (!teamFilter) return phases
     const tp = teamOptions.find((t) => t.team === teamFilter)?.phases

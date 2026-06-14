@@ -18,6 +18,7 @@ import {
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel"
 import type { EmotionalRadarValues } from "@/src/lib/experience-radar/articles"
 import { TeamFlag } from "./team-flag"
+import { useRadarPhase } from "./radar-phase-context"
 import {
   MatchPhaseRadar,
   type MatchPhases,
@@ -162,8 +163,8 @@ export function MatchNote({
         {/* Mensaje de apoyo como nota al pie, en letra pequeña. */}
         <p className="mt-4 text-xs italic leading-relaxed text-muted-foreground/80">{fanSectionIntro}</p>
 
-        {/* Journey emocional del hincha: se completa al cambiar de fase en la barra. */}
-        <FanJourney phases={phases} current={phase} />
+        {/* Journey emocional del hincha: comparte país y fase con el radar. */}
+        <FanJourney teamPhases={teamPhases} combined={phases} />
       </section>
 
       {/* Lo que hemos aprendido — bajo "cómo llegan las hinchadas", sin caja contenedora. */}
@@ -380,14 +381,57 @@ const PRED_CLASS: Record<"Gana" | "Empata" | "Pierde", string> = {
   Pierde: "bg-[#DC2626]/15 text-[#DC2626]",
 }
 
-function FanJourney({ phases, current }: { phases: MatchPhases; current: RadarViewMode }) {
-  const currentIdx = JOURNEY_STEPS.findIndex((s) => s.key === current)
+/** Color de cada fase, igual que en el radar (antes / durante / predicción). */
+const PHASE_COLOR: Record<RadarViewMode, string> = {
+  expectativa: "#14B8A6",
+  realidad: "#F97316",
+  percepcion: "#8B5CF6",
+}
+
+function FanJourney({ teamPhases, combined }: { teamPhases?: TeamPhaseRadar[]; combined: MatchPhases }) {
+  const ctx = useRadarPhase()
+  const [showPred, setShowPred] = useState(false)
+
+  const current: RadarViewMode = ctx?.phase ?? "expectativa"
+  const teams = ctx?.teams ?? teamPhases?.map((t) => t.team) ?? []
+  const selectedTeam = ctx?.team ?? teamPhases?.[0]?.team ?? null
+  const selected = selectedTeam ? teamPhases?.find((t) => t.team === selectedTeam) : undefined
+  const phases = selected?.phases ?? combined
+  const opponent = selected?.nextOpponent
   const prediction = fanPrediction(phases.percepcion)
+  const currentIdx = JOURNEY_STEPS.findIndex((s) => s.key === current)
+
   return (
     <div className="mt-6 rounded-2xl border border-border bg-card p-4 shadow-sm dark:border-white/12">
-      <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-muted-foreground">
-        <Route size={14} className="text-[var(--cyan)]" /> Journey emocional del hincha
-      </p>
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-muted-foreground">
+          <Route size={14} className="text-[var(--cyan)]" /> Journey emocional del hincha
+        </p>
+        {/* Selector de país (compartido con el radar): el journey muestra esa hinchada. */}
+        {ctx && teams.length > 1 && (
+          <div className="flex items-center gap-2">
+            {teams.map((team) => {
+              const active = selectedTeam === team
+              return (
+                <button
+                  key={team}
+                  type="button"
+                  onClick={() => ctx.setTeam(team)}
+                  aria-pressed={active}
+                  aria-label={team}
+                  title={team}
+                  className={`inline-flex items-center justify-center rounded-full p-0.5 transition-all ${
+                    active ? "scale-110 ring-2 ring-[var(--cyan)]" : "opacity-55 grayscale hover:opacity-100 hover:grayscale-0"
+                  }`}
+                >
+                  <TeamFlag team={team} circle />
+                </button>
+              )
+            })}
+          </div>
+        )}
+      </div>
+
       <div className="mt-3 grid grid-cols-3 gap-2">
         {JOURNEY_STEPS.map((step, i) => {
           const phaseV = phases[step.key]
@@ -395,31 +439,39 @@ function FanJourney({ phases, current }: { phases: MatchPhases; current: RadarVi
           const isCurrent = step.key === current
           const reached = i <= currentIdx && !!phaseV
           const isPrediction = step.key === "percepcion"
+          const color = PHASE_COLOR[step.key]
           const Icon = isPrediction ? Sparkles : moodFace(phaseV)
           return (
             <div
               key={step.key}
-              className={`rounded-xl border p-3 text-center transition-colors ${
-                isCurrent
-                  ? "border-[var(--cyan)] bg-[var(--cyan)]/[0.06]"
-                  : reached
-                    ? "border-[var(--cyan)]/30"
-                    : "border-border/60 opacity-70"
-              }`}
+              className="rounded-xl border border-border/60 p-3 text-center transition-colors"
+              style={{
+                borderColor: isCurrent ? color : reached ? `${color}66` : undefined,
+                backgroundColor: isCurrent ? `${color}14` : undefined,
+              }}
             >
               <span
-                className={`mx-auto flex h-7 w-7 items-center justify-center rounded-full ${
-                  reached ? "bg-[var(--cyan)] text-white" : "bg-muted text-muted-foreground"
-                }`}
+                className="mx-auto flex h-7 w-7 items-center justify-center rounded-full"
+                style={{ backgroundColor: reached ? color : "var(--muted)", color: reached ? "#fff" : "var(--muted-foreground)" }}
               >
                 <Icon size={16} />
               </span>
               <p className="mt-1.5 text-[11px] font-semibold">{step.label}</p>
               {isPrediction ? (
-                prediction && phaseV ? (
-                  <span className={`mt-1 inline-block rounded-full px-2 py-0.5 text-[11px] font-bold ${PRED_CLASS[prediction.label]}`}>
-                    {prediction.label} {prediction.pct}%
-                  </span>
+                phaseV && prediction ? (
+                  showPred ? (
+                    <span className={`mt-1 inline-block rounded-full px-2 py-0.5 text-[11px] font-bold ${PRED_CLASS[prediction.label]}`}>
+                      {prediction.label} {prediction.pct}%
+                    </span>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => setShowPred(true)}
+                      className="mt-1 inline-block rounded-full border border-border px-2 py-0.5 text-[11px] font-semibold text-[var(--cyan)] transition-colors hover:bg-[var(--cyan)]/10"
+                    >
+                      Ver pronóstico
+                    </button>
+                  )
                 ) : (
                   <p className="mt-0.5 text-[11px] text-muted-foreground/60">—</p>
                 )
@@ -434,9 +486,18 @@ function FanJourney({ phases, current }: { phases: MatchPhases; current: RadarVi
           )
         })}
       </div>
-      <p className="mt-3 text-[11px] italic leading-relaxed text-muted-foreground/80">
-        La predicción del hincha (gana/empata/pierde) sale del ánimo colectivo para el próximo partido, no de una cuota. Cambia de fase en la barra inferior para completar el recorrido.
-      </p>
+
+      {showPred && prediction && phases.percepcion ? (
+        <p className="mt-3 text-[11px] leading-relaxed text-muted-foreground">
+          Pronóstico del hincha{selectedTeam ? ` de ${selectedTeam}` : ""} para su próximo partido
+          {opponent ? <> (vs <strong className="text-foreground">{opponent}</strong>)</> : ""}:{" "}
+          <strong className="text-foreground">{prediction.label} {prediction.pct}%</strong>. Sale del ánimo colectivo, no de una cuota.
+        </p>
+      ) : (
+        <p className="mt-3 text-[11px] italic leading-relaxed text-muted-foreground/80">
+          Toca una bandera para ver el recorrido de esa hinchada y «Ver pronóstico» para su predicción del próximo partido.
+        </p>
+      )}
     </div>
   )
 }
