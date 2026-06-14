@@ -15,8 +15,30 @@ function dayKey(value: Date): string {
   return new Intl.DateTimeFormat("en-CA").format(value)
 }
 
+/** Marca temporal para ordenar dentro del día: hora del partido, o mediodía del día. */
+function recencyTime(a: RadarArticle): number {
+  return new Date(a.kickoffAt || `${a.date}T12:00:00`).getTime()
+}
+
+/**
+ * Orden DENTRO de un día: primero los analizados (finalizados, el más reciente primero),
+ * luego los que están en vivo y al final los próximos (el más cercano primero). Así la
+ * nota recién evaluada encabeza su fila, y debajo siguen los partidos que vienen.
+ */
+function compareWithinDay(a: RadarArticle, b: RadarArticle): number {
+  const tier = (x: RadarArticle) => {
+    const s = resolveMatchStatus(x)
+    return s === "finalizado" ? 0 : s === "en_vivo" ? 1 : 2
+  }
+  const ta = tier(a)
+  const tb = tier(b)
+  if (ta !== tb) return ta - tb
+  // Próximos: el más cercano primero (asc). Analizados / en vivo: el más reciente primero (desc).
+  return ta === 2 ? recencyTime(a) - recencyTime(b) : recencyTime(b) - recencyTime(a)
+}
+
 /** Agrupa por día (date), días de más reciente a más antiguo; dentro del día:
- *  en vivo → próximos → finalizados (vía compareForFeed). */
+ *  analizados → en vivo → próximos (vía compareWithinDay). */
 function groupByDay(articles: RadarArticle[]): Array<{ date: string; items: RadarArticle[] }> {
   const map = new Map<string, RadarArticle[]>()
   for (const a of articles) {
@@ -27,7 +49,7 @@ function groupByDay(articles: RadarArticle[]): Array<{ date: string; items: Rada
   }
   return [...map.entries()]
     .sort(([d1], [d2]) => d2.localeCompare(d1))
-    .map(([date, items]) => ({ date, items: [...items].sort((a, b) => compareForFeed(a, b)) }))
+    .map(([date, items]) => ({ date, items: [...items].sort(compareWithinDay) }))
 }
 
 /**
