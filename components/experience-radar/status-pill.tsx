@@ -6,11 +6,12 @@
 export type MatchStatus = "previa" | "en_vivo" | "finalizado"
 
 // Etiquetas de ANÁLISIS (no de resultado), cortas: "Previa en análisis" / "Partido
-// analizado". Estilo glass (translúcido + blur) para que se vea la imagen por detrás.
+// analizado". Estilo glass (más translúcido + blur, sin bordes) para que se vea bien
+// la imagen por detrás y la cápsula no pese sobre la foto.
 const MAP: Record<MatchStatus, { label: string; cls: string }> = {
-  previa: { label: "Previa en análisis", cls: "bg-[#F59E0B]/70 text-black backdrop-blur-md" },
-  en_vivo: { label: "En vivo", cls: "bg-[var(--magenta)]/70 text-[#fff] backdrop-blur-md" },
-  finalizado: { label: "Partido analizado", cls: "bg-[var(--cyan)]/70 text-black backdrop-blur-md" },
+  previa: { label: "Previa en análisis", cls: "bg-[#F59E0B]/40 text-black backdrop-blur-md" },
+  en_vivo: { label: "En vivo", cls: "bg-[var(--magenta)]/40 text-[#fff] backdrop-blur-md" },
+  finalizado: { label: "Partido analizado", cls: "bg-[var(--cyan)]/40 text-black backdrop-blur-md" },
 }
 
 export function StatusPill({

@@ -10,7 +10,6 @@ import {
   Route,
   Smartphone,
   Smile,
-  Sparkles,
   Trophy,
   Users,
   type LucideIcon,
@@ -163,7 +162,7 @@ export function MatchNote({
         {/* Mensaje de apoyo como nota al pie, en letra pequeña. */}
         <p className="mt-4 text-xs italic leading-relaxed text-muted-foreground/80">{fanSectionIntro}</p>
 
-        {/* Journey emocional del hincha: comparte país y fase con el radar. */}
+        {/* Ruta emocional del hincha: comparte país y fase con el radar. */}
         <FanJourney teamPhases={teamPhases} combined={phases} />
       </section>
 
@@ -313,14 +312,14 @@ function FanApproachCard({ team, phase }: { team: TeamApproachData; phase: Radar
  */
 const UX_BEHAVIOR: Record<RadarViewMode, string> = {
   expectativa:
-    "Segunda pantalla activa y móvil primero: buscan horario, alineación y dónde ver. Pico de notificaciones y multitarea entre apps.",
+    "Casi todo se vive desde el celular y muchos lo combinan con la tele: buscan a qué hora juega, la alineación y dónde verlo, saltando entre varias apps.",
   realidad:
-    "En el gol escriben a medias por la euforia (texto cortado, mayúsculas, emojis); molestan los anuncios que tapan la pantalla en móvil y aparecen gestos de zoom para revisar la jugada.",
+    "En el gol escriben rápido y a medias por la euforia (texto cortado, mayúsculas, emojis), molestan los anuncios que tapan la pantalla en el celular y se repite la jugada para revisarla.",
   percepcion:
-    "Circulan clips y memes, vuelven a la repetición y la conversación migra a hilos y stories; la opinión se enfría y se ordena.",
+    "Circulan clips y memes, se vuelve a ver la repetición y la conversación pasa a comentarios e historias; la opinión se enfría y se ordena.",
 }
 
-/* ── Journey emocional del hincha (Antes · Durante · Predicción) ── */
+/* ── Ruta emocional del hincha (Antes · Durante · Predicción) ── */
 
 const EMOTION_LABEL: Record<keyof EmotionalRadarValues, string> = {
   euforia: "Euforia",
@@ -390,7 +389,6 @@ const PHASE_COLOR: Record<RadarViewMode, string> = {
 
 function FanJourney({ teamPhases, combined }: { teamPhases?: TeamPhaseRadar[]; combined: MatchPhases }) {
   const ctx = useRadarPhase()
-  const [showPred, setShowPred] = useState(false)
 
   const current: RadarViewMode = ctx?.phase ?? "expectativa"
   const teams = ctx?.teams ?? teamPhases?.map((t) => t.team) ?? []
@@ -400,37 +398,38 @@ function FanJourney({ teamPhases, combined }: { teamPhases?: TeamPhaseRadar[]; c
   const opponent = selected?.nextOpponent
   const prediction = fanPrediction(phases.percepcion)
   const currentIdx = JOURNEY_STEPS.findIndex((s) => s.key === current)
+  // La predicción (próximo partido) se muestra al elegir «Predicción» en la barra inferior:
+  // así no hay un clic extra y la emoción del paso no se pierde dentro de su caja.
+  const showPrediction = current === "percepcion" && !!prediction && !!phases.percepcion
 
   return (
     <div className="mt-6 rounded-2xl border border-border bg-card p-4 shadow-sm dark:border-white/12">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-muted-foreground">
-          <Route size={14} className="text-[var(--cyan)]" /> Journey emocional del hincha
-        </p>
-        {/* Selector de país (compartido con el radar): el journey muestra esa hinchada. */}
-        {ctx && teams.length > 1 && (
-          <div className="flex items-center gap-2">
-            {teams.map((team) => {
-              const active = selectedTeam === team
-              return (
-                <button
-                  key={team}
-                  type="button"
-                  onClick={() => ctx.setTeam(team)}
-                  aria-pressed={active}
-                  aria-label={team}
-                  title={team}
-                  className={`inline-flex items-center justify-center rounded-full p-0.5 transition-all ${
-                    active ? "scale-110 ring-2 ring-[var(--cyan)]" : "opacity-55 grayscale hover:opacity-100 hover:grayscale-0"
-                  }`}
-                >
-                  <TeamFlag team={team} circle />
-                </button>
-              )
-            })}
-          </div>
-        )}
-      </div>
+      <p className="flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-wide text-muted-foreground">
+        <Route size={14} className="text-[var(--cyan)]" /> Ruta emocional del hincha
+      </p>
+      {/* Selector de país centrado (igual que en la caja del radar): el journey muestra esa hinchada. */}
+      {ctx && teams.length > 1 && (
+        <div className="mt-3 flex items-center justify-center gap-3">
+          {teams.map((team) => {
+            const active = selectedTeam === team
+            return (
+              <button
+                key={team}
+                type="button"
+                onClick={() => ctx.setTeam(team)}
+                aria-pressed={active}
+                aria-label={team}
+                title={team}
+                className={`inline-flex items-center justify-center rounded-full p-0.5 transition-all ${
+                  active ? "scale-110 ring-2 ring-[var(--cyan)]" : "opacity-55 grayscale hover:opacity-100 hover:grayscale-0"
+                }`}
+              >
+                <TeamFlag team={team} circle />
+              </button>
+            )
+          })}
+        </div>
+      )}
 
       <div className="mt-3 grid grid-cols-3 gap-2">
         {JOURNEY_STEPS.map((step, i) => {
@@ -438,9 +437,10 @@ function FanJourney({ teamPhases, combined }: { teamPhases?: TeamPhaseRadar[]; c
           const dom = dominantEmotion(phaseV)
           const isCurrent = step.key === current
           const reached = i <= currentIdx && !!phaseV
-          const isPrediction = step.key === "percepcion"
           const color = PHASE_COLOR[step.key]
-          const Icon = isPrediction ? Sparkles : moodFace(phaseV)
+          // Todos los pasos (incluida la Predicción) muestran su carita y emoción dominante,
+          // para que el indicador no se pierda. El pronóstico del próximo partido va aparte.
+          const Icon = moodFace(phaseV)
           return (
             <div
               key={step.key}
@@ -457,25 +457,7 @@ function FanJourney({ teamPhases, combined }: { teamPhases?: TeamPhaseRadar[]; c
                 <Icon size={16} />
               </span>
               <p className="mt-1.5 text-[11px] font-semibold">{step.label}</p>
-              {isPrediction ? (
-                phaseV && prediction ? (
-                  showPred ? (
-                    <span className={`mt-1 inline-block rounded-full px-2 py-0.5 text-[11px] font-bold ${PRED_CLASS[prediction.label]}`}>
-                      {prediction.label} {prediction.pct}%
-                    </span>
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={() => setShowPred(true)}
-                      className="mt-1 inline-block rounded-full border border-border px-2 py-0.5 text-[11px] font-semibold text-[var(--cyan)] transition-colors hover:bg-[var(--cyan)]/10"
-                    >
-                      Ver pronóstico
-                    </button>
-                  )
-                ) : (
-                  <p className="mt-0.5 text-[11px] text-muted-foreground/60">—</p>
-                )
-              ) : dom ? (
+              {dom ? (
                 <p className="mt-0.5 text-[11px] leading-tight text-muted-foreground">
                   {dom.label} <span className="tabular-nums">{dom.value}</span>
                 </p>
@@ -487,15 +469,34 @@ function FanJourney({ teamPhases, combined }: { teamPhases?: TeamPhaseRadar[]; c
         })}
       </div>
 
-      {showPred && prediction && phases.percepcion ? (
-        <p className="mt-3 text-[11px] leading-relaxed text-muted-foreground">
-          Pronóstico del hincha{selectedTeam ? ` de ${selectedTeam}` : ""} para su próximo partido
-          {opponent ? <> (vs <strong className="text-foreground">{opponent}</strong>)</> : ""}:{" "}
-          <strong className="text-foreground">{prediction.label} {prediction.pct}%</strong>. Sale del ánimo colectivo, no de una cuota.
-        </p>
+      {showPrediction && prediction ? (
+        // Caja de predicción: aparece sola al elegir «Predicción» abajo, con bola de cristal.
+        <div
+          className="mt-3 flex items-start justify-between gap-3 rounded-xl border p-3"
+          style={{ borderColor: `${PHASE_COLOR.percepcion}66`, backgroundColor: `${PHASE_COLOR.percepcion}12` }}
+        >
+          <div>
+            <p className="text-[11px] font-bold uppercase tracking-wide" style={{ color: PHASE_COLOR.percepcion }}>
+              Predicción
+            </p>
+            <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+              Para el próximo partido
+              {opponent ? <> vs <strong className="text-foreground">{opponent}</strong></> : ""}, el pronóstico de la
+              hinchada{selectedTeam ? ` de ${selectedTeam}` : ""} es{" "}
+              <span className={`inline-block rounded-full px-2 py-0.5 text-[11px] font-bold ${PRED_CLASS[prediction.label]}`}>
+                {prediction.label} {prediction.pct}%
+              </span>
+              . Sale del ánimo colectivo en fuentes revisadas, no de una cuota.
+            </p>
+          </div>
+          <span className="shrink-0 text-2xl leading-none" aria-hidden>
+            🔮
+          </span>
+        </div>
       ) : (
         <p className="mt-3 text-[11px] italic leading-relaxed text-muted-foreground/80">
-          Toca una bandera para ver el recorrido de esa hinchada y «Ver pronóstico» para su predicción del próximo partido.
+          Toca una bandera para ver el recorrido de esa hinchada. El pronóstico del próximo partido aparece al elegir
+          «Predicción» en la barra de abajo.
         </p>
       )}
     </div>

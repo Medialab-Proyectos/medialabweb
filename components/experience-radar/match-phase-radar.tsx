@@ -159,30 +159,58 @@ const AXIS_NOUN: Record<AxisKey, string> = {
   optimismo: "el optimismo",
 }
 
-/**
- * Interpretación breve y FIEL al valor: explica qué sintió la hinchada y por qué, leído de
- * su reacción en redes. Pensada para lectura rápida; los valores bajos describen lo negativo
- * (p. ej. una goleada en contra → euforia baja = tristeza), no lo positivo.
- */
-function interpretAxis(axis: AxisKey, value: number, phase: RadarViewMode, matchLabel: string): string {
-  const level: "alta" | "media" | "baja" = value >= 65 ? "alta" : value >= 40 ? "media" : "baja"
-  const moment =
-    phase === "expectativa"
-      ? "antes del partido"
-      : phase === "realidad"
-        ? "durante el partido"
-        : "después del partido"
+type Level = "alta" | "media" | "baja"
 
-  const why: Record<AxisKey, Record<"alta" | "media" | "baja", string>> = {
+/**
+ * Interpretación breve y FIEL al valor, DISTINTA por fase: el "antes" describe la
+ * anticipación (con qué ánimo llegaba la hinchada), el "durante" la reacción en vivo y
+ * el "después" cómo quedó el recuerdo. Así no se repite el mismo texto entre fases ni se
+ * le atribuye al "antes" algo que solo pasa con el partido en juego (p. ej. bronca por una
+ * jugada). Pensada para lectura rápida; los valores bajos describen lo negativo.
+ */
+const WHY: Record<RadarViewMode, Record<AxisKey, Record<Level, string>>> = {
+  expectativa: {
     euforia: {
-      alta: "explotó la celebración con una oleada de publicaciones, emojis y videos compartidos.",
+      alta: "la hinchada llegaba encendida, con mucha ilusión y ganas de partido.",
+      media: "había ánimo, aunque con los pies en la tierra.",
+      baja: "se llegaba con poca emoción, más cautela que fiesta.",
+    },
+    confianza: {
+      alta: "se confiaba en el equipo y se decía sin titubear.",
+      media: "había fe, pero con reparos por el rival o el momento.",
+      baja: "primaban las dudas sobre cómo iba a salir.",
+    },
+    ansiedad: {
+      alta: "se notaban los nervios previos: preguntas por alineación, horario y rival.",
+      media: "había algo de tensión propia de la antesala.",
+      baja: "se llegaba tranquilo, sin nervios marcados.",
+    },
+    frustracion: {
+      alta: "ya se arrastraban quejas o malestar de partidos anteriores.",
+      media: "asomaba algún fastidio puntual antes de empezar.",
+      baja: "el ambiente previo era tranquilo, sin reclamos.",
+    },
+    incertidumbre: {
+      alta: "nadie tenía claro qué esperar; competían muchas hipótesis del resultado.",
+      media: "había dudas, pero una idea general de cómo se daría.",
+      baja: "se llegaba con una expectativa bastante clara.",
+    },
+    optimismo: {
+      alta: "se miraba el partido con ilusión y confianza en un buen resultado.",
+      media: "había optimismo prudente, atado a cómo arrancara el equipo.",
+      baja: "se llegaba con resignación o esperando lo peor.",
+    },
+  },
+  realidad: {
+    euforia: {
+      alta: "explotó la celebración con una oleada de publicaciones, emojis y videos.",
       media: "hubo festejo, aunque medido y mezclado con cautela.",
-      baja: "casi no se celebró y predominaron los mensajes de bronca o el silencio.",
+      baja: "casi no se celebró; predominó la bronca o el silencio.",
     },
     confianza: {
       alta: "la hinchada defendía un relato claro y respondía segura a las críticas.",
       media: "el relato se sostenía, pero temblaba con cada jugada.",
-      baja: "pesaban las dudas y la gente buscaba explicaciones antes de opinar.",
+      baja: "pesaban las dudas y se buscaban explicaciones antes de opinar.",
     },
     ansiedad: {
       alta: "no paraban las consultas en vivo, las repeticiones y la necesidad de confirmar cada jugada.",
@@ -197,17 +225,59 @@ function interpretAxis(axis: AxisKey, value: number, phase: RadarViewMode, match
     incertidumbre: {
       alta: "nadie cerraba una explicación común y los relatos competían entre sí.",
       media: "quedaban dudas, aunque el relato principal se entendía.",
-      baja: "ya había una lectura estable y compartida de lo ocurrido.",
+      baja: "ya había una lectura estable y compartida de lo que pasaba.",
     },
     optimismo: {
-      alta: "la conversación miraba al próximo partido con ilusión y revancha.",
-      media: "asomaba expectativa, prudente y condicionada a lo que venga.",
-      baja: "lo que viene se miraba con desánimo o resignación.",
+      alta: "aun en pleno partido se miraba lo que venía con ilusión.",
+      media: "asomaba expectativa, prudente y condicionada al marcador.",
+      baja: "lo que venía se miraba con desánimo.",
     },
-  }
+  },
+  percepcion: {
+    euforia: {
+      alta: "quedó sensación de fiesta: se siguió celebrando y compartiendo el momento.",
+      media: "quedó un buen recuerdo, sin desbordes.",
+      baja: "el recuerdo fue amargo o de bajón.",
+    },
+    confianza: {
+      alta: "la hinchada quedó convencida y reforzó su relato de cara a lo que viene.",
+      media: "quedó una confianza moderada, a la espera de confirmar.",
+      baja: "quedaron dudas sobre el equipo tras lo visto.",
+    },
+    ansiedad: {
+      alta: "tras el pitazo seguían las ganas de revisar jugadas y confirmar detalles.",
+      media: "quedó algo de tensión, ya más calmada.",
+      baja: "el tema se cerró sin urgencias.",
+    },
+    frustracion: {
+      alta: "el malestar siguió en la conversación después del partido.",
+      media: "quedó algo de molestia puntual.",
+      baja: "el cierre fue tranquilo, con pocas quejas.",
+    },
+    incertidumbre: {
+      alta: "siguió sin haber una lectura común de lo ocurrido.",
+      media: "quedaban dudas, pero ya con un relato dominante.",
+      baja: "quedó una explicación clara y compartida.",
+    },
+    optimismo: {
+      alta: "la hinchada mira el próximo partido con ilusión y revancha.",
+      media: "asoma expectativa prudente para lo que viene.",
+      baja: "lo que viene se mira con desánimo o resignación.",
+    },
+  },
+}
+
+function interpretAxis(axis: AxisKey, value: number, phase: RadarViewMode, matchLabel: string): string {
+  const level: Level = value >= 65 ? "alta" : value >= 40 ? "media" : "baja"
+  const moment =
+    phase === "expectativa"
+      ? "antes del partido"
+      : phase === "realidad"
+        ? "durante el partido"
+        : "después del partido"
 
   const noun = `${AXIS_NOUN[axis][0].toUpperCase()}${AXIS_NOUN[axis].slice(1)}`
-  return `${noun} fue ${level} ${moment}: ${why[axis][level]}`
+  return `${noun} fue ${level} ${moment}: ${WHY[phase][axis][level]}`
 }
 
 export function MatchPhaseRadar({
