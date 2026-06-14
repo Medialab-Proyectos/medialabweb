@@ -41,6 +41,8 @@ export interface TeamPhaseRadar {
   phases: MatchPhases
   /** Rival del próximo partido de esta selección (para la predicción del hincha). */
   nextOpponent?: string
+  /** La selección ya no tiene más partidos (eliminada): no se habilita el pronóstico. */
+  eliminated?: boolean
 }
 
 export type RadarViewMode = "expectativa" | "realidad" | "percepcion"

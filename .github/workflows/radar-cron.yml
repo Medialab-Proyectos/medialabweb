@@ -1,15 +1,10 @@
-name: Experience Radar cron
+name: Experience Radar (manual)
 
-# Dispara el agente diario de Experience Radar 4 veces al día (cron externo gratis,
-# sin necesidad de Vercel Pro). Golpea el mismo endpoint que el cron de Vercel.
-# Las horas están en UTC; Colombia = UTC-5.
+# Actualización AUTOMÁTICA desactivada a propósito: el contenido se actualiza a mano
+# (investigación profunda con verificación de fuentes), no por cron. Se conserva solo
+# el disparo manual por si alguna vez se quiere golpear el endpoint desde GitHub.
 on:
-  schedule:
-    - cron: "0 16 * * *"   # 11:00 a. m. CO — previa del partido de las 2 p. m.
-    - cron: "30 21 * * *"  #  4:30 p. m. CO — análisis posterior
-    - cron: "0 23 * * *"   #  6:00 p. m. CO — previa del partido de las 9 p. m.
-    - cron: "30 4 * * *"   # 11:30 p. m. CO — análisis final nocturno
-  workflow_dispatch: {}    # permite dispararlo a mano para probar
+  workflow_dispatch: {}    # solo manual (Actions → Run workflow)
 
 # Evita corridas solapadas si alguna se atrasa.
 concurrency:

@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react"
 import Link from "next/link"
-import { ArrowRight, Clock3, RefreshCw } from "lucide-react"
+import { ArrowRight, Clock3, RefreshCw, Sparkles } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 import type { RadarArticle } from "@/src/lib/experience-radar/articles"
 import { NoteImage } from "./note-image"
@@ -42,6 +42,17 @@ export function EspecialesGrid({ articles }: { articles: RadarArticle[] }) {
   useEffect(() => setMounted(true), [])
 
   const groups = useMemo(() => groupByDay(articles), [articles])
+
+  // Último partido analizado = el finalizado más reciente (compareForFeed deja los
+  // finalizados de más nuevo a más antiguo). Se resalta para que se vea de un vistazo
+  // cuál fue la última actualización del agente. Se calcula tras montar (depende de la hora).
+  const latestAnalyzedSlug = useMemo(() => {
+    const finalized = articles
+      .filter((a) => !a.placeholder && resolveMatchStatus(a) === "finalizado")
+      .sort((a, b) => compareForFeed(a, b))
+    return finalized[0]?.slug ?? null
+  }, [articles])
+
   if (!groups.length) return null
 
   const today = mounted ? dayKey(new Date()) : null
@@ -91,11 +102,13 @@ export function EspecialesGrid({ articles }: { articles: RadarArticle[] }) {
                 <CarouselContent>
                   {group.items.map((a) => (
                     <CarouselItem key={a.slug} className="sm:basis-1/2 lg:basis-1/3">
-                      <NoteCard article={a} />
+                      <NoteCard article={a} isLatestAnalyzed={mounted && a.slug === latestAnalyzedSlug} />
                     </CarouselItem>
                   ))}
                 </CarouselContent>
-                {group.items.length > 3 && (
+                {/* Botones de desplazamiento en TODOS los días con más de una nota.
+                    Embla los deshabilita solo cuando no hay a dónde desplazar. */}
+                {group.items.length > 1 && (
                   <>
                     <CarouselPrevious className="-top-10 left-auto right-11" />
                     <CarouselNext className="-top-10 right-0" />
@@ -111,7 +124,7 @@ export function EspecialesGrid({ articles }: { articles: RadarArticle[] }) {
 }
 
 /** Tarjeta de nota del portal (imagen, estado, categoría, disponibilidad). */
-function NoteCard({ article: a }: { article: RadarArticle }) {
+function NoteCard({ article: a, isLatestAnalyzed = false }: { article: RadarArticle; isLatestAnalyzed?: boolean }) {
   const { t, lang, localized } = useLanguage()
   const availability = getArticleAvailability(a)
 
@@ -137,17 +150,25 @@ function NoteCard({ article: a }: { article: RadarArticle }) {
       aria-disabled={!availability.accessible}
       tabIndex={availability.accessible ? undefined : -1}
       onClick={availability.accessible ? undefined : (event) => event.preventDefault()}
-      className={`group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-colors dark:border-white/12 ${
-        availability.accessible ? "hover:border-[var(--cyan)]/50" : "cursor-not-allowed opacity-75"
-      }`}
+      className={`group flex h-full flex-col overflow-hidden rounded-2xl bg-card shadow-sm transition-colors ${
+        isLatestAnalyzed
+          ? "border-2 border-[var(--magenta)] shadow-md shadow-[var(--magenta)]/10"
+          : "border border-border dark:border-white/12"
+      } ${availability.accessible ? "hover:border-[var(--cyan)]/50" : "cursor-not-allowed opacity-75"}`}
     >
       <div className="relative h-40 w-full overflow-hidden">
         <NoteImage
           src={a.imageUrl}
           seed={a.slug}
+          teams={a.teams}
           alt={a.seoTitle}
-          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+          className="h-full w-full object-cover object-[center_20%] transition-transform duration-300 group-hover:scale-[1.03]"
         />
+        {isLatestAnalyzed && (
+          <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-[var(--magenta)] px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-[#fff] shadow-md ring-1 ring-black/10">
+            <Sparkles size={12} /> {t("Último analizado", "Latest analyzed")}
+          </span>
+        )}
         <StatusPill status={resolveMatchStatus(a)} placeholder={a.placeholder} className="absolute right-3 top-3" />
       </div>
       <div className="flex flex-1 flex-col p-4">

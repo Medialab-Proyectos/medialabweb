@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { pickDefaultImage } from "./default-image"
+import { pickMatchImage } from "./default-image"
 
 /**
  * Imagen de nota con respaldo robusto: si la URL real (p. ej. de Latingoles) falla
@@ -14,6 +14,7 @@ export function NoteImage({
   className,
   loading = "lazy",
   seed,
+  teams,
   fallback,
 }: {
   src?: string
@@ -22,9 +23,11 @@ export function NoteImage({
   loading?: "eager" | "lazy"
   /** Semilla (p. ej. slug del partido) para elegir una imagen por defecto estable. */
   seed?: string
+  /** Equipos del partido: si juega un anfitrión (México/EE. UU./Canadá), usa su imagen. */
+  teams?: string[]
   fallback?: string
 }) {
-  const resolvedFallback = fallback ?? pickDefaultImage(seed)
+  const resolvedFallback = fallback ?? pickMatchImage(seed, teams)
   const [remoteFailed, setRemoteFailed] = useState(false)
   const [remoteLoaded, setRemoteLoaded] = useState(false)
   const remoteSrc = src && src !== resolvedFallback && !remoteFailed ? src : null

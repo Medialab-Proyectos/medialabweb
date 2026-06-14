@@ -4,12 +4,14 @@ import { useMemo, useState } from "react"
 import {
   ArrowUpRight,
   Clock,
+  Flag,
   Frown,
   Lightbulb,
   Meh,
   Route,
   Smartphone,
   Smile,
+  Sparkles,
   Trophy,
   Users,
   type LucideIcon,
@@ -37,6 +39,8 @@ export interface TeamApproachData {
   whatHappened?: string
   expectationVsReality?: string
   future?: { mood: string; behaviorEffect: string }
+  /** Experiencia de usuario vivida ESPECÍFICA de esta hinchada, por etapa (no genérica). */
+  userExperience?: { expectativa?: string; realidad?: string; percepcion?: string }
 }
 
 export interface MatchScoreData {
@@ -292,31 +296,20 @@ function FanApproachCard({ team, phase }: { team: TeamApproachData; phase: Radar
           </div>
         ))}
       </dl>
-
-      {/* Lectura UX / comportamiento digital del momento (patrón observado, no del marcador). */}
-      <div className="mt-3 flex items-start gap-2 rounded-lg border border-border/70 bg-muted/40 p-2.5">
-        <Smartphone size={14} className="mt-0.5 shrink-0 text-[var(--magenta)]" />
-        <div>
-          <p className="text-[10px] font-bold uppercase tracking-wide text-[var(--magenta)]">Experiencia de usuario vivida</p>
-          <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground">{UX_BEHAVIOR[phase]}</p>
+      {/* Experiencia de usuario vivida ESPECÍFICA de esta hinchada y etapa. Solo aparece si
+          hay texto propio del país (no genérico): puede salir en una caja y en la otra no, y
+          nunca se duplica el mismo texto entre selecciones. */}
+      {team.userExperience?.[phase] && (
+        <div className="mt-3 flex items-start gap-2 rounded-lg border border-border/70 bg-muted/40 p-3">
+          <Smartphone size={14} className="mt-0.5 shrink-0 text-[var(--magenta)]" />
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-wide text-[var(--magenta)]">Experiencia de usuario vivida</p>
+            <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground">{team.userExperience[phase]}</p>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   )
-}
-
-/**
- * Lectura de experiencia/uso de dispositivos por fase. Son patrones DOCUMENTADOS del
- * consumo de fútbol en digital (no datos inventados de este partido): sirven para mirar
- * el evento con ojos de UX y diseño comportamental.
- */
-const UX_BEHAVIOR: Record<RadarViewMode, string> = {
-  expectativa:
-    "Casi todo se vive desde el celular y muchos lo combinan con la tele: buscan a qué hora juega, la alineación y dónde verlo, saltando entre varias apps.",
-  realidad:
-    "En el gol escriben rápido y a medias por la euforia (texto cortado, mayúsculas, emojis), molestan los anuncios que tapan la pantalla en el celular y se repite la jugada para revisarla.",
-  percepcion:
-    "Circulan clips y memes, se vuelve a ver la repetición y la conversación pasa a comentarios e historias; la opinión se enfría y se ordena.",
 }
 
 /* ── Ruta emocional del hincha (Antes · Durante · Predicción) ── */
@@ -371,7 +364,7 @@ function fanPrediction(v?: EmotionalRadarValues): { label: "Gana" | "Empata" | "
 const JOURNEY_STEPS: Array<{ key: RadarViewMode; label: string }> = [
   { key: "expectativa", label: "Antes" },
   { key: "realidad", label: "Durante" },
-  { key: "percepcion", label: "Predicción" },
+  { key: "percepcion", label: "Pronóstico" },
 ]
 
 const PRED_CLASS: Record<"Gana" | "Empata" | "Pierde", string> = {
@@ -396,11 +389,12 @@ function FanJourney({ teamPhases, combined }: { teamPhases?: TeamPhaseRadar[]; c
   const selected = selectedTeam ? teamPhases?.find((t) => t.team === selectedTeam) : undefined
   const phases = selected?.phases ?? combined
   const opponent = selected?.nextOpponent
+  const eliminated = selected?.eliminated ?? false
   const prediction = fanPrediction(phases.percepcion)
   const currentIdx = JOURNEY_STEPS.findIndex((s) => s.key === current)
   // La predicción (próximo partido) se muestra al elegir «Predicción» en la barra inferior:
   // así no hay un clic extra y la emoción del paso no se pierde dentro de su caja.
-  const showPrediction = current === "percepcion" && !!prediction && !!phases.percepcion
+  const showPrediction = current === "percepcion" && !eliminated && !!prediction && !!phases.percepcion
 
   return (
     <div className="mt-6 rounded-2xl border border-border bg-card p-4 shadow-sm dark:border-white/12">
@@ -472,31 +466,43 @@ function FanJourney({ teamPhases, combined }: { teamPhases?: TeamPhaseRadar[]; c
       {showPrediction && prediction ? (
         // Caja de predicción: aparece sola al elegir «Predicción» abajo, con bola de cristal.
         <div
-          className="mt-3 flex items-start justify-between gap-3 rounded-xl border p-3"
+          className="mt-3 rounded-xl border p-3"
           style={{ borderColor: `${PHASE_COLOR.percepcion}66`, backgroundColor: `${PHASE_COLOR.percepcion}12` }}
         >
-          <div>
-            <p className="text-[11px] font-bold uppercase tracking-wide" style={{ color: PHASE_COLOR.percepcion }}>
-              Predicción
+          <div className="flex items-center justify-between gap-3">
+            <p className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wide" style={{ color: PHASE_COLOR.percepcion }}>
+              <Sparkles size={14} aria-hidden /> Predicción
             </p>
+            <span className={`inline-block rounded-full px-3 py-1 text-sm font-extrabold ${PRED_CLASS[prediction.label]}`}>
+              {prediction.label} {prediction.pct}%
+            </span>
+          </div>
+          <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+            Para el próximo partido
+            {opponent ? <> vs <strong className="text-foreground">{opponent}</strong></> : ""}, es el pronóstico de la
+            hinchada{selectedTeam ? ` de ${selectedTeam}` : ""}. Sale del ánimo colectivo en fuentes revisadas, no de una
+            cuota.
+          </p>
+        </div>
+      ) : eliminated && current === "percepcion" ? (
+        // La selección ya no tiene más partidos: sin pronóstico, se indica la eliminación.
+        <div
+          className="mt-3 flex items-start gap-3 rounded-xl border p-3"
+          style={{ borderColor: "#DC262666", backgroundColor: "#DC26260F" }}
+        >
+          <Flag size={20} className="mt-0.5 shrink-0 text-[#DC2626]" aria-hidden />
+          <div>
+            <p className="text-[11px] font-bold uppercase tracking-wide text-[#DC2626]">Eliminada del Mundial</p>
             <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
-              Para el próximo partido
-              {opponent ? <> vs <strong className="text-foreground">{opponent}</strong></> : ""}, el pronóstico de la
-              hinchada{selectedTeam ? ` de ${selectedTeam}` : ""} es{" "}
-              <span className={`inline-block rounded-full px-2 py-0.5 text-[11px] font-bold ${PRED_CLASS[prediction.label]}`}>
-                {prediction.label} {prediction.pct}%
-              </span>
-              . Sale del ánimo colectivo en fuentes revisadas, no de una cuota.
+              {selectedTeam ?? "Esta selección"} ya no tiene más partidos en el torneo, así que no hay pronóstico de
+              próximo encuentro. Su recorrido emocional queda como cierre.
             </p>
           </div>
-          <span className="shrink-0 text-2xl leading-none" aria-hidden>
-            🔮
-          </span>
         </div>
       ) : (
         <p className="mt-3 text-[11px] italic leading-relaxed text-muted-foreground/80">
           Toca una bandera para ver el recorrido de esa hinchada. El pronóstico del próximo partido aparece al elegir
-          «Predicción» en la barra de abajo.
+          «Pronóstico» en la barra de abajo.
         </p>
       )}
     </div>

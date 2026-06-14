@@ -3,13 +3,29 @@
  * Se elige una de forma "aleatoria pero ESTABLE" por partido: el mismo slug siempre
  * cae en la misma imagen. Así varía entre notas pero no parpadea entre renders ni
  * causa desajustes de hidratación (server y cliente calculan lo mismo).
+ *
+ * Las imágenes de selección anfitriona (México, EE. UU., Canadá) NO van aquí: se usan
+ * SOLO en partidos de ese equipo, vía `pickMatchImage`, y solo como respaldo cuando no
+ * hay imagen enlazable de un medio reconocido.
  */
 export const DEFAULT_MATCH_IMAGES = [
   "/images/experience-radar-vs.png",
   "/images/experience-radar-vs2.png",
   "/images/experience-radar-vs2-var1.png",
   "/images/experience-radar-vs2-var2.png",
+  "/images/radar-uxbox-futbol-var1.png",
 ] as const
+
+/**
+ * Imagen específica por selección anfitriona: solo se usa cuando esa selección juega el
+ * partido (no en otras notas). El orden importa: si por algún motivo jugaran dos
+ * anfitriones, gana el primero de la lista.
+ */
+const HOST_TEAM_IMAGES: Array<{ test: RegExp; image: string }> = [
+  { test: /m[eé]xico/i, image: "/images/radar-uxschool-futbol-mexico.png" },
+  { test: /estados unidos|ee\.?\s?uu|united states|\busa\b/i, image: "/images/radar-uxschool-futbol-usa.png" },
+  { test: /canad[aá]/i, image: "/images/radar-uxschool-futbol-canada.png" },
+]
 
 /** Devuelve una imagen por defecto determinista a partir de una semilla (p. ej. el slug). */
 export function pickDefaultImage(seed?: string): string {
@@ -19,4 +35,17 @@ export function pickDefaultImage(seed?: string): string {
     hash = (hash * 31 + seed.charCodeAt(i)) >>> 0
   }
   return DEFAULT_MATCH_IMAGES[hash % DEFAULT_MATCH_IMAGES.length]
+}
+
+/**
+ * Imagen de respaldo para una nota SIN imagen de referencia enlazable: si juega una
+ * selección anfitriona, usa su imagen dedicada; si no, cae al pool aleatorio estable.
+ */
+export function pickMatchImage(seed?: string, teams?: string[]): string {
+  if (teams?.length) {
+    for (const host of HOST_TEAM_IMAGES) {
+      if (teams.some((team) => host.test.test(team))) return host.image
+    }
+  }
+  return pickDefaultImage(seed)
 }

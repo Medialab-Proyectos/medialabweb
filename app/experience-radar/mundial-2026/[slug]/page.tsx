@@ -17,9 +17,9 @@ import { RadarNewsletter } from "@/components/experience-radar/radar-newsletter"
 import { RelatedNotes, type RelatedNote } from "@/components/experience-radar/related-notes"
 import { NoteImage } from "@/components/experience-radar/note-image"
 import { StatusPill } from "@/components/experience-radar/status-pill"
-import { pickDefaultImage } from "@/components/experience-radar/default-image"
+import { pickMatchImage } from "@/components/experience-radar/default-image"
 import { getRadarArticleBySlug, getAllRadarArticles } from "@/src/lib/experience-radar/articleData"
-import { resolveMatchStatus } from "@/src/lib/experience-radar/articleAvailability"
+import { resolveMatchStatus, getArticleAvailability } from "@/src/lib/experience-radar/articleAvailability"
 import type { EmotionalRadarValues, RadarArticle } from "@/src/lib/experience-radar/articles"
 
 const SITE = "https://medialab.design"
@@ -39,7 +39,7 @@ export async function generateMetadata({
   if (!article) return { title: "Artículo no encontrado | Experience Radar" }
 
   const url = `${SITE}${BASE}/${article.slug}`
-  const image = article.imageUrl || `${SITE}${pickDefaultImage(article.slug)}`
+  const image = article.imageUrl || `${SITE}${pickMatchImage(article.slug, article.teams)}`
   return {
     title: article.seoTitle,
     description: article.metaDescription,
@@ -102,8 +102,9 @@ export default async function RadarArticlePage({
         slug: a.slug,
         title: a.seoTitle,
         teams: a.teams.join(" vs "),
-        image: a.imageUrl || pickDefaultImage(a.slug),
+        image: a.imageUrl || pickMatchImage(a.slug, a.teams),
         badge: s === "previa" ? "Previa en análisis" : s === "en_vivo" ? "En vivo" : "Partido analizado",
+        accessible: getArticleAvailability(a).accessible,
       }
     })
 
@@ -149,6 +150,7 @@ export default async function RadarArticlePage({
             <NoteImage
               src={article.imageUrl}
               seed={article.slug}
+              teams={article.teams}
               alt={article.imageAlt || `${article.teams.join(" vs ")} — ${article.seoTitle}`}
               className="h-full w-full object-cover object-[center_20%]"
               loading="eager"
@@ -321,21 +323,24 @@ const NEXT_OPPONENT: Record<string, string> = {
  */
 function resolveTeamPhases(article: RadarArticle, phases: MatchPhases): TeamPhaseRadar[] {
   return article.teams.map((team) => {
-    const nextOpponent = NEXT_OPPONENT[team]
+    // Eliminada SOLO con dato explícito del agente (no se infiere de un mapa incompleto:
+    // en fase de grupos todos siguen vivos). Sin pronóstico: se omite la fase de percepción.
+    const eliminated = article.eliminatedTeams?.includes(team) ?? false
+    const nextOpponent = eliminated ? undefined : NEXT_OPPONENT[team]
     const tr = article.teamRadars?.find((x) => x.team === team)
     if (tr) {
       const realidad = tr.current.emotional
       const built: MatchPhases = { expectativa: projectExpectation(realidad) }
       if (phases.realidad) built.realidad = realidad
-      if (phases.percepcion) built.percepcion = tr.predicted.emotional
-      return { team, phases: built, nextOpponent }
+      if (phases.percepcion && !eliminated) built.percepcion = tr.predicted.emotional
+      return { team, phases: built, nextOpponent, eliminated }
     }
     const collective = article.collectiveByTeam?.find((c) => c.team === team)
     const lean = teamLean(team, `${collective?.mood ?? ""} ${collective?.behaviorEffect ?? ""}`)
     const built: MatchPhases = { expectativa: leanEmotional(phases.expectativa, lean) }
     if (phases.realidad) built.realidad = leanEmotional(phases.realidad, lean)
-    if (phases.percepcion) built.percepcion = leanEmotional(phases.percepcion, lean)
-    return { team, phases: built, nextOpponent }
+    if (phases.percepcion && !eliminated) built.percepcion = leanEmotional(phases.percepcion, lean)
+    return { team, phases: built, nextOpponent, eliminated }
   })
 }
 
@@ -443,7 +448,7 @@ function JsonLd({
   lessons: Array<{ term: string; explanation: string }>
 }) {
   const url = `${SITE}${BASE}/${article.slug}`
-  const image = article.imageUrl || `${SITE}${pickDefaultImage(article.slug)}`
+  const image = article.imageUrl || `${SITE}${pickMatchImage(article.slug, article.teams)}`
 
   // El "Resumen para IA" (aiSummary) ya no se muestra al usuario: vive aquí, en el
   // abstract del NewsArticle, que es el canal para motores de IA / GEO.

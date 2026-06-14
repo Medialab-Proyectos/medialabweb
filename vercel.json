@@ -2,12 +2,6 @@
   "installCommand": "npm install --legacy-peer-deps",
   "buildCommand": "npm run build",
   "framework": "nextjs",
-  "crons": [
-    {
-      "path": "/api/experience-radar/run",
-      "schedule": "30 4 * * *"
-    }
-  ],
   "redirects": [
     {
       "source": "/:path(.*)",

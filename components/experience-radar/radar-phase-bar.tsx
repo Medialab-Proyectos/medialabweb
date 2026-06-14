@@ -24,7 +24,7 @@ const PHASE_ITEMS: Array<{
 }> = [
   { key: "expectativa", es: "Antes del partido", en: "Before", icon: Target, color: "#14B8A6" },
   { key: "realidad", es: "Durante el partido", en: "During", icon: Zap, color: "#F97316" },
-  { key: "percepcion", es: "Predicción", en: "Prediction", icon: Brain, color: "#8B5CF6" },
+  { key: "percepcion", es: "Pronóstico", en: "Forecast", icon: Brain, color: "#8B5CF6" },
 ]
 
 export function RadarPhaseBar({ shareTitle }: { shareTitle: string }) {

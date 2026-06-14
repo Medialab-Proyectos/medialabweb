@@ -92,7 +92,14 @@ export function getArticleAvailability(
     }
   }
 
-  // Dentro de la ventana, en vivo o finalizado: la nota es accesible con el contenido
-  // disponible (previa o final). Ya no se oculta un finalizado a la espera del análisis.
+  // En estado PREVIA (antes del pitazo) la nota se muestra en el calendario pero NO se
+  // abre: el análisis vivo (radar, hinchadas, hallazgos) solo tiene sentido cuando el
+  // partido arranca. Se libera al pasar a "en vivo" o "finalizado".
+  if (resolveMatchStatus(article, now) === "previa") {
+    return { visible: true, accessible: false, availableAt: availableAt.toISOString(), reason: "preparing" }
+  }
+
+  // En vivo o finalizado: la nota es accesible con el contenido disponible.
+  // Ya no se oculta un finalizado a la espera del análisis.
   return { visible: true, accessible: true, availableAt: availableAt.toISOString() }
 }

@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { ArrowUpRight } from "lucide-react"
+import { ArrowUpRight, Clock3 } from "lucide-react"
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel"
 import { NoteImage } from "./note-image"
 
@@ -12,6 +12,8 @@ export interface RelatedNote {
   image: string
   /** Etiqueta corta de estado (Previa / En vivo / Finalizado). */
   badge?: string
+  /** Si la nota aún no es accesible (previa sin análisis), la tarjeta no enlaza. */
+  accessible?: boolean
 }
 
 /**
@@ -30,14 +32,12 @@ export function RelatedNotes({ notes }: { notes: RelatedNote[] }) {
 
       <Carousel opts={{ align: "start", dragFree: true }} className="mt-4">
         <CarouselContent className="-ml-3">
-          {notes.map((n) => (
-            <CarouselItem key={n.slug} className="basis-[80%] pl-3 sm:basis-1/2 lg:basis-1/3">
-              <Link
-                href={`/experience-radar/mundial-2026/${n.slug}`}
-                className="group block h-full overflow-hidden rounded-2xl border border-border bg-card transition-colors hover:border-[var(--cyan)]"
-              >
+          {notes.map((n) => {
+            const locked = n.accessible === false
+            const card = (
+              <>
                 <div className="relative">
-                  <NoteImage src={n.image} seed={n.slug} alt={n.title} className="h-32 w-full object-cover" />
+                  <NoteImage src={n.image} seed={n.slug} teams={n.teams.split(" vs ")} alt={n.title} className="h-32 w-full object-cover object-[center_20%]" />
                   {n.badge && (
                     <span className="absolute left-2 top-2 rounded-full bg-black/55 px-2.5 py-0.5 text-[10px] font-semibold text-[#fff] backdrop-blur-sm">
                       {n.badge}
@@ -47,13 +47,35 @@ export function RelatedNotes({ notes }: { notes: RelatedNote[] }) {
                 <div className="p-4">
                   <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">{n.teams}</p>
                   <p className="mt-1 line-clamp-2 text-sm font-bold leading-snug">{n.title}</p>
-                  <span className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-[var(--cyan)]">
-                    Leer nota <ArrowUpRight size={12} />
-                  </span>
+                  {locked ? (
+                    <span className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-muted-foreground">
+                      <Clock3 size={12} /> Análisis en preparación
+                    </span>
+                  ) : (
+                    <span className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-[var(--cyan)]">
+                      Leer nota <ArrowUpRight size={12} />
+                    </span>
+                  )}
                 </div>
-              </Link>
-            </CarouselItem>
-          ))}
+              </>
+            )
+            return (
+              <CarouselItem key={n.slug} className="basis-[80%] pl-3 sm:basis-1/2 lg:basis-1/3">
+                {locked ? (
+                  <div className="block h-full cursor-not-allowed overflow-hidden rounded-2xl border border-border bg-card opacity-75">
+                    {card}
+                  </div>
+                ) : (
+                  <Link
+                    href={`/experience-radar/mundial-2026/${n.slug}`}
+                    className="group block h-full overflow-hidden rounded-2xl border border-border bg-card transition-colors hover:border-[var(--cyan)]"
+                  >
+                    {card}
+                  </Link>
+                )}
+              </CarouselItem>
+            )
+          })}
         </CarouselContent>
       </Carousel>
     </section>

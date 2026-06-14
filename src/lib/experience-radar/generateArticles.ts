@@ -469,12 +469,15 @@ export async function generateAndStoreArticlesFromReport(
     ),
   )
 
+  const latingolesWithImage = report.signals.filter(
+    (candidate) => candidate.sourceType === "latingoles" && Boolean(candidate.imageUrl) && candidate.teams?.length,
+  )
   const imageUpdates = existing.flatMap((fixture) => {
-    const signal = report.signals.find((candidate) =>
-      candidate.sourceType === "latingoles" &&
-      Boolean(candidate.imageUrl) &&
-      sameTeams(candidate.teams, fixture.teams),
-    )
+    // Prioriza una imagen del MISMO partido (ambos equipos); si no hay, una que
+    // comparta al menos un equipo (sigue siendo relacionada) antes que la genérica.
+    const signal =
+      latingolesWithImage.find((candidate) => sameTeams(candidate.teams, fixture.teams)) ??
+      latingolesWithImage.find((candidate) => sharesTeam(candidate.teams, fixture.teams))
     if (!signal?.imageUrl || fixture.imageUrl === signal.imageUrl) return []
 
     const sourceExists = fixture.sources.some((source) => source.url === signal.url)
@@ -653,6 +656,13 @@ function buildTeamRadars(article: RadarArticle): TeamRadar[] {
 function sameTeams(left: string[], right: string[]): boolean {
   const normalize = (teams: string[]) => teams.map((team) => team.trim().toLowerCase()).sort().join("|")
   return normalize(left) === normalize(right)
+}
+
+/** ¿Comparten al menos un equipo? Para usar una imagen relacionada cuando no hay match exacto. */
+function sharesTeam(left: string[], right: string[]): boolean {
+  const norm = (team: string) => team.trim().toLowerCase()
+  const set = new Set(left.map(norm))
+  return right.some((team) => set.has(norm(team)))
 }
 
 function mergeArticleUpdates(base: RadarArticle[], preferred: RadarArticle[]): RadarArticle[] {

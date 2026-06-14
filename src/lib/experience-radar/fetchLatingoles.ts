@@ -237,20 +237,43 @@ function readXml(xml: string, tag: string): string {
 
 const PLAYER_HINTS = ["messi", "mbappe", "haaland", "vinicius", "bellingham"]
 const TEAM_ALIASES: Array<[string, string[]]> = [
-  ["argentina", ["argentina"]],
-  ["brasil", ["brasil", "brazil"]],
-  ["colombia", ["colombia"]],
+  // Anfitriones
   ["méxico", ["mexico", "méxico"]],
   ["canadá", ["canada", "canadá"]],
-  ["estados unidos", ["usa", "estados unidos", "united states"]],
+  ["estados unidos", ["usa", "ee.uu", "estados unidos", "united states"]],
+  // En el fixture / datos actuales
+  ["sudáfrica", ["sudafrica", "sudáfrica", "south africa"]],
+  ["corea del sur", ["corea del sur", "corea", "south korea"]],
+  ["chequia", ["chequia", "república checa", "republica checa", "czechia", "czech republic"]],
+  ["catar", ["catar", "qatar"]],
+  ["suiza", ["suiza", "switzerland"]],
+  ["brasil", ["brasil", "brazil"]],
+  ["marruecos", ["marruecos", "morocco"]],
+  ["haití", ["haiti", "haití"]],
+  ["escocia", ["escocia", "scotland"]],
+  ["australia", ["australia"]],
+  ["turquía", ["turquia", "turquía", "turkiye", "türkiye", "turkey"]],
   ["bosnia y herzegovina", ["bosnia", "bosnia y herzegovina", "bosnia and herzegovina"]],
   ["paraguay", ["paraguay"]],
+  ["japón", ["japon", "japón", "japan"]],
+  ["polonia", ["polonia", "poland"]],
+  ["argentina", ["argentina"]],
+  ["colombia", ["colombia"]],
   ["españa", ["espana", "españa", "spain"]],
   ["francia", ["francia", "france"]],
-  ["sudáfrica", ["sudafrica", "sudáfrica", "south africa"]],
-  ["marruecos", ["marruecos", "morocco"]],
-  ["japón", ["japon", "japón", "japan"]],
-  ["corea del sur", ["corea del sur", "south korea"]],
+  // Otras selecciones comunes del Mundial
+  ["alemania", ["alemania", "germany"]],
+  ["inglaterra", ["inglaterra", "england"]],
+  ["portugal", ["portugal"]],
+  ["países bajos", ["paises bajos", "países bajos", "holanda", "netherlands"]],
+  ["italia", ["italia", "italy"]],
+  ["uruguay", ["uruguay"]],
+  ["ecuador", ["ecuador"]],
+  ["croacia", ["croacia", "croatia"]],
+  ["bélgica", ["belgica", "bélgica", "belgium"]],
+  ["senegal", ["senegal"]],
+  ["ghana", ["ghana"]],
+  ["nigeria", ["nigeria"]],
 ]
 
 function detectEntities(values: unknown[], hints: string[]): string[] {

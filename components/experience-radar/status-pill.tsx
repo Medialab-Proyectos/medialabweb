@@ -9,9 +9,9 @@ export type MatchStatus = "previa" | "en_vivo" | "finalizado"
 // analizado". Estilo glass (más translúcido + blur, sin bordes) para que se vea bien
 // la imagen por detrás y la cápsula no pese sobre la foto.
 const MAP: Record<MatchStatus, { label: string; cls: string }> = {
-  previa: { label: "Previa en análisis", cls: "bg-[#F59E0B]/40 text-black backdrop-blur-md" },
-  en_vivo: { label: "En vivo", cls: "bg-[var(--magenta)]/40 text-[#fff] backdrop-blur-md" },
-  finalizado: { label: "Partido analizado", cls: "bg-[var(--cyan)]/40 text-black backdrop-blur-md" },
+  previa: { label: "Previa en análisis", cls: "bg-[#F59E0B]/90 text-black backdrop-blur-md" },
+  en_vivo: { label: "En vivo", cls: "bg-[var(--magenta)] text-[#fff] backdrop-blur-md" },
+  finalizado: { label: "Partido analizado", cls: "bg-[var(--cyan)]/90 text-black backdrop-blur-md" },
 }
 
 export function StatusPill({
@@ -25,11 +25,11 @@ export function StatusPill({
   className?: string
 }) {
   const s = placeholder
-    ? { label: "Próximamente", cls: "bg-black/35 text-white backdrop-blur-md" }
+    ? { label: "Próximamente", cls: "bg-black/70 text-[#fff] backdrop-blur-md" }
     : MAP[status ?? "finalizado"] ?? MAP.finalizado
   return (
     <span
-      className={`inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide shadow-sm ${s.cls} ${className}`}
+      className={`inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide shadow-md ring-1 ring-black/10 ${s.cls} ${className}`}
     >
       {s.label}
     </span>

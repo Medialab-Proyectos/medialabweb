@@ -171,6 +171,13 @@ export interface RadarArticle {
   matchSummary?: string
 
   /**
+   * Selecciones que ya NO tienen más partidos (eliminadas del torneo). Para esas
+   * hinchadas no se habilita el pronóstico del próximo partido: la nota indica que
+   * el equipo está eliminado. El agente lo llena al cerrar la fase de grupos/llaves.
+   */
+  eliminatedTeams?: string[]
+
+  /**
    * Bloque 2 — radar de fases (telaraña de 6 emociones, 3 polígonos):
    *  - `expectativa`: antes del partido (siempre presente).
    *  - `realidad`: durante el partido (solo cuando finalizó).
@@ -210,6 +217,16 @@ export interface RadarArticle {
     howTheyArrived?: string
     whatHappened?: string
     expectationVsReality?: string
+    /**
+     * "Experiencia de usuario vivida" ESPECÍFICA de esta hinchada, por etapa (cómo
+     * consume y reacciona en digital ESE país). Debe ser propia de cada selección, no
+     * un texto genérico: si no hay dato real, se omite (no se inventa ni se duplica).
+     */
+    userExperience?: {
+      expectativa?: string
+      realidad?: string
+      percepcion?: string
+    }
   }>
 
   /**

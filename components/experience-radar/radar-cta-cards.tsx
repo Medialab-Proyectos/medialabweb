@@ -9,8 +9,9 @@ import { RADAR_PROMO } from "@/src/lib/experience-radar/articles"
 
 /**
  * CTA final de la nota. Dos tarjetas integradas (no banner publicitario): se sienten
- * parte del contenido. UX School conserva la promo Mundial (cupón copiable); UXBox
- * invita a convertir una idea en experiencia real. Bilingüe.
+ * parte del contenido. La imagen ocupa TODO el ancho de la tarjeta (banner superior,
+ * un poco más alto) y el texto va debajo. UX School conserva la promo Mundial (cupón
+ * copiable); UXBox invita a convertir una idea en experiencia real. Bilingüe.
  */
 export function RadarCtaCards() {
   const { t } = useLanguage()
@@ -29,8 +30,18 @@ export function RadarCtaCards() {
   return (
     <section className="mt-12 grid gap-6 md:grid-cols-2">
       {/* UX School */}
-      <article className="flex flex-col sm:flex-row gap-5 overflow-hidden rounded-2xl border border-[var(--cyan)]/30 bg-[var(--cyan)]/[0.05] p-5 transition-all duration-300 hover:border-[var(--cyan)]/50 hover:shadow-lg hover:shadow-[var(--cyan)]/[0.02]">
-        <div className="flex-1 flex flex-col justify-between order-2 sm:order-1">
+      <article className="flex flex-col overflow-hidden rounded-2xl border border-[var(--cyan)]/30 bg-[var(--cyan)]/[0.05] transition-all duration-300 hover:border-[var(--cyan)]/50 hover:shadow-lg hover:shadow-[var(--cyan)]/[0.02]">
+        <div className="relative h-44 w-full shrink-0 overflow-hidden bg-black/10">
+          <Image
+            src="/images/radar-uxschool-futbol-colombia-azul.png"
+            alt="UX School Mundial 2026"
+            fill
+            sizes="(max-width: 768px) 100vw, 50vw"
+            className="object-cover transition-transform duration-500 hover:scale-105"
+            priority
+          />
+        </div>
+        <div className="flex flex-1 flex-col justify-between p-5">
           <div>
             <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-[var(--cyan)]">
               <GraduationCap size={14} /> UX School
@@ -71,21 +82,20 @@ export function RadarCtaCards() {
             <GraduationCap size={14} /> {t("Conocer el curso", "See the course")}
           </Link>
         </div>
-        <div className="relative w-full h-32 sm:w-28 sm:h-28 shrink-0 overflow-hidden rounded-xl bg-black/10 order-1 sm:order-2 self-start">
-          <Image
-            src="/images/radar-uxschool-futbol-v3.png"
-            alt="UX School Mundial 2026"
-            fill
-            sizes="(max-width: 640px) 100vw, 112px"
-            className="object-cover transition-transform duration-500 hover:scale-105"
-            priority
-          />
-        </div>
       </article>
 
       {/* UXBox */}
-      <article className="flex flex-col sm:flex-row gap-5 overflow-hidden rounded-2xl border border-[var(--magenta)]/30 bg-[var(--magenta)]/[0.05] p-5 transition-all duration-300 hover:border-[var(--magenta)]/50 hover:shadow-lg hover:shadow-[var(--magenta)]/[0.02]">
-        <div className="flex-1 flex flex-col justify-between order-2 sm:order-1">
+      <article className="flex flex-col overflow-hidden rounded-2xl border border-[var(--magenta)]/30 bg-[var(--magenta)]/[0.05] transition-all duration-300 hover:border-[var(--magenta)]/50 hover:shadow-lg hover:shadow-[var(--magenta)]/[0.02]">
+        <div className="relative h-44 w-full shrink-0 overflow-hidden bg-black/10">
+          <Image
+            src="/images/radar-uxbox-futbol-centered.png"
+            alt="UXBox Mundial 2026"
+            fill
+            sizes="(max-width: 768px) 100vw, 50vw"
+            className="object-cover transition-transform duration-500 hover:scale-105"
+          />
+        </div>
+        <div className="flex flex-1 flex-col justify-between p-5">
           <div>
             <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-[var(--magenta)]">
               <Box size={14} /> UXBox
@@ -107,15 +117,6 @@ export function RadarCtaCards() {
           >
             <ArrowRight size={14} /> {t("Probar UXBox", "Try UXBox")}
           </Link>
-        </div>
-        <div className="relative w-full h-32 sm:w-28 sm:h-28 shrink-0 overflow-hidden rounded-xl bg-black/10 order-1 sm:order-2 self-start">
-          <Image
-            src="/images/radar-uxbox-futbol-v3.png"
-            alt="UXBox Mundial 2026"
-            fill
-            sizes="(max-width: 640px) 100vw, 112px"
-            className="object-cover transition-transform duration-500 hover:scale-105"
-          />
         </div>
       </article>
     </section>
