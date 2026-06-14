@@ -7,7 +7,15 @@
  * verificación y revisión humana antes de publicar.
  */
 
-import { generateRadarArticle, type RadarArticle, type RadarArticleInput } from "./articles"
+import {
+  generateRadarArticle,
+  type ArticleSourceRef,
+  type EmotionalRadarValues,
+  type ProductApplication,
+  type RadarArticle,
+  type RadarArticleInput,
+  type TeamRadar,
+} from "./articles"
 import { getStoredRadarArticles } from "./articleStore"
 import { compareForFeed } from "./articleAvailability"
 
@@ -62,6 +70,131 @@ function upcomingMatch(input: {
     sources: [{ name: `FIFA — ${label}`, url: input.officialUrl, kind: "oficial" }],
   }
 }
+
+/** Una hinchada en una nota finalizada: narrativa + radar emocional (actual y próximo). */
+interface FinishedTeam {
+  team: string
+  expectedEmotion: string
+  dominantConversation: string
+  fanConfidence: string
+  mainNarrative: string
+  howTheyArrived: string
+  whatHappened: string
+  expectationVsReality: string
+  mood: string
+  behaviorEffect: string
+  current: EmotionalRadarValues
+  predicted: EmotionalRadarValues
+}
+
+/**
+ * Nota de partido FINALIZADO con datos reales. Ensambla la estructura completa (estado,
+ * marcador, fases, radar por hinchada, hinchadas, aprendizajes) a partir de la narrativa
+ * y deja la prosa específica en cada llamada. Mantiene consistencia y evita olvidar campos.
+ */
+function finishedMatch(input: {
+  date: string
+  kickoffAt: string
+  slug: string
+  group: string
+  home: string
+  away: string
+  homeGoals: number
+  awayGoals: number
+  scoreDetail: string
+  seoTitle: string
+  hook: string
+  matchSummary: string
+  quickSummary: string
+  whatHappened: string
+  aiSummary: string
+  uxFinding: string
+  keyPlays: string[]
+  controversies: string[]
+  statements: string[]
+  combined: { expectativa: EmotionalRadarValues; realidad: EmotionalRadarValues; percepcion: EmotionalRadarValues }
+  teamsData: [FinishedTeam, FinishedTeam]
+  lessons: Array<{ term: string; explanation: string }>
+  humanBehavior: string
+  cognitiveBiases: string[]
+  emotionalReaction: string
+  digitalPatterns: string
+  productApplications: ProductApplication[]
+  fanPulse: { concerns: string[]; emotions: string[]; frustrations: string[]; enthusiasm: string[] }
+  sources: Array<{ name: string; url: string; kind: ArticleSourceRef["kind"] }>
+  imageUrl?: string
+  imageAlt?: string
+  imageCredit?: string
+  imageSourceUrl?: string
+}): RadarArticleInput {
+  const teamRadars: TeamRadar[] = input.teamsData.map((t) => ({
+    team: t.team,
+    current: { score: avgEmo(t.current), emotional: t.current },
+    predicted: { score: avgEmo(t.predicted), emotional: t.predicted },
+  }))
+  return {
+    category: "Fan Experience",
+    date: input.date,
+    kickoffAt: input.kickoffAt,
+    slug: input.slug,
+    matchState: "finalizado",
+    updateState: "ready",
+    imageUrl: input.imageUrl,
+    imageAlt: input.imageAlt,
+    imageCredit: input.imageCredit,
+    imageSourceUrl: input.imageSourceUrl,
+    matchScore: {
+      home: input.home,
+      away: input.away,
+      homeGoals: input.homeGoals,
+      awayGoals: input.awayGoals,
+      detail: input.scoreDetail,
+    },
+    matchSummary: input.matchSummary,
+    matchPhases: input.combined,
+    teamApproach: input.teamsData.map((t) => ({
+      team: t.team,
+      expectedEmotion: t.expectedEmotion,
+      dominantConversation: t.dominantConversation,
+      fanConfidence: t.fanConfidence,
+      mainNarrative: t.mainNarrative,
+      howTheyArrived: t.howTheyArrived,
+      whatHappened: t.whatHappened,
+      expectationVsReality: t.expectationVsReality,
+    })),
+    teamRadars,
+    collectiveByTeam: input.teamsData.map((t) => ({ team: t.team, mood: t.mood, behaviorEffect: t.behaviorEffect })),
+    lessons: input.lessons.map((l) => ({ ...l, phase: "despues" as const })),
+    seoTitle: input.seoTitle,
+    teams: [input.home, input.away],
+    event: `Mundial 2026 — ${input.group}`,
+    hook: input.hook,
+    quickSummary: input.quickSummary,
+    whatHappened: input.whatHappened,
+    keyPlays: input.keyPlays,
+    controversies: input.controversies,
+    statements: input.statements,
+    fanPulse: {
+      ...input.fanPulse,
+      sources: input.sources.filter((s) => s.kind === "conversacion" || s.kind === "tendencia").slice(0, 3),
+    },
+    mediaLabInsight: {
+      humanBehavior: input.humanBehavior,
+      cognitiveBiases: input.cognitiveBiases,
+      emotionalReaction: input.emotionalReaction,
+      digitalPatterns: input.digitalPatterns,
+    },
+    productApplications: input.productApplications,
+    emotionalRadar: input.combined.percepcion,
+    scoreFactors: { emotionalImpact: 86, digitalConversation: 84, virality: 86, userInterest: 88 },
+    uxFinding: input.uxFinding,
+    aiSummary: input.aiSummary,
+    sources: input.sources,
+  }
+}
+
+const avgEmo = (e: EmotionalRadarValues): number =>
+  Math.round(Object.values(e).reduce((a, b) => a + b, 0) / Object.values(e).length)
 
 const ARTICLE_INPUTS: RadarArticleInput[] = [
   {
@@ -853,19 +986,29 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
     ],
   },
 
-  // ───────────────────────── Artículo 3 · PREVIA ─────────────────────────
-  // Partido REAL del fixture: Brasil vs Marruecos, 13 jun 2026, Nueva Jersey (MetLife).
+  // ─────────────────── Brasil 1-1 Marruecos · FINALIZADO (datos reales) ───────────────────
+  // 13 jun 2026, MetLife (Nueva Jersey). Saibari 21' (MAR), Vinícius 32' (BRA). 80.663 asistentes.
   {
     category: "Fan Experience",
     date: "2026-06-13",
     kickoffAt: "2026-06-13T22:00:00.000Z",
     slug: "brasil-marruecos-mundial-2026",
-    matchState: "previa",
+    matchState: "finalizado",
+    matchScore: {
+      home: "Brasil",
+      away: "Marruecos",
+      homeGoals: 1,
+      awayGoals: 1,
+      detail: "Marruecos: Ismael Saibari 21'. Brasil: Vinícius Júnior 32'. 80.663 espectadores en el MetLife.",
+    },
     matchSummary:
-      "Brasil y Marruecos jugarán el 13 de junio a las 22:00 UTC en Nueva York/Nueva Jersey. FIFA presenta el cruce entre el cinco veces campeón y el semifinalista de 2022 como uno de los partidos destacados de la fase de grupos. La previa enfrenta dos expectativas: la obligación histórica de Brasil y la legitimidad competitiva que Marruecos construyó en Qatar.",
+      "Brasil y Marruecos empataron 1-1 en el MetLife ante 80.663 espectadores. Saibari adelantó a Marruecos (21') y Vinícius Júnior igualó de derecha (32'). El pentacampeón no pudo con el semifinalista de 2022: para Brasil, un empate que sabe a poco; para Marruecos, el orgullo de volver a plantarle cara a un gigante.",
     matchPhases: {
-      // Solo expectativa: lo que ambas hinchadas proyectan antes del partido.
+      // Antes: euforia con presión de favorito. Durante: tensión por ir por detrás y no poder
+      // con Marruecos. Después: en Brasil queda frustración; en la lectura general, respeto al rival.
       expectativa: { euforia: 80, confianza: 76, ansiedad: 56, frustracion: 26, incertidumbre: 54, optimismo: 78 },
+      realidad: { euforia: 64, confianza: 58, ansiedad: 72, frustracion: 58, incertidumbre: 60, optimismo: 64 },
+      percepcion: { euforia: 66, confianza: 62, ansiedad: 46, frustracion: 52, incertidumbre: 44, optimismo: 66 },
     },
     teamApproach: [
       {
@@ -874,6 +1017,9 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
         dominantConversation: "El mandato de volver a ganar y exhibir el jogo bonito.",
         fanConfidence: "Confianza muy alta, casi de obligación de ganar.",
         mainNarrative: "El gigante que debe reafirmar su jerarquía desde el debut.",
+        howTheyArrived: "Por detrás tras el gol de Saibari (21'), obligados a remar contra un rival incómodo.",
+        whatHappened: "Vinícius igualó (32') pero el pentacampeón no pudo pasar del 1-1.",
+        expectationVsReality: "Se daba por hecha la victoria; el empate ante Marruecos se vivió como decepción.",
       },
       {
         team: "Marruecos",
@@ -881,92 +1027,141 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
         dominantConversation: "El orgullo de competir de igual a igual con una potencia.",
         fanConfidence: "Confianza alta y unida, sin miedo escénico.",
         mainNarrative: "El equipo que ya demostró que puede dar el golpe.",
+        howTheyArrived: "Golpeando primero con Saibari y dominando tramos ante el pentacampeón.",
+        whatHappened: "Aguantaron el 1-1 y le sacaron un punto a Brasil, reforzando su prestigio.",
+        expectationVsReality: "Empatar al cinco veces campeón se sintió casi como una victoria moral.",
+      },
+    ],
+    lessons: [
+      { term: "Punto de referencia", explanation: "El mismo 1-1 es decepción para Brasil (esperaba ganar) y casi victoria para Marruecos (esperaba competir): el valor de un resultado depende de la expectativa, no es absoluto." },
+      { term: "Efecto David vs Goliat", explanation: "Frenar a un gigante eleva el prestigio del 'pequeño' más de lo que el empate baja al grande: la conversación premia al que rinde por encima de lo esperado." },
+      { term: "Sesgo de expectativa", explanation: "La presión de favorito convierte un empate digno en frustración; la expectativa fija el listón con el que se juzga la experiencia." },
+    ],
+    collectiveByTeam: [
+      {
+        team: "Brasil",
+        mood: "Frustración por un empate que sabe a poco",
+        behaviorEffect:
+          "Llegan con autoexigencia: la conversación pide más contundencia y pone bajo lupa a sus figuras.",
+      },
+      {
+        team: "Marruecos",
+        mood: "Orgullo por plantarle cara al pentacampeón",
+        behaviorEffect:
+          "Llegan reforzados: el 'efecto 2022' se renueva y eleva la confianza pública y la participación.",
+      },
+    ],
+    teamRadars: [
+      {
+        team: "Brasil",
+        current: {
+          score: 52,
+          emotional: { euforia: 50, confianza: 52, ansiedad: 66, frustracion: 70, incertidumbre: 58, optimismo: 52 },
+        },
+        predicted: {
+          score: 62,
+          emotional: { euforia: 58, confianza: 64, ansiedad: 54, frustracion: 52, incertidumbre: 50, optimismo: 64 },
+        },
+      },
+      {
+        team: "Marruecos",
+        current: {
+          score: 80,
+          emotional: { euforia: 82, confianza: 78, ansiedad: 38, frustracion: 26, incertidumbre: 36, optimismo: 84 },
+        },
+        predicted: {
+          score: 76,
+          emotional: { euforia: 74, confianza: 76, ansiedad: 42, frustracion: 30, incertidumbre: 42, optimismo: 80 },
+        },
       },
     ],
     seoTitle:
-      "Brasil vs Marruecos: previa, expectativa y por qué este partido paraliza al Mundial 2026",
+      "Brasil 1-1 Marruecos: resultado, goles y el empate que sabe distinto para cada hinchada (Mundial 2026)",
     teams: ["Brasil", "Marruecos"],
     event: "Mundial 2026 — Grupo C",
     hook: "El debut más esperado de la primera fecha",
     quickSummary:
-      "Antes de Brasil–Marruecos (Grupo C, 13 de junio en MetLife), el interés está marcado por el peso histórico de Brasil y un antecedente que pesa: Marruecos —semifinalista en 2022— ya venció a Brasil por primera vez en su historia (2-1, amistoso en Tánger, marzo de 2023). Esta nota registra la expectativa previa; tras el partido se actualizará con resultado, conversación y percepción observables.",
+      "Brasil empató 1-1 con Marruecos en el MetLife (Grupo C, 80.663 espectadores). Saibari adelantó a los africanos (21') y Vinícius Júnior igualó (32'). El pentacampeón no pudo con el semifinalista de 2022 y el mismo empate se vivió al revés en cada hinchada: frustración brasileña por no ganar y orgullo marroquí por frenar a un gigante. El antecedente pesaba: Marruecos ya había vencido a Brasil por primera vez en un amistoso en Tánger (2-1, marzo 2023).",
     whatHappened:
-      "El partido aún no se juega. FIFA confirma horario y escenario (MetLife, Nueva Jersey) y presenta el cruce entre el cinco veces campeón y una selección marroquí que llegó a semifinales en 2022. La memoria reciente alimenta el morbo: en la fase de grupos de Francia 1998 Brasil se impuso 3-0, pero en marzo de 2023 Marruecos rompió los libros de historia y venció 2-1 a Brasil por primera vez, en Tánger. A eso se suman las dudas sobre el estado físico de Neymar. Ese marco emocional —favoritismo histórico contra legitimidad reciente— condicionará cómo ambas hinchadas interpreten las primeras jugadas.",
+      "Marruecos volvió a plantarle cara al pentacampeón. Ismael Saibari adelantó a los africanos al 21' y dominó tramos del partido ante 80.663 espectadores en el MetLife; Vinícius Júnior, tras combinar con Bruno Guimarães, igualó con un derechazo (32', su décimo gol internacional). El 1-1 final dejó dos lecturas opuestas: para Brasil, una decepción —se daba por hecha la victoria y la conversación pidió más contundencia y puso bajo lupa a sus figuras—; para Marruecos, casi una victoria moral que renueva el 'efecto 2022' y su prestigio. La memoria reciente alimentaba el morbo: en Francia 1998 Brasil ganó 3-0, pero en marzo de 2023 Marruecos lo venció por primera vez en Tánger (2-1).",
     keyPlays: [
-      "Aún sin jugarse: se actualizará tras el partido.",
+      "Gol de Ismael Saibari para el 0-1 de Marruecos (21').",
+      "Empate de Vinícius Júnior con un derechazo (32'), su décimo gol internacional.",
+      "Marruecos aguanta el 1-1 y le saca un punto al pentacampeón.",
     ],
     controversies: [
-      "La disponibilidad física de Neymar añade incertidumbre a la expectativa brasileña.",
+      "Brasil terminó señalado por no superar a Marruecos pese a su favoritismo.",
+      "El empate reabrió el debate sobre el nivel real del pentacampeón y el estado de sus figuras.",
     ],
     statements: [
-      "El seleccionador de Marruecos ha planteado competir por el primer lugar del grupo; Brasil llega con la presión histórica de aspirar al título.",
+      "La afición brasileña vivió el empate como decepción; el entorno marroquí, como una validación de su crecimiento.",
     ],
     fanPulse: {
       concerns: [
-        "¿Quién llega mejor de forma?",
-        "¿A qué hora y dónde verlo?",
-        "¿Cómo afecta el antecedente de 2022?",
+        "¿Por qué no pudimos con Marruecos?",
+        "¿Cuál es el nivel real de Brasil?",
+        "¿Sigue vigente el 'efecto 2022' de Marruecos?",
       ],
-      emotions: ["Euforia anticipada", "Ansiedad por el debut", "Orgullo de pertenencia"],
+      emotions: ["Frustración brasileña", "Orgullo marroquí", "Tensión por ir por detrás"],
       frustrations: [
-        "Sobrecarga de opiniones contradictorias antes del partido.",
+        "Brasil: la falta de contundencia ante un rival incómodo.",
+        "La sensación de que el favoritismo no se tradujo en victoria.",
       ],
       enthusiasm: [
-        "Expectativa máxima por el cruce de estilos.",
-        "Interés por un cruce entre un campeón histórico y el semifinalista africano de 2022.",
+        "Marruecos renueva su prestigio ante un gigante.",
+        "El gol de Vinícius mantiene viva la conversación brasileña.",
       ],
       sources: [
-        { name: "FIFA — previa Brasil vs Marruecos", url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/brazil-morocco-preview-live-stream-team-news-tickets", kind: "oficial" },
+        { name: "Reddit r/soccer — hilo posterior del partido", url: "https://www.reddit.com/r/soccer/", kind: "conversacion" },
+        { name: "Google Trends — picos de búsqueda en vivo", url: "https://trends.google.com/trends/", kind: "tendencia" },
       ],
     },
     mediaLabInsight: {
       humanBehavior:
-        "Antes de un evento muy esperado, las personas construyen expectativas sobre la memoria emocional más que sobre datos: lo que sentimos que va a pasar pesa más que lo probable.",
+        "No juzgamos un resultado en absoluto, sino respecto a una expectativa: el mismo 1-1 es decepción para quien debía ganar y casi victoria para quien debía competir.",
       cognitiveBiases: [
-        "Sesgo de optimismo: cada hinchada sobreestima las probabilidades de su equipo.",
-        "Efecto halo: los éxitos recientes hacen ver al equipo mejor de lo que los datos sostienen.",
-        "Prueba social: cuando todo el feed coincide, la expectativa se siente como certeza.",
+        "Punto de referencia: el valor del empate es relativo a lo que cada hinchada esperaba.",
+        "Efecto David vs Goliat: frenar a un gigante eleva más al pequeño de lo que baja al grande.",
+        "Sesgo de expectativa: la presión de favorito convierte un empate digno en frustración.",
       ],
       emotionalReaction:
-        "La euforia previa eleva el listón: si la realidad no la iguala, la decepción posterior será mayor aunque el desempeño sea bueno.",
+        "La carga emocional no la dio el marcador, sino la distancia entre lo esperado y lo logrado: frustración de un lado, orgullo del otro.",
       digitalPatterns:
-        "Búsquedas de alineaciones y horarios, confrontación entre aficiones y consumo intensivo de contenido previo.",
+        "Dos conversaciones paralelas con el mismo dato: autocrítica y exigencia en Brasil; celebración y validación en Marruecos.",
     },
     productApplications: [
       {
-        sector: "Ecommerce",
-        application:
-          "Antes de un lanzamiento muy esperado, gestionar la expectativa con información clara evita que la euforia previa se convierta en decepción si algo no cumple.",
-      },
-      {
         sector: "Producto digital",
         application:
-          "En el onboarding de una función muy anunciada, alinear lo prometido con lo entregado protege la percepción posterior del usuario.",
+          "El mismo resultado se siente como éxito o fracaso según la expectativa fijada: encuadrar y anclar bien las expectativas cambia la satisfacción percibida sin cambiar el producto.",
+      },
+      {
+        sector: "SaaS B2B",
+        application:
+          "Si te posicionas como líder de categoría, subes el listón: un buen resultado puede leerse como decepción si no deslumbra.",
+      },
+      {
+        sector: "Startups",
+        application:
+          "Para el 'pequeño', competir de igual a igual con un grande genera más prestigio que un resultado modesto frente a un par: aprovecha el efecto David vs Goliat en tu narrativa.",
       },
     ],
-    emotionalRadar: {
-      euforia: 80,
-      confianza: 76,
-      ansiedad: 56,
-      frustracion: 26,
-      incertidumbre: 54,
-      optimismo: 78,
-    },
+    emotionalRadar: { euforia: 66, confianza: 62, ansiedad: 46, frustracion: 52, incertidumbre: 44, optimismo: 66 },
     uxFinding:
-      "La expectativa previa fija el listón con el que se juzgará la experiencia real. Gestionar lo que la gente espera, antes del evento, define qué tan satisfecha quedará después.",
+      "La satisfacción no depende del resultado absoluto sino de la expectativa con la que se compara. Fijar el punto de referencia adecuado convierte un mismo resultado en triunfo o en decepción.",
     aiSummary:
-      "Nota previa de Brasil–Marruecos del Mundial 2026 (13 de junio, Nueva Jersey). El Experience Radar de MediaLab analiza la expectativa antes del pitazo: ambas aficiones construyen su confianza sobre la memoria emocional —el favoritismo de Brasil y la gesta de Marruecos en 2022, prueba social— más que sobre datos de rendimiento. El aprendizaje para productos digitales es que la expectativa previa fija el listón con el que se juzgará la experiencia real; gestionar lo prometido evita que la euforia se convierta en decepción. La nota se actualizará con la realidad y la percepción tras el partido.",
+      "Brasil empató 1-1 con Marruecos en el Mundial 2026 (MetLife, 80.663 espectadores): Saibari adelantó a los africanos y Vinícius Júnior igualó. Experience Radar de MediaLab lo analiza desde el comportamiento: por el punto de referencia y el efecto David vs Goliat, el mismo empate se vivió como decepción (Brasil, que debía ganar) y como casi victoria (Marruecos, que debía competir). Para productos digitales —producto, SaaS, startups— la lección es que la expectativa fijada define el valor percibido más que el resultado en sí.",
     scoreFactors: {
-      emotionalImpact: 88,
+      emotionalImpact: 90,
       digitalConversation: 92,
       virality: 90,
       userInterest: 95,
     },
     sources: [
+      { name: "ESPN — Brazil 1-1 Morocco (Game Analysis)", url: "https://www.espn.com/soccer/report/_/gameId/760419", kind: "referencia" },
       { name: "FIFA — centro de partido Brasil vs Marruecos", url: "https://www.fifa.com/en/match-centre/match/17/285023/289273/400021456", kind: "oficial" },
-      { name: "FIFA — previa Brasil vs Marruecos", url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/brazil-morocco-preview-live-stream-team-news-tickets", kind: "oficial" },
-      { name: "AP — expectativa de Brasil y estado de Neymar", url: "https://apnews.com/article/brazil-world-cup-neymar-ancelotti-ebdba3dcbf32124a38b388775cc20b38", kind: "referencia" },
-      { name: "WinSports — calendario y cobertura del Mundial 2026", url: "https://www.winsports.co/futbol-internacional/noticias/copa-mundial-de-la-fifa-2026-mira-el-calendario-completo-437848", kind: "referencia" },
+      { name: "WinSports — cobertura del Mundial 2026", url: "https://www.winsports.co/futbol-internacional/noticias/copa-mundial-de-la-fifa-2026-mira-el-calendario-completo-437848", kind: "referencia" },
+      { name: "Reddit r/soccer — hilo posterior del partido", url: "https://www.reddit.com/r/soccer/", kind: "conversacion" },
     ],
   },
 
@@ -974,29 +1169,319 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
   // Fixtures verificados (FIFA/ESPN). Horarios convertidos a UTC desde la hora del este.
   // ── Sábado 13 de junio: Catar-Suiza (3pm ET), Brasil-Marruecos (6pm), Haití-Escocia
   //    (9pm) y Australia-Turquía (12am ET / 9pm en Vancouver). Las 4 del día. ──
-  upcomingMatch({
+  // ── Catar 1-1 Suiza · FINALIZADO (datos reales) ──
+  finishedMatch({
     date: "2026-06-13",
     kickoffAt: "2026-06-13T19:00:00.000Z",
     slug: "catar-suiza-mundial-2026",
-    teams: ["Catar", "Suiza"],
     group: "Grupo B",
-    officialUrl: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/scores-fixtures",
+    home: "Catar",
+    away: "Suiza",
+    homeGoals: 1,
+    awayGoals: 1,
+    scoreDetail: "Suiza: Breel Embolo de penal 17'. Catar: Boualem Khoukhi de cabeza 90+4'. Catar sumó su primer punto en un Mundial; Suiza dominó (xG 3.24 vs 0.76).",
+    seoTitle: "Catar 1-1 Suiza: el gol agónico que dio a Catar su primer punto mundialista (Mundial 2026)",
+    hook: "El empate sobre la hora que reescribió 90 minutos de dominio suizo",
+    matchSummary:
+      "Catar empató 1-1 con Suiza en el minuto 90+4 y logró su PRIMER punto en la historia de los Mundiales. Embolo había puesto el 0-1 de penal (17') y Suiza dominó casi todo (xG 3.24 a 0.76), pero el cabezazo de Khoukhi sobre la hora cambió el partido entero: euforia catarí y frustración suiza por exactamente el mismo marcador.",
+    quickSummary:
+      "Catar rescató un 1-1 ante Suiza con un cabezazo de Khoukhi en el 90+4 y consiguió su primer punto mundialista. Suiza, que dominó de principio a fin (xG 3.24 vs 0.76) y se adelantó con un penal de Embolo, lo dejó escapar sobre la hora. El mismo empate se vivió como triunfo (Catar) y como dos puntos perdidos (Suiza): un caso de regla pico-fin y aversión a la pérdida.",
+    whatHappened:
+      "Suiza llevó el partido durante 90 minutos: golpeó primero con un penal de Breel Embolo (17') tras falta sobre Freuler y acumuló ocasiones (3.24 goles esperados frente a apenas 0.76 de Catar). Pero en el cuarto minuto de descuento, el capitán Boualem Khoukhi conectó un cabezazo y desató la fiesta catarí: su primer punto en un Mundial. La conversación digital giró por completo en esos segundos finales: de la resignación local a la explosión de celebración, y de la tranquilidad suiza a la bronca por dejar escapar un partido controlado. El marcador fue el mismo para ambos; la experiencia, opuesta.",
+    keyPlays: [
+      "Penal de Embolo para el 0-1 de Suiza (17').",
+      "Suiza domina las ocasiones pero no liquida (xG 3.24 vs 0.76).",
+      "Cabezazo de Khoukhi en el 90+4 para el 1-1 y el primer punto de Catar.",
+    ],
+    controversies: [
+      "Suiza lamentó la cantidad de ocasiones falladas que terminaron costándole dos puntos.",
+      "El penal del 17' marcó el guion, pero el descuento lo reescribió.",
+    ],
+    statements: [
+      "La afición catarí celebró el punto como un hito; el entorno suizo habló de oportunidad perdida.",
+    ],
+    combined: {
+      expectativa: { euforia: 62, confianza: 64, ansiedad: 50, frustracion: 28, incertidumbre: 54, optimismo: 64 },
+      realidad: { euforia: 60, confianza: 56, ansiedad: 78, frustracion: 58, incertidumbre: 64, optimismo: 60 },
+      percepcion: { euforia: 72, confianza: 60, ansiedad: 40, frustracion: 50, incertidumbre: 40, optimismo: 66 },
+    },
+    teamsData: [
+      {
+        team: "Catar",
+        expectedEmotion: "Ilusión cautelosa de local-anfitrión regional ante una potencia.",
+        dominantConversation: "Competir con orden y soñar con el primer punto histórico.",
+        fanConfidence: "Confianza contenida, con el peso de no haber sumado nunca.",
+        mainNarrative: "El equipo que busca su primera alegría mundialista.",
+        howTheyArrived: "Por detrás casi todo el partido, resistiendo el dominio suizo.",
+        whatHappened: "El cabezazo de Khoukhi en el 90+4 firmó el 1-1 y el primer punto mundialista de Catar.",
+        expectationVsReality: "Un empate que, por su historia, se festejó como un triunfo y un alivio enorme.",
+        mood: "Euforia agónica por el primer punto histórico",
+        behaviorEffect:
+          "Llegan envalentonados: el gol sobre la hora rompe un techo psicológico y dispara la confianza pública y la participación.",
+        current: { euforia: 86, confianza: 70, ansiedad: 34, frustracion: 24, incertidumbre: 34, optimismo: 84 },
+        predicted: { euforia: 72, confianza: 68, ansiedad: 44, frustracion: 32, incertidumbre: 44, optimismo: 76 },
+      },
+      {
+        team: "Suiza",
+        expectedEmotion: "Confianza de favorito, con la obligación de empezar ganando.",
+        dominantConversation: "Imponer su juego y llevarse los tres puntos sin sobresaltos.",
+        fanConfidence: "Confianza alta, casi de trámite.",
+        mainNarrative: "La potencia europea que debía resolver con solvencia.",
+        howTheyArrived: "Mandando: se adelantó pronto y acumuló ocasiones toda la tarde.",
+        whatHappened: "No liquidó y encajó en el 90+4; el dominio no se tradujo en victoria.",
+        expectationVsReality: "Esperaban ganar cómodos; el empate sobre la hora supo a dos puntos regalados.",
+        mood: "Frustración por dejar escapar un partido controlado",
+        behaviorEffect:
+          "Llegan con autocrítica: la conversación se centra en la falta de contundencia y en cerrar los partidos.",
+        current: { euforia: 28, confianza: 44, ansiedad: 66, frustracion: 78, incertidumbre: 58, optimismo: 40 },
+        predicted: { euforia: 44, confianza: 56, ansiedad: 54, frustracion: 54, incertidumbre: 50, optimismo: 54 },
+      },
+    ],
+    lessons: [
+      { term: "Regla pico-fin", explanation: "El recuerdo se ancla en el momento más intenso y en el final: un gol en el 90+4 redefine cómo se vive todo el partido, por encima de lo que pasó antes." },
+      { term: "Aversión a la pérdida", explanation: "A Suiza le dolió más perder dos puntos que tenía que a Catar le alegró sumar uno inesperado: perder lo seguro pesa más que ganar lo improbable." },
+      { term: "Sesgo de recencia", explanation: "Lo último que ocurre tiñe la experiencia entera; el descuento borró 90 minutos de dominio suizo en la conversación." },
+    ],
+    humanBehavior:
+      "No juzgamos el resultado en absoluto, sino respecto a una expectativa: el mismo 1-1 es triunfo para quien nunca sumó y fracaso para quien dominó. El cierre define el recuerdo.",
+    cognitiveBiases: [
+      "Regla pico-fin: el gol del descuento marca el recuerdo de todo el partido.",
+      "Aversión a la pérdida: pesa más perder lo seguro que ganar lo improbable.",
+      "Sesgo de recencia: el último minuto reescribe los noventa anteriores.",
+    ],
+    emotionalReaction:
+      "La euforia catarí y la frustración suiza no nacen del marcador, sino de la distancia entre lo esperado y lo vivido por cada hinchada.",
+    digitalPatterns:
+      "Sentimiento que se invierte en segundos: resignación local y calma suiza hasta el 90+4, y luego explosión de celebración frente a bronca y autocrítica.",
+    productApplications: [
+      { sector: "Producto digital", application: "El final de un flujo define la satisfacción más que el promedio: cuida el cierre (confirmaciones, estados de éxito) porque es lo que el usuario recuerda." },
+      { sector: "Fintech", application: "Un resultado neutro se vive como pérdida o ganancia según la referencia mostrada: encuadrar bien evita que un dato neutral se perciba como fracaso." },
+      { sector: "SaaS / Onboarding", application: "Ancla expectativas alcanzables: un logro modesto se siente como éxito si la referencia está bien puesta." },
+    ],
+    fanPulse: {
+      concerns: ["¿Cómo desperdiciamos tantas ocasiones?", "¿Sirve este punto de cara al grupo?", "¿Cómo llega cada equipo al próximo partido?"],
+      emotions: ["Resignación que se vuelve euforia (Catar)", "Calma que se vuelve bronca (Suiza)", "Tensión hasta el último minuto"],
+      frustrations: ["Suiza: la falta de contundencia.", "Catar: el sufrimiento de ir por detrás casi todo el partido."],
+      enthusiasm: ["Catar celebra su primer punto mundialista.", "El golpe de efecto del gol en el descuento."],
+    },
+    uxFinding:
+      "La satisfacción depende de la expectativa con la que se compara y del momento final, no del promedio. Un buen cierre puede convertir un resultado neutro en una experiencia recordada como victoria.",
+    aiSummary:
+      "Catar empató 1-1 con Suiza en el Mundial 2026 con un cabezazo de Khoukhi en el 90+4 y sumó su primer punto histórico; Embolo había marcado de penal y Suiza dominó (xG 3.24 vs 0.76). Experience Radar de MediaLab lo analiza desde el comportamiento: por la regla pico-fin y la aversión a la pérdida, el mismo empate se vivió como triunfo (Catar) y como fracaso (Suiza). Para productos digitales —fintech, SaaS, producto— la lección es que el final y el marco de referencia definen el valor percibido más que el promedio.",
+    sources: [
+      { name: "ESPN — Qatar 1-1 Switzerland (Final Score)", url: "https://www.espn.com/soccer/match/_/gameId/760420/switzerland-qatar", kind: "referencia" },
+      { name: "FIFA — Mundial 2026 (centro del torneo)", url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026", kind: "oficial" },
+      { name: "Reddit r/soccer — hilo posterior del partido", url: "https://www.reddit.com/r/soccer/", kind: "conversacion" },
+    ],
   }),
-  upcomingMatch({
+  // ── Haití 0-1 Escocia · FINALIZADO (datos reales) ──
+  finishedMatch({
     date: "2026-06-13",
     kickoffAt: "2026-06-14T01:00:00.000Z",
     slug: "haiti-escocia-mundial-2026",
-    teams: ["Haití", "Escocia"],
     group: "Grupo C",
-    officialUrl: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/scores-fixtures",
+    home: "Haití",
+    away: "Escocia",
+    homeGoals: 0,
+    awayGoals: 1,
+    scoreDetail: "Escocia: John McGinn 28' (con desvío). Escocia logró una victoria histórica y lideró por momentos el Grupo C tras el empate Brasil-Marruecos.",
+    seoTitle: "Haití 0-1 Escocia: McGinn rompe la sequía mundialista del Tartan Army (Mundial 2026)",
+    hook: "El alivio escocés tras años de espera y un debut digno de Haití",
+    matchSummary:
+      "Escocia venció 0-1 a Haití con un gol de John McGinn (28', con desvío) y rompió una larga sequía: para el Tartan Army, más que tres puntos, fue alivio acumulado. Haití firmó un debut digno y competitivo, pero la derrota deja el sabor de no haber puntuado pese a competir.",
+    quickSummary:
+      "Escocia ganó 0-1 a Haití con un gol de McGinn (28') y celebró como un desahogo: el peso de años de frustración mundialista se transformó en euforia y alivio. Haití compitió y se fue con la cabeza en alto, pero la derrota duele. El partido muestra cómo el alivio tras una larga espera amplifica la emoción de una victoria ajustada.",
+    whatHappened:
+      "Escocia abrió el marcador al 28' con un remate de John McGinn que se desvió en un defensa y descolocó al portero Placide. El 1-0 resistió un partido tenso en Boston: Haití, en su debut, compitió con orden y generó respeto, pero no encontró el empate. Para la afición escocesa, la conversación digital no fue de euforia futbolística pura, sino de alivio: el desahogo de romper una sequía y, por momentos, liderar el Grupo C tras el empate entre Brasil y Marruecos. Haití se fue con orgullo por el debut, pero con la frustración de competir y no sumar.",
+    keyPlays: [
+      "Gol de John McGinn al 28' (con desvío) para el 0-1.",
+      "Haití compite y genera respeto en su debut, sin concretar el empate.",
+      "Escocia aguanta el 1-0 y rompe su sequía mundialista.",
+    ],
+    controversies: [
+      "El desvío en el gol escocés alimentó el debate sobre la fortuna del resultado.",
+      "Haití lamentó la falta de eficacia para premiar su buen debut.",
+    ],
+    statements: [
+      "La afición escocesa vivió el triunfo como un alivio histórico más que como una goleada festiva.",
+    ],
+    combined: {
+      expectativa: { euforia: 64, confianza: 58, ansiedad: 56, frustracion: 30, incertidumbre: 58, optimismo: 64 },
+      realidad: { euforia: 58, confianza: 60, ansiedad: 70, frustracion: 48, incertidumbre: 58, optimismo: 62 },
+      percepcion: { euforia: 66, confianza: 66, ansiedad: 42, frustracion: 40, incertidumbre: 40, optimismo: 68 },
+    },
+    teamsData: [
+      {
+        team: "Haití",
+        expectedEmotion: "Ilusión del debutante con poco que perder.",
+        dominantConversation: "Competir con orgullo y dar la sorpresa.",
+        fanConfidence: "Confianza humilde, apoyada en la garra.",
+        mainNarrative: "El debutante que quiere dejar una buena imagen.",
+        howTheyArrived: "Compitiendo de igual a igual, sin concretar sus opciones.",
+        whatHappened: "Encajaron un gol con desvío y no encontraron el empate pese a competir.",
+        expectationVsReality: "Hicieron un buen debut, pero la derrota deja el sabor de no haber sumado.",
+        mood: "Orgullo del debut con frustración por no puntuar",
+        behaviorEffect:
+          "Llegan con autoestima por competir, pero con la conversación centrada en mejorar la puntería y sumar.",
+        current: { euforia: 40, confianza: 46, ansiedad: 58, frustracion: 62, incertidumbre: 58, optimismo: 48 },
+        predicted: { euforia: 48, confianza: 52, ansiedad: 52, frustracion: 50, incertidumbre: 52, optimismo: 56 },
+      },
+      {
+        team: "Escocia",
+        expectedEmotion: "Tensión y ansiedad por años de frustración mundialista.",
+        dominantConversation: "La presión de por fin ganar en un Mundial.",
+        fanConfidence: "Confianza con miedo escénico, marcada por el historial.",
+        mainNarrative: "El Tartan Army que arrastra una larga espera.",
+        howTheyArrived: "Tensos, con el peso de la sequía sobre cada jugada.",
+        whatHappened: "Ganaron 0-1 con el gol de McGinn y rompieron la sequía.",
+        expectationVsReality: "Más que una goleada, fue un alivio: el desahogo de por fin ganar.",
+        mood: "Alivio y euforia por romper la sequía",
+        behaviorEffect:
+          "Llegan liberados: el techo psicológico roto eleva la confianza y la narrativa de 'esta vez sí'.",
+        current: { euforia: 82, confianza: 74, ansiedad: 36, frustracion: 26, incertidumbre: 34, optimismo: 82 },
+        predicted: { euforia: 72, confianza: 74, ansiedad: 42, frustracion: 30, incertidumbre: 42, optimismo: 78 },
+      },
+    ],
+    lessons: [
+      { term: "Efecto de alivio", explanation: "Tras una larga espera, una victoria ajustada genera más emoción que una goleada sin historia: el desahogo amplifica el valor percibido." },
+      { term: "Punto de referencia", explanation: "Escocia midió el resultado contra años sin ganar; Haití contra la ilusión del debut: la misma jugada produce alivio o frustración según la referencia." },
+      { term: "Sesgo de resultado", explanation: "Un gol con desvío se recuerda como mérito cuando se gana; la suerte se reencuadra como justicia desde el lado ganador." },
+    ],
+    humanBehavior:
+      "El valor de un logro depende de la espera que lo precede: romper una sequía convierte una victoria modesta en una experiencia emocional enorme.",
+    cognitiveBiases: [
+      "Efecto de alivio: la espera acumulada amplifica la emoción del desenlace.",
+      "Punto de referencia: alivio (Escocia) vs frustración (Haití) ante el mismo 0-1.",
+      "Sesgo de resultado: ganar reencuadra la fortuna como mérito.",
+    ],
+    emotionalReaction:
+      "La euforia escocesa fue desahogo más que fiesta; la de Haití, orgullo con sabor amargo. La emoción la define la historia previa, no solo el marcador.",
+    digitalPatterns:
+      "Conversación de desahogo y memoria histórica del lado escocés; orgullo y autoexigencia del lado haitiano, con foco en la eficacia.",
+    productApplications: [
+      { sector: "Producto digital", application: "Un avance modesto se siente como gran logro si la referencia (la espera, el esfuerzo) está bien encuadrada: celebra los hitos en su contexto." },
+      { sector: "SaaS / Onboarding", application: "Reconocer el esfuerzo acumulado del usuario antes de un logro multiplica la satisfacción percibida del momento." },
+      { sector: "Ecommerce", application: "Tras una espera (stock, lista de deseos), confirmar la compra con un gesto de reconocimiento convierte un evento normal en memorable." },
+    ],
+    fanPulse: {
+      concerns: ["¿Aguantará Escocia el nivel?", "¿Cómo mejora Haití su puntería?", "¿Alcanza este punto de partida para el grupo?"],
+      emotions: ["Alivio y desahogo (Escocia)", "Orgullo con frustración (Haití)", "Tensión durante el 1-0"],
+      frustrations: ["Haití: competir y no puntuar.", "Escocia: sufrir un 1-0 corto hasta el final."],
+      enthusiasm: ["Escocia rompe su sequía mundialista.", "Haití deja una buena imagen en su debut."],
+    },
+    uxFinding:
+      "El valor percibido de un logro depende de la espera previa. Encuadrar el esfuerzo acumulado convierte un resultado modesto en una experiencia emocional fuerte.",
+    aiSummary:
+      "Escocia venció 0-1 a Haití en el Mundial 2026 con un gol de McGinn (28') y rompió una larga sequía mundialista. Experience Radar de MediaLab lo analiza desde el comportamiento: por el efecto de alivio y el punto de referencia, una victoria ajustada se vivió como un desahogo histórico (Escocia) y como orgullo frustrado (Haití). Para productos digitales la lección es que el valor percibido de un logro depende de la espera previa: encuadrar el esfuerzo acumulado amplifica la satisfacción.",
+    sources: [
+      { name: "ESPN — Haiti 0-1 Scotland (recap)", url: "https://www.espn.com/soccer/match/_/gameId/760418/scotland-haiti", kind: "referencia" },
+      { name: "FIFA — Mundial 2026 (centro del torneo)", url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026", kind: "oficial" },
+      { name: "Reddit r/soccer — hilo posterior del partido", url: "https://www.reddit.com/r/soccer/", kind: "conversacion" },
+    ],
   }),
-  upcomingMatch({
+  // ── Australia 2-0 Turquía · FINALIZADO (datos reales) ──
+  finishedMatch({
     date: "2026-06-13",
     kickoffAt: "2026-06-14T04:00:00.000Z",
     slug: "australia-turquia-mundial-2026",
-    teams: ["Australia", "Turquía"],
     group: "Fase de grupos",
-    officialUrl: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/scores-fixtures",
+    home: "Australia",
+    away: "Turquía",
+    homeGoals: 2,
+    awayGoals: 0,
+    scoreDetail: "Australia firmó un 2-0 sólido en su debut; Turquía no encontró respuesta. (Goleadores pendientes de verificación en la nota.)",
+    seoTitle: "Australia 2-0 Turquía: el debut sólido de los Socceroos en el Mundial 2026",
+    hook: "La solvencia australiana y la decepción turca en el arranque",
+    matchSummary:
+      "Australia se impuso 2-0 a Turquía en un debut sólido y ordenado. Los Socceroos transmitieron control y eficacia; Turquía, señalada como favorita en su grupo, no encontró respuesta y se fue con más dudas que certezas.",
+    quickSummary:
+      "Australia venció 2-0 a Turquía con un debut sólido y ordenado. La afición australiana celebró el control y la eficacia; la turca, que llegaba con expectativa de favorita, quedó con la sensación de un arranque fallido. El contraste muestra cómo la expectativa previa amplifica la satisfacción (Australia) o la decepción (Turquía) ante el mismo partido.",
+    whatHappened:
+      "Australia controló su debut y lo cerró con un 2-0 que dejó buenas sensaciones: orden, eficacia y solvencia. Turquía, que llegaba con la etiqueta de candidata a liderar su grupo, no logró imponer su juego y terminó superada. La conversación digital reflejó el contraste: confianza y alivio del lado australiano, autocrítica y decepción del lado turco, donde la expectativa previa hizo que el tropiezo se sintiera más duro.",
+    keyPlays: [
+      "Australia toma el control y se adelanta en el marcador.",
+      "Turquía no encuentra respuesta a la solidez australiana.",
+      "Los Socceroos cierran un 2-0 que da tranquilidad a su debut.",
+    ],
+    controversies: [
+      "Turquía, señalada como favorita, quedó debiendo y abrió el debate sobre su nivel real.",
+    ],
+    statements: [
+      "La afición australiana valoró el orden y la eficacia; el entorno turco pidió autocrítica tras un debut fallido.",
+    ],
+    combined: {
+      expectativa: { euforia: 60, confianza: 58, ansiedad: 52, frustracion: 30, incertidumbre: 56, optimismo: 62 },
+      realidad: { euforia: 70, confianza: 72, ansiedad: 44, frustracion: 36, incertidumbre: 40, optimismo: 74 },
+      percepcion: { euforia: 74, confianza: 76, ansiedad: 34, frustracion: 34, incertidumbre: 32, optimismo: 78 },
+    },
+    teamsData: [
+      {
+        team: "Australia",
+        expectedEmotion: "Confianza tranquila, sin ser favorito declarado.",
+        dominantConversation: "Competir con orden y aprovechar sus oportunidades.",
+        fanConfidence: "Confianza moderada, apoyada en el carácter colectivo.",
+        mainNarrative: "El equipo aguerrido que crece desde el orden.",
+        howTheyArrived: "Sólidos y ordenados, controlando el ritmo del partido.",
+        whatHappened: "Cerraron un 2-0 eficaz que validó su plan de juego.",
+        expectationVsReality: "Superaron la expectativa: un debut convincente que ilusiona.",
+        mood: "Confianza y satisfacción por un debut sólido",
+        behaviorEffect:
+          "Llegan reforzados: la conversación celebra el orden y proyecta un grupo competitivo.",
+        current: { euforia: 80, confianza: 80, ansiedad: 34, frustracion: 24, incertidumbre: 30, optimismo: 84 },
+        predicted: { euforia: 72, confianza: 78, ansiedad: 40, frustracion: 28, incertidumbre: 40, optimismo: 80 },
+      },
+      {
+        team: "Turquía",
+        expectedEmotion: "Confianza de favorito con presión por rendir.",
+        dominantConversation: "La obligación de liderar el grupo desde el debut.",
+        fanConfidence: "Confianza alta, casi de exigencia.",
+        mainNarrative: "El candidato que debía empezar mostrando jerarquía.",
+        howTheyArrived: "Superados, sin imponer su juego en ningún momento.",
+        whatHappened: "Cayeron 0-2 y no encontraron respuesta a la solidez rival.",
+        expectationVsReality: "La expectativa de favorito amplificó la decepción del tropiezo.",
+        mood: "Decepción y autocrítica tras un debut fallido",
+        behaviorEffect:
+          "Llegan tocados: la conversación se centra en el nivel real y en recomponer la confianza.",
+        current: { euforia: 30, confianza: 40, ansiedad: 60, frustracion: 74, incertidumbre: 60, optimismo: 38 },
+        predicted: { euforia: 44, confianza: 50, ansiedad: 54, frustracion: 56, incertidumbre: 54, optimismo: 50 },
+      },
+    ],
+    lessons: [
+      { term: "Sesgo de expectativa", explanation: "El favorito (Turquía) sufre más un tropiezo porque su referencia era ganar; el mismo 2-0 se vive peor desde la expectativa alta." },
+      { term: "Efecto halo inverso", explanation: "Un debut flojo del candidato tiñe toda su valoración hacia abajo, igual que un buen arranque la eleva (Australia)." },
+      { term: "Anclaje de confianza", explanation: "Un primer resultado sólido fija un relato positivo que sostiene la confianza de la hinchada en lo que viene." },
+    ],
+    humanBehavior:
+      "La misma actuación se juzga distinto según la expectativa previa: ser favorito eleva el listón y convierte un tropiezo en decepción amplificada.",
+    cognitiveBiases: [
+      "Sesgo de expectativa: el favorito sufre más el tropiezo.",
+      "Efecto halo (inverso): un mal debut arrastra toda la valoración.",
+      "Anclaje: el primer resultado fija el relato de confianza.",
+    ],
+    emotionalReaction:
+      "Satisfacción y alivio del lado australiano; decepción amplificada del lado turco, donde la expectativa de favorito hizo más dura la caída.",
+    digitalPatterns:
+      "Conversación de validación y confianza en Australia; autocrítica y revisión del nivel real en Turquía, con foco en el próximo partido.",
+    productApplications: [
+      { sector: "Producto digital", application: "Gestiona la expectativa antes de lanzar: prometer 'líder de categoría' eleva el listón y convierte un buen resultado en decepción si no deslumbra." },
+      { sector: "SaaS B2B", application: "Un primer entregable sólido ancla la confianza del cliente; un arranque flojo del 'favorito' cuesta el doble recuperarlo." },
+      { sector: "Ecommerce", application: "Una primera compra impecable fija expectativas; si te vendiste como premium, el listón sube y el margen de error baja." },
+    ],
+    fanPulse: {
+      concerns: ["¿Es tan bueno Australia o Turquía falló?", "¿Cuál es el nivel real de Turquía?", "¿Cómo reacciona el favorito tras el tropiezo?"],
+      emotions: ["Confianza y alivio (Australia)", "Decepción y autocrítica (Turquía)", "Sorpresa por el marcador"],
+      frustrations: ["Turquía: no imponer su juego siendo favorita.", "El peso de la expectativa sobre el debut turco."],
+      enthusiasm: ["Australia ilusiona con un debut sólido.", "El orden colectivo como sello de los Socceroos."],
+    },
+    uxFinding:
+      "La expectativa que fijas define cómo se juzga tu desempeño: posicionarte como favorito sube el listón y amplifica la decepción ante cualquier tropiezo.",
+    aiSummary:
+      "Australia venció 2-0 a Turquía en su debut en el Mundial 2026 con un partido sólido y ordenado, mientras la favorita Turquía decepcionó. Experience Radar de MediaLab lo analiza desde el comportamiento: por el sesgo de expectativa y el efecto halo, el mismo resultado se vivió como confianza (Australia) y como decepción amplificada (Turquía). Para productos digitales la lección es que la expectativa que fijas —favorito o aspirante— define cómo se juzga tu desempeño.",
+    sources: [
+      { name: "FIFA — Mundial 2026 (centro del torneo)", url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026", kind: "oficial" },
+      { name: "ESPN — Mundial 2026 (resultados)", url: "https://www.espn.com/soccer/scoreboard", kind: "referencia" },
+      { name: "Reddit r/soccer — hilo posterior del partido", url: "https://www.reddit.com/r/soccer/", kind: "conversacion" },
+    ],
   }),
   upcomingMatch({
     date: "2026-06-14",
