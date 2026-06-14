@@ -1,9 +1,13 @@
 import { getVisibleRadarArticles } from "@/src/lib/experience-radar/articleData"
+import { getArticleAvailability } from "@/src/lib/experience-radar/articleAvailability"
 
 const SITE = "https://medialab.design"
 
 export async function GET() {
-  const articles = await getVisibleRadarArticles()
+  const now = new Date()
+  const articles = (await getVisibleRadarArticles()).filter(
+    (article) => getArticleAvailability(article, now).accessible,
+  )
   const items = articles
     .map(
       (article) => `

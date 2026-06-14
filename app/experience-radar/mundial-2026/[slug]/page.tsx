@@ -14,6 +14,7 @@ import { MatchCountdown } from "@/components/experience-radar/match-countdown"
 import { RadarPhaseProvider } from "@/components/experience-radar/radar-phase-context"
 import { RadarPhaseBar } from "@/components/experience-radar/radar-phase-bar"
 import { RadarNewsletter } from "@/components/experience-radar/radar-newsletter"
+import { PushOptIn } from "@/components/experience-radar/push-optin"
 import { RelatedNotes, type RelatedNote } from "@/components/experience-radar/related-notes"
 import { NoteImage } from "@/components/experience-radar/note-image"
 import { StatusPill } from "@/components/experience-radar/status-pill"
@@ -37,6 +38,14 @@ export async function generateMetadata({
   const { slug } = await params
   const article = await getRadarArticleBySlug(slug)
   if (!article) return { title: "Artículo no encontrado | Experience Radar" }
+
+  const availability = getArticleAvailability(article)
+  if (!availability.accessible) {
+    return {
+      title: "Análisis en preparación | Experience Radar",
+      robots: { index: false, follow: true },
+    }
+  }
 
   const url = `${SITE}${BASE}/${article.slug}`
   const image = article.imageUrl || `${SITE}${pickMatchImage(article.slug, article.teams)}`
@@ -75,6 +84,7 @@ export default async function RadarArticlePage({
   const { slug } = await params
   const article = await getRadarArticleBySlug(slug)
   if (!article) notFound()
+  if (!getArticleAvailability(article).accessible) notFound()
 
   const status = resolveRuntimeStatus(article)
   const isPreview = status === "previa"
@@ -194,6 +204,9 @@ export default async function RadarArticlePage({
 
         {/* Suscripción: va DESPUÉS del simulador ── */}
         <RadarNewsletter />
+
+        {/* Opt-in de notificaciones push: avisos de nuevos análisis en el dispositivo. */}
+        <PushOptIn />
 
         {/* ── CTA final integrado ── */}
         <RadarCtaCards />

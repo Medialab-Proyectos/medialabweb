@@ -1,5 +1,6 @@
 import { MetadataRoute } from "next"
 import { getVisibleRadarArticles } from "@/src/lib/experience-radar/articleData"
+import { getArticleAvailability } from "@/src/lib/experience-radar/articleAvailability"
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://medialab.design"
@@ -99,7 +100,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ]
 
-  const articles = await getVisibleRadarArticles()
+  const articles = (await getVisibleRadarArticles()).filter(
+    (article) => getArticleAvailability(article, now).accessible,
+  )
   const articleEntries: MetadataRoute.Sitemap = articles.map((article) => ({
     url: `${baseUrl}/experience-radar/mundial-2026/${article.slug}`,
     lastModified: new Date(article.updatedAt || article.date),

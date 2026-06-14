@@ -81,3 +81,43 @@ verificado de cada uno y las fuentes que usaste.
     percepcion: "…",
   },
   ```
+
+## Notificaciones push (Web Push)
+
+El usuario puede activar avisos de "nuevo análisis" en su dispositivo (botón en la página
+del especial). Llega aunque el sitio esté cerrado. El envío es **manual** (igual que las
+actualizaciones).
+
+### 1. Generar claves VAPID (una sola vez)
+```bash
+npx web-push generate-vapid-keys
+```
+
+### 2. Variables de entorno (Vercel → Settings → Environment Variables)
+```
+VAPID_PUBLIC_KEY=<clave pública>
+VAPID_PRIVATE_KEY=<clave privada>
+VAPID_SUBJECT=mailto:hello@medialab.design
+NEXT_PUBLIC_VAPID_PUBLIC_KEY=<la MISMA clave pública>   # la usa el navegador
+CRON_SECRET=<tu secreto>                                # ya debería existir
+```
+> `NEXT_PUBLIC_VAPID_PUBLIC_KEY` debe ser idéntica a `VAPID_PUBLIC_KEY`. Sin estas
+> variables, el bloque de opt-in no aparece y el envío responde 500. Para persistir
+> suscripciones en producción hace falta **Vercel KV** (`KV_REST_API_URL`,
+> `KV_REST_API_TOKEN`); sin KV solo se guardan en `.data` local (efímero en Vercel).
+
+### 3. Enviar el push después de actualizar las notas
+```bash
+curl -X POST "https://medialab.design/api/experience-radar/push/send" \
+  -H "Authorization: Bearer $CRON_SECRET" \
+  -H "Content-Type: application/json" \
+  -d '{"title":"Nuevo análisis del Mundial","body":"Ya está el de <partido>","url":"/experience-radar/mundial-2026/<slug>"}'
+```
+Responde `{ ok, sent, failed, total }`. Las suscripciones caducadas (404/410) se limpian solas.
+
+### Archivos
+- `public/sw.js` — service worker (push + clic).
+- `components/experience-radar/push-optin.tsx` — opt-in (valida si ya está activo).
+- `src/lib/experience-radar/pushStore.ts` — guarda suscripciones (KV/.data).
+- `app/api/experience-radar/push/subscribe/route.ts` — alta/baja (POST/DELETE).
+- `app/api/experience-radar/push/send/route.ts` — envío seguro (POST + Bearer CRON_SECRET).

@@ -1,11 +1,13 @@
 import { NextResponse } from "next/server"
+import { getVisibleRadarArticles } from "@/src/lib/experience-radar/articleData"
+import { getArticleAvailability } from "@/src/lib/experience-radar/articleAvailability"
 
 export async function GET() {
   const host = "medialab.design"
   const key = "68d839bb87a64c48970e5a95cb88a914"
   const keyLocation = `https://${host}/${key}.txt`
 
-  const urls = [
+  const staticUrls = [
     `https://${host}/`,
     `https://${host}/en`,
     `https://${host}/curso`,
@@ -25,6 +27,13 @@ export async function GET() {
     `https://${host}/uxgreen`,
     `https://${host}/en/uxgreen`,
   ]
+
+  const now = new Date()
+  const radarUrls = (await getVisibleRadarArticles())
+    .filter((article) => getArticleAvailability(article, now).accessible)
+    .map((article) => `https://${host}/experience-radar/mundial-2026/${article.slug}`)
+
+  const urls = [...new Set([...staticUrls, ...radarUrls])]
 
   try {
     // Send to IndexNow API (Bing, Yandex, etc.)
