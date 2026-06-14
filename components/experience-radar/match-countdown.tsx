@@ -23,7 +23,7 @@ export function MatchCountdown({ kickoffAt, overlay = false }: { kickoffAt: stri
   if (remaining <= 0) {
     return (
       <div className={overlay
-        ? "inline-flex w-fit max-w-full items-center gap-2 rounded-full border border-white/25 bg-black/80 px-4 py-2 text-sm font-semibold text-[#fff] shadow-lg backdrop-blur-md"
+        ? "inline-flex w-fit max-w-full items-center gap-2 rounded-full border border-white/25 bg-black/45 px-4 py-2 text-sm font-semibold text-[#fff] shadow-lg backdrop-blur-md"
         : "mt-4 inline-flex items-center gap-2 rounded-xl border border-[#F97316]/40 bg-[#F97316]/10 px-4 py-2 text-sm font-semibold text-[#F97316]"}>
         <Clock3 size={16} /> {isLive ? "Partido en vivo" : "El partido ya comenzó"}
       </div>
@@ -38,7 +38,7 @@ export function MatchCountdown({ kickoffAt, overlay = false }: { kickoffAt: stri
 
   return (
     <div className={overlay
-      ? "inline-block w-fit max-w-full rounded-xl border border-white/20 bg-black/80 px-3 py-2 text-[#fff] shadow-xl backdrop-blur-md"
+      ? "inline-block w-fit max-w-full rounded-xl border border-white/20 bg-black/45 px-3 py-2 text-[#fff] shadow-xl backdrop-blur-md"
       : "mt-4 rounded-xl border border-[var(--cyan)]/30 bg-[var(--cyan)]/[0.06] px-4 py-3"}>
       <p className={`flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide ${overlay ? "text-[#fff]" : "text-[var(--cyan)]"}`}>
         <Clock3 size={13} /> El partido comienza en

@@ -1,7 +1,20 @@
 "use client"
 
 import { useMemo, useState } from "react"
-import { ArrowUpRight, Clock, Lightbulb, Route, Smartphone, Trophy, Users } from "lucide-react"
+import {
+  ArrowUpRight,
+  Clock,
+  Frown,
+  Lightbulb,
+  Meh,
+  Route,
+  Smartphone,
+  Smile,
+  Sparkles,
+  Trophy,
+  Users,
+  type LucideIcon,
+} from "lucide-react"
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel"
 import type { EmotionalRadarValues } from "@/src/lib/experience-radar/articles"
 import { TeamFlag } from "./team-flag"
@@ -284,7 +297,7 @@ function FanApproachCard({ team, phase }: { team: TeamApproachData; phase: Radar
       <div className="mt-3 flex items-start gap-2 rounded-lg border border-border/70 bg-muted/40 p-2.5">
         <Smartphone size={14} className="mt-0.5 shrink-0 text-[var(--magenta)]" />
         <div>
-          <p className="text-[10px] font-bold uppercase tracking-wide text-[var(--magenta)]">UX · uso de dispositivos</p>
+          <p className="text-[10px] font-bold uppercase tracking-wide text-[var(--magenta)]">Experiencia de usuario vivida</p>
           <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground">{UX_BEHAVIOR[phase]}</p>
         </div>
       </div>
@@ -325,14 +338,51 @@ function dominantEmotion(v?: EmotionalRadarValues): { label: string; value: numb
   return { label: EMOTION_LABEL[top[0]], value: top[1] }
 }
 
+/** Carita según el balance emocional de la fase (positivo / neutro / negativo). */
+function moodFace(v?: EmotionalRadarValues): LucideIcon {
+  if (!v) return Meh
+  const positivo = (v.euforia + v.confianza + v.optimismo) / 3
+  const negativo = (v.ansiedad + v.frustracion) / 2
+  if (positivo - negativo > 12) return Smile
+  if (negativo - positivo > 12) return Frown
+  return Meh
+}
+
+/**
+ * Predicción del hincha para el próximo partido (gana/empata/pierde + %), derivada del
+ * ÁNIMO de la fase de percepción (no es una cuota deportiva): optimismo/confianza empujan
+ * a "gana", ansiedad/frustración a "pierde", incertidumbre a "empata".
+ */
+function fanPrediction(v?: EmotionalRadarValues): { label: "Gana" | "Empata" | "Pierde"; pct: number } | null {
+  if (!v) return null
+  const gana = v.optimismo * 0.5 + v.confianza * 0.5
+  const pierde = v.frustracion * 0.5 + v.ansiedad * 0.4
+  const empata = v.incertidumbre * 0.5 + 25
+  const total = gana + pierde + empata || 1
+  const opts: Array<{ label: "Gana" | "Empata" | "Pierde"; pct: number }> = [
+    { label: "Gana", pct: gana / total },
+    { label: "Empata", pct: empata / total },
+    { label: "Pierde", pct: pierde / total },
+  ]
+  const top = opts.sort((a, b) => b.pct - a.pct)[0]
+  return { label: top.label, pct: Math.round(top.pct * 100) }
+}
+
 const JOURNEY_STEPS: Array<{ key: RadarViewMode; label: string }> = [
   { key: "expectativa", label: "Antes" },
   { key: "realidad", label: "Durante" },
   { key: "percepcion", label: "Predicción" },
 ]
 
+const PRED_CLASS: Record<"Gana" | "Empata" | "Pierde", string> = {
+  Gana: "bg-[#16A34A]/15 text-[#16A34A]",
+  Empata: "bg-[#F59E0B]/15 text-[#B45309] dark:text-[#F59E0B]",
+  Pierde: "bg-[#DC2626]/15 text-[#DC2626]",
+}
+
 function FanJourney({ phases, current }: { phases: MatchPhases; current: RadarViewMode }) {
   const currentIdx = JOURNEY_STEPS.findIndex((s) => s.key === current)
+  const prediction = fanPrediction(phases.percepcion)
   return (
     <div className="mt-6 rounded-2xl border border-border bg-card p-4 shadow-sm dark:border-white/12">
       <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-muted-foreground">
@@ -340,9 +390,12 @@ function FanJourney({ phases, current }: { phases: MatchPhases; current: RadarVi
       </p>
       <div className="mt-3 grid grid-cols-3 gap-2">
         {JOURNEY_STEPS.map((step, i) => {
-          const dom = dominantEmotion(phases[step.key])
+          const phaseV = phases[step.key]
+          const dom = dominantEmotion(phaseV)
           const isCurrent = step.key === current
-          const reached = i <= currentIdx && !!dom
+          const reached = i <= currentIdx && !!phaseV
+          const isPrediction = step.key === "percepcion"
+          const Icon = isPrediction ? Sparkles : moodFace(phaseV)
           return (
             <div
               key={step.key}
@@ -355,14 +408,22 @@ function FanJourney({ phases, current }: { phases: MatchPhases; current: RadarVi
               }`}
             >
               <span
-                className={`mx-auto flex h-6 w-6 items-center justify-center rounded-full text-[11px] font-bold ${
+                className={`mx-auto flex h-7 w-7 items-center justify-center rounded-full ${
                   reached ? "bg-[var(--cyan)] text-white" : "bg-muted text-muted-foreground"
                 }`}
               >
-                {i + 1}
+                <Icon size={16} />
               </span>
               <p className="mt-1.5 text-[11px] font-semibold">{step.label}</p>
-              {dom ? (
+              {isPrediction ? (
+                prediction && phaseV ? (
+                  <span className={`mt-1 inline-block rounded-full px-2 py-0.5 text-[11px] font-bold ${PRED_CLASS[prediction.label]}`}>
+                    {prediction.label} {prediction.pct}%
+                  </span>
+                ) : (
+                  <p className="mt-0.5 text-[11px] text-muted-foreground/60">—</p>
+                )
+              ) : dom ? (
                 <p className="mt-0.5 text-[11px] leading-tight text-muted-foreground">
                   {dom.label} <span className="tabular-nums">{dom.value}</span>
                 </p>
@@ -374,7 +435,7 @@ function FanJourney({ phases, current }: { phases: MatchPhases; current: RadarVi
         })}
       </div>
       <p className="mt-3 text-[11px] italic leading-relaxed text-muted-foreground/80">
-        Cambia entre Antes · Durante · Predicción en la barra inferior para ver cómo se completa el recorrido emocional.
+        La predicción del hincha (gana/empata/pierde) sale del ánimo colectivo para el próximo partido, no de una cuota. Cambia de fase en la barra inferior para completar el recorrido.
       </p>
     </div>
   )
@@ -410,16 +471,9 @@ export function LessonsCarousel({
           {normalized.map((lesson, i) => (
             <CarouselItem key={`${lesson.term}-${i}`} className="basis-[88%] pl-3 sm:basis-1/2 lg:basis-1/3">
               <article className="h-full rounded-xl border border-border bg-card p-4 shadow-sm dark:border-white/12">
-                <div className="flex flex-wrap items-center gap-2">
-                  <span
-                    className={`rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-[#fff] ${
-                      lesson.phase === "antes" ? "bg-[var(--cyan)]" : "bg-[var(--magenta)]"
-                    }`}
-                  >
-                    {lesson.phase === "antes" ? "Antes" : "Después"}
-                  </span>
-                  <p className="text-sm font-bold text-[var(--magenta)]">{lesson.term}</p>
-                </div>
+                <p className="flex items-center gap-1.5 text-sm font-bold text-[var(--magenta)]">
+                  <Lightbulb size={14} className="shrink-0 text-[var(--cyan)]" /> {lesson.term}
+                </p>
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{lesson.explanation}</p>
               </article>
             </CarouselItem>

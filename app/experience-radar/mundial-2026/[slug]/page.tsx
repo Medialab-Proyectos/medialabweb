@@ -103,7 +103,7 @@ export default async function RadarArticlePage({
         title: a.seoTitle,
         teams: a.teams.join(" vs "),
         image: a.imageUrl || pickDefaultImage(a.slug),
-        badge: s === "previa" ? "Previa analizada" : s === "en_vivo" ? "Analizando" : "Fin analizado",
+        badge: s === "previa" ? "Previa en análisis" : s === "en_vivo" ? "En vivo" : "Partido analizado",
       }
     })
 
@@ -142,13 +142,15 @@ export default async function RadarArticlePage({
 
         {/* Foto del encuentro (imagen visible, antes del marcador). Alto reducido y foco
             superior para no cortar la cabeza de los jugadores en imágenes aleatorias. */}
-        <figure className="mt-5 overflow-hidden rounded-2xl border border-border bg-muted shadow-sm">
-          <div className="relative h-48 bg-muted md:h-64">
+        <figure className="mt-5 overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+          {/* La imagen llena el cuadro (object-cover) y se encuadra un poco arriba
+              (object-[center_20%]) para mostrar las cabezas de los jugadores. */}
+          <div className="relative h-48 md:h-64">
             <NoteImage
               src={article.imageUrl}
               seed={article.slug}
               alt={article.imageAlt || `${article.teams.join(" vs ")} — ${article.seoTitle}`}
-              className="h-full w-full object-contain"
+              className="h-full w-full object-cover object-[center_20%]"
               loading="eager"
             />
             <StatusPill status={status} className="absolute left-3 top-3 z-10" />

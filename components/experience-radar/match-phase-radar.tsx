@@ -24,7 +24,7 @@ import {
   Zap,
 } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import type { EmotionalRadarValues } from "@/src/lib/experience-radar/articles"
 import { useRadarPhase } from "./radar-phase-context"
 import { TeamFlag } from "./team-flag"
@@ -173,34 +173,34 @@ function interpretAxis(axis: AxisKey, value: number, phase: RadarViewMode, match
 
   const why: Record<AxisKey, Record<"alta" | "media" | "baja", string>> = {
     euforia: {
-      alta: "explotó la celebración: oleada de publicaciones, emojis y videos compartidos.",
-      media: "hubo festejo, pero medido y mezclado con cautela.",
-      baja: "casi no se celebró: predominaron mensajes de bronca o el silencio.",
+      alta: "explotó la celebración con una oleada de publicaciones, emojis y videos compartidos.",
+      media: "hubo festejo, aunque medido y mezclado con cautela.",
+      baja: "casi no se celebró y predominaron los mensajes de bronca o el silencio.",
     },
     confianza: {
       alta: "la hinchada defendía un relato claro y respondía segura a las críticas.",
       media: "el relato se sostenía, pero temblaba con cada jugada.",
-      baja: "muchas dudas: la gente buscaba explicaciones antes de opinar.",
+      baja: "pesaban las dudas y la gente buscaba explicaciones antes de opinar.",
     },
     ansiedad: {
-      alta: "consultas en vivo constantes: «¿cómo va?», repeticiones y verificación jugada a jugada.",
-      media: "tensión presente, sin tomarse toda la conversación.",
+      alta: "no paraban las consultas en vivo, las repeticiones y la necesidad de confirmar cada jugada.",
+      media: "había tensión, sin llegar a tomarse toda la conversación.",
       baja: "se siguió el partido con calma, sin urgencia por confirmar.",
     },
     frustracion: {
       alta: "la conversación se cargó de quejas por lo que salió mal o pareció injusto.",
-      media: "molestia puntual, mezclada con otras lecturas.",
-      baja: "pocas quejas; el tono general fue tranquilo.",
+      media: "asomó molestia puntual, mezclada con otras lecturas.",
+      baja: "hubo pocas quejas y el tono general fue tranquilo.",
     },
     incertidumbre: {
-      alta: "nadie cerraba una explicación común: relatos en disputa.",
+      alta: "nadie cerraba una explicación común y los relatos competían entre sí.",
       media: "quedaban dudas, aunque el relato principal se entendía.",
-      baja: "lectura ya estable y compartida de lo ocurrido.",
+      baja: "ya había una lectura estable y compartida de lo ocurrido.",
     },
     optimismo: {
-      alta: "la conversación miró al próximo partido con ilusión y revancha.",
-      media: "expectativa prudente, condicionada a lo que venga.",
-      baja: "lo que viene se miró con desánimo o resignación.",
+      alta: "la conversación miraba al próximo partido con ilusión y revancha.",
+      media: "asomaba expectativa, prudente y condicionada a lo que venga.",
+      baja: "lo que viene se miraba con desánimo o resignación.",
     },
   }
 
@@ -436,8 +436,10 @@ export function MatchPhaseRadar({
                     <p className="flex items-center gap-1.5 text-sm font-semibold">
                       <axis.icon size={15} style={{ color: activePhase.color }} className="shrink-0" />
                       {t(axis.es, axis.en)}
-                      <Tooltip>
-                        <TooltipTrigger asChild>
+                      {/* Popover (clic/tap): a diferencia del tooltip, en móvil se queda
+                          abierto al tocar y deja leer el significado. */}
+                      <Popover>
+                        <PopoverTrigger asChild>
                           <button
                             type="button"
                             className="inline-flex rounded-full text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--cyan)]"
@@ -445,11 +447,11 @@ export function MatchPhaseRadar({
                           >
                             <Info size={13} />
                           </button>
-                        </TooltipTrigger>
-                        <TooltipContent side="top" sideOffset={6} className="max-w-64 border border-border bg-popover leading-relaxed text-popover-foreground">
+                        </PopoverTrigger>
+                        <PopoverContent side="top" sideOffset={6} className="max-w-64 border border-border bg-popover p-3 text-xs leading-relaxed text-popover-foreground">
                           {axis.help}
-                        </TooltipContent>
-                      </Tooltip>
+                        </PopoverContent>
+                      </Popover>
                     </p>
                     <span className="text-sm font-black tabular-nums" style={{ color: activePhase.color }}>
                       {value}
