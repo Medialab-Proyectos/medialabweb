@@ -1644,9 +1644,9 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
     },
     uxFinding: "Una experiencia no tiene una sola definición de éxito. Reconocer el primer logro del usuario puede preservar orgullo, vínculo y continuidad incluso dentro de un resultado global adverso.",
     aiSummary: "Alemania goleó 7-1 a Curazao con tantos de Nmecha, Schlotterbeck, Havertz (dos), Musiala, Brown y Undav. Comenencia marcó al 21' el primer gol mundialista de Curazao y convirtió un partido desigual en una memoria fundacional. La regla pico-fin y el efecto de encuadre explican por qué Alemania recuerda una demostración de fuerza mientras Curazao conserva orgullo dentro de la derrota. Para productos digitales, la lección es segmentar la definición de éxito y hacer visible el primer logro.",
-    imageUrl: "https://i.guim.co.uk/img/media/4d92d3c23965214465413a16d409c7e4bb6bdbbd/438_0_3942_3154/master/3942.jpg?width=1200&height=630&quality=85&auto=format&fit=crop&precrop=40:21,offset-x50,offset-y0&overlay-align=bottom%2Cleft&overlay-width=100p&overlay-base64=L2ltZy9zdGF0aWMvb3ZlcmxheXMvdGctZGVmYXVsdC5wbmc&enable=upscale&s=25b9375441902a629fdab0ca9a7bf40c",
+    imageUrl: "/images/experience-radar/mundial-2026/alemania-curazao.jpg",
     imageAlt: "Alemania y Curazao durante el debut mundialista del conjunto caribeño en Houston",
-    imageCredit: "The Guardian",
+    imageCredit: "Lars Baron/Getty Images vía The Guardian",
     imageSourceUrl: "https://www.theguardian.com/football/2026/jun/14/germany-curacao-world-cup-match-report",
     sources: [
       { name: "FIFA — Alemania vs Curazao", url: "https://www.fifa.com/en/match-centre/match/17/285023/289273/400021464", kind: "oficial" },
@@ -1658,13 +1658,107 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
       { name: "X — conversación sobre el primer gol de Curazao", url: "https://x.com/Squawka", kind: "tendencia" },
     ],
   }),
-  upcomingMatch({
+  finishedMatch({
     date: "2026-06-14",
     kickoffAt: "2026-06-14T20:00:00.000Z",
     slug: "paises-bajos-japon-mundial-2026",
-    teams: ["Países Bajos", "Japón"],
-    group: "Fase de grupos",
-    officialUrl: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/scores-fixtures",
+    group: "Grupo F",
+    home: "Países Bajos",
+    away: "Japón",
+    homeGoals: 2,
+    awayGoals: 2,
+    scoreDetail: "Países Bajos: Virgil van Dijk 51', Crysencio Summerville 64'. Japón: Keito Nakamura 57', Daichi Kamada 89'.",
+    seoTitle: "Países Bajos 2-2 Japón: Kamada premia la insistencia japonesa al final",
+    hook: "Dos ventajas no alcanzaron: Japón convirtió la persistencia en recuerdo",
+    matchSummary: "Países Bajos y Japón empataron 2-2 en Arlington. Van Dijk y Summerville adelantaron dos veces a la Oranje, pero Nakamura y Kamada respondieron; el empate del 89' llegó cuando Japón ya dominaba el tramo final.",
+    quickSummary: "Países Bajos se puso dos veces en ventaja, con Van Dijk (51') y Summerville (64'), y Japón contestó con Nakamura (57') y Kamada (89'). El cambio neerlandés a una línea de cinco no protegió el resultado. Para Japón, insistir hasta el cierre convirtió un partido cuesta arriba en una señal de confianza; para la Oranje, el mismo 2-2 quedó asociado a una ventaja desperdiciada.",
+    whatHappened: "Tras un primer tiempo prudente, Van Dijk abrió el marcador de cabeza al 51'. Nakamura igualó seis minutos después con un remate desviado y Summerville devolvió la ventaja neerlandesa al 64' con una definición precisa. Japón aumentó la presión, sumó dos delanteros y encontró el 2-2 al 89': Ogawa cabeceó un córner, el balón golpeó en Kamada y superó a Verbruggen. El empate fue coherente con el dominio japonés del último cuarto de hora y castigó el repliegue final de Países Bajos.",
+    aiSummary: "Países Bajos y Japón empataron 2-2: Van Dijk y Summerville adelantaron dos veces a la Oranje; Nakamura y Kamada respondieron, el último al 89'. Japón transformó persistencia y ajustes ofensivos en un punto emocionalmente valioso, mientras el repliegue neerlandés reforzó la sensación de pérdida. La aversión a la pérdida, la regla pico-fin y el sesgo de acción explican las lecturas opuestas. En producto, el caso recuerda que cerrar una experiencia exige preservar claridad y control, no solo añadir defensas o pasos al final.",
+    uxFinding: "Añadir protección al final no garantiza seguridad: si el cambio reduce la iniciativa y aumenta la presión percibida, puede empeorar justo el momento que más pesa en el recuerdo.",
+    keyPlays: [
+      "51': Van Dijk cabecea el 1-0 tras asistencia de Ryan Gravenberch.",
+      "57': Nakamura empata con un remate que cambia de trayectoria.",
+      "64': Summerville marca el 2-1, su primer gol internacional, también asistido por Gravenberch.",
+      "89': el cabezazo de Ogawa rebota en Kamada y fija el 2-2.",
+    ],
+    controversies: [
+      "El cambio de Ronald Koeman a una línea de cinco quedó bajo crítica porque Japón empató después y dominó el cierre.",
+      "Los dos goles japoneses tuvieron desvíos, pero las crónicas coincidieron en que el empate reflejó el empuje del tramo final.",
+    ],
+    statements: [
+      "The Guardian describió el segundo tiempo como un duelo emocionante y consideró justo el empate por la reacción japonesa.",
+      "La crónica destacó que Japón mostró su mejor ataque cuando estuvo por detrás y terminó dominando el último cuarto.",
+      "Summerville celebró su primer gol internacional apenas semanas después de debutar con Países Bajos.",
+    ],
+    combined: {
+      expectativa: { euforia: 68, confianza: 70, ansiedad: 52, frustracion: 24, incertidumbre: 50, optimismo: 72 },
+      realidad: { euforia: 76, confianza: 62, ansiedad: 74, frustracion: 54, incertidumbre: 68, optimismo: 70 },
+      percepcion: { euforia: 68, confianza: 58, ansiedad: 48, frustracion: 58, incertidumbre: 48, optimismo: 66 },
+    },
+    teamsData: [
+      {
+        team: "Países Bajos",
+        expectedEmotion: "Confianza cauta ante un rival técnicamente fuerte.",
+        dominantConversation: "Confirmar que la Oranje podía controlar un grupo exigente desde el debut.",
+        fanConfidence: "Alta en el talento, con dudas sobre la gestión de ventajas.",
+        mainNarrative: "El favorito que debía imponer jerarquía sin perder control.",
+        howTheyArrived: "Con favoritismo estrecho y presión por empezar mandando en el Grupo F.",
+        whatHappened: "Se adelantaron dos veces, replegaron al final y concedieron el empate en el 89'.",
+        expectationVsReality: "La calidad ofensiva apareció, pero la gestión del cierre quedó por debajo de la expectativa.",
+        mood: "Frustración por una ventaja perdida y dudas sobre el cierre",
+        behaviorEffect: "La conversación llega al duelo con Suecia enfocada en los cambios, el repliegue y la capacidad de sostener resultados.",
+        current: { euforia: 48, confianza: 54, ansiedad: 58, frustracion: 70, incertidumbre: 58, optimismo: 56 },
+        predicted: { euforia: 58, confianza: 62, ansiedad: 54, frustracion: 48, incertidumbre: 50, optimismo: 64 },
+        userExperience: {
+          realidad: "Los clips de Van Dijk y Summerville sostuvieron dos picos de celebración, pero el debate digital cambió tras el ingreso de defensores y el empate tardío.",
+          percepcion: "El 2-2 se leyó desde la ventaja perdida: comentarios y crónicas pusieron el foco en la línea de cinco y en la dificultad para cerrar el partido.",
+        },
+      },
+      {
+        team: "Japón",
+        expectedEmotion: "Ambición prudente y confianza en la estructura colectiva.",
+        dominantConversation: "Demostrar que competir de igual a igual con una potencia ya no era sorpresa.",
+        fanConfidence: "Moderada-alta por la cohesión y la capacidad de presión.",
+        mainNarrative: "El aspirante que podía convertir orden y paciencia en una declaración.",
+        howTheyArrived: "Con respeto por la Oranje, pero sin asumir un papel defensivo permanente.",
+        whatHappened: "Respondieron dos veces y dominaron el cierre hasta empatar al 89'.",
+        expectationVsReality: "La reacción confirmó la expectativa de un equipo resiliente y técnicamente competitivo.",
+        mood: "Orgullo y confianza por rescatar dos veces el partido",
+        behaviorEffect: "La hinchada llega al cruce con Túnez con mayor participación y una narrativa de persistencia comprobada.",
+        current: { euforia: 82, confianza: 80, ansiedad: 34, frustracion: 24, incertidumbre: 36, optimismo: 84 },
+        predicted: { euforia: 74, confianza: 78, ansiedad: 42, frustracion: 28, incertidumbre: 40, optimismo: 82 },
+        userExperience: {
+          realidad: "Cada respuesta japonesa produjo una nueva ola de clips y comentarios; el empuje del último cuarto convirtió el partido en una experiencia de insistencia compartida.",
+          percepcion: "El gol fortuito de Kamada se volvió el pico final: el detalle del rebote importó menos que la sensación de que seguir atacando tuvo recompensa.",
+        },
+      },
+    ],
+    lessons: [
+      { term: "Regla pico-fin", explanation: "El empate del 89' domina el recuerdo: Japón conserva la recompensa final y Países Bajos la pérdida, aunque ambos sumaron lo mismo." },
+      { term: "Aversión a la pérdida", explanation: "Para la Oranje, ceder dos ventajas duele más que el valor objetivo de un punto; Japón encuadra ese mismo punto como ganancia." },
+      { term: "Sesgo de acción", explanation: "Agregar una línea de cinco pareció una intervención protectora, pero actuar más no equivale a controlar mejor el cierre." },
+    ],
+    humanBehavior: "Las personas evalúan un empate desde la trayectoria que las llevó hasta él: quien pierde una ventaja siente deterioro; quien alcanza al rival siente progreso.",
+    cognitiveBiases: ["Regla pico-fin", "Aversión a la pérdida", "Sesgo de acción"],
+    emotionalReaction: "Japón terminó en euforia y validación colectiva; Países Bajos pasó de dos celebraciones a frustración, porque el último evento reescribió el balance emocional.",
+    digitalPatterns: "Los goles y el debut goleador de Summerville dominaron primero; después, el empate de Kamada, el rebote y la decisión neerlandesa de replegar concentraron la conversación.",
+    productApplications: [
+      { sector: "Producto digital", application: "Diseña el cierre como una fase propia: mostrar control, progreso y próximos pasos evita que un buen recorrido termine asociado a pérdida." },
+      { sector: "SaaS", application: "No añadas pasos de confirmación solo para parecer más seguro; mide si realmente reducen errores o si trasladan ansiedad al final." },
+      { sector: "Servicio", application: "Cuando una recuperación llega tarde, haz visible que la insistencia del usuario produjo resultado; ese reconocimiento amplifica la confianza." },
+    ],
+    fanPulse: {
+      concerns: ["¿Puede Países Bajos sostener una ventaja?", "¿Mantendrá Japón su agresividad desde el inicio?", "¿Qué ajustes dejará el empate para la segunda jornada?"],
+      emotions: ["Frustración neerlandesa", "Orgullo japonés", "Ansiedad de un cierre abierto"],
+      frustrations: ["Dos ventajas neerlandesas desperdiciadas.", "Un primer tiempo demasiado prudente."],
+      enthusiasm: ["La reacción japonesa.", "El primer gol internacional de Summerville.", "Un grupo que queda completamente abierto."],
+    },
+    sources: [
+      { name: "FIFA — calendario y resultados del Mundial 2026", url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/scores-fixtures", kind: "oficial" },
+      { name: "Associated Press — Japón rescata el 2-2 ante Países Bajos", url: "https://apnews.com/article/world-cup-netherlands-japan-score-d5cb428f3a5f1199345894d44a6bdded", kind: "referencia" },
+      { name: "The Guardian — Países Bajos 2-2 Japón", url: "https://www.theguardian.com/football/live/2026/jun/14/netherlands-v-japan-world-cup-2026-live", kind: "referencia" },
+      { name: "SB Nation — los cuatro goles del empate", url: "https://www.sbnation.com/fifa-world-cup/1118493/world-cup-2026-every-goal-from-the-netherlands-japan-thriller", kind: "referencia" },
+    ],
   }),
   upcomingMatch({
     date: "2026-06-14",
@@ -1714,6 +1808,38 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
     slug: "iran-nueva-zelanda-mundial-2026",
     teams: ["Irán", "Nueva Zelanda"],
     group: "Grupo G",
+    officialUrl: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/scores-fixtures",
+  }),
+  upcomingMatch({
+    date: "2026-06-16",
+    kickoffAt: "2026-06-16T16:00:00.000Z",
+    slug: "francia-senegal-mundial-2026",
+    teams: ["Francia", "Senegal"],
+    group: "Grupo I",
+    officialUrl: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/scores-fixtures",
+  }),
+  upcomingMatch({
+    date: "2026-06-16",
+    kickoffAt: "2026-06-16T19:00:00.000Z",
+    slug: "iraq-noruega-mundial-2026",
+    teams: ["Irak", "Noruega"],
+    group: "Grupo I",
+    officialUrl: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/scores-fixtures",
+  }),
+  upcomingMatch({
+    date: "2026-06-16",
+    kickoffAt: "2026-06-16T22:00:00.000Z",
+    slug: "argentina-argelia-mundial-2026",
+    teams: ["Argentina", "Argelia"],
+    group: "Grupo J",
+    officialUrl: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/scores-fixtures",
+  }),
+  upcomingMatch({
+    date: "2026-06-16",
+    kickoffAt: "2026-06-17T01:00:00.000Z",
+    slug: "austria-jordania-mundial-2026",
+    teams: ["Austria", "Jordania"],
+    group: "Grupo J",
     officialUrl: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/scores-fixtures",
   }),
 ]
@@ -1769,6 +1895,16 @@ function preserveImage(article: RadarArticle, source: RadarArticle): RadarArticl
   }
 }
 
+function preserveVerifiedMatchData(article: RadarArticle, source: RadarArticle): RadarArticle {
+  if (article.matchScore || !source.matchScore) return article
+  return {
+    ...article,
+    matchState: "finalizado",
+    matchScore: source.matchScore,
+    matchSummary: article.matchSummary || source.matchSummary,
+  }
+}
+
 function applyLockedSeedImage(article: RadarArticle): RadarArticle {
   const locked = LOCKED_SEED_IMAGES.get(article.slug)
   return locked?.imageUrl ? preserveImage(article, locked) : article
@@ -1786,7 +1922,11 @@ export async function getAllRadarArticles(): Promise<RadarArticle[]> {
   const list = stored && stored.length ? [...RADAR_ARTICLE_SEED, ...stored] : RADAR_ARTICLE_SEED
   // Orden del feed: EN VIVO primero, luego lo PRÓXIMO (más cercano), y al final los
   // FINALIZADOS (más reciente primero). Así la destacada es la que se juega ahora.
-  return dedupeByMatch(list).map(applyLockedSeedImage).sort((a, b) => compareForFeed(a, b))
+  const seedByMatch = new Map(RADAR_ARTICLE_SEED.map((article) => [matchKey(article), article]))
+  return dedupeByMatch(list)
+    .map((article) => preserveVerifiedMatchData(article, seedByMatch.get(matchKey(article)) ?? article))
+    .map(applyLockedSeedImage)
+    .sort((a, b) => compareForFeed(a, b))
 }
 
 /**
