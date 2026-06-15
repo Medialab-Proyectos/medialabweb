@@ -271,6 +271,7 @@ function detectTeams(text: string): string[] {
     "Argentina", "Brasil", "Colombia", "Mexico", "Canada", "USA", "France", "Spain",
     "Bosnia", "Qatar", "Switzerland", "Scotland", "Haiti", "Australia", "Türkiye",
     "Germany", "Curaçao", "Netherlands", "Japan", "Ecuador", "Tunisia", "Sweden",
+    "Ivory Coast", "Côte d'Ivoire", "Iran", "New Zealand",
   ]
   const lower = text.toLowerCase()
   return teams.filter((team) => lower.includes(team.toLowerCase()))

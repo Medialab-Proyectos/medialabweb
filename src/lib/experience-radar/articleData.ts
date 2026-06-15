@@ -189,6 +189,7 @@ function finishedMatch(input: {
   combined: { expectativa: EmotionalRadarValues; realidad: EmotionalRadarValues; percepcion: EmotionalRadarValues }
   teamsData: [FinishedTeam, FinishedTeam]
   lessons: Array<{ term: string; explanation: string }>
+  matchInterpretations?: RadarArticle["matchInterpretations"]
   humanBehavior: string
   cognitiveBiases: string[]
   emotionalReaction: string
@@ -200,6 +201,7 @@ function finishedMatch(input: {
   imageAlt?: string
   imageCredit?: string
   imageSourceUrl?: string
+  analyzedAt?: string
 }): RadarArticleInput {
   const teamRadars: TeamRadar[] = input.teamsData.map((t) => ({
     team: t.team,
@@ -213,6 +215,7 @@ function finishedMatch(input: {
     slug: input.slug,
     matchState: "finalizado",
     updateState: "ready",
+    analyzedFinalAt: input.analyzedAt,
     imageUrl: input.imageUrl,
     imageAlt: input.imageAlt,
     imageCredit: input.imageCredit,
@@ -240,6 +243,7 @@ function finishedMatch(input: {
     teamRadars,
     collectiveByTeam: input.teamsData.map((t) => ({ team: t.team, mood: t.mood, behaviorEffect: t.behaviorEffect })),
     lessons: input.lessons.map((l) => ({ ...l, phase: "despues" as const })),
+    matchInterpretations: input.matchInterpretations,
     seoTitle: input.seoTitle,
     teams: [input.home, input.away],
     event: `Mundial 2026 — ${input.group}`,
@@ -1837,21 +1841,133 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
     imageCredit: "Kai Pfaffenbach/Reuters vía El País",
     imageSourceUrl: "https://elpais.com/deportes/mundial-futbol/2026-06-14/paises-bajos-japon-en-directo-partido-del-grupo-f-del-mundial-2026-en-vivo.html",
   }),
-  upcomingMatch({
+  finishedMatch({
     date: "2026-06-14",
     kickoffAt: "2026-06-14T23:00:00.000Z",
     slug: "costa-de-marfil-ecuador-mundial-2026",
-    teams: ["Costa de Marfil", "Ecuador"],
-    group: "Fase de grupos",
-    officialUrl: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/scores-fixtures",
+    group: "Grupo E",
+    home: "Costa de Marfil",
+    away: "Ecuador",
+    homeGoals: 1,
+    awayGoals: 0,
+    scoreDetail: "Costa de Marfil: Amad Diallo 90'. Asistencia: Wilfried Singo.",
+    seoTitle: "Costa de Marfil 1-0 Ecuador: Amad convierte el último minuto en un golpe emocional",
+    hook: "Un partido de equilibrio terminó definido por el único momento que nadie pudo corregir",
+    matchSummary: "Costa de Marfil venció 1-0 a Ecuador en Filadelfia con un gol de Amad Diallo al 90'. Ecuador tuvo más posesión y golpeó dos veces el poste; los marfileños produjeron cuatro remates al arco contra uno y premiaron su insistencia final.",
+    quickSummary: "Amad Diallo entró al 56' y marcó al 90' tras una carrera de Wilfried Singo. Ecuador perdió un invicto de 19 partidos y convirtió la falta de definición en la narrativa dominante. En Reddit, el desenlace fue descrito como un golpe al estómago; para Costa de Marfil, la regla pico-fin borró casi todo lo anterior y dejó una memoria de recompensa.",
+    whatHappened: "Ecuador controló tramos del primer tiempo y estrelló remates de Alan Minda y Enner Valencia en la madera. Elye Wahi respondió con otro travesaño al 52'. Cuando el empate parecía cerrado, Singo rompió por la derecha y Amad, suplente desde el 56', definió de zurda al 90'. La diferencia no estuvo en el volumen, sino en convertir la última oportunidad disponible.",
+    aiSummary: "Costa de Marfil derrotó 1-0 a Ecuador con Amad Diallo al 90'. El partido dejó tres señales: la última acción dominó el recuerdo, Ecuador sufrió más por las ocasiones desperdiciadas que por el equilibrio global y la entrada de Amad validó una intervención tardía. En productos digitales, el cierre y la capacidad de recuperar valor antes de terminar pueden redefinir toda la experiencia.",
+    uxFinding: "El último momento útil puede reescribir una experiencia completa: conviene diseñar cierres con capacidad real de recuperación, no tratarlos como un trámite.",
+    keyPlays: ["29': Alan Minda remata al travesaño.", "45': Enner Valencia golpea el poste izquierdo.", "52': Elye Wahi estrella otro balón en el travesaño.", "90': Singo rompe por derecha y Amad Diallo define el 1-0."],
+    controversies: ["Ecuador reclamó una falta de Guéla Doué en el segundo tiempo; no derivó en una decisión que cambiara el marcador.", "Beccacece consideró injusta la derrota por el desarrollo, aunque reconoció que el fútbol premia convertir las ocasiones."],
+    statements: ["Emerse Faé dijo que el gol reflejó una jugada trabajada y celebró la asistencia de Singo y la definición de Amad.", "Sebastián Beccacece afirmó que la derrota dolía y debía fortalecer al equipo para lo que sigue."],
+    combined: {
+      expectativa: { euforia: 64, confianza: 68, ansiedad: 52, frustracion: 24, incertidumbre: 54, optimismo: 70 },
+      realidad: { euforia: 60, confianza: 54, ansiedad: 74, frustracion: 62, incertidumbre: 70, optimismo: 58 },
+      percepcion: { euforia: 78, confianza: 72, ansiedad: 40, frustracion: 52, incertidumbre: 42, optimismo: 74 },
+    },
+    teamsData: [
+      {
+        team: "Costa de Marfil", expectedEmotion: "Ambición cauta en su regreso al Mundial.", dominantConversation: "Competir por avanzar y confirmar el crecimiento de una generación joven.", fanConfidence: "Moderada, apoyada en velocidad y profundidad ofensiva.", mainNarrative: "Volver después de doce años y demostrar que el equipo puede cerrar partidos.", howTheyArrived: "Con confianza defensiva y un ataque capaz de cambiar desde el banco.", whatHappened: "Resistieron los postes ecuatorianos y ganaron con dos suplentes decisivos en el minuto 90.", expectationVsReality: "La victoria llegó más tarde y con más tensión de la esperada, pero reforzó la idea de profundidad.", mood: "Euforia por una recompensa tardía", behaviorEffect: "El gol instala a Amad como símbolo de soluciones desde el banco y aumenta la confianza antes de Alemania.", current: { euforia: 86, confianza: 80, ansiedad: 30, frustracion: 18, incertidumbre: 32, optimismo: 84 }, predicted: { euforia: 72, confianza: 74, ansiedad: 50, frustracion: 24, incertidumbre: 46, optimismo: 76 },
+        userExperience: { realidad: "Los clips del gol concentraron la conversación en la carrera de Singo y en la petición de que Amad sea titular.", percepcion: "Reddit y X encuadraron el 1-0 como recompensa merecida y como prueba de que el banco podía cambiar el partido." },
+      },
+      {
+        team: "Ecuador", expectedEmotion: "Confianza por una larga racha invicta y una defensa estable.", dominantConversation: "Confirmar competitividad y corregir la falta de gol.", fanConfidence: "Alta en la estructura, más baja en la definición.", mainNarrative: "Una selección difícil de vencer que necesitaba convertir control en goles.", howTheyArrived: "Con 19 partidos sin perder y expectativas de puntuar en el debut.", whatHappened: "Golpearon la madera dos veces, no marcaron y concedieron en la última acción decisiva.", expectationVsReality: "El rendimiento pareció suficiente para sumar, pero el marcador convirtió la falta de definición en crisis.", mood: "Dolor y urgencia por una oportunidad perdida", behaviorEffect: "La conversación se desplaza hacia la obligación de marcar varios goles ante Curazao y la presión sobre los atacantes.", current: { euforia: 22, confianza: 46, ansiedad: 72, frustracion: 82, incertidumbre: 62, optimismo: 42 }, predicted: { euforia: 48, confianza: 58, ansiedad: 64, frustracion: 56, incertidumbre: 52, optimismo: 62 },
+        userExperience: { realidad: "Los postes y las ocasiones falladas generaron una espera cada vez más tensa; el gol tardío produjo una caída abrupta de ánimo.", percepcion: "En Reddit, la reacción mezcló 'golpe al estómago' con temor a que la falta de gol provoque una eliminación temprana." },
+      },
+    ],
+    lessons: [
+      { term: "Regla pico-fin", explanation: "El gol del 90' domina el recuerdo y reduce un partido equilibrado a recompensa para unos y golpe para otros." },
+      { term: "Aversión a la pérdida", explanation: "Ecuador no procesa solo una derrota: procesa los postes, el invicto roto y el punto que parecía asegurado." },
+      { term: "Sesgo de resultado", explanation: "La misma actuación ecuatoriana habría parecido sólida con 0-0; el último gol hace que se evalúe como fracaso de definición." },
+    ],
+    matchInterpretations: {
+      expectativa: { euforia: "El regreso marfileño y el invicto ecuatoriano sostenían ilusión en ambos lados.", confianza: "Ecuador confiaba en su estructura; Costa de Marfil, en su profundidad.", ansiedad: "El debut elevó la tensión sin un favorito claro.", frustracion: "Todavía baja: ambas hinchadas esperaban un partido cerrado.", incertidumbre: "Alta por el equilibrio previo del Grupo E.", optimismo: "Los dos equipos veían una oportunidad real de sumar." },
+      realidad: { euforia: "Los postes generaron picos incompletos hasta la explosión del gol de Amad.", confianza: "La confianza ecuatoriana cayó con cada ocasión fallada; la marfileña creció con los cambios.", ansiedad: "El 0-0 prolongado convirtió cada transición en amenaza.", frustracion: "Ecuador acumuló frustración por no convertir su mejor tramo.", incertidumbre: "Se mantuvo hasta el minuto 90.", optimismo: "Costa de Marfil conservó iniciativa suficiente para buscar una última acción." },
+      percepcion: { euforia: "Para Costa de Marfil, todo el partido quedó resumido en la celebración final.", confianza: "Amad y Singo validaron la profundidad del plantel.", ansiedad: "Ecuador sale con presión inmediata por el siguiente partido.", frustracion: "Los postes y el invicto roto amplifican el dolor ecuatoriano.", incertidumbre: "La clasificación ecuatoriana queda más abierta de lo previsto.", optimismo: "Los marfileños leen el triunfo como una base real para competir el grupo." },
+    },
+    humanBehavior: "Las personas no promedian una experiencia: el último evento de alta intensidad puede reemplazar el balance acumulado.",
+    cognitiveBiases: ["Regla pico-fin", "Aversión a la pérdida", "Sesgo de resultado"],
+    emotionalReaction: "Costa de Marfil pasó de tensión a euforia instantánea; Ecuador, de aceptar un empate a sentir una pérdida total.",
+    digitalPatterns: "El clip del gol desplazó rápidamente los postes y el desarrollo; en Ecuador dominaron preguntas sobre definición y diferencia de gol futura.",
+    productApplications: [
+      { sector: "Producto digital", application: "Diseñar una recuperación útil antes de cerrar puede cambiar el recuerdo de una sesión con fricción." },
+      { sector: "SaaS", application: "El resumen final debe contextualizar el progreso para que un último error no borre todo el valor entregado." },
+      { sector: "Servicio", application: "Una solución tardía todavía genera confianza si llega antes de que el usuario abandone y reconoce el esfuerzo previo." },
+    ],
+    fanPulse: { concerns: ["La falta de gol de Ecuador", "La titularidad de Amad", "El impacto sobre la diferencia de gol"], emotions: ["Euforia tardía", "Dolor ecuatoriano", "Alivio marfileño"], frustrations: ["Dos postes sin recompensa", "Perder en el minuto 90"], enthusiasm: ["La carrera de Singo", "El impacto de Amad desde el banco"] },
+    sources: [
+      { name: "FIFA — calendario y resultados", url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/scores-fixtures", kind: "oficial" },
+      { name: "ESPN — Costa de Marfil 1-0 Ecuador", url: "https://www.espn.com/soccer/report/_/gameId/760423", kind: "referencia" },
+      { name: "Latingoles — Amad castiga a Ecuador", url: "https://latingoles.com/golpe-al-invicto-marfileno-diallo-castiga-a-ecuatorianos-valencia-minda-y-yeboah/", kind: "referencia" },
+      { name: "The Guardian — relato del partido", url: "https://www.theguardian.com/football/live/2026/jun/14/cote-d-ivoire-v-ecuador-world-cup-2026-live", kind: "referencia" },
+      { name: "Reddit r/soccer — post-partido", url: "https://www.reddit.com/r/soccer/comments/1u6277d/post_match_thread_ivory_coast_1_0_ecuador_fifa/", kind: "conversacion" },
+      { name: "X — reacción al gol de Amad", url: "https://x.com/ManUtd/status/2066424471028711598", kind: "tendencia" },
+    ],
+    imageUrl: "/images/experience-radar/mundial-2026/costa-de-marfil-ecuador.jpg",
+    imageAlt: "Jugadores de Costa de Marfil celebran el gol tardío ante Ecuador",
+    imageCredit: "Latingoles",
+    imageSourceUrl: "https://latingoles.com/golpe-al-invicto-marfileno-diallo-castiga-a-ecuatorianos-valencia-minda-y-yeboah/",
+    analyzedAt: "2026-06-15T13:50:00.000Z",
   }),
-  upcomingMatch({
+  finishedMatch({
     date: "2026-06-14",
     kickoffAt: "2026-06-15T02:00:00.000Z",
     slug: "suecia-tunez-mundial-2026",
-    teams: ["Suecia", "Túnez"],
-    group: "Fase de grupos",
-    officialUrl: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/scores-fixtures",
+    group: "Grupo F",
+    home: "Suecia",
+    away: "Túnez",
+    homeGoals: 5,
+    awayGoals: 1,
+    scoreDetail: "Suecia: Yasin Ayari 7', 90+6'; Alexander Isak 30'; Viktor Gyökeres 59'; Mattias Svanberg 84'. Túnez: Omar Rekik 43'.",
+    seoTitle: "Suecia 5-1 Túnez: Ayari convierte una goleada en validación colectiva",
+    hook: "Suecia marcó en una noche más goles que durante toda su clasificación mundialista",
+    matchSummary: "Suecia goleó 5-1 a Túnez en Monterrey con doblete de Yasin Ayari y goles de Isak, Gyökeres y Svanberg. Rekik descontó antes del descanso, pero los errores tunecinos y la eficiencia sueca abrieron una diferencia mayor de lo que sugerían la posesión y el xG.",
+    quickSummary: "Ayari abrió al 7' y cerró al 90+6'; no celebró el primero por respeto a sus raíces tunecinas. Suecia produjo siete remates al arco y convirtió cinco, mientras Reddit pasó de celebrar el regreso mundialista a preguntar por el techo real del equipo. Túnez quedó atrapada entre errores defensivos, frustración y debate sobre su dirección técnica.",
+    whatHappened: "Ayari castigó un rebote al 7' e Isak amplió al 30'. Rekik redujo al 43' y abrió una breve posibilidad de remontada, pero Isak robó y asistió a Gyökeres para el 3-1 al 59'. Svanberg marcó 18 segundos después de entrar al 84', validado por VAR, y Ayari cerró con un remate lejano al 90+6'. Suecia convirtió una noche de bajo margen previo en una demostración de eficacia.",
+    aiSummary: "Suecia venció 5-1 a Túnez con doblete de Ayari y goles de Isak, Gyökeres y Svanberg. La goleada reencuadró meses de dudas y produjo prueba social inmediata alrededor del proyecto de Graham Potter. Para Túnez, cada error confirmó la narrativa negativa y amplificó la frustración. La lección de producto es que una secuencia de éxitos visibles puede reconstruir confianza rápidamente, pero también que los fallos encadenados necesitan una interrupción clara antes de convertirse en identidad.",
+    uxFinding: "La confianza puede reconstruirse con evidencia visible y acumulativa: cada éxito reduce la carga del anterior fracaso y cambia la expectativa del siguiente paso.",
+    keyPlays: ["7': Ayari abre con una volea y evita celebrarlo por sus raíces tunecinas.", "30': Isak marca el 2-0.", "43': Rekik descuenta de cabeza.", "59': Gyökeres convierte tras robo y asistencia de Isak.", "84': Svanberg marca 18 segundos después de entrar; VAR valida.", "90+6': Ayari completa su doblete desde fuera del área."],
+    controversies: ["El 4-1 de Svanberg requirió una revisión larga de VAR por posible fuera de juego.", "La magnitud de la derrota reabrió de inmediato el debate sobre la continuidad de Sabri Lamouchi."],
+    statements: ["Graham Potter destacó la química entre Isak y Gyökeres, aunque señaló que el equipo todavía podía mejorar.", "Ayari explicó que no celebró su primer gol por respeto a Túnez, país ligado a su familia."],
+    combined: { expectativa: { euforia: 56, confianza: 48, ansiedad: 62, frustracion: 44, incertidumbre: 66, optimismo: 58 }, realidad: { euforia: 82, confianza: 78, ansiedad: 48, frustracion: 42, incertidumbre: 42, optimismo: 80 }, percepcion: { euforia: 86, confianza: 84, ansiedad: 30, frustracion: 34, incertidumbre: 30, optimismo: 88 } },
+    teamsData: [
+      { team: "Suecia", expectedEmotion: "Ilusión prudente tras una clasificación muy difícil.", dominantConversation: "Comprobar si Potter había cambiado realmente al equipo.", fanConfidence: "Moderada y todavía frágil.", mainNarrative: "Volver al Mundial y dejar atrás una clasificación sin victorias.", howTheyArrived: "Por repechaje, con dudas acumuladas y talento ofensivo evidente.", whatHappened: "Marcaron cinco, lideraron el grupo y conectaron a Isak, Gyökeres y Ayari.", expectationVsReality: "La eficacia superó ampliamente la expectativa y convirtió dudas en entusiasmo.", mood: "Euforia y sensación de renacimiento", behaviorEffect: "La hinchada eleva el techo esperado y llega al duelo con Países Bajos buscando confirmación, no supervivencia.", current: { euforia: 92, confianza: 88, ansiedad: 24, frustracion: 12, incertidumbre: 26, optimismo: 92 }, predicted: { euforia: 78, confianza: 82, ansiedad: 44, frustracion: 22, incertidumbre: 40, optimismo: 84 }, userExperience: { realidad: "Los goles sucesivos transformaron el hilo de partido en una celebración de eficacia; el gesto de Ayari añadió una capa emocional compartible.", percepcion: "Reddit destacó que Suecia marcó más en un partido que en toda la clasificación y empezó a discutir cuánto puede avanzar el equipo." } },
+      { team: "Túnez", expectedEmotion: "Esperanza de competir desde el orden y aprovechar la presión sueca.", dominantConversation: "Romper el techo histórico de la fase de grupos.", fanConfidence: "Baja-moderada tras cambios recientes de entrenador.", mainNarrative: "Un equipo obligado a ser compacto para sostenerse.", howTheyArrived: "Con dudas tácticas y señales defensivas preocupantes.", whatHappened: "Concedieron temprano, reaccionaron con el 2-1 y volvieron a derrumbarse por errores propios.", expectationVsReality: "La estructura no resistió y la derrota confirmó los temores previos.", mood: "Frustración, vergüenza y búsqueda de responsables", behaviorEffect: "La conversación se concentra en el entrenador, la selección de jugadores y la necesidad de una ruptura antes de enfrentar a Japón.", current: { euforia: 12, confianza: 22, ansiedad: 82, frustracion: 92, incertidumbre: 84, optimismo: 18 }, predicted: { euforia: 24, confianza: 30, ansiedad: 76, frustracion: 74, incertidumbre: 72, optimismo: 32 }, userExperience: { realidad: "El descuento de Rekik produjo una breve recuperación, pero el 3-1 reactivó la sensación de desorden y los últimos goles aceleraron el abandono emocional.", percepcion: "Los comentarios pasaron del análisis del partido a cuestionar la dirección técnica y describir los errores como evitables." } },
+    ],
+    lessons: [
+      { term: "Prueba social", explanation: "Cada gol reforzó la idea de que el cambio sueco era real; la confianza colectiva creció porque todos veían la misma evidencia." },
+      { term: "Sesgo de confirmación", explanation: "En Túnez, cada error posterior fue leído como confirmación de una preparación deficiente y no como incidente aislado." },
+      { term: "Efecto de contraste", explanation: "La goleada se percibió aún mayor al compararse con una clasificación sueca en la que el equipo apenas había marcado." },
+    ],
+    matchInterpretations: {
+      expectativa: { euforia: "Suecia celebraba volver, pero sin certeza sobre su nivel real.", confianza: "El talento ofensivo sostenía una confianza todavía condicionada.", ansiedad: "La mala clasificación seguía presente en la memoria.", frustracion: "Había cansancio por meses de bajo rendimiento.", incertidumbre: "Potter todavía necesitaba una prueba competitiva.", optimismo: "Isak y Gyökeres daban razones para esperar una mejora." },
+      realidad: { euforia: "Los goles sucesivos convirtieron el partido en una liberación colectiva.", confianza: "Cada combinación ofensiva elevó la seguridad sueca.", ansiedad: "El 2-1 abrió una pausa breve; el 3-1 la cerró.", frustracion: "Túnez acumuló frustración con errores que parecían repetirse.", incertidumbre: "El VAR del cuarto gol alargó una duda ya menor sobre el resultado.", optimismo: "Suecia terminó jugando y pensando como líder del grupo." },
+      percepcion: { euforia: "La mayor victoria del ciclo se convirtió en símbolo de renacimiento.", confianza: "La conversación ya no pregunta si Suecia compite, sino hasta dónde llega.", ansiedad: "Baja en Suecia y se dispara en Túnez.", frustracion: "La derrota tunecina se interpreta como falla estructural.", incertidumbre: "Túnez entra en crisis de dirección; Suecia reduce sus dudas.", optimismo: "El ataque sueco instala una expectativa alta para el siguiente partido." },
+    },
+    humanBehavior: "Una cadena de resultados visibles puede cambiar rápidamente la identidad percibida de un grupo; una cadena de errores puede hacer lo mismo en dirección opuesta.",
+    cognitiveBiases: ["Prueba social", "Sesgo de confirmación", "Efecto de contraste"],
+    emotionalReaction: "Suecia pasó de cautela a euforia acumulativa; Túnez tuvo un breve alivio con el 2-1 antes de caer en frustración y desconexión.",
+    digitalPatterns: "Los clips de Ayari, la sociedad Isak-Gyökeres y la cifra de cinco goles dominaron X; Reddit añadió comparaciones con la clasificación y críticas tácticas a Túnez.",
+    productApplications: [
+      { sector: "Producto digital", application: "Haz visibles pequeños éxitos consecutivos para reconstruir confianza después de un periodo de bajo rendimiento." },
+      { sector: "SaaS", application: "Interrumpe una cadena de errores con diagnóstico y recuperación claros antes de que el usuario la convierta en una expectativa permanente." },
+      { sector: "Educación", application: "Comparar progreso reciente con el punto de partida correcto puede activar motivación sin inflar promesas." },
+    ],
+    fanPulse: { concerns: ["La defensa sueca ante rivales superiores", "La continuidad técnica de Túnez", "Si la eficacia se sostendrá"], emotions: ["Euforia sueca", "Respeto por Ayari", "Frustración tunecina"], frustrations: ["Errores defensivos evitables", "Una reacción tunecina demasiado breve"], enthusiasm: ["La dupla Isak-Gyökeres", "El doblete de Ayari", "El liderato del grupo"] },
+    sources: [
+      { name: "FIFA — Suecia vs Túnez", url: "https://www.fifa.com/en/match-centre/match/17/285023/289273/400021474", kind: "oficial" },
+      { name: "Win Sports — Suecia goleó a Túnez", url: "https://www.winsports.co/futbol-internacional/noticias/en-vivo-suecia-vs-tunez-minuto-a-minuto-y-goles-copa-mundial-de-la-fifa-438701", kind: "referencia" },
+      { name: "The Guardian — Suecia 5-1 Túnez", url: "https://www.theguardian.com/football/2026/jun/15/sweden-tunisia-world-cup-match-report", kind: "referencia" },
+      { name: "Associated Press — doblete de Ayari", url: "https://www.washingtonpost.com/sports/soccer/2026/06/15/world-cup-sweden-tunisia-score/1ab746e8-6871-11f1-830e-133d20cadd28_story.html", kind: "referencia" },
+      { name: "Reddit r/soccer — post-partido", url: "https://www.reddit.com/r/soccer/comments/1u65r5e/post_match_thread_sweden_5_1_tunisia_fifa_world/", kind: "conversacion" },
+      { name: "X — conversación sobre Ayari", url: "https://x.com/TouchlineX/status/2066345165703545206", kind: "tendencia" },
+    ],
+    imageUrl: "/images/experience-radar/mundial-2026/suecia-tunez.jpg",
+    imageAlt: "Jugadores de Suecia celebran durante la goleada 5-1 ante Túnez",
+    imageCredit: "@svenskfotboll vía Win Sports",
+    imageSourceUrl: "https://www.winsports.co/futbol-internacional/noticias/en-vivo-suecia-vs-tunez-minuto-a-minuto-y-goles-copa-mundial-de-la-fifa-438701",
+    analyzedAt: "2026-06-15T13:51:00.000Z",
   }),
   // 15 jun 2026 (hora ET): España–Cabo Verde 12pm, Bélgica–Egipto 3pm,
   // Arabia Saudita–Uruguay 6pm, Irán–Nueva Zelanda 9pm. Todos dentro del corte de 48h.
@@ -1933,13 +2049,32 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
     emotionalRadar: { euforia: 64, confianza: 60, ansiedad: 68, frustracion: 44, incertidumbre: 62, optimismo: 66 },
     analyzedAt: "2026-06-15T11:15:00.000Z",
   }),
-  upcomingMatch({
+  analyzedUpcomingMatch({
     date: "2026-06-15",
     kickoffAt: "2026-06-16T01:00:00.000Z",
     slug: "iran-nueva-zelanda-mundial-2026",
     teams: ["Irán", "Nueva Zelanda"],
     group: "Grupo G",
-    officialUrl: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/scores-fixtures",
+    seoTitle: "Irán vs Nueva Zelanda: previa, tensión del viaje y radar emocional del Mundial 2026",
+    hook: "El debut llega después de una preparación atravesada por visados, traslados y tensión política",
+    quickSummary: "Irán y Nueva Zelanda debutan en Los Ángeles a las 20:00 de Bogotá. Irán llega tarde desde Tijuana, sin Sardar Azmoun y con una experiencia que Mehdi Taremi describió como menos alegre por la tensión política; Nueva Zelanda vuelve al Mundial apoyada en Chris Wood y en una generación formada durante años por Darren Bazeley.",
+    whatHappened: "La previa está marcada por fricciones ajenas al juego: cambios de sede de entrenamiento, visados denegados, viaje tardío y protestas previstas. Para Irán, la tarea digital es separar información deportiva, seguridad y política sin negar ninguna; para Nueva Zelanda, el reto es convertir una presencia poco frecuente en una experiencia de pertenencia y oportunidad.",
+    uxFinding: "Cuando el contexto externo invade una experiencia, ocultarlo aumenta ansiedad: conviene separar capas de información, indicar qué está confirmado y devolver al usuario una ruta clara hacia su objetivo principal.",
+    keyPlays: ["20:00 Bogotá: inicio en Los Ángeles Stadium.", "Irán llegó desde Tijuana tras cambios logísticos y de visados.", "Mehdi Taremi lidera el ataque iraní; Chris Wood es la principal referencia de Nueva Zelanda."],
+    statements: ["Mehdi Taremi dijo que la tensión había reducido la alegría habitual de la experiencia mundialista.", "Amir Ghalenoei insistió en que el equipo representa al pueblo iraní y quiere concentrarse en el fútbol."],
+    sources: [
+      { name: "FIFA — previa oficial Irán vs Nueva Zelanda", url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/ir-iran-new-zealand-preview-live-stream-team-news-tickets", kind: "oficial" },
+      { name: "Latingoles — despedida de Irán en Tijuana", url: "https://latingoles.com/despedida-mundialista-iranies-arropan-a-iran-en-tijuana-antes-del-debut-ante-nueva-zelanda/", kind: "referencia" },
+      { name: "Associated Press — tensión y llegada de Irán", url: "https://apnews.com/article/ebddd27c7508e07f3291f8994105924e", kind: "referencia" },
+      { name: "The Guardian — llegada de Irán a Estados Unidos", url: "https://www.theguardian.com/football/2026/jun/15/iran-world-cup-mehdi-taremi-amir-ghalenoei-fifa-tension-peace-deal", kind: "referencia" },
+      { name: "Sports Illustrated — perfil de Nueva Zelanda", url: "https://www.si.com/soccer/new-zealand-2026-world-cup-preview", kind: "referencia" },
+    ],
+    imageUrl: "/images/experience-radar/mundial-2026/iran-nueva-zelanda.jpg",
+    imageAlt: "Aficionados despiden a Irán antes del debut contra Nueva Zelanda",
+    imageCredit: "Latingoles",
+    imageSourceUrl: "https://latingoles.com/despedida-mundialista-iranies-arropan-a-iran-en-tijuana-antes-del-debut-ante-nueva-zelanda/",
+    emotionalRadar: { euforia: 52, confianza: 58, ansiedad: 78, frustracion: 64, incertidumbre: 76, optimismo: 56 },
+    analyzedAt: "2026-06-15T13:52:00.000Z",
   }),
   upcomingMatch({
     date: "2026-06-16",
@@ -2048,6 +2183,11 @@ function applyLockedSeedImage(article: RadarArticle): RadarArticle {
   return locked?.imageUrl ? preserveImage(article, locked) : article
 }
 
+function containsLegacyGenericCopy(article: RadarArticle): boolean {
+  const text = JSON.stringify(article).toLowerCase()
+  return text.includes("los asistentes con ia durante el evento")
+}
+
 /**
  * Lista de artículos (más recientes primero). Prioriza lo que el agente diario
  * guardó en el store; si no hay nada persistido, usa el seed. Garantiza una sola
@@ -2061,7 +2201,13 @@ export async function getAllRadarArticles(): Promise<RadarArticle[]> {
   // Orden del feed: EN VIVO primero, luego lo PRÓXIMO (más cercano), y al final los
   // FINALIZADOS (más reciente primero). Así la destacada es la que se juega ahora.
   const seedByMatch = new Map(RADAR_ARTICLE_SEED.map((article) => [matchKey(article), article]))
-  return dedupeByMatch(list)
+  const seedBySlug = new Map(RADAR_ARTICLE_SEED.map((article) => [article.slug, article]))
+  const sanitized = list.flatMap((article) => {
+    if (!containsLegacyGenericCopy(article)) return [article]
+    const seed = seedBySlug.get(article.slug)
+    return seed ? [seed] : []
+  })
+  return dedupeByMatch(sanitized)
     .map((article) => preserveVerifiedMatchData(article, seedByMatch.get(matchKey(article)) ?? article))
     .map(applyLockedSeedImage)
     .sort((a, b) => compareForFeed(a, b))

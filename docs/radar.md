@@ -19,6 +19,8 @@ zona horaria y revisa todos los partidos que comiencen durante las siguientes 12
 Contrasta horario, sede, novedades de plantilla, declaraciones y conversación previa en
 al menos 3 fuentes. Actualiza su previa aunque ya exista. Si no hay partidos en la ventana,
 déjalo registrado expresamente en el reporte final con la hora exacta del corte.
+No crees una segunda previa ni reemplaces una previa editorial completa: si ya existe,
+solo actualízala cuando haya un dato nuevo, verificable y relevante.
 
 PASOS:
 1) INVESTIGA cada partido en al menos 3 fuentes y CRUZA datos:
