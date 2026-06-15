@@ -1757,8 +1757,13 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
       { name: "FIFA — calendario y resultados del Mundial 2026", url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/scores-fixtures", kind: "oficial" },
       { name: "Associated Press — Japón rescata el 2-2 ante Países Bajos", url: "https://apnews.com/article/world-cup-netherlands-japan-score-d5cb428f3a5f1199345894d44a6bdded", kind: "referencia" },
       { name: "The Guardian — Países Bajos 2-2 Japón", url: "https://www.theguardian.com/football/live/2026/jun/14/netherlands-v-japan-world-cup-2026-live", kind: "referencia" },
+      { name: "El País — Países Bajos 2-2 Japón", url: "https://elpais.com/deportes/mundial-futbol/2026-06-14/paises-bajos-japon-en-directo-partido-del-grupo-f-del-mundial-2026-en-vivo.html", kind: "referencia" },
       { name: "SB Nation — los cuatro goles del empate", url: "https://www.sbnation.com/fifa-world-cup/1118493/world-cup-2026-every-goal-from-the-netherlands-japan-thriller", kind: "referencia" },
     ],
+    imageUrl: "/images/experience-radar/mundial-2026/paises-bajos-japon.jpg",
+    imageAlt: "Virgil van Dijk y Ayase Ueda disputan el balón durante Países Bajos 2-2 Japón",
+    imageCredit: "Kai Pfaffenbach/Reuters vía El País",
+    imageSourceUrl: "https://elpais.com/deportes/mundial-futbol/2026-06-14/paises-bajos-japon-en-directo-partido-del-grupo-f-del-mundial-2026-en-vivo.html",
   }),
   upcomingMatch({
     date: "2026-06-14",
@@ -1896,12 +1901,17 @@ function preserveImage(article: RadarArticle, source: RadarArticle): RadarArticl
 }
 
 function preserveVerifiedMatchData(article: RadarArticle, source: RadarArticle): RadarArticle {
-  if (article.matchScore || !source.matchScore) return article
+  if (!source.matchScore) return article
+  const score = `${source.matchScore.homeGoals}-${source.matchScore.awayGoals}`
+  const hasScoreInTitle = article.seoTitle.includes(score)
+  if (article.matchScore && hasScoreInTitle) return article
   return {
     ...article,
     matchState: "finalizado",
-    matchScore: source.matchScore,
+    matchScore: article.matchScore ?? source.matchScore,
     matchSummary: article.matchSummary || source.matchSummary,
+    // Una versión antigua del store no puede ocultar el marcador confirmado del titular.
+    seoTitle: hasScoreInTitle ? article.seoTitle : source.seoTitle,
   }
 }
 

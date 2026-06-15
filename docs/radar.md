@@ -10,7 +10,15 @@ Actúa como mi motor de análisis del Experience Radar (especial Mundial 2026). 
 OpenAI ni datos inventados: investiga con tus herramientas (WebSearch/WebFetch) y verifica
 todo contra fuentes reales antes de escribir.
 
-PARTIDO(S) A ACTUALIZAR: los pendientes del día a anetrior a actulizar, se actualiza la previa su estan a 24horas o se llenan completo si ya juagaron, valida que esten tidos los partidos, y se incluyeb los partidos a 48 horas que no esten pero como ya sabes no accesibles
+PARTIDO(S) A ACTUALIZAR: los pendientes del día anterior; se actualiza la previa si están
+a 24 horas o se llenan completos si ya jugaron. Valida que estén todos los partidos e
+incluye los partidos a 48 horas que no estén, pero todavía como notas no accesibles.
+
+VENTANA PRIORITARIA DE 12 HORAS: al inicio de CADA corrida, calcula la hora actual con
+zona horaria y revisa todos los partidos que comiencen durante las siguientes 12 horas.
+Contrasta horario, sede, novedades de plantilla, declaraciones y conversación previa en
+al menos 3 fuentes. Actualiza su previa aunque ya exista. Si no hay partidos en la ventana,
+déjalo registrado expresamente en el reporte final con la hora exacta del corte.
 
 PASOS:
 1) INVESTIGA cada partido en al menos 3 fuentes y CRUZA datos:
@@ -30,6 +38,9 @@ PASOS:
    con TODOS estos campos llenos en español, específicos al partido (nada genérico):
    - matchScore {home, away, homeGoals, awayGoals, scoreDetail con goleadores y minutos}
    - seoTitle, hook, matchSummary, quickSummary, whatHappened, aiSummary, uxFinding
+   - TITULAR CON MARCADOR: toda nota finalizada debe comenzar su `seoTitle` con los equipos
+     y el marcador exacto, por ejemplo `Canadá 1-1 Bosnia: ...`. Comprueba también el HTML
+     final: una versión antigua del store nunca puede reemplazarlo por un titular sin score.
    - keyPlays[], controversies[], statements[] (frases reales citadas con su fuente)
    - combined: expectativa/realidad/percepcion — cada una con los 6 ejes 0–100
      (euforia, confianza, ansiedad, frustracion, incertidumbre, optimismo) coherentes
@@ -51,8 +62,14 @@ PASOS:
    - IMÁGENES: antes de tocar una nota, revisa su `imageUrl`, `imageCredit` e
      `imageSourceUrl` actuales. Si ya tiene una imagen aprobada, CONSÉRVALA exactamente:
      actualizar el análisis, marcador o fuentes NUNCA autoriza cambiar la foto.
-   - Solo busca imagen cuando la nota NO tenga una. Usa una fotografía real del partido
-     procedente de una fuente autorizada (por ejemplo Win Sports o Latingoles), verifica
+   - Solo busca imagen cuando la nota NO tenga una. La búsqueda es OBLIGATORIA e insistente:
+     prueba primero el scraping y la noticia específica en `https://latingoles.com/` y
+     `https://www.winsports.co/`; si no aparece o bloquea la descarga, continúa con FIFA,
+     AP, Reuters, The Guardian, ESPN, AS, Marca, El País, Cadena SER y otros medios serios.
+     No abandones la búsqueda tras una sola URL, un 403 o un CDN bloqueado: prueba la imagen
+     original, `og:image`, variantes del CDN y otra fuente periodística. Registra en el
+     reporte final qué dominios intentaste y por qué no se obtuvo imagen, si ese fue el caso.
+   - Usa una fotografía real del partido procedente de una fuente autorizada, verifica
      visualmente que corresponda a los equipos y descarga una copia en
      `public/images/experience-radar/mundial-2026/`. `imageUrl` debe apuntar a la ruta local
      `/images/experience-radar/mundial-2026/<slug-corto>.jpg`; conserva el crédito y la URL
@@ -83,6 +100,11 @@ AL TERMINAR:
      mostrar la imagen real inmediatamente y usar el fallback solo después de `onError`.
    - Si publicas cambios, confirma que producción ya entrega las rutas locales antes de
      decir que terminó. Incógnito no corrige un cambio que todavía no fue desplegado.
+   - PUSH AUTOMÁTICO OBLIGATORIO: después de persistir/publicar notas que acaban de quedar
+     accesibles, ejecuta `notifyNewlyPublishedArticles(await getAllRadarArticles())` o la
+     ruta `/api/experience-radar/run`, que ya lo invoca. No dependas de un envío manual.
+     Verifica y reporta `push.notified`, los slugs notificados y cualquier error. El push
+     sigue siendo best-effort y no debe romper la publicación, pero siempre debe intentarse.
    - Dime qué partidos actualizaste, el marcador verificado, las fuentes usadas y cuáles
      imágenes nuevas agregaste o cuáles preservaste sin cambios.
 ```
