@@ -114,9 +114,9 @@ export const mockSignals: Signal[] = [
   },
   {
     id: "sig-008",
-    title: "Asistentes con IA para resolver dudas en vivo",
+    title: "Verificación de información durante eventos en vivo",
     summary:
-      "Crece el uso de asistentes con IA para resolver dudas durante el evento; las respuestas imprecisas rompen la confianza.",
+      "Crece la necesidad de contrastar información durante el evento; las respuestas imprecisas rompen la confianza.",
     sourceName: "Curaduría editorial MediaLab",
     sourceUrl: "https://medialab.design/experience-radar",
     publishedAt: TODAY,

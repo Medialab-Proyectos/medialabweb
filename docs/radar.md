@@ -74,6 +74,8 @@ PASOS:
      `public/images/experience-radar/mundial-2026/`. `imageUrl` debe apuntar a la ruta local
      `/images/experience-radar/mundial-2026/<slug-corto>.jpg`; conserva el crédito y la URL
      de la noticia original en `imageCredit` e `imageSourceUrl`.
+   - La descarga y adición de imágenes al repositorio es AUTOMÁTICA: no pidas confirmación
+     editorial antes de descargar, validar, guardar y preparar la imagen para publicación.
    - NO uses hotlink como `imageUrl`: una URL externa puede responder 409/403 o bloquearse
      por referer y hacer que aparezca el respaldo aunque la foto exista. Comprueba que el
      archivo descargado sea una imagen válida, no HTML, y que tenga tamaño/dimensiones
@@ -82,6 +84,8 @@ PASOS:
    - Las imágenes declaradas en `RADAR_ARTICLE_SEED` quedan bloqueadas por slug mediante
      `LOCKED_SEED_IMAGES`. No elimines ese bloqueo ni permitas que el store, el scraping,
      X, Reddit, Latingoles o una ejecución posterior del generador las sobrescriban.
+   - ORDEN DIARIO: dentro de cada fecha, la nota analizada o actualizada más recientemente
+     debe aparecer primero. Conserva `analyzedPreviaAt`/`analyzedFinalAt` para ese orden.
 
 4) ELIMINACIÓN: si una selección de la nota ya quedó fuera del Mundial (sin más partidos),
    agrega su nombre a eliminatedTeams en esa nota, para que NO se habilite el pronóstico.
@@ -105,6 +109,9 @@ AL TERMINAR:
      ruta `/api/experience-radar/run`, que ya lo invoca. No dependas de un envío manual.
      Verifica y reporta `push.notified`, los slugs notificados y cualquier error. El push
      sigue siendo best-effort y no debe romper la publicación, pero siempre debe intentarse.
+   - GIT AUTOMÁTICO OBLIGATORIO: al terminar la revisión, ejecuta pruebas, agrega únicamente
+     los cambios del radar, crea un commit descriptivo y haz `git push` a la rama activa sin
+     pedir confirmación adicional. Si el push falla, reporta el error exacto.
    - Dime qué partidos actualizaste, el marcador verificado, las fuentes usadas y cuáles
      imágenes nuevas agregaste o cuáles preservaste sin cambios.
 ```

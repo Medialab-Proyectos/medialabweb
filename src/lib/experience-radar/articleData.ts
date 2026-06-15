@@ -71,6 +71,78 @@ function upcomingMatch(input: {
   }
 }
 
+function analyzedUpcomingMatch(input: {
+  date: string
+  kickoffAt: string
+  slug: string
+  teams: [string, string]
+  group: string
+  seoTitle: string
+  hook: string
+  quickSummary: string
+  whatHappened: string
+  uxFinding: string
+  keyPlays: string[]
+  statements: string[]
+  sources: Array<{ name: string; url: string; kind: ArticleSourceRef["kind"] }>
+  imageUrl: string
+  imageAlt: string
+  imageCredit: string
+  imageSourceUrl: string
+  emotionalRadar: EmotionalRadarValues
+  analyzedAt: string
+}): RadarArticleInput {
+  const label = input.teams.join(" vs ")
+  return {
+    category: "Fan Experience",
+    date: input.date,
+    kickoffAt: input.kickoffAt,
+    slug: input.slug,
+    matchState: "previa",
+    updateState: "ready",
+    placeholder: false,
+    analyzedPreviaAt: input.analyzedAt,
+    seoTitle: input.seoTitle,
+    teams: input.teams,
+    event: `Mundial 2026 — ${input.group}`,
+    hook: input.hook,
+    quickSummary: input.quickSummary,
+    matchSummary: input.quickSummary,
+    whatHappened: input.whatHappened,
+    keyPlays: input.keyPlays,
+    controversies: [],
+    statements: input.statements,
+    fanPulse: {
+      concerns: ["Alineación y estado físico", "Cómo reducir la incertidumbre antes del debut", "Qué narrativa dominará el inicio"],
+      emotions: ["Expectativa", "Ansiedad previa", "Optimismo cauteloso"],
+      frustrations: ["Información dispersa y cambios de última hora"],
+      enthusiasm: [input.hook],
+      sources: input.sources.filter((source) => source.kind === "conversacion" || source.kind === "tendencia"),
+    },
+    mediaLabInsight: {
+      humanBehavior: "Antes de un debut, la audiencia convierte cada novedad de alineación, viaje o estado físico en una señal sobre el resultado futuro.",
+      cognitiveBiases: ["Efecto de disponibilidad", "Sesgo de confirmación", "Aversión a la incertidumbre"],
+      emotionalReaction: "La cercanía del inicio aumenta la búsqueda compulsiva de novedades y amplifica el peso de la última información disponible.",
+      digitalPatterns: `La conversación sobre ${label} se concentra en horarios, posibles titulares, ausencias y clips de llegada o entrenamiento.`,
+    },
+    productApplications: [
+      { sector: "Producto digital", application: "Separar hechos confirmados, dudas y hora de próxima actualización evita que una novedad menor se convierta en certeza falsa." },
+      { sector: "Streaming", application: "Mostrar acceso, horario local y estado de la transmisión antes del pico reduce soporte y recargas compulsivas." },
+      { sector: "SaaS", application: "En procesos sensibles, una línea de tiempo visible ayuda a distinguir el estado actual de la interpretación del usuario." },
+    ],
+    emotionalRadar: input.emotionalRadar,
+    matchPhases: { expectativa: input.emotionalRadar },
+    scoreFactors: { emotionalImpact: 76, digitalConversation: 72, virality: 68, userInterest: 84 },
+    uxFinding: input.uxFinding,
+    aiSummary: `${input.quickSummary} El análisis separa hechos verificados de expectativas y observa cómo la última novedad disponible moldea confianza, ansiedad y conversación digital.`,
+    sources: input.sources,
+    imageUrl: input.imageUrl,
+    imageAlt: input.imageAlt,
+    imageCredit: input.imageCredit,
+    imageSourceUrl: input.imageSourceUrl,
+  }
+}
+
 /** Una hinchada en una nota finalizada: narrativa + radar emocional (actual y próximo). */
 interface FinishedTeam {
   team: string
@@ -1783,29 +1855,83 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
   }),
   // 15 jun 2026 (hora ET): España–Cabo Verde 12pm, Bélgica–Egipto 3pm,
   // Arabia Saudita–Uruguay 6pm, Irán–Nueva Zelanda 9pm. Todos dentro del corte de 48h.
-  upcomingMatch({
+  analyzedUpcomingMatch({
     date: "2026-06-15",
     kickoffAt: "2026-06-15T16:00:00.000Z",
     slug: "espana-cabo-verde-mundial-2026",
     teams: ["España", "Cabo Verde"],
     group: "Grupo H",
-    officialUrl: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/scores-fixtures",
+    seoTitle: "España vs Cabo Verde: previa, alineaciones y radar emocional del debut en el Mundial 2026",
+    hook: "El estreno mundialista de Cabo Verde frente a una España que dosifica a sus figuras",
+    quickSummary: "España debuta en Atlanta ante Cabo Verde, que juega el primer partido mundialista de su historia. Luis de la Fuente confirmó que Lamine Yamal y Nico Williams comenzarán en el banco; la expectativa española convive con el orgullo y la atención global que concentra el debut caboverdiano.",
+    whatHappened: "La previa se mueve entre dos marcos muy distintos: España llega como campeona de Europa y discute quién inicia en portería, lateral derecho y extremo izquierdo; Cabo Verde llega sin experiencia mundialista y convierte el acceso al escenario en el principal hito. Esa asimetría hace que una misma incertidumbre se viva como exigencia en un lado y oportunidad en el otro.",
+    uxFinding: "Cuando dos audiencias llegan con referencias tan distintas, el diseño debe contextualizar el progreso: una experiencia idéntica puede sentirse como obligación o como logro histórico.",
+    keyPlays: ["12:00 ET / 11:00 Bogotá: inicio en Atlanta.", "Lamine Yamal y Nico Williams están disponibles, pero partirán como suplentes.", "Cabo Verde disputa el primer encuentro mundialista de su historia."],
+    statements: ["Luis de la Fuente indicó que Lamine Yamal está en condiciones de jugar algunos minutos.", "La conversación oficial de España abrió el día con el mensaje #VamosEspaña."],
+    sources: [
+      { name: "FIFA — calendario oficial", url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/scores-fixtures", kind: "oficial" },
+      { name: "Latingoles — Yamal y Williams esperan su turno", url: "https://latingoles.com/no-arrancan-espanoles-yamal-williams-y-munoz-esperan-su-turno-ante-cabo-verde/", kind: "referencia" },
+      { name: "El País — horario y novedades de España", url: "https://elpais.com/deportes/mundial-futbol/2026-06-15/espana-cabo-verde-horario-y-donde-ver-el-primer-partido-de-la-seleccion-en-la-copa-del-mundo.html", kind: "referencia" },
+      { name: "AS — posible alineación de España", url: "https://as.com/futbol/seleccion/alineacion-posible-de-espana-frente-a-cabo-verde-para-el-debut-en-el-mundial-2026-f202606-n/", kind: "referencia" },
+    ],
+    imageUrl: "/images/experience-radar/mundial-2026/espana-cabo-verde.jpg",
+    imageAlt: "Luis de la Fuente durante la previa de España vs Cabo Verde",
+    imageCredit: "Latingoles",
+    imageSourceUrl: "https://latingoles.com/no-arrancan-espanoles-yamal-williams-y-munoz-esperan-su-turno-ante-cabo-verde/",
+    emotionalRadar: { euforia: 72, confianza: 74, ansiedad: 48, frustracion: 18, incertidumbre: 46, optimismo: 78 },
+    analyzedAt: "2026-06-15T11:13:00.000Z",
   }),
-  upcomingMatch({
+  analyzedUpcomingMatch({
     date: "2026-06-15",
     kickoffAt: "2026-06-15T19:00:00.000Z",
     slug: "belgica-egipto-mundial-2026",
     teams: ["Bélgica", "Egipto"],
     group: "Grupo G",
-    officialUrl: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/scores-fixtures",
+    seoTitle: "Bélgica vs Egipto: previa, figuras y radar emocional del Grupo G en el Mundial 2026",
+    hook: "La experiencia belga frente al deseo egipcio de conseguir su primera victoria mundialista",
+    quickSummary: "Bélgica y Egipto abren el Grupo G en Seattle. Bélgica combina referentes veteranos como De Bruyne, Courtois y Lukaku con la aceleración de Doku; Egipto deposita su atención en Salah, Marmoush y una defensa que concedió muy poco durante la clasificación.",
+    whatHappened: "La previa enfrenta dos narrativas de presión: Bélgica intenta demostrar que puede competir después de la etiqueta de generación dorada, mientras Egipto regresa al Mundial todavía buscando su primera victoria histórica. Para ambas hinchadas, el debut funciona como prueba de identidad antes que como simple primer partido.",
+    uxFinding: "Las etiquetas heredadas condicionan la lectura del presente: un producto debe reconocer la memoria del usuario sin permitir que ella defina por completo la experiencia actual.",
+    keyPlays: ["15:00 ET / 14:00 Bogotá: inicio en Seattle.", "Bélgica llega invicta en la clasificación europea.", "Egipto construyó su clasificación desde una defensa de bajo margen de error."],
+    statements: ["La previa de Seattle Sounders destaca a De Bruyne, Doku y Courtois como referentes belgas.", "Hossam Hassan presentó a Salah y Marmoush como ejes de una selección egipcia que también incorpora talento joven."],
+    sources: [
+      { name: "FIFA — calendario oficial", url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/scores-fixtures", kind: "oficial" },
+      { name: "Seattle Sounders — guía Bélgica vs Egipto", url: "https://www.soundersfc.com/news/belvegy-101-preview-all-you-need-to-know-when-belgium-faces-egypt-in-fifa-world-cup-2026tm-at-lumen-field", kind: "referencia" },
+      { name: "Latingoles — claves del día 5", url: "https://latingoles.com/el-dia-5-del-mundial-en-5-claves/", kind: "referencia" },
+      { name: "Barça Blaugranes — contexto de Hamza Abdelkarim", url: "https://www.barcablaugranes.com/world-cup-2026/123534/hamza-abdelkarim-will-suprise-fans-egypt-boss-talks-up-barcelonas-great-player", kind: "referencia" },
+    ],
+    imageUrl: "/images/experience-radar/mundial-2026/belgica-egipto.png",
+    imageAlt: "Lumen Field preparado para Bélgica vs Egipto",
+    imageCredit: "Seattle Sounders FC",
+    imageSourceUrl: "https://www.soundersfc.com/news/belvegy-101-preview-all-you-need-to-know-when-belgium-faces-egypt-in-fifa-world-cup-2026tm-at-lumen-field",
+    emotionalRadar: { euforia: 68, confianza: 66, ansiedad: 54, frustracion: 22, incertidumbre: 52, optimismo: 70 },
+    analyzedAt: "2026-06-15T11:14:00.000Z",
   }),
-  upcomingMatch({
+  analyzedUpcomingMatch({
     date: "2026-06-15",
     kickoffAt: "2026-06-15T22:00:00.000Z",
     slug: "arabia-saudita-uruguay-mundial-2026",
     teams: ["Arabia Saudita", "Uruguay"],
     group: "Grupo H",
-    officialUrl: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/scores-fixtures",
+    seoTitle: "Arabia Saudita vs Uruguay: previa, viaje de la Celeste y radar emocional del Mundial 2026",
+    hook: "La demora aérea de Uruguay convirtió la logística en parte de la experiencia previa",
+    quickSummary: "Arabia Saudita y Uruguay debutan en Miami con una previa alterada por el viaje tardío de la Celeste desde México. Bielsa restó importancia al retraso, mientras José María Giménez lo calificó como difícil; Arabia Saudita llega con George Donis y apenas doce sesiones de trabajo.",
+    whatHappened: "La conversación dejó de centrarse solo en Valverde, Darwin Núñez o Al-Dawsari y pasó a la confiabilidad de la operación del torneo. El retraso aéreo introdujo una señal de pérdida de control para Uruguay, mientras Arabia Saudita intenta convertir una preparación corta en una narrativa de oportunidad.",
+    uxFinding: "En una experiencia crítica, la logística también es interfaz: cuando el sistema falla antes del momento principal, explicar causa, impacto y recuperación protege la confianza.",
+    keyPlays: ["18:00 ET / 17:00 Bogotá: inicio en Miami.", "Uruguay llegó con demora por problemas de documentación del vuelo.", "George Donis afronta su primer partido competitivo con Arabia Saudita tras doce sesiones."],
+    statements: ["Marcelo Bielsa afirmó que el retraso del vuelo no causó problemas.", "José María Giménez describió la situación como difícil, aunque el equipo aprovechó para descansar."],
+    sources: [
+      { name: "FIFA — calendario oficial", url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/scores-fixtures", kind: "oficial" },
+      { name: "Latingoles — Uruguay ante Arabia Saudita", url: "https://latingoles.com/celeste-en-alerta-uruguayos-valverde-nunez-y-araujo-retan-al-saudi-al-dawsari/", kind: "referencia" },
+      { name: "The Guardian — retraso del viaje uruguayo", url: "https://www.theguardian.com/football/2026/jun/15/uruguay-delayed-by-plane-paperwork-as-world-cup-travel-challenges-continue", kind: "referencia" },
+      { name: "AS — el método Bielsa y la previa", url: "https://as.com/futbol/mundial/el-metodo-bielsa-de-una-uruguay-enfadada-f202606-n/", kind: "referencia" },
+    ],
+    imageUrl: "/images/experience-radar/mundial-2026/arabia-saudita-uruguay.jpg",
+    imageAlt: "La selección de Uruguay a su llegada antes del debut ante Arabia Saudita",
+    imageCredit: "Latingoles",
+    imageSourceUrl: "https://latingoles.com/celeste-en-alerta-uruguayos-valverde-nunez-y-araujo-retan-al-saudi-al-dawsari/",
+    emotionalRadar: { euforia: 64, confianza: 60, ansiedad: 68, frustracion: 44, incertidumbre: 62, optimismo: 66 },
+    analyzedAt: "2026-06-15T11:15:00.000Z",
   }),
   upcomingMatch({
     date: "2026-06-15",
@@ -1905,6 +2031,8 @@ function preserveVerifiedMatchData(article: RadarArticle, source: RadarArticle):
   const score = `${source.matchScore.homeGoals}-${source.matchScore.awayGoals}`
   const hasScoreInTitle = article.seoTitle.includes(score)
   if (article.matchScore && hasScoreInTitle) return article
+  // Una reescritura genérica del store no reemplaza la edición completa verificada.
+  if (!hasScoreInTitle) return source
   return {
     ...article,
     matchState: "finalizado",

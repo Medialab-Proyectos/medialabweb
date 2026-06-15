@@ -34,6 +34,10 @@ function recencyTime(a: RadarArticle): number {
   return new Date(a.kickoffAt || `${a.date}T12:00:00`).getTime()
 }
 
+function analysisTime(a: RadarArticle): number {
+  return new Date(a.analyzedFinalAt || a.analyzedPreviaAt || a.updatedAt).getTime()
+}
+
 /**
  * Orden del feed de notas: primero los que se juegan AHORA (en vivo), luego lo
  * PRÓXIMO (el más cercano primero) y al final los FINALIZADOS (el más reciente
@@ -47,6 +51,10 @@ export function compareForFeed(a: RadarArticle, b: RadarArticle, now: Date = new
   const ta = tier(a)
   const tb = tier(b)
   if (ta !== tb) return ta - tb
+  if (a.date === b.date) {
+    const analyzedDiff = analysisTime(b) - analysisTime(a)
+    if (analyzedDiff !== 0) return analyzedDiff
+  }
   // Próximos: el más cercano primero (asc). En vivo / finalizados: el más reciente primero (desc).
   return ta === 1 ? recencyTime(a) - recencyTime(b) : recencyTime(b) - recencyTime(a)
 }
@@ -92,14 +100,7 @@ export function getArticleAvailability(
     }
   }
 
-  // En estado PREVIA (antes del pitazo) la nota se muestra en el calendario pero NO se
-  // abre: el análisis vivo (radar, hinchadas, hallazgos) solo tiene sentido cuando el
-  // partido arranca. Se libera al pasar a "en vivo" o "finalizado".
-  if (resolveMatchStatus(article, now) === "previa") {
-    return { visible: true, accessible: false, availableAt: availableAt.toISOString(), reason: "preparing" }
-  }
-
-  // En vivo o finalizado: la nota es accesible con el contenido disponible.
-  // Ya no se oculta un finalizado a la espera del análisis.
+  // Una previa analizada se abre dentro de la ventana editorial de 24 horas. Los
+  // placeholders siguen bloqueados arriba hasta que exista contenido real.
   return { visible: true, accessible: true, availableAt: availableAt.toISOString() }
 }

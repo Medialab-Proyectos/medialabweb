@@ -179,8 +179,8 @@ const PLAYBOOK: Record<ExperienceSignalCategory, ArticlePlaybook> = {
     ],
   },
   IA: {
-    hook: "los asistentes con IA durante el evento",
-    headline: "el uso de IA en vivo y qué enseña sobre confianza y trazabilidad",
+    hook: "la verificación de información en tiempo real",
+    headline: "cómo se valida la información en vivo y qué enseña sobre confianza y trazabilidad",
     humanBehavior: "El usuario confía en la IA cuando comunica fuentes, límites y nivel de certeza; una respuesta confiada pero errónea daña más que la ausencia.",
     cognitiveBiases: ["Sesgo de automatización: confiar de más en la respuesta de la máquina."],
     emotionalReaction: "Desconfianza tras una respuesta segura pero equivocada.",
@@ -440,6 +440,10 @@ export async function generateAndStoreArticlesFromReport(
   const candidates = generated.flatMap((article) => {
     const fixture = existing.find((candidate) => sameTeams(candidate.teams, article.teams))
     if (!fixture?.kickoffAt) return []
+
+    // Una nota final ya verificada no vuelve al generador temático. Las señales
+    // generales de IA, streaming o reviews no pueden degradar su edición.
+    if (fixture.matchState === "finalizado" && fixture.matchScore) return []
 
     const kickoff = new Date(fixture.kickoffAt).getTime()
     if (!Number.isFinite(kickoff)) return []
