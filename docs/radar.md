@@ -44,6 +44,9 @@ PASOS:
    - TITULAR CON MARCADOR: toda nota finalizada debe comenzar su `seoTitle` con los equipos
      y el marcador exacto, por ejemplo `Canadá 1-1 Bosnia: ...`. Comprueba también el HTML
      final: una versión antigua del store nunca puede reemplazarlo por un titular sin score.
+   - TITULAR CAPITALIZADO: después del marcador y los dos puntos, el titular debe iniciar
+     con mayúscula. Correcto: `Catar 1-1 Suiza: El gol agónico...`; incorrecto:
+     `Catar 1-1 Suiza: el gol agónico...`.
    - keyPlays[], controversies[], statements[] (frases reales citadas con su fuente)
    - combined: expectativa/realidad/percepcion — cada una con los 6 ejes 0–100
      (euforia, confianza, ansiedad, frustracion, incertidumbre, optimismo) coherentes
@@ -133,6 +136,17 @@ CUMPLIMIENTO (obligatorio):
    - No reproduzcas notas completas: resumen propio + enlaces de referencia.
    - El pronóstico es lectura de ánimo colectivo, NO predicción de marcador ni cuota.
    - Corrige cualquier dato fabricado que encuentres por uno verificado.
+   - SEO / INDEXACIÓN DEL ESPECIAL: las notas de `/experience-radar/mundial-2026/[slug]`
+     deben publicarse como contenido de **Experience Radar**, no como marca genérica del
+     dominio. Verifica que el HTML renderizado incluya:
+     - `<title>` con formato `<seoTitle> | Experience Radar`.
+     - `openGraph.siteName`, `applicationName` y `publisher` como `Experience Radar`.
+     - `NewsArticle.author.name` y `NewsArticle.publisher.name` como `Experience Radar`.
+     - `news-sitemap.xml` con `<news:name>Experience Radar</news:name>`.
+     - La URL canónica en español y `hreflang` coherente con la ruta espejo en inglés.
+   - Tras cambios de título, metadata, JSON-LD o sitemap de noticias, solicita recrawl /
+     reindexación en Search Console para las URLs afectadas y vuelve a enviar o validar
+     `https://medialab.design/news-sitemap.xml`.
 
 AL TERMINAR:
    - Corre `npx tsc --noEmit` y `npm run build`.
@@ -203,6 +217,10 @@ correspondiente, para que ninguna predicción quede sin equipo.
   «Antes del partido» puede mostrar `previewImageUrl`; en «Durante el partido» y
   «Pronóstico» debe mostrar `imageUrl`. Las notas finalizadas arrancan en «Durante el
   partido» si tienen `matchPhases.realidad`.
+- **SEO de marca para indexación**: Google puede mostrar el dominio si no entiende la marca
+  editorial. En las notas del Mundial, la marca visible para metadata, Open Graph, Twitter,
+  JSON-LD `NewsArticle` y `news-sitemap.xml` es **Experience Radar**. El dominio sigue siendo
+  `medialab.design`, pero el producto editorial se identifica como `Experience Radar`.
 - **Imágenes editoriales fijas**: las fotos aprobadas finales viven en
   `public/images/experience-radar/mundial-2026/` y se referencian desde
   `src/lib/experience-radar/articleData.ts`. Actualmente están fijadas las de México vs
