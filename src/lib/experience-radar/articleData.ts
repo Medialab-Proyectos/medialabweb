@@ -2403,7 +2403,7 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
   }),
   analyzedUpcomingMatch({
     date: "2026-06-16",
-    kickoffAt: "2026-06-16T16:00:00.000Z",
+    kickoffAt: "2026-06-16T19:00:00.000Z",
     slug: "francia-senegal-mundial-2026",
     teams: ["Francia", "Senegal"],
     group: "Grupo I",
@@ -2412,7 +2412,7 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
     quickSummary: "Francia debuta ante Senegal en New York/New Jersey Stadium en un cruce que mezcla jerarquía de plantel, paciencia pedida por Warren Zaïre-Emery y Youssouf Koné, y la capacidad senegalesa de competir sin complejo frente a selecciones de primera línea. La previa se mueve entre expectativa de autoridad francesa y respeto por un rival que no acepta el papel de comparsa.",
     whatHappened: "La conversación previa no se limita a Mbappé o al favoritismo francés. FIFA empujó una lectura de paciencia y madurez competitiva desde voces del propio grupo, mientras la previa general del día presentó el partido como uno de los focos del inicio de la jornada 6. Para Senegal, el reto es resistir la narrativa de jerarquía ajena; para Francia, demostrar control sin sobreactuar presión.",
     uxFinding: "Cuando una marca favorita enfrenta un retador con identidad propia, la experiencia mejora si separa expectativa pública de evidencia real en lugar de asumir superioridad automática.",
-    keyPlays: ["11:00 Bogotá / 12:00 ET: inicio en New York/New Jersey Stadium.", "Francia abre su participación en el Grupo I.", "La previa oficial insiste en paciencia y control emocional para el estreno francés."],
+    keyPlays: ["14:00 Bogotá / 15:00 ET: inicio en New York/New Jersey Stadium.", "Francia abre su participación en el Grupo I.", "La previa oficial insiste en paciencia y control emocional para el estreno francés."],
     statements: ["FIFA destacó declaraciones de Warren Zaïre-Emery y Youssouf Koné sobre la necesidad de paciencia en el debut.", "La previa global de la jornada 6 de FIFA ubica este cruce como uno de los grandes focos del día."],
     sources: [
       { name: "FIFA — previa Francia vs Senegal", url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/france-senegal-preview-live-stream-team-news-tickets", kind: "oficial" },
@@ -2428,7 +2428,7 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
   }),
   analyzedUpcomingMatch({
     date: "2026-06-16",
-    kickoffAt: "2026-06-16T19:00:00.000Z",
+    kickoffAt: "2026-06-16T22:00:00.000Z",
     slug: "iraq-noruega-mundial-2026",
     teams: ["Irak", "Noruega"],
     group: "Grupo I",
@@ -2437,7 +2437,7 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
     quickSummary: "Irak y Noruega se enfrentan en Boston en un duelo de expectativas asimétricas. FIFA presenta el partido como una batalla del Grupo I y la conversación paralela gira alrededor del debut mundialista de Erling Haaland, mientras Irak intenta que el relato no sea solo el de su rival, sino el de un retorno competitivo con identidad propia.",
     whatHappened: "La previa combina dos intensidades distintas: Noruega concentra atención masiva por Haaland y por el volumen simbólico de su regreso mundialista; Irak busca desplazar la mirada desde la celebridad rival hacia su propia narrativa de pertenencia. Cuando una conversación nace tan inclinada hacia una figura, la experiencia del otro lado depende de encontrar señales tempranas de dignidad competitiva.",
     uxFinding: "Si una audiencia llega atraída por una sola figura, el diseño debe abrir espacio para que el resto de actores también construyan significado desde el primer minuto.",
-    keyPlays: ["14:00 Bogotá / 15:00 ET: inicio en Boston.", "Haaland concentra gran parte de la conversación previa sobre Noruega.", "Irak abre su ruta en el Grupo I intentando competir también por relato, no solo por resultado."],
+    keyPlays: ["17:00 Bogotá / 18:00 ET: inicio en Boston.", "Haaland concentra gran parte de la conversación previa sobre Noruega.", "Irak abre su ruta en el Grupo I intentando competir también por relato, no solo por resultado."],
     statements: ["La previa oficial de FIFA encuadra el duelo como una batalla abierta del Grupo I.", "Latingoles subraya el foco sobre Haaland en el debut noruego ante Irak."],
     sources: [
       { name: "FIFA — previa Irak vs Noruega", url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/iraq-norway-live-stream-team-news-tickets", kind: "oficial" },
@@ -2453,7 +2453,7 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
   }),
   analyzedUpcomingMatch({
     date: "2026-06-16",
-    kickoffAt: "2026-06-16T22:00:00.000Z",
+    kickoffAt: "2026-06-17T01:00:00.000Z",
     slug: "argentina-argelia-mundial-2026",
     teams: ["Argentina", "Argelia"],
     group: "Grupo J",
@@ -2462,7 +2462,7 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
     quickSummary: "Argentina debuta ante Argelia en Kansas City en un partido que FIFA sitúa entre los focos centrales de la jornada 6. La conversación pública se inclina hacia Messi y la jerarquía campeona, mientras Argelia intenta entrar al escenario sin aceptar el rol de simple telón de fondo. La previa exige distinguir magnetismo global de superioridad automática.",
     whatHappened: "El partido llega envuelto en una lógica conocida: una selección campeona y una figura total concentran el volumen emocional de la previa. Pero esa concentración también crea una oportunidad para el rival, que puede ganar relevancia si convierte cualquier tramo competitivo en una historia de interrupción del guion esperado. Para producto, es un caso claro de atención desbalanceada y redistribución potencial del interés en tiempo real.",
     uxFinding: "Cuando una experiencia está dominada por una marca o figura total, conviene diseñar puntos de entrada que permitan al resto del sistema ganar atención si la narrativa empieza a cambiar.",
-    keyPlays: ["17:00 Bogotá / 18:00 ET: inicio en Kansas City Stadium.", "Argentina abre su ruta en el Grupo J con Messi como centro gravitacional de la conversación.", "FIFA incluye el partido entre los principales focos de la jornada 6."],
+    keyPlays: ["20:00 Bogotá / 21:00 ET: inicio en Kansas City Stadium.", "Argentina abre su ruta en el Grupo J con Messi como centro gravitacional de la conversación.", "FIFA incluye el partido entre los principales focos de la jornada 6."],
     statements: ["La previa oficial de FIFA presenta el encuentro con foco en transmisión, contexto y arranque de grupo.", "Latingoles enfatiza el pulso emocional argentino a través de Messi, Martínez y Álvarez antes del cruce con Argelia."],
     sources: [
       { name: "FIFA — previa Argentina vs Argelia", url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/argentina-algeria-preview-live-stream-team-news-tickets", kind: "oficial" },
@@ -2478,7 +2478,7 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
   }),
   upcomingMatch({
     date: "2026-06-16",
-    kickoffAt: "2026-06-17T01:00:00.000Z",
+    kickoffAt: "2026-06-17T04:00:00.000Z",
     slug: "austria-jordania-mundial-2026",
     teams: ["Austria", "Jordania"],
     group: "Grupo J",

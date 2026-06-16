@@ -9,6 +9,7 @@ import { NoteImage } from "./note-image"
 import { StatusPill } from "./status-pill"
 import { getArticleAvailability, resolveMatchStatus, compareForFeed } from "@/src/lib/experience-radar/articleAvailability"
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel"
+import { LocalMatchTime } from "./local-match-time"
 
 /** Día (YYYY-MM-DD) en la zona LOCAL de quien abre la página. */
 function dayKey(value: Date): string {
@@ -159,13 +160,6 @@ function NoteCard({ article: a, isLatestAnalyzed = false }: { article: RadarArti
       }).format(new Date(availability.availableAt))
     : null
 
-  const kickoffLabel = a.kickoffAt
-    ? new Intl.DateTimeFormat(lang === "es" ? "es-CO" : "en-US", {
-        hour: "2-digit",
-        minute: "2-digit",
-      }).format(new Date(a.kickoffAt))
-    : null
-
   return (
     <Link
       href={availability.accessible ? localized(`/experience-radar/mundial-2026/${a.slug}`) : "#"}
@@ -199,9 +193,9 @@ function NoteCard({ article: a, isLatestAnalyzed = false }: { article: RadarArti
       </div>
       <div className="flex flex-1 flex-col p-4">
         <h3 className="text-sm font-bold leading-snug group-hover:text-[var(--cyan)]">{a.seoTitle}</h3>
-        {kickoffLabel && (
+        {a.kickoffAt && (
           <span className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-foreground/80">
-            <Clock3 size={13} /> {a.teams.join(" vs ")} · {kickoffLabel}
+            <Clock3 size={13} /> {a.teams.join(" vs ")} · <LocalMatchTime iso={a.kickoffAt} date={a.date} variant="time" />
           </span>
         )}
         <p className="mt-2 line-clamp-2 text-xs text-muted-foreground">{a.quickSummary}</p>

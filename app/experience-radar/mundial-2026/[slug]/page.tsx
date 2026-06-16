@@ -16,6 +16,7 @@ import { RadarPhaseBar } from "@/components/experience-radar/radar-phase-bar"
 import { RadarNewsletter } from "@/components/experience-radar/radar-newsletter"
 import { RelatedNotes, type RelatedNote } from "@/components/experience-radar/related-notes"
 import { PhaseAwareNoteImage } from "@/components/experience-radar/phase-aware-note-image"
+import { LocalMatchTime } from "@/components/experience-radar/local-match-time"
 import { pickMatchImage } from "@/components/experience-radar/default-image"
 import { getRadarArticleBySlug, getAllRadarArticles } from "@/src/lib/experience-radar/articleData"
 import { resolveMatchStatus, getArticleAvailability } from "@/src/lib/experience-radar/articleAvailability"
@@ -178,8 +179,7 @@ export default async function RadarArticlePage({
           </Link>
         </div>
         <p className="mt-3 text-sm text-muted-foreground">
-          {article.teams.join(" vs ")} · {formatDate(article.date)}
-          {article.kickoffAt ? ` · ${formatKickoff(article.kickoffAt)}` : ""}
+          {article.teams.join(" vs ")} · <LocalMatchTime iso={article.kickoffAt} date={article.date} />
         </p>
         <PhaseAwareNoteImage
           status={status}
@@ -500,23 +500,6 @@ function resolveSourceLabels(article: RadarArticle): string[] {
     if (!byKind.has(source.kind)) byKind.set(source.kind, source.name)
   }
   return [...byKind.values()]
-}
-
-/* ───────────────── Subcomponentes (server) ───────────────── */
-
-function formatDate(value: string): string {
-  return new Intl.DateTimeFormat("es-CO", { dateStyle: "long", timeZone: "America/Bogota" }).format(
-    new Date(`${value}T12:00:00`),
-  )
-}
-
-function formatKickoff(value: string): string {
-  return new Intl.DateTimeFormat("es-CO", {
-    hour: "numeric",
-    minute: "2-digit",
-    timeZone: "America/Bogota",
-    timeZoneName: "short",
-  }).format(new Date(value))
 }
 
 /* ───────────────── JSON-LD (SEO / GEO / motores de IA) ───────────────── */

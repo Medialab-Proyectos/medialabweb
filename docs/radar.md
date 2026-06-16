@@ -31,6 +31,20 @@ PASOS:
    - Confirma marcador EXACTO, goleadores con minuto, polémicas arbitrales y frases reales.
    Si un dato no se puede verificar, NO lo incluyas.
 
+   HORARIOS (kickoffAt) — REGLA CRÍTICA:
+   - `kickoffAt` SIEMPRE se guarda en UTC (sufijo `Z`, p. ej. `2026-06-16T19:00:00.000Z`).
+   - VERIFICA la hora oficial de cada partido en una fuente seria (FIFA/ESPN/AS) y conviértela
+     bien a UTC. En junio, la hora del Este de EE. UU. es EDT = UTC−4 (ET + 4h = UTC); Colombia
+     es UTC−5. Ej.: 3:00 p. m. ET → 19:00 UTC → 2:00 p. m. en Colombia.
+   - NO asumas la grilla del día (12pm/3pm/6pm/9pm ET): cada jornada empieza a una hora distinta.
+     Comprueba el partido concreto, no el patrón. Un error típico es correr todo el día un turno
+     (−3 h). Si el último partido del día arranca pasada la medianoche UTC, su `kickoffAt` lleva
+     la fecha del día siguiente (la `date` editorial puede seguir siendo la del día del fixture).
+   - La hora se MUESTRA en la zona horaria del visitante (la del navegador), con el nombre de la
+     zona (p. ej. "GMT−5"), vía el componente `LocalMatchTime`. NO formatees horas con zona fija
+     en el servidor. Si pones horas dentro de textos (keyPlays, etc.), aclara la zona: por
+     ejemplo "20:00 Bogotá / 21:00 ET", y mantenla coherente con el `kickoffAt` en UTC.
+
 2) ANALIZA con lente de UX y comportamiento (no como cronista deportivo): qué sesgos
    cognitivos aparecieron (regla pico-fin, sesgo de recencia, aversión a la pérdida,
    punto de referencia/encuadre, prueba social, etc.), cómo se movió la emoción de la

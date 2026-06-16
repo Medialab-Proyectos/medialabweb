@@ -13,6 +13,23 @@ import { useLanguage } from "@/lib/language-context"
 export function NextMatchBar({ updatedAt }: { updatedAt?: string }) {
   const { t, lang } = useLanguage()
   const [countdown, setCountdown] = useState("")
+  const [updated, setUpdated] = useState<string | null>(null)
+
+  // "Última actualización" en la zona horaria del VISITANTE (no una fija). Se calcula tras
+  // montar para no mostrar una hora del servidor (UTC) ni desajustar la hidratación.
+  useEffect(() => {
+    if (!updatedAt) {
+      setUpdated(null)
+      return
+    }
+    setUpdated(
+      new Intl.DateTimeFormat(lang === "es" ? "es-CO" : "en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+        timeZoneName: "short",
+      }).format(new Date(updatedAt)),
+    )
+  }, [updatedAt, lang])
 
   useEffect(() => {
     const tick = () => {
@@ -41,14 +58,6 @@ export function NextMatchBar({ updatedAt }: { updatedAt?: string }) {
     const id = setInterval(tick, 30_000)
     return () => clearInterval(id)
   }, [])
-
-  const updated = updatedAt
-    ? new Intl.DateTimeFormat(lang === "es" ? "es-CO" : "en-US", {
-        hour: "2-digit",
-        minute: "2-digit",
-        timeZone: "America/Bogota",
-      }).format(new Date(updatedAt))
-    : null
 
   return (
     <div className="sticky top-16 z-40 border-b border-border bg-background/95 backdrop-blur-sm md:top-20">
