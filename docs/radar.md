@@ -10,9 +10,10 @@ Actúa como mi motor de análisis del Experience Radar (especial Mundial 2026). 
 OpenAI ni datos inventados: investiga con tus herramientas (WebSearch/WebFetch) y verifica
 todo contra fuentes reales antes de escribir.
 
-PARTIDO(S) A ACTUALIZAR: los pendientes del día anterior; se actualiza la previa si están
-a 24 horas o se llenan completos si ya jugaron. Valida que estén todos los partidos e
-incluye los partidos a 48 horas que no estén, pero todavía como notas no accesibles.
+PARTIDO(S) A ACTUALIZAR: los pendientes del día anterior y los partidos de hoy; se
+actualiza la previa si están a 24 horas o se llenan completos si ya jugaron. Valida que
+estén todos los partidos e incluye los partidos a 48 horas que no estén, pero todavía como
+notas no accesibles.
 
 VENTANA PRIORITARIA DE 12 HORAS: al inicio de CADA corrida, calcula la hora actual con
 zona horaria y revisa todos los partidos que comiencen durante las siguientes 12 horas.
@@ -50,6 +51,10 @@ PASOS:
    - teamsData[2] (FinishedTeam): expectedEmotion, dominantConversation, fanConfidence,
      mainNarrative, howTheyArrived, whatHappened, expectationVsReality, mood,
      behaviorEffect, current{6 ejes}, predicted{6 ejes}.
+   - PREVIA ANALIZADA (analyzedUpcomingMatch): pasa `teamsData` con la lectura DISTINTA de
+     cada hinchada (expectedEmotion, dominantConversation, fanConfidence, mainNarrative). Si
+     no se aporta, ambas cajas muestran el mismo texto y la UI las colapsa en "Ambas
+     hinchadas". Para dos lecturas separadas, llena `teamsData` con datos propios de cada país.
    - userExperience POR EQUIPO: cómo consume y reacciona EN DIGITAL la hinchada de ESE
      país, por etapa { expectativa?, realidad?, percepcion? }. DEBE ser específico de cada
      selección (memes, hashtags, apps, quejas propias de esa afición) y DISTINTO entre los
@@ -62,9 +67,33 @@ PASOS:
    - productApplications[], fanPulse {concerns, emotions, frustrations, enthusiasm}.
    - sources[] con name, url y kind reales (las que de verdad consultaste).
    - IMÁGENES: antes de tocar una nota, revisa su `imageUrl`, `imageCredit` e
-     `imageSourceUrl` actuales. Si ya tiene una imagen aprobada, CONSÉRVALA exactamente:
-     actualizar el análisis, marcador o fuentes NUNCA autoriza cambiar la foto.
-   - Solo busca imagen cuando la nota NO tenga una. La búsqueda es OBLIGATORIA e insistente:
+     `imageSourceUrl` actuales y determina en qué etapa está: `previa`, `en_vivo` o
+     `finalizado`/pronóstico.
+   - Las imágenes de la previa y de la noticia/análisis actualizado DEBEN ser diferentes.
+     Cada partido puede tener dos imágenes editoriales: una de previa (antes del partido) y
+     una última imagen de análisis (durante/finalizado/pronóstico). Cuando el encuentro ya
+     fue analizado, CONSERVA la última imagen exactamente; esa es la imagen aprobada que no
+     debe volver a cambiarse en corridas posteriores.
+   - Si una nota sigue en `previa`, conserva la imagen de previa si ya existe. Si pasa de
+     `previa` a `en_vivo` o `finalizado`, NO reutilices la foto de previa: busca y guarda
+     una imagen distinta, más actual, de la noticia o del partido. Desde ese momento esa
+     nueva imagen debe quedar en `imageUrl`, `imageCredit` e `imageSourceUrl`.
+   - NO pierdas la imagen inicial: cuando reemplaces la imagen del análisis, conserva la
+     foto de antes del partido en `previewImageUrl`, `previewImageAlt`, `previewImageCredit`
+     y `previewImageSourceUrl`. Si el archivo local de previa fue pisado, vuelve a
+     descargarlo o guárdalo con sufijo `-previa` antes de publicar.
+   - En el especial/listado de `/experience-radar/mundial-2026`, una nota analizada debe
+     mostrar SIEMPRE la imagen final de análisis (`imageUrl`). La imagen de previa solo se
+     muestra mientras el partido está en `previa` o dentro de la nota cuando el usuario
+     selecciona la fase «Antes del partido».
+   - Al entrar a una nota ya analizada/finalizada, la fase inicial debe ser «Durante el
+     partido» (`realidad`) si existe. No debe abrir mostrando «Antes del partido» salvo que
+     la nota todavía sea previa o no tenga datos de realidad.
+   - Para los partidos de hoy y de ayer, valida explícitamente esta regla: si tienen previa
+     y ya fueron jugados o están en análisis, cambia a la imagen final; si ya tienen imagen
+     final aprobada, consérvala sin tocar.
+   - Solo busca imagen cuando la etapa requiere una imagen y la nota NO tiene la imagen
+     correcta para esa etapa. La búsqueda es OBLIGATORIA e insistente:
      prueba primero el scraping y la noticia específica en `https://latingoles.com/` y
      `https://www.winsports.co/`; si no aparece o bloquea la descarga, continúa con FIFA,
      AP, Reuters, The Guardian, ESPN, AS, Marca, El País, Cadena SER y otros medios serios.
@@ -83,14 +112,21 @@ PASOS:
      archivo descargado sea una imagen válida, no HTML, y que tenga tamaño/dimensiones
      razonables. Si no consigues una foto verificable, deja `imageUrl` vacío; el sistema
      escogerá un respaldo local estable según el slug.
-   - Las imágenes declaradas en `RADAR_ARTICLE_SEED` quedan bloqueadas por slug mediante
-     `LOCKED_SEED_IMAGES`. No elimines ese bloqueo ni permitas que el store, el scraping,
-     X, Reddit, Latingoles o una ejecución posterior del generador las sobrescriban.
+   - Las imágenes finales declaradas en `RADAR_ARTICLE_SEED` quedan bloqueadas por slug
+     mediante `LOCKED_SEED_IMAGES`. No elimines ese bloqueo ni permitas que el store, el
+     scraping, X, Reddit, Latingoles o una ejecución posterior del generador sobrescriban
+     la última imagen aprobada del partido.
    - ORDEN DIARIO: dentro de cada fecha, la nota analizada o actualizada más recientemente
      debe aparecer primero. Conserva `analyzedPreviaAt`/`analyzedFinalAt` para ese orden.
 
 4) ELIMINACIÓN: si una selección de la nota ya quedó fuera del Mundial (sin más partidos),
    agrega su nombre a eliminatedTeams en esa nota, para que NO se habilite el pronóstico.
+
+4b) PRÓXIMO RIVAL: llena `nextOpponents` (clave = equipo, valor = rival) con el próximo
+   contrincante VERIFICADO de cada selección del partido, según el fixture oficial. Es lo que
+   hace que el pronóstico diga "Para el próximo partido vs X". Si la nota del próximo partido
+   ya existe en el calendario, el rival se infiere solo; igual conviene ponerlo explícito para
+   los equipos cuyo siguiente cruce aún no está cargado (p. ej. Irán → su rival real).
 
 CUMPLIMIENTO (obligatorio):
    - Sin contenido de apuestas ni cuotas. Sin logos oficiales de FIFA.
@@ -158,7 +194,16 @@ correspondiente, para que ninguna predicción quede sin equipo.
 
 ## Notas de implementación (referencia rápida)
 
-- **Imágenes editoriales fijas**: las fotos aprobadas viven en
+- **Imágenes editoriales por etapa**: cada partido puede tener dos imágenes: una de previa
+  y una final/de análisis. La previa se puede reemplazar cuando el partido pasa a en vivo,
+  finalizado o pronóstico en el listado, pero debe conservarse en los campos
+  `previewImage*`. Una vez analizado el encuentro, se conserva siempre la última imagen
+  final en `imageUrl`.
+- **Render por fase**: el especial usa `imageUrl`; la nota usa la imagen según fase. En
+  «Antes del partido» puede mostrar `previewImageUrl`; en «Durante el partido» y
+  «Pronóstico» debe mostrar `imageUrl`. Las notas finalizadas arrancan en «Durante el
+  partido» si tienen `matchPhases.realidad`.
+- **Imágenes editoriales fijas**: las fotos aprobadas finales viven en
   `public/images/experience-radar/mundial-2026/` y se referencian desde
   `src/lib/experience-radar/articleData.ts`. Actualmente están fijadas las de México vs
   Sudáfrica, Corea del Sur vs Chequia, Estados Unidos vs Paraguay, Canadá vs Bosnia y los

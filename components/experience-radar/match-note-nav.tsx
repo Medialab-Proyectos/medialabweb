@@ -8,8 +8,9 @@ import { useLanguage } from "@/lib/language-context"
 /**
  * Submenú de contenido de la NOTA de partido (igual patrón que el home): sticky bajo el
  * header, aparece al hacer scroll, resalta la sección activa y hace scroll suave hacia el
- * ancla. La sección del journey/radar se llama «Predicción». Solo muestra las secciones que
- * existen en el DOM (p. ej. «Aprendizajes» solo en notas finalizadas).
+ * ancla. «Radar» lleva a la gráfica; «Predicción» lleva a la Ruta emocional del hincha (más
+ * abajo). Solo muestra las secciones que existen en el DOM (p. ej. «Aprendizajes» solo en
+ * notas finalizadas).
  */
 export function MatchNoteNav() {
   const { t } = useLanguage()
@@ -22,6 +23,7 @@ export function MatchNoteNav() {
 
   const sections = [
     { id: "resumen", label: t("Resumen", "Summary") },
+    { id: "radar", label: t("Radar", "Radar") },
     { id: "prediccion", label: t("Predicción", "Prediction") },
     { id: "hinchadas", label: t("Hinchadas", "Fans") },
     { id: "aprendizajes", label: t("Aprendizajes", "Lessons") },

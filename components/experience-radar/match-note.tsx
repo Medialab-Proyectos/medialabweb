@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import Link from "next/link"
 import {
   ArrowUpRight,
@@ -92,7 +92,11 @@ export function MatchNote({
   teamPhases,
   priorByTeam,
 }: MatchNoteProps) {
-  const [phase, setPhase] = useState<RadarViewMode>("expectativa")
+  const phaseCtx = useRadarPhase()
+  const [phase, setPhase] = useState<RadarViewMode>(phaseCtx?.phase ?? "expectativa")
+  useEffect(() => {
+    if (phaseCtx?.phase) setPhase(phaseCtx.phase)
+  }, [phaseCtx?.phase])
   const matchLabel = matchScore
     ? `${matchScore.home} vs ${matchScore.away}`
     : teamApproach.map((team) => team.team).slice(0, 2).join(" vs ")
@@ -129,6 +133,19 @@ export function MatchNote({
         ? "Comparamos lo que cada hinchada esperaba con lo que vivió: dónde confió, dónde se frustró y por qué canales lo expresó."
         : "Con qué ánimo, sesgos y por qué medios llegará cada hinchada al próximo partido. Crece con nuevos cruces y señales."
 
+  // Cuando la nota no trae datos POR EQUIPO (p. ej. una previa analizada), el respaldo
+  // rellena ambas tarjetas con el mismo texto compartido. En ese caso se colapsan en una
+  // sola lectura ("Ambas hinchadas") para no duplicar; si hay datos distintos, se ven las dos.
+  const approachSignature = (a: TeamApproachData) =>
+    [a.expectedEmotion, a.dominantConversation, a.fanConfidence, a.mainNarrative, a.howTheyArrived, a.whatHappened, a.expectationVsReality]
+      .map((v) => v ?? "")
+      .join("|")
+  const fanCardsDuplicated =
+    teamApproach.length > 1 && new Set(teamApproach.map(approachSignature)).size === 1
+  const fanCards = fanCardsDuplicated
+    ? [{ team: teamApproach.map((t) => t.team).join(" y "), data: teamApproach[0], combined: true }]
+    : teamApproach.map((t) => ({ team: t.team, data: t, combined: false }))
+
   return (
     <>
       <section id="resumen" className="mt-8 scroll-mt-32 rounded-2xl border border-border bg-gradient-to-br from-card via-card to-[var(--cyan)]/[0.06] p-5 shadow-sm dark:border-white/12">
@@ -155,7 +172,7 @@ export function MatchNote({
         ) : null}
       </section>
 
-      <section id="prediccion" className="mt-8 scroll-mt-32">
+      <section id="radar" className="mt-8 scroll-mt-32">
         <MatchPhaseRadar
           phases={phases}
           status={status}
@@ -165,8 +182,10 @@ export function MatchNote({
           onPhaseChange={setPhase}
           teamPhases={teamPhases}
         />
-        {/* Ruta emocional del hincha: comparte país y fase con el radar. Vive junto al radar
-            porque ambos forman la sección «Predicción» del menú de contenido. */}
+      </section>
+
+      {/* «Predicción» del menú = Ruta emocional del hincha (más adelante que el radar). */}
+      <section id="prediccion" className="mt-8 scroll-mt-32">
         <FanJourney teamPhases={teamPhases} combined={phases} priorByTeam={priorByTeam} />
       </section>
 
@@ -177,9 +196,9 @@ export function MatchNote({
         {/* En móvil se deslizan como carrusel; en desktop quedan 2-up sin scroll. */}
         <Carousel opts={{ align: "start", dragFree: true }} className="mt-4">
           <CarouselContent className="-ml-3">
-            {teamApproach.map((team) => (
-              <CarouselItem key={team.team} className="basis-[88%] pl-3 sm:basis-1/2">
-                <FanApproachCard team={team} phase={phase} />
+            {fanCards.map((card) => (
+              <CarouselItem key={card.team} className={`pl-3 ${card.combined ? "basis-full" : "basis-[88%] sm:basis-1/2"}`}>
+                <FanApproachCard team={card.data} phase={phase} combinedLabel={card.combined ? card.team : undefined} />
               </CarouselItem>
             ))}
           </CarouselContent>
@@ -275,7 +294,16 @@ function ScoreTeam({
   )
 }
 
-function FanApproachCard({ team, phase }: { team: TeamApproachData; phase: RadarViewMode }) {
+function FanApproachCard({
+  team,
+  phase,
+  combinedLabel,
+}: {
+  team: TeamApproachData
+  phase: RadarViewMode
+  /** Si las dos hinchadas comparten la misma lectura, se muestra una sola caja con este rótulo. */
+  combinedLabel?: string
+}) {
   const rows: Array<{ label: string; value?: string }> =
     phase === "expectativa"
       ? [
@@ -301,8 +329,17 @@ function FanApproachCard({ team, phase }: { team: TeamApproachData; phase: Radar
     <div className="h-full rounded-xl border border-border bg-card p-4 shadow-sm dark:border-white/12">
       <p className="flex items-center justify-between text-sm font-bold">
         <span className="inline-flex items-center gap-2">
-          <TeamFlag team={team.team} small />
-          Hinchada de {team.team}
+          {combinedLabel ? (
+            <>
+              <Users size={16} className="text-[var(--cyan)]" />
+              Ambas hinchadas
+            </>
+          ) : (
+            <>
+              <TeamFlag team={team.team} small />
+              Hinchada de {team.team}
+            </>
+          )}
         </span>
         {phase === "percepcion" && <ArrowUpRight size={14} className="text-[var(--magenta)]" />}
       </p>
@@ -470,13 +507,21 @@ function FanJourney({
           const isCurrent = step.key === current
           const reached = i <= currentIdx && !!phaseV
           const color = PHASE_COLOR[step.key]
-          // Todos los pasos (incluida la Predicción) muestran su carita y emoción dominante,
-          // para que el indicador no se pierda. El pronóstico del próximo partido va aparte.
+          // Cada paso es un botón: cambia la fase (antes/durante/pronóstico) en el radar y en
+          // toda la nota. Se deshabilita si la fase aún no está disponible (p. ej. en previa).
+          const disabled = !ctx?.available.includes(step.key)
           const Icon = moodFace(phaseV)
           return (
-            <div
+            <button
               key={step.key}
-              className="rounded-xl border border-border/60 p-3 text-center transition-colors"
+              type="button"
+              onClick={() => ctx?.setPhase(step.key)}
+              disabled={disabled}
+              aria-pressed={isCurrent}
+              title={disabled ? "Disponible cuando avance el partido" : step.label}
+              className={`rounded-xl border border-border/60 p-3 text-center transition-all ${
+                disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer hover:border-foreground/30 hover:shadow-sm"
+              }`}
               style={{
                 borderColor: isCurrent ? color : reached ? `${color}66` : undefined,
                 backgroundColor: isCurrent ? `${color}14` : undefined,
@@ -496,7 +541,7 @@ function FanJourney({
               ) : (
                 <p className="mt-0.5 text-[11px] text-muted-foreground/60">—</p>
               )}
-            </div>
+            </button>
           )
         })}
       </div>
@@ -547,10 +592,13 @@ function FanJourney({
             </span>
           </div>
           <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-            Para el próximo partido
-            {opponent ? <> vs <strong className="text-foreground">{opponent}</strong></> : ""}, es el pronóstico de la
-            hinchada{selectedTeam ? <> de <strong className="text-foreground">{selectedTeam}</strong></> : ""}. Sale del ánimo
-            colectivo en fuentes revisadas, no de una cuota.
+            {opponent ? (
+              <>Para el próximo partido vs <strong className="text-foreground">{opponent}</strong>, este</>
+            ) : (
+              <>De cara a su próximo partido, este</>
+            )}{" "}
+            es el pronóstico de la hinchada{selectedTeam ? <> de <strong className="text-foreground">{selectedTeam}</strong></> : ""}.
+            Sale del ánimo colectivo en fuentes revisadas, no de una cuota.
           </p>
         </div>
       ) : eliminated && current === "percepcion" ? (

@@ -26,13 +26,17 @@ const RadarPhaseContext = createContext<RadarPhaseContextValue | null>(null)
 export function RadarPhaseProvider({
   available,
   teams,
+  initialPhase,
   children,
 }: {
   available: RadarViewMode[]
   teams: string[]
+  initialPhase?: RadarViewMode
   children: ReactNode
 }) {
-  const [phase, setPhase] = useState<RadarViewMode>(available[0] ?? "expectativa")
+  const [phase, setPhase] = useState<RadarViewMode>(
+    initialPhase && available.includes(initialPhase) ? initialPhase : available[0] ?? "expectativa",
+  )
   const [team, setTeam] = useState<string | null>(teams[0] ?? null)
 
   const value = useMemo<RadarPhaseContextValue>(

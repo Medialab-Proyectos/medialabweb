@@ -91,6 +91,15 @@ function analyzedUpcomingMatch(input: {
   imageSourceUrl: string
   emotionalRadar: EmotionalRadarValues
   analyzedAt: string
+  /** Lectura POR HINCHADA (opcional): si se da, cada caja de país es distinta (no se colapsan). */
+  teamsData?: Array<{
+    team: string
+    expectedEmotion: string
+    dominantConversation: string
+    fanConfidence: string
+    mainNarrative: string
+    userExperience?: { expectativa?: string; realidad?: string; percepcion?: string }
+  }>
 }): RadarArticleInput {
   const label = input.teams.join(" vs ")
   return {
@@ -132,6 +141,15 @@ function analyzedUpcomingMatch(input: {
     ],
     emotionalRadar: input.emotionalRadar,
     matchPhases: { expectativa: input.emotionalRadar },
+    // Lectura por hinchada (si se aporta): evita que ambas cajas muestren el mismo texto.
+    teamApproach: input.teamsData?.map((t) => ({
+      team: t.team,
+      expectedEmotion: t.expectedEmotion,
+      dominantConversation: t.dominantConversation,
+      fanConfidence: t.fanConfidence,
+      mainNarrative: t.mainNarrative,
+      userExperience: t.userExperience,
+    })),
     scoreFactors: { emotionalImpact: 76, digitalConversation: 72, virality: 68, userInterest: 84 },
     uxFinding: input.uxFinding,
     aiSummary: `${input.quickSummary} El análisis separa hechos verificados de expectativas y observa cómo la última novedad disponible moldea confianza, ansiedad y conversación digital.`,
@@ -201,7 +219,15 @@ function finishedMatch(input: {
   imageAlt?: string
   imageCredit?: string
   imageSourceUrl?: string
+  previewImageUrl?: string
+  previewImageAlt?: string
+  previewImageCredit?: string
+  previewImageSourceUrl?: string
   analyzedAt?: string
+  /** Próximo rival por selección (clave = equipo). Para el pronóstico "vs X". */
+  nextOpponents?: Record<string, string>
+  /** Selecciones eliminadas (sin más partidos): no se habilita su pronóstico. */
+  eliminatedTeams?: string[]
 }): RadarArticleInput {
   const teamRadars: TeamRadar[] = input.teamsData.map((t) => ({
     team: t.team,
@@ -216,10 +242,16 @@ function finishedMatch(input: {
     matchState: "finalizado",
     updateState: "ready",
     analyzedFinalAt: input.analyzedAt,
+    nextOpponents: input.nextOpponents,
+    eliminatedTeams: input.eliminatedTeams,
     imageUrl: input.imageUrl,
     imageAlt: input.imageAlt,
     imageCredit: input.imageCredit,
     imageSourceUrl: input.imageSourceUrl,
+    previewImageUrl: input.previewImageUrl,
+    previewImageAlt: input.previewImageAlt,
+    previewImageCredit: input.previewImageCredit,
+    previewImageSourceUrl: input.previewImageSourceUrl,
     matchScore: {
       home: input.home,
       away: input.away,
@@ -1294,7 +1326,7 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
     homeGoals: 1,
     awayGoals: 1,
     scoreDetail: "Suiza: Breel Embolo de penal 17'. Catar: Boualem Khoukhi de cabeza 90+4'. Catar sumó su primer punto en un Mundial; Suiza dominó (xG 3.24 vs 0.76).",
-    seoTitle: "Catar 1-1 Suiza: el gol agónico que dio a Catar su primer punto mundialista (Mundial 2026)",
+    seoTitle: "Catar 1-1 Suiza: El gol agónico que dio a Catar su primer punto mundialista (Mundial 2026)",
     hook: "El empate sobre la hora que reescribió 90 minutos de dominio suizo",
     matchSummary:
       "Catar empató 1-1 con Suiza en el minuto 90+4 y logró su PRIMER punto en la historia de los Mundiales. Embolo había puesto el 0-1 de penal (17') y Suiza dominó casi todo (xG 3.24 a 0.76), pero el cabezazo de Khoukhi sobre la hora cambió el partido entero: euforia catarí y frustración suiza por exactamente el mismo marcador.",
@@ -2063,7 +2095,11 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
     imageUrl: "/images/experience-radar/mundial-2026/espana-cabo-verde.jpg",
     imageAlt: "España y Cabo Verde disputan el balón durante el empate 0-0 en Atlanta",
     imageCredit: "Latingoles",
-    imageSourceUrl: "https://latingoles.com/no-arrancan-espanoles-yamal-williams-y-munoz-esperan-su-turno-ante-cabo-verde/",
+    imageSourceUrl: "https://latingoles.com/0-0-espana-revive-fantasmas-del-mundial/",
+    previewImageUrl: "/images/experience-radar/mundial-2026/espana-cabo-verde-previa.jpg",
+    previewImageAlt: "Luis de la Fuente en la previa de España ante Cabo Verde",
+    previewImageCredit: "Latingoles",
+    previewImageSourceUrl: "https://latingoles.com/no-arrancan-espanoles-yamal-williams-y-munoz-esperan-su-turno-ante-cabo-verde/",
     analyzedAt: "2026-06-16T10:22:00.000Z",
   }),
   finishedMatch({
@@ -2155,10 +2191,14 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
       { name: "Reddit r/soccer — post-partido", url: "https://www.reddit.com/r/soccer/comments/1u6t67u/postmatch_thread_belgium_11_egypt_fifa_world_cup/", kind: "conversacion" },
       { name: "X — Lukaku provoca el empate al instante", url: "https://x.com/OptaAnalyst/status/2066627130197164096", kind: "tendencia" },
     ],
-    imageUrl: "/images/experience-radar/mundial-2026/belgica-egipto.png",
+    imageUrl: "/images/experience-radar/mundial-2026/belgica-egipto.jpg",
     imageAlt: "Bélgica y Egipto disputan el balón durante el empate 1-1 en Seattle",
-    imageCredit: "Seattle Sounders FC",
-    imageSourceUrl: "https://www.soundersfc.com/news/belvegy-101-preview-all-you-need-to-know-when-belgium-faces-egypt-in-fifa-world-cup-2026tm-at-lumen-field",
+    imageCredit: "CiberCuba",
+    imageSourceUrl: "https://www.cibercuba.com/noticias/2026-06-16-u1-e199854-s27066-nid332375-belgica-egipto-empatan-1-1-debut-mundial-2026",
+    previewImageUrl: "/images/experience-radar/mundial-2026/belgica-egipto.png",
+    previewImageAlt: "Vista previa del Bélgica vs Egipto en Lumen Field",
+    previewImageCredit: "Seattle Sounders FC",
+    previewImageSourceUrl: "https://www.soundersfc.com/news/belvegy-101-preview-all-you-need-to-know-when-belgium-faces-egypt-in-fifa-world-cup-2026tm-at-lumen-field",
     analyzedAt: "2026-06-16T10:31:00.000Z",
   }),
   finishedMatch({
@@ -2252,8 +2292,12 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
     ],
     imageUrl: "/images/experience-radar/mundial-2026/arabia-saudita-uruguay.jpg",
     imageAlt: "Arabia Saudita y Uruguay durante el empate 1-1 en Miami",
-    imageCredit: "Latingoles",
-    imageSourceUrl: "https://latingoles.com/celeste-en-alerta-uruguayos-valverde-nunez-y-araujo-retan-al-saudi-al-dawsari/",
+    imageCredit: "EFE/Alberto Estevez vía Latingoles",
+    imageSourceUrl: "https://latingoles.com/noche-de-alertas-el-caboverdiano-dias-frena-al-espanol-yamal-y-el-uruguayo-araujo-salva-a-uruguay/",
+    previewImageUrl: "/images/experience-radar/mundial-2026/arabia-saudita-uruguay-previa.jpg",
+    previewImageAlt: "Jugadores de Uruguay en la previa del debut ante Arabia Saudita",
+    previewImageCredit: "Latingoles",
+    previewImageSourceUrl: "https://latingoles.com/celeste-en-alerta-uruguayos-valverde-nunez-y-araujo-retan-al-saudi-al-dawsari/",
     analyzedAt: "2026-06-16T10:39:00.000Z",
   }),
   finishedMatch({
@@ -2265,6 +2309,8 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
     away: "Nueva Zelanda",
     homeGoals: 2,
     awayGoals: 2,
+    // Grupo G, jornada 2 (fixture oficial): Irán→Bélgica (21 jun), Nueva Zelanda→Egipto.
+    nextOpponents: { "Irán": "Bélgica", "Nueva Zelanda": "Egipto" },
     scoreDetail: "Nueva Zelanda: Elijah Just 7', 54'. Irán: Ramin Rezaeian 32', Mohammad Mohebi 64'.",
     seoTitle: "Irán 2-2 Nueva Zelanda: dos remontadas parciales y una identidad en disputa",
     hook: "Nueva Zelanda golpeó dos veces; Irán respondió dos veces y dejó el partido más vibrante del cierre del día",
@@ -2347,8 +2393,12 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
     ],
     imageUrl: "/images/experience-radar/mundial-2026/iran-nueva-zelanda.jpg",
     imageAlt: "Irán y Nueva Zelanda durante el empate 2-2 en Los Ángeles",
-    imageCredit: "Latingoles",
-    imageSourceUrl: "https://latingoles.com/despedida-mundialista-iranies-arropan-a-iran-en-tijuana-antes-del-debut-ante-nueva-zelanda/",
+    imageCredit: "EFE/Omar Alonso vía Latingoles",
+    imageSourceUrl: "https://latingoles.com/partido-de-resistencia-neozelandes-just-e-iranies-rezaeian-y-mohebi-firman-empate-mundialista/",
+    previewImageUrl: "/images/experience-radar/mundial-2026/iran-nueva-zelanda-previa.jpg",
+    previewImageAlt: "Aficionados iraníes arropan a Irán en la previa del debut ante Nueva Zelanda",
+    previewImageCredit: "Latingoles",
+    previewImageSourceUrl: "https://latingoles.com/despedida-mundialista-iranies-arropan-a-iran-en-tijuana-antes-del-debut-ante-nueva-zelanda/",
     analyzedAt: "2026-06-16T10:48:00.000Z",
   }),
   analyzedUpcomingMatch({
@@ -2484,6 +2534,10 @@ function preserveImage(article: RadarArticle, source: RadarArticle): RadarArticl
     imageAlt: source.imageAlt,
     imageCredit: source.imageCredit,
     imageSourceUrl: source.imageSourceUrl,
+    previewImageUrl: source.previewImageUrl,
+    previewImageAlt: source.previewImageAlt,
+    previewImageCredit: source.previewImageCredit,
+    previewImageSourceUrl: source.previewImageSourceUrl,
   }
 }
 

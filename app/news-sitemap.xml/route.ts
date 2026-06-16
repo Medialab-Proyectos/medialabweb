@@ -30,7 +30,7 @@ export async function GET() {
     <loc>${SITE}/experience-radar/mundial-2026/${escapeXml(article.slug)}</loc>
     <news:news>
       <news:publication>
-        <news:name>MediaLab Ingeniería</news:name>
+        <news:name>Experience Radar</news:name>
         <news:language>es</news:language>
       </news:publication>
       <news:publication_date>${escapeXml(article.updatedAt || article.publishedAt)}</news:publication_date>

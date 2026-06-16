@@ -11,6 +11,7 @@ import RadarArticlePage from "@/app/experience-radar/mundial-2026/[slug]/page"
 const SITE = "https://medialab.design"
 const BASE_EN = "/en/experience-radar/world-cup-2026"
 const BASE_ES = "/experience-radar/mundial-2026"
+const RADAR_BRAND = "Experience Radar"
 
 export const dynamic = "force-dynamic"
 
@@ -24,8 +25,11 @@ export async function generateMetadata({
   if (!article) return { title: "Article not found | Experience Radar" }
 
   const url = `${SITE}${BASE_EN}/${article.slug}`
+  const brandedTitle = `${article.seoTitle} | ${RADAR_BRAND}`
   return {
-    title: article.seoTitle,
+    title: { absolute: brandedTitle },
+    applicationName: RADAR_BRAND,
+    publisher: RADAR_BRAND,
     description: article.metaDescription,
     alternates: {
       canonical: `${BASE_ES}/${article.slug}`,
@@ -36,16 +40,17 @@ export async function generateMetadata({
       },
     },
     openGraph: {
-      title: article.seoTitle,
+      title: brandedTitle,
       description: article.metaDescription,
       type: "article",
       url,
+      siteName: RADAR_BRAND,
       publishedTime: article.publishedAt,
       modifiedTime: article.updatedAt,
       section: article.category,
-      authors: ["MediaLab Ingeniería"],
+      authors: [RADAR_BRAND],
     },
-    twitter: { card: "summary_large_image", title: article.seoTitle, description: article.metaDescription },
+    twitter: { card: "summary_large_image", title: brandedTitle, description: article.metaDescription },
     robots: { index: false, follow: true },
   }
 }

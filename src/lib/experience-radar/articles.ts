@@ -114,6 +114,11 @@ export interface RadarArticle {
   imageAlt?: string
   imageCredit?: string
   imageSourceUrl?: string
+  /** Imagen usada en la previa; se conserva cuando `imageUrl` pasa a ser la foto final. */
+  previewImageUrl?: string
+  previewImageAlt?: string
+  previewImageCredit?: string
+  previewImageSourceUrl?: string
 
   /**
    * Estado de la nota viva. "previa" = disponible 2–3 h antes (expectativa,
@@ -176,6 +181,13 @@ export interface RadarArticle {
    * el equipo está eliminado. El agente lo llena al cerrar la fase de grupos/llaves.
    */
   eliminatedTeams?: string[]
+
+  /**
+   * Próximo rival VERIFICADO de cada selección de la nota (clave = nombre del equipo,
+   * valor = rival). Lo llena el agente con el fixture oficial. Tiene prioridad sobre la
+   * inferencia por calendario; así el pronóstico siempre dice contra quién se juega.
+   */
+  nextOpponents?: Record<string, string>
 
   /**
    * Bloque 2 — radar de fases (telaraña de 6 emociones, 3 polígonos):

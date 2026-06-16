@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import {
-  ExternalLink, ChevronDown, BookOpen, Sparkles,
+  ExternalLink, ChevronDown, BookOpen, Sparkles, ArrowRight,
 } from "lucide-react"
 import { Footer } from "@/components/footer"
 import { Navbar } from "@/components/navbar"
@@ -11,13 +11,11 @@ import { MatchNote, type PriorTeamPrediction } from "@/components/experience-rad
 import { MatchNoteNav } from "@/components/experience-radar/match-note-nav"
 import { type MatchPhases, type MatchRuntimeStatus, type RadarViewMode, type TeamPhaseRadar } from "@/components/experience-radar/match-phase-radar"
 import { FanSimulator } from "@/components/experience-radar/fan-simulator"
-import { MatchCountdown } from "@/components/experience-radar/match-countdown"
 import { RadarPhaseProvider } from "@/components/experience-radar/radar-phase-context"
 import { RadarPhaseBar } from "@/components/experience-radar/radar-phase-bar"
 import { RadarNewsletter } from "@/components/experience-radar/radar-newsletter"
 import { RelatedNotes, type RelatedNote } from "@/components/experience-radar/related-notes"
-import { NoteImage } from "@/components/experience-radar/note-image"
-import { StatusPill } from "@/components/experience-radar/status-pill"
+import { PhaseAwareNoteImage } from "@/components/experience-radar/phase-aware-note-image"
 import { pickMatchImage } from "@/components/experience-radar/default-image"
 import { getRadarArticleBySlug, getAllRadarArticles } from "@/src/lib/experience-radar/articleData"
 import { resolveMatchStatus, getArticleAvailability } from "@/src/lib/experience-radar/articleAvailability"
@@ -25,6 +23,7 @@ import type { EmotionalRadarValues, RadarArticle } from "@/src/lib/experience-ra
 
 const SITE = "https://medialab.design"
 const BASE = "/experience-radar/mundial-2026"
+const RADAR_BRAND = "Experience Radar"
 
 function absoluteSiteUrl(value: string): string {
   return value.startsWith("http://") || value.startsWith("https://") ? value : `${SITE}${value}`
@@ -53,8 +52,11 @@ export async function generateMetadata({
 
   const url = `${SITE}${BASE}/${article.slug}`
   const image = absoluteSiteUrl(article.imageUrl || pickMatchImage(article.slug, article.teams))
+  const brandedTitle = `${article.seoTitle} | ${RADAR_BRAND}`
   return {
-    title: article.seoTitle,
+    title: { absolute: brandedTitle },
+    applicationName: RADAR_BRAND,
+    publisher: RADAR_BRAND,
     description: article.metaDescription,
     alternates: {
       canonical: `${BASE}/${article.slug}`,
@@ -65,17 +67,18 @@ export async function generateMetadata({
       },
     },
     openGraph: {
-      title: article.seoTitle,
+      title: brandedTitle,
       description: article.metaDescription,
       type: "article",
       url,
+      siteName: RADAR_BRAND,
       images: [{ url: image, alt: article.imageAlt || article.seoTitle }],
       publishedTime: article.publishedAt,
       modifiedTime: article.updatedAt,
       section: article.category,
-      authors: ["MediaLab Ingeniería"],
+      authors: [RADAR_BRAND],
     },
-    twitter: { card: "summary_large_image", title: article.seoTitle, description: article.metaDescription, images: [image] },
+    twitter: { card: "summary_large_image", title: brandedTitle, description: article.metaDescription, images: [image] },
     robots: { index: true, follow: true },
   }
 }
@@ -100,14 +103,18 @@ export default async function RadarArticlePage({
   const availablePhases = (["expectativa", "realidad", "percepcion"] as const).filter(
     (k) => phases[k],
   ) as RadarViewMode[]
-  const teamPhases = resolveTeamPhases(article, phases)
+  const initialPhase: RadarViewMode = availablePhases.includes("realidad") ? "realidad" : availablePhases[0] ?? "expectativa"
+  const allArticles = await getAllRadarArticles()
+  // Próximo rival de cada selección (para el pronóstico): se toma del calendario real
+  // (siguiente partido donde juega), con respaldo al mapa fijo si aún no está la nota.
+  const nextOpponentByTeam = computeNextOpponentByTeam(article, allArticles)
+  const teamPhases = resolveTeamPhases(article, phases, nextOpponentByTeam)
   const approach = resolveTeamApproach(article)
   const lessons = resolveLessons(article)
   const summary = article.matchSummary || article.quickSummary
   const sourceLabels = resolveSourceLabels(article)
 
   // Notas relacionadas (resto del especial) para el carrusel del final.
-  const allArticles = await getAllRadarArticles()
   const related: RelatedNote[] = allArticles
     .filter((a) => a.slug !== article.slug)
     .slice(0, 8)
@@ -144,7 +151,7 @@ export default async function RadarArticlePage({
   const priorByTeam = computePriorByTeam(article, allArticles)
 
   return (
-    <RadarPhaseProvider available={availablePhases} teams={article.teams}>
+    <RadarPhaseProvider available={availablePhases} teams={article.teams} initialPhase={initialPhase}>
     <main className="min-h-screen bg-background text-foreground">
       <Navbar />
       <MatchNoteNav />
@@ -158,51 +165,37 @@ export default async function RadarArticlePage({
 
         <div className="mt-4 flex flex-wrap items-start gap-x-3 gap-y-2">
           <h1 className="text-3xl font-bold leading-tight text-foreground md:text-4xl">{article.seoTitle}</h1>
-          {/* Atajo sutil a la predicción: deja claro de qué partido es y lleva al journey. */}
+          {/* Botón a la predicción (Ruta emocional del hincha): lleva al journey más abajo.
+              En previa muestra la predicción previa (con qué ánimo llega la hinchada). */}
           <Link
             href="#prediccion"
             title={`Predicción · ${article.teams.join(" vs ")}`}
-            className="mt-1 inline-flex shrink-0 items-center gap-1.5 rounded-full border border-[var(--cyan)]/30 bg-[var(--cyan)]/[0.06] px-3 py-1 text-xs font-medium text-[var(--cyan)] transition-colors hover:bg-[var(--cyan)]/15"
+            className="mt-1 inline-flex shrink-0 items-center gap-1.5 rounded-full bg-[var(--cyan)] px-4 py-1.5 text-xs font-semibold text-[#fff] shadow-sm transition-colors hover:opacity-90"
           >
-            <Sparkles size={13} /> Predicción
+            <Sparkles size={13} />{" "}
+            {status === "previa" ? "Mira la predicción previa" : "Mira la predicción del partido"}{" "}
+            <ArrowRight size={14} />
           </Link>
         </div>
         <p className="mt-3 text-sm text-muted-foreground">
           {article.teams.join(" vs ")} · {formatDate(article.date)}
           {article.kickoffAt ? ` · ${formatKickoff(article.kickoffAt)}` : ""}
         </p>
-
-        {/* Foto del encuentro (imagen visible, antes del marcador). Alto reducido y foco
-            superior para no cortar la cabeza de los jugadores en imágenes aleatorias. */}
-        <figure className="mt-5 overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
-          {/* La imagen llena el cuadro (object-cover) y se encuadra un poco arriba
-              (object-[center_20%]) para mostrar las cabezas de los jugadores. */}
-          <div className="relative h-48 md:h-64">
-            <NoteImage
-              src={article.imageUrl}
-              seed={article.slug}
-              teams={article.teams}
-              alt={article.imageAlt || `${article.teams.join(" vs ")} — ${article.seoTitle}`}
-              className="h-full w-full object-cover object-[center_20%]"
-              loading="eager"
-            />
-            <StatusPill status={status} className="absolute left-3 top-3 z-10" />
-            {article.kickoffAt && status !== "finalizado" && (
-              <div className="absolute bottom-3 left-3 right-3 z-10 md:bottom-4 md:left-4 md:right-auto md:max-w-sm">
-                <MatchCountdown kickoffAt={article.kickoffAt} overlay />
-              </div>
-            )}
-          </div>
-          <figcaption className="border-t border-border px-4 py-2 text-[11px] text-muted-foreground">
-            {article.imageSourceUrl ? (
-              <Link href={article.imageSourceUrl} target="_blank" rel="noopener noreferrer nofollow" className="hover:text-foreground">
-                {article.imageCredit || "Imagen editorial de la fuente"}. Referencia enlazada, no patrocinada.
-              </Link>
-            ) : (
-              "Imagen representativa del partido. Referencia editorial, no patrocinada."
-            )}
-          </figcaption>
-        </figure>
+        <PhaseAwareNoteImage
+          status={status}
+          slug={article.slug}
+          teams={article.teams}
+          title={article.seoTitle}
+          kickoffAt={article.kickoffAt}
+          imageUrl={article.imageUrl}
+          imageAlt={article.imageAlt}
+          imageCredit={article.imageCredit}
+          imageSourceUrl={article.imageSourceUrl}
+          previewImageUrl={article.previewImageUrl}
+          previewImageAlt={article.previewImageAlt}
+          previewImageCredit={article.previewImageCredit}
+          previewImageSourceUrl={article.previewImageSourceUrl}
+        />
 
         <MatchNote
           status={status}
@@ -353,12 +346,16 @@ const NEXT_OPPONENT: Record<string, string> = {
  * combinado con un sesgo determinista por equipo y por su ánimo colectivo. Es una
  * proyección editorial (no pronóstico de marcador), coherente con el resto del módulo.
  */
-function resolveTeamPhases(article: RadarArticle, phases: MatchPhases): TeamPhaseRadar[] {
+function resolveTeamPhases(
+  article: RadarArticle,
+  phases: MatchPhases,
+  nextOpponentByTeam: Record<string, string> = {},
+): TeamPhaseRadar[] {
   return article.teams.map((team) => {
     // Eliminada SOLO con dato explícito del agente (no se infiere de un mapa incompleto:
     // en fase de grupos todos siguen vivos). Sin pronóstico: se omite la fase de percepción.
     const eliminated = article.eliminatedTeams?.includes(team) ?? false
-    const nextOpponent = eliminated ? undefined : NEXT_OPPONENT[team]
+    const nextOpponent = eliminated ? undefined : nextOpponentByTeam[team] ?? NEXT_OPPONENT[team]
     const tr = article.teamRadars?.find((x) => x.team === team)
     if (tr) {
       const realidad = tr.current.emotional
@@ -449,6 +446,30 @@ function resolveRuntimeStatus(article: RadarArticle): MatchRuntimeStatus {
  * nota previa con ese dato, se omite y la UI cae en la voz de la hinchada (radar de
  * expectativa de esta misma nota).
  */
+/**
+ * Próximo rival de cada selección del partido, tomado del CALENDARIO real: la siguiente
+ * nota (por hora de inicio) donde esa selección vuelve a jugar. Así el pronóstico siempre
+ * dice contra quién juega, sin depender del mapa fijo (incompleto). Respaldo: NEXT_OPPONENT.
+ */
+function computeNextOpponentByTeam(
+  article: RadarArticle,
+  allArticles: RadarArticle[],
+): Record<string, string> {
+  const time = (a: RadarArticle) => new Date(a.kickoffAt || `${a.date}T12:00:00`).getTime()
+  const thisTime = time(article)
+  const result: Record<string, string> = {}
+  for (const team of article.teams) {
+    // Prioridad: dato verificado en la nota → siguiente partido del calendario → mapa fijo.
+    const explicit = article.nextOpponents?.[team]
+    const next = allArticles
+      .filter((a) => a.slug !== article.slug && a.teams.includes(team) && time(a) > thisTime)
+      .sort((a, b) => time(a) - time(b))[0]
+    const opponent = explicit ?? next?.teams.find((x) => x !== team) ?? NEXT_OPPONENT[team]
+    if (opponent) result[team] = opponent
+  }
+  return result
+}
+
 function computePriorByTeam(
   article: RadarArticle,
   allArticles: RadarArticle[],
@@ -541,11 +562,11 @@ function JsonLd({
       "@type": "SpeakableSpecification",
       cssSelector: ["h1", "article section:first-of-type"],
     },
-    author: { "@type": "Organization", name: "MediaLab Ingeniería", url: SITE },
+    author: { "@type": "Organization", name: RADAR_BRAND, url: `${SITE}/experience-radar` },
     publisher: {
       "@type": "Organization",
-      name: "MediaLab Ingeniería",
-      url: SITE,
+      name: RADAR_BRAND,
+      url: `${SITE}/experience-radar`,
       logo: { "@type": "ImageObject", url: `${SITE}/images/logo-medialab-400.png` },
     },
     keywords: [...article.teams, article.event, article.category, "UX", "experiencia de usuario", "Mundial 2026"].join(", "),
