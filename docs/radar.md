@@ -120,6 +120,42 @@ AL TERMINAR:
 
 ---
 
+## Submenú de contenido y predicción «Antes» en la nota
+
+Cada **nota de partido** lleva, igual que el home, un **submenú de contenido** que aparece
+bajo el header al hacer scroll (`components/experience-radar/match-note-nav.tsx`). Resalta la
+sección activa y baja con scroll suave al ancla. Las secciones (y sus `id`) son:
+
+| Menú | `id` | Qué contiene |
+| --- | --- | --- |
+| Resumen | `#resumen` | Marcador + lectura por fase (antes/ahora/después). |
+| **Predicción** | `#prediccion` | El radar de fases **y** la «Ruta emocional del hincha» (journey map). |
+| Hinchadas | `#hinchadas` | Cómo llegan / vivieron las hinchadas. |
+| Aprendizajes | `#aprendizajes` | Los 3 hallazgos (solo en notas finalizadas). |
+| Fuentes | `#fuentes` | Acordeón de fuentes consultadas. |
+
+El menú solo muestra las secciones que existen en esa nota (p. ej. «Aprendizajes» no sale en
+una previa). La sección del **journey map se llama «Predicción»** en el menú. Tras el `<h1>`
+hay un **botón sutil «Predicción»** que enlaza a `#prediccion` y deja claro de qué partido es
+(`title` con los equipos), porque algunos titulares no nombran a las dos selecciones.
+
+**Predicción en «Antes» (journey map).** Antes el paso «Antes» solo mostraba la emoción
+dominante; ahora también muestra una **caja de predicción** (Gana/Empata/Pierde + %), igual
+que el «Pronóstico» del paso «Predicción». De dónde sale ese valor, en orden:
+
+1. **Análisis previo** — la nota ANTERIOR de esa selección (último partido ya finalizado donde
+   jugó). Se hereda su `teamRadars[].predicted.emotional`, que es justo la proyección que allí
+   se hizo de cara a ESTE partido. La caja enlaza a esa nota previa.
+2. **Voz de la hinchada** — si no hay nota previa con ese dato, se deriva del radar de
+   `expectativa` de la propia nota (la lectura del ánimo previo, no una cuota).
+
+> Implicación para el agente: el campo `predicted` de cada equipo NO es decorativo. Es lo que
+> alimenta la predicción «Antes» de la SIGUIENTE nota de esa selección. Mantén `predicted`
+> coherente con el rival real del próximo partido.
+
+Toda caja de predicción (Antes y Pronóstico) **siempre nombra a la hinchada** y al rival
+correspondiente, para que ninguna predicción quede sin equipo.
+
 ## Notas de implementación (referencia rápida)
 
 - **Imágenes editoriales fijas**: las fotos aprobadas viven en

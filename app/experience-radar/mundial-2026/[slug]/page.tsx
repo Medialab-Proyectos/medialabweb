@@ -2,12 +2,13 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import {
-  ExternalLink, ChevronDown, BookOpen,
+  ExternalLink, ChevronDown, BookOpen, Sparkles,
 } from "lucide-react"
 import { Footer } from "@/components/footer"
 import { Navbar } from "@/components/navbar"
 import { RadarCtaCards } from "@/components/experience-radar/radar-cta-cards"
-import { MatchNote } from "@/components/experience-radar/match-note"
+import { MatchNote, type PriorTeamPrediction } from "@/components/experience-radar/match-note"
+import { MatchNoteNav } from "@/components/experience-radar/match-note-nav"
 import { type MatchPhases, type MatchRuntimeStatus, type RadarViewMode, type TeamPhaseRadar } from "@/components/experience-radar/match-phase-radar"
 import { FanSimulator } from "@/components/experience-radar/fan-simulator"
 import { MatchCountdown } from "@/components/experience-radar/match-countdown"
@@ -137,10 +138,16 @@ export default async function RadarArticlePage({
         percepcion: article.mediaLabInsight.emotionalReaction,
       }
 
+  // Predicción «Antes» por equipo: hereda la proyección de la nota anterior de esa selección
+  // (el partido previo donde ya se anticipó con qué ánimo llegaría a ESTE encuentro). Si no
+  // existe, la UI cae en la voz de la hinchada (radar de expectativa de esta misma nota).
+  const priorByTeam = computePriorByTeam(article, allArticles)
+
   return (
     <RadarPhaseProvider available={availablePhases} teams={article.teams}>
     <main className="min-h-screen bg-background text-foreground">
       <Navbar />
+      <MatchNoteNav />
       <RadarPhaseBar shareTitle={article.seoTitle} />
       <JsonLd article={article} summary={summary} lessons={lessons} />
 
@@ -149,7 +156,17 @@ export default async function RadarArticlePage({
           <span className="rounded-full border border-border bg-card px-3 py-1 text-card-foreground">{article.event}</span>
         </div>
 
-        <h1 className="mt-4 text-3xl font-bold leading-tight text-foreground md:text-4xl">{article.seoTitle}</h1>
+        <div className="mt-4 flex flex-wrap items-start gap-x-3 gap-y-2">
+          <h1 className="text-3xl font-bold leading-tight text-foreground md:text-4xl">{article.seoTitle}</h1>
+          {/* Atajo sutil a la predicción: deja claro de qué partido es y lleva al journey. */}
+          <Link
+            href="#prediccion"
+            title={`Predicción · ${article.teams.join(" vs ")}`}
+            className="mt-1 inline-flex shrink-0 items-center gap-1.5 rounded-full border border-[var(--cyan)]/30 bg-[var(--cyan)]/[0.06] px-3 py-1 text-xs font-medium text-[var(--cyan)] transition-colors hover:bg-[var(--cyan)]/15"
+          >
+            <Sparkles size={13} /> Predicción
+          </Link>
+        </div>
         <p className="mt-3 text-sm text-muted-foreground">
           {article.teams.join(" vs ")} · {formatDate(article.date)}
           {article.kickoffAt ? ` · ${formatKickoff(article.kickoffAt)}` : ""}
@@ -197,6 +214,7 @@ export default async function RadarArticlePage({
           interpretations={article.matchInterpretations}
           sourceLabels={sourceLabels}
           teamPhases={teamPhases}
+          priorByTeam={priorByTeam}
         />
 
         {/* ── BLOQUE 5 · Simulador (solo finalizado) ── */}
@@ -213,7 +231,7 @@ export default async function RadarArticlePage({
         <RadarCtaCards />
 
         {/* Fuentes consultadas — acordeón colapsado */}
-        <details className="group mt-10 rounded-2xl border border-border p-5">
+        <details id="fuentes" className="group mt-10 scroll-mt-32 rounded-2xl border border-border p-5">
           <summary className="flex cursor-pointer list-none items-center justify-between gap-2 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
             <span className="flex items-center gap-2"><BookOpen size={14} /> Fuentes consultadas ({article.sources.length})</span>
             <ChevronDown size={16} className="shrink-0 transition-transform group-open:rotate-180" />
@@ -422,6 +440,36 @@ function resolveLessons(article: RadarArticle): Array<{ term: string; explanatio
 /** Estado en tiempo real, delegado en la función compartida (misma lógica que el listado). */
 function resolveRuntimeStatus(article: RadarArticle): MatchRuntimeStatus {
   return resolveMatchStatus(article)
+}
+
+/**
+ * Predicción «Antes» por equipo: para cada selección del partido busca su nota ANTERIOR
+ * (el último encuentro ya finalizado donde jugó) y hereda la proyección `predicted` que allí
+ * se hizo de cara a este partido. Es el "análisis previo ya hecho en otra nota". Si no hay
+ * nota previa con ese dato, se omite y la UI cae en la voz de la hinchada (radar de
+ * expectativa de esta misma nota).
+ */
+function computePriorByTeam(
+  article: RadarArticle,
+  allArticles: RadarArticle[],
+): Record<string, PriorTeamPrediction> {
+  const result: Record<string, PriorTeamPrediction> = {}
+  for (const team of article.teams) {
+    const prior = allArticles
+      .filter(
+        (a) =>
+          a.slug !== article.slug &&
+          a.teams.includes(team) &&
+          a.date < article.date &&
+          resolveRuntimeStatus(a) === "finalizado",
+      )
+      .sort((a, b) => b.date.localeCompare(a.date))[0]
+    if (!prior) continue
+    const emotional = prior.teamRadars?.find((x) => x.team === team)?.predicted.emotional
+    if (!emotional) continue
+    result[team] = { emotional, fromTitle: prior.seoTitle, fromSlug: prior.slug }
+  }
+  return result
 }
 
 function resolveSourceLabels(article: RadarArticle): string[] {

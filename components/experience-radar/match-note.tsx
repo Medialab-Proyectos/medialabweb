@@ -1,6 +1,7 @@
 "use client"
 
 import { useMemo, useState } from "react"
+import Link from "next/link"
 import {
   ArrowUpRight,
   Clock,
@@ -12,6 +13,7 @@ import {
   Smartphone,
   Smile,
   Sparkles,
+  Target,
   Trophy,
   Users,
   type LucideIcon,
@@ -51,6 +53,19 @@ export interface MatchScoreData {
   detail?: string
 }
 
+/**
+ * Predicción "Antes" de una hinchada heredada de un análisis previo: la proyección que se
+ * hizo en otra nota (el partido anterior de esa selección) de cara a ESTE encuentro. Si no
+ * existe, la UI cae en la voz de la hinchada (radar de expectativa de esta misma nota).
+ */
+export interface PriorTeamPrediction {
+  emotional: EmotionalRadarValues
+  /** Título de la nota previa de donde sale la proyección. */
+  fromTitle: string
+  /** Slug de la nota previa, para enlazarla. */
+  fromSlug: string
+}
+
 export interface MatchNoteProps {
   status: MatchRuntimeStatus
   matchScore?: MatchScoreData
@@ -61,6 +76,8 @@ export interface MatchNoteProps {
   interpretations?: MatchInterpretations
   sourceLabels?: string[]
   teamPhases?: TeamPhaseRadar[]
+  /** Predicción "Antes" por equipo, heredada de la nota anterior de esa selección. */
+  priorByTeam?: Record<string, PriorTeamPrediction>
 }
 
 export function MatchNote({
@@ -73,6 +90,7 @@ export function MatchNote({
   interpretations,
   sourceLabels,
   teamPhases,
+  priorByTeam,
 }: MatchNoteProps) {
   const [phase, setPhase] = useState<RadarViewMode>("expectativa")
   const matchLabel = matchScore
@@ -113,7 +131,7 @@ export function MatchNote({
 
   return (
     <>
-      <section className="mt-8 rounded-2xl border border-border bg-gradient-to-br from-card via-card to-[var(--cyan)]/[0.06] p-5 shadow-sm dark:border-white/12">
+      <section id="resumen" className="mt-8 scroll-mt-32 rounded-2xl border border-border bg-gradient-to-br from-card via-card to-[var(--cyan)]/[0.06] p-5 shadow-sm dark:border-white/12">
         {/* Tras un partido finalizado SIEMPRE viene el marcador (placeholder si falta el dato). */}
         {status === "finalizado" &&
           (matchScore ? <Scoreboard score={matchScore} /> : <ScorePending label={matchLabel} />)}
@@ -137,7 +155,7 @@ export function MatchNote({
         ) : null}
       </section>
 
-      <section className="mt-8">
+      <section id="prediccion" className="mt-8 scroll-mt-32">
         <MatchPhaseRadar
           phases={phases}
           status={status}
@@ -147,9 +165,12 @@ export function MatchNote({
           onPhaseChange={setPhase}
           teamPhases={teamPhases}
         />
+        {/* Ruta emocional del hincha: comparte país y fase con el radar. Vive junto al radar
+            porque ambos forman la sección «Predicción» del menú de contenido. */}
+        <FanJourney teamPhases={teamPhases} combined={phases} priorByTeam={priorByTeam} />
       </section>
 
-      <section className="mt-10">
+      <section id="hinchadas" className="mt-10 scroll-mt-32">
         <h2 className="flex items-center gap-2 text-2xl font-bold">
           <Users size={20} className="shrink-0 text-[var(--cyan)]" /> {fanSectionTitle}
         </h2>
@@ -165,9 +186,6 @@ export function MatchNote({
         </Carousel>
         {/* Mensaje de apoyo como nota al pie, en letra pequeña. */}
         <p className="mt-4 text-xs italic leading-relaxed text-muted-foreground/80">{fanSectionIntro}</p>
-
-        {/* Ruta emocional del hincha: comparte país y fase con el radar. */}
-        <FanJourney teamPhases={teamPhases} combined={phases} />
       </section>
 
       {/* Lo que hemos aprendido — bajo "cómo llegan las hinchadas", sin caja contenedora. */}
@@ -380,21 +398,41 @@ const PHASE_COLOR: Record<RadarViewMode, string> = {
   percepcion: "#8B5CF6",
 }
 
-function FanJourney({ teamPhases, combined }: { teamPhases?: TeamPhaseRadar[]; combined: MatchPhases }) {
+function FanJourney({
+  teamPhases,
+  combined,
+  priorByTeam,
+}: {
+  teamPhases?: TeamPhaseRadar[]
+  combined: MatchPhases
+  priorByTeam?: Record<string, PriorTeamPrediction>
+}) {
   const ctx = useRadarPhase()
 
   const current: RadarViewMode = ctx?.phase ?? "expectativa"
   const teams = ctx?.teams ?? teamPhases?.map((t) => t.team) ?? []
-  const selectedTeam = ctx?.team ?? teamPhases?.[0]?.team ?? null
+  // Equipo activo: del contexto, del primer teamPhase o del primer equipo. Nunca null si hay
+  // datos, para que la predicción SIEMPRE diga de qué hinchada habla.
+  const selectedTeam = ctx?.team ?? teamPhases?.[0]?.team ?? teams[0] ?? null
   const selected = selectedTeam ? teamPhases?.find((t) => t.team === selectedTeam) : undefined
   const phases = selected?.phases ?? combined
   const opponent = selected?.nextOpponent
   const eliminated = selected?.eliminated ?? false
+  // Rival de ESTE partido (para la predicción «Antes»): la otra selección del cruce.
+  const matchRival = selectedTeam ? teams.find((tname) => tname !== selectedTeam) : undefined
   const prediction = fanPrediction(phases.percepcion)
   const currentIdx = JOURNEY_STEPS.findIndex((s) => s.key === current)
   // La predicción (próximo partido) se muestra al elegir «Predicción» en la barra inferior:
   // así no hay un clic extra y la emoción del paso no se pierde dentro de su caja.
   const showPrediction = current === "percepcion" && !eliminated && !!prediction && !!phases.percepcion
+
+  // Predicción «Antes»: nace de un análisis previo (la nota anterior de esta selección, donde
+  // ya se proyectó cómo llegaría) o, si no existe, de la voz de la hinchada en esta nota
+  // (radar de expectativa). Aparece al elegir «Antes», igual que el pronóstico en «Predicción».
+  const prior = selectedTeam ? priorByTeam?.[selectedTeam] : undefined
+  const anteEmotional = prior?.emotional ?? phases.expectativa
+  const antePrediction = fanPrediction(anteEmotional)
+  const showAnte = current === "expectativa" && !!antePrediction && !!phases.expectativa
 
   return (
     <div className="mt-6 rounded-2xl border border-border bg-card p-4 shadow-sm dark:border-white/12">
@@ -463,7 +501,38 @@ function FanJourney({ teamPhases, combined }: { teamPhases?: TeamPhaseRadar[]; c
         })}
       </div>
 
-      {showPrediction && prediction ? (
+      {showAnte && antePrediction ? (
+        // Caja de predicción «Antes»: el pronóstico con el que la hinchada LLEGABA a este
+        // partido. Sale de un análisis previo (otra nota) o de la voz de la hinchada.
+        <div
+          className="mt-3 rounded-xl border p-3"
+          style={{ borderColor: `${PHASE_COLOR.expectativa}66`, backgroundColor: `${PHASE_COLOR.expectativa}12` }}
+        >
+          <div className="flex items-center justify-between gap-3">
+            <p className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wide" style={{ color: PHASE_COLOR.expectativa }}>
+              <Target size={14} aria-hidden /> Predicción · antes
+            </p>
+            <span className={`inline-block rounded-full px-3 py-1 text-sm font-extrabold ${PRED_CLASS[antePrediction.label]}`}>
+              {antePrediction.label} {antePrediction.pct}%
+            </span>
+          </div>
+          <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+            Con qué pronóstico llegaba la hinchada{selectedTeam ? <> de <strong className="text-foreground">{selectedTeam}</strong></> : ""} a este
+            partido{matchRival ? <> ante <strong className="text-foreground">{matchRival}</strong></> : ""}.{" "}
+            {prior ? (
+              <>
+                Viene del análisis previo en{" "}
+                <Link href={`/experience-radar/mundial-2026/${prior.fromSlug}`} className="font-medium text-foreground underline-offset-2 hover:underline">
+                  {prior.fromTitle}
+                </Link>
+                .
+              </>
+            ) : (
+              <>Sale de la voz de la hinchada antes del pitazo en fuentes revisadas, no de una cuota.</>
+            )}
+          </p>
+        </div>
+      ) : showPrediction && prediction ? (
         // Caja de predicción: aparece sola al elegir «Predicción» abajo, con bola de cristal.
         <div
           className="mt-3 rounded-xl border p-3"
@@ -480,8 +549,8 @@ function FanJourney({ teamPhases, combined }: { teamPhases?: TeamPhaseRadar[]; c
           <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
             Para el próximo partido
             {opponent ? <> vs <strong className="text-foreground">{opponent}</strong></> : ""}, es el pronóstico de la
-            hinchada{selectedTeam ? ` de ${selectedTeam}` : ""}. Sale del ánimo colectivo en fuentes revisadas, no de una
-            cuota.
+            hinchada{selectedTeam ? <> de <strong className="text-foreground">{selectedTeam}</strong></> : ""}. Sale del ánimo
+            colectivo en fuentes revisadas, no de una cuota.
           </p>
         </div>
       ) : eliminated && current === "percepcion" ? (
@@ -501,8 +570,8 @@ function FanJourney({ teamPhases, combined }: { teamPhases?: TeamPhaseRadar[]; c
         </div>
       ) : (
         <p className="mt-3 text-[11px] italic leading-relaxed text-muted-foreground/80">
-          Toca una bandera para ver el recorrido de esa hinchada. El pronóstico del próximo partido aparece al elegir
-          «Pronóstico» en la barra de abajo.
+          Toca una bandera para ver el recorrido de esa hinchada. La predicción con la que llegaba aparece en «Antes» y el
+          pronóstico del próximo partido en «Pronóstico», desde la barra de abajo.
         </p>
       )}
     </div>
@@ -528,7 +597,7 @@ export function LessonsCarousel({
   if (!normalized.length) return null
 
   return (
-    <section className="mt-10">
+    <section id="aprendizajes" className="mt-10 scroll-mt-32">
       <h2 className="flex items-center gap-2 text-2xl font-bold">
         <Lightbulb size={20} className="shrink-0 text-[var(--cyan)]" /> Lo que hemos aprendido
       </h2>
