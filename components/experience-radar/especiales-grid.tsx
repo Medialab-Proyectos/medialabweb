@@ -66,14 +66,14 @@ export function EspecialesGrid({ articles }: { articles: RadarArticle[] }) {
 
   const groups = useMemo(() => groupByDay(articles), [articles])
 
-  // Último partido analizado = el finalizado más reciente (compareForFeed deja los
-  // finalizados de más nuevo a más antiguo). Se resalta para que se vea de un vistazo
-  // cuál fue la última actualización del agente. Se calcula tras montar (depende de la hora).
+  // Último partido analizado = el finalizado con ANÁLISIS REAL más reciente. Solo cuenta si
+  // tiene marcador (matchScore): un partido que pasó su hora pero aún no fue analizado NO se
+  // marca como "Último analizado". compareForFeed deja el más reciente primero.
   const latestAnalyzedSlug = useMemo(() => {
-    const finalized = articles
-      .filter((a) => !a.placeholder && resolveMatchStatus(a) === "finalizado")
+    const analyzed = articles
+      .filter((a) => !a.placeholder && Boolean(a.matchScore))
       .sort((a, b) => compareForFeed(a, b))
-    return finalized[0]?.slug ?? null
+    return analyzed[0]?.slug ?? null
   }, [articles])
 
   if (!groups.length) return null
@@ -188,7 +188,12 @@ function NoteCard({ article: a, isLatestAnalyzed = false }: { article: RadarArti
             <Sparkles size={12} /> {t("Último analizado", "Latest analyzed")}
           </span>
         ) : (
-          <StatusPill status={resolveMatchStatus(a)} placeholder={a.placeholder} className="absolute right-3 top-3" />
+          <StatusPill
+            status={resolveMatchStatus(a)}
+            placeholder={a.placeholder}
+            analyzing={resolveMatchStatus(a) === "finalizado" && !a.matchScore}
+            className="absolute right-3 top-3"
+          />
         )}
       </div>
       <div className="flex flex-1 flex-col p-4">

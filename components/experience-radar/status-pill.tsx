@@ -17,16 +17,21 @@ const MAP: Record<MatchStatus, { label: string; cls: string }> = {
 export function StatusPill({
   status,
   placeholder = false,
+  analyzing = false,
   className = "",
 }: {
   status?: MatchStatus
   /** Marcador de calendario sin análisis: muestra "Próximamente" en vez del estado. */
   placeholder?: boolean
+  /** Partido cuya hora ya pasó pero AÚN SIN marcador/análisis: "En análisis", no "analizado". */
+  analyzing?: boolean
   className?: string
 }) {
   const s = placeholder
     ? { label: "Próximamente", cls: "bg-black/70 text-[#fff] backdrop-blur-md" }
-    : MAP[status ?? "finalizado"] ?? MAP.finalizado
+    : analyzing
+      ? { label: "En análisis", cls: "bg-[#475569]/90 text-[#fff] backdrop-blur-md" }
+      : MAP[status ?? "finalizado"] ?? MAP.finalizado
   return (
     <span
       className={`inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide shadow-md ring-1 ring-black/10 ${s.cls} ${className}`}

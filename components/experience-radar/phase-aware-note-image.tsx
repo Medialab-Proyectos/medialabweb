@@ -8,6 +8,8 @@ import { StatusPill, type MatchStatus } from "./status-pill"
 
 interface PhaseAwareNoteImageProps {
   status: MatchStatus
+  /** Finalizado por hora pero sin marcador todavía: muestra "En análisis". */
+  analyzing?: boolean
   slug: string
   teams: string[]
   title: string
@@ -29,6 +31,7 @@ interface PhaseAwareNoteImageProps {
  */
 export function PhaseAwareNoteImage({
   status,
+  analyzing = false,
   slug,
   teams,
   title,
@@ -69,7 +72,7 @@ export function PhaseAwareNoteImage({
           className="h-full w-full object-cover object-[center_20%]"
           loading="eager"
         />
-        <StatusPill status={status} className="absolute left-3 top-3 z-10" />
+        <StatusPill status={status} analyzing={analyzing} className="absolute left-3 top-3 z-10" />
         {kickoffAt && status !== "finalizado" && (
           <div className="absolute bottom-3 left-3 right-3 z-10 md:bottom-4 md:left-4 md:right-auto md:max-w-sm">
             <MatchCountdown kickoffAt={kickoffAt} overlay />

@@ -183,6 +183,7 @@ export default async function RadarArticlePage({
         </p>
         <PhaseAwareNoteImage
           status={status}
+          analyzing={analysisPending}
           slug={article.slug}
           teams={article.teams}
           title={article.seoTitle}

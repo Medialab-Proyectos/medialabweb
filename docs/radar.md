@@ -253,6 +253,18 @@ correspondiente, para que ninguna predicción quede sin equipo.
   una imagen en caché puede cargar antes de hidratar React y quedar invisible para siempre.
 - **Estados de la nota**: `previa` no es accesible hasta que el partido pasa a en vivo /
   finalizado. El marcador hace que se trate como finalizado aunque el agente no lo marque.
+- **"Analizado" SOLO con marcador**: un partido cuya hora ya pasó (finalizado por tiempo)
+  pero SIN `matchScore` NO está analizado. La UI lo muestra como **"En análisis"** (píldora) y
+  NUNCA recibe el badge **"Último analizado"** del listado. Ese badge marca el `matchScore` más
+  reciente. Por tanto, para que un partido cuente como analizado, el agente DEBE llenar
+  `matchScore` (y el resto del análisis final); no basta con que la hora haya pasado.
+- **"Ambas hinchadas"**: en "Cómo llegan las hinchadas", si las dos selecciones tendrían el
+  mismo texto (previa sin `teamsData` por equipo), la UI colapsa las dos tarjetas en una sola
+  ("Ambas hinchadas"). Para ver las dos diferenciadas, llena `teamsData` con la lectura propia
+  de cada hinchada (ver regla de PREVIA ANALIZADA en el paso 3).
+- **Próximo rival**: el pronóstico dice "vs X" tomando `nextOpponents[equipo]` (verificado) o,
+  si falta, el siguiente partido de esa selección en el calendario. Llena `nextOpponents`
+  cuando el siguiente cruce aún no exista como nota (ver paso 4b).
 - **userExperience**: se llena dentro de cada equipo en `teamsData` del `finishedMatch(...)`.
   Ejemplo:
   ```ts
