@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
-import Link from "next/link"
 import {
   ArrowUpRight,
   Clock,
@@ -470,10 +469,7 @@ function FanJourney({
   const selectedTeam = ctx?.team ?? teamPhases?.[0]?.team ?? teams[0] ?? null
   const selected = selectedTeam ? teamPhases?.find((t) => t.team === selectedTeam) : undefined
   const phases = selected?.phases ?? combined
-  const opponent = selected?.nextOpponent
   const eliminated = selected?.eliminated ?? false
-  // Rival de ESTE partido (para la predicción «Antes»): la otra selección del cruce.
-  const matchRival = selectedTeam ? teams.find((tname) => tname !== selectedTeam) : undefined
   const prediction = fanPrediction(phases.percepcion)
   const currentIdx = JOURNEY_STEPS.findIndex((s) => s.key === current)
   // La predicción (próximo partido) se muestra al elegir «Predicción» en la barra inferior:
@@ -578,21 +574,7 @@ function FanJourney({
               {antePrediction.label} {antePrediction.pct}%
             </span>
           </div>
-          <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-            Con qué pronóstico llegaba la hinchada{selectedTeam ? <> de <strong className="text-foreground">{selectedTeam}</strong></> : ""} a este
-            partido{matchRival ? <> ante <strong className="text-foreground">{matchRival}</strong></> : ""}.{" "}
-            {prior ? (
-              <>
-                Viene del análisis previo en{" "}
-                <Link href={`/experience-radar/mundial-2026/${prior.fromSlug}`} className="font-medium text-foreground underline-offset-2 hover:underline">
-                  {prior.fromTitle}
-                </Link>
-                .
-              </>
-            ) : (
-              <>Sale de la voz de la hinchada antes del pitazo en fuentes revisadas, no de una cuota.</>
-            )}
-          </p>
+
           <PredictionBreakdown prediction={antePrediction} team={selectedTeam} />
         </div>
       ) : showPrediction && prediction ? (
@@ -609,15 +591,7 @@ function FanJourney({
               {prediction.label} {prediction.pct}%
             </span>
           </div>
-          <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-            {opponent ? (
-              <>Para el próximo partido vs <strong className="text-foreground">{opponent}</strong>, este</>
-            ) : (
-              <>De cara a su próximo partido, este</>
-            )}{" "}
-            es el pronóstico de la hinchada{selectedTeam ? <> de <strong className="text-foreground">{selectedTeam}</strong></> : ""}.
-            Sale del ánimo colectivo en fuentes revisadas, no de una cuota ni una apuesta.
-          </p>
+
           <PredictionBreakdown prediction={prediction} team={selectedTeam} />
         </div>
       ) : eliminated && current === "percepcion" ? (

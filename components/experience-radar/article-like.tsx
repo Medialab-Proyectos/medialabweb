@@ -21,6 +21,7 @@ export function ArticleLike({ slug }: { slug: string }) {
   const likedKey = `experience-radar:liked:${slug}`
   const [liked, setLiked] = useState(false)
   const [count, setCount] = useState(base)
+  const [showPlus, setShowPlus] = useState(false)
 
   useEffect(() => {
     try {
@@ -36,6 +37,10 @@ export function ArticleLike({ slug }: { slug: string }) {
   function toggleLike() {
     setLiked((current) => {
       const nextLiked = !current
+      if (nextLiked) {
+        setShowPlus(true)
+        window.setTimeout(() => setShowPlus(false), 850)
+      }
       setCount((currentCount) => {
         const nextCount = Math.max(0, currentCount + (nextLiked ? 1 : -1))
         try {
@@ -55,12 +60,17 @@ export function ArticleLike({ slug }: { slug: string }) {
       aria-pressed={liked}
       aria-label={liked ? "Quitar like" : "Dar like"}
       title={liked ? "Quitar like" : "Me gusta este analisis"}
-      className={`mt-1 inline-flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold shadow-sm transition-colors ${
+      className={`relative mt-1 inline-flex shrink-0 items-center gap-1.5 overflow-visible rounded-full border px-3 py-1.5 text-xs font-semibold shadow-sm transition-colors ${
         liked
           ? "border-[var(--magenta)] bg-[var(--magenta)] text-white"
           : "border-border bg-card text-card-foreground hover:border-[var(--magenta)] hover:text-[var(--magenta)]"
       }`}
     >
+      {showPlus && (
+        <span className="pointer-events-none absolute -top-6 right-1 animate-[radar-like-pop_850ms_ease-out_forwards] rounded-full bg-[var(--magenta)] px-2 py-0.5 text-[11px] font-black text-white shadow-lg">
+          +1
+        </span>
+      )}
       <Heart size={14} className={liked ? "fill-current" : ""} />
       <span>{formatCount(count)}</span>
     </button>
