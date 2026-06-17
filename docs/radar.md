@@ -251,6 +251,10 @@ correspondiente, para que ninguna predicción quede sin equipo.
 - **Render de imagen**: `components/experience-radar/note-image.tsx` no debe ocultar la
   imagen real esperando hidratación. No restaures la lógica `opacity-0` + `onLoad`, porque
   una imagen en caché puede cargar antes de hidratar React y quedar invisible para siempre.
+- **Subida automática de imágenes y push**: cuando una nota cambia de previa a finalizado o
+  necesita imagen editorial verificada, el agente debe descargar, validar, guardar y subir la
+  imagen local sin pedir confirmación. Tras publicar notas accesibles, debe intentar el push
+  automático y reportar `push.notified`, slugs notificados y errores best-effort.
 - **Estados de la nota**: `previa` no es accesible hasta que el partido pasa a en vivo /
   finalizado. El marcador hace que se trate como finalizado aunque el agente no lo marque.
 - **"Analizado" SOLO con marcador**: un partido cuya hora ya pasó (finalizado por tiempo)
