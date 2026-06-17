@@ -72,6 +72,12 @@ PASOS:
      cada hinchada (expectedEmotion, dominantConversation, fanConfidence, mainNarrative). Si
      no se aporta, ambas cajas muestran el mismo texto y la UI las colapsa en "Ambas
      hinchadas". Para dos lecturas separadas, llena `teamsData` con datos propios de cada país.
+   - IMAGEN DE PREVIA ANALIZADA: toda `analyzedUpcomingMatch(...)` debe traer una imagen
+     editorial propia de la previa, descargada y guardada localmente en
+     `public/images/experience-radar/mundial-2026/`. No uses imágenes genéricas del radar,
+     fallback del sitio ni hotlinks externos para una previa ya analizada. Si no hay foto de
+     Latingoles o Win Sports, insiste con FIFA, The Guardian, AP, Reuters, ESPN, AS, Marca,
+     Goal u otra fuente periodística verificable y registra qué fuente quedó.
    - userExperience POR EQUIPO: cómo consume y reacciona EN DIGITAL la hinchada de ESE
      país, por etapa { expectativa?, realidad?, percepcion? }. DEBE ser específico de cada
      selección (memes, hashtags, apps, quejas propias de esa afición) y DISTINTO entre los
@@ -227,6 +233,11 @@ correspondiente, para que ninguna predicción quede sin equipo.
   finalizado o pronóstico en el listado, pero debe conservarse en los campos
   `previewImage*`. Una vez analizado el encuentro, se conserva siempre la última imagen
   final en `imageUrl`.
+- **Previas sin genéricos**: una previa analizada nunca debe quedar con imagen genérica de
+  MediaLab, fallback del radar o `pickMatchImage`. Debe tener `imageUrl`, `imageCredit` e
+  `imageSourceUrl` de una foto/noticia real de previa, copiada localmente. Si todavía no se
+  consiguió foto verificable, deja la previa como calendario (`upcomingMatch`) hasta hallarla
+  o documenta explícitamente el bloqueo.
 - **Render por fase**: el especial usa `imageUrl`; la nota usa la imagen según fase. En
   «Antes del partido» puede mostrar `previewImageUrl`; en «Durante el partido» y
   «Pronóstico» debe mostrar `imageUrl`. Las notas finalizadas arrancan en «Durante el
