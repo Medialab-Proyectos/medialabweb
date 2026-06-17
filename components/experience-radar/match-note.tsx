@@ -469,7 +469,9 @@ function FanJourney({
   const selectedTeam = ctx?.team ?? teamPhases?.[0]?.team ?? teams[0] ?? null
   const selected = selectedTeam ? teamPhases?.find((t) => t.team === selectedTeam) : undefined
   const phases = selected?.phases ?? combined
+  const opponent = selected?.nextOpponent
   const eliminated = selected?.eliminated ?? false
+  const matchRival = selectedTeam ? teams.find((tname) => tname !== selectedTeam) : undefined
   const prediction = fanPrediction(phases.percepcion)
   const currentIdx = JOURNEY_STEPS.findIndex((s) => s.key === current)
   // La predicción (próximo partido) se muestra al elegir «Predicción» en la barra inferior:
@@ -575,7 +577,7 @@ function FanJourney({
             </span>
           </div>
 
-          <PredictionBreakdown prediction={antePrediction} team={selectedTeam} />
+          <PredictionBreakdown prediction={antePrediction} team={selectedTeam} opponent={matchRival} context="current" />
         </div>
       ) : showPrediction && prediction ? (
         // Caja de predicción: aparece sola al elegir «Predicción» abajo, con bola de cristal.
@@ -592,7 +594,7 @@ function FanJourney({
             </span>
           </div>
 
-          <PredictionBreakdown prediction={prediction} team={selectedTeam} />
+          <PredictionBreakdown prediction={prediction} team={selectedTeam} opponent={opponent} context="next" />
         </div>
       ) : eliminated && current === "percepcion" ? (
         // La selección ya no tiene más partidos: sin pronóstico, se indica la eliminación.
@@ -619,12 +621,28 @@ function FanJourney({
   )
 }
 
-function PredictionBreakdown({ prediction, team }: { prediction: FanPrediction; team?: string | null }) {
+function PredictionBreakdown({
+  prediction,
+  team,
+  opponent,
+  context,
+}: {
+  prediction: FanPrediction
+  team?: string | null
+  opponent?: string
+  context: "current" | "next"
+}) {
   const teamLabel = team ? ` de ${team}` : ""
+  const contextText =
+    opponent && context === "next"
+      ? `Para el próximo partido vs ${opponent}, `
+      : opponent
+        ? `Para este partido ante ${opponent}, `
+        : ""
   return (
     <div className="mt-3 rounded-lg border border-border/70 bg-background/45 p-3">
       <p className="text-xs leading-relaxed text-muted-foreground">
-        Aunque la señal más fuerte es <strong className="text-foreground">{prediction.label.toLowerCase()} {prediction.pct}%</strong>,
+        {contextText}aunque la señal más fuerte es <strong className="text-foreground">{prediction.label.toLowerCase()} {prediction.pct}%</strong>,
         el radar lee tres caminos del ánimo de la hinchada{teamLabel}: ganar{" "}
         <strong className="text-foreground">{prediction.chances.Gana}%</strong>, empatar{" "}
         <strong className="text-foreground">{prediction.chances.Empata}%</strong> y perder{" "}
