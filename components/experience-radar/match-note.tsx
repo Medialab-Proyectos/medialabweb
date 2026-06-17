@@ -445,12 +445,6 @@ const PRED_CLASS: Record<"Gana" | "Empata" | "Pierde", string> = {
   Pierde: "bg-[#DC2626]/15 text-[#DC2626]",
 }
 
-const PRED_TEXT_CLASS: Record<"Gana" | "Empata" | "Pierde", string> = {
-  Gana: "text-[#16A34A]",
-  Empata: "text-[#B45309] dark:text-[#F59E0B]",
-  Pierde: "text-[#DC2626]",
-}
-
 /** Color de cada fase, igual que en el radar (antes / durante / predicción). */
 const PHASE_COLOR: Record<RadarViewMode, string> = {
   expectativa: "#14B8A6",
@@ -663,16 +657,6 @@ function PredictionBreakdown({ prediction, team }: { prediction: FanPrediction; 
         <strong className="text-foreground">{prediction.chances.Pierde}%</strong>. No predice el marcador: traduce confianza,
         ansiedad e incertidumbre detectadas en las fuentes.
       </p>
-      <div className="mt-2 grid grid-cols-3 gap-2">
-        {(["Gana", "Empata", "Pierde"] as const).map((label) => (
-          <div key={label} className="rounded-md border border-border/60 bg-card px-2 py-1.5 text-center">
-            <p className="text-[10px] font-bold uppercase tracking-wide text-muted-foreground">{label}</p>
-            <p className={`text-sm font-black tabular-nums ${PRED_TEXT_CLASS[label]}`}>
-              {prediction.chances[label]}%
-            </p>
-          </div>
-        ))}
-      </div>
     </div>
   )
 }
