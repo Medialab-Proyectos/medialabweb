@@ -16,6 +16,7 @@ import { RadarPhaseBar } from "@/components/experience-radar/radar-phase-bar"
 import { RadarNewsletter } from "@/components/experience-radar/radar-newsletter"
 import { RelatedNotes, type RelatedNote } from "@/components/experience-radar/related-notes"
 import { PhaseAwareNoteImage } from "@/components/experience-radar/phase-aware-note-image"
+import { ArticleLike } from "@/components/experience-radar/article-like"
 import { LocalMatchTime } from "@/components/experience-radar/local-match-time"
 import { pickMatchImage } from "@/components/experience-radar/default-image"
 import { getRadarArticleBySlug, getAllRadarArticles } from "@/src/lib/experience-radar/articleData"
@@ -177,6 +178,7 @@ export default async function RadarArticlePage({
             {status === "previa" ? "Mira la predicción previa" : "Mira la predicción del partido"}{" "}
             <ArrowRight size={14} />
           </Link>
+          <ArticleLike slug={article.slug} />
         </div>
         <p className="mt-3 text-sm text-muted-foreground">
           {article.teams.join(" vs ")} · <LocalMatchTime iso={article.kickoffAt} date={article.date} />

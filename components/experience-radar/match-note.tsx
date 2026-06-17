@@ -401,19 +401,36 @@ function moodFace(v?: EmotionalRadarValues): LucideIcon {
  * ÁNIMO de la fase de percepción (no es una cuota deportiva): optimismo/confianza empujan
  * a "gana", ansiedad/frustración a "pierde", incertidumbre a "empata".
  */
-function fanPrediction(v?: EmotionalRadarValues): { label: "Gana" | "Empata" | "Pierde"; pct: number } | null {
+type FanPrediction = {
+  label: "Gana" | "Empata" | "Pierde"
+  pct: number
+  chances: Record<"Gana" | "Empata" | "Pierde", number>
+}
+
+function fanPrediction(v?: EmotionalRadarValues): FanPrediction | null {
   if (!v) return null
   const gana = v.optimismo * 0.5 + v.confianza * 0.5
   const pierde = v.frustracion * 0.5 + v.ansiedad * 0.4
   const empata = v.incertidumbre * 0.5 + 25
   const total = gana + pierde + empata || 1
+  const ganaPct = Math.round((gana / total) * 100)
+  const empataPct = Math.round((empata / total) * 100)
+  const pierdePct = Math.max(0, 100 - ganaPct - empataPct)
   const opts: Array<{ label: "Gana" | "Empata" | "Pierde"; pct: number }> = [
-    { label: "Gana", pct: gana / total },
-    { label: "Empata", pct: empata / total },
-    { label: "Pierde", pct: pierde / total },
+    { label: "Gana", pct: ganaPct },
+    { label: "Empata", pct: empataPct },
+    { label: "Pierde", pct: pierdePct },
   ]
   const top = opts.sort((a, b) => b.pct - a.pct)[0]
-  return { label: top.label, pct: Math.round(top.pct * 100) }
+  return {
+    label: top.label,
+    pct: top.pct,
+    chances: {
+      Gana: opts.find((o) => o.label === "Gana")?.pct ?? 0,
+      Empata: opts.find((o) => o.label === "Empata")?.pct ?? 0,
+      Pierde: opts.find((o) => o.label === "Pierde")?.pct ?? 0,
+    },
+  }
 }
 
 const JOURNEY_STEPS: Array<{ key: RadarViewMode; label: string }> = [
@@ -426,6 +443,12 @@ const PRED_CLASS: Record<"Gana" | "Empata" | "Pierde", string> = {
   Gana: "bg-[#16A34A]/15 text-[#16A34A]",
   Empata: "bg-[#F59E0B]/15 text-[#B45309] dark:text-[#F59E0B]",
   Pierde: "bg-[#DC2626]/15 text-[#DC2626]",
+}
+
+const PRED_TEXT_CLASS: Record<"Gana" | "Empata" | "Pierde", string> = {
+  Gana: "text-[#16A34A]",
+  Empata: "text-[#B45309] dark:text-[#F59E0B]",
+  Pierde: "text-[#DC2626]",
 }
 
 /** Color de cada fase, igual que en el radar (antes / durante / predicción). */
@@ -576,6 +599,7 @@ function FanJourney({
               <>Sale de la voz de la hinchada antes del pitazo en fuentes revisadas, no de una cuota.</>
             )}
           </p>
+          <PredictionBreakdown prediction={antePrediction} team={selectedTeam} />
         </div>
       ) : showPrediction && prediction ? (
         // Caja de predicción: aparece sola al elegir «Predicción» abajo, con bola de cristal.
@@ -598,8 +622,9 @@ function FanJourney({
               <>De cara a su próximo partido, este</>
             )}{" "}
             es el pronóstico de la hinchada{selectedTeam ? <> de <strong className="text-foreground">{selectedTeam}</strong></> : ""}.
-            Sale del ánimo colectivo en fuentes revisadas, no de una cuota.
+            Sale del ánimo colectivo en fuentes revisadas, no de una cuota ni una apuesta.
           </p>
+          <PredictionBreakdown prediction={prediction} team={selectedTeam} />
         </div>
       ) : eliminated && current === "percepcion" ? (
         // La selección ya no tiene más partidos: sin pronóstico, se indica la eliminación.
@@ -622,6 +647,32 @@ function FanJourney({
           pronóstico del próximo partido en «Pronóstico», desde la barra de abajo.
         </p>
       )}
+    </div>
+  )
+}
+
+function PredictionBreakdown({ prediction, team }: { prediction: FanPrediction; team?: string | null }) {
+  const teamLabel = team ? ` de ${team}` : ""
+  return (
+    <div className="mt-3 rounded-lg border border-border/70 bg-background/45 p-3">
+      <p className="text-xs leading-relaxed text-muted-foreground">
+        Aunque la señal más fuerte es <strong className="text-foreground">{prediction.label.toLowerCase()} {prediction.pct}%</strong>,
+        el radar lee tres caminos del ánimo de la hinchada{teamLabel}: ganar{" "}
+        <strong className="text-foreground">{prediction.chances.Gana}%</strong>, empatar{" "}
+        <strong className="text-foreground">{prediction.chances.Empata}%</strong> y perder{" "}
+        <strong className="text-foreground">{prediction.chances.Pierde}%</strong>. No predice el marcador: traduce confianza,
+        ansiedad e incertidumbre detectadas en las fuentes.
+      </p>
+      <div className="mt-2 grid grid-cols-3 gap-2">
+        {(["Gana", "Empata", "Pierde"] as const).map((label) => (
+          <div key={label} className="rounded-md border border-border/60 bg-card px-2 py-1.5 text-center">
+            <p className="text-[10px] font-bold uppercase tracking-wide text-muted-foreground">{label}</p>
+            <p className={`text-sm font-black tabular-nums ${PRED_TEXT_CLASS[label]}`}>
+              {prediction.chances[label]}%
+            </p>
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
