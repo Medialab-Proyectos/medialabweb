@@ -244,6 +244,10 @@ URL del blog: https://medialab.design/blog
 
 ### Artículos publicados
 
+**Ya No Estamos Aprendiendo a Trabajar. Estamos Aprendiendo a Dirigir Inteligencias** (Junio 2026, 9 min)
+El fin del paradigma del prompt. Un prompt es trabajo manual: instruyes, la IA responde, el proceso termina. Los agentes y loops reciben objetivos en lugar de instrucciones y siguen trabajando cuando tú dejas de hacerlo. El trabajo pasa de ejecutarse a orquestarse (como un director de cine). Zero UI cobra relevancia: cuando los sistemas entienden objetivos en lugar de clics, la interfaz deja de ser el centro. La habilidad de la próxima década no es usar IA, sino dirigirla mediante pensamiento sistémico. Referencias a Boris Cherny (Anthropic) y al Zero UI Manifesto.
+https://medialab.design/blog/dirigir-inteligencias
+
 **La Arquitectura de la Percepción: Tus Usuarios No Navegan Flujos, Sino Estados Emocionales** (Mayo 2026, 8 min)
 Propone el Diseño de Experiencia Consciente (CXD): las personas navegan estados emocionales (orientación, carga cognitiva, tiempo subjetivo, confianza), no flujos lógicos. Caso real del fracaso de IA por voz de McDonald's drive-thru.
 https://medialab.design/blog/arquitectura-percepcion

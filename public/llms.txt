@@ -166,6 +166,7 @@ Experience Radar es el observatorio editorial de MediaLab sobre comportamiento h
 
 ## Artículos del blog
 
+- Ya No Aprendemos a Trabajar, Aprendemos a Dirigir Inteligencias (El Fin de los Prompts): https://medialab.design/blog/dirigir-inteligencias
 - La Arquitectura de la Percepción: https://medialab.design/blog/arquitectura-percepcion
 - El ADN del Significado: https://medialab.design/blog/adn-del-significado
 - El Trono de la Decisión — IA y Diseño Ético: https://medialab.design/blog/trono-de-la-decision

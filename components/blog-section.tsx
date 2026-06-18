@@ -4,65 +4,11 @@ import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
 import { ArrowRight, Clock } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
+import { BLOG_POSTS } from "@/lib/blog-posts"
 
-const articles = [
-  {
-    slug: "arquitectura-percepcion",
-    categoryEs: "Diseño UX",
-    categoryEn: "UX Design",
-    titleEs: "La Arquitectura de la Percepción: Tus Usuarios No Navegan Flujos, Sino Estados Emocionales",
-    titleEn: "The Architecture of Perception: Users Navigate Emotional States, Not Flows",
-    excerptEs: "El error más costoso del UX moderno es diseñar para un usuario ideal en lugar del usuario real. Descubre los 4 estados críticos de la percepción consciente.",
-    excerptEn: "The costliest UX mistake is designing for an ideal user instead of the real one. Discover the 4 critical states of conscious perception.",
-    readTime: "8 min",
-    date: "May 2026",
-    image: "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=1200&auto=format&fit=crop",
-    color: "#E8751A",
-    featured: true,
-  },
-  {
-    slug: "adn-del-significado",
-    categoryEs: "Producto",
-    categoryEn: "Product",
-    titleEs: "El ADN del Significado: Por Qué la Motivación No Basta para Retener Usuarios",
-    titleEn: "The DNA of Meaning: Why Motivation Isn't Enough to Retain Users",
-    excerptEs: "La motivación inicia la acción, pero el significado sostiene el hábito. 4 patrones de diseño noético para crear productos que trascienden.",
-    excerptEn: "Motivation starts the action, but meaning sustains the habit. 4 noetic design patterns for products that transcend.",
-    readTime: "7 min",
-    date: "May 2026",
-    image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1200&auto=format&fit=crop",
-    color: "#2AABB3",
-    featured: false,
-  },
-  {
-    slug: "trono-de-la-decision",
-    categoryEs: "IA y Ética",
-    categoryEn: "AI & Ethics",
-    titleEs: "El Trono de la Decisión: IA, Autonomía Humana y Diseño Ético",
-    titleEn: "The Throne of Decision: AI, Human Autonomy, and Ethical Design",
-    excerptEs: "En la era de los agentes de IA, el mayor riesgo no es la privacidad — es la infantilización del usuario. La ética estoica aplicada al diseño digital.",
-    excerptEn: "In the age of AI agents, the greatest risk isn't privacy — it's user infantilization. Stoic ethics applied to digital design.",
-    readTime: "9 min",
-    date: "May 2026",
-    image: "https://images.unsplash.com/photo-1655720828018-edd2daec9349?q=80&w=1200&auto=format&fit=crop",
-    color: "#E8751A",
-    featured: false,
-  },
-  {
-    slug: "influencia-sin-erosion",
-    categoryEs: "Diseño Conductual",
-    categoryEn: "Behavioral Design",
-    titleEs: "Influencia sin Erosión: Diseño de Comportamiento Sostenible sin Manipular",
-    titleEn: "Influence Without Erosion: Sustainable Behavior Design Without Manipulation",
-    excerptEs: "El comportamiento sostenido no nace de la presión. Nace de una conciencia respetada. Las 4 capas de la acción y el caso del botón de $300 millones.",
-    excerptEn: "Sustained behavior doesn't come from pressure — it comes from respected consciousness. The 4 layers of action and the $300M button case.",
-    readTime: "10 min",
-    date: "May 2026",
-    image: "https://images.unsplash.com/photo-1573497620053-ea5300f94f21?q=80&w=1200&auto=format&fit=crop",
-    color: "#2AABB3",
-    featured: false,
-  },
-]
+// Showcase de la home: los 4 artículos más recientes del registro.
+// El primero (el más nuevo) se muestra como destacado.
+const articles = BLOG_POSTS.slice(0, 4)
 
 export function BlogSection() {
   const ref = useRef<HTMLDivElement>(null)
@@ -177,7 +123,7 @@ export function BlogSection() {
                   </p>
                   <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground">
                     <span className="flex items-center gap-1"><Clock size={14} />{article.readTime}</span>
-                    <span className="text-muted-foreground/60">{article.date}</span>
+                    <span className="text-muted-foreground/60">{t(article.dateEs, article.dateEn)}</span>
                     <span className="ml-auto font-semibold flex items-center gap-1 group-hover:gap-1.5 transition-all" style={{ color: article.color }}>
                       {t("Leer", "Read")} <ArrowRight size={11} />
                     </span>

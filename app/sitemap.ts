@@ -1,6 +1,7 @@
 import { MetadataRoute } from "next"
 import { getVisibleRadarArticles } from "@/src/lib/experience-radar/articleData"
 import { getArticleAvailability } from "@/src/lib/experience-radar/articleAvailability"
+import { BLOG_POSTS } from "@/lib/blog-posts"
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://medialab.design"
@@ -37,18 +38,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: "/blog", changeFrequency: "weekly", priority: 0.9, en: true, lastModified: "2026-05-25" },
     { path: "/recursos/analizador-ux-ia", changeFrequency: "monthly", priority: 0.85, en: true, lastModified: "2026-05-20" },
     { path: "/uxgreen", changeFrequency: "monthly", priority: 0.90, en: true, lastModified: "2026-05-20" },
-    { path: "/blog/arquitectura-percepcion", changeFrequency: "monthly", priority: 0.8, en: false, lastModified: "2026-05-14" },
-    { path: "/blog/adn-del-significado", changeFrequency: "monthly", priority: 0.8, en: false, lastModified: "2026-05-14" },
-    { path: "/blog/trono-de-la-decision", changeFrequency: "monthly", priority: 0.8, en: false, lastModified: "2026-05-14" },
-    { path: "/blog/influencia-sin-erosion", changeFrequency: "monthly", priority: 0.8, en: false, lastModified: "2026-05-14" },
-    { path: "/blog/psicologia-adopcion", changeFrequency: "monthly", priority: 0.8, en: false, lastModified: "2026-05-14" },
-    { path: "/blog/discovery-ia", changeFrequency: "monthly", priority: 0.8, en: false, lastModified: "2026-05-14" },
-    { path: "/blog/ux-fintech", changeFrequency: "monthly", priority: 0.8, en: false, lastModified: "2026-05-14" },
-    { path: "/blog/mvp-escala", changeFrequency: "monthly", priority: 0.8, en: false, lastModified: "2026-05-14" },
   ]
 
+  // Artículos del blog — derivados del registro único (lib/blog-posts.ts).
+  // Son prosa en español (en: false) → solo URL ES con x-default.
+  const blogRoutes = BLOG_POSTS.map((post) => ({
+    path: `/blog/${post.slug}`,
+    changeFrequency: "monthly" as const,
+    priority: post.priority ?? 0.8,
+    en: post.translated ?? false,
+    lastModified: post.lastModified,
+  }))
+
   const entries: MetadataRoute.Sitemap = []
-  for (const r of routes) {
+  for (const r of [...routes, ...blogRoutes]) {
     const esUrl = `${baseUrl}${r.path || "/"}`
     const enUrl = `${baseUrl}/en${r.path}`
     const languages = r.en

@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { BlogIndexContent } from "../../blog/blog-index-content"
+import { BLOG_POSTS } from "@/lib/blog-posts"
 
 export const metadata: Metadata = {
   title: "Blog on UX, AI, and Digital Product",
@@ -43,16 +44,7 @@ const blogListSchema = {
   inLanguage: "en",
 }
 
-const articles = [
-  { slug: "arquitectura-percepcion", title: "The Architecture of Perception: Your Users Don't Navigate Flows, They Navigate Emotional States" },
-  { slug: "adn-del-significado", title: "The DNA of Meaning: Why Motivation Isn't Enough to Retain Users" },
-  { slug: "trono-de-la-decision", title: "The Throne of Decision: AI, Human Autonomy, and Ethical Design" },
-  { slug: "influencia-sin-erosion", title: "Influence Without Erosion: Sustainable Behavioral Design Without Manipulation" },
-  { slug: "psicologia-adopcion", title: "The Psychology of Digital Adoption" },
-  { slug: "discovery-ia", title: "Product Discovery with AI" },
-  { slug: "ux-fintech", title: "UX in Fintech: Designing for Trust" },
-  { slug: "mvp-escala", title: "From MVP to Scale" },
-]
+const articles = BLOG_POSTS.map((p) => ({ slug: p.slug, title: p.titleEn }))
 
 export default function BlogIndexEn() {
   const itemListSchema = {
