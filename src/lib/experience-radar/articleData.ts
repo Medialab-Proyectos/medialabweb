@@ -2666,7 +2666,7 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
     imageCredit: "The Guardian",
     imageSourceUrl: "https://www.theguardian.com/football/2026/jun/18/uzbekistan-colombia-world-cup-2026-group-k-match-report",
     analyzedAt: "2026-06-18T10:20:00.000Z",
-    nextOpponents: { Uzbekistan: "RD Congo", Colombia: "Portugal" },
+    nextOpponents: { Uzbekistan: "Portugal", Colombia: "RD Congo" },
   }),
   finishedMatch({
     date: "2026-06-16",
@@ -3226,7 +3226,7 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
     previewImageCredit: "The Guardian",
     previewImageSourceUrl: "https://www.theguardian.com/football/2026/jun/17/portugal-cristiano-ronaldo-world-cup-drc",
     analyzedAt: "2026-06-18T09:50:00.000Z",
-    nextOpponents: { Portugal: "Colombia", "RD Congo": "Uzbekistan" },
+    nextOpponents: { Portugal: "Uzbekistan", "RD Congo": "Colombia" },
   }),
   finishedMatch({
     date: "2026-06-17",
