@@ -276,6 +276,16 @@ correspondiente, para que ninguna predicción quede sin equipo.
   NUNCA recibe el badge **"Último analizado"** del listado. Ese badge marca el `matchScore` más
   reciente. Por tanto, para que un partido cuente como analizado, el agente DEBE llenar
   `matchScore` (y el resto del análisis final); no basta con que la hora haya pasado.
+- **Ayer y hoy sin huecos**: antes de cerrar la corrida, revisa de forma explícita TODOS los
+  partidos de ayer y de hoy. Si alguno ya terminó, debe quedar como `finishedMatch(...)` con
+  marcador exacto, goleadores/minutos y análisis final completo. No puede quedar una previa
+  accesible, una nota "en análisis" o una nota con badge de analizado si el partido ya acabó
+  pero aún no tiene `matchScore`.
+- **Fotos no recicladas entre partidos**: está prohibido reutilizar la foto de un partido A en
+  la nota de un partido B aunque se guarde con otro nombre local. Antes de aprobar una imagen,
+  valida que el `imageSourceUrl`, el contexto editorial y la foto correspondan al cruce real de
+  esa nota. Si la imagen actual proviene de otro partido, reemplázala por una fuente específica
+  del encuentro correcto.
 - **"Ambas hinchadas"**: en "Cómo llegan las hinchadas", si las dos selecciones tendrían el
   mismo texto (previa sin `teamsData` por equipo), la UI colapsa las dos tarjetas en una sola
   ("Ambas hinchadas"). Para ver las dos diferenciadas, llena `teamsData` con la lectura propia
