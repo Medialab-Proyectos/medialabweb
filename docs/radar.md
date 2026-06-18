@@ -266,6 +266,9 @@ correspondiente, para que ninguna predicción quede sin equipo.
   necesita imagen editorial verificada, el agente debe descargar, validar, guardar y subir la
   imagen local sin pedir confirmación. Tras publicar notas accesibles, debe intentar el push
   automático y reportar `push.notified`, slugs notificados y errores best-effort.
+- **Git sin confirmación adicional**: si en la corrida se agregan archivos nuevos de imagen en
+  `public/images/experience-radar/mundial-2026/`, el agente debe incluirlos en el commit del
+  radar y hacer `git push` a la rama activa sin preguntarme.
 - **Estados de la nota**: `previa` no es accesible hasta que el partido pasa a en vivo /
   finalizado. El marcador hace que se trate como finalizado aunque el agente no lo marque.
 - **"Analizado" SOLO con marcador**: un partido cuya hora ya pasó (finalizado por tiempo)
