@@ -15,8 +15,8 @@ actualiza la previa si están a 24 horas o se llenan completos si ya jugaron. Va
 estén todos los partidos e incluye los partidos a 48 horas que no estén, pero todavía como
 notas no accesibles.
 
-VENTANA PRIORITARIA DE 12 HORAS: al inicio de CADA corrida, calcula la hora actual con
-zona horaria y revisa todos los partidos que comiencen durante las siguientes 12 horas.
+VENTANA PRIORITARIA DE 24 HORAS: al inicio de CADA corrida, calcula la hora actual con
+zona horaria y revisa todos los partidos que comiencen durante las siguientes 24 horas.
 Contrasta horario, sede, novedades de plantilla, declaraciones y conversación previa en
 al menos 3 fuentes. Actualiza su previa aunque ya exista. Si no hay partidos en la ventana,
 déjalo registrado expresamente en el reporte final con la hora exacta del corte.
