@@ -125,7 +125,7 @@ export function generateDailyInsight(signals: ExperienceSignal[], sources: Sourc
     worldExperienceIndex,
     note: {
       executiveSummary:
-        "MediaLab convierte senales verificables del ecosistema Mundial en aprendizajes de UX, producto e IA. Esta nota no narra partidos: observa friccion, ansiedad, confianza y recuperacion en experiencias digitales de alta demanda.",
+        "Experience Radar convierte senales verificables del ecosistema Mundial en aprendizajes de UX, producto e IA. Esta nota no narra partidos: observa friccion, ansiedad, confianza y recuperacion en experiencias digitales de alta demanda.",
       analyzedSignals: summarizeSignals(signals),
       mainFinding: findingOfTheDay,
       uxInsights: insights.map((insight) => insight.insight),
@@ -144,9 +144,19 @@ function buildEditorialSignals(
   insights: ExperienceInsight[],
 ): DailyRadarReport["editorialSignals"] {
   const newsSignals = signals.filter((signal) => signal.sourceType === "latingoles" || signal.sourceType === "fifa")
-  const socialSignals = signals.filter((signal) => signal.sourceType === "reddit" || signal.sourceType === "app-review")
+  const socialSignals = signals.filter((signal) =>
+    signal.sourceType === "reddit"
+    || signal.sourceType === "app-review"
+    || signal.sourceType === "instagram"
+    || signal.sourceType === "facebook"
+    || signal.sourceType === "youtube"
+    || signal.sourceType === "x",
+  )
+  const contextualSignals = signals.filter((signal) =>
+    signal.sourceType === "analyst" || signal.sourceType === "365scores",
+  )
   const trendSignals = signals.filter((signal) => signal.sourceType === "google-trends" || signal.rising)
-  const primary = selectPrimaryNewsSignal(newsSignals) ?? signals[0]
+  const primary = selectPrimaryNewsSignal([...newsSignals, ...contextualSignals]) ?? signals[0]
   const teams = unique(signals.flatMap((signal) => signal.teams), 2)
   const matchName = teams.length >= 2 ? `${teams[0]} vs ${teams[1]}` : primary?.title ?? "Mundial 2026"
   const highlight = findByWords(signals, ["polemica", "var", "controversia", "reclamo", "duda", "error"]) ?? primary
@@ -218,7 +228,7 @@ function buildSeo(
 ): DailyRadarReport["seo"] {
   const title = `${shortenTitle(editorialSignals.resultOrMainFact)}: resultado, resumen y polemica desde Experience Radar`
   const description =
-    `Resultado o hecho principal, resumen, conversacion de aficionados e insight UX de MediaLab. ${article.experienceRadarScore}`
+    `Resultado o hecho principal, resumen, conversacion de aficionados e insight UX de Experience Radar. ${article.experienceRadarScore}`
   const faq = [
     {
       question: "Que analiza Experience Radar sobre el Mundial?",
@@ -246,12 +256,12 @@ function buildSeo(
     dateModified: date,
     author: {
       "@type": "Organization",
-      name: "MediaLab",
+      name: "Experience Radar",
     },
     publisher: {
       "@type": "Organization",
-      name: "MediaLab",
-      url: "https://medialab.design",
+      name: "Experience Radar",
+      url: "https://medialab.design/experience-radar",
     },
     mainEntityOfPage: "https://medialab.design/experience-radar",
     citation: sources.filter((source) => source.url).map((source) => source.url),

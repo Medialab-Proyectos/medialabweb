@@ -30,6 +30,16 @@ export const APP_REVIEW_TARGETS = [
   { app: "DirecTV", appleId: "1136238277", googlePackage: "com.directv.dvrscheduler" },
 ]
 
+export const THREE_SIXTY_FIVE_SCORES_URLS = [
+  "https://www.365scores.com/es/football/league/fifa-world-cup-5930",
+  "https://www.365scores.com/es/football/league/fifa-world-cup-5930/matches",
+  "https://www.365scores.com/es/football/league/fifa-world-cup-5930/standings",
+]
+
+export const ANALYST_PAGE_URLS = [
+  "https://www.theguardian.com/profile/jonathanwilson",
+]
+
 export function sourceUsage(
   input: Omit<SourceUsage, "checkedAt"> & { checkedAt?: string },
 ): SourceUsage {

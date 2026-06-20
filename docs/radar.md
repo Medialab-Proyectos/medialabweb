@@ -27,7 +27,11 @@ PASOS:
 1) INVESTIGA cada partido en al menos 3 fuentes y CRUZA datos:
    - Resultado y desarrollo: FIFA oficial, ESPN, AS/Marca, medios deportivos serios.
    - Voz de la hinchada (sentimiento, memes, quejas, euforia): Latingoles, Reddit (r/soccer
-     y subs de cada selección), X/redes, Google Trends.
+     y subs de cada selección), X/redes, Google Trends, Instagram, Facebook, YouTube
+     (comentarios y/o chat visible), páginas de comentaristas/analistas de fútbol y, cuando
+     aporte algo verificable al partido, páginas de data como 365Scores (p. ej. mapa de tiros,
+     tiros al arco, momentum o eventos del encuentro). Las cuotas de apuestas NO son fuente
+     permitida ni señal editorial válida.
    - Confirma marcador EXACTO, goleadores con minuto, polémicas arbitrales y frases reales.
    Si un dato no se puede verificar, NO lo incluyas.
 
@@ -189,6 +193,126 @@ AL TERMINAR:
 ```
 
 ---
+
+## Fuentes sociales ampliadas y proyectos sugeridos
+
+Además de Reddit, X, Latingoles, Win Sports y FIFA, el radar puede ampliar la **voz social**
+con Instagram, Facebook, YouTube y páginas de analistas/comentaristas, siempre bajo estas
+reglas:
+
+1. **Solo contenido público o sesión propia ya disponible del navegador**. No fuerces login,
+   no intentes romper CAPTCHA, no uses credenciales ajenas ni prometas acceso estable cuando
+   la plataforma no lo garantiza.
+2. **No conviertas una herramienta frágil en fuente única**. Instagram/Facebook/YouTube son
+   señales complementarias; el hecho base del partido sigue validándose con FIFA y medios
+   periodísticos serios.
+3. **No uses cuotas ni picks de apuestas** como señal de sentimiento, predicción o análisis.
+   Si una página mezcla estadísticas con betting, toma solo los datos deportivos verificables
+   y excluye odds, casas, promociones y lenguaje de apuesta.
+
+### Instagram (best-effort)
+
+- **Proyecto recomendado**: `instaloader`
+  - Repo: https://github.com/instaloader/instaloader
+  - Docs: https://instaloader.github.io/
+  - Útil para perfiles públicos, hashtags, captions, comentarios y metadatos de posts.
+  - Uso editorial en el radar: reacciones de cuentas oficiales, captions, comentarios
+    visibles, frecuencia de publicación, clips/fotos previas y narrativa visual del partido.
+  - Si la plataforma endurece límites, úsalo como señal opcional; nunca bloquees la corrida
+    completa del radar por depender de Instagram.
+
+### Facebook (best-effort)
+
+- **Proyecto recomendado**: `facebook-scraper`
+  - Repo: https://github.com/kevinzg/facebook-scraper
+  - Útil para páginas públicas y algunos grupos/posts públicos; puede requerir cookies
+    exportadas desde una sesión propia del navegador para mejorar estabilidad.
+  - Uso editorial en el radar: posts de páginas oficiales o medios, comentarios visibles,
+    número y tono de reacciones, conversación de comunidades públicas.
+  - No asumas cobertura estable de grupos privados ni de perfiles cerrados.
+
+### YouTube (best-effort)
+
+- **Proyecto ligero recomendado**: `youtube-comment-downloader`
+  - Repo: https://github.com/egbertbouman/youtube-comment-downloader
+  - Descarga comentarios sin usar la API oficial de YouTube.
+- **Proyecto de exploración/archivo**: `youtube-comment-suite`
+  - Repo: https://github.com/mattwright324/youtube-comment-suite
+  - Útil cuando haga falta revisar muchos videos/canales y detectar temas recurrentes.
+- Uso editorial en el radar: comentarios de transmisiones, resúmenes, previas, ruedas de
+  prensa, análisis de canales deportivos y clips postpartido.
+
+### 365Scores y data visual del partido
+
+- **Proyecto sugerido para shot maps/eventos**: helper de `LanusStats`
+  - Referencia: https://github.com/federicorabanos/LanusStats/blob/main/LanusStats/threesixfivescores.py
+  - Permite extraer `shotmap` y eventos desde URLs de partido de 365Scores.
+- **Paquete alterno a evaluar**: https://pypi.org/project/365scores/
+- Uso editorial en el radar: mapa de tiros, tiros al arco, secuencia de eventos, momentum y
+  apoyos visuales para contrastar si la percepción de dominio coincide con lo que pasó.
+- 365Scores **no reemplaza** la verificación oficial del marcador; funciona como capa de
+  contexto visual/estadístico.
+
+### Páginas de comentaristas y analistas de fútbol
+
+- Prioriza páginas públicas, blogs, canales y cuentas verificables de analistas cuando
+  aporten lectura táctica, explicación de una polémica o interpretación de una jugada.
+- Úsalas como **fuente de interpretación**, no como única prueba del hecho.
+- Si tomas una frase o lectura táctica, enlaza la URL exacta en `sources[]` y separa siempre
+  el dato verificable del comentario editorial.
+
+#### Lista curada de comentaristas / analistas reconocidos
+
+Usa estas referencias como **pool preferente** cuando necesites contexto táctico, lectura de
+partido, reacción postpartido o conversación cualificada. No es obligatorio consultar todas;
+elige las pertinentes para el partido y la región.
+
+- **Jonathan Wilson (The Guardian)** — análisis, táctica e historia del juego.
+  - https://www.theguardian.com/profile/jonathanwilson
+- **Tifo Football / The Athletic FC (YouTube)** — táctica, contexto y watchalongs.
+  - https://www.youtube.com/channel/UCGYYNGmyhZ_kwBF_lqqXdAQ
+- **The Overlap / Stick to Football (YouTube)** — debate de exjugadores y reacción a
+  partidos grandes; útil para percepción pública y lectura de vestuario.
+  - https://www.youtube.com/%40TheOverlap
+- **La Media Inglesa (YouTube)** — análisis reconocido de fútbol inglés e internacional en
+  español.
+  - https://www.youtube.com/LaMediaInglesa
+- **El Enganche / José David López (YouTube)** — fútbol internacional, contexto y análisis
+  táctico/editorial en español.
+  - https://www.youtube.com/c/elenganche/videos
+
+#### Cómo usarlos dentro del radar
+
+- **Para táctica y explicación de lo ocurrido**: Jonathan Wilson, Tifo Football, El Enganche.
+- **Para conversación pública y reacción fuerte postpartido**: The Overlap, La Media Inglesa,
+  canales y videos con watchalong o post-match reaction.
+- **Para previas y contexto internacional**: El Enganche, La Media Inglesa, Tifo Football.
+- **Para partidos del Mundial con mucho arrastre en inglés**: The Guardian, Tifo Football,
+  The Overlap.
+
+#### Criterio editorial al usarlos
+
+- No tomes a un comentarista como fuente única del hecho base.
+- Si un análisis contradice FIFA o el marcador oficial, prevalece la fuente oficial para el
+  dato y el comentarista solo se cita como interpretación.
+- Prioriza piezas publicadas el mismo día del partido o en la ventana inmediata posterior.
+- Si un canal es demasiado opinativo o partidista para ese caso, úsalo solo como señal de
+  comunidad, no como interpretación principal.
+
+### Orden recomendado de consulta social
+
+Cuando busques sentimiento o conversación para una nota, usa este orden de prioridad:
+
+1. Reddit
+2. Instagram
+3. Facebook
+4. YouTube
+5. X
+6. Google Trends
+7. Latingoles / páginas de analistas como capa editorial adicional
+
+> Si alguna plataforma no responde o exige barreras no razonables, sigue con la siguiente y
+> deja constancia breve en el reporte final. El radar debe ser resistente a fuentes caídas.
 
 ## Submenú de contenido y predicción «Antes» en la nota
 
