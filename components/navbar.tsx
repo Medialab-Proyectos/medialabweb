@@ -181,6 +181,12 @@ export function Navbar() {
               key={link.href}
               href={link.href.startsWith("#") ? link.href : localized(link.href)}
               title={link.label}
+              onClick={(e) => {
+                if ((link as any).uxgreen && isUXGreen) {
+                  e.preventDefault()
+                  window.scrollTo({ top: 0, behavior: "smooth" })
+                }
+              }}
               className={`text-sm font-medium transition-colors relative after:absolute after:bottom-[-3px] after:left-0 after:w-0 after:h-px after:transition-all after:duration-300 ${
                 (link as any).uxgreen
                   ? "after:bg-[#00BFA6] hover:after:w-full"
@@ -322,7 +328,13 @@ export function Navbar() {
               key={link.href}
               href={link.href.startsWith("#") ? link.href : localized(link.href)}
               title={link.label}
-              onClick={() => setMobileOpen(false)}
+              onClick={(e) => {
+                setMobileOpen(false)
+                if ((link as any).uxgreen && isUXGreen) {
+                  e.preventDefault()
+                  window.scrollTo({ top: 0, behavior: "smooth" })
+                }
+              }}
               className={`text-base font-medium py-2 last:border-0 flex items-center gap-1.5 ${
                 forceDarkNav ? "border-b border-white/10" : "border-b border-border"
               } ${
