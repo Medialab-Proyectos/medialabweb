@@ -18,6 +18,7 @@ import {
 } from "./articles"
 import { getStoredRadarArticles } from "./articleStore"
 import { compareForFeed } from "./articleAvailability"
+import { normalizeCognitiveBiases } from "./cognitiveBiases"
 
 function upcomingMatch(input: {
   date: string
@@ -4593,6 +4594,16 @@ function applyLockedSeedImage(article: RadarArticle): RadarArticle {
   return locked?.imageUrl ? preserveImage(article, locked) : article
 }
 
+function normalizeArticleBiases(article: RadarArticle): RadarArticle {
+  return {
+    ...article,
+    mediaLabInsight: {
+      ...article.mediaLabInsight,
+      cognitiveBiases: normalizeCognitiveBiases(article.mediaLabInsight.cognitiveBiases),
+    },
+  }
+}
+
 function containsLegacyGenericCopy(article: RadarArticle): boolean {
   const text = JSON.stringify(article).toLowerCase()
   return text.includes("los asistentes con ia durante el evento")
@@ -4620,6 +4631,7 @@ export async function getAllRadarArticles(): Promise<RadarArticle[]> {
   return dedupeByMatch(sanitized)
     .map((article) => preserveVerifiedMatchData(article, seedByMatch.get(matchKey(article)) ?? article))
     .map(applyLockedSeedImage)
+    .map(normalizeArticleBiases)
     .sort((a, b) => compareForFeed(a, b))
 }
 

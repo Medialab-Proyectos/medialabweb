@@ -17,6 +17,7 @@
  */
 
 import { hasProhibitedContent, isAutoPublishEnabled, makeId, sanitizeText } from "./sources"
+import { normalizeCognitiveBiases } from "./cognitiveBiases"
 import type { EditorialStatus, ExperienceSignalCategory } from "./types"
 
 /** Cupón de la promoción especial Mundial (sección 10 — CTA). */
@@ -431,6 +432,10 @@ export function generateRadarArticle(input: RadarArticleInput): RadarArticle {
 
   return {
     ...input,
+    mediaLabInsight: {
+      ...input.mediaLabInsight,
+      cognitiveBiases: normalizeCognitiveBiases(input.mediaLabInsight.cognitiveBiases),
+    },
     id: makeId("article", [...input.teams, date]),
     slug,
     category: input.category,

@@ -496,6 +496,7 @@ function FanJourney({
         <div className="mt-3 flex items-center justify-center gap-3">
           {teams.map((team) => {
             const active = selectedTeam === team
+            const option = teamPhases?.find((candidate) => candidate.team === team)
             return (
               <button
                 key={team}
@@ -503,12 +504,17 @@ function FanJourney({
                 onClick={() => ctx.setTeam(team)}
                 aria-pressed={active}
                 aria-label={team}
-                title={team}
-                className={`inline-flex items-center justify-center rounded-full p-0.5 transition-all ${
+                title={option?.eliminated ? `${team} · eliminada` : team}
+                className={`inline-flex flex-col items-center justify-center gap-1 rounded-xl px-1 py-0.5 transition-all ${
                   active ? "scale-110 ring-2 ring-[var(--cyan)]" : "opacity-55 grayscale hover:opacity-100 hover:grayscale-0"
                 }`}
               >
                 <TeamFlag team={team} circle />
+                {option?.eliminated && (
+                  <span className="rounded-full bg-[#DC2626]/12 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wide text-[#DC2626]">
+                    Eliminada
+                  </span>
+                )}
               </button>
             )
           })}
@@ -615,6 +621,11 @@ function FanJourney({
         <p className="mt-3 text-[11px] italic leading-relaxed text-muted-foreground/80">
           Toca una bandera para ver el recorrido de esa hinchada. La predicción con la que llegaba aparece en «Antes» y el
           pronóstico del próximo partido en «Pronóstico», desde la barra de abajo.
+        </p>
+      )}
+      {eliminated && current !== "percepcion" && (
+        <p className="mt-2 text-[11px] leading-relaxed text-[#DC2626]">
+          {selectedTeam ?? "Esta selección"} ya está eliminada. Su recorrido emocional sigue visible, pero ya no tendrá pronóstico de próximo partido.
         </p>
       )}
     </div>

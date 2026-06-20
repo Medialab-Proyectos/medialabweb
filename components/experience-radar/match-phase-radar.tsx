@@ -421,14 +421,19 @@ export function MatchPhaseRadar({
                 onClick={() => setTeamFilter(opt.team)}
                 aria-pressed={isActive}
                 aria-label={opt.team}
-                title={opt.team}
-                className={`inline-flex items-center justify-center rounded-full p-0.5 transition-all ${
+                title={opt.eliminated ? `${opt.team} · eliminada` : opt.team}
+                className={`inline-flex flex-col items-center justify-center gap-1 rounded-xl px-1 py-0.5 transition-all ${
                   isActive
                     ? "scale-110 ring-2 ring-[var(--cyan)] ring-offset-2 ring-offset-card"
                     : "opacity-55 grayscale hover:opacity-100 hover:grayscale-0"
                 }`}
               >
                 <TeamFlag team={opt.team} circle />
+                {opt.eliminated && (
+                  <span className="rounded-full bg-[#DC2626]/12 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wide text-[#DC2626]">
+                    Eliminada
+                  </span>
+                )}
               </button>
             )
           })}
