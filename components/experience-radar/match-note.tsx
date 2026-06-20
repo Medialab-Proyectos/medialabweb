@@ -635,6 +635,8 @@ function PredictionBreakdown({
       ? `Para el próximo partido vs ${opponent}, `
       : opponent
         ? `Para este partido ante ${opponent}, `
+        : context === "next"
+          ? "Para el próximo partido, con rival todavía por definir, "
         : ""
   return (
     <div className="mt-3 rounded-lg border border-border/70 bg-background/45 p-3">

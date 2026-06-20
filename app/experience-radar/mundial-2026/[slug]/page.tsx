@@ -348,6 +348,10 @@ const NEXT_OPPONENT: Record<string, string> = {
  * puebla el agente), lo usa; si no, deriva la lectura de cada hinchada del radar
  * combinado con un sesgo determinista por equipo y por su ánimo colectivo. Es una
  * proyección editorial (no pronóstico de marcador), coherente con el resto del módulo.
+ *
+ * Importante: "eliminada" no significa automáticamente "sin próximo partido". En fase de
+ * grupos puede quedar una jornada pendiente; el pronóstico solo se oculta cuando no hay
+ * un próximo rival verificado o deducible en el calendario.
  */
 function resolveTeamPhases(
   article: RadarArticle,
@@ -355,23 +359,24 @@ function resolveTeamPhases(
   nextOpponentByTeam: Record<string, string> = {},
 ): TeamPhaseRadar[] {
   return article.teams.map((team) => {
-    // Eliminada SOLO con dato explícito del agente (no se infiere de un mapa incompleto:
-    // en fase de grupos todos siguen vivos). Sin pronóstico: se omite la fase de percepción.
+    // Eliminada SOLO con dato explícito del agente (no se infiere de un mapa incompleto).
+    // Aun eliminada, si todavía tiene rival pendiente, se conserva la percepción/pronóstico.
     const eliminated = article.eliminatedTeams?.includes(team) ?? false
-    const nextOpponent = eliminated ? undefined : nextOpponentByTeam[team] ?? NEXT_OPPONENT[team]
+    const nextOpponent = nextOpponentByTeam[team] ?? NEXT_OPPONENT[team]
+    const canProjectNextMatch = !!nextOpponent
     const tr = article.teamRadars?.find((x) => x.team === team)
     if (tr) {
       const realidad = tr.current.emotional
       const built: MatchPhases = { expectativa: projectExpectation(realidad) }
       if (phases.realidad) built.realidad = realidad
-      if (phases.percepcion && !eliminated) built.percepcion = tr.predicted.emotional
+      if (phases.percepcion && canProjectNextMatch) built.percepcion = tr.predicted.emotional
       return { team, phases: built, nextOpponent, eliminated }
     }
     const collective = article.collectiveByTeam?.find((c) => c.team === team)
     const lean = teamLean(team, `${collective?.mood ?? ""} ${collective?.behaviorEffect ?? ""}`)
     const built: MatchPhases = { expectativa: leanEmotional(phases.expectativa, lean) }
     if (phases.realidad) built.realidad = leanEmotional(phases.realidad, lean)
-    if (phases.percepcion && !eliminated) built.percepcion = leanEmotional(phases.percepcion, lean)
+    if (phases.percepcion && canProjectNextMatch) built.percepcion = leanEmotional(phases.percepcion, lean)
     return { team, phases: built, nextOpponent, eliminated }
   })
 }
