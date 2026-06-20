@@ -146,14 +146,24 @@ PASOS:
    - ORDEN DIARIO: dentro de cada fecha, la nota analizada o actualizada más recientemente
      debe aparecer primero. Conserva `analyzedPreviaAt`/`analyzedFinalAt` para ese orden.
 
-4) ELIMINACIÓN: si una selección de la nota ya quedó fuera del Mundial (sin más partidos),
-   agrega su nombre a eliminatedTeams en esa nota, para que NO se habilite el pronóstico.
+4) ELIMINACIÓN: si una selección de la nota ya quedó fuera del Mundial, agrega su nombre a
+   `eliminatedTeams` en esa nota para marcarla visualmente como eliminada.
+   - OJO: `eliminatedTeams` NO significa automáticamente "sin pronóstico". Si esa selección
+     todavía tiene un partido pendiente en el calendario, el pronóstico se mantiene y debe
+     seguir mostrando su próximo rival.
+   - Solo se oculta el pronóstico cuando la selección ya no tiene más partidos o no existe un
+     próximo rival verificado/deducible.
 
 4b) PRÓXIMO RIVAL: llena `nextOpponents` (clave = equipo, valor = rival) con el próximo
    contrincante VERIFICADO de cada selección del partido, según el fixture oficial. Es lo que
-   hace que el pronóstico diga "Para el próximo partido vs X". Si la nota del próximo partido
-   ya existe en el calendario, el rival se infiere solo; igual conviene ponerlo explícito para
-   los equipos cuyo siguiente cruce aún no está cargado (p. ej. Irán → su rival real).
+   hace que el pronóstico diga "Para el próximo partido vs X".
+   - Si la nota del próximo partido ya existe en el calendario, el rival se infiere solo; igual
+     conviene ponerlo explícito para los equipos cuyo siguiente cruce aún no está cargado
+     (p. ej. Irán → su rival real).
+   - Si una selección está eliminada pero todavía tiene una fecha pendiente, `nextOpponents`
+     sigue siendo obligatorio para que el pronóstico no desaparezca por error.
+   - Si todavía no existe rival confirmado, la UI debe caer en un texto del tipo "rival por
+     definir", no en un falso "sin próximo partido".
 
 CUMPLIMIENTO (obligatorio):
    - Sin contenido de apuestas ni cuotas. Sin logos oficiales de FIFA.
@@ -416,7 +426,9 @@ correspondiente, para que ninguna predicción quede sin equipo.
   de cada hinchada (ver regla de PREVIA ANALIZADA en el paso 3).
 - **Próximo rival**: el pronóstico dice "vs X" tomando `nextOpponents[equipo]` (verificado) o,
   si falta, el siguiente partido de esa selección en el calendario. Llena `nextOpponents`
-  cuando el siguiente cruce aún no exista como nota (ver paso 4b).
+  cuando el siguiente cruce aún no exista como nota (ver paso 4b). Una selección eliminada puede
+  seguir mostrando pronóstico si todavía le queda una fecha; solo desaparece cuando ya no tiene
+  rival pendiente o el rival sigue sin definirse.
 - **userExperience**: se llena dentro de cada equipo en `teamsData` del `finishedMatch(...)`.
   Ejemplo:
   ```ts
