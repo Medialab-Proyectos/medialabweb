@@ -324,6 +324,7 @@ export function MatchPhaseRadar({
   const chartPhases = useMemo(() => PHASES.filter((p) => phases[p.key]), [phases])
   const activePhase = chartPhases.find((p) => p.key === viewMode) ?? chartPhases[0]
   const label = teamFilter ? `la hinchada de ${teamFilter}` : matchLabel ?? "este partido"
+  const selectedTeamState = teamFilter ? teamOptions.find((t) => t.team === teamFilter) : undefined
 
   // Categoría seleccionada al tocar un eje del radar: resalta y desplaza su tarjeta.
   const [activeAxis, setActiveAxis] = useState<AxisKey | null>(null)
@@ -400,12 +401,19 @@ export function MatchPhaseRadar({
 
   return (
     <div className="rounded-2xl border border-border bg-gradient-to-b from-card to-[var(--cyan)]/[0.03] p-5 shadow-sm dark:border-white/12 md:p-7">
-      <div>
-        <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-[var(--cyan)]">
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-[var(--cyan)]">
           <Gauge size={14} /> {t("Radar del partido", "Match radar")}
-        </p>
-        <h2 className="mt-1 text-2xl font-bold md:text-3xl">{titleText}</h2>
-        <p className="mt-1 text-sm text-muted-foreground">{subtitleText}</p>
+          </p>
+          <h2 className="mt-1 text-2xl font-bold md:text-3xl">{titleText}</h2>
+          <p className="mt-1 text-sm text-muted-foreground">{subtitleText}</p>
+        </div>
+        {selectedTeamState?.eliminated && (
+          <span className="inline-flex items-center rounded-full bg-[#DC2626]/10 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-[#DC2626]">
+            Eliminada
+          </span>
+        )}
       </div>
 
       {/* Banderas de las 2 hinchadas (círculos de selección) ARRIBA de la gráfica: tocar
@@ -421,19 +429,14 @@ export function MatchPhaseRadar({
                 onClick={() => setTeamFilter(opt.team)}
                 aria-pressed={isActive}
                 aria-label={opt.team}
-                title={opt.eliminated ? `${opt.team} · eliminada` : opt.team}
-                className={`inline-flex flex-col items-center justify-center gap-1 rounded-xl px-1 py-0.5 transition-all ${
+                title={opt.team}
+                className={`inline-flex items-center justify-center rounded-full p-0.5 transition-all ${
                   isActive
                     ? "scale-110 ring-2 ring-[var(--cyan)] ring-offset-2 ring-offset-card"
                     : "opacity-55 grayscale hover:opacity-100 hover:grayscale-0"
                 }`}
               >
                 <TeamFlag team={opt.team} circle />
-                {opt.eliminated && (
-                  <span className="rounded-full bg-[#DC2626]/12 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wide text-[#DC2626]">
-                    Eliminada
-                  </span>
-                )}
               </button>
             )
           })}

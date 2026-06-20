@@ -476,7 +476,7 @@ function FanJourney({
   const currentIdx = JOURNEY_STEPS.findIndex((s) => s.key === current)
   // La predicción (próximo partido) se muestra al elegir «Predicción» en la barra inferior:
   // así no hay un clic extra y la emoción del paso no se pierde dentro de su caja.
-  const showPrediction = current === "percepcion" && !eliminated && !!prediction && !!phases.percepcion
+  const showPrediction = current === "percepcion" && !!prediction && !!phases.percepcion
 
   // Predicción «Antes»: nace de un análisis previo (la nota anterior de esta selección, donde
   // ya se proyectó cómo llegaría) o, si no existe, de la voz de la hinchada en esta nota
@@ -488,15 +488,21 @@ function FanJourney({
 
   return (
     <div className="mt-6 rounded-2xl border border-border bg-card p-4 shadow-sm dark:border-white/12">
-      <p className="flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-wide text-muted-foreground">
-        <Route size={14} className="text-[var(--cyan)]" /> Ruta emocional del hincha
-      </p>
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <p className="flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-wide text-muted-foreground">
+          <Route size={14} className="text-[var(--cyan)]" /> Ruta emocional del hincha
+        </p>
+        {eliminated && (
+          <span className="inline-flex items-center rounded-full bg-[#DC2626]/10 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-[#DC2626]">
+            Eliminada
+          </span>
+        )}
+      </div>
       {/* Selector de país centrado (igual que en la caja del radar): el journey muestra esa hinchada. */}
       {ctx && teams.length > 1 && (
         <div className="mt-3 flex items-center justify-center gap-3">
           {teams.map((team) => {
             const active = selectedTeam === team
-            const option = teamPhases?.find((candidate) => candidate.team === team)
             return (
               <button
                 key={team}
@@ -504,17 +510,12 @@ function FanJourney({
                 onClick={() => ctx.setTeam(team)}
                 aria-pressed={active}
                 aria-label={team}
-                title={option?.eliminated ? `${team} · eliminada` : team}
-                className={`inline-flex flex-col items-center justify-center gap-1 rounded-xl px-1 py-0.5 transition-all ${
+                title={team}
+                className={`inline-flex items-center justify-center rounded-full p-0.5 transition-all ${
                   active ? "scale-110 ring-2 ring-[var(--cyan)]" : "opacity-55 grayscale hover:opacity-100 hover:grayscale-0"
                 }`}
               >
                 <TeamFlag team={team} circle />
-                {option?.eliminated && (
-                  <span className="rounded-full bg-[#DC2626]/12 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wide text-[#DC2626]">
-                    Eliminada
-                  </span>
-                )}
               </button>
             )
           })}
@@ -602,30 +603,15 @@ function FanJourney({
 
           <PredictionBreakdown prediction={prediction} team={selectedTeam} opponent={opponent} context="next" />
         </div>
-      ) : eliminated && current === "percepcion" ? (
-        // La selección ya no tiene más partidos: sin pronóstico, se indica la eliminación.
-        <div
-          className="mt-3 flex items-start gap-3 rounded-xl border p-3"
-          style={{ borderColor: "#DC262666", backgroundColor: "#DC26260F" }}
-        >
-          <Flag size={20} className="mt-0.5 shrink-0 text-[#DC2626]" aria-hidden />
-          <div>
-            <p className="text-[11px] font-bold uppercase tracking-wide text-[#DC2626]">Eliminada del Mundial</p>
-            <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
-              {selectedTeam ?? "Esta selección"} ya no tiene más partidos en el torneo, así que no hay pronóstico de
-              próximo encuentro. Su recorrido emocional queda como cierre.
-            </p>
-          </div>
-        </div>
       ) : (
         <p className="mt-3 text-[11px] italic leading-relaxed text-muted-foreground/80">
           Toca una bandera para ver el recorrido de esa hinchada. La predicción con la que llegaba aparece en «Antes» y el
           pronóstico del próximo partido en «Pronóstico», desde la barra de abajo.
         </p>
       )}
-      {eliminated && current !== "percepcion" && (
+      {eliminated && (
         <p className="mt-2 text-[11px] leading-relaxed text-[#DC2626]">
-          {selectedTeam ?? "Esta selección"} ya está eliminada. Su recorrido emocional sigue visible, pero ya no tendrá pronóstico de próximo partido.
+          {selectedTeam ?? "Esta selección"} ya está eliminada del torneo, pero todavía puede cambiar la percepción emocional de su cierre en el próximo partido.
         </p>
       )}
     </div>
