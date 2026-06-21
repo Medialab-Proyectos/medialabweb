@@ -904,9 +904,10 @@
 }
 
 /* ── UXGreen hero background image ─────────────────────────────────────────── */
+/* Default = dark ("bajo contraste") theme: keep the image clearly visible. */
 .uxgreen-hero-bg {
-  opacity: 0.65;
-  filter: saturate(1.2);
+  opacity: 0.82;
+  filter: saturate(1.3) brightness(1.05);
 }
 .light .uxgreen-hero-bg {
   opacity: 1;
@@ -973,10 +974,11 @@
 
 /* ── UXGreen secondary button ─────────────────────────────────────────────── */
 .uxgreen-secondary-btn {
-  background: rgba(0, 191, 166, 0.08);
+  background: rgba(0, 191, 166, 0.16);
+  border-color: rgba(0, 191, 166, 0.55) !important;
 }
 .uxgreen-secondary-btn:hover {
-  background: rgba(0, 191, 166, 0.15);
+  background: rgba(0, 191, 166, 0.24);
 }
 .light .uxgreen-secondary-btn {
   background: rgba(0, 191, 166, 0.08);
@@ -1078,44 +1080,61 @@
   }
 }
 
-/* ── UXGreen flip cards (problem indicators) ──────────────────────────────── */
+/* ── UXGreen flip cards (problem indicators) — cross-fade (mobile-safe) ────── */
 .uxgreen-flip {
-  perspective: 1200px;
-}
-.uxgreen-flip-inner {
   position: relative;
-  width: 100%;
-  height: 100%;
-  transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
-  transform-style: preserve-3d;
-}
-.uxgreen-flip.is-flipped .uxgreen-flip-inner {
-  transform: rotateY(180deg);
 }
 .uxgreen-flip-face {
   position: absolute;
   inset: 0;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
   display: flex;
   flex-direction: column;
+  transition: opacity 0.35s ease, transform 0.35s ease;
 }
 .uxgreen-flip-back {
-  transform: rotateY(180deg);
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.98);
+}
+.uxgreen-flip.is-flipped .uxgreen-flip-front {
+  opacity: 0;
+  pointer-events: none;
+}
+.uxgreen-flip.is-flipped .uxgreen-flip-back {
+  opacity: 1;
+  pointer-events: auto;
+  transform: none;
 }
 @media (prefers-reduced-motion: reduce) {
-  .uxgreen-flip-inner {
-    transition: none;
+  .uxgreen-flip-face {
+    transition: opacity 0.2s ease;
   }
 }
 
 /* ── UXGreen horizontal carousel (mobile dimension groups / stats) ─────────── */
+/* Cards live inside the section's padding, so the first card keeps a left
+   margin and isn't glued to the screen edge. */
 .uxgreen-carousel {
   scroll-snap-type: x mandatory;
+  scroll-padding-left: 0.25rem;
   -webkit-overflow-scrolling: touch;
 }
 .uxgreen-carousel > * {
   scroll-snap-align: start;
+}
+
+/* ── UXGreen primary CTA — white in dark themes, teal in light/warm ───────── */
+.uxgreen-cta-primary {
+  background: #ffffff;
+  color: #0a0a0a;
+}
+.uxgreen-cta-primary:hover {
+  opacity: 0.92;
+}
+.light .uxgreen-cta-primary,
+.warm .uxgreen-cta-primary {
+  background: linear-gradient(135deg, #00bfa6, #00a891);
+  color: #000;
 }
 
 /* ── Careers card image gradient ─────────────────────────────────────────── */

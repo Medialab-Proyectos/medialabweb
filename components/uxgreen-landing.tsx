@@ -1,12 +1,11 @@
 "use client"
 
 import { useEffect, useRef, useState, useCallback } from "react"
-import Link from "next/link"
 import Image from "next/image"
 import {
   Zap, Globe, Leaf, Eye, Brain, Cpu, BarChart2, Wind,
   ArrowRight, ChevronDown, TrendingUp,
-  Server, AlertTriangle, Gauge, RotateCw, ExternalLink, Mail,
+  Server, AlertTriangle, Gauge, RotateCw, ExternalLink, Mail, CheckCircle2,
 } from "lucide-react"
 import { UXGreenCalculator } from "@/components/uxgreen-calculator"
 import { UXGreenSectionNav } from "@/components/uxgreen-section-nav"
@@ -354,10 +353,9 @@ function FAQItem({ q, a }: { q: string; a: string }) {
 
 // ─── Pillar card ─────────────────────────────────────────────────────────────
 
-function PillarCard({ pillar, num, visible }: { pillar: (typeof PILLARS)[number]; num: number; visible: boolean }) {
+function PillarCard({ pillar, num, accent, visible }: { pillar: (typeof PILLARS)[number]; num: number; accent: string; visible: boolean }) {
   const { t } = useLanguage()
   const Icon = pillar.icon
-  const c = pillar.color
   return (
     <div
       className="rounded-2xl uxgreen-card p-5 transition-all duration-300 group snap-start min-w-[80%] sm:min-w-0 flex flex-col"
@@ -365,20 +363,21 @@ function PillarCard({ pillar, num, visible }: { pillar: (typeof PILLARS)[number]
         transitionDelay: visible ? `${num * 50}ms` : "0ms",
         opacity: visible ? 1 : 0,
         transform: visible ? "translateY(0)" : "translateY(24px)",
+        borderTop: `3px solid ${accent}`,
       }}
     >
       {/* Icon at the same level as the title — no oversized icon block */}
       <div className="flex items-center gap-2.5 mb-2.5">
-        <Icon size={18} style={{ color: c }} className="flex-shrink-0 group-hover:scale-110 transition-transform duration-300" />
+        <Icon size={18} style={{ color: accent }} className="flex-shrink-0 group-hover:scale-110 transition-transform duration-300" />
         <h3 className="font-display font-semibold text-sm">{pillar.title}</h3>
-        <span className="ml-auto text-[11px] font-semibold opacity-25 tabular-nums tracking-widest">
+        <span className="ml-auto text-[11px] font-semibold tabular-nums tracking-widest opacity-40" style={{ color: accent }}>
           {String(num).padStart(2, "0")}
         </span>
       </div>
-      <p className="text-xs font-medium mb-3" style={{ color: c }}>{t(pillar.tagline[0], pillar.tagline[1])}</p>
+      <p className="text-xs font-medium mb-3" style={{ color: accent }}>{t(pillar.tagline[0], pillar.tagline[1])}</p>
       <p className="opacity-50 text-xs leading-relaxed mb-4 flex-1">{t(pillar.desc[0], pillar.desc[1])}</p>
-      <div className="border-t pt-4" style={{ borderColor: `${c}33` }}>
-        <span className="text-xl font-bold font-display" style={{ color: c }}>{pillar.metric}</span>
+      <div className="border-t pt-4" style={{ borderColor: `${accent}33` }}>
+        <span className="text-xl font-bold font-display" style={{ color: accent }}>{pillar.metric}</span>
         <p className="opacity-30 text-[10px] mt-0.5">{t(pillar.metricLabel[0], pillar.metricLabel[1])}</p>
       </div>
     </div>
@@ -393,52 +392,133 @@ function StatFlipCard({ stat, visible, delay }: { stat: (typeof STATS)[number]; 
   const Icon = stat.icon
   return (
     <div
-      className="uxgreen-flip snap-start min-w-[82%] sm:min-w-0 h-[260px] transition-all duration-700"
+      className={`uxgreen-flip snap-start min-w-[78%] sm:min-w-0 h-[190px] transition-all duration-700 ${flipped ? "is-flipped" : ""}`}
       style={{
         transitionDelay: visible ? `${delay}ms` : "0ms",
         opacity: visible ? 1 : 0,
         transform: visible ? "translateY(0)" : "translateY(24px)",
       }}
     >
-      <div className={`uxgreen-flip-inner ${flipped ? "is-flipped" : ""}`}>
-        {/* Front */}
+      {/* Front — compact: icon next to the value */}
+      <button
+        type="button"
+        onClick={() => setFlipped(true)}
+        aria-label={t("Ver el caso", "See the case")}
+        className="uxgreen-flip-face uxgreen-flip-front rounded-2xl uxgreen-card p-5 text-left w-full"
+      >
+        <div className="flex items-center gap-3 mb-2">
+          <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: "rgba(0,191,166,0.12)" }}>
+            <Icon size={18} style={{ color: "#00BFA6" }} />
+          </div>
+          <span className="text-3xl font-bold font-display" style={{ color: "#00BFA6" }}>{stat.value}</span>
+        </div>
+        <p className="text-[13px] opacity-65 leading-snug flex-1">{t(stat.label[0], stat.label[1])}</p>
+        <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-widest text-[#00BFA6] opacity-70 mt-2">
+          <RotateCw size={11} /> {t("Ver el caso", "See the case")}
+        </span>
+      </button>
+
+      {/* Back */}
+      <div className="uxgreen-flip-face uxgreen-flip-back rounded-2xl uxgreen-card p-5 text-left">
         <button
           type="button"
-          onClick={() => setFlipped(true)}
-          aria-label={t("Ver más sobre este dato", "See more about this stat")}
-          className="uxgreen-flip-face rounded-2xl uxgreen-card p-6 text-left w-full"
+          onClick={() => setFlipped(false)}
+          className="text-left flex-1"
+          aria-label={t("Volver", "Back")}
         >
-          <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style={{ background: "rgba(0,191,166,0.12)" }}>
-            <Icon size={20} style={{ color: "#00BFA6" }} />
-          </div>
-          <div className="text-4xl font-bold font-display mb-2" style={{ color: "#00BFA6" }}>{stat.value}</div>
-          <p className="text-sm opacity-65 leading-relaxed flex-1">{t(stat.label[0], stat.label[1])}</p>
-          <span className="mt-3 inline-flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-widest text-[#00BFA6] opacity-70">
-            <RotateCw size={11} /> {t("Ver el caso", "See the case")}
-          </span>
+          <p className="text-[13px] opacity-80 leading-snug">{t(stat.detail[0], stat.detail[1])}</p>
         </button>
-
-        {/* Back */}
-        <div className="uxgreen-flip-face uxgreen-flip-back rounded-2xl uxgreen-card p-6 text-left">
-          <button
-            type="button"
-            onClick={() => setFlipped(false)}
-            className="text-left flex-1"
-            aria-label={t("Volver", "Back")}
-          >
-            <p className="text-sm opacity-80 leading-relaxed">{t(stat.detail[0], stat.detail[1])}</p>
-          </button>
-          <a
-            href={stat.sourceUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-3 inline-flex items-center gap-1.5 text-[11px] font-semibold text-[#00BFA6] hover:underline"
-          >
-            <ExternalLink size={12} /> {stat.source}
-          </a>
-        </div>
+        <a
+          href={stat.sourceUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-[#00BFA6] hover:underline mt-2"
+        >
+          <ExternalLink size={12} /> {stat.source}
+        </a>
       </div>
     </div>
+  )
+}
+
+// ─── Inline contact form (final CTA) ─────────────────────────────────────────
+
+function UXGreenContactForm() {
+  const { t } = useLanguage()
+  const [site, setSite] = useState("")
+  const [email, setEmail] = useState("")
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle")
+
+  const valid = email.includes("@") && site.trim().length > 3
+
+  async function submit(e: React.FormEvent) {
+    e.preventDefault()
+    if (!valid || status === "sending") return
+    setStatus("sending")
+    try {
+      const res = await fetch("/api/uxgreen-lead", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: site, email }),
+      })
+      if (!res.ok) throw new Error("send-failed")
+      setStatus("sent")
+    } catch {
+      setStatus("error")
+    }
+  }
+
+  if (status === "sent") {
+    return (
+      <div className="text-center py-3">
+        <CheckCircle2 size={34} className="text-[#00BFA6] mx-auto mb-3" />
+        <p className="font-semibold mb-1 text-sm">{t("¡Gracias! Te estaremos contactando.", "Thanks! We'll be in touch.")}</p>
+        <p className="text-xs opacity-55 leading-relaxed mb-4">
+          {t(
+            "Recibirás un primer análisis gratuito por correo y coordinaremos una llamada para ayudarte a mejorar tu sitio.",
+            "You'll receive a first free analysis by email and we'll set up a call to help you improve your site.",
+          )}
+        </p>
+        <button
+          type="button"
+          onClick={() => { setStatus("idle"); setSite(""); setEmail("") }}
+          className="text-xs font-semibold text-[#00BFA6] hover:underline"
+        >
+          {t("Enviar otra solicitud", "Send another request")}
+        </button>
+      </div>
+    )
+  }
+
+  return (
+    <form onSubmit={submit} className="space-y-3">
+      <input
+        type="text"
+        value={site}
+        onChange={(e) => setSite(e.target.value)}
+        placeholder={t("Tu sitio web (tudominio.com)", "Your website (yourdomain.com)")}
+        className="w-full px-4 py-3 rounded-xl bg-white/5 border border-current/15 text-sm outline-none focus:border-[#00BFA6]/50 transition-all placeholder:opacity-40"
+      />
+      <input
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder={t("Tu correo electrónico", "Your email")}
+        className="w-full px-4 py-3 rounded-xl bg-white/5 border border-current/15 text-sm outline-none focus:border-[#00BFA6]/50 transition-all placeholder:opacity-40"
+      />
+      <button
+        type="submit"
+        disabled={!valid || status === "sending"}
+        className="uxgreen-cta-primary w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm transition-all hover:scale-[1.02] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100"
+      >
+        <Mail size={15} />
+        {status === "sending" ? t("Enviando...", "Sending...") : t("Contáctanos", "Contact us")}
+      </button>
+      {status === "error" && (
+        <p className="text-xs text-red-400 text-center">{t("No pudimos enviar. Intenta de nuevo.", "Couldn't send. Please try again.")}</p>
+      )}
+      <p className="text-[10px] opacity-35 text-center">{t("Primer análisis gratuito · Sin compromiso", "First analysis free · No commitment")}</p>
+    </form>
   )
 }
 
@@ -548,35 +628,17 @@ export function UXGreenLanding() {
             <span className="uxgreen-accent uxgreen-heat">{t("tiene un costo real.", "has a real cost.")}</span>
           </h1>
 
-          {/* Subhead */}
-          <p className="max-w-2xl mx-auto leading-relaxed mb-6 opacity-80" style={{ fontSize: "clamp(0.95rem, 1.8vw, 1.1rem)" }}>
+          {/* Subhead — concise, one idea that flows into the CTA */}
+          <p className="max-w-2xl mx-auto leading-relaxed mb-8 opacity-85" style={{ fontSize: "clamp(0.98rem, 1.9vw, 1.15rem)" }}>
             <strong style={{ color: "#00BFA6" }}>{t("UXGreen™ es el estándar de MediaLab", "UXGreen™ is MediaLab's standard")}</strong>{" "}
-            {t("que mide la eficiencia digital de tu producto en 8 dimensiones: performance, accesibilidad, huella de carbono, carga cognitiva, UX y preparación para IA. Optimizar reduce el CO₂ por visita hasta un 80%.", "that measures your product's digital efficiency across 8 dimensions: performance, accessibility, carbon footprint, cognitive load, UX, and AI readiness. Optimizing reduces CO₂ per visit by up to 80%.")}
+            {t("que mide la eficiencia energética digital de tu producto y lo optimiza para reducir el CO₂ por cada visita hasta en un 80%.", "that measures your product's digital energy efficiency and optimizes it to cut CO₂ per visit by up to 80%.")}
           </p>
-
-          {/* Google ranking callout — highlighted + sourced */}
-          <div className="flex justify-center mb-8">
-            <a
-              href="https://developers.google.com/search/docs/appearance/core-web-vitals"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group inline-flex items-center gap-2.5 px-4 py-2.5 rounded-xl border transition-all hover:scale-[1.02] max-w-xl"
-              style={{ borderColor: "rgba(0,191,166,0.45)", background: "rgba(0,0,0,0.32)", boxShadow: "0 0 24px rgba(0,191,166,0.12)" }}
-            >
-              <GoogleG className="w-5 h-5 flex-shrink-0" />
-              <span className="text-xs sm:text-sm font-semibold leading-snug text-left" style={{ color: "#fff" }}>
-                {t("Google penaliza los sitios lentos e ineficientes — tu ranking depende de esto.", "Google penalizes slow, inefficient sites — your ranking depends on it.")}
-              </span>
-              <ArrowRight size={14} className="flex-shrink-0 text-[#00BFA6] group-hover:translate-x-0.5 transition-transform" />
-            </a>
-          </div>
 
           {/* CTAs */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
               href="#calculator"
-              className="inline-flex items-center justify-center gap-2 px-7 py-4 rounded-xl font-semibold text-sm text-black transition-all hover:opacity-90 hover:scale-[1.02]"
-              style={{ background: "linear-gradient(135deg, #00BFA6, #00A891)" }}
+              className="uxgreen-cta-primary inline-flex items-center justify-center gap-2 px-7 py-4 rounded-xl font-semibold text-sm transition-all hover:scale-[1.02]"
             >
               <Gauge size={16} />
               {t("Analiza tu sitio gratis", "Analyze your site free")}
@@ -584,19 +646,27 @@ export function UXGreenLanding() {
             </a>
             <a
               href="#pillars"
-              className="inline-flex items-center gap-2 px-7 py-4 rounded-xl font-semibold text-sm border transition-all hover:scale-[1.02] uxgreen-secondary-btn"
-              style={{ borderColor: "rgba(0,191,166,0.35)", color: "#00BFA6" }}
+              className="inline-flex items-center justify-center gap-2 px-7 py-4 rounded-xl font-semibold text-sm border transition-all hover:scale-[1.02] uxgreen-secondary-btn"
+              style={{ color: "#00BFA6" }}
             >
               {t("¿Qué mide UXGreen™?", "What does UXGreen™ measure?")}
             </a>
           </div>
 
-          {/* Social proof micro */}
-          <div className="flex items-center justify-center gap-6 mt-8 text-xs opacity-70 flex-wrap">
-            <span>✓ {t("30 segundos", "30 seconds")}</span>
-            <span>✓ {t("Sin registro", "No sign-up")}</span>
-            <span>✓ {t("Resultados al instante", "Instant results")}</span>
-            <span>✓ {t("Score verificable", "Verifiable score")}</span>
+          {/* Google note — small footnote after the buttons (not the headline) */}
+          <div className="flex justify-center mt-6">
+            <a
+              href="https://developers.google.com/search/docs/appearance/core-web-vitals"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-flex items-center gap-2 text-xs opacity-60 hover:opacity-90 transition-opacity"
+            >
+              <GoogleG className="w-3.5 h-3.5 flex-shrink-0" />
+              <span className="leading-snug">
+                {t("Google penaliza los sitios lentos e ineficientes.", "Google penalizes slow, inefficient sites.")}{" "}
+                <span className="font-semibold text-[#00BFA6] underline underline-offset-2">{t("Conoce más", "Learn more")}</span>
+              </span>
+            </a>
           </div>
         </div>
 
@@ -614,7 +684,7 @@ export function UXGreenLanding() {
       <section
         id="manifesto"
         ref={statsRef as React.RefObject<HTMLElement>}
-        className="py-24 px-6 bg-[var(--surface-mid)] scroll-mt-28"
+        className="py-14 md:py-20 px-6 bg-[var(--surface-mid)] scroll-mt-28"
         aria-labelledby="manifesto-heading"
       >
         <div className="max-w-7xl mx-auto">
@@ -690,8 +760,14 @@ export function UXGreenLanding() {
 
           </div>
 
-          {/* Stats Cards — flip to reveal the case, carousel on mobile */}
-          <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-4 overflow-x-auto no-scrollbar uxgreen-carousel sm:overflow-visible -mx-6 px-6 sm:mx-0 sm:px-0 pb-2 sm:pb-0">
+          {/* Indicators label */}
+          <div className="flex items-center gap-3 mb-4">
+            <span className="text-xs font-semibold tracking-widest uppercase text-[#00BFA6]">{t("Indicadores", "Indicators")}</span>
+            <span className="h-px flex-1 bg-current/10" />
+          </div>
+
+          {/* Stats Cards — flip to reveal the case, carousel on mobile (keeps left margin) */}
+          <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-4 overflow-x-auto no-scrollbar uxgreen-carousel sm:overflow-visible pb-2 sm:pb-0">
             {STATS.map((stat, i) => (
               <StatFlipCard key={i} stat={stat} visible={statsVisible} delay={i * 80} />
             ))}
@@ -700,31 +776,6 @@ export function UXGreenLanding() {
             {t("Toca una tarjeta para ver el caso · desliza →", "Tap a card to see the case · swipe →")}
           </p>
 
-          {/* Micro-testimonial — Goleman: human empathy between data */}
-          <div className="mt-12 max-w-2xl mx-auto">
-            <div className="rounded-2xl uxgreen-card p-6 md:p-8 text-center relative">
-              <div className="text-[#00BFA6] opacity-30 text-4xl font-serif leading-none mb-3" aria-hidden="true">&ldquo;</div>
-              <p className="text-sm opacity-70 leading-relaxed mb-4 italic">
-                {t(
-                  "No tenía idea de que nuestra landing generaba 4.2g de CO₂ por visita. Después de optimizar con las recomendaciones de UXGreen™, bajamos a 0.3g — y el bounce rate se redujo 22%. Ahora rendimiento y sostenibilidad son parte de nuestro roadmap.",
-                  "I had no idea our landing was generating 4.2g of CO₂ per visit. After optimizing with UXGreen™ recommendations, we dropped to 0.3g — and bounce rate decreased 22%. Now performance and sustainability are part of our roadmap."
-                )}
-              </p>
-              <div className="flex items-center justify-center gap-3">
-                <div
-                  className="w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-bold text-black"
-                  style={{ background: "#00BFA6" }}
-                >
-                  DR
-                </div>
-                <div className="text-left">
-                  <p className="text-xs font-medium opacity-80">Diego R.</p>
-                  <p className="text-[10px] opacity-40">{t("CTO · SaaS B2B · Colombia", "CTO · B2B SaaS · Colombia")}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
         </div>
       </section>
 
@@ -732,7 +783,7 @@ export function UXGreenLanding() {
       <section
         id="pillars"
         ref={pillarsRef as React.RefObject<HTMLElement>}
-        className="py-24 px-6 bg-[var(--surface-dark)] scroll-mt-28"
+        className="py-14 md:py-20 px-6 bg-[var(--surface-dark)] scroll-mt-28"
         aria-labelledby="pillars-heading"
       >
         <div className="max-w-7xl mx-auto">
@@ -752,58 +803,58 @@ export function UXGreenLanding() {
             </p>
           </div>
 
-          {/* Category A: Rendimiento — pillars 0,1,2 */}
-          <div className="mb-10">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "rgba(0,191,166,0.12)" }}>
+          {/* Category A: Consumo energético — accent teal */}
+          <div className="mb-12">
+            <div className="flex items-center gap-3 mb-5">
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "rgba(0,191,166,0.16)" }}>
                 <Zap size={16} style={{ color: "#00BFA6" }} />
               </div>
               <div>
-                <h3 className="font-display font-semibold text-sm">{t("Consumo energético", "Energy consumption")}</h3>
+                <h3 className="font-display font-semibold text-sm" style={{ color: "#00BFA6" }}>{t("Consumo energético", "Energy consumption")}</h3>
                 <p className="text-[10px] opacity-40">{t("Velocidad, métricas de Google y huella de carbono por cada visita", "Speed, Google metrics, and carbon footprint per visit")}</p>
               </div>
             </div>
-            <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-4 overflow-x-auto no-scrollbar uxgreen-carousel sm:overflow-visible -mx-6 px-6 sm:mx-0 sm:px-0 pb-2 sm:pb-0">
+            <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-4 overflow-x-auto no-scrollbar uxgreen-carousel sm:overflow-visible pb-2 sm:pb-0">
               {PILLARS.slice(0, 3).map((pillar, i) => (
-                <PillarCard key={i} pillar={pillar} num={i + 1} visible={pillarsVisible} />
+                <PillarCard key={i} pillar={pillar} num={i + 1} accent="#00BFA6" visible={pillarsVisible} />
               ))}
             </div>
           </div>
 
-          {/* Category B: Experiencia — pillars 3,4,5 (was 4th=UX Efficiency originally index 3) */}
-          <div className="mb-10">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "rgba(0,191,166,0.12)" }}>
-                <Eye size={16} style={{ color: "#00BFA6" }} />
+          {/* Category B: Eficiencia de recursos — accent forest green */}
+          <div className="mb-12">
+            <div className="flex items-center gap-3 mb-5">
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "rgba(46,158,91,0.16)" }}>
+                <Eye size={16} style={{ color: "#2E9E5B" }} />
               </div>
               <div>
-                <h3 className="font-display font-semibold text-sm">{t("Eficiencia de recursos", "Resource efficiency")}</h3>
+                <h3 className="font-display font-semibold text-sm" style={{ color: "#2E9E5B" }}>{t("Eficiencia de recursos", "Resource efficiency")}</h3>
                 <p className="text-[10px] opacity-40">{t("Menos peticiones al servidor, menos recarga, menos energía desperdiciada por mala UX", "Fewer server requests, fewer reloads, less energy wasted by poor UX")}</p>
               </div>
             </div>
-            <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-4 overflow-x-auto no-scrollbar uxgreen-carousel sm:overflow-visible -mx-6 px-6 sm:mx-0 sm:px-0 pb-2 sm:pb-0">
+            <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-4 overflow-x-auto no-scrollbar uxgreen-carousel sm:overflow-visible pb-2 sm:pb-0">
               {[PILLARS[3], PILLARS[4], PILLARS[6]].map((pillar, i) => {
                 const originalIndex = [3, 4, 6][i]
-                return <PillarCard key={originalIndex} pillar={pillar} num={originalIndex + 1} visible={pillarsVisible} />
+                return <PillarCard key={originalIndex} pillar={pillar} num={originalIndex + 1} accent="#2E9E5B" visible={pillarsVisible} />
               })}
             </div>
           </div>
 
-          {/* Category C: Futuro — pillars 5,7 (AI Efficiency + Sustainable UX) */}
+          {/* Category C: Sostenibilidad a largo plazo — accent lime */}
           <div>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "rgba(0,191,166,0.12)" }}>
-                <Wind size={16} style={{ color: "#00BFA6" }} />
+            <div className="flex items-center gap-3 mb-5">
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "rgba(124,166,43,0.16)" }}>
+                <Wind size={16} style={{ color: "#7CA62B" }} />
               </div>
               <div>
-                <h3 className="font-display font-semibold text-sm">{t("Sostenibilidad a largo plazo", "Long-term sustainability")}</h3>
+                <h3 className="font-display font-semibold text-sm" style={{ color: "#7CA62B" }}>{t("Sostenibilidad a largo plazo", "Long-term sustainability")}</h3>
                 <p className="text-[10px] opacity-40">{t("IA eficiente y diseño sostenible que reduce el costo energético con cada iteración", "Efficient AI and sustainable design that reduces energy cost with every iteration")}</p>
               </div>
             </div>
-            <div className="flex sm:grid sm:grid-cols-2 gap-4 overflow-x-auto no-scrollbar uxgreen-carousel sm:overflow-visible -mx-6 px-6 sm:mx-0 sm:px-0 pb-2 sm:pb-0">
+            <div className="flex sm:grid sm:grid-cols-2 gap-4 overflow-x-auto no-scrollbar uxgreen-carousel sm:overflow-visible pb-2 sm:pb-0">
               {[PILLARS[5], PILLARS[7]].map((pillar, i) => {
                 const originalIndex = [5, 7][i]
-                return <PillarCard key={originalIndex} pillar={pillar} num={originalIndex + 1} visible={pillarsVisible} />
+                return <PillarCard key={originalIndex} pillar={pillar} num={originalIndex + 1} accent="#7CA62B" visible={pillarsVisible} />
               })}
             </div>
           </div>
@@ -813,7 +864,7 @@ export function UXGreenLanding() {
       {/* ── CALCULATOR ────────────────────────────────────────────────────────── */}
       <section
         id="calculator"
-        className="py-24 px-6 bg-[var(--surface-mid)] scroll-mt-28"
+        className="py-14 md:py-20 px-6 bg-[var(--surface-mid)] scroll-mt-28"
         aria-labelledby="calculator-heading"
       >
         <div className="max-w-7xl mx-auto">
@@ -852,7 +903,7 @@ export function UXGreenLanding() {
       </section>
 
       {/* ── HOW IT WORKS ─────────────────────────────────────────────────────── */}
-      <section id="process" className="py-24 px-6 bg-[var(--surface-mid)] scroll-mt-28" aria-labelledby="how-heading">
+      <section id="process" className="py-14 md:py-20 px-6 bg-[var(--surface-mid)] scroll-mt-28" aria-labelledby="how-heading">
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-12 gap-12 items-center">
             
@@ -908,9 +959,9 @@ export function UXGreenLanding() {
               </div>
             </div>
 
-            {/* Mockup image (right 5 cols) */}
-            <div className="lg:col-span-5 relative lg:mt-20">
-              <div className="relative rounded-2xl overflow-hidden aspect-[4/3] w-full border border-current/10 shadow-2xl bg-black/40">
+            {/* Mockup image (right 5 cols) — aligned with the steps, clearer */}
+            <div className="lg:col-span-5 relative">
+              <div className="relative rounded-2xl overflow-hidden aspect-[4/3] w-full border border-[#00BFA6]/20 shadow-2xl bg-black/40">
                 <Image
                   src="/images/uxgreen-testing.png"
                   alt="MediaLab UXGreen Human Testing and Analysis"
@@ -918,7 +969,7 @@ export function UXGreenLanding() {
                   sizes="(max-width: 1024px) 100vw, 40vw"
                   className="object-cover transition-transform duration-700 hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent pointer-events-none" />
               </div>
               <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full pointer-events-none opacity-20 filter blur-xl" style={{ background: "#00BFA6" }} />
               <div className="absolute -bottom-6 -left-6 w-32 h-32 rounded-full pointer-events-none opacity-10 filter blur-2xl" style={{ background: "#2ecc71" }} />
@@ -928,70 +979,8 @@ export function UXGreenLanding() {
         </div>
       </section>
 
-      {/* ── BRIDGE: Score → Auditoría ─────────────────────────────────────── */}
-      <section className="py-20 px-6 bg-[var(--surface-dark)]" aria-labelledby="bridge-heading">
-        <div className="max-w-4xl mx-auto">
-          <div className="rounded-2xl border border-[#00BFA6]/20 overflow-hidden">
-            <div className="grid md:grid-cols-[1fr_auto_1fr] items-stretch">
-              {/* Left — free */}
-              <div className="p-8 md:p-10 text-center md:text-left">
-                <span className="text-xs font-semibold tracking-widest uppercase text-[#00BFA6] block mb-3">
-                  {t("Hazlo tú", "Do it yourself")}
-                </span>
-                <h3 className="font-display font-bold text-xl mb-3">
-                  {t("Analiza gratis", "Analyze for free")}
-                </h3>
-                <p className="opacity-50 text-sm leading-relaxed mb-5">
-                  {t("Usa el UXGreen™ Analyzer, obtén tu score en 8 dimensiones y un roadmap de mejoras que puedes implementar con tu equipo.", "Use the UXGreen™ Analyzer, get your score across 8 dimensions and an improvement roadmap you can implement with your team.")}
-                </p>
-                <a
-                  href="#calculator"
-                  className="inline-flex w-full sm:w-auto items-center justify-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm border transition-all hover:scale-[1.02]"
-                  style={{ borderColor: "rgba(0,191,166,0.35)", color: "#00BFA6" }}
-                >
-                  {t("Ir al Analyzer", "Go to Analyzer")}
-                </a>
-              </div>
-
-              {/* Divider */}
-              <div className="hidden md:flex items-center px-2">
-                <div className="w-px h-2/3 bg-current/10" />
-              </div>
-              <div className="md:hidden flex justify-center py-2">
-                <div className="h-px w-2/3 bg-current/10" />
-              </div>
-
-              {/* Right — paid */}
-              <div className="p-8 md:p-10 text-center md:text-left" style={{ background: "rgba(0,191,166,0.03)" }}>
-                <span className="text-xs font-semibold tracking-widest uppercase text-[#00BFA6] block mb-3">
-                  {t("Que MediaLab lo haga", "Let MediaLab do it")}
-                </span>
-                <h3 className="font-display font-bold text-xl mb-3">
-                  {t("Auditoría + implementación", "Audit + implementation")}
-                </h3>
-                <p className="opacity-50 text-sm leading-relaxed mb-5">
-                  {t("Nuestro equipo ejecuta la auditoría UXGreen™ completa, implementa las optimizaciones y certifica tu producto bajo el estándar.", "Our team runs the full UXGreen™ audit, implements optimizations, and certifies your product under the standard.")}
-                </p>
-                <Link
-                  href="/contacto"
-                  className="inline-flex w-full sm:w-auto items-center justify-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm text-black transition-all hover:opacity-90 hover:scale-[1.02]"
-                  style={{ background: "linear-gradient(135deg, #00BFA6, #00A891)" }}
-                >
-                  {t("Agendar discovery", "Schedule discovery")}
-                  <ArrowRight size={16} />
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          <p id="bridge-heading" className="text-center opacity-30 text-xs mt-6">
-            {t("El 73% de empresas que analizan su score agendan una sesión de discovery en la primera semana.", "73% of companies that analyze their score schedule a discovery session within the first week.")}
-          </p>
-        </div>
-      </section>
-
       {/* ── FAQ ──────────────────────────────────────────────────────────────── */}
-      <section id="faq" className="py-24 px-6 bg-[var(--surface-dark)] scroll-mt-28" aria-labelledby="faq-uxgreen-heading">
+      <section id="faq" className="py-14 md:py-20 px-6 bg-[var(--surface-dark)] scroll-mt-28" aria-labelledby="faq-uxgreen-heading">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-12">
             <span className="text-xs font-semibold tracking-widest uppercase text-[#00BFA6] block mb-4">
@@ -1014,7 +1003,7 @@ export function UXGreenLanding() {
       </section>
 
       {/* ── FINAL CTA ────────────────────────────────────────────────────────── */}
-      <section id="cta" className="py-24 px-6 bg-[var(--surface-mid)] relative overflow-hidden scroll-mt-28" aria-labelledby="cta-uxgreen-heading">
+      <section id="cta" className="py-14 md:py-20 px-6 bg-[var(--surface-mid)] relative overflow-hidden scroll-mt-28" aria-labelledby="cta-uxgreen-heading">
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
@@ -1022,46 +1011,69 @@ export function UXGreenLanding() {
           }}
           aria-hidden="true"
         />
-        <div className="max-w-3xl mx-auto text-center relative z-10">
-          <div
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border text-xs font-semibold mb-6"
-            style={{ borderColor: "rgba(0,191,166,0.35)", background: "rgba(0,191,166,0.08)", color: "#00BFA6" }}
-          >
-            <span className="w-2 h-2 rounded-full bg-[#00BFA6] animate-pulse" />
-            {t("Primer estándar de eficiencia digital en Latinoamérica", "First digital efficiency standard in Latin America")}
+        <div className="max-w-4xl mx-auto relative z-10">
+          <div className="text-center">
+            <div
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full border text-[11px] sm:text-xs font-semibold mb-6 max-w-full"
+              style={{ borderColor: "rgba(0,191,166,0.35)", background: "rgba(0,191,166,0.08)", color: "#00BFA6" }}
+            >
+              <span className="w-2 h-2 rounded-full bg-[#00BFA6] animate-pulse flex-shrink-0" />
+              {t("Primer estándar de eficiencia digital en LATAM", "First digital efficiency standard in LATAM")}
+            </div>
+
+            <h2
+              id="cta-uxgreen-heading"
+              className="font-display font-bold text-3xl sm:text-4xl md:text-5xl mb-5 leading-tight"
+            >
+              {t("¿Tu producto digital", "Does your digital product")}{" "}
+              <span className="uxgreen-heat">{t("cumple?", "pass?")}</span>
+            </h2>
+
+            <p className="opacity-55 text-base md:text-lg mb-8 max-w-xl mx-auto leading-relaxed">
+              {t("Tus usuarios lo saben en 3 segundos. Google lo mide en cada visita. Tu competencia ya lo está optimizando. La pregunta no es si deberías medirlo — es cuánto estás perdiendo por no hacerlo.", "Your users know in 3 seconds. Google measures it on every visit. Your competition is already optimizing. The question isn't whether you should measure it — it's how much you're losing by not doing it.")}
+            </p>
+
+            <div className="flex justify-center mb-12">
+              <a
+                href="#calculator"
+                className="uxgreen-cta-primary inline-flex items-center justify-center gap-2 px-7 py-4 rounded-xl font-semibold text-sm transition-all hover:scale-[1.02]"
+              >
+                <Gauge size={16} />
+                {t("Medir mi sitio ahora — gratis", "Measure my site now — free")}
+                <ArrowRight size={16} />
+              </a>
+            </div>
           </div>
 
-          <h2
-            id="cta-uxgreen-heading"
-            className="font-display font-bold text-4xl sm:text-5xl mb-5 leading-tight"
-          >
-            {t("¿Tu producto digital", "Does your digital product")}{" "}
-            <span className="uxgreen-heat">{t("cumple?", "pass?")}</span>
-          </h2>
+          {/* Two paths: DIY analyzer / MediaLab inline contact */}
+          <div className="grid md:grid-cols-2 gap-4 text-left max-w-3xl mx-auto">
+            <div className="rounded-2xl uxgreen-card p-6 md:p-7 flex flex-col">
+              <span className="text-xs font-semibold tracking-widest uppercase text-[#00BFA6] block mb-2">{t("Hazlo tú", "Do it yourself")}</span>
+              <h3 className="font-display font-bold text-lg mb-2">{t("Analiza gratis", "Analyze for free")}</h3>
+              <p className="opacity-50 text-sm leading-relaxed mb-5 flex-1">
+                {t("Usa el UXGreen™ Analyzer, obtén tu score en 8 dimensiones y un roadmap de mejoras que puedes implementar con tu equipo.", "Use the UXGreen™ Analyzer, get your score across 8 dimensions and an improvement roadmap you can implement with your team.")}
+              </p>
+              <a
+                href="#calculator"
+                className="inline-flex w-full items-center justify-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm border uxgreen-secondary-btn transition-all hover:scale-[1.02]"
+                style={{ color: "#00BFA6" }}
+              >
+                {t("Ir al Analyzer", "Go to Analyzer")}
+                <ArrowRight size={15} />
+              </a>
+            </div>
 
-          <p className="opacity-55 text-lg mb-8 max-w-xl mx-auto leading-relaxed">
-            {t("Tus usuarios lo saben en 3 segundos. Google lo mide en cada visita. Tu competencia ya lo está optimizando. La pregunta no es si deberías medirlo — es cuánto estás perdiendo por no hacerlo.", "Your users know in 3 seconds. Google measures it on every visit. Your competition is already optimizing. The question isn't whether you should measure it — it's how much you're losing by not doing it.")}
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
-              href="#calculator"
-              className="inline-flex items-center gap-2 px-7 py-4 rounded-xl font-semibold text-sm text-black transition-all hover:opacity-90 hover:scale-[1.02]"
-              style={{ background: "linear-gradient(135deg, #00BFA6, #00A891)" }}
-            >
-              {t("Medir mi sitio ahora — gratis", "Measure my site now — free")}
-              <ArrowRight size={16} />
-            </a>
-            <Link
-              href="/contacto"
-              className="inline-flex items-center justify-center gap-2 px-7 py-4 rounded-xl font-semibold text-sm border border-current/40 hover:border-current/60 hover:bg-current/10 transition-all"
-            >
-              <Mail size={16} />
-              {t("Contáctanos", "Contact us")}
-            </Link>
+            <div className="rounded-2xl uxgreen-card p-6 md:p-7 flex flex-col" style={{ background: "rgba(0,191,166,0.04)" }}>
+              <span className="text-xs font-semibold tracking-widest uppercase text-[#00BFA6] block mb-2">{t("Que MediaLab lo haga", "Let MediaLab do it")}</span>
+              <h3 className="font-display font-bold text-lg mb-2">{t("Contáctanos", "Contact us")}</h3>
+              <p className="opacity-50 text-sm leading-relaxed mb-4">
+                {t("Déjanos tu sitio y tu correo. Te enviamos un primer análisis gratuito y agendamos una llamada para mejorarlo contigo.", "Leave us your site and email. We'll send a first free analysis and set up a call to improve it with you.")}
+              </p>
+              <UXGreenContactForm />
+            </div>
           </div>
 
-          <p className="opacity-25 text-xs mt-6">
+          <p className="opacity-25 text-xs mt-8 text-center">
             {t("Análisis gratuito · Sin registro · Estándar UXGreen™ by MediaLab © 2026", "Free analysis · No sign-up · UXGreen™ Standard by MediaLab © 2026")}
           </p>
         </div>

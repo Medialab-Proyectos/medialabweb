@@ -354,6 +354,7 @@ export function UXGreenCalculator() {
                 opacity: isValidUrl(url) ? 1 : 0.5,
               }}
             >
+              <Globe size={16} />
               {t("Analizar sitio", "Analyze site")}
               <ChevronRight size={16} />
             </button>
