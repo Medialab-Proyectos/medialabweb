@@ -7,7 +7,7 @@ const LOGO_URL    = `${SITE_URL}/images/logo-medialab-400.png`
 
 export async function POST(req: NextRequest) {
   try {
-    const { url, email } = await req.json()
+    const { url, email, name } = await req.json()
 
     if (!url || !email || !String(email).includes("@")) {
       return NextResponse.json({ error: "Faltan campos requeridos" }, { status: 400 })
@@ -15,6 +15,7 @@ export async function POST(req: NextRequest) {
 
     const site = String(url).trim()
     const clientEmail = String(email).trim()
+    const clientName = name ? String(name).trim() : ""
 
     // No email provider configured → behave gracefully (demo mode)
     if (!process.env.RESEND_API_KEY) {
@@ -57,6 +58,7 @@ export async function POST(req: NextRequest) {
   </div>
   <div class="body">
     <div class="tag">Formulario UXGreen™</div>
+    ${clientName ? `<div class="field"><div class="field-label">Nombre</div><div class="field-value">${clientName}</div></div>` : ""}
     <div class="field"><div class="field-label">Sitio web</div><div class="field-value">${site}</div></div>
     <div class="field"><div class="field-label">Correo</div><div class="field-value">${clientEmail}</div></div>
   </div>
@@ -96,7 +98,7 @@ export async function POST(req: NextRequest) {
   </div>
   <div class="body">
     <p class="greeting">
-      Hola,<br><br>
+      Hola${clientName ? ` ${clientName.split(" ")[0]}` : ""},<br><br>
       Gracias por tu interés en <strong>UXGreen™</strong>. Ya recibimos <strong>${site}</strong> y vamos a analizar
       su eficiencia digital: performance, Core Web Vitals, huella de carbono, accesibilidad, IA y UX.
     </p>

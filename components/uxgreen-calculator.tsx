@@ -12,6 +12,7 @@ import {
   BarChart2,
   Wind,
   ChevronRight,
+  ChevronDown,
   RefreshCw,
   AlertCircle,
   CheckCircle2,
@@ -19,7 +20,8 @@ import {
 } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 
-const UXGREEN_BADGE = "/images/curso/logos/Green%20UX%20v%202.svg"
+const UXGREEN_BADGE = "/images/curso/logos/loguxgreen.fw.png"
+const UXGREEN_BADGE_WHITE = "/images/curso/logos/loguxbalnco.fw.png"
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -106,6 +108,9 @@ const LOADING_MESSAGES: [string, string][] = [
   ["Generando recomendaciones...", "Generating recommendations..."],
   ["Preparando tu UXGreen™ Score...", "Preparing your UXGreen™ Score..."],
 ]
+
+// Minimum time on the analysis view so the 8 dimensions all complete on screen
+const MIN_LOADING_MS = 9000
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -202,7 +207,7 @@ function ScoreRing({ score, size = 160 }: { score: number; size?: number }) {
 function ScoreBar({ score, animated }: { score: number; animated: boolean }) {
   const color = scoreColor(score)
   return (
-    <div className="h-1.5 w-full rounded-full bg-white/8 overflow-hidden">
+    <div className="h-1.5 w-full rounded-full bg-current/10 overflow-hidden">
       <div
         className="h-full rounded-full"
         style={{
@@ -217,7 +222,7 @@ function ScoreBar({ score, animated }: { score: number; animated: boolean }) {
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 
-export function UXGreenCalculator() {
+export function UXGreenCalculator({ onPhaseChange }: { onPhaseChange?: (active: boolean) => void } = {}) {
   const { t } = useLanguage()
   const [step, setStep] = useState<"input" | "context" | "loading" | "results" | "error">("input")
   const [url, setUrl] = useState("")
@@ -226,22 +231,35 @@ export function UXGreenCalculator() {
   const [country, setCountry] = useState("")
   const [traffic, setTraffic] = useState("")
   const [loadingMsg, setLoadingMsg] = useState(0)
+  const [pillarsDone, setPillarsDone] = useState(0)
   const [result, setResult] = useState<UXGreenResult | null>(null)
   const [errorMsg, setErrorMsg] = useState("")
   const [barsAnimated, setBarsAnimated] = useState(false)
   const [email, setEmail] = useState("")
   const [emailSent, setEmailSent] = useState(false)
-  const intervalRef = useRef<NodeJS.Timeout | null>(null)
+  const [checking, setChecking] = useState(false)
+  const [urlError, setUrlError] = useState("")
   const resultsRef = useRef<HTMLDivElement>(null)
 
-  // Rotate loading messages
+  // Tell the page when we're past the form (analyzing/results) so it can
+  // hide the side image and use the full width for the report.
   useEffect(() => {
-    if (step === "loading") {
-      intervalRef.current = setInterval(() => {
-        setLoadingMsg((p) => (p + 1) % LOADING_MESSAGES.length)
-      }, 1800)
-    }
-    return () => { if (intervalRef.current) clearInterval(intervalRef.current) }
+    // Hide the side image as soon as we leave the URL step (industry step onward)
+    onPhaseChange?.(step !== "input")
+  }, [step, onPhaseChange])
+
+  // Loading: rotate ambient messages AND fill the 8-dimension checklist so it
+  // visibly completes within the minimum loading window before results show.
+  useEffect(() => {
+    if (step !== "loading") return
+    const msgInt = setInterval(() => {
+      setLoadingMsg((p) => (p + 1) % LOADING_MESSAGES.length)
+    }, 2600)
+    const pillarStep = Math.floor(MIN_LOADING_MS / (SCORE_PILLARS.length + 2))
+    const pillarInt = setInterval(() => {
+      setPillarsDone((p) => Math.min(p + 1, SCORE_PILLARS.length))
+    }, pillarStep)
+    return () => { clearInterval(msgInt); clearInterval(pillarInt) }
   }, [step])
 
   // Animate bars after results mount
@@ -266,6 +284,8 @@ export function UXGreenCalculator() {
   async function runAnalysis() {
     setStep("loading")
     setLoadingMsg(0)
+    setPillarsDone(0)
+    const startedAt = Date.now()
     try {
       const res = await fetch("/api/uxgreen", {
         method: "POST",
@@ -274,6 +294,10 @@ export function UXGreenCalculator() {
       })
       if (!res.ok) throw new Error("Analysis failed")
       const data: UXGreenResult = await res.json()
+      const elapsed = Date.now() - startedAt
+      if (elapsed < MIN_LOADING_MS) {
+        await new Promise((r) => setTimeout(r, MIN_LOADING_MS - elapsed))
+      }
       setResult(data)
       setStep("results")
       setTimeout(() => resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 100)
@@ -303,10 +327,7 @@ export function UXGreenCalculator() {
   if (step === "input") {
     return (
       <div className="max-w-2xl mx-auto">
-        <div
-          className="rounded-2xl border border-white/10 p-8"
-          style={{ background: "linear-gradient(135deg, rgba(0,191,166,0.04) 0%, rgba(0,0,0,0) 60%)" }}
-        >
+        <div className="rounded-2xl uxgreen-card p-8">
           <div className="flex items-center gap-2 mb-6">
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold text-[#00BFA6] border border-[#00BFA6]/30 bg-[#00BFA6]/8">
               <span className="w-1.5 h-1.5 rounded-full bg-[#00BFA6] animate-pulse" />
@@ -337,7 +358,7 @@ export function UXGreenCalculator() {
                   if (e.key === "Enter" && isValidUrl(url)) setStep("context")
                 }}
                 placeholder={t("tudominio.com", "yourdomain.com")}
-                className="w-full pl-11 pr-4 py-4 rounded-xl bg-white/5 border border-white/20 text-sm outline-none focus:border-[#00BFA6]/50 focus:bg-[#00BFA6]/4 transition-all duration-200 placeholder:opacity-25"
+                className="w-full pl-11 pr-4 py-4 rounded-xl bg-current/5 border border-current/25 text-sm outline-none focus:border-[#00BFA6]/60 focus:bg-[#00BFA6]/5 transition-all duration-200 placeholder:opacity-50"
                 autoFocus
               />
             </div>
@@ -377,7 +398,7 @@ export function UXGreenCalculator() {
     return (
       <div className="max-w-2xl mx-auto">
         <div
-          className="rounded-2xl border border-white/10 p-8"
+          className="rounded-2xl border border-current/15 p-8"
           style={{ background: "linear-gradient(135deg, rgba(0,191,166,0.04) 0%, rgba(0,0,0,0) 60%)" }}
         >
           <button onClick={() => setStep("input")} className="opacity-30 text-xs mb-6 hover:opacity-60 transition-colors">
@@ -396,57 +417,66 @@ export function UXGreenCalculator() {
               <label className="text-xs opacity-40 font-semibold uppercase tracking-widest block mb-2">
                 {t("Industria", "Industry")}
               </label>
-              <select
-                value={industry}
-                onChange={(e) => setIndustry(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-sm outline-none focus:border-[#00BFA6]/50 transition-all cursor-pointer"
-              >
-                <option value="" className="bg-[#0d0d0d]">{t("Selecciona tu industria...", "Select your industry...")}</option>
-                {INDUSTRIES.map((i) => (
-                  <option key={i.value} value={i.value} className="bg-[#0d0d0d]">{t(i.label[0], i.label[1])}</option>
-                ))}
-              </select>
+              <div className="relative">
+                <select
+                  value={industry}
+                  onChange={(e) => setIndustry(e.target.value)}
+                  className="w-full appearance-none px-4 pr-10 py-3.5 rounded-xl bg-current/5 border border-current/15 text-sm outline-none focus:border-[#00BFA6]/50 transition-all cursor-pointer"
+                >
+                  <option value="" className="bg-background text-foreground">{t("Selecciona tu industria...", "Select your industry...")}</option>
+                  {INDUSTRIES.map((i) => (
+                    <option key={i.value} value={i.value} className="bg-background text-foreground">{t(i.label[0], i.label[1])}</option>
+                  ))}
+                </select>
+                <ChevronDown size={16} className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 opacity-50" />
+              </div>
             </div>
 
             <div>
               <label className="text-xs opacity-40 font-semibold uppercase tracking-widest block mb-2">
                 {t("Tipo de producto", "Product type")}
               </label>
-              <select
-                value={productType}
-                onChange={(e) => setProductType(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-sm outline-none focus:border-[#00BFA6]/50 transition-all cursor-pointer"
-              >
-                <option value="" className="bg-[#0d0d0d]">{t("Selecciona el tipo...", "Select the type...")}</option>
-                {PRODUCT_TYPES.map((p) => (
-                  <option key={p.value} value={p.value} className="bg-[#0d0d0d]">{t(p.label[0], p.label[1])}</option>
-                ))}
-              </select>
+              <div className="relative">
+                <select
+                  value={productType}
+                  onChange={(e) => setProductType(e.target.value)}
+                  className="w-full appearance-none px-4 pr-10 py-3.5 rounded-xl bg-current/5 border border-current/15 text-sm outline-none focus:border-[#00BFA6]/50 transition-all cursor-pointer"
+                >
+                  <option value="" className="bg-background text-foreground">{t("Selecciona el tipo...", "Select the type...")}</option>
+                  {PRODUCT_TYPES.map((p) => (
+                    <option key={p.value} value={p.value} className="bg-background text-foreground">{t(p.label[0], p.label[1])}</option>
+                  ))}
+                </select>
+                <ChevronDown size={16} className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 opacity-50" />
+              </div>
             </div>
 
             <div>
               <label className="text-xs opacity-40 font-semibold uppercase tracking-widest block mb-2">
                 {t("Tráfico aproximado", "Approximate traffic")}
               </label>
-              <select
-                value={traffic}
-                onChange={(e) => setTraffic(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-sm outline-none focus:border-[#00BFA6]/50 transition-all cursor-pointer"
-              >
-                <option value="" className="bg-[#0d0d0d]">{t("Visitas mensuales...", "Monthly visits...")}</option>
-                {TRAFFIC_OPTIONS.map((opt) => (
-                  <option key={opt.value} value={opt.value} className="bg-[#0d0d0d]">{t(opt.label[0], opt.label[1])}</option>
-                ))}
-              </select>
+              <div className="relative">
+                <select
+                  value={traffic}
+                  onChange={(e) => setTraffic(e.target.value)}
+                  className="w-full appearance-none px-4 pr-10 py-3.5 rounded-xl bg-current/5 border border-current/15 text-sm outline-none focus:border-[#00BFA6]/50 transition-all cursor-pointer"
+                >
+                  <option value="" className="bg-background text-foreground">{t("Visitas mensuales...", "Monthly visits...")}</option>
+                  {TRAFFIC_OPTIONS.map((opt) => (
+                    <option key={opt.value} value={opt.value} className="bg-background text-foreground">{t(opt.label[0], opt.label[1])}</option>
+                  ))}
+                </select>
+                <ChevronDown size={16} className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 opacity-50" />
+              </div>
             </div>
 
             <button
               onClick={runAnalysis}
               disabled={!isReady}
-              className="w-full py-4 rounded-xl font-semibold text-sm transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-2"
+              className="w-full py-4 rounded-xl font-semibold text-sm transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-2"
               style={{
-                background: isReady ? "linear-gradient(135deg, #00BFA6, #00A891)" : "rgba(255,255,255,0.08)",
-                color: isReady ? "#000" : "rgba(255,255,255,0.3)",
+                background: isReady ? "linear-gradient(135deg, #00BFA6, #00A891)" : "rgba(0,191,166,0.12)",
+                color: isReady ? "#000" : "#00BFA6",
               }}
             >
               {t("Iniciar análisis UXGreen™", "Start UXGreen™ analysis")}
@@ -463,7 +493,7 @@ export function UXGreenCalculator() {
     return (
       <div className="max-w-2xl mx-auto">
         <div
-          className="rounded-2xl border border-white/10 p-10 flex flex-col items-center text-center"
+          className="rounded-2xl border border-current/15 p-10 flex flex-col items-center text-center"
           style={{ background: "linear-gradient(135deg, rgba(0,191,166,0.04) 0%, rgba(0,0,0,0) 60%)" }}
         >
           <div className="relative mb-8">
@@ -495,22 +525,22 @@ export function UXGreenCalculator() {
 
           <div className="w-full mt-8 space-y-2">
             {SCORE_PILLARS.map((p, i) => {
-              const isActive = i <= loadingMsg
+              const isActive = i < pillarsDone
               return (
                 <div key={p.key} className="flex items-center gap-3">
                   <div
                     className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-300"
-                    style={{ background: isActive ? "rgba(0,191,166,0.2)" : "rgba(255,255,255,0.05)" }}
+                    style={{ background: isActive ? "rgba(0,191,166,0.2)" : "rgba(127,127,127,0.14)" }}
                   >
                     {isActive ? (
                       <CheckCircle2 size={12} className="text-[#00BFA6]" />
                     ) : (
-                      <div className="w-1.5 h-1.5 rounded-full bg-white/20" />
+                      <div className="w-1.5 h-1.5 rounded-full bg-current/25" />
                     )}
                   </div>
                   <span
-                    className="text-xs transition-colors duration-300"
-                    style={{ color: isActive ? "rgba(255,255,255,0.7)" : "rgba(255,255,255,0.2)" }}
+                    className="text-xs transition-all duration-300"
+                    style={{ color: isActive ? "#00BFA6" : undefined, opacity: isActive ? 1 : 0.35 }}
                   >
                     {p.label}
                   </span>
@@ -533,7 +563,7 @@ export function UXGreenCalculator() {
           <p className="opacity-50 text-sm mb-6 max-w-sm">{errorMsg}</p>
           <button
             onClick={reset}
-            className="flex items-center gap-2 px-6 py-3 rounded-xl bg-white/8 opacity-70 text-sm hover:bg-white/12 transition-colors"
+            className="flex items-center gap-2 px-6 py-3 rounded-xl bg-current/10 opacity-70 text-sm hover:bg-current/18 transition-colors"
           >
             <RefreshCw size={14} />
             {t("Intentar con otro dominio", "Try another domain")}
@@ -551,23 +581,23 @@ export function UXGreenCalculator() {
       <div ref={resultsRef} className="max-w-4xl mx-auto space-y-6">
         {/* Header bar */}
         <div className="flex items-center justify-between flex-wrap gap-3">
-          <div className="flex items-center gap-2 opacity-40 text-sm">
-            <Globe size={14} />
-            <span className="font-mono text-xs">{result.url.replace("https://", "").replace("http://", "")}</span>
+          <div className="flex items-center gap-2 text-sm">
+            <Globe size={14} className="opacity-50" />
+            <span className="font-mono text-xs opacity-50">{result.url.replace("https://", "").replace("http://", "")}</span>
             {result.dataSource === "live" && (
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[#00BFA6]/15 text-[#00BFA6] border border-[#00BFA6]/20">
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[#00BFA6]/15 text-[#00BFA6] border border-[#00BFA6]/30">
                 {t("Datos en tiempo real", "Real-time data")}
               </span>
             )}
             {result.dataSource === "estimated" && (
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-amber-500/12 text-amber-400 border border-amber-500/20">
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/40">
                 {t("Estimado (dominio privado)", "Estimated (private domain)")}
               </span>
             )}
           </div>
           <button
             onClick={reset}
-            className="flex items-center gap-1.5 opacity-30 hover:opacity-60 text-xs transition-colors"
+            className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full border border-current/25 opacity-70 hover:opacity-100 hover:border-[#00BFA6]/50 hover:text-[#00BFA6] transition-all"
           >
             <RefreshCw size={12} />
             {t("Nuevo análisis", "New analysis")}
@@ -584,14 +614,10 @@ export function UXGreenCalculator() {
           <div className="flex-1 text-center sm:text-left">
             <div className="flex items-center gap-3 mb-3 justify-center sm:justify-start">
               {result.certLevel !== "not-certified" && (
-                <Image
-                  src={UXGREEN_BADGE}
-                  alt={`${cert.label} badge`}
-                  width={48}
-                  height={48}
-                  unoptimized
-                  className="flex-shrink-0"
-                />
+                <>
+                  <Image src={UXGREEN_BADGE} alt={`${cert.label} badge`} width={48} height={48} className="flex-shrink-0 uxg-seal-green" />
+                  <Image src={UXGREEN_BADGE_WHITE} alt="" aria-hidden width={48} height={48} className="flex-shrink-0 uxg-seal-white" />
+                </>
               )}
               <div
                 className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold border"
@@ -638,7 +664,7 @@ export function UXGreenCalculator() {
             return (
               <div
                 key={pillar.key}
-                className="rounded-xl border border-white/8 p-4 group hover:border-white/16 transition-colors"
+                className="rounded-xl border border-current/15 p-4 group hover:border-current/25 transition-colors"
                 style={{ background: "rgba(255,255,255,0.02)" }}
               >
                 <div className="flex items-start justify-between mb-3">
@@ -673,7 +699,7 @@ export function UXGreenCalculator() {
 
         {/* Insights */}
         {result.insights.length > 0 && (
-          <div className="rounded-2xl border border-white/10 p-6" style={{ background: "rgba(255,255,255,0.02)" }}>
+          <div className="rounded-2xl border border-current/15 p-6" style={{ background: "rgba(255,255,255,0.02)" }}>
             <h4 className="text-sm font-semibold mb-4 font-display">
               {t("Insights principales", "Key insights")}
             </h4>
@@ -713,7 +739,7 @@ export function UXGreenCalculator() {
         {/* Lead Capture CTA */}
         {!emailSent ? (
           <div
-            className="rounded-2xl border border-white/10 p-8 text-center"
+            className="rounded-2xl border border-current/15 p-8 text-center"
             style={{
               background: "linear-gradient(135deg, rgba(0,191,166,0.06) 0%, rgba(0,0,0,0) 100%)",
             }}
@@ -736,7 +762,7 @@ export function UXGreenCalculator() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder={t("tu@email.com", "you@email.com")}
-                className="flex-1 px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-sm placeholder:opacity-25 outline-none focus:border-[#00BFA6]/50 transition-all"
+                className="flex-1 px-4 py-3 rounded-xl bg-current/5 border border-current/25 text-sm placeholder:opacity-50 outline-none focus:border-[#00BFA6]/50 transition-all"
               />
               <button
                 onClick={() => {
@@ -748,9 +774,9 @@ export function UXGreenCalculator() {
                 {t("Enviar reporte", "Send report")}
               </button>
             </div>
-            <p className="opacity-20 text-xs mt-4">
+            <p className="opacity-55 text-xs mt-4">
               {t("O agenda una auditoría con nuestro equipo → ", "Or book an audit with our team → ")}
-              <a href="/contacto" className="underline hover:opacity-40 transition-colors">
+              <a href="/contacto" className="font-semibold text-[#00BFA6] underline underline-offset-2 hover:opacity-80 transition-opacity">
                 {t("Hablar con un experto", "Talk to an expert")}
               </a>
             </p>

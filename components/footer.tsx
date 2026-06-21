@@ -5,7 +5,8 @@ import Image from "next/image"
 import { Linkedin, Twitter, Instagram } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 
-const UXGREEN_BADGE = "/images/curso/logos/Green%20UX%20v%202.svg"
+const UXGREEN_BADGE = "/images/curso/logos/loguxgreen.fw.png"
+const UXGREEN_BADGE_WHITE = "/images/curso/logos/loguxbalnco.fw.png"
 
 const socials = [
   { icon: Linkedin, label: "LinkedIn", href: "https://www.linkedin.com/company/medialab-ingenieria" },
@@ -159,8 +160,15 @@ export function Footer() {
                 alt="UXGreen™ Certified badge"
                 width={28}
                 height={28}
-                className="opacity-85 group-hover:opacity-100 transition-opacity"
-                unoptimized
+                className="opacity-85 group-hover:opacity-100 transition-opacity uxg-seal-green"
+              />
+              <Image
+                src={UXGREEN_BADGE_WHITE}
+                alt=""
+                aria-hidden
+                width={28}
+                height={28}
+                className="opacity-85 group-hover:opacity-100 transition-opacity uxg-seal-white"
               />
               <div className="flex flex-col">
                 <span

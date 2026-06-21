@@ -1,0 +1,27 @@
+Image with src "/images/asistente/ada-open.png" is using quality "100" which is not configured in images.qualities [75]. Please update your config to [100, 75].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⨯ ReferenceError: UXGREEN_LOGO is not defined
+    at UXGreenLanding (components\uxgreen-landing.tsx:1075:26)
+  1073 |                 <div className="relative h-9 w-28 flex-shrink-0">
+  1074 |                   <Image
+> 1075 |                     src={UXGREEN_LOGO}
+       |                          ^
+  1076 |                     alt="UXGreen™"
+  1077 |                     fill
+  1078 |                     sizes="112px" {
+  digest: '1452816038'
+}
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⨯ ReferenceError: UXGREEN_LOGO is not defined
+    at UXGreenLanding (components\uxgreen-landing.tsx:1074:26)
+  1072 |                 <div className="relative h-9 w-28 flex-shrink-0">
+  1073 |                   <Image
+> 1074 |                     src={UXGREEN_LOGO}
+       |                          ^
+  1075 |                     alt="UXGreen™"
+  1076 |                     fill
+  1077 |                     sizes="112px" {
+  digest: '1452816038'
+}
+⚠ Fast Refresh had to perform a full reload due to a runtime error.

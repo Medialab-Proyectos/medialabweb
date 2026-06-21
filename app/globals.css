@@ -1137,6 +1137,34 @@
   color: #000;
 }
 
+/* ── UXGreen analyzer background — dimmer in light/warm ───────────────────── */
+.light .uxgreen-analyzer-bg,
+.warm .uxgreen-analyzer-bg {
+  opacity: 0.4;
+}
+
+/* Seal glow only in dark themes (in light it reads as a smudge under the logo) */
+.dark .uxg-seal-glow,
+.pure-dark .uxg-seal-glow {
+  filter: drop-shadow(0 0 16px rgba(0, 191, 166, 0.4));
+}
+
+/* ── UXGreen seal — green on light/warm, white on dark/pure-dark ───────────── */
+.uxg-seal-green {
+  display: inline-block;
+}
+.uxg-seal-white {
+  display: none;
+}
+.dark .uxg-seal-green,
+.pure-dark .uxg-seal-green {
+  display: none;
+}
+.dark .uxg-seal-white,
+.pure-dark .uxg-seal-white {
+  display: inline-block;
+}
+
 /* ── Careers card image gradient ─────────────────────────────────────────── */
 .careers-card-gradient {
   background: linear-gradient(to top, var(--card), transparent);

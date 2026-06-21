@@ -1,0 +1,121 @@
+
+> my-project@0.1.0 dev
+> next dev
+
+▲ Next.js 16.1.6 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.39.156:3000
+- Environments: .env.local
+
+✓ Starting...
+Creating turbopack project {
+  dir: 'C:\\Users\\coben\\Desktop\\sitiomlab\\medialabweb',
+  testMode: true
+}
+✓ Ready in 1065ms
+ GET /api/experience-radar/run 200 in 20.6s (compile: 472ms, render: 20.2s)
+ GET /v4 404 in 2.7s (compile: 2.4s, render: 291ms)
+ GET /manifest.webmanifest 200 in 322ms (compile: 301ms, render: 21ms)
+ GET / 200 in 1314ms (compile: 124ms, render: 1190ms)
+ GET /manifest.webmanifest 200 in 13ms (compile: 4ms, render: 8ms)
+ GET /experience-radar 200 in 1259ms (compile: 1216ms, render: 43ms)
+ GET /manifest.webmanifest 200 in 10ms (compile: 4ms, render: 7ms)
+ GET /uxgreen 200 in 736ms (compile: 700ms, render: 36ms)
+ GET /manifest.webmanifest 200 in 31ms (compile: 24ms, render: 7ms)
+ GET / 200 in 55ms (compile: 13ms, render: 42ms)
+ GET /manifest.webmanifest 200 in 9ms (compile: 5ms, render: 5ms)
+ GET /experience-radar 200 in 47ms (compile: 6ms, render: 41ms)
+ GET /manifest.webmanifest 200 in 10ms (compile: 4ms, render: 6ms)
+ GET /uxgreen 200 in 38ms (compile: 7ms, render: 31ms)
+ GET /manifest.webmanifest 200 in 13ms (compile: 5ms, render: 8ms)
+ GET /experience-radar 200 in 36ms (compile: 5ms, render: 31ms)
+ GET /manifest.webmanifest 200 in 10ms (compile: 3ms, render: 7ms)
+ GET / 200 in 51ms (compile: 8ms, render: 43ms)
+ GET /manifest.webmanifest 200 in 12ms (compile: 4ms, render: 7ms)
+ GET /uxgreen 200 in 37ms (compile: 5ms, render: 32ms)
+ GET /manifest.webmanifest 200 in 12ms (compile: 5ms, render: 7ms)
+ GET / 200 in 50ms (compile: 9ms, render: 41ms)
+ GET /manifest.webmanifest 200 in 10ms (compile: 4ms, render: 6ms)
+ GET /uxgreen 200 in 44ms (compile: 6ms, render: 37ms)
+ GET /manifest.webmanifest 200 in 7ms (compile: 2ms, render: 4ms)
+✓ Compiled in 409ms
+✓ Compiled in 755ms
+✓ Compiled in 350ms
+✓ Compiled in 544ms
+✓ Compiled in 273ms
+✓ Compiled in 230ms
+ GET /manifest.webmanifest 200 in 12ms (compile: 5ms, render: 7ms)
+✓ Compiled in 515ms
+✓ Compiled in 458ms
+✓ Compiled in 979ms
+✓ Compiled in 756ms
+ GET /uxgreen 200 in 599ms (compile: 139ms, render: 461ms)
+ GET /manifest.webmanifest 200 in 12ms (compile: 3ms, render: 9ms)
+✓ Compiled in 248ms
+✓ Compiled in 263ms
+ GET /uxgreen 500 in 411ms (compile: 112ms, render: 299ms)
+✓ Compiled in 268ms
+ GET /uxgreen 500 in 373ms (compile: 82ms, render: 291ms)
+ GET /manifest.webmanifest 200 in 16ms (compile: 8ms, render: 8ms)
+✓ Compiled in 241ms
+ GET /uxgreen 200 in 415ms (compile: 96ms, render: 319ms)
+ GET /manifest.webmanifest 200 in 12ms (compile: 5ms, render: 8ms)
+✓ Compiled in 289ms
+✓ Compiled in 240ms
+✓ Compiled in 269ms
+✓ Compiled in 220ms
+✓ Compiled in 182ms
+ GET / 200 in 330ms (compile: 129ms, render: 201ms)
+ GET /manifest.webmanifest 200 in 13ms (compile: 4ms, render: 9ms)
+ GET /uxgreen 200 in 194ms (compile: 116ms, render: 78ms)
+ GET /manifest.webmanifest 200 in 12ms (compile: 4ms, render: 8ms)
+✓ Compiled in 2.2s
+✓ Compiled in 477ms
+✓ Compiled in 238ms
+✓ Compiled in 254ms
+✓ Compiled in 300ms
+✓ Compiled in 309ms
+✓ Compiled in 524ms
+✓ Compiled in 282ms
+✓ Compiled in 332ms
+✓ Compiled in 284ms
+✓ Compiled in 626ms
+✓ Compiled in 238ms
+✓ Compiled in 282ms
+✓ Compiled in 265ms
+✓ Compiled in 230ms
+✓ Compiled in 346ms
+✓ Compiled in 280ms
+✓ Compiled in 451ms
+✓ Compiled in 567ms
+✓ Compiled in 460ms
+✓ Compiled in 436ms
+✓ Compiled in 1597ms
+✓ Compiled in 452ms
+✓ Compiled in 1196ms
+✓ Compiled in 623ms
+✓ Compiled in 487ms
+✓ Compiled in 765ms
+✓ Compiled in 250ms
+✓ Compiled in 1187ms
+✓ Compiled in 439ms
+✓ Compiled in 394ms
+✓ Finished filesystem cache database compaction in 10.8s
+✓ Compiled in 452ms
+✓ Compiled in 587ms
+✓ Compiled in 644ms
+✓ Compiled in 456ms
+✓ Compiled in 410ms
+✓ Compiled in 263ms
+✓ Compiled in 243ms
+✓ Compiled in 208ms
+✓ Compiled in 410ms
+✓ Compiled in 234ms
+✓ Compiled in 230ms
+✓ Compiled in 359ms
+✓ Compiled in 523ms
+✓ Compiled in 380ms
+ GET /uxgreen 200 in 654ms (compile: 269ms, render: 386ms)
+ GET /manifest.webmanifest 200 in 19ms (compile: 6ms, render: 12ms)
+✓ Compiled in 215ms
+✓ Compiled in 316ms
