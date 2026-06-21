@@ -170,16 +170,22 @@ export async function POST(req: NextRequest) {
   let normalizedUrl = url.trim()
   if (!normalizedUrl.startsWith("http")) normalizedUrl = "https://" + normalizedUrl
 
-  // Parallel API calls
+  const PAGESPEED_KEY =
+    process.env.PAGESPEED_API_KEY ||
+    process.env.GOOGLE_PAGESPEED_API_KEY ||
+    process.env.PSI_API_KEY ||
+    ""
+
+  // Parallel API calls — Google PageSpeed (core metrics) + Website Carbon
   const [carbonResult, pageSpeedResult] = await Promise.allSettled([
     fetch(`https://api.websitecarbon.com/site?url=${encodeURIComponent(normalizedUrl)}`, {
       signal: AbortSignal.timeout(9000),
       headers: { "User-Agent": "UXGreen-Analyzer/1.0 (medialab.design)" },
     }).then((r) => (r.ok ? r.json() : Promise.reject("carbon-err"))),
     fetch(
-      `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(normalizedUrl)}&strategy=mobile`,
-      { signal: AbortSignal.timeout(18000) }
-    ).then((r) => (r.ok ? r.json() : Promise.reject("psi-err"))),
+      `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(normalizedUrl)}&strategy=mobile&category=performance&category=accessibility${PAGESPEED_KEY ? `&key=${PAGESPEED_KEY}` : ""}`,
+      { signal: AbortSignal.timeout(20000) }
+    ).then((r) => (r.ok ? r.json() : Promise.reject(`psi-${r.status}`))),
   ])
 
   // Carbon data
@@ -202,25 +208,36 @@ export async function POST(req: NextRequest) {
     dataSource = "live"
   }
 
-  // PageSpeed data
-  let perfScore = pseudoRandom(seed, 32, 68, 1)
-  let a11yScore = pseudoRandom(seed, 38, 74, 3)
-  let lcpScore = pseudoRandom(seed, 28, 66, 5)
-  let clsScore = pseudoRandom(seed, 35, 72, 9)
-  let tbtScore = pseudoRandom(seed, 25, 60, 13)
+  // PageSpeed data — required for a real analysis (performance, CWV, accessibility)
+  let perfScore = 0
+  let a11yScore = 0
+  let lcpScore = 0
+  let clsScore = 0
+  let tbtScore = 0
+  let psiOk = false
 
   if (pageSpeedResult.status === "fulfilled" && pageSpeedResult.value) {
     const ps = pageSpeedResult.value
     const cats = ps.lighthouseResult?.categories
     const audits = ps.lighthouseResult?.audits
-    if (cats) {
+    if (cats && cats.performance) {
       perfScore = Math.round((cats.performance?.score ?? 0) * 100)
-      a11yScore = Math.round((cats.accessibility?.score ?? 0) * 100)
+      a11yScore = cats.accessibility ? Math.round((cats.accessibility.score ?? 0) * 100) : Math.round(perfScore * 0.85)
       lcpScore = Math.round((audits?.["largest-contentful-paint"]?.score ?? 0) * 100)
       clsScore = Math.round((audits?.["cumulative-layout-shift"]?.score ?? 0) * 100)
       tbtScore = Math.round((audits?.["total-blocking-time"]?.score ?? 0) * 100)
+      psiOk = true
       dataSource = "live"
     }
+  }
+
+  // A real analysis needs Google PageSpeed. If it couldn't measure the site we
+  // do NOT fabricate a score — we explain why and route the user to our experts.
+  if (!psiOk) {
+    const reason = !PAGESPEED_KEY
+      ? "El análisis automático en tiempo real no está disponible en este momento."
+      : "No pudimos medir tu sitio en tiempo real. Puede estar bloqueando el rastreo automático, requerir inicio de sesión, ser muy lento o no estar accesible públicamente."
+    return NextResponse.json({ analyzable: false, url: normalizedUrl, reason })
   }
 
   const adj = INDUSTRY_ADJ[industry] || {}

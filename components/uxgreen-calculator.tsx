@@ -110,7 +110,7 @@ const LOADING_MESSAGES: [string, string][] = [
 ]
 
 // Minimum time on the analysis view so the 8 dimensions all complete on screen
-const MIN_LOADING_MS = 9000
+const MIN_LOADING_MS = 7000
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -255,9 +255,11 @@ export function UXGreenCalculator({ onPhaseChange }: { onPhaseChange?: (active: 
     const msgInt = setInterval(() => {
       setLoadingMsg((p) => (p + 1) % LOADING_MESSAGES.length)
     }, 2600)
+    // Fill up to the second-to-last step on a timer; the LAST one only
+    // completes when the real analysis actually returns (see runAnalysis).
     const pillarStep = Math.floor(MIN_LOADING_MS / (SCORE_PILLARS.length + 2))
     const pillarInt = setInterval(() => {
-      setPillarsDone((p) => Math.min(p + 1, SCORE_PILLARS.length))
+      setPillarsDone((p) => Math.min(p + 1, SCORE_PILLARS.length - 1))
     }, pillarStep)
     return () => { clearInterval(msgInt); clearInterval(pillarInt) }
   }, [step])
@@ -281,6 +283,28 @@ export function UXGreenCalculator({ onPhaseChange }: { onPhaseChange?: (active: 
     }
   }
 
+  // Verify the domain actually exists/responds before moving on, so the
+  // analysis runs against a real site.
+  async function validateAndProceed() {
+    if (!isValidUrl(url) || checking) return
+    setChecking(true)
+    setUrlError("")
+    try {
+      const res = await fetch(`/api/uxgreen/validate?url=${encodeURIComponent(url.trim())}`)
+      const data = await res.json()
+      if (data.reachable) {
+        setStep("context")
+      } else {
+        setUrlError(t("No pudimos encontrar ese sitio. Verifica que la URL exista.", "We couldn't reach that site. Make sure the URL exists."))
+      }
+    } catch {
+      // If our own check fails, don't block the user — let them proceed.
+      setStep("context")
+    } finally {
+      setChecking(false)
+    }
+  }
+
   async function runAnalysis() {
     setStep("loading")
     setLoadingMsg(0)
@@ -293,12 +317,21 @@ export function UXGreenCalculator({ onPhaseChange }: { onPhaseChange?: (active: 
         body: JSON.stringify({ url, industry, productType, country, traffic }),
       })
       if (!res.ok) throw new Error("Analysis failed")
-      const data: UXGreenResult = await res.json()
+      const json = await res.json()
       const elapsed = Date.now() - startedAt
       if (elapsed < MIN_LOADING_MS) {
         await new Promise((r) => setTimeout(r, MIN_LOADING_MS - elapsed))
       }
-      setResult(data)
+      // The API couldn't run a REAL analysis — show why instead of faking a score
+      if (json && json.analyzable === false) {
+        setErrorMsg(json.reason || t("No pudimos analizar tu sitio en tiempo real.", "We couldn't analyze your site in real time."))
+        setStep("error")
+        return
+      }
+      // The real analysis is done → complete the last dimension, then reveal
+      setPillarsDone(SCORE_PILLARS.length)
+      await new Promise((r) => setTimeout(r, 550))
+      setResult(json as UXGreenResult)
       setStep("results")
       setTimeout(() => resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 100)
     } catch {
@@ -353,9 +386,9 @@ export function UXGreenCalculator({ onPhaseChange }: { onPhaseChange?: (active: 
               <input
                 type="text"
                 value={url}
-                onChange={(e) => setUrl(e.target.value)}
+                onChange={(e) => { setUrl(e.target.value); if (urlError) setUrlError("") }}
                 onKeyDown={(e) => {
-                  if (e.key === "Enter" && isValidUrl(url)) setStep("context")
+                  if (e.key === "Enter") validateAndProceed()
                 }}
                 placeholder={t("tudominio.com", "yourdomain.com")}
                 className="w-full pl-11 pr-4 py-4 rounded-xl bg-current/5 border border-current/25 text-sm outline-none focus:border-[#00BFA6]/60 focus:bg-[#00BFA6]/5 transition-all duration-200 placeholder:opacity-50"
@@ -363,9 +396,15 @@ export function UXGreenCalculator({ onPhaseChange }: { onPhaseChange?: (active: 
               />
             </div>
 
+            {urlError && (
+              <p className="flex items-center gap-1.5 text-xs text-red-500">
+                <AlertCircle size={13} /> {urlError}
+              </p>
+            )}
+
             <button
-              onClick={() => { if (isValidUrl(url)) setStep("context") }}
-              disabled={!isValidUrl(url)}
+              onClick={validateAndProceed}
+              disabled={!isValidUrl(url) || checking}
               className="w-full py-4 rounded-xl font-semibold text-sm transition-all duration-200 disabled:cursor-not-allowed flex items-center justify-center gap-2 hover:opacity-90"
               style={{
                 background: isValidUrl(url)
@@ -375,9 +414,18 @@ export function UXGreenCalculator({ onPhaseChange }: { onPhaseChange?: (active: 
                 opacity: isValidUrl(url) ? 1 : 0.5,
               }}
             >
-              <Globe size={16} />
-              {t("Analizar sitio", "Analyze site")}
-              <ChevronRight size={16} />
+              {checking ? (
+                <>
+                  <RefreshCw size={16} className="animate-spin" />
+                  {t("Verificando...", "Checking...")}
+                </>
+              ) : (
+                <>
+                  <Globe size={16} />
+                  {t("Analizar sitio", "Analyze site")}
+                  <ChevronRight size={16} />
+                </>
+              )}
             </button>
           </div>
 
@@ -557,13 +605,33 @@ export function UXGreenCalculator({ onPhaseChange }: { onPhaseChange?: (active: 
   if (step === "error") {
     return (
       <div className="max-w-2xl mx-auto">
-        <div className="rounded-2xl border border-red-500/20 p-8 flex flex-col items-center text-center bg-red-500/5">
-          <AlertCircle size={40} className="text-red-400 mb-4" />
-          <h3 className="font-semibold mb-2">{t("No pudimos analizar ese dominio", "We couldn't analyze that domain")}</h3>
-          <p className="opacity-50 text-sm mb-6 max-w-sm">{errorMsg}</p>
+        <div className="rounded-2xl uxgreen-card p-8 flex flex-col items-center text-center">
+          <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4" style={{ background: "rgba(245,158,11,0.14)" }}>
+            <AlertCircle size={26} className="text-amber-500" />
+          </div>
+          <h3 className="font-display font-semibold text-lg mb-2">
+            {t("No pudimos completar un análisis real", "We couldn't complete a real analysis")}
+          </h3>
+          <p className="opacity-60 text-sm mb-6 max-w-md leading-relaxed">{errorMsg}</p>
+
+          {/* Experts CTA */}
+          <div className="w-full max-w-sm rounded-xl border border-[#00BFA6]/25 p-5 mb-5" style={{ background: "rgba(0,191,166,0.05)" }}>
+            <p className="text-sm font-medium mb-3">
+              {t("Nuestros expertos pueden analizar tu sitio a fondo y ayudarte a mejorarlo.", "Our experts can analyze your site in depth and help you improve it.")}
+            </p>
+            <a
+              href="/contacto"
+              className="inline-flex w-full items-center justify-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm transition-all hover:scale-[1.02] hover:opacity-90"
+              style={{ background: "linear-gradient(135deg, #00BFA6, #00A891)", color: "#ffffff" }}
+            >
+              {t("Que nuestros expertos te ayuden", "Let our experts help you")}
+              <ExternalLink size={14} />
+            </a>
+          </div>
+
           <button
             onClick={reset}
-            className="flex items-center gap-2 px-6 py-3 rounded-xl bg-current/10 opacity-70 text-sm hover:bg-current/18 transition-colors"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-current/20 text-sm opacity-70 hover:opacity-100 hover:border-[#00BFA6]/40 transition-all"
           >
             <RefreshCw size={14} />
             {t("Intentar con otro dominio", "Try another domain")}
