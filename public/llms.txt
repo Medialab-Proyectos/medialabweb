@@ -162,7 +162,7 @@ Experience Radar es el observatorio editorial de MediaLab sobre comportamiento h
 - Notas (lista siempre al día, generadas por el agente diario): Feed RSS https://medialab.design/experience-radar/feed.xml y Sitemap https://medialab.design/sitemap.xml
 - Cada nota expone JSON-LD (NewsArticle con abstract para IA, FAQPage, BreadcrumbList, SportsEvent) y un resumen para IA de ~100 palabras.
 
-**Política de fuentes:** calendario y resultados con FIFA; contexto editorial e imágenes enlazadas con Latingoles cuando estén disponibles; conversación pública con enlaces directos; Google Trends solo cuando aporte señales pertinentes. MediaLab distingue hechos verificados de interpretación editorial.
+**Politica de fuentes:** calendario y resultados con FIFA; contexto editorial e imagenes con Win Sports, Latingoles y otros medios autorizados cuando aporten valor; conversacion publica con enlaces directos a X, Reddit, Instagram, Facebook o YouTube cuando sea pertinente; Google Trends y 365Scores solo como señales complementarias. MediaLab distingue hechos verificados de interpretacion editorial, guarda las imagenes finales de Experience Radar en rutas locales del repositorio y evita hotlinks en notas publicadas.
 
 ## Artículos del blog
 

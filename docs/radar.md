@@ -403,6 +403,9 @@ correspondiente, para que ninguna predicción quede sin equipo.
 - **Git sin confirmación adicional**: si en la corrida se agregan archivos nuevos de imagen en
   `public/images/experience-radar/mundial-2026/`, el agente debe incluirlos en el commit del
   radar y hacer `git push` a la rama activa sin preguntarme.
+- **Imagen descargada = imagen publicada**: si una fuente autorizada entrega una imagen valida
+  para una nota de radar, el agente debe descargarla, dejarla referenciada en la nota correcta,
+  stagearla en git y subirla junto con el resto de la corrida sin pedir aprobacion extra.
 - **Estados de la nota**: `previa` no es accesible hasta que el partido pasa a en vivo /
   finalizado. El marcador hace que se trate como finalizado aunque el agente no lo marque.
 - **"Analizado" SOLO con marcador**: un partido cuya hora ya pasó (finalizado por tiempo)

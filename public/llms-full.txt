@@ -346,7 +346,7 @@ No. Acelera la toma de decisiones antes de inversión técnica avanzada. Los est
 
 Experience Radar es un producto editorial de MediaLab Ingeniería que analiza señales, emociones, sesgos cognitivos y comportamiento digital alrededor de grandes eventos. Su principio editorial es: "No seguimos el marcador. Analizamos la experiencia".
 
-**Metodología:** (1) validar partido, fecha y resultado con fuente oficial; (2) contrastar contexto con fuentes editoriales enlazadas como Latingoles; (3) observar conversación pública y tendencias solo cuando la fuente responde y es pertinente; (4) separar hechos verificables de inferencias de UX; (5) mantener una URL estable por partido que evoluciona de previa a resultado final.
+**Metodologia:** (1) validar partido, fecha y resultado con fuente oficial; (2) contrastar contexto, imagenes y notas con fuentes editoriales autorizadas como Win Sports, Latingoles y otros medios pertinentes; (3) observar conversacion publica y tendencias solo cuando la fuente responde y aporta señal real, incluyendo X, Reddit, Instagram, Facebook, YouTube, Google Trends y 365Scores cuando aplique; (4) separar hechos verificables de inferencias de UX; (5) mantener una URL estable por partido que evoluciona de previa a resultado final; (6) guardar las imagenes editoriales finales en rutas locales del repositorio para evitar hotlinks y preservar SEO, GEO y citabilidad consistente para LLMs.
 
 **URLs canónicas:**
 - https://medialab.design/experience-radar
