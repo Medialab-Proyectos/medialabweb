@@ -3,9 +3,8 @@
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { PortfolioHero } from "@/components/portfolio/portfolio-hero"
-import { PortfolioMetrics } from "@/components/portfolio/portfolio-metrics"
 import { PortfolioCases } from "@/components/portfolio/portfolio-cases"
-import { PortfolioCTA } from "@/components/portfolio/portfolio-cta"
+import { CTASection } from "@/components/cta-section"
 import { StickyCTA } from "@/components/sticky-cta"
 
 export function PortfolioContent() {
@@ -13,9 +12,8 @@ export function PortfolioContent() {
     <main id="main-content">
       <Navbar />
       <PortfolioHero />
-      <PortfolioMetrics />
       <PortfolioCases />
-      <PortfolioCTA />
+      <CTASection />
       <Footer />
       <StickyCTA />
     </main>

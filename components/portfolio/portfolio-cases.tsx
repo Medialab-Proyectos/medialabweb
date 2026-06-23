@@ -2,10 +2,13 @@
 
 import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
-import { TrendingUp, Users, Clock, Target, Zap, BarChart3, Package } from "lucide-react"
+import { TrendingUp, Users, Clock, Target, Zap, BarChart3, Package, Globe, Smartphone, PlayCircle, ChevronDown } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 
 type Category = "todos" | "web-design" | "mobile-app" | "ia" | "branding"
+
+type MediaKind = "web" | "mobile" | "video"
+type GalleryItem = { kind: MediaKind; src: string }
 
 type CaseItem = {
   id: string
@@ -17,14 +20,33 @@ type CaseItem = {
   gradient: string
   challenge: string
   solution: string
+  footnote?: string
+  customImage?: React.ReactNode
+  gallery?: GalleryItem[]
   results: { icon: React.ElementType; value: string; label: string }[]
   tags: string[]
   categories: Category[]
   usedUxbox: boolean
 }
 
-function CaseCard({ c, i, visible, labels }: { c: CaseItem; i: number; visible: boolean; labels: { challenge: string; solution: string } }) {
+function CaseCard({ c, i, visible, labels }: { c: CaseItem; i: number; visible: boolean; labels: { challenge: string; solution: string; seeChallenge: string; hide: string } }) {
   const [hovered, setHovered] = useState(false)
+  const [open, setOpen] = useState(false)
+  const { t } = useLanguage()
+
+  const gallery = c.gallery ?? []
+  const kinds = Array.from(new Set(gallery.map((g) => g.kind))) as MediaKind[]
+  const [activeKind, setActiveKind] = useState<MediaKind | null>(kinds[0] ?? null)
+  const [mediaIdx, setMediaIdx] = useState(0)
+
+  const kindMeta: Record<MediaKind, { icon: React.ElementType; label: string }> = {
+    web: { icon: Globe, label: t("Web", "Web") },
+    mobile: { icon: Smartphone, label: t("Móvil", "Mobile") },
+    video: { icon: PlayCircle, label: t("Video", "Video") },
+  }
+
+  const kindItems = activeKind ? gallery.filter((g) => g.kind === activeKind) : []
+  const current = kindItems[mediaIdx]
 
   return (
     <div
@@ -34,10 +56,33 @@ function CaseCard({ c, i, visible, labels }: { c: CaseItem; i: number; visible: 
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      {/* Image */}
-      <div className={`relative aspect-[16/11] md:aspect-auto overflow-hidden ${i % 2 === 1 ? "md:order-2" : ""}`}>
-        <Image src={c.image} alt={c.title} fill className="object-cover transition-transform duration-700 group-hover:scale-105" sizes="(max-width: 768px) 100vw, 50vw" />
-        <div className="absolute inset-0" style={{ background: `linear-gradient(to ${i % 2 === 1 ? "left" : "right"}, ${c.color}30, transparent)` }} />
+      {/* Media */}
+      <div
+        className={`relative aspect-[16/11] md:aspect-auto overflow-hidden ${i % 2 === 1 ? "md:order-2" : ""}`}
+        style={{ background: c.gradient }}
+      >
+        {current ? (
+          current.kind === "video" ? (
+            <video src={current.src} controls playsInline className="absolute inset-0 w-full h-full object-cover" />
+          ) : (
+            <Image
+              key={current.src}
+              src={current.src}
+              alt={`${c.title} — ${kindMeta[current.kind].label}`}
+              fill
+              className={`transition-transform duration-700 ${current.kind === "mobile" ? "object-contain p-2" : "object-cover group-hover:scale-105"}`}
+              sizes="(max-width: 768px) 100vw, 50vw"
+            />
+          )
+        ) : c.customImage ? (
+          c.customImage
+        ) : (
+          <Image src={c.image} alt={c.title} fill className="object-cover transition-transform duration-700 group-hover:scale-105" sizes="(max-width: 768px) 100vw, 50vw" />
+        )}
+
+        {/* Decorative gradient (keeps badge legible) */}
+        <div className="absolute inset-0 pointer-events-none" style={{ background: `linear-gradient(to ${i % 2 === 1 ? "left" : "right"}, ${c.color}30, transparent)` }} />
+
         {/* Industry badge */}
         <div className="absolute top-4 left-4 flex items-center gap-2">
           <span className="px-3 py-1.5 rounded-full text-xs font-semibold backdrop-blur-md border" style={{ background: `${c.color}20`, borderColor: `${c.color}40`, color: "white" }}>
@@ -49,48 +94,105 @@ function CaseCard({ c, i, visible, labels }: { c: CaseItem; i: number; visible: 
             </span>
           )}
         </div>
+
+        {/* Media tabs — debajo de la imagen (esquina inferior izquierda) */}
+        {kinds.length > 0 && (
+          <div className="absolute bottom-3 left-3 flex flex-wrap gap-1.5">
+            {kinds.map((k) => {
+              const Meta = kindMeta[k]
+              const isActive = k === activeKind
+              return (
+                <button
+                  key={k}
+                  type="button"
+                  onClick={() => { setActiveKind(k); setMediaIdx(0) }}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-semibold backdrop-blur-md border transition-all ${isActive ? "text-white shadow-lg" : "text-white/80 border-white/20 bg-black/30 hover:bg-black/40"}`}
+                  style={isActive ? { background: `${c.color}`, borderColor: `${c.color}` } : undefined}
+                >
+                  <Meta.icon size={12} /> {Meta.label}
+                </button>
+              )
+            })}
+          </div>
+        )}
+
+        {/* Dots para navegar dentro de la pestaña activa */}
+        {kindItems.length > 1 && (
+          <div className="absolute bottom-3 right-3 flex gap-1.5">
+            {kindItems.map((_, di) => (
+              <button
+                key={di}
+                type="button"
+                onClick={() => setMediaIdx(di)}
+                aria-label={t(`Ver imagen ${di + 1}`, `View image ${di + 1}`)}
+                className={`h-2 rounded-full transition-all duration-300 ${di === mediaIdx ? "w-5 bg-white" : "w-2 bg-white/40 hover:bg-white/60"}`}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Content */}
-      <div className="flex flex-col gap-5 p-8 lg:p-10">
+      <div className="flex flex-col gap-4 p-6 md:p-8 lg:p-10">
         {/* Client label */}
         <span className="text-xs font-semibold tracking-widest uppercase" style={{ color: c.color }}>{c.client}</span>
 
         <h3 className="font-display font-bold text-2xl lg:text-3xl text-foreground leading-tight">{c.title}</h3>
 
-        {/* Challenge & Solution */}
-        <div className="flex flex-col gap-4">
-          <div>
-            <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1 block">{labels.challenge}</span>
-            <p className="text-sm text-muted-foreground leading-relaxed">{c.challenge}</p>
-          </div>
-          <div>
-            <span className="text-xs font-bold uppercase tracking-wider mb-1 block" style={{ color: c.color }}>{labels.solution}</span>
-            <p className="text-sm text-foreground/80 leading-relaxed">{c.solution}</p>
-          </div>
-        </div>
+        {/* Toggle — solo móvil */}
+        <button
+          type="button"
+          onClick={() => setOpen((o) => !o)}
+          aria-expanded={open}
+          className="md:hidden inline-flex items-center justify-between gap-2 px-4 py-2.5 rounded-full text-sm font-semibold border transition-all w-fit"
+          style={{ color: c.color, borderColor: `${c.color}40`, background: `${c.color}12` }}
+        >
+          {open ? labels.hide : labels.seeChallenge}
+          <ChevronDown size={16} className={`transition-transform duration-300 ${open ? "rotate-180" : ""}`} />
+        </button>
 
-        {/* Results */}
-        <div className="grid grid-cols-3 gap-3 py-4 border-y border-border">
-          {c.results.map((r) => {
-            const Icon = r.icon
-            return (
-              <div key={r.label} className="flex flex-col items-center gap-1 text-center">
-                <Icon size={16} style={{ color: c.color }} />
-                <span className="font-display font-bold text-lg" style={{ color: c.color }}>{r.value}</span>
-                <span className="text-[10px] text-muted-foreground leading-tight">{r.label}</span>
+        {/* Collapsible content — acordeón en móvil, siempre abierto en desktop */}
+        <div className={`grid transition-[grid-template-rows] duration-500 ease-out md:grid-rows-[1fr] ${open ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}>
+          <div className="overflow-hidden min-h-0">
+            <div className="flex flex-col gap-5 pt-1">
+              {/* Challenge & Solution */}
+              <div className="flex flex-col gap-4">
+                <div>
+                  <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1 block">{labels.challenge}</span>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{c.challenge}</p>
+                </div>
+                <div>
+                  <span className="text-xs font-bold uppercase tracking-wider mb-1 block" style={{ color: c.color }}>{labels.solution}</span>
+                  <p className="text-sm text-foreground/80 leading-relaxed">{c.solution}</p>
+                  {c.footnote && (
+                    <p className="mt-2 text-[11px] italic text-muted-foreground/70 leading-snug">{c.footnote}</p>
+                  )}
+                </div>
               </div>
-            )
-          })}
-        </div>
 
-        {/* Tags */}
-        <div className="flex flex-wrap gap-2">
-          {c.tags.map((tag) => (
-            <span key={tag} className="px-3 py-1 rounded-full text-xs font-medium bg-secondary text-secondary-foreground border border-border">{tag}</span>
-          ))}
-        </div>
+              {/* Results */}
+              <div className="grid grid-cols-3 gap-3 py-4 border-y border-border">
+                {c.results.map((r) => {
+                  const Icon = r.icon
+                  return (
+                    <div key={r.label} className="flex flex-col items-center gap-1 text-center">
+                      <Icon size={16} style={{ color: c.color }} />
+                      <span className="font-display font-bold text-lg" style={{ color: c.color }}>{r.value}</span>
+                      <span className="text-[10px] text-muted-foreground leading-tight">{r.label}</span>
+                    </div>
+                  )
+                })}
+              </div>
 
+              {/* Tags */}
+              <div className="flex flex-wrap gap-2">
+                {c.tags.map((tag) => (
+                  <span key={tag} className="px-3 py-1 rounded-full text-xs font-medium bg-secondary text-secondary-foreground border border-border">{tag}</span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   )
@@ -147,24 +249,32 @@ export function PortfolioCases() {
       title: t("Presencia Digital Multi-plataforma", "Multi-Platform Digital Presence"),
       client: "Ricardo Montaner",
       industry: t("Entretenimiento", "Entertainment"),
-      image: "/images/case-saas.png",
+      image: "/images/montaner-showcase.png",
       color: "var(--magenta)",
       gradient: "linear-gradient(135deg, #8B1A4A, #C62E65)",
+      gallery: [
+        { kind: "web", src: "/images/montaner-web-1.png" },
+        { kind: "web", src: "/images/montaner-web-2.png" },
+        { kind: "mobile", src: "/images/montaner-mobile-1.png" },
+        { kind: "mobile", src: "/images/montaner-mobile-2.png" },
+        { kind: "mobile", src: "/images/montaner-mobile-3.png" },
+      ],
       challenge: t(
-        "Crear una presencia digital cohesiva para Ricardo Montaner a través de múltiples plataformas, con un sitio web visualmente impactante e innovador que refleje la esencia del artista.",
-        "Build a cohesive digital presence for Ricardo Montaner across multiple platforms, with a visually striking and innovative website that captures the artist's essence."
+        "Para este proyecto integral, desarrollamos una presencia digital cohesiva para Ricardo Montaner a través de múltiples plataformas. Nuestra tarea principal fue diseñar un sitio web visualmente impactante e innovador para exhibir su discografía, asegurando una experiencia de usuario intuitiva y cautivadora.",
+        "For this comprehensive project, we developed a cohesive digital presence for Ricardo Montaner through multiple platforms. Our main task was designing a visually stunning and innovative website to showcase his discography, ensuring an intuitive and engaging user experience."
       ),
       solution: t(
-        "Diseñamos un sitio web visualmente impresionante para exhibir su discografía con una experiencia de usuario intuitiva y atractiva. Además, creamos el sitio web oficial del artista, alineado con su imagen para crear una plataforma visualmente cautivadora que garantiza navegación fluida y participación activa.",
-        "We designed a stunning website to showcase his discography with an intuitive, engaging user experience. We also created the artist's official site, aligned with his brand image to deliver a visually captivating platform that ensures smooth navigation and active engagement."
+        "Diseñamos el sitio web oficial del artista, alineado con la imagen de Montaner para crear una plataforma visualmente atractiva que cautiva a los visitantes, garantizando navegación fluida y participación activa.",
+        "Additionally, we crafted the official artist's website, aligning it with Montaner's image to create a seamless, visually appealing platform that captivates visitors while guaranteeing smooth navigation and active participation."
       ),
+      footnote: t("* Diseño de laboratorio UX", "* UX Lab design"),
       results: [
         { icon: Zap, value: t("Premium", "Premium"), label: t("Experiencia visual", "Visual experience") },
         { icon: Users, value: "Multi", label: t("Plataformas conectadas", "Connected platforms") },
         { icon: Target, value: "100%", label: t("Alineación de marca", "Brand alignment") },
       ],
       tags: ["Web Design", "UX/UI", "Prototype", "Development"],
-      categories: ["web-design"],
+      categories: ["web-design", "mobile-app"],
       usedUxbox: false,
     },
     {
@@ -276,6 +386,8 @@ export function PortfolioCases() {
   const cardLabels = {
     challenge: t("El reto", "The challenge"),
     solution: t("Nuestra solución", "Our solution"),
+    seeChallenge: t("Ver el reto", "See the challenge"),
+    hide: t("Ocultar", "Hide"),
   }
 
   return (

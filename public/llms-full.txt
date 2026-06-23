@@ -211,7 +211,7 @@ App interactiva con videos educativos, juegos y tracking de progreso para capaci
 El caso Pepsico funciona como prueba de escala: MediaLab diseña productos digitales que deben ser claros para muchos usuarios, roles y contextos al mismo tiempo.
 
 **Ricardo Montaner — Presencia Digital Multi-plataforma** (Entretenimiento)
-Sitio web oficial del artista con experiencia visual premium para exhibir discografía. Diseño alineado con la imagen del artista para navegación fluida y participación activa.
+Para este proyecto integral, desarrollamos una presencia digital cohesiva para Ricardo Montaner a través de múltiples plataformas. Nuestra tarea principal fue diseñar un sitio web visualmente impactante e innovador para exhibir su discografía, asegurando una experiencia de usuario intuitiva y cautivadora. Además, diseñamos el sitio web oficial del artista, alineado con la imagen de Montaner para crear una plataforma visualmente atractiva que cautiva a los visitantes, garantizando navegación fluida y participación activa. * Diseño de laboratorio UX
 
 **Bellanova Clinic — Experiencia Digital de Lujo** (Salud & Belleza)
 Sitio web premium para clínica estética que refleja exclusividad y excelencia. +200% tráfico orgánico, percepción de marca premium, 8 semanas de entrega.
