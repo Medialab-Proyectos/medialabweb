@@ -406,6 +406,20 @@ correspondiente, para que ninguna predicción quede sin equipo.
 - **Imagen descargada = imagen publicada**: si una fuente autorizada entrega una imagen valida
   para una nota de radar, el agente debe descargarla, dejarla referenciada en la nota correcta,
   stagearla en git y subirla junto con el resto de la corrida sin pedir aprobacion extra.
+- **Sin relleno ni frases comodin**: elimina cualquier texto generico tipo "los asistentes con IA
+  durante el evento", "la tecnologia acompano la experiencia" o formulas parecidas si no salen de
+  una fuente real y verificable del partido. Toda nota debe hablar del cruce concreto, no de un
+  lugar comun.
+- **Voz social real o nada**: Instagram, Facebook, YouTube, Reddit, X, Latingoles, Win Sports y
+  paginas de analistas solo cuentan si entregan senales observables (comentarios, titulares,
+  frases, clips o patrones de reaccion). Si una plataforma falla, bloquea, exige login o no ofrece
+  evidencia clara, no inventes tono de hinchada; documenta el bloqueo y apoyate en las otras
+  fuentes disponibles.
+- **Robots / LLM / SEO / GEO**: antes de cerrar una corrida del especial, revisa que el contenido
+  siga reforzando `Experience Radar` como marca editorial en metadata, JSON-LD, sitemap de
+  noticias, `robots`/indexacion, archivos `llms*.txt` y demas superficies GEO/LLM del sitio. Si
+  un cambio editorial afecta discoverability o descripcion del producto, actualizalo en la misma
+  corrida o reporta el bloqueo exacto.
 - **Estados de la nota**: `previa` no es accesible hasta que el partido pasa a en vivo /
   finalizado. El marcador hace que se trate como finalizado aunque el agente no lo marque.
 - **"Analizado" SOLO con marcador**: un partido cuya hora ya pasó (finalizado por tiempo)
