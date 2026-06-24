@@ -52,8 +52,8 @@ export function ServicesSummarySection() {
       image: "/images/service-cro-saas-team.png",
       titleEs: "Menos feature factory, más decisiones que mueven métricas",
       titleEn: "Less feature factory, more decisions that move metrics",
-      lineEs: "CRO para SaaS: convertimos feedback disperso, requests y fricción en prioridades de activación, retención y conversión.",
-      lineEn: "SaaS CRO: we turn scattered feedback, requests, and friction into activation, retention, and conversion priorities.",
+      lineEs: "CRO para SaaS: convertimos feedback y fricción en prioridades de activación y conversión.",
+      lineEn: "SaaS CRO: we turn feedback and friction into activation and conversion priorities.",
       href: "/servicios/cro-saas",
     },
   ]
@@ -106,9 +106,8 @@ export function ServicesSummarySection() {
                 transition={{ delay: 0.05 + i * 0.08, duration: 0.5 }}
                 className="min-w-[80%] snap-start sm:min-w-0"
               >
-                <Link
-                  href={localized(s.href)}
-                  className="group flex flex-col h-full gap-3 p-6 rounded-2xl border border-border bg-card hover:-translate-y-1 transition-all duration-300 overflow-hidden"
+                <div
+                  className="group flex flex-col gap-3 p-6 rounded-2xl border border-border bg-card transition-all duration-300 overflow-hidden hover:-translate-y-1"
                   onMouseEnter={(e) => { e.currentTarget.style.borderColor = s.color }}
                   onMouseLeave={(e) => { e.currentTarget.style.borderColor = "" }}
                 >
@@ -130,41 +129,47 @@ export function ServicesSummarySection() {
                   >
                     <Icon className="w-5 h-5" style={{ color: s.color }} />
                   </div>
-                  <h3 className="text-lg font-bold text-foreground font-display leading-snug">
+                  <h3 className="text-lg font-bold text-foreground font-display leading-snug line-clamp-2 min-h-[3.25rem]">
                     {t(s.titleEs, s.titleEn)}
                   </h3>
-                  <p className="text-sm text-foreground/60 dark:text-foreground/50 leading-relaxed flex-1">
+                  <p className="text-sm text-foreground/60 dark:text-foreground/50 leading-relaxed line-clamp-2 min-h-[2.7rem]">
                     {t(s.lineEs, s.lineEn)}
                   </p>
-                  <span
-                    className="inline-flex items-center gap-1.5 mt-1 text-sm font-semibold transition-all duration-300 group-hover:gap-2.5"
+                  <Link
+                    href={localized(s.href)}
+                    className="inline-flex items-center gap-1.5 mt-1 w-fit text-sm font-semibold transition-all duration-300 hover:gap-2.5"
                     style={{ color: s.color }}
                   >
                     {t("Conoce más", "Learn more")}
                     <ArrowRight size={15} />
-                  </span>
-                </Link>
+                  </Link>
+                </div>
               </motion.div>
             )
           })}
         </div>
 
-        {/* CTAs */}
-        <div className="flex flex-col sm:flex-row gap-3">
-          <Link
-            href="#contact"
-            className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold text-sm text-white shadow-lg hover:brightness-110 transition active:scale-[0.98]"
-            style={{ background: "#E8751A", boxShadow: "0 8px 30px rgba(232,117,26,0.35)" }}
-          >
-            {t("Contáctanos", "Contact us")}
-            <ArrowRight size={16} />
-          </Link>
-          <a
-            href="#uxbox"
-            className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold text-sm border dark:border-white/15 border-foreground/15 dark:text-white/75 text-foreground/75 dark:hover:text-white hover:text-foreground dark:hover:border-white/30 hover:border-foreground/30 dark:hover:bg-white/5 hover:bg-foreground/5 transition-all active:scale-[0.98]"
-          >
-            {t("Probar UXBox gratis", "Try UXBox free")}
-          </a>
+        {/* CTAs — en caja para no quedar sueltos */}
+        <div className="rounded-2xl border border-border bg-secondary/30 p-5 md:p-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-base font-semibold text-foreground text-balance">
+            {t("¿No sabes por dónde empezar? Cuéntanos tu reto y te guiamos.", "Not sure where to start? Tell us your challenge and we'll guide you.")}
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3 shrink-0">
+            <Link
+              href="#contact"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold text-sm text-white shadow-lg hover:brightness-110 transition active:scale-[0.98] w-full sm:w-auto"
+              style={{ background: "#E8751A", boxShadow: "0 8px 30px rgba(232,117,26,0.35)" }}
+            >
+              {t("Contáctanos", "Contact us")}
+              <ArrowRight size={16} />
+            </Link>
+            <a
+              href="#uxbox"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold text-sm border dark:border-white/15 border-foreground/15 dark:text-white/75 text-foreground/75 dark:hover:text-white hover:text-foreground dark:hover:border-white/30 hover:border-foreground/30 dark:hover:bg-white/5 hover:bg-foreground/5 transition-all active:scale-[0.98] w-full sm:w-auto"
+            >
+              {t("Probar UXBox gratis", "Try UXBox free")}
+            </a>
+          </div>
         </div>
 
         <div className="grid md:grid-cols-[1fr_auto] gap-5 items-center rounded-2xl border border-[var(--cyan)]/25 bg-card p-6 md:p-7">
@@ -184,7 +189,7 @@ export function ServicesSummarySection() {
           </div>
           <Link
             href={localized("/portafolio") + "#crea-adn"}
-            className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full font-semibold text-sm border border-[var(--cyan)]/30 text-[var(--cyan)] hover:bg-[var(--cyan)]/10 transition-all"
+            className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full font-semibold text-sm border border-[var(--cyan)]/30 text-[var(--cyan)] hover:bg-[var(--cyan)]/10 transition-all w-full md:w-auto"
           >
             {t("Ver caso Crea ADN", "See Crea ADN case")}
             <ArrowRight size={15} />

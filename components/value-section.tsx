@@ -1,77 +1,121 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useState } from "react"
 import Link from "next/link"
-import { ArrowRight, SearchCheck, UsersRound, LineChart, ShieldCheck, Brain, Zap, Layers } from "lucide-react"
+import { ArrowRight, SearchCheck, UsersRound, LineChart, ShieldCheck } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 
+type LadderItem = {
+  n: number
+  icon: React.ElementType
+  color: string
+  titleEs: string; titleEn: string
+  frontEs: string; frontEn: string
+  backEs: string; backEn: string
+}
+
+const ladder: LadderItem[] = [
+  {
+    n: 1, icon: SearchCheck, color: "var(--magenta)",
+    titleEs: "Te encuentran", titleEn: "They find you",
+    frontEs: "Tu producto aparece donde tu cliente te busca.", frontEn: "Your product shows up where your customer looks for you.",
+    backEs: "Arquitectura de contenido y SEO técnico para que Google —y las personas— entiendan qué haces y por qué importa.",
+    backEn: "Content architecture and technical SEO so Google —and people— understand what you do and why it matters.",
+  },
+  {
+    n: 2, icon: UsersRound, color: "var(--cyan)",
+    titleEs: "Te entienden", titleEn: "They understand you",
+    frontEs: "Cada pantalla habla el idioma de tu usuario.", frontEn: "Every screen speaks your user's language.",
+    backEs: "Investigamos miedos, motivaciones y fricciones reales antes de diseñar una sola pantalla.",
+    backEn: "We research real fears, motivations, and friction before designing a single screen.",
+  },
+  {
+    n: 3, icon: LineChart, color: "var(--orange)",
+    titleEs: "Te eligen", titleEn: "They choose you",
+    frontEs: "La confianza supera a la objeción y el usuario actúa.", frontEn: "Trust outweighs objection and the user acts.",
+    backEs: "Optimizamos cada punto de decisión (CRO) con datos de comportamiento real, no suposiciones.",
+    backEn: "We optimize every decision point (CRO) with real behavioral data, not assumptions.",
+  },
+  {
+    n: 4, icon: ShieldCheck, color: "var(--magenta)",
+    titleEs: "Se quedan", titleEn: "They stay",
+    frontEs: "Vuelven por la experiencia, no por notificaciones.", frontEn: "They return for the experience, not for notifications.",
+    backEs: "Performance, accesibilidad y arquitectura que escalan sin romperse, con un solo equipo end-to-end.",
+    backEn: "Performance, accessibility, and architecture that scale without breaking, with one end-to-end team.",
+  },
+]
+
+function FlipCard({ item }: { item: LadderItem }) {
+  const [flipped, setFlipped] = useState(false)
+  const { t } = useLanguage()
+  const Icon = item.icon
+  const color = item.color
+
+  return (
+    <div className="min-w-[82%] snap-start sm:min-w-0 h-[268px] [perspective:1400px]">
+      <div className={`relative h-full w-full transition-transform duration-500 [transform-style:preserve-3d] ${flipped ? "[transform:rotateY(180deg)]" : ""}`}>
+        {/* Frente */}
+        <div className="absolute inset-0 [backface-visibility:hidden] flex flex-col gap-3 p-6 rounded-2xl border border-border bg-card">
+          <div className="flex items-center gap-3">
+            <span
+              className="font-display text-4xl font-bold leading-none bg-clip-text text-transparent"
+              style={{ backgroundImage: `linear-gradient(135deg, ${color}, color-mix(in oklab, ${color} 45%, transparent))` }}
+            >
+              0{item.n}
+            </span>
+            <span
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
+              style={{ background: `color-mix(in oklab, ${color} 14%, transparent)`, border: `1px solid color-mix(in oklab, ${color} 32%, transparent)` }}
+            >
+              <Icon size={18} style={{ color }} />
+            </span>
+          </div>
+          <h3 className="font-display font-bold text-xl text-foreground">{t(item.titleEs, item.titleEn)}</h3>
+          <p className="text-sm text-muted-foreground leading-relaxed flex-1">{t(item.frontEs, item.frontEn)}</p>
+          <button
+            type="button"
+            onClick={() => setFlipped(true)}
+            className="inline-flex items-center gap-1.5 text-sm font-semibold w-fit transition-all hover:gap-2.5"
+            style={{ color }}
+          >
+            {t("Cómo lo logramos", "How we do it")}
+            <ArrowRight size={14} />
+          </button>
+        </div>
+
+        {/* Reverso */}
+        <div
+          className="absolute inset-0 [backface-visibility:hidden] [transform:rotateY(180deg)] flex flex-col gap-3 p-6 rounded-2xl border bg-card"
+          style={{ borderColor: `color-mix(in oklab, ${color} 45%, transparent)` }}
+        >
+          <span className="text-xs font-semibold tracking-widest uppercase" style={{ color }}>
+            {t("Cómo lo logramos", "How we do it")}
+          </span>
+          <p className="text-sm text-foreground/80 leading-relaxed flex-1">{t(item.backEs, item.backEn)}</p>
+          <button
+            type="button"
+            onClick={() => setFlipped(false)}
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground w-fit transition-colors"
+          >
+            <ArrowRight size={14} className="rotate-180" />
+            {t("Volver", "Back")}
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 /**
- * Sección de valor — fusiona lo esencial de About + ExperienceDesign + WhyUs
- * en una sola pieza sin redundancia. Conserva id="about" para el nav del home.
+ * Sección de valor (id="about") — sobre nosotros + recorrido del usuario
+ * en tarjetas que voltean para mostrar "cómo lo logramos".
  */
 export function ValueSection() {
-  const ref = useRef<HTMLDivElement>(null)
-  const [visible, setVisible] = useState(false)
   const { t } = useLanguage()
-
-  useEffect(() => {
-    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setVisible(true) }, { threshold: 0.12 })
-    if (ref.current) obs.observe(ref.current)
-    return () => obs.disconnect()
-  }, [])
-
-  const ladder = [
-    {
-      n: "01", icon: SearchCheck, color: "var(--magenta)",
-      titleEs: "Te encuentran", titleEn: "They find you",
-      descEs: "Arquitectura y contenido para que Google —y tus clientes— sepan qué haces y por qué importa.",
-      descEn: "Architecture and content so Google —and your customers— know what you do and why it matters.",
-    },
-    {
-      n: "02", icon: UsersRound, color: "var(--cyan)",
-      titleEs: "Te entienden", titleEn: "They understand you",
-      descEs: "Mapeamos miedos, motivaciones y fricciones de tu usuario antes de diseñar una sola pantalla.",
-      descEn: "We map your users' fears, motivations, and friction before designing a single screen.",
-    },
-    {
-      n: "03", icon: LineChart, color: "var(--orange)",
-      titleEs: "Te eligen", titleEn: "They choose you",
-      descEs: "Optimizamos cada punto de decisión para que la confianza supere a la objeción.",
-      descEn: "We optimize every decision point so trust outweighs objection.",
-    },
-    {
-      n: "04", icon: ShieldCheck, color: "var(--magenta)",
-      titleEs: "Se quedan", titleEn: "They stay",
-      descEs: "Producto, performance y arquitectura que escalan sin romperse. Retención por experiencia, no por notificaciones.",
-      descEn: "Product, performance, and architecture that scale without breaking. Retention through experience, not notifications.",
-    },
-  ]
-
-  const diffs = [
-    {
-      icon: Brain,
-      titleEs: "Investigamos antes de diseñar", titleEn: "We research before we design",
-      descEs: "Nada de suposiciones: cada decisión nace de datos de comportamiento real.",
-      descEn: "No assumptions: every decision starts from real behavioral data.",
-    },
-    {
-      icon: Zap,
-      titleEs: "Claridad en días, no meses", titleEn: "Clarity in days, not months",
-      descEs: "UXBox comprime el discovery con IA y un equipo humano lo valida.",
-      descEn: "UXBox compresses discovery with AI, validated by a human team.",
-    },
-    {
-      icon: Layers,
-      titleEs: "Un solo equipo, end-to-end", titleEn: "One team, end-to-end",
-      descEs: "Research, diseño y desarrollo sin intermediarios ni traspasos.",
-      descEn: "Research, design, and development with no middlemen or hand-offs.",
-    },
-  ]
 
   return (
     <section
       id="about"
-      ref={ref}
       className="relative py-12 md:py-24 px-6 bg-background overflow-hidden"
       aria-labelledby="value-heading"
     >
@@ -83,7 +127,7 @@ export function ValueSection() {
       />
 
       <div className="relative max-w-7xl mx-auto flex flex-col gap-12 md:gap-16">
-        {/* Hook */}
+        {/* Hook — sobre nosotros */}
         <div className="flex flex-col gap-5 max-w-3xl">
           <span className="text-xs font-semibold tracking-widest uppercase text-[var(--magenta)]">
             {t("Por qué nos eligen", "Why teams choose us")}
@@ -96,61 +140,50 @@ export function ValueSection() {
           </h2>
           <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
             {t(
-              "Unimos psicología del consumidor, IA y diseño UX para que cada decisión tenga evidencia real — no suposiciones. Así construimos productos que la gente entiende, usa y recomienda.",
-              "We combine consumer psychology, AI, and UX design so every decision is backed by real evidence — not assumptions. That's how we build products people understand, use, and recommend."
+              "Somos una agencia con más de 4 años de experiencia. Un equipo experto que combina psicología del consumidor, IA y diseño UX para que cada decisión tenga evidencia real — no suposiciones. Así construimos productos que la gente entiende, usa y recomienda.",
+              "We're an agency with 4+ years of experience. An expert team that blends consumer psychology, AI, and UX design so every decision is backed by real evidence — not assumptions. That's how we build products people understand, use, and recommend."
             )}
           </p>
         </div>
 
-        {/* Value ladder — te encuentran → entienden → eligen → se quedan (carrusel en móvil) */}
-        <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-2 sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:overflow-visible sm:pb-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          {ladder.map((p, i) => {
-            const Icon = p.icon
-            return (
-              <div
-                key={p.titleEs}
-                className={`group relative flex flex-col gap-4 p-6 rounded-2xl border border-border bg-card transition-all duration-500 hover:-translate-y-1 hover:shadow-xl min-w-[80%] snap-start sm:min-w-0 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
-                style={{ transitionDelay: `${i * 90}ms` }}
-              >
-                <div className="flex items-center justify-between">
-                  <div className="w-11 h-11 rounded-xl flex items-center justify-center transition-transform duration-200 group-hover:scale-110" style={{ background: `${p.color}18`, border: `1px solid ${p.color}33` }}>
-                    <Icon size={20} style={{ color: p.color }} />
-                  </div>
-                  <span className="font-display font-bold text-2xl tabular-nums" style={{ color: p.color, opacity: 0.22 }}>{p.n}</span>
-                </div>
-                <h3 className="font-display font-bold text-xl text-foreground">{t(p.titleEs, p.titleEn)}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{t(p.descEs, p.descEn)}</p>
-              </div>
-            )
-          })}
+        {/* Recorrido del usuario — tarjetas que voltean */}
+        <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-1.5 max-w-2xl">
+            <span className="text-xs font-semibold tracking-widest uppercase text-[var(--cyan)]">{t("El recorrido de tu usuario", "Your user's journey")}</span>
+            <p className="text-sm text-muted-foreground">{t("Voltea cada tarjeta para ver cómo lo logramos.", "Flip each card to see how we do it.")}</p>
+          </div>
+          <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-2 sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:overflow-visible sm:pb-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {ladder.map((item) => (
+              <FlipCard key={item.titleEs} item={item} />
+            ))}
+          </div>
         </div>
 
-        {/* Diferenciadores + CTA */}
-        <div className="grid gap-8 lg:grid-cols-[1.5fr_1fr] lg:items-center rounded-3xl border border-border bg-secondary/30 p-6 md:p-10">
-          <div className="grid gap-6 sm:grid-cols-3">
-            {diffs.map((d) => {
-              const Icon = d.icon
-              return (
-                <div key={d.titleEs} className="flex flex-col gap-2">
-                  <Icon size={22} className="text-[var(--cyan)]" />
-                  <h3 className="font-semibold text-foreground leading-snug">{t(d.titleEs, d.titleEn)}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{t(d.descEs, d.descEn)}</p>
-                </div>
-              )
-            })}
-          </div>
-          <div className="flex flex-col gap-4 lg:items-end lg:text-right">
-            <p className="text-base font-medium text-foreground text-balance">
-              {t("¿Tu producto pierde usuarios y no sabes por qué?", "Is your product losing users and you don't know why?")}
-            </p>
+        {/* Caja CTA */}
+        <div className="relative overflow-hidden rounded-2xl border border-[var(--magenta)]/20 p-6 md:p-8 flex flex-col gap-5">
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 -z-10"
+            style={{ background: "linear-gradient(120deg, color-mix(in oklab, var(--magenta) 10%, transparent), transparent 55%), linear-gradient(300deg, color-mix(in oklab, var(--cyan) 8%, transparent), transparent 55%)" }}
+          />
+          <p className="text-lg md:text-xl font-semibold text-foreground text-balance max-w-xl">
+            {t("¿Tu producto pierde usuarios y no sabes por qué?", "Is your product losing users and you don't know why?")}
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3">
             <Link
               href="#contact"
               className="group inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full font-semibold text-sm text-white transition-all hover:brightness-110 active:scale-95 w-full sm:w-auto"
-              style={{ background: "var(--magenta)" }}
+              style={{ background: "var(--magenta)", boxShadow: "0 10px 30px color-mix(in oklab, var(--magenta) 30%, transparent)" }}
             >
               {t("Cuéntanos tu desafío", "Tell us your challenge")}
               <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
             </Link>
+            <a
+              href="#uxbox"
+              className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full font-semibold text-sm border border-border text-foreground hover:bg-foreground/5 hover:border-foreground/30 transition-all active:scale-95 w-full sm:w-auto"
+            >
+              {t("Probar el UXBox gratis", "Try UXBox free")}
+            </a>
           </div>
         </div>
       </div>

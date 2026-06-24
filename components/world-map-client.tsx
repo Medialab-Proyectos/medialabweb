@@ -1,7 +1,9 @@
 "use client"
 
-import React from "react"
+import React, { useState } from "react"
 import { ComposableMap, Geographies, Geography, Marker, ZoomableGroup } from "react-simple-maps"
+import { RotateCcw } from "lucide-react"
+import { useLanguage } from "@/lib/language-context"
 
 const GEO_URL = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json"
 
@@ -59,7 +61,23 @@ interface Props {
   setTooltip: (v: { name: string; country: string } | null) => void
 }
 
+const DEFAULT_POS: { coordinates: [number, number]; zoom: number } = { coordinates: [0, 0], zoom: 1 }
+
+// ZoomableGroup runtime supports center/onMoveEnd, but they're absent from the inferred types
+const ZG = ZoomableGroup as unknown as React.ComponentType<{
+  zoom?: number
+  center?: [number, number]
+  minZoom?: number
+  maxZoom?: number
+  onMoveEnd?: (pos: { coordinates: [number, number]; zoom: number }) => void
+  children?: React.ReactNode
+}>
+
 export function WorldMap({ tooltip, setTooltip }: Props) {
+  const { t } = useLanguage()
+  const [position, setPosition] = useState(DEFAULT_POS)
+  const moved = position.zoom !== 1 || position.coordinates[0] !== 0 || position.coordinates[1] !== 0
+
   return (
     <div
       className="relative w-full rounded-2xl overflow-hidden border border-white/10"
@@ -75,12 +93,31 @@ export function WorldMap({ tooltip, setTooltip }: Props) {
         </div>
       )}
 
+      {/* Botón para centrar / resetear el mapa */}
+      {moved && (
+        <button
+          type="button"
+          onClick={() => setPosition(DEFAULT_POS)}
+          aria-label={t("Centrar mapa", "Reset map")}
+          className="absolute top-3 right-3 z-20 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-transform active:scale-95"
+          style={{ background: "rgba(10,22,40,0.9)", border: "1px solid rgba(232,117,26,0.4)", color: "white" }}
+        >
+          <RotateCcw size={13} /> {t("Centrar", "Reset")}
+        </button>
+      )}
+
       <ComposableMap
         projection="geoMercator"
         projectionConfig={{ scale: 130, center: [-20, 15] }}
         style={{ width: "100%", height: "auto" }}
       >
-        <ZoomableGroup zoom={1} minZoom={1} maxZoom={4}>
+        <ZG
+          zoom={position.zoom}
+          center={position.coordinates}
+          minZoom={1}
+          maxZoom={4}
+          onMoveEnd={(pos) => setPosition({ coordinates: pos.coordinates, zoom: pos.zoom })}
+        >
 
           {/* Countries — Colombia highlighted as HQ country */}
           <Geographies geography={GEO_URL}>
@@ -158,7 +195,7 @@ export function WorldMap({ tooltip, setTooltip }: Props) {
             <circle r={2.5} fill="#E8751A" />
           </Marker>
 
-        </ZoomableGroup>
+        </ZG>
       </ComposableMap>
 
       {/* Legend */}

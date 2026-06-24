@@ -85,10 +85,10 @@ export function WorldPresence() {
                 className="relative overflow-hidden flex flex-col items-center gap-2 py-6 rounded-xl border dark:border-white/10 border-foreground/10 dark:bg-white/5 bg-foreground/5"
               >
                 <Icon
-                  size={88}
+                  size={116}
                   aria-hidden="true"
-                  className="absolute -right-3 -bottom-3 pointer-events-none"
-                  style={{ color: "var(--magenta)", opacity: 0.08 }}
+                  className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+                  style={{ color: "var(--magenta)", opacity: 0.07 }}
                 />
                 <span className="relative font-display font-bold text-3xl md:text-4xl" style={{ color: "var(--magenta)" }}>
                   {s.value}

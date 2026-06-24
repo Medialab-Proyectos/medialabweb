@@ -116,10 +116,9 @@ export function CoursePromoSection() {
           visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
         }`}
       >
-        {/* Eyebrow */}
-        <div className="inline-flex items-center gap-3">
+        {/* Eyebrow — logo arriba, badge debajo (conexión) */}
+        <div className="flex flex-col items-center gap-3">
           <Image src="/images/ecosistema/school.svg" alt="UXSchool" width={110} height={30} className="h-7 w-auto brightness-0 invert opacity-70" />
-          <span className="w-px h-5 bg-white/15" aria-hidden="true" />
           <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[var(--orange)]/30 bg-[var(--orange)]/[0.12]">
             <Sparkles size={12} style={{ color: "var(--orange)" }} />
             <span className="text-[11px] tracking-[0.12em] uppercase font-semibold" style={{ color: "var(--orange)" }}>
@@ -162,8 +161,8 @@ export function CoursePromoSection() {
           })}
         </div>
 
-        {/* CTA */}
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-3">
+        {/* CTA — full width en móvil */}
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-3 w-full sm:w-auto">
           <Link
             href={localized("/curso")}
             className="group inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full text-sm font-semibold text-white transition-all duration-300 hover:scale-[1.03] hover:shadow-lg active:scale-95 w-full sm:w-auto"
