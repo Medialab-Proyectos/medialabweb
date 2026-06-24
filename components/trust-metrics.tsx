@@ -43,10 +43,16 @@ export function TrustMetrics() {
 
   return (
     <section
-      className="py-20 px-6 bg-background border-b border-border"
+      className="pt-16 md:pt-24 pb-20 px-6 bg-background"
       aria-label="Trust metrics"
     >
       <div className="max-w-6xl mx-auto">
+        {/* Separador artístico entre marcas e indicadores */}
+        <div className="flex items-center justify-center gap-3 sm:gap-5 mb-10" aria-hidden="true">
+          <span className="h-px w-16 sm:w-40" style={{ background: "linear-gradient(to right, transparent, color-mix(in oklab, var(--magenta) 45%, transparent))" }} />
+          <span className="w-2 h-2 rotate-45 rounded-[2px]" style={{ background: "linear-gradient(135deg, var(--magenta), var(--cyan))", boxShadow: "0 0 12px color-mix(in oklab, var(--magenta) 45%, transparent)" }} />
+          <span className="h-px w-16 sm:w-40" style={{ background: "linear-gradient(to left, transparent, color-mix(in oklab, var(--cyan) 45%, transparent))" }} />
+        </div>
         <p className="text-center text-xs font-semibold tracking-widest uppercase text-muted-foreground mb-12">
           {t(
             "Resultados reales de equipos que dejaron de adivinar y empezaron a diseñar con evidencia",
@@ -58,7 +64,7 @@ export function TrustMetrics() {
             <MetricCard key={m.label} {...m} />
           ))}
         </div>
-        <p className="mt-4 max-w-3xl mx-auto text-center text-xs text-muted-foreground leading-relaxed">
+        <p className="mt-4 max-w-3xl mx-auto text-center text-xs italic text-muted-foreground leading-relaxed">
           {t(
             "Estas cifras son promedios internos y resultados reportados por clientes en proyectos entregados; en cada propuesta definimos la línea base, la muestra y la métrica que vamos a mover.",
             "These figures are internal averages and client-reported results from shipped projects; in every proposal we define the baseline, sample, and metric we aim to move."

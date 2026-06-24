@@ -7,6 +7,7 @@ import { useLanguage } from "@/lib/language-context"
 import {
   ArrowRight,
   Brain,
+  Download,
   GraduationCap,
   Layers,
   Sparkles,
@@ -58,170 +59,140 @@ export function CoursePromoSection() {
     <section
       id="curso-promo"
       ref={ref}
-      className="relative py-28 px-6 overflow-hidden"
+      className="dark-hero-text relative py-28 px-6 overflow-hidden isolate"
       aria-labelledby="curso-promo-heading"
     >
-      {/* Cinematic dark gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[var(--surface-dark)] via-[var(--surface-dark)]/90 to-[var(--surface-mid)] transition-colors duration-300" />
-
-      {/* Ambient glow orbs (Dark only) */}
-      <div className="absolute top-[15%] left-[10%] w-[420px] h-[420px] bg-[var(--magenta)]/[0.05] rounded-full blur-[180px] pointer-events-none ambient-glow" />
-      <div className="absolute bottom-[10%] right-[15%] w-[380px] h-[380px] bg-[var(--cyan)]/[0.04] rounded-full blur-[160px] pointer-events-none ambient-glow" />
-
-      {/* Subtle grid overlay */}
+      {/* Base oscura neutra fija (independiente del tema, sin tinte morado) */}
       <div
-        className="absolute inset-0 opacity-[0.03] pointer-events-none"
+        className="absolute inset-0 -z-10"
+        style={{ background: "linear-gradient(160deg, #07090c 0%, #080b10 50%, #0a0f14 100%)" }}
+        aria-hidden="true"
+      />
+
+      {/* Glows vívidos — naranja + cian protagonistas, magenta de acento (base neutra, sin morado) */}
+      <div
+        className="absolute -top-24 left-[2%] w-[500px] h-[500px] rounded-full blur-[150px] -z-10 animate-float-1 pointer-events-none"
+        style={{ background: "radial-gradient(circle, rgba(42,171,179,0.28), transparent 70%)" }}
+        aria-hidden="true"
+      />
+      <div
+        className="absolute -bottom-32 right-[4%] w-[500px] h-[500px] rounded-full blur-[160px] -z-10 animate-float-2 pointer-events-none"
+        style={{ background: "radial-gradient(circle, rgba(232,117,26,0.26), transparent 70%)" }}
+        aria-hidden="true"
+      />
+      <div
+        className="absolute top-[40%] right-[34%] w-[360px] h-[360px] rounded-full blur-[150px] -z-10 animate-float-3 pointer-events-none"
+        style={{ background: "radial-gradient(circle, rgba(230,0,126,0.14), transparent 70%)" }}
+        aria-hidden="true"
+      />
+
+      {/* Rejilla técnica (vibra IA) — líneas blancas tenues con desvanecido */}
+      <div
+        className="absolute inset-0 -z-10 opacity-[0.06] pointer-events-none"
         style={{
-          backgroundImage: `linear-gradient(var(--dot-color) 1px, transparent 1px), linear-gradient(90deg, var(--dot-color) 1px, transparent 1px)`,
-          backgroundSize: "60px 60px",
+          backgroundImage:
+            "linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)",
+          backgroundSize: "56px 56px",
+          WebkitMaskImage: "radial-gradient(ellipse 85% 75% at 50% 42%, #000 5%, transparent 80%)",
+          maskImage: "radial-gradient(ellipse 85% 75% at 50% 42%, #000 5%, transparent 80%)",
         }}
         aria-hidden="true"
       />
 
-      <div className="relative z-10 max-w-7xl mx-auto">
-        {/* Top layout: text + card */}
-        <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-12 lg:gap-16 items-center">
-          {/* Left — copy */}
-          <div
-            className={`flex flex-col gap-6 transition-all duration-700 ${
-              visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-            }`}
+      {/* Líneas de separación superior e inferior (gradiente de marca) */}
+      <div
+        className="absolute top-0 inset-x-0 h-px -z-10"
+        style={{ background: "linear-gradient(90deg, transparent, rgba(232,117,26,0.55), rgba(42,171,179,0.55), transparent)" }}
+        aria-hidden="true"
+      />
+      <div
+        className="absolute bottom-0 inset-x-0 h-px -z-10"
+        style={{ background: "linear-gradient(90deg, transparent, rgba(42,171,179,0.4), rgba(232,117,26,0.4), transparent)" }}
+        aria-hidden="true"
+      />
+
+      <div
+        className={`relative z-10 max-w-3xl mx-auto flex flex-col items-center text-center gap-6 transition-all duration-700 ${
+          visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+        }`}
+      >
+        {/* Eyebrow */}
+        <div className="inline-flex items-center gap-3">
+          <Image src="/images/ecosistema/school.svg" alt="UXSchool" width={110} height={30} className="h-7 w-auto brightness-0 invert opacity-70" />
+          <span className="w-px h-5 bg-white/15" aria-hidden="true" />
+          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[var(--orange)]/30 bg-[var(--orange)]/[0.12]">
+            <Sparkles size={12} style={{ color: "var(--orange)" }} />
+            <span className="text-[11px] tracking-[0.12em] uppercase font-semibold" style={{ color: "var(--orange)" }}>
+              {t("Nuevo · Formación Profesional", "New · Professional Training")}
+            </span>
+          </span>
+        </div>
+
+        {/* Headline */}
+        <h2
+          id="curso-promo-heading"
+          className="font-display font-bold text-3xl md:text-4xl lg:text-[2.75rem] leading-[1.15] text-white text-balance"
+        >
+          {t("Aprende a construir con IA sin perder tu ", "Learn to build with AI without losing your ")}
+          <span className="bg-clip-text text-transparent" style={{ backgroundImage: "linear-gradient(90deg, var(--cyan), var(--magenta))" }}>
+            {t("criterio humano", "human judgment")}
+          </span>
+          {t(".", ".")}
+        </h2>
+
+        {/* Subtext */}
+        <p className="text-base md:text-lg text-white/65 leading-relaxed max-w-2xl">
+          {t(
+            "Nuestra metodología de 9 módulos para diseñadores UX/UI, developers y startups que quieren usar IA como copiloto estratégico — no como reemplazo.",
+            "Our 9-module methodology for UX/UI designers, developers, and startups that want to use AI as a strategic copilot — not a replacement."
+          )}
+        </p>
+
+        {/* Highlights — en línea, sin caja, con icono */}
+        <div className="flex flex-wrap items-center justify-center gap-x-7 gap-y-3 pt-1">
+          {highlights.map((h, i) => {
+            const Icon = h.icon
+            const color = i === 0 ? "var(--magenta)" : i === 1 ? "var(--cyan)" : "var(--orange)"
+            return (
+              <span key={i} className="inline-flex items-center gap-2 text-sm font-medium text-white/80">
+                <Icon size={16} style={{ color }} />
+                {t(h.titleEs, h.titleEn)}
+              </span>
+            )
+          })}
+        </div>
+
+        {/* CTA */}
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-3">
+          <Link
+            href={localized("/curso")}
+            className="group inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full text-sm font-semibold text-white transition-all duration-300 hover:scale-[1.03] hover:shadow-lg active:scale-95 w-full sm:w-auto"
+            style={{ background: "var(--orange)", boxShadow: "0 10px 30px rgba(232,117,26,0.35)" }}
           >
-            {/* Eyebrow */}
-            <div className="inline-flex items-center gap-3 w-fit">
-              <Image src="/images/ecosistema/school.svg" alt="UXSchool" width={110} height={30} className="h-7 w-auto dark:brightness-0 dark:invert dark:opacity-60 opacity-70" />
-              <span className="w-px h-5 dark:bg-white/15 bg-foreground/15" aria-hidden="true" />
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[var(--magenta)]/20 bg-[var(--magenta)]/[0.08]">
-                <Sparkles size={12} style={{ color: "var(--magenta)" }} />
-                <span
-                  className="text-[11px] tracking-[0.12em] uppercase font-semibold"
-                  style={{ color: "var(--magenta)" }}
-                >
-                  {t("Nuevo · Formación Profesional", "New · Professional Training")}
-                </span>
-              </span>
-            </div>
-
-            {/* Headline */}
-            <h2
-              id="curso-promo-heading"
-              className="font-display font-bold text-3xl md:text-4xl lg:text-[2.75rem] leading-[1.15] dark:text-white text-foreground text-balance"
-            >
-              {t(
-                "Aprende a construir con IA sin perder tu criterio humano.",
-                "Learn to build with AI without losing your human judgment."
-              )}
-            </h2>
-
-            {/* Subtext */}
-            <p className="text-base md:text-lg dark:text-white/65 text-muted-foreground leading-relaxed max-w-xl">
-              {t(
-                "Nuestra metodología de 9 módulos para diseñadores UX/UI, developers y startups que quieren usar IA como copiloto estratégico — no como reemplazo.",
-                "Our 9-module methodology for UX/UI designers, developers, and startups that want to use AI as a strategic copilot — not a replacement."
-              )}
-            </p>
-
-            {/* Trust badges */}
-            <div className="flex flex-wrap items-center gap-5 text-xs dark:text-white/35 text-muted-foreground/60">
-              <span className="flex items-center gap-1.5">
-                <Users size={13} className="dark:text-white/25 text-muted-foreground/40 shrink-0" />
-                {t("Cohorte 02 · Solo 30 cupos", "Cohort 02 · Only 30 spots")}
-              </span>
-              <span className="flex items-center gap-1.5">
-                <GraduationCap size={13} className="dark:text-white/25 text-muted-foreground/40 shrink-0" />
-                {t("Metodología propietaria validada", "Validated proprietary methodology")}
-              </span>
-            </div>
-
-            {/* CTA */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2">
-              <Link
-                href={localized("/curso")}
-                className="group inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full text-sm font-semibold text-white transition-all duration-300 hover:scale-[1.03] hover:shadow-lg active:scale-95 w-full sm:w-auto"
-                style={{ background: "var(--magenta)" }}
-              >
-                {t("Explorar el curso", "Explore the course")}
-                <ArrowRight
-                  size={15}
-                  className="group-hover:translate-x-1 transition-transform"
-                />
-              </Link>
-              <Link
-                href={localized("/curso") + "#metodologia"}
-                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full text-sm font-medium dark:text-white/65 text-foreground/75 border dark:border-white/[0.08] border-foreground/15 hover:dark:border-white/[0.18] hover:border-foreground/30 hover:dark:text-white hover:text-foreground hover:dark:bg-white/[0.02] hover:bg-foreground/[0.02] transition-all duration-300 w-full sm:w-auto"
-              >
-                {t("Ver metodología", "View methodology")}
-              </Link>
-            </div>
-          </div>
-
-          {/* Right — highlights card */}
-          <div
-            className={`relative transition-all duration-700 delay-150 ${
-              visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
-            }`}
+            {t("Explorar el curso", "Explore the course")}
+            <ArrowRight size={15} className="group-hover:translate-x-1 transition-transform" />
+          </Link>
+          <a
+            href="/images/curso/Curso2026.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full text-sm font-medium text-white/80 border border-[var(--cyan)]/45 hover:border-[var(--cyan)]/80 hover:text-white hover:bg-[var(--cyan)]/10 transition-all duration-300 w-full sm:w-auto"
           >
-            <div className="rounded-3xl border dark:border-white/[0.14] border-foreground/10 dark:bg-white/[0.02] bg-foreground/[0.02] backdrop-blur-sm p-8 md:p-10 flex flex-col gap-7">
-              {/* Card header */}
-              <div className="flex flex-col gap-2">
-                <span className="text-xs font-semibold tracking-widest uppercase text-[var(--cyan)]">
-                  {t("¿Qué vas a lograr?", "What will you achieve?")}
-                </span>
-                <p className="text-sm dark:text-white/60 text-muted-foreground leading-relaxed">
-                  {t(
-                    "Un programa intensivo diseñado para profesionales que quieren liderar la era IA con criterio, no con miedo.",
-                    "An intensive program for professionals who want to lead the AI era with judgment, not fear."
-                  )}
-                </p>
-              </div>
+            <Download size={16} />
+            {t("Descargar currículo", "Download curriculum")}
+          </a>
+        </div>
 
-              {/* Highlights */}
-              <div className="flex flex-col gap-5">
-                {highlights.map((h, i) => {
-                  const Icon = h.icon
-                  return (
-                    <div
-                      key={i}
-                      className="group flex gap-4 items-start p-4 rounded-2xl border border-transparent hover:dark:border-white/[0.06] hover:border-foreground/10 hover:dark:bg-white/[0.02] hover:bg-foreground/[0.02] transition-all duration-300"
-                    >
-                      <div
-                        className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
-                        style={{
-                          background:
-                            i === 0
-                              ? "linear-gradient(135deg, var(--magenta), #c55a0f)"
-                              : i === 1
-                              ? "linear-gradient(135deg, var(--cyan), #1a7a80)"
-                              : "linear-gradient(135deg, var(--magenta), var(--cyan))",
-                        }}
-                      >
-                        <Icon size={18} className="text-white" />
-                      </div>
-                      <div className="flex flex-col gap-1">
-                        <h3 className="text-sm font-semibold dark:text-white text-foreground">
-                          {t(h.titleEs, h.titleEn)}
-                        </h3>
-                        <p className="text-xs dark:text-white/60 text-muted-foreground leading-relaxed">
-                          {t(h.descEs, h.descEn)}
-                        </p>
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
-
-              {/* Bottom accent line */}
-              <div className="h-px w-full bg-gradient-to-r from-transparent via-[var(--magenta)]/30 to-transparent" />
-
-              {/* Quote */}
-              <p className="text-xs dark:text-white/25 text-muted-foreground/45 italic text-center">
-                &ldquo;{t(
-                  "La IA genera opciones. Tú aprenderás a darles sentido.",
-                  "AI generates options. You'll learn to give them meaning."
-                )}&rdquo;
-              </p>
-            </div>
-          </div>
+        {/* Trust badges */}
+        <div className="flex flex-wrap items-center justify-center gap-5 text-xs text-white/45 pt-1">
+          <span className="flex items-center gap-1.5">
+            <Users size={13} className="text-white/35 shrink-0" />
+            {t("Cohorte 02 · Solo 30 cupos", "Cohort 02 · Only 30 spots")}
+          </span>
+          <span className="flex items-center gap-1.5">
+            <GraduationCap size={13} className="text-white/35 shrink-0" />
+            {t("Metodología propietaria validada", "Validated proprietary methodology")}
+          </span>
         </div>
       </div>
     </section>

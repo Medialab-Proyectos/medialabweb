@@ -19,6 +19,7 @@ export function ServicesSummarySection() {
     {
       icon: Microscope,
       color: "var(--magenta)",
+      image: "/images/service-ux-design-team.png",
       titleEs: "Experiencias que tus usuarios recordarán",
       titleEn: "Experiences your users will remember",
       lineEs: "Diseño UX/UI con investigación real para que la gente entienda tu producto y vuelva.",
@@ -28,6 +29,7 @@ export function ServicesSummarySection() {
     {
       icon: Brain,
       color: "var(--cyan)",
+      image: "/images/service-ai-discovery-team.png",
       titleEs: "De idea vaga a producto claro en días",
       titleEn: "From vague idea to clear product in days",
       lineEs: "Discovery con IA: validamos tu idea con datos antes de que inviertas.",
@@ -37,6 +39,7 @@ export function ServicesSummarySection() {
     {
       icon: Code2,
       color: "var(--magenta)",
+      image: "/images/service-dev-team.png",
       titleEs: "Código que tus usuarios nunca notarán (y eso es bueno)",
       titleEn: "Code your users will never notice (and that's good)",
       lineEs: "Desarrollo a la medida, sólido y rápido, listo para crecer.",
@@ -46,6 +49,7 @@ export function ServicesSummarySection() {
     {
       icon: BarChart3,
       color: "var(--cyan)",
+      image: "/images/service-cro-saas-team.png",
       titleEs: "Menos feature factory, más decisiones que mueven métricas",
       titleEn: "Less feature factory, more decisions that move metrics",
       lineEs: "CRO para SaaS: convertimos feedback disperso, requests y fricción en prioridades de activación, retención y conversión.",
@@ -104,10 +108,22 @@ export function ServicesSummarySection() {
               >
                 <Link
                   href={localized(s.href)}
-                  className="group flex flex-col h-full gap-3 p-6 rounded-2xl border border-border bg-card hover:-translate-y-1 transition-all duration-300"
+                  className="group flex flex-col h-full gap-3 p-6 rounded-2xl border border-border bg-card hover:-translate-y-1 transition-all duration-300 overflow-hidden"
                   onMouseEnter={(e) => { e.currentTarget.style.borderColor = s.color }}
                   onMouseLeave={(e) => { e.currentTarget.style.borderColor = "" }}
                 >
+                  {/* Imagen del servicio */}
+                  <div className="relative -mx-6 -mt-6 mb-1 h-32 overflow-hidden">
+                    <Image
+                      src={s.image}
+                      alt={t(s.titleEs, s.titleEn)}
+                      fill
+                      className="object-cover transition-transform duration-300 group-hover:scale-105"
+                      sizes="(max-width: 768px) 80vw, 25vw"
+                    />
+                    <div className="absolute inset-0" style={{ background: `linear-gradient(to top, var(--card), transparent 65%)` }} />
+                  </div>
+
                   <div
                     className="w-11 h-11 rounded-xl flex items-center justify-center"
                     style={{ background: `color-mix(in srgb, ${s.color} 12%, transparent)` }}
@@ -161,16 +177,16 @@ export function ServicesSummarySection() {
             </h3>
             <p className="text-sm text-muted-foreground leading-relaxed">
               {t(
-                "Pepsico es una muestra de lo que hacemos cuando un producto debe funcionar para muchos usuarios, roles y contextos al mismo tiempo.",
-                "Pepsico is a sample of what we do when a product needs to work for many users, roles, and contexts at the same time."
+                "Crea ADN es una muestra de lo que hacemos cuando un producto debe funcionar para muchos usuarios, roles y contextos al mismo tiempo.",
+                "Crea ADN is a sample of what we do when a product needs to work for many users, roles, and contexts at the same time."
               )}
             </p>
           </div>
           <Link
-            href={localized("/portafolio") + "#pepsico"}
+            href={localized("/portafolio") + "#crea-adn"}
             className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full font-semibold text-sm border border-[var(--cyan)]/30 text-[var(--cyan)] hover:bg-[var(--cyan)]/10 transition-all"
           >
-            {t("Ver caso Pepsico", "See Pepsico case")}
+            {t("Ver caso Crea ADN", "See Crea ADN case")}
             <ArrowRight size={15} />
           </Link>
         </div>

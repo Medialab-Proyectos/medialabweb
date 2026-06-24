@@ -170,8 +170,10 @@ export function ExperienceDesignSection() {
 
         <div className="flex flex-col items-start justify-between gap-5 border-t border-border pt-8 md:flex-row md:items-center">
           <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground">
-            ¿Tu producto necesita posicionarse mejor en Google, activar más demanda o rediseñar su experiencia 
-            sin perder la voz humana de tu marca? Hablemos.
+            {t(
+              "¿Tu producto necesita posicionarse mejor en Google, activar más demanda o rediseñar su experiencia sin perder la voz humana de tu marca? Hablemos.",
+              "Does your product need to rank better on Google, drive more demand, or redesign its experience without losing your brand's human voice? Let's talk."
+            )}
           </p>
           <Link
             href="#contact"

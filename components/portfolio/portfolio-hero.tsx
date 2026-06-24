@@ -61,7 +61,8 @@ export function PortfolioHero() {
     const ORANGE = "232,117,26" // estrella que se forma al unirse los puntos
     const ACCENT = "120,150,200" // azul tenue ocasional, sin morado dominante
     const LINK = 100   // distancia máx. para unir puntos (líneas más cortas)
-    const CR = 165     // radio de influencia del cursor (muy sutil)
+    const CR = 96      // radio del cursor (menos sensible: solo muy cerca)
+    const NEAR_MIN = 0.32 // umbral: solo puntos muy próximos reaccionan
 
     type P = { x: number; y: number; vx: number; vy: number; dx: number; dy: number; accent: boolean; star: boolean; phase: number }
     let particles: P[] = []
@@ -207,25 +208,43 @@ export function PortfolioHero() {
         return cst.life < cst.max
       })
 
-      // 3) Conexión con el cursor (naranja) + puntos
-      for (const p of particles) {
-        let near = 0
-        if (cursorOn) {
+      // 3) Interacción con el cursor — solo los puntos MUY cercanos se vuelven naranja
+      const orange = new Map<P, number>()
+      if (cursorOn) {
+        for (const p of particles) {
           const dx = mouse.x - p.dx, dy = mouse.y - p.dy
           const d = Math.hypot(dx, dy)
           if (d < CR) {
-            near = 1 - d / CR
-            // Hilo naranja hacia el mouse, visible
-            ctx.strokeStyle = `rgba(${ORANGE},${near * 0.4})`
-            ctx.lineWidth = 1
-            ctx.beginPath()
-            ctx.moveTo(p.dx, p.dy)
-            ctx.lineTo(mouse.x, mouse.y)
-            ctx.stroke()
+            const near = 1 - d / CR
+            if (near > NEAR_MIN) orange.set(p, near)
           }
         }
-        // El punto se vuelve naranja y crece cerca del cursor
-        if (near > 0.04) {
+        const arr = [...orange.keys()]
+        // Líneas cortas entre los puntos naranjas (se "unen")
+        for (let i = 0; i < arr.length; i++) {
+          for (let j = i + 1; j < arr.length; j++) {
+            const a = arr[i], b = arr[j]
+            const dx = a.dx - b.dx, dy = a.dy - b.dy
+            const d = Math.hypot(dx, dy)
+            if (d < LINK) {
+              ctx.strokeStyle = `rgba(${ORANGE},${(1 - d / LINK) * 0.4})`
+              ctx.lineWidth = 1
+              ctx.beginPath(); ctx.moveTo(a.dx, a.dy); ctx.lineTo(b.dx, b.dy); ctx.stroke()
+            }
+          }
+        }
+        // Hilo corto hacia el mouse
+        orange.forEach((near, p) => {
+          ctx.strokeStyle = `rgba(${ORANGE},${near * 0.4})`
+          ctx.lineWidth = 1
+          ctx.beginPath(); ctx.moveTo(p.dx, p.dy); ctx.lineTo(mouse.x, mouse.y); ctx.stroke()
+        })
+      }
+
+      // Puntos (naranja si están muy cerca del cursor)
+      for (const p of particles) {
+        const near = orange.get(p)
+        if (near !== undefined) {
           glint(p.dx, p.dy, 1.4 + near * 1.3, 0.45 + near * 0.4, ORANGE)
         } else {
           ctx.fillStyle = p.accent ? `rgba(${ACCENT},0.45)` : `rgba(${TEAL},0.55)`

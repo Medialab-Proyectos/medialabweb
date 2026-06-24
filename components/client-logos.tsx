@@ -1,6 +1,5 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
 import { useLanguage } from "@/lib/language-context"
 
@@ -20,28 +19,16 @@ const logos = [
 ]
 
 export function ClientLogos() {
-  const ref = useRef<HTMLDivElement>(null)
-  const [visible, setVisible] = useState(false)
   const { t } = useLanguage()
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) setVisible(true)
-      },
-      { threshold: 0.2 }
-    )
-    if (ref.current) observer.observe(ref.current)
-    return () => observer.disconnect()
-  }, [])
+  // Duplicamos para que el bucle del marquee sea continuo
+  const loop = [...logos, ...logos]
 
   return (
     <section
-      ref={ref}
-      className="py-14 px-6 bg-background border-b border-border"
+      className="py-14 px-6 bg-background"
       aria-label={t("La confianza de empresas líderes", "Trusted by leading companies")}
     >
-      <div className="max-w-6xl mx-auto flex flex-col gap-10">
+      <div className="max-w-6xl mx-auto flex flex-col gap-6">
         <p className="text-center text-xs font-semibold tracking-widest uppercase text-muted-foreground">
           {t(
             "Equipos que dejaron de adivinar y empezaron a diseñar con evidencia",
@@ -49,38 +36,28 @@ export function ClientLogos() {
           )}
         </p>
 
+        {/* Carrusel lento de marcas (con desvanecido en los bordes) */}
         <div
-          className={`flex flex-wrap items-center justify-center gap-x-10 gap-y-8 md:gap-x-14 transition-all duration-700 ${
-            visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-          }`}
+          className="relative overflow-hidden"
+          style={{
+            WebkitMaskImage: "linear-gradient(to right, transparent, #000 8%, #000 92%, transparent)",
+            maskImage: "linear-gradient(to right, transparent, #000 8%, #000 92%, transparent)",
+          }}
         >
-          {logos.map((logo, i) => (
-            <div
-              key={logo.id}
-              className="flex items-center justify-center"
-              style={{ transitionDelay: `${i * 60}ms` }}
-            >
-              {/*
-                Light mode: logos are very light/white → invert to make them dark gray
-                Dark mode:  logos are very light/white → keep as-is but dim slightly
-                grayscale(1) ensures no color
-                invert(1) in light mode makes white → black
-              */}
-              <Image
-                src={logo.src}
-                alt={logo.alt}
-                width={140}
-                height={44}
-                className="client-logo"
-                style={{
-                  width: "auto",
-                  height: "38px",
-                  maxWidth: "130px",
-                  objectFit: "contain",
-                }}
-              />
-            </div>
-          ))}
+          <div className="flex w-max items-center gap-x-12 md:gap-x-16 animate-marquee" style={{ animationDuration: "55s" }}>
+            {loop.map((logo, i) => (
+              <div key={`${logo.id}-${i}`} className="flex items-center justify-center shrink-0" aria-hidden={i >= logos.length}>
+                <Image
+                  src={logo.src}
+                  alt={logo.alt}
+                  width={140}
+                  height={44}
+                  className="client-logo"
+                  style={{ width: "auto", height: "38px", maxWidth: "130px", objectFit: "contain" }}
+                />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 

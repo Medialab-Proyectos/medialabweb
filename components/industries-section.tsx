@@ -3,13 +3,20 @@
 import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { CreditCard, Landmark, Car, Rocket, GraduationCap, ShoppingCart } from "lucide-react"
+import { CreditCard, Landmark, Car, Rocket, GraduationCap, ShoppingCart, ChevronLeft, ChevronRight } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 
 export function IndustriesSection() {
   const ref = useRef<HTMLDivElement>(null)
+  const trackRef = useRef<HTMLDivElement>(null)
   const [visible, setVisible] = useState(false)
   const { t, localized } = useLanguage()
+
+  const scrollByDir = (dir: number) => {
+    const el = trackRef.current
+    if (!el) return
+    el.scrollBy({ left: dir * el.clientWidth * 0.8, behavior: "smooth" })
+  }
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -119,13 +126,18 @@ export function IndustriesSection() {
           </p>
         </div>
 
-        {/* Industry cards — carousel on mobile, grid on desktop */}
-        <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 -mx-6 px-6 sm:mx-0 sm:px-0 sm:overflow-visible sm:grid sm:grid-cols-3 lg:grid-cols-4 md:gap-5" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
+        {/* Industry cards — carrusel (web + móvil) */}
+        <div className="relative">
+          <div
+            ref={trackRef}
+            className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 -mx-6 px-6 sm:mx-0 sm:px-0 md:gap-5 [&::-webkit-scrollbar]:hidden"
+            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+          >
           {industries.map((industry, i) => {
             const Icon = industry.icon
             const cardClass = `group relative overflow-hidden rounded-2xl border border-border bg-card
                   hover:border-transparent hover:shadow-2xl transition-all duration-400
-                  min-w-[70%] snap-start sm:min-w-0
+                  min-w-[72%] sm:min-w-[300px] snap-start
                   ${industry.href ? "cursor-pointer" : "cursor-default"}
                   ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`
             const cardStyle = { transitionDelay: `${i * 70}ms`, transitionDuration: "500ms" }
@@ -186,6 +198,25 @@ export function IndustriesSection() {
               </div>
             )
           })}
+          </div>
+
+          {/* Flechas — visibles en desktop; en móvil se desliza con el dedo */}
+          <button
+            type="button"
+            onClick={() => scrollByDir(-1)}
+            aria-label={t("Anterior", "Previous")}
+            className="hidden md:flex absolute -left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-card border border-border shadow-lg items-center justify-center text-muted-foreground hover:text-foreground hover:border-[var(--magenta)]/50 transition-all z-10"
+          >
+            <ChevronLeft size={20} />
+          </button>
+          <button
+            type="button"
+            onClick={() => scrollByDir(1)}
+            aria-label={t("Siguiente", "Next")}
+            className="hidden md:flex absolute -right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-card border border-border shadow-lg items-center justify-center text-muted-foreground hover:text-foreground hover:border-[var(--magenta)]/50 transition-all z-10"
+          >
+            <ChevronRight size={20} />
+          </button>
         </div>
       </div>
     </section>

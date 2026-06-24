@@ -274,6 +274,13 @@
 }
 .animate-fade-in-up { animation: fade-in-up 0.7s ease-out forwards; }
 
+/* Fade only (sin movimiento) — para crossfades suaves */
+@keyframes fade-only {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.animate-fade-only { animation: fade-only 0.35s ease-out both; }
+
 /* Slide in from left */
 @keyframes slide-in-left {
   from { opacity: 0; transform: translateX(-40px); }

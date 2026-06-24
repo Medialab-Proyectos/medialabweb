@@ -3,7 +3,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import { motion } from "framer-motion"
-import { ArrowRight, Lightbulb } from "lucide-react"
+import { ArrowRight } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 
 /**
@@ -79,6 +79,16 @@ export function EntryDoorsSection() {
           <h2 className="font-display font-bold text-3xl md:text-4xl lg:text-5xl leading-tight text-foreground text-balance">
             {t("Encuentra tu camino", "Find your path")}
           </h2>
+          <p className="mt-5 max-w-3xl mx-auto text-base md:text-lg text-foreground/70 dark:text-foreground/60 leading-relaxed">
+            {t("A eso se le llama ", "This is what's called ")}
+            <strong className="text-foreground font-semibold">
+              {t("diseño de experiencia (UX)", "experience design (UX)")}
+            </strong>
+            {t(
+              ": lograr que tu producto sea claro, fácil y que la gente quiera usarlo. Es la diferencia entre un producto que vende y uno que fracasa.",
+              ": making your product clear, easy, and something people actually want to use. It's the difference between a product that sells and one that fails.",
+            )}
+          </p>
         </motion.div>
 
 
@@ -144,21 +154,6 @@ export function EntryDoorsSection() {
               </motion.div>
             )
           })}
-        </div>
-
-        {/* UX callout */}
-        <div className="mt-10 md:mt-12 flex items-start gap-4 p-6 md:p-8 rounded-2xl border-l-4 border border-[#E8772E]/30 border-l-[#E8772E] bg-[#E8772E]/[0.06]">
-          <Lightbulb className="w-7 h-7 shrink-0 mt-0.5" style={{ color: "#E8772E" }} aria-hidden="true" />
-          <p className="text-base md:text-lg text-foreground/85 leading-relaxed">
-            {t("A eso se le llama ", "This is what's called ")}
-            <strong className="text-foreground font-bold">
-              {t("diseño de experiencia (UX)", "experience design (UX)")}
-            </strong>
-            {t(
-              ": lograr que tu producto sea claro, fácil y que la gente quiera usarlo. Es la diferencia entre un producto que vende y uno que fracasa.",
-              ": making your product clear, easy, and something people actually want to use. It's the difference between a product that sells and one that fails.",
-            )}
-          </p>
         </div>
       </div>
     </section>

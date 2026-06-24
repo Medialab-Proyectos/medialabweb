@@ -3,16 +3,14 @@ import { HeroSection } from "@/components/hero-section"
 import { MarqueeTicker } from "@/components/marquee-ticker"
 import { ClientLogos } from "@/components/client-logos"
 import { TrustMetrics } from "@/components/trust-metrics"
-import { AboutSection } from "@/components/about-section"
+import { ValueSection } from "@/components/value-section"
 import { ServicesSummarySection } from "@/components/services-summary-section"
-import { ExperienceDesignSection } from "@/components/experience-design-section"
 import { MethodSection } from "@/components/method-section"
 import { UXBoxForm } from "@/components/uxbox-form"
 import { IndustriesSection } from "@/components/industries-section"
 import { WorldPresence } from "@/components/world-presence"
 import { TestimonialsSection } from "@/components/testimonials-section"
 import { DigitalProductsSection } from "@/components/digital-products-section"
-import { WhyUsSection } from "@/components/why-us-section"
 import { FAQSection } from "@/components/faq-section"
 import { BlogSection } from "@/components/blog-section"
 import { CTASection } from "@/components/cta-section"
@@ -421,12 +419,11 @@ export default function Home() {
       <ClientLogos />
       <TrustMetrics />
 
-      {/* — PROBLEMA / SOLUCIÓN — */}
-      <AboutSection />
+      {/* — PROBLEMA / VALOR (fusión de About + ExperienceDesign + WhyUs) — */}
+      <ValueSection />
 
       {/* — VALOR — resumen en la home; el detalle vive en /servicios/* */}
       <ServicesSummarySection />
-      <ExperienceDesignSection />
 
       {/* — CÓMO TRABAJAMOS — método original "5 pasos" con indicadores (tiempo, satisfacción…) */}
       <MethodSection />
@@ -434,17 +431,16 @@ export default function Home() {
       {/* — ACTIVACIÓN — UXBox subido: el CTA del hero ahora encuentra su destino cerca */}
       <UXBoxForm />
 
-      {/* — UXSCHOOL destacado — tras mostrar el método y la herramienta */}
-      <CoursePromoSection />
-
       {/* — CONTEXTO — relevancia sectorial + alcance antes de la prueba */}
       <IndustriesSection />
       <WorldPresence />
 
-      {/* — PRUEBA / DESEO (cluster) — testimonios + portafolio UXLab + diferenciadores juntos */}
+      {/* — PRUEBA / DESEO (cluster) — testimonios + portafolio UXLab */}
       <TestimonialsSection />
       <DigitalProductsSection />
-      <WhyUsSection />
+
+      {/* — OTRA PUERTA — UXSchool (audiencia profesional), fuera del hilo B2B */}
+      <CoursePromoSection />
 
       {/* — AUTORIDAD / CONTENIDO — */}
       <BlogSection />

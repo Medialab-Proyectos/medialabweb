@@ -279,23 +279,6 @@ export function TestimonialsSection() {
           </div>
         </div>
 
-        {/* Trust indicators */}
-        <div className="flex flex-wrap items-center justify-center gap-8 pt-8 border-t border-border">
-          <div className="flex flex-col items-center gap-1">
-            <span className="font-display font-bold text-2xl text-foreground">4.8/5</span>
-            <span className="text-xs text-muted-foreground">{t("Nos recomiendan a otros", "They recommend us to others")}</span>
-          </div>
-          <div className="w-px h-10 bg-border hidden sm:block" />
-          <div className="flex flex-col items-center gap-1">
-            <span className="font-display font-bold text-2xl text-foreground">100%</span>
-            <span className="text-xs text-muted-foreground">{t("Entregado cuando lo prometimos", "Delivered when we promised")}</span>
-          </div>
-          <div className="w-px h-10 bg-border hidden sm:block" />
-          <div className="flex flex-col items-center gap-1">
-            <span className="font-display font-bold text-2xl text-foreground">85%</span>
-            <span className="text-xs text-muted-foreground">{t("Vuelven con un nuevo proyecto", "Return with a new project")}</span>
-          </div>
-        </div>
       </div>
     </section>
   )

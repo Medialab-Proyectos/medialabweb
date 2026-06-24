@@ -1,14 +1,76 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+import { createPortal } from "react-dom"
 import Image from "next/image"
-import { TrendingUp, Users, Clock, Target, Zap, BarChart3, Package, Globe, Smartphone, PlayCircle, ChevronDown } from "lucide-react"
+import { TrendingUp, Users, Clock, Target, Zap, BarChart3, Package, Globe, Smartphone, PlayCircle, ChevronDown, Volume2, VolumeX, Play, ExternalLink, X } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 
 type Category = "todos" | "web-design" | "mobile-app" | "ia" | "branding"
 
 type MediaKind = "web" | "mobile" | "video"
-type GalleryItem = { kind: MediaKind; src: string }
+type GalleryItem = { kind: MediaKind; src: string; fit?: "cover" | "contain"; label?: string }
+
+function CaseVideo({ src }: { src: string }) {
+  const vref = useRef<HTMLVideoElement>(null)
+  const [playing, setPlaying] = useState(true)
+  const [muted, setMuted] = useState(true)
+  const [volume, setVolume] = useState(0.6)
+  const { t } = useLanguage()
+
+  useEffect(() => {
+    const v = vref.current
+    if (v) { v.volume = volume; v.muted = muted }
+  }, [volume, muted])
+
+  const togglePlay = () => {
+    const v = vref.current
+    if (!v) return
+    if (v.paused) { v.play(); setPlaying(true) } else { v.pause(); setPlaying(false) }
+  }
+
+  const toggleMute = () => setMuted((m) => {
+    const next = !m
+    if (!next && volume === 0) setVolume(0.6)
+    return next
+  })
+
+  const onVolume = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = parseFloat(e.target.value)
+    setVolume(val)
+    setMuted(val === 0)
+  }
+
+  return (
+    <div className="absolute inset-0 cursor-pointer" onClick={togglePlay}>
+      {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
+      <video ref={vref} src={src} autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover" />
+
+      {/* Indicador cuando está en pausa */}
+      {!playing && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black/25">
+          <span className="w-16 h-16 rounded-full bg-black/50 backdrop-blur-md flex items-center justify-center text-white">
+            <Play size={26} className="ml-1" />
+          </span>
+        </div>
+      )}
+
+      {/* Control de volumen */}
+      <div className="absolute bottom-3 right-3 flex items-center gap-2 px-2.5 py-1.5 rounded-full bg-black/45 backdrop-blur-md border border-white/15" onClick={(e) => e.stopPropagation()}>
+        <button type="button" onClick={toggleMute} aria-label={t("Activar/silenciar sonido", "Toggle sound")} className="text-[#fff]/90 hover:text-[#fff] transition-colors">
+          {muted || volume === 0 ? <VolumeX size={16} /> : <Volume2 size={16} />}
+        </button>
+        <input
+          type="range" min={0} max={1} step={0.05}
+          value={muted ? 0 : volume}
+          onChange={onVolume}
+          aria-label={t("Volumen", "Volume")}
+          className="w-16 h-1 accent-white cursor-pointer"
+        />
+      </div>
+    </div>
+  )
+}
 
 type CaseItem = {
   id: string
@@ -23,30 +85,65 @@ type CaseItem = {
   footnote?: string
   customImage?: React.ReactNode
   gallery?: GalleryItem[]
+  liveLinks?: { label: string; url: string }[]
   results: { icon: React.ElementType; value: string; label: string }[]
   tags: string[]
   categories: Category[]
   usedUxbox: boolean
 }
 
-function CaseCard({ c, i, visible, labels }: { c: CaseItem; i: number; visible: boolean; labels: { challenge: string; solution: string; seeChallenge: string; hide: string } }) {
+function Lightbox({ src, alt, onClose }: { src: string; alt: string; onClose: () => void }) {
+  const { t } = useLanguage()
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose() }
+    document.addEventListener("keydown", onKey)
+    const prev = document.body.style.overflow
+    document.body.style.overflow = "hidden"
+    return () => { document.removeEventListener("keydown", onKey); document.body.style.overflow = prev }
+  }, [onClose])
+
+  return createPortal(
+    <div
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 backdrop-blur-sm p-4"
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+    >
+      <button
+        type="button"
+        onClick={onClose}
+        aria-label={t("Cerrar", "Close")}
+        className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-[#fff] flex items-center justify-center transition-colors"
+      >
+        <X size={20} />
+      </button>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={src}
+        alt={alt}
+        onClick={(e) => e.stopPropagation()}
+        className="max-w-[94vw] max-h-[90vh] object-contain rounded-2xl shadow-2xl animate-fade-in-up"
+      />
+    </div>,
+    document.body
+  )
+}
+
+function CaseCard({ c, i, visible, labels, open, onToggle }: { c: CaseItem; i: number; visible: boolean; labels: { challenge: string; solution: string; seeChallenge: string; hide: string }; open: boolean; onToggle: () => void }) {
   const [hovered, setHovered] = useState(false)
-  const [open, setOpen] = useState(false)
+  const [zoom, setZoom] = useState<string | null>(null)
   const { t } = useLanguage()
 
   const gallery = c.gallery ?? []
-  const kinds = Array.from(new Set(gallery.map((g) => g.kind))) as MediaKind[]
-  const [activeKind, setActiveKind] = useState<MediaKind | null>(kinds[0] ?? null)
-  const [mediaIdx, setMediaIdx] = useState(0)
+  const [activeIdx, setActiveIdx] = useState(0)
 
   const kindMeta: Record<MediaKind, { icon: React.ElementType; label: string }> = {
-    web: { icon: Globe, label: t("Web", "Web") },
-    mobile: { icon: Smartphone, label: t("Móvil", "Mobile") },
+    web: { icon: Globe, label: c.id === "bellanova" ? t("Web Clínica", "Clinic Web") : t("Web", "Web") },
+    mobile: { icon: c.id === "bellanova" ? Users : Smartphone, label: c.id === "bellanova" ? t("Dr. Menéndez", "Dr. Menéndez") : t("Móvil", "Mobile") },
     video: { icon: PlayCircle, label: t("Video", "Video") },
   }
 
-  const kindItems = activeKind ? gallery.filter((g) => g.kind === activeKind) : []
-  const current = kindItems[mediaIdx]
+  const current = gallery[activeIdx]
 
   return (
     <div
@@ -63,21 +160,26 @@ function CaseCard({ c, i, visible, labels }: { c: CaseItem; i: number; visible: 
       >
         {current ? (
           current.kind === "video" ? (
-            <video src={current.src} controls playsInline className="absolute inset-0 w-full h-full object-cover" />
+            <CaseVideo src={current.src} />
           ) : (
             <Image
               key={current.src}
               src={current.src}
               alt={`${c.title} — ${kindMeta[current.kind].label}`}
               fill
-              className={`transition-transform duration-700 ${current.kind === "mobile" ? "object-contain p-2" : "object-cover group-hover:scale-105"}`}
+              onClick={() => setZoom(current.src)}
+              className={`cursor-zoom-in object-top transition-transform duration-700 ${
+                (current.fit ?? (current.kind === "mobile" ? "contain" : "cover")) === "contain"
+                  ? "object-contain p-2"
+                  : "object-cover group-hover:scale-105"
+              }`}
               sizes="(max-width: 768px) 100vw, 50vw"
             />
           )
         ) : c.customImage ? (
           c.customImage
         ) : (
-          <Image src={c.image} alt={c.title} fill className="object-cover transition-transform duration-700 group-hover:scale-105" sizes="(max-width: 768px) 100vw, 50vw" />
+          <Image src={c.image} alt={c.title} fill onClick={() => setZoom(c.image)} className="cursor-zoom-in object-cover object-top transition-transform duration-700 group-hover:scale-105" sizes="(max-width: 768px) 100vw, 50vw" />
         )}
 
         {/* Decorative gradient (keeps badge legible) */}
@@ -89,45 +191,30 @@ function CaseCard({ c, i, visible, labels }: { c: CaseItem; i: number; visible: 
             {c.industry}
           </span>
           {c.usedUxbox && (
-            <span className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-full text-[10px] font-bold backdrop-blur-md border border-[var(--orange)]/40 bg-[var(--orange)]/20 text-white">
+            <span className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-full text-[10px] font-bold backdrop-blur-md border border-[var(--orange)]/40 bg-[var(--orange)]/20 text-[#fff]">
               <Package size={10} /> UXBox
             </span>
           )}
         </div>
 
-        {/* Media tabs — debajo de la imagen (esquina inferior izquierda) */}
-        {kinds.length > 0 && (
-          <div className="absolute bottom-3 left-3 flex flex-wrap gap-1.5">
-            {kinds.map((k) => {
-              const Meta = kindMeta[k]
-              const isActive = k === activeKind
+        {/* Pestañas — una por vista (esquina inferior izquierda) */}
+        {gallery.length > 1 && (
+          <div className="absolute bottom-3 left-3 right-3 flex flex-wrap gap-1.5">
+            {gallery.map((item, gi) => {
+              const Meta = kindMeta[item.kind]
+              const isActive = gi === activeIdx
               return (
                 <button
-                  key={k}
+                  key={`${item.src}-${gi}`}
                   type="button"
-                  onClick={() => { setActiveKind(k); setMediaIdx(0) }}
-                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-semibold backdrop-blur-md border transition-all ${isActive ? "text-white shadow-lg" : "text-white/80 border-white/20 bg-black/30 hover:bg-black/40"}`}
+                  onClick={() => setActiveIdx(gi)}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-semibold backdrop-blur-md border transition-all ${isActive ? "text-[#fff] shadow-lg" : "text-[#fff]/80 border-white/20 bg-black/30 hover:bg-black/40"}`}
                   style={isActive ? { background: `${c.color}`, borderColor: `${c.color}` } : undefined}
                 >
-                  <Meta.icon size={12} /> {Meta.label}
+                  <Meta.icon size={12} /> {item.label ?? Meta.label}
                 </button>
               )
             })}
-          </div>
-        )}
-
-        {/* Dots para navegar dentro de la pestaña activa */}
-        {kindItems.length > 1 && (
-          <div className="absolute bottom-3 right-3 flex gap-1.5">
-            {kindItems.map((_, di) => (
-              <button
-                key={di}
-                type="button"
-                onClick={() => setMediaIdx(di)}
-                aria-label={t(`Ver imagen ${di + 1}`, `View image ${di + 1}`)}
-                className={`h-2 rounded-full transition-all duration-300 ${di === mediaIdx ? "w-5 bg-white" : "w-2 bg-white/40 hover:bg-white/60"}`}
-              />
-            ))}
           </div>
         )}
       </div>
@@ -142,9 +229,9 @@ function CaseCard({ c, i, visible, labels }: { c: CaseItem; i: number; visible: 
         {/* Toggle — solo móvil */}
         <button
           type="button"
-          onClick={() => setOpen((o) => !o)}
+          onClick={onToggle}
           aria-expanded={open}
-          className="md:hidden inline-flex items-center justify-between gap-2 px-4 py-2.5 rounded-full text-sm font-semibold border transition-all w-fit"
+          className="md:hidden flex w-full items-center justify-between gap-2 px-5 py-3 rounded-full text-sm font-semibold border transition-all"
           style={{ color: c.color, borderColor: `${c.color}40`, background: `${c.color}12` }}
         >
           {open ? labels.hide : labels.seeChallenge}
@@ -190,10 +277,30 @@ function CaseCard({ c, i, visible, labels }: { c: CaseItem; i: number; visible: 
                   <span key={tag} className="px-3 py-1 rounded-full text-xs font-medium bg-secondary text-secondary-foreground border border-border">{tag}</span>
                 ))}
               </div>
+
+              {/* Sitios en vivo */}
+              {c.liveLinks && c.liveLinks.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {c.liveLinks.map((link) => (
+                    <a
+                      key={link.url}
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border transition-all hover:brightness-110"
+                      style={{ color: c.color, borderColor: `${c.color}40`, background: `${c.color}12` }}
+                    >
+                      <ExternalLink size={13} /> {link.label}
+                    </a>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </div>
       </div>
+
+      {zoom && <Lightbox src={zoom} alt={c.title} onClose={() => setZoom(null)} />}
     </div>
   )
 }
@@ -220,28 +327,41 @@ export function PortfolioCases() {
 
   const cases: CaseItem[] = [
     {
-      id: "pepsico",
+      id: "crea-adn",
       title: t("Plataforma de Capacitación Interactiva", "Interactive Training Platform"),
-      client: "Pepsico",
+      client: "Crea ADN",
       industry: t("FMCG / Enterprise", "FMCG / Enterprise"),
-      image: "/images/pepsico-showcase.png",
+      image: "/images/Portafolio/ADN/adn-heel.png",
       color: "var(--cyan)",
       gradient: "linear-gradient(135deg, #004B93, #0066CC)",
+      gallery: [
+        { kind: "mobile", src: "/images/Portafolio/ADN/adn-heel.png", fit: "cover", label: "Heel" },
+        { kind: "mobile", src: "/images/Portafolio/ADN/adn-alpina-v2.png", fit: "cover", label: "Alpina Ecuador" },
+        { kind: "mobile", src: "/images/Portafolio/ADN/adn-abbott.png", fit: "cover", label: "Abbott" },
+        { kind: "mobile", src: "/images/Portafolio/ADN/adn-pepsico-v2.png", fit: "cover", label: "Pepsico" },
+      ],
       challenge: t(
-        "Pepsico necesitaba una solución avanzada para capacitar a su fuerza de ventas a gran escala, con seguimiento de progreso y evaluación de desempeño en tiempo real.",
-        "Pepsico needed an advanced solution to train its sales force at scale, with progress tracking and real-time performance evaluation."
+        "Junto a Andrés Cadena, autor de Rompiendo Hábitos, desarrollamos una plataforma de aprendizaje para fortalecer las habilidades comerciales de equipos de ventas en empresas como Abbott, Heel, PepsiCo y Alpina, mediante una experiencia digital que incrementara el compromiso y permitiera medir el desempeño de los participantes.",
+        "Together with Andrés Cadena, author of Rompiendo Hábitos, we developed a learning platform to strengthen the commercial skills of sales teams at companies like Abbott, Heel, PepsiCo, and Alpina — through a digital experience that boosts engagement and makes it possible to measure participants' performance."
       ),
       solution: t(
-        "Desarrollamos una aplicación interactiva con videos educativos, juegos y un sistema de tracking que monitorea los materiales vistos y evalúa el rendimiento de los usuarios. La plataforma soporta múltiples roles — asesores y participantes — con herramientas específicas para gestionar el aprendizaje.",
-        "We built an interactive application with educational videos, games, and a tracking system that monitors viewed material and evaluates user performance. The platform supports multiple roles — advisors and participants — with dedicated tools to manage learning."
+        "Diseñamos una plataforma de aprendizaje gamificada con rutas de formación, evaluaciones, retos, logros y recompensas que convierten la capacitación en una experiencia interactiva. La solución permite gestionar programas de entrenamiento a gran escala y hacer seguimiento al progreso de cada usuario de forma intuitiva.",
+        "We designed a gamified learning platform with training paths, assessments, challenges, achievements, and rewards that turn training into an interactive experience. The solution makes it possible to manage large-scale training programs and track each user's progress intuitively."
+      ),
+      footnote: t(
+        "Metodología basada en el libro Rompiendo Hábitos de Andrés Cadena.",
+        "Methodology based on Andrés Cadena's book Rompiendo Hábitos."
       ),
       results: [
+        { icon: Package, value: "4", label: t("Marcas desplegadas", "Brands deployed") },
         { icon: Users, value: "+500", label: t("Usuarios capacitados", "Users trained") },
         { icon: TrendingUp, value: "+85%", label: t("Tasa de completación", "Completion rate") },
-        { icon: Clock, value: t("12 sem", "12 wks"), label: t("Tiempo de entrega", "Delivery time") },
       ],
       tags: ["UX Research", "Prototype", "User Testing", "Development"],
       categories: ["mobile-app"],
+      liveLinks: [
+        { label: t("Rompiendo Hábitos (Amazon)", "Rompiendo Hábitos (Amazon)"), url: "https://www.amazon.com/dp/B08FVSKLQK" },
+      ],
       usedUxbox: false,
     },
     {
@@ -249,25 +369,21 @@ export function PortfolioCases() {
       title: t("Presencia Digital Multi-plataforma", "Multi-Platform Digital Presence"),
       client: "Ricardo Montaner",
       industry: t("Entretenimiento", "Entertainment"),
-      image: "/images/montaner-showcase.png",
+      image: "/images/Portafolio/Montaner/montaner-web.png",
       color: "var(--magenta)",
-      gradient: "linear-gradient(135deg, #8B1A4A, #C62E65)",
+      gradient: "linear-gradient(135deg, #12020A, #2C0519)",
       gallery: [
-        { kind: "web", src: "/images/montaner-web-1.png" },
-        { kind: "web", src: "/images/montaner-web-2.png" },
-        { kind: "mobile", src: "/images/montaner-mobile-1.png" },
-        { kind: "mobile", src: "/images/montaner-mobile-2.png" },
-        { kind: "mobile", src: "/images/montaner-mobile-3.png" },
+        { kind: "web", src: "/images/Portafolio/Montaner/montaner-web.png" },
+        { kind: "mobile", src: "/images/Portafolio/Montaner/montaner-mobile.png", fit: "cover" },
       ],
       challenge: t(
-        "Para este proyecto integral, desarrollamos una presencia digital cohesiva para Ricardo Montaner a través de múltiples plataformas. Nuestra tarea principal fue diseñar un sitio web visualmente impactante e innovador para exhibir su discografía, asegurando una experiencia de usuario intuitiva y cautivadora.",
-        "For this comprehensive project, we developed a cohesive digital presence for Ricardo Montaner through multiple platforms. Our main task was designing a visually stunning and innovative website to showcase his discography, ensuring an intuitive and engaging user experience."
+        "Con el lanzamiento de \"Yo No Fumo\", Ricardo Montaner necesitaba una experiencia digital que transmitiera la esencia emocional del sencillo y fortaleciera la conexión entre el artista y sus seguidores. El desafío consistía en integrar música, contenido exclusivo y fechas de la gira dentro de una plataforma inmersiva, elegante y fácil de explorar.",
+        "With the release of \"Yo No Fumo,\" Ricardo Montaner needed a digital experience that conveyed the emotional essence of the single and strengthened the connection between the artist and his followers. The challenge was to integrate music, exclusive content, and tour dates within an immersive, elegant, and easy-to-explore platform."
       ),
       solution: t(
-        "Diseñamos el sitio web oficial del artista, alineado con la imagen de Montaner para crear una plataforma visualmente atractiva que cautiva a los visitantes, garantizando navegación fluida y participación activa.",
-        "Additionally, we crafted the official artist's website, aligning it with Montaner's image to create a seamless, visually appealing platform that captivates visitors while guaranteeing smooth navigation and active participation."
+        "Diseñamos una experiencia digital premium centrada en el universo de \"Yo No Fumo\", desarrollando un sitio web inmersivo con una navegación intuitiva que integra música, discografía, letras, giras y contenido exclusivo. Cada interacción fue pensada para amplificar la identidad artística de Ricardo Montaner y generar una conexión emocional con sus fans.",
+        "We designed a premium digital experience centered on the world of \"Yo No Fumo,\" building an immersive website with intuitive navigation that integrates music, discography, lyrics, tours, and exclusive content. Every interaction was crafted to amplify Ricardo Montaner's artistic identity and create an emotional connection with his fans."
       ),
-      footnote: t("* Diseño de laboratorio UX", "* UX Lab design"),
       results: [
         { icon: Zap, value: t("Premium", "Premium"), label: t("Experiencia visual", "Visual experience") },
         { icon: Users, value: "Multi", label: t("Plataformas conectadas", "Connected platforms") },
@@ -282,16 +398,21 @@ export function PortfolioCases() {
       title: t("Experiencia Digital de Lujo para Clínica Estética", "Luxury Digital Experience for Aesthetic Clinic"),
       client: "Bellanova Clinic",
       industry: t("Salud & Belleza", "Health & Beauty"),
-      image: "/images/case-mobility.png",
+      image: "/images/Portafolio/Bellanova/bellanova-web.png",
       color: "var(--orange)",
-      gradient: "linear-gradient(135deg, #C8956C, #A67548)",
+      gradient: "linear-gradient(135deg, #021a14, #083c30)",
+      gallery: [
+        { kind: "web", src: "/images/Portafolio/Bellanova/bellanova-web.png" },
+        { kind: "mobile", src: "/images/Portafolio/Bellanova/bellanova-menendez.png", fit: "cover" },
+        { kind: "video", src: "/images/Portafolio/Bellanova/VideoMarca.mp4" },
+      ],
       challenge: t(
-        "Bellanova Clinic necesitaba una experiencia digital que reflejara la excelencia y exclusividad de sus servicios estéticos, generando confianza inmediata en pacientes potenciales.",
-        "Bellanova Clinic needed a digital experience that reflected the excellence and exclusivity of its aesthetic services, generating immediate trust with prospective patients."
+        "Bellanova Clinic necesitaba una experiencia digital que reflejara la calidad, confianza y exclusividad de sus servicios, diferenciando la marca y generando credibilidad desde el primer contacto.",
+        "Bellanova Clinic needed a digital experience that reflected the quality, trust, and exclusivity of its services — setting the brand apart and building credibility from the very first interaction."
       ),
       solution: t(
-        "Creamos una experiencia digital lujosa con un diseño web intuitivo y elegante que destaca la amplia gama de servicios. El diseño refuerza la presencia online de la clínica y construye confianza con los pacientes a través de cada punto de contacto.",
-        "We crafted a luxury digital experience with an intuitive, elegant web design that highlights the wide range of services. The design reinforces the clinic's online presence and builds trust with patients at every touchpoint."
+        "Diseñamos una experiencia digital elegante e intuitiva que combina estrategia, usabilidad y diseño para destacar cada procedimiento y facilitar la conversión de nuevos pacientes. El resultado es un sitio web que fortalece la marca y transmite confianza en cada interacción.",
+        "We designed an elegant, intuitive digital experience that blends strategy, usability, and design to highlight every procedure and drive new-patient conversion. The result is a website that strengthens the brand and conveys trust at every interaction."
       ),
       results: [
         { icon: TrendingUp, value: "+200%", label: t("Tráfico orgánico", "Organic traffic") },
@@ -300,6 +421,10 @@ export function PortfolioCases() {
       ],
       tags: ["Web Design", "Prototype", "User Testing", "Development"],
       categories: ["web-design", "branding"],
+      liveLinks: [
+        { label: "clinicabellanova.net", url: "https://clinicabellanova.net/" },
+        { label: "jpmenendez.com", url: "https://jpmenendez.com/" },
+      ],
       usedUxbox: false,
     },
     {
@@ -379,6 +504,8 @@ export function PortfolioCases() {
     },
   ]
 
+  const [openId, setOpenId] = useState<string | null>(null)
+
   const filtered = filter === "todos"
     ? cases
     : cases.filter((c) => c.categories.includes(filter))
@@ -421,7 +548,17 @@ export function PortfolioCases() {
         </div>
 
         <div className="flex flex-col gap-8">
-          {filtered.map((c, i) => <CaseCard key={c.id} c={c} i={i} visible={visible} labels={cardLabels} />)}
+          {filtered.map((c, i) => (
+            <CaseCard
+              key={c.id}
+              c={c}
+              i={i}
+              visible={visible}
+              labels={cardLabels}
+              open={openId === c.id}
+              onToggle={() => setOpenId((prev) => (prev === c.id ? null : c.id))}
+            />
+          ))}
           {filtered.length === 0 && (
             <p className="text-center text-muted-foreground py-12">{t("No hay casos en esta categoría aún.", "No case studies in this category yet.")}</p>
           )}

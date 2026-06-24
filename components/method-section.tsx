@@ -146,132 +146,100 @@ export function MethodSection() {
           </p>
         </div>
 
-        {/* Desktop: Step tabs */}
+        {/* Desktop: un solo card — stepper vertical (izq) + significado (der) */}
         <div
-          className="hidden md:grid grid-cols-5 gap-2 rounded-xl border bg-background p-2"
-          role="tablist"
-          style={{ borderColor: "var(--method-tabs-border, var(--border))" }}
-          aria-label={t("Pasos de la metodología MediaLab", "MediaLab methodology steps")}
+          className={`hidden md:grid md:grid-cols-[280px_1fr] rounded-2xl border border-border overflow-hidden h-[440px] bg-card transition-opacity duration-500 ${visible ? "opacity-100" : "opacity-0"}`}
         >
-          {steps.map((step, i) => {
-            const Icon = step.icon
-            const isActive = i === activeStep
-            return (
-              <button
-                key={step.number}
-                onClick={() => setActiveStep(i)}
-                onMouseEnter={() => setActiveStep(i)}
-                className={`group relative flex min-h-[124px] flex-col gap-3 rounded-lg border px-4 py-3 text-left transition-all duration-300 cursor-pointer overflow-hidden
-                  ${isActive
-                    ? "border-transparent bg-card shadow-lg"
-                    : "border-border bg-card/40 hover:bg-card hover:border-foreground/25 hover:-translate-y-0.5"
-                  }
-                  ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
-                style={{ transitionDelay: `${i * 80}ms` }}
-                role="tab"
-                aria-pressed={isActive}
-                aria-selected={isActive}
-                aria-controls="method-active-panel"
-              >
-                <div
-                  className="absolute inset-x-0 top-0 h-1 transition-opacity duration-300"
-                  style={{ background: step.gradient, opacity: isActive ? 1 : 0 }}
-                  aria-hidden="true"
-                />
-
-                <div className="flex items-center gap-3">
-                  <div
-                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md transition-all duration-300"
+          {/* Stepper vertical conectado */}
+          <div className="relative flex flex-col border-r border-border bg-secondary/30">
+            <div
+              role="tablist"
+              aria-orientation="vertical"
+              aria-label={t("Pasos de la metodología MediaLab", "MediaLab methodology steps")}
+              className="flex flex-col"
+            >
+            {steps.map((step, i) => {
+              const Icon = step.icon
+              const isActive = i === activeStep
+              return (
+                <button
+                  key={step.number}
+                  onClick={() => setActiveStep(i)}
+                  onMouseEnter={() => setActiveStep(i)}
+                  role="tab"
+                  aria-selected={isActive}
+                  aria-controls="method-active-panel"
+                  className={`group relative flex items-center gap-3 px-5 py-4 text-left transition-colors duration-300 ${isActive ? "bg-card" : "hover:bg-card/60"}`}
+                >
+                  {/* Acento de la fase activa */}
+                  <span
+                    className="absolute inset-y-0 left-0 w-1 transition-opacity duration-300"
+                    style={{ background: step.gradient, opacity: isActive ? 1 : 0 }}
+                    aria-hidden="true"
+                  />
+                  <span
+                    className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xs font-bold transition-all duration-300"
                     style={{
-                      background: isActive ? step.color : `${step.color}18`,
-                      boxShadow: isActive ? `0 8px 24px ${step.color}35` : "none",
+                      background: isActive ? step.color : "transparent",
+                      border: `1.5px solid ${isActive ? step.color : "var(--border)"}`,
+                      color: isActive ? "#fff" : "var(--muted-foreground)",
                     }}
                   >
-                    <Icon size={18} style={{ color: isActive ? "white" : step.color }} />
-                  </div>
-                  <div className="min-w-0">
-                    <span className="block text-[10px] font-bold uppercase tracking-widest" style={{ color: step.color }}>
+                    {isActive ? <Icon size={16} /> : step.number}
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-[10px] font-bold uppercase tracking-widest" style={{ color: step.color, opacity: isActive ? 1 : 0.65 }}>
                       {step.number}
                     </span>
-                    <span className="block truncate text-sm font-semibold text-foreground">{step.label}</span>
-                  </div>
-                </div>
-
-                <p className="line-clamp-2 text-xs leading-relaxed text-muted-foreground">
-                  {step.title}
-                </p>
-
-                <div className="mt-auto flex items-end justify-between gap-2">
-                  <div>
-                    <span className="font-display text-lg font-bold" style={{ color: step.color }}>{step.stat}</span>
-                    <p className="text-[10px] leading-tight text-muted-foreground">{step.statLabel}</p>
-                  </div>
+                    <span className="block truncate text-sm font-semibold" style={{ color: isActive ? "var(--foreground)" : "var(--muted-foreground)" }}>
+                      {step.label}
+                    </span>
+                  </span>
                   <ChevronRight
-                    size={15}
-                    className={`transition-all duration-300 ${isActive ? "translate-x-0 opacity-100" : "-translate-x-1 opacity-0"}`}
+                    size={16}
+                    className={`shrink-0 transition-all duration-300 ${isActive ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-1"}`}
                     style={{ color: step.color }}
                     aria-hidden="true"
                   />
-                </div>
-              </button>
-            )
-          })}
-        </div>
+                </button>
+              )
+            })}
+            </div>
 
-        {/* Active step detail panel */}
-        <div
-          id="method-active-panel"
-          role="tabpanel"
-          className={`hidden md:grid grid-cols-[0.95fr_1.05fr] rounded-xl border overflow-hidden transition-all duration-500 h-[420px] ${visible ? "opacity-100" : "opacity-0"}`}
-          style={{ background: "var(--card)", borderColor: "var(--method-tabs-border, var(--border))" }}
-        >
-
-          {/* Left: visual image */}
-          <div className="relative min-h-[300px]">
-            <div className="absolute inset-0 bg-black/20 z-10" />
-            <Image src={activeData.image} alt={activeData.title} fill className="object-cover" sizes="50vw" />
-            <div className="absolute inset-0 z-20 flex flex-col justify-end p-8" style={{ background: "linear-gradient(to top, rgba(0,0,0,0.8), transparent)" }}>
-              <div className="font-display font-bold text-5xl text-white mb-2">
-                {activeData.stat}
-              </div>
-              <div className="text-sm text-white/80 font-medium">{activeData.statLabel}</div>
+            {/* Texto descriptivo bajo el stepper */}
+            <div className="mt-auto border-t border-border p-5">
+              <p className="text-xs leading-relaxed text-muted-foreground">
+                <span className="font-semibold text-foreground">{t("Cinco fases, cero adivinanzas.", "Five phases, zero guesswork.")}</span>{" "}
+                {t("Cada paso entrega un resultado medible — tú eliges cuál mover primero.", "Each step delivers a measurable result — you choose which one to move first.")}
+              </p>
             </div>
           </div>
 
-          {/* Right: content */}
-          <div className="relative flex flex-col justify-center gap-5 p-8 lg:p-10">
-            <div
-              className="absolute inset-y-8 left-0 w-1 rounded-r-full"
-              style={{ background: activeData.gradient }}
-              aria-hidden="true"
-            />
-            <div className="flex items-center gap-3">
-              <div
-                className="flex h-12 w-12 items-center justify-center rounded-md"
-                style={{ background: activeData.color }}
-              >
-                <ActiveIcon size={21} className="text-white" />
+          {/* Significado — imagen en cuadro (izq) + contenido (der) */}
+          <div id="method-active-panel" role="tabpanel" className="grid grid-cols-[44%_1fr] h-full">
+            {/* Imagen en cuadro */}
+            <div className="relative m-4 lg:m-6 rounded-xl overflow-hidden border border-border">
+              <div key={activeData.image} className="absolute inset-0 animate-fade-only">
+                <Image src={activeData.image} alt={activeData.title} fill className="object-cover" sizes="(max-width: 1024px) 40vw, 30vw" />
               </div>
-              <span className="text-xs font-semibold tracking-widest uppercase" style={{ color: activeData.color }}>
-                {t("Paso", "Step")} {activeData.number} · {activeData.label}
-              </span>
+              <div aria-hidden="true" className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(0,0,0,0.72) 0%, transparent 55%)" }} />
+              <div key={activeStep} className="absolute inset-x-0 bottom-0 z-10 p-5 animate-fade-only">
+                <div className="font-display text-4xl font-bold leading-none text-white">{activeData.stat}</div>
+                <div className="mt-1 text-xs font-medium text-white/85">{activeData.statLabel}</div>
+              </div>
             </div>
-            <span className="sr-only" style={{ color: activeData.color }}>
-              <ActiveIcon size={16} /> {t("Paso", "Step")} {activeData.number} — {activeData.label}
-            </span>
-            <h3 className="font-display text-3xl font-bold leading-tight text-foreground text-balance">{activeData.title}</h3>
-            <p className="text-base leading-relaxed text-muted-foreground">{activeData.description}</p>
-            <div className="grid grid-cols-2 gap-3 pt-2">
-              <div className="rounded-lg border border-border bg-background p-4">
-                <span className="block text-xs font-semibold uppercase tracking-widest text-muted-foreground">{t("Resultado", "Result")}</span>
-                <span className="mt-2 block font-display text-2xl font-bold" style={{ color: activeData.color }}>
-                  {activeData.stat}
+            {/* Contenido */}
+            <div key={activeStep} className="flex flex-col justify-center gap-5 p-6 pr-8 lg:p-10 animate-fade-only">
+              <div className="flex items-center gap-3">
+                <span className="flex h-12 w-12 items-center justify-center rounded-xl" style={{ background: activeData.color, boxShadow: `0 10px 30px ${activeData.color}40` }}>
+                  <ActiveIcon size={22} className="text-white" />
+                </span>
+                <span className="text-xs font-semibold tracking-widest uppercase" style={{ color: activeData.color }}>
+                  {t("Paso", "Step")} {activeData.number} · {activeData.label}
                 </span>
               </div>
-              <div className="rounded-lg border border-border bg-background p-4">
-                <span className="block text-xs font-semibold uppercase tracking-widest text-muted-foreground">{t("Foco", "Focus")}</span>
-                <span className="mt-2 block text-sm font-semibold text-foreground">{activeData.statLabel}</span>
-              </div>
+              <h3 className="font-display text-2xl lg:text-3xl font-bold leading-tight text-foreground text-balance">{activeData.title}</h3>
+              <p className="text-base leading-relaxed text-muted-foreground line-clamp-4">{activeData.description}</p>
             </div>
           </div>
         </div>
