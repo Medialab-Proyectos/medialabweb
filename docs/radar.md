@@ -134,6 +134,8 @@ PASOS:
      de la noticia original en `imageCredit` e `imageSourceUrl`.
    - La descarga y adición de imágenes al repositorio es AUTOMÁTICA: no pidas confirmación
      editorial antes de descargar, validar, guardar y preparar la imagen para publicación.
+   - Si encuentras una imagen válida y verificable para la nota correcta, súbela al repo en la
+     misma corrida sin preguntarme; la revisión editorial ya queda delegada a estas reglas.
    - NO uses hotlink como `imageUrl`: una URL externa puede responder 409/403 o bloquearse
      por referer y hacer que aparezca el respaldo aunque la foto exista. Comprueba que el
      archivo descargado sea una imagen válida, no HTML, y que tenga tamaño/dimensiones
@@ -198,6 +200,8 @@ AL TERMINAR:
    - GIT AUTOMÁTICO OBLIGATORIO: al terminar la revisión, ejecuta pruebas, agrega únicamente
      los cambios del radar, crea un commit descriptivo y haz `git push` a la rama activa sin
      pedir confirmación adicional. Si el push falla, reporta el error exacto.
+   - El flujo esperado es continuo: descarga de imagen -> guardado local -> commit de radar ->
+     `git push`. No dejes imágenes nuevas fuera del commit ni pidas permiso extra para subirlas.
    - Dime qué partidos actualizaste, el marcador verificado, las fuentes usadas y cuáles
      imágenes nuevas agregaste o cuáles preservaste sin cambios.
 ```
