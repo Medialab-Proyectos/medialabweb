@@ -82,27 +82,34 @@ export function MidCTA({
   return (
     <div
       ref={ref}
-      className={`py-20 px-6 bg-gradient-to-br from-[var(--surface-dark)] to-[var(--surface-mid)] text-foreground transition-all duration-300 ${
+      className={`dark-hero-text relative overflow-hidden py-20 px-6 transition-all duration-500 ${
         visible ? "opacity-100" : "opacity-0"
       }`}
+      style={{ background: "linear-gradient(120deg, #5e1640 0%, #b81d6a 46%, #E8751A 100%)" }}
     >
-      <div className="max-w-5xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-10">
+      {/* Glow decorativo */}
+      <div
+        aria-hidden="true"
+        className="absolute -top-24 -right-16 w-[28rem] h-[28rem] rounded-full pointer-events-none"
+        style={{ background: "radial-gradient(circle, rgba(255,255,255,0.14), transparent 70%)" }}
+      />
+      <div className="relative max-w-5xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-10">
         <div className="flex flex-col gap-4 max-w-xl text-center lg:text-left">
-          <h3 className="font-display font-bold text-2xl md:text-3xl dark:text-white text-foreground text-balance">
+          <h3 className="font-display font-bold text-2xl md:text-3xl text-white text-balance">
             {resolvedHeadline}
           </h3>
-          <p className="text-base dark:text-white/60 text-muted-foreground">{resolvedSubheadline}</p>
-          <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 text-sm dark:text-white/65 text-muted-foreground">
+          <p className="text-base text-white/80">{resolvedSubheadline}</p>
+          <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 text-sm text-white/80">
             <span className="flex items-center gap-1.5">
-              <CheckCircle2 size={14} className="text-green-400" />
+              <CheckCircle2 size={14} className="text-white" />
               {t("Llamada gratuita de 30 min", "Free 30-min call")}
             </span>
             <span className="flex items-center gap-1.5">
-              <CheckCircle2 size={14} className="text-green-400" />
+              <CheckCircle2 size={14} className="text-white" />
               {t("Sin compromiso", "No commitment")}
             </span>
             <span className="flex items-center gap-1.5">
-              <CheckCircle2 size={14} className="text-green-400" />
+              <CheckCircle2 size={14} className="text-white" />
               {t("Asesoría experta", "Expert guidance")}
             </span>
           </div>
@@ -110,7 +117,7 @@ export function MidCTA({
         <BookingModal>
           <button
             type="button"
-            className="group inline-flex items-center gap-2 px-8 py-4 rounded-full font-semibold text-sm bg-[var(--magenta)] text-white hover:brightness-110 transition-all duration-200 active:scale-95 shadow-lg shadow-[var(--magenta)]/25"
+            className="group inline-flex items-center gap-2 px-8 py-4 rounded-full font-semibold text-sm bg-white text-[var(--magenta)] hover:brightness-105 transition-all duration-200 active:scale-95 shadow-lg shadow-black/25"
           >
             {resolvedButtonText}
             <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />

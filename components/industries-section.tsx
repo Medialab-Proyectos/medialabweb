@@ -130,7 +130,7 @@ export function IndustriesSection() {
         <div className="relative">
           <div
             ref={trackRef}
-            className="flex gap-4 overflow-x-auto snap-x snap-mandatory touch-pan-x pb-4 md:gap-5 [&::-webkit-scrollbar]:hidden"
+            className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 md:gap-5 [&::-webkit-scrollbar]:hidden"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
           {industries.map((industry, i) => {

@@ -447,8 +447,8 @@ export default function Home() {
 
       {/* — EMPUJÓN FINAL — justo antes de objeciones y cierre */}
       <MidCTA
-        headline="Cada sprint sin investigación de usuarios es inversión que no regresa"
-        headlineEn="Every sprint without user research is investment that doesn't come back"
+        headline="Cada mes sin investigación de usuarios es inversión que no regresa"
+        headlineEn="Every month without user research is investment that doesn't come back"
         subheadline="Ya viste cómo trabajamos. Ahora imagina eso aplicado a tu producto. 40+ equipos ya dieron el paso — ¿y tú?"
         subheadlineEn="You've seen how we work. Now imagine that applied to your product. 40+ teams already took the step — what about you?"
       />

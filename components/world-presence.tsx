@@ -83,7 +83,7 @@ export function WorldPresence() {
             >
               <span
                 className="font-display font-bold text-4xl md:text-5xl bg-clip-text text-transparent leading-none"
-                style={{ backgroundImage: "linear-gradient(135deg, var(--magenta), var(--cyan))" }}
+                style={{ backgroundImage: "linear-gradient(135deg, #F59E0B, #E8751A)" }}
               >
                 {s.value}
               </span>

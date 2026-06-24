@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import { createPortal } from "react-dom"
 import Image from "next/image"
-import { TrendingUp, Users, Clock, Target, Zap, BarChart3, Package, Globe, Smartphone, PlayCircle, ChevronDown, Volume2, VolumeX, Play, ExternalLink, X } from "lucide-react"
+import { TrendingUp, Users, Clock, Target, Zap, BarChart3, Package, Globe, Smartphone, PlayCircle, ChevronDown, Volume2, VolumeX, Play, ExternalLink, X, ArrowRight } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 
 type Category = "todos" | "web-design" | "mobile-app" | "ia" | "branding"
@@ -155,7 +155,7 @@ function CaseCard({ c, i, visible, labels, open, onToggle }: { c: CaseItem; i: n
     >
       {/* Media */}
       <div
-        className={`relative aspect-[16/11] md:aspect-auto overflow-hidden ${i % 2 === 1 ? "md:order-2" : ""}`}
+        className={`relative aspect-[4/3] md:aspect-auto overflow-hidden ${i % 2 === 1 ? "md:order-2" : ""}`}
         style={{ background: c.gradient }}
       >
         {current ? (
@@ -197,9 +197,9 @@ function CaseCard({ c, i, visible, labels, open, onToggle }: { c: CaseItem; i: n
           )}
         </div>
 
-        {/* Pestañas — una por vista (esquina inferior izquierda) */}
+        {/* Pestañas — una por vista, en carrusel para no montarse */}
         {gallery.length > 1 && (
-          <div className="absolute bottom-3 left-3 right-3 flex flex-wrap gap-1.5">
+          <div className="absolute bottom-3 left-3 right-3 flex gap-1.5 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {gallery.map((item, gi) => {
               const Meta = kindMeta[item.kind]
               const isActive = gi === activeIdx
@@ -208,7 +208,7 @@ function CaseCard({ c, i, visible, labels, open, onToggle }: { c: CaseItem; i: n
                   key={`${item.src}-${gi}`}
                   type="button"
                   onClick={() => setActiveIdx(gi)}
-                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-semibold backdrop-blur-md border transition-all ${isActive ? "text-[#fff] shadow-lg" : "text-[#fff]/80 border-white/20 bg-black/30 hover:bg-black/40"}`}
+                  className={`inline-flex shrink-0 items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-semibold backdrop-blur-md border transition-all ${isActive ? "text-[#fff] shadow-lg" : "text-[#fff]/80 border-white/20 bg-black/30 hover:bg-black/40"}`}
                   style={isActive ? { background: `${c.color}`, borderColor: `${c.color}` } : undefined}
                 >
                   <Meta.icon size={12} /> {item.label ?? Meta.label}
@@ -271,23 +271,23 @@ function CaseCard({ c, i, visible, labels, open, onToggle }: { c: CaseItem; i: n
                 })}
               </div>
 
-              {/* Tags */}
-              <div className="flex flex-wrap gap-2">
+              {/* Tags — carrusel en móvil, wrap en desktop */}
+              <div className="flex sm:flex-wrap gap-2 overflow-x-auto sm:overflow-visible [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                 {c.tags.map((tag) => (
-                  <span key={tag} className="px-3 py-1 rounded-full text-xs font-medium bg-secondary text-secondary-foreground border border-border">{tag}</span>
+                  <span key={tag} className="shrink-0 px-3 py-1 rounded-full text-xs font-medium bg-secondary text-secondary-foreground border border-border">{tag}</span>
                 ))}
               </div>
 
               {/* Sitios en vivo */}
               {c.liveLinks && c.liveLinks.length > 0 && (
-                <div className="flex flex-wrap gap-2">
+                <div className="flex sm:flex-wrap gap-2 overflow-x-auto sm:overflow-visible [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                   {c.liveLinks.map((link) => (
                     <a
                       key={link.url}
                       href={link.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border transition-all hover:brightness-110"
+                      className="inline-flex shrink-0 items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border transition-all hover:brightness-110"
                       style={{ color: c.color, borderColor: `${c.color}40`, background: `${c.color}12` }}
                     >
                       <ExternalLink size={13} /> {link.label}
@@ -295,6 +295,16 @@ function CaseCard({ c, i, visible, labels, open, onToggle }: { c: CaseItem; i: n
                   ))}
                 </div>
               )}
+
+              {/* CTA por proyecto */}
+              <a
+                href="#contact"
+                className="group inline-flex w-fit items-center gap-2 mt-1 px-5 py-2.5 rounded-full text-sm font-semibold border transition-all hover:brightness-110"
+                style={{ color: c.color, borderColor: `${c.color}55`, background: `${c.color}14` }}
+              >
+                {t("¿Tienes una idea? Contáctanos", "Have an idea? Contact us")}
+                <ArrowRight size={15} className="group-hover:translate-x-1 transition-transform" />
+              </a>
             </div>
           </div>
         </div>
@@ -530,13 +540,13 @@ export function PortfolioCases() {
           </p>
         </div>
 
-        {/* Category filter */}
-        <div className="flex flex-wrap gap-2">
+        {/* Category filter — carrusel en móvil, wrap en desktop */}
+        <div className="flex sm:flex-wrap gap-2 overflow-x-auto sm:overflow-visible [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {categories.map((cat) => (
             <button
               key={cat.id}
               onClick={() => setFilter(cat.id)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 border ${
+              className={`shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 border ${
                 filter === cat.id
                   ? "border-[var(--magenta)]/30 bg-[var(--magenta)]/10 text-[var(--magenta)]"
                   : "border-border bg-card text-muted-foreground hover:border-[var(--magenta)]/20 hover:text-foreground"

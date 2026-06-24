@@ -476,6 +476,15 @@
   display: none !important;
 }
 
+/* UXBox: los glows de fondo se ven irregulares en web + temas claros.
+   Se mantienen en móvil (se ven bien) y en temas oscuros. */
+@media (min-width: 768px) {
+  .light .uxbox-bg-glow,
+  .warm .uxbox-bg-glow {
+    display: none !important;
+  }
+}
+
 /* Course hero — slow-moving aura behind constellation */
 .course-aura { opacity: 0.18; }
 .dark .course-aura { opacity: 0.14; }

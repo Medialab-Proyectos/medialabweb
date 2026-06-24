@@ -92,7 +92,7 @@ export function BlogSection() {
           </a>
 
           {/* Subsiguientes — stacked en desktop, carrusel solo en móvil */}
-          <div className="lg:col-span-2 flex gap-4 lg:gap-6 overflow-x-auto lg:overflow-visible snap-x snap-mandatory lg:flex-col touch-pan-x pb-2 lg:pb-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div className="lg:col-span-2 flex gap-4 lg:gap-6 overflow-x-auto lg:overflow-visible snap-x snap-mandatory lg:flex-col pb-2 lg:pb-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {rest.map((article, i) => (
               <a
                 key={article.slug}

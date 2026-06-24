@@ -152,7 +152,7 @@ export function ValueSection() {
             <span className="text-xs font-semibold tracking-widest uppercase text-[var(--cyan)]">{t("El recorrido de tu usuario", "Your user's journey")}</span>
             <p className="text-sm text-muted-foreground">{t("Voltea cada tarjeta para ver cómo lo logramos.", "Flip each card to see how we do it.")}</p>
           </div>
-          <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory touch-pan-x pb-2 sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:overflow-visible sm:pb-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-2 sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:overflow-visible sm:pb-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {ladder.map((item) => (
               <FlipCard key={item.titleEs} item={item} />
             ))}
@@ -160,7 +160,10 @@ export function ValueSection() {
         </div>
 
         {/* Caja CTA — mismo estilo que la de "Cómo te ayudamos" */}
-        <div className="rounded-2xl border border-border bg-secondary/30 p-5 md:p-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div
+          className="rounded-2xl border border-border p-5 md:p-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+          style={{ background: "linear-gradient(115deg, color-mix(in oklab, var(--magenta) 12%, transparent), transparent 42%), linear-gradient(300deg, color-mix(in oklab, var(--orange) 14%, transparent), transparent 48%), var(--card)" }}
+        >
           <p className="text-base font-semibold text-foreground text-balance">
             {t("¿Tu producto pierde usuarios y no sabes por qué?", "Is your product losing users and you don't know why?")}
           </p>

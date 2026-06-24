@@ -94,7 +94,7 @@ export function ServicesSummarySection() {
         </div>
 
         {/* Compact service cards — carousel on mobile, grid on desktop */}
-        <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory touch-pan-x pb-4 sm:overflow-visible sm:grid sm:grid-cols-2 lg:grid-cols-4 md:gap-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
+        <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 sm:overflow-visible sm:grid sm:grid-cols-2 lg:grid-cols-4 md:gap-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
           {services.map((s, i) => {
             const Icon = s.icon
             return (
@@ -151,7 +151,10 @@ export function ServicesSummarySection() {
         </div>
 
         {/* CTAs — en caja para no quedar sueltos */}
-        <div className="rounded-2xl border border-border bg-secondary/30 p-5 md:p-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div
+          className="rounded-2xl border border-border p-5 md:p-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+          style={{ background: "linear-gradient(115deg, color-mix(in oklab, var(--magenta) 12%, transparent), transparent 42%), linear-gradient(300deg, color-mix(in oklab, var(--orange) 14%, transparent), transparent 48%), var(--card)" }}
+        >
           <p className="text-base font-semibold text-foreground text-balance">
             {t("¿No sabes por dónde empezar? Cuéntanos tu reto y te guiamos.", "Not sure where to start? Tell us your challenge and we'll guide you.")}
           </p>

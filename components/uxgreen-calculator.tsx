@@ -392,7 +392,6 @@ export function UXGreenCalculator({ onPhaseChange }: { onPhaseChange?: (active: 
                 }}
                 placeholder={t("tudominio.com", "yourdomain.com")}
                 className="w-full pl-11 pr-4 py-4 rounded-xl bg-current/5 border border-current/25 text-sm outline-none focus:border-[#00BFA6]/60 focus:bg-[#00BFA6]/5 transition-all duration-200 placeholder:opacity-50"
-                autoFocus
               />
             </div>
 

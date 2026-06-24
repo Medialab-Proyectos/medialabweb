@@ -105,6 +105,7 @@ export function HomeSectionNav() {
     e.preventDefault()
     const el = document.getElementById(id)
     if (el) {
+      setActive(id) // selección inmediata (no esperar al observer)
       const navbarHeight = 120
       const top = el.getBoundingClientRect().top + window.scrollY - navbarHeight
       window.scrollTo({ top, behavior: "smooth" })

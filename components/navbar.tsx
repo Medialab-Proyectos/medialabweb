@@ -53,6 +53,13 @@ export function Navbar() {
   const ctaHref = isCurso ? "#registro" : isHome ? "#contact" : localized("/contacto")
   const currentLinks = navLinks[lang]
 
+  // Marca como activo el enlace de la página actual (solo rutas, no anclas)
+  const isLinkActive = useCallback((href: string) => {
+    if (href.includes("#")) return false
+    const target = localized(href)
+    return pathname === target || pathname === href
+  }, [pathname, localized])
+
   const activeTheme = mounted ? theme : "dark"
   const isDarkTheme = activeTheme === "dark" || activeTheme === "pure-dark"
 
@@ -199,7 +206,7 @@ export function Navbar() {
                     ? "text-[#00BFA6]/80 hover:text-[#00BFA6]"
                     : "text-[#00BFA6]/70 hover:text-[#00BFA6]"
                   : linkIdle
-              }`}
+              } ${isLinkActive(link.href) ? "after:!w-full" : ""}`}
             >
               {(link as any).highlight && (
                 <span className="absolute -top-1 -right-1.5 w-1.5 h-1.5 rounded-full bg-[var(--magenta)] animate-pulse" />
@@ -323,7 +330,7 @@ export function Navbar() {
             ? "bg-[#0a0a0a]/95 border-white/[0.06]"
             : "bg-background/95 border-border"
         }`}>
-          {currentLinks.map((link) => (
+          {currentLinks.map((link, i) => (
             <Link
               key={link.href}
               href={link.href.startsWith("#") ? link.href : localized(link.href)}
@@ -335,8 +342,8 @@ export function Navbar() {
                   window.scrollTo({ top: 0, behavior: "smooth" })
                 }
               }}
-              className={`text-base font-medium py-2 last:border-0 flex items-center gap-1.5 ${
-                forceDarkNav ? "border-b border-white/10" : "border-b border-border"
+              className={`text-base font-medium py-2 flex items-center gap-1.5 ${
+                i === currentLinks.length - 1 ? "" : forceDarkNav ? "border-b border-white/10" : "border-b border-border"
               } ${
                 (link as any).uxgreen
                   ? "text-[#00BFA6]"
@@ -380,8 +387,10 @@ export function Navbar() {
             </div>
           )}
           {/* UXGreen™ block */}
-          <div className={`flex items-start gap-2 p-3 rounded-xl border ${forceDarkNav ? "border-[#00BFA6]/20 bg-[#00BFA6]/[0.06]" : "border-[#00BFA6]/15 bg-[#00BFA6]/[0.04]"}`}>
-            <Leaf size={13} className="text-[#00BFA6] shrink-0 mt-0.5" />
+          <div className={`flex items-center gap-2.5 p-3 rounded-xl border ${forceDarkNav ? "border-[#00BFA6]/20 bg-[#00BFA6]/[0.06]" : "border-[#00BFA6]/15 bg-[#00BFA6]/[0.04]"}`}>
+            <span className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center bg-[#00BFA6]/15 border border-[#00BFA6]/40">
+              <Leaf size={15} className="text-[#00BFA6]" />
+            </span>
             <div>
               <span className="text-xs font-semibold text-[#00BFA6]">UXGreen™</span>
               <p className={`text-[11px] mt-0.5 leading-snug ${forceDarkNav ? "text-white/50" : "text-muted-foreground"}`}>
