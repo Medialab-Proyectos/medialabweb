@@ -60,6 +60,7 @@ export async function generateMetadata({
     applicationName: RADAR_BRAND,
     publisher: RADAR_BRAND,
     description: article.metaDescription,
+    keywords: [...article.teams, article.event, article.category, "Experience Radar", "UX", "comportamiento humano", "Mundial 2026"],
     alternates: {
       canonical: `${BASE}/${article.slug}`,
       languages: {
@@ -81,7 +82,17 @@ export async function generateMetadata({
       authors: [RADAR_BRAND],
     },
     twitter: { card: "summary_large_image", title: brandedTitle, description: article.metaDescription, images: [image] },
-    robots: { index: true, follow: true },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+        "max-video-preview": -1,
+      },
+    },
   }
 }
 
@@ -252,7 +263,8 @@ export default async function RadarArticlePage({
           <p className="mt-4 text-xs leading-relaxed text-muted-foreground">
             Contenido editorial e investigativo independiente. MediaLab no es patrocinador oficial del torneo, no
             usa logos oficiales y no reproduce noticias completas: las fuentes se enlazan solo como referencia.
-            Datos de partido mostrados como ejemplo en borrador, pendientes de verificación.
+            Los hechos deportivos se publican solo tras contraste con fuentes oficiales o periodísticas enlazadas;
+            la capa de UX y comportamiento se identifica como interpretación editorial.
           </p>
         </details>
       </article>
@@ -560,6 +572,11 @@ function JsonLd({
       url: `${SITE}/experience-radar`,
       logo: { "@type": "ImageObject", url: `${SITE}/images/logo-medialab-400.png` },
     },
+    mentions: article.fanPulse.sources.map((source) => ({
+      "@type": "CreativeWork",
+      name: source.name,
+      url: source.url,
+    })),
     keywords: [...article.teams, article.event, article.category, "UX", "experiencia de usuario", "Mundial 2026"].join(", "),
     isAccessibleForFree: true,
   }

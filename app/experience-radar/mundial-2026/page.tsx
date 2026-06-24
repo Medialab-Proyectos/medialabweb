@@ -9,14 +9,14 @@ import { RadarFloatingMenu } from "@/components/experience-radar/radar-floating-
 import { NextMatchBar } from "@/components/experience-radar/next-match-bar"
 
 /**
- * Página 2 — PORTAL del especial "Mundial 2026".
+ * Pagina 2 - PORTAL del especial "Mundial 2026".
  *
  * Es un portal de NOTAS, no la nota completa: hero del Mundial (contexto/escala) +
- * nota principal (la más reciente, que se abre en su detalle) + grilla del resto.
- * La nota completa con su análisis vive en /experience-radar/mundial-2026/[slug].
- * Espejo en inglés: /en/experience-radar/world-cup-2026 (idioma por ruta).
+ * nota principal (la mas reciente, que se abre en su detalle) + grilla del resto.
+ * La nota completa con su analisis vive en /experience-radar/mundial-2026/[slug].
+ * Espejo en ingles: /en/experience-radar/world-cup-2026 (idioma por ruta).
  *
- * Fase 2 añadirá: barra viva (próximo partido + contador), buscador y filtros chip.
+ * Fase 2 anadira: barra viva (proximo partido + contador), buscador y filtros chip.
  */
 export const dynamic = "force-dynamic"
 
@@ -25,6 +25,21 @@ export async function generateMetadata(): Promise<Metadata> {
     title: "Mundial 2026: análisis de experiencia, emoción y comportamiento | Experience Radar",
     description:
       "Notas verificadas del Mundial 2026 sobre emoción de las hinchadas, comportamiento digital, sesgos cognitivos y aprendizajes aplicables a UX y producto.",
+    applicationName: "Experience Radar",
+    publisher: "Experience Radar",
+    keywords: [
+      "Experience Radar",
+      "Mundial 2026",
+      "análisis del Mundial 2026",
+      "previas Mundial 2026",
+      "resultados Mundial 2026",
+      "UX y futbol",
+      "comportamiento del aficionado",
+      "sesgos cognitivos en deportes",
+      "experiencia de usuario",
+      "GEO",
+      "SEO editorial",
+    ],
     alternates: {
       canonical: "/experience-radar/mundial-2026",
       types: { "application/rss+xml": "https://medialab.design/experience-radar/feed.xml" },
@@ -39,6 +54,7 @@ export async function generateMetadata(): Promise<Metadata> {
       description: "Resultados y previas verificadas convertidas en aprendizajes de UX, producto y comportamiento humano.",
       type: "website",
       url: "https://medialab.design/experience-radar/mundial-2026",
+      siteName: "Experience Radar",
       images: [{ url: "/images/experience-radar-vs2.png", alt: "Experience Radar - Especial Mundial 2026" }],
     },
     twitter: {
@@ -47,7 +63,17 @@ export async function generateMetadata(): Promise<Metadata> {
       description: "Resultados y previas verificadas convertidas en aprendizajes de UX, producto y comportamiento humano.",
       images: ["/images/experience-radar-vs2.png"],
     },
-    robots: { index: true, follow: true },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+        "max-video-preview": -1,
+      },
+    },
   }
 }
 
@@ -90,7 +116,7 @@ export default async function ExperienceRadarMundialPage({
         <section className="mx-auto max-w-3xl px-6 py-16">
           {query ? (
             <>
-              <h2 className="text-2xl font-bold">Sin resultados para «{q}»</h2>
+              <h2 className="text-2xl font-bold">Sin resultados para "{q}"</h2>
               <p className="mt-3 text-muted-foreground">
                 No encontramos notas que coincidan con tu búsqueda.{" "}
                 <a href="/experience-radar/mundial-2026" className="font-semibold text-[var(--cyan)] hover:underline">
@@ -124,6 +150,17 @@ function buildCollectionSchema(articles: Awaited<ReturnType<typeof getVisibleRad
     description: "Análisis verificados del Mundial 2026 desde la experiencia, la emoción y el comportamiento digital.",
     url: "https://medialab.design/experience-radar/mundial-2026",
     inLanguage: "es",
+    publisher: {
+      "@type": "Organization",
+      name: "Experience Radar",
+      url: "https://medialab.design/experience-radar",
+    },
+    about: [
+      { "@type": "Thing", name: "Mundial 2026" },
+      { "@type": "Thing", name: "UX" },
+      { "@type": "Thing", name: "comportamiento digital" },
+      { "@type": "Thing", name: "sesgos cognitivos" },
+    ],
     hasPart: articles.map((article) => ({
       "@type": "NewsArticle",
       headline: article.seoTitle,
@@ -143,6 +180,10 @@ function buildFaqSchema() {
     {
       question: "¿Las notas usan resultados y fuentes reales?",
       answer: "Sí. Los hechos deportivos se contrastan con fuentes oficiales y editoriales enlazadas; la interpretación de comportamiento se identifica como análisis de MediaLab.",
+    },
+    {
+      question: "¿Experience Radar usa voces reales de redes sociales?",
+      answer: "Sí. Cuando hay señal verificable, el análisis incorpora conversación pública enlazada desde X, Reddit, Instagram, Facebook o YouTube y la separa de los hechos confirmados.",
     },
   ]
   return {

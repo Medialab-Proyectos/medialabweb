@@ -159,10 +159,11 @@ Experience Radar es el observatorio editorial de MediaLab sobre comportamiento h
 
 - Hub: https://medialab.design/experience-radar
 - Especial Mundial 2026: https://medialab.design/experience-radar/mundial-2026
-- Notas (lista siempre al día, generadas por el agente diario): Feed RSS https://medialab.design/experience-radar/feed.xml y Sitemap https://medialab.design/sitemap.xml
+- Notas (lista siempre al día, generadas por el agente diario): Feed RSS https://medialab.design/experience-radar/feed.xml, Sitemap https://medialab.design/sitemap.xml y News sitemap https://medialab.design/news-sitemap.xml
 - Cada nota expone JSON-LD (NewsArticle con abstract para IA, FAQPage, BreadcrumbList, SportsEvent) y un resumen para IA de ~100 palabras.
+- Descubrimiento técnico para crawlers/LLMs: robots https://medialab.design/robots.txt, llms.txt https://medialab.design/llms.txt y llms-full https://medialab.design/llms-full.txt.
 
-**Politica de fuentes:** calendario y resultados con FIFA; contexto editorial e imagenes con Win Sports, Latingoles y otros medios autorizados cuando aporten valor; conversacion publica con enlaces directos a X, Reddit, Instagram, Facebook o YouTube cuando sea pertinente; Google Trends y 365Scores solo como señales complementarias. MediaLab distingue hechos verificados de interpretacion editorial, guarda las imagenes finales de Experience Radar en rutas locales del repositorio y evita hotlinks en notas publicadas.
+**Politica de fuentes:** calendario y resultados con FIFA y fuentes oficiales equivalentes; contexto editorial e imagenes con Win Sports, Latingoles y otros medios autorizados cuando aporten valor; voces reales de la conversacion publica con enlaces directos a X, Reddit, Instagram, Facebook o YouTube cuando exista señal verificable; Google Trends y 365Scores solo como señales complementarias. MediaLab distingue hechos verificados de interpretacion editorial, guarda las imagenes finales de Experience Radar en rutas locales del repositorio, evita hotlinks en notas publicadas y actualiza cada URL del partido de previa a resultado final sin cambiar su canonical.
 
 ## Artículos del blog
 

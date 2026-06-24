@@ -2,15 +2,24 @@ import { MetadataRoute } from "next"
 
 export default function robots(): MetadataRoute.Robots {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://medialab.design"
+  const sharedAllow = [
+    "/",
+    "/llms.txt",
+    "/llms-full.txt",
+    "/sitemap.xml",
+    "/news-sitemap.xml",
+    "/experience-radar/feed.xml",
+  ]
+  const sharedDisallow = ["/api/", "/_next/data/", "/experience-radar/actualizar"]
 
   return {
     rules: [
       {
         userAgent: "*",
-        allow: "/",
-        disallow: ["/api/", "/_next/data/"],
+        allow: sharedAllow,
+        disallow: sharedDisallow,
       },
-      // Search-aware AI agents (real-time browsing for answers — keep allowed for AEO/GEO)
+      // Search-aware AI agents with browsing capabilities.
       {
         userAgent: [
           "OAI-SearchBot",
@@ -22,6 +31,8 @@ export default function robots(): MetadataRoute.Robots {
           "Claude-SearchBot",
           "Google-Extended",
           "GoogleOther",
+          "Googlebot-News",
+          "Googlebot-Image",
           "Applebot",
           "Applebot-Extended",
           "DuckAssistBot",
@@ -33,14 +44,14 @@ export default function robots(): MetadataRoute.Robots {
           "YouBot",
           "cohere-ai",
         ],
-        allow: ["/", "/llms.txt", "/llms-full.txt"],
-        disallow: ["/api/"],
+        allow: sharedAllow,
+        disallow: sharedDisallow,
       },
-      // Training-only crawlers — allow by default to maximize brand citations
+      // Training crawlers remain allowed for citation and brand discovery.
       {
         userAgent: ["GPTBot", "ClaudeBot", "anthropic-ai", "CCBot", "Bytespider", "Diffbot", "FacebookBot"],
-        allow: ["/", "/llms.txt", "/llms-full.txt"],
-        disallow: ["/api/"],
+        allow: sharedAllow,
+        disallow: sharedDisallow,
       },
     ],
     sitemap: [`${baseUrl}/sitemap.xml`, `${baseUrl}/news-sitemap.xml`],

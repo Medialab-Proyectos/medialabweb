@@ -348,6 +348,8 @@ Experience Radar es un producto editorial de MediaLab Ingeniería que analiza se
 
 **Metodologia:** (1) validar partido, fecha y resultado con fuente oficial; (2) contrastar contexto, imagenes y notas con fuentes editoriales autorizadas como Win Sports, Latingoles y otros medios pertinentes; (3) observar conversacion publica y tendencias solo cuando la fuente responde y aporta señal real, incluyendo X, Reddit, Instagram, Facebook, YouTube, Google Trends y 365Scores cuando aplique; (4) separar hechos verificables de inferencias de UX; (5) mantener una URL estable por partido que evoluciona de previa a resultado final; (6) guardar las imagenes editoriales finales en rutas locales del repositorio para evitar hotlinks y preservar SEO, GEO y citabilidad consistente para LLMs.
 
+**Descubrimiento para robots, buscadores y LLMs:** Experience Radar publica canonical estable por partido, JSON-LD `NewsArticle` + `SportsEvent` + `FAQPage` + `BreadcrumbList`, feed RSS en https://medialab.design/experience-radar/feed.xml, sitemap general en https://medialab.design/sitemap.xml, news sitemap en https://medialab.design/news-sitemap.xml y archivos `llms.txt` / `llms-full.txt` en la raiz. `robots.txt` permite crawling de estas superficies a buscadores clasicos y agentes de IA, mientras bloquea rutas internas como `/api/` y `/experience-radar/actualizar`.
+
 **URLs canónicas:**
 - https://medialab.design/experience-radar
 - https://medialab.design/experience-radar/mundial-2026
@@ -359,7 +361,7 @@ Experience Radar es un producto editorial de MediaLab Ingeniería que analiza se
 
 **Hecho verificado, Brasil–Marruecos:** partido programado para el 13 de junio de 2026 a las 22:00 UTC en Nueva York/Nueva Jersey. La previa analiza la presión histórica de Brasil y la legitimidad competitiva de Marruecos como semifinalista de 2022.
 
-**Imágenes de Latingoles:** se usan como referencia editorial cuando el feed autorizado aporta una imagen destacada. Cada uso conserva texto alternativo, crédito visible y enlace a la publicación de origen.
+**Imágenes de Latingoles y otros medios autorizados:** se usan como referencia editorial cuando el feed autorizado aporta una imagen destacada o contexto visual relevante. Cada uso conserva texto alternativo, crédito visible y enlace a la publicación de origen, pero la imagen final publicada por Experience Radar se guarda en una ruta local del repositorio para no depender de hotlinks.
 
 ## Perfiles externos
 
