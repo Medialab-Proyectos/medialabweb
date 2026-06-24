@@ -6181,7 +6181,7 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
     ],
   }),
   analyzedUpcomingMatch({
-    date: "2026-06-25",
+    date: "2026-06-24",
     kickoffAt: "2026-06-25T01:00:00.000Z",
     slug: "chequia-mexico-mundial-2026",
     teams: ["Chequia", "Mexico"],
@@ -6221,7 +6221,7 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
     ],
   }),
   analyzedUpcomingMatch({
-    date: "2026-06-25",
+    date: "2026-06-24",
     kickoffAt: "2026-06-25T01:00:00.000Z",
     slug: "sudafrica-corea-del-sur-mundial-2026",
     teams: ["Sudafrica", "Corea del Sur"],
