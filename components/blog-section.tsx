@@ -91,38 +91,38 @@ export function BlogSection() {
             </div>
           </a>
 
-          {/* Subsiguientes — carrusel */}
-          <div className="lg:col-span-2 flex gap-4 overflow-x-auto snap-x snap-mandatory pb-2 -mx-6 px-6 lg:mx-0 lg:px-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {/* Subsiguientes — stacked en desktop, carrusel solo en móvil */}
+          <div className="lg:col-span-2 flex gap-4 lg:gap-6 overflow-x-auto lg:overflow-visible snap-x snap-mandatory lg:flex-col touch-pan-x pb-2 lg:pb-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {rest.map((article, i) => (
               <a
                 key={article.slug}
                 href={localized(`/blog/${article.slug}`)}
                 title={t(article.titleEs, article.titleEn)}
-                className="group flex flex-col min-w-[78%] sm:min-w-[320px] lg:min-w-[300px] snap-start rounded-2xl border border-border bg-card overflow-hidden hover:shadow-xl hover:border-transparent transition-all duration-300"
+                className="group flex gap-5 min-w-[88%] sm:min-w-[55%] lg:min-w-0 snap-start rounded-2xl border border-border bg-card overflow-hidden hover:shadow-xl hover:border-transparent transition-all duration-300"
                 style={{ transitionDelay: `${i * 60}ms` }}
               >
                 {/* Thumbnail */}
-                <div className="relative w-full h-40 shrink-0 overflow-hidden">
+                <div className="relative w-32 sm:w-40 md:w-48 shrink-0 overflow-hidden">
                   <Image
                     src={article.image}
                     alt={t(article.titleEs, article.titleEn)}
                     fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    draggable={false}
+                    className="object-cover group-hover:scale-105 transition-transform duration-500 pointer-events-none select-none"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-                  <span className="absolute bottom-3 left-3 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider text-white" style={{ background: article.color }}>
-                    {t(article.categoryEs, article.categoryEn)}
-                  </span>
                 </div>
                 {/* Content */}
-                <div className="flex flex-col gap-2 p-5 flex-1">
+                <div className="flex flex-col gap-2 py-5 pr-5 flex-1 justify-center min-w-0">
+                  <span className="text-xs font-bold uppercase tracking-widest" style={{ color: article.color }}>
+                    {t(article.categoryEs, article.categoryEn)}
+                  </span>
                   <h3 className="font-display font-semibold text-base text-foreground leading-snug text-balance group-hover:opacity-80 transition-opacity line-clamp-2">
                     {t(article.titleEs, article.titleEn)}
                   </h3>
-                  <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">
+                  <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2 hidden md:block">
                     {t(article.excerptEs, article.excerptEn)}
                   </p>
-                  <div className="flex items-center gap-3 mt-auto pt-3 text-xs text-muted-foreground">
+                  <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground">
                     <span className="flex items-center gap-1"><Clock size={14} />{article.readTime}</span>
                     <span className="ml-auto font-semibold flex items-center gap-1 group-hover:gap-1.5 transition-all" style={{ color: article.color }}>
                       {t("Leer", "Read")} <ArrowRight size={11} />

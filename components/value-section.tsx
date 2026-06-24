@@ -52,11 +52,11 @@ function FlipCard({ item }: { item: LadderItem }) {
   const color = item.color
 
   return (
-    <div className="min-w-[82%] snap-start sm:min-w-0 h-[268px] [perspective:1400px]">
+    <div className="min-w-[82%] snap-start sm:min-w-0 h-[232px] [perspective:1400px]">
       <div className={`relative h-full w-full transition-transform duration-500 [transform-style:preserve-3d] ${flipped ? "[transform:rotateY(180deg)]" : ""}`}>
         {/* Frente */}
         <div className="absolute inset-0 [backface-visibility:hidden] flex flex-col gap-3 p-6 rounded-2xl border border-border bg-card">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center justify-between">
             <span
               className="font-display text-4xl font-bold leading-none bg-clip-text text-transparent"
               style={{ backgroundImage: `linear-gradient(135deg, ${color}, color-mix(in oklab, ${color} 45%, transparent))` }}
@@ -71,7 +71,7 @@ function FlipCard({ item }: { item: LadderItem }) {
             </span>
           </div>
           <h3 className="font-display font-bold text-xl text-foreground">{t(item.titleEs, item.titleEn)}</h3>
-          <p className="text-sm text-muted-foreground leading-relaxed flex-1">{t(item.frontEs, item.frontEn)}</p>
+          <p className="text-sm text-muted-foreground leading-relaxed">{t(item.frontEs, item.frontEn)}</p>
           <button
             type="button"
             onClick={() => setFlipped(true)}
@@ -152,35 +152,30 @@ export function ValueSection() {
             <span className="text-xs font-semibold tracking-widest uppercase text-[var(--cyan)]">{t("El recorrido de tu usuario", "Your user's journey")}</span>
             <p className="text-sm text-muted-foreground">{t("Voltea cada tarjeta para ver cómo lo logramos.", "Flip each card to see how we do it.")}</p>
           </div>
-          <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-2 sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:overflow-visible sm:pb-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory touch-pan-x pb-2 sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:overflow-visible sm:pb-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {ladder.map((item) => (
               <FlipCard key={item.titleEs} item={item} />
             ))}
           </div>
         </div>
 
-        {/* Caja CTA */}
-        <div className="relative overflow-hidden rounded-2xl border border-[var(--magenta)]/20 p-6 md:p-8 flex flex-col gap-5">
-          <div
-            aria-hidden="true"
-            className="absolute inset-0 -z-10"
-            style={{ background: "linear-gradient(120deg, color-mix(in oklab, var(--magenta) 10%, transparent), transparent 55%), linear-gradient(300deg, color-mix(in oklab, var(--cyan) 8%, transparent), transparent 55%)" }}
-          />
-          <p className="text-lg md:text-xl font-semibold text-foreground text-balance max-w-xl">
+        {/* Caja CTA — mismo estilo que la de "Cómo te ayudamos" */}
+        <div className="rounded-2xl border border-border bg-secondary/30 p-5 md:p-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-base font-semibold text-foreground text-balance">
             {t("¿Tu producto pierde usuarios y no sabes por qué?", "Is your product losing users and you don't know why?")}
           </p>
-          <div className="flex flex-col sm:flex-row gap-3">
+          <div className="flex flex-col sm:flex-row gap-3 shrink-0">
             <Link
               href="#contact"
-              className="group inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full font-semibold text-sm text-white transition-all hover:brightness-110 active:scale-95 w-full sm:w-auto"
-              style={{ background: "var(--magenta)", boxShadow: "0 10px 30px color-mix(in oklab, var(--magenta) 30%, transparent)" }}
+              className="group inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold text-sm text-white transition-all hover:brightness-110 active:scale-95 w-full sm:w-auto"
+              style={{ background: "var(--magenta)", boxShadow: "0 8px 30px color-mix(in oklab, var(--magenta) 30%, transparent)" }}
             >
               {t("Cuéntanos tu desafío", "Tell us your challenge")}
               <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
             </Link>
             <a
               href="#uxbox"
-              className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full font-semibold text-sm border border-border text-foreground hover:bg-foreground/5 hover:border-foreground/30 transition-all active:scale-95 w-full sm:w-auto"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold text-sm border border-border text-foreground hover:bg-foreground/5 hover:border-foreground/30 transition-all active:scale-95 w-full sm:w-auto"
             >
               {t("Probar el UXBox gratis", "Try UXBox free")}
             </a>

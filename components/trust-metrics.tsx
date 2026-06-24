@@ -1,6 +1,6 @@
 "use client"
 
-import { Layers, Globe, Clock, Users, Package } from "lucide-react"
+import { Globe, Clock, Users, Package } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 
 function MetricCard({
@@ -35,7 +35,6 @@ export function TrustMetrics() {
   const { t } = useLanguage()
 
   const metrics = [
-    { value: 40, suffix: "+", label: t("Productos en producción", "Products in production"), icon: Layers },
     { value: 50, suffix: "+", label: t("Proyectos entregados", "Projects delivered"), icon: Package },
     { value: 98, suffix: "%", label: t("Clientes que repiten", "Returning clients"), icon: Users },
     { value: 7, suffix: "", label: t("Países con impacto", "Countries impacted"), icon: Globe },
@@ -60,7 +59,7 @@ export function TrustMetrics() {
             "Real results from teams that stopped guessing and started designing with evidence"
           )}
         </p>
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {metrics.map((m) => (
             <MetricCard key={m.label} {...m} />
           ))}

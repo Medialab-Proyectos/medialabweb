@@ -94,7 +94,7 @@ export function ServicesSummarySection() {
         </div>
 
         {/* Compact service cards — carousel on mobile, grid on desktop */}
-        <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 -mx-6 px-6 sm:mx-0 sm:px-0 sm:overflow-visible sm:grid sm:grid-cols-2 lg:grid-cols-4 md:gap-5 scrollbar-hide" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
+        <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory touch-pan-x pb-4 sm:overflow-visible sm:grid sm:grid-cols-2 lg:grid-cols-4 md:gap-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
           {services.map((s, i) => {
             const Icon = s.icon
             return (
@@ -117,7 +117,8 @@ export function ServicesSummarySection() {
                       src={s.image}
                       alt={t(s.titleEs, s.titleEn)}
                       fill
-                      className="object-cover transition-transform duration-300 group-hover:scale-105"
+                      draggable={false}
+                      className="object-cover transition-transform duration-300 group-hover:scale-105 pointer-events-none select-none"
                       sizes="(max-width: 768px) 80vw, 25vw"
                     />
                     <div className="absolute inset-0" style={{ background: `linear-gradient(to top, var(--card), transparent 65%)` }} />

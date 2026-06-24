@@ -3,7 +3,6 @@
 import { useState } from "react"
 import dynamic from "next/dynamic"
 import Link from "next/link"
-import { Globe, MapPin, Users, Briefcase } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 
 // Load the map only on the client — react-simple-maps uses d3-geo which requires DOM
@@ -26,10 +25,10 @@ const WorldMap = dynamic(
 )
 
 const stats = [
-  { value: "9",   labelEs: "Países",    labelEn: "Countries", icon: Globe },
-  { value: "15",  labelEs: "Ciudades",  labelEn: "Cities",    icon: MapPin },
-  { value: "+20", labelEs: "Clientes",  labelEn: "Clients",   icon: Users },
-  { value: "+50", labelEs: "Proyectos", labelEn: "Projects",  icon: Briefcase },
+  { value: "9",   labelEs: "Países",    labelEn: "Countries" },
+  { value: "15",  labelEs: "Ciudades",  labelEn: "Cities"    },
+  { value: "+20", labelEs: "Clientes",  labelEn: "Clients"   },
+  { value: "+50", labelEs: "Proyectos", labelEn: "Projects"  },
 ]
 
 export function WorldPresence() {
@@ -77,28 +76,22 @@ export function WorldPresence() {
 
         {/* Stats row */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {stats.map((s) => {
-            const Icon = s.icon
-            return (
-              <div
-                key={s.value}
-                className="relative overflow-hidden flex flex-col items-center gap-2 py-6 rounded-xl border dark:border-white/10 border-foreground/10 dark:bg-white/5 bg-foreground/5"
+          {stats.map((s) => (
+            <div
+              key={s.value}
+              className="flex flex-col items-center gap-2 py-7 rounded-xl border dark:border-white/10 border-foreground/10 dark:bg-white/5 bg-foreground/5"
+            >
+              <span
+                className="font-display font-bold text-4xl md:text-5xl bg-clip-text text-transparent leading-none"
+                style={{ backgroundImage: "linear-gradient(135deg, var(--magenta), var(--cyan))" }}
               >
-                <Icon
-                  size={116}
-                  aria-hidden="true"
-                  className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
-                  style={{ color: "var(--magenta)", opacity: 0.07 }}
-                />
-                <span className="relative font-display font-bold text-3xl md:text-4xl" style={{ color: "var(--magenta)" }}>
-                  {s.value}
-                </span>
-                <span className="relative text-sm font-medium dark:text-white/60 text-muted-foreground">
-                  {t(s.labelEs, s.labelEn)}
-                </span>
-              </div>
-            )
-          })}
+                {s.value}
+              </span>
+              <span className="text-sm md:text-base font-medium dark:text-white/70 text-muted-foreground">
+                {t(s.labelEs, s.labelEn)}
+              </span>
+            </div>
+          ))}
         </div>
 
       </div>
