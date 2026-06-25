@@ -371,7 +371,7 @@ export function CourseHero() {
         <div className="absolute inset-0 course-hero-overlay" />
       </div>
 
-      <motion.div style={{ opacity, y }} className="relative z-10 w-full max-w-6xl mx-auto px-6 lg:px-8 pt-32 md:pt-32 pb-20 md:pb-16">
+      <motion.div style={{ opacity, y }} className="relative z-10 w-full max-w-6xl mx-auto px-6 lg:px-8 pt-28 md:pt-28 pb-20 md:pb-16">
         <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-12 md:gap-16 items-center">
           {/* Left — Text */}
           <motion.div variants={stagger} initial="hidden" animate="visible" className="flex flex-col items-center sm:items-start">
@@ -404,11 +404,12 @@ export function CourseHero() {
 
             {/* Value prop — 2 líneas max */}
             <motion.p variants={fadeUp} className="text-base md:text-lg dark:text-white/80 text-muted-foreground leading-relaxed mb-8 sm:mb-4 max-w-md text-center sm:text-left">
-              {t(
-                "Aprende a estructurar, validar y optimizar productos digitales funcionales con IA en ",
-                "Learn to structure, validate, and optimize functional digital products with AI in "
-              )}
-              <span className="font-semibold" style={{ color: 'var(--cyan)' }}>{t("8 semanas", "8 weeks")}</span>.
+              {t("Aprende a ", "Learn to ")}
+              <strong className="font-bold dark:text-white text-foreground">{t("estructurar, validar y optimizar", "structure, validate, and optimize")}</strong>
+              {t(" productos digitales funcionales con ", " functional digital products with ")}
+              <strong className="font-bold dark:text-white text-foreground">{t("IA", "AI")}</strong>
+              {t(" en ", " in ")}
+              <span className="font-bold underline decoration-2 underline-offset-4 decoration-[var(--cyan)]" style={{ color: 'var(--cyan)' }}>{t("8 semanas", "8 weeks")}</span>.
             </motion.p>
 
             {/* CTAs — stacked full-width on mobile, side-by-side on desktop */}

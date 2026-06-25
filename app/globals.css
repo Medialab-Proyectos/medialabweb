@@ -402,6 +402,47 @@
   border-color: rgba(239,68,68,0.12);
 }
 
+/* Móvil + oscuro: las cajas del curso se perdían sobre el fondo casi negro.
+   Subimos el contraste de fondo/borde solo en esa vista. */
+@media (max-width: 767px) {
+  .dark .curso-card,
+  .pure-dark .curso-card {
+    background: rgba(255,255,255,0.10);
+    border-color: rgba(255,255,255,0.22);
+  }
+  .dark .curso-card-highlight,
+  .pure-dark .curso-card-highlight {
+    background: rgba(42,171,179,0.16);
+    border-color: rgba(42,171,179,0.40);
+  }
+  .dark .curso-card-danger,
+  .pure-dark .curso-card-danger {
+    background: rgba(239,68,68,0.13);
+    border-color: rgba(239,68,68,0.35);
+  }
+  /* Bandas/cards con bg surface-dark (mid-CTA, objetivo): separarlas del fondo */
+  .dark .course-band,
+  .pure-dark .course-band {
+    background-color: #161619 !important;
+  }
+}
+
+/* Home — móvil: tarjetas del "recorrido del usuario" tintadas por paso (oscuro)
+   + sección del curso con fondo un poco más claro/vivo. */
+@media (max-width: 767px) {
+  .dark .value-card,
+  .pure-dark .value-card {
+    background: color-mix(in srgb, var(--step) 16%, var(--card)) !important;
+    border-color: color-mix(in srgb, var(--step) 42%, transparent) !important;
+  }
+  .coursepromo-base {
+    background: linear-gradient(160deg, #12161d 0%, #15191f 50%, #181426 100%) !important;
+  }
+  .coursepromo-glow {
+    filter: brightness(1.45) saturate(1.1);
+  }
+}
+
 :root .curso-glow,
 .light .curso-glow {
   opacity: 0.12;

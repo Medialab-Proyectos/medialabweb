@@ -113,8 +113,9 @@ export function CourseCta() {
                 <span className="font-semibold" style={{ color: 'var(--cyan)' }}>{t("8 semanas", "8 weeks")}</span>
               </p>
               <p className="text-sm text-foreground/60 dark:text-foreground/55 mb-5 leading-snug">
+                <span aria-hidden="true">💎 </span>
                 {t("Lo que otros gastan en lujos que se devalúan, tú lo inviertes en ", "What others spend on depreciating luxuries, you invest in ")}
-                <span className="font-semibold text-foreground/85 dark:text-foreground/75">{t("volverte indispensable", "becoming indispensable")}</span>.
+                <span className="font-semibold text-foreground/85 dark:text-foreground/75 underline decoration-2 underline-offset-2 decoration-[var(--magenta)]">{t("volverte indispensable", "becoming indispensable")}</span>.
               </p>
 
               {/* Value stack + total — unified box */}

@@ -29,7 +29,7 @@ export function CourseMidCta({ headline, headlineEn, subtext, subtextEn, ctaText
   const CtaIcon = ctaIcon === "download" ? Download : ctaIcon === "enroll" ? Rocket : null
 
   return (
-    <div className="relative overflow-hidden bg-[var(--surface-dark)] text-white -mt-px">
+    <div className="course-band relative overflow-hidden bg-[var(--surface-dark)] text-white -mt-px">
       {/* Líneas de acento — marcan el cambio de sección de forma sutil (claro y oscuro) */}
       <div aria-hidden="true" className="absolute top-0 inset-x-0 h-px" style={{ background: `linear-gradient(90deg, transparent, rgba(${accent},0.55), transparent)` }} />
       <div aria-hidden="true" className="absolute bottom-0 inset-x-0 h-px" style={{ background: `linear-gradient(90deg, transparent, rgba(${accent},0.35), transparent)` }} />

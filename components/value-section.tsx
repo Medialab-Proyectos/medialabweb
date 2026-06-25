@@ -52,10 +52,10 @@ function FlipCard({ item }: { item: LadderItem }) {
   const color = item.color
 
   return (
-    <div className="min-w-[82%] snap-start sm:min-w-0 h-[232px] [perspective:1400px]">
+    <div className="min-w-[82%] snap-start sm:min-w-0 h-[232px] [perspective:1400px]" style={{ ["--step" as string]: color }}>
       <div className={`relative h-full w-full transition-transform duration-500 [transform-style:preserve-3d] ${flipped ? "[transform:rotateY(180deg)]" : ""}`}>
         {/* Frente */}
-        <div className="absolute inset-0 [backface-visibility:hidden] flex flex-col gap-3 p-6 rounded-2xl border border-border bg-card">
+        <div className="value-card absolute inset-0 [backface-visibility:hidden] flex flex-col gap-3 p-6 rounded-2xl border border-border bg-card">
           <div className="flex items-center justify-between">
             <span
               className="font-display text-4xl font-bold leading-none bg-clip-text text-transparent"
@@ -85,7 +85,7 @@ function FlipCard({ item }: { item: LadderItem }) {
 
         {/* Reverso */}
         <div
-          className="absolute inset-0 [backface-visibility:hidden] [transform:rotateY(180deg)] flex flex-col gap-3 p-6 rounded-2xl border bg-card"
+          className="value-card absolute inset-0 [backface-visibility:hidden] [transform:rotateY(180deg)] flex flex-col gap-3 p-6 rounded-2xl border bg-card"
           style={{ borderColor: `color-mix(in oklab, ${color} 45%, transparent)` }}
         >
           <span className="text-xs font-semibold tracking-widest uppercase" style={{ color }}>

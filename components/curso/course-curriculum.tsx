@@ -153,7 +153,7 @@ export function CourseCurriculum() {
       label: t("Bloque 3", "Block 3"),
       title: t("Validación Humana", "Human Validation"),
       subtitle: t("Valida con personas reales y prepara tu producto para evolucionar", "Validate with real people and prepare your product to evolve"),
-      color: "#7c3aed",
+      color: "#8b5cf6",
       modules: [
         {
           icon: ClipboardCheck, number: "08",

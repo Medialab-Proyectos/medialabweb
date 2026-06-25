@@ -63,7 +63,7 @@ export function CourseObjective() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.2, duration: 0.6 }}
-          className="relative rounded-2xl bg-[var(--surface-dark)] bg-gradient-to-br from-[var(--cyan)]/[0.10] via-transparent to-[#7c3aed]/[0.12] border border-[var(--cyan)]/20 shadow-xl overflow-hidden"
+          className="course-band relative rounded-2xl bg-[var(--surface-dark)] bg-gradient-to-br from-[var(--cyan)]/[0.10] via-transparent to-[#7c3aed]/[0.12] border border-[var(--cyan)]/20 shadow-xl overflow-hidden"
         >
           {/* Subtle brand glows */}
           <div className="absolute top-0 left-1/4 w-[250px] h-[250px] bg-[var(--cyan)]/[0.08] rounded-full blur-[100px] pointer-events-none" />

@@ -64,24 +64,24 @@ export function CoursePromoSection() {
     >
       {/* Base oscura neutra fija (independiente del tema, sin tinte morado) */}
       <div
-        className="absolute inset-0 -z-10"
+        className="coursepromo-base absolute inset-0 -z-10"
         style={{ background: "linear-gradient(160deg, #07090c 0%, #080b10 50%, #0a0f14 100%)" }}
         aria-hidden="true"
       />
 
       {/* Glows vívidos — naranja + cian protagonistas, magenta de acento (base neutra, sin morado) */}
       <div
-        className="absolute -top-24 left-[2%] w-[500px] h-[500px] rounded-full blur-[150px] -z-10 animate-float-1 pointer-events-none"
+        className="coursepromo-glow absolute -top-24 left-[2%] w-[500px] h-[500px] rounded-full blur-[150px] -z-10 animate-float-1 pointer-events-none"
         style={{ background: "radial-gradient(circle, rgba(42,171,179,0.28), transparent 70%)" }}
         aria-hidden="true"
       />
       <div
-        className="absolute -bottom-32 right-[4%] w-[500px] h-[500px] rounded-full blur-[160px] -z-10 animate-float-2 pointer-events-none"
+        className="coursepromo-glow absolute -bottom-32 right-[4%] w-[500px] h-[500px] rounded-full blur-[160px] -z-10 animate-float-2 pointer-events-none"
         style={{ background: "radial-gradient(circle, rgba(232,117,26,0.26), transparent 70%)" }}
         aria-hidden="true"
       />
       <div
-        className="absolute top-[40%] right-[34%] w-[360px] h-[360px] rounded-full blur-[150px] -z-10 animate-float-3 pointer-events-none"
+        className="coursepromo-glow absolute top-[40%] right-[34%] w-[360px] h-[360px] rounded-full blur-[150px] -z-10 animate-float-3 pointer-events-none"
         style={{ background: "radial-gradient(circle, rgba(230,0,126,0.14), transparent 70%)" }}
         aria-hidden="true"
       />
