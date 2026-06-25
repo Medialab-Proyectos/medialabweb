@@ -19,7 +19,6 @@ export function CourseSectionNav() {
     { id: "audiencia", label: t("¿Para quién?", "Who's it for?") },
     { id: "testimonios", label: t("Testimonios", "Testimonials") },
     { id: "diferencia", label: t("La Diferencia", "The Difference") },
-    { id: "metodologia", label: t("Metodología", "Methodology") },
     { id: "programa", label: t("Programa", "Program") },
     { id: "transformacion", label: t("Resultado", "Outcome") },
     { id: "herramientas", label: t("Herramientas", "Tools") },

@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion"
 import Image from "next/image"
+import { Download, Rocket, MessageCircle } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 
 interface CourseMidCtaProps {
@@ -12,24 +13,28 @@ interface CourseMidCtaProps {
   ctaText?: string
   ctaTextEn?: string
   ctaHref?: string
+  ctaIcon?: "download" | "enroll"
   variant?: "primary" | "subtle"
   bgImage?: string
+  advisorHref?: string
+  advisorText?: string
+  advisorTextEn?: string
 }
 
-export function CourseMidCta({ headline, headlineEn, subtext, subtextEn, ctaText, ctaTextEn, ctaHref, variant = "subtle", bgImage }: CourseMidCtaProps) {
+export function CourseMidCta({ headline, headlineEn, subtext, subtextEn, ctaText, ctaTextEn, ctaHref, ctaIcon, variant = "subtle", bgImage, advisorHref, advisorText, advisorTextEn }: CourseMidCtaProps) {
   const { t } = useLanguage()
 
   const isPrimary = variant === "primary"
+  const accent = isPrimary ? "232,117,26" : "42,171,179"
+  const CtaIcon = ctaIcon === "download" ? Download : ctaIcon === "enroll" ? Rocket : null
 
   return (
-    <div className="relative overflow-hidden bg-[var(--surface-dark)] text-white -mt-px border-t border-b border-white/[0.05]">
-      {/* Glow accent */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] rounded-full blur-[100px]"
-          style={{ background: isPrimary ? 'rgba(232,117,26,0.25)' : 'rgba(42,171,179,0.20)' }}
-        />
-      </div>
+    <div className="relative overflow-hidden bg-[var(--surface-dark)] text-white -mt-px">
+      {/* Líneas de acento — marcan el cambio de sección de forma sutil (claro y oscuro) */}
+      <div aria-hidden="true" className="absolute top-0 inset-x-0 h-px" style={{ background: `linear-gradient(90deg, transparent, rgba(${accent},0.55), transparent)` }} />
+      <div aria-hidden="true" className="absolute bottom-0 inset-x-0 h-px" style={{ background: `linear-gradient(90deg, transparent, rgba(${accent},0.35), transparent)` }} />
+      {/* Tinte de marca sutil */}
+      <div aria-hidden="true" className="absolute inset-0 pointer-events-none" style={{ background: `radial-gradient(ellipse 90% 75% at 50% 50%, rgba(${accent},0.12), transparent 70%)` }} />
 
       <motion.div
         initial={{ opacity: 0, y: 12 }}
@@ -58,15 +63,31 @@ export function CourseMidCta({ headline, headlineEn, subtext, subtextEn, ctaText
           <p className="text-base md:text-lg text-white/90 mb-8 max-w-2xl mx-auto font-medium">
             {t(subtext, subtextEn ?? subtext)}
           </p>
-          {ctaText && ctaHref && (
-            <a
-              href={ctaHref}
-              {...(ctaHref.endsWith(".pdf") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-              className="inline-flex items-center justify-center w-full sm:w-auto px-8 py-3.5 text-sm font-bold text-white rounded-full transition-all duration-300 hover:scale-[1.03] shadow-[0_4px_20px_rgba(0,0,0,0.5)]"
-              style={{ background: isPrimary ? 'var(--magenta)' : 'var(--cyan)' }}
-            >
-              {t(ctaText, ctaTextEn ?? ctaText)}
-            </a>
+          {((ctaText && ctaHref) || advisorHref) && (
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+              {ctaText && ctaHref && (
+                <a
+                  href={ctaHref}
+                  {...(ctaHref.endsWith(".pdf") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                  className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-3.5 text-sm font-bold text-white rounded-full transition-all duration-300 hover:scale-[1.03] shadow-[0_4px_20px_rgba(0,0,0,0.5)]"
+                  style={{ background: isPrimary ? 'var(--magenta)' : 'var(--cyan)' }}
+                >
+                  {CtaIcon && <CtaIcon size={16} />}
+                  {t(ctaText, ctaTextEn ?? ctaText)}
+                </a>
+              )}
+              {advisorHref && (
+                <a
+                  href={advisorHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-3.5 text-sm font-bold rounded-full transition-all duration-300 hover:scale-[1.03] border border-white/40 text-white hover:bg-white/10"
+                >
+                  <MessageCircle size={16} />
+                  {t(advisorText ?? "Habla con un asesor", advisorTextEn ?? advisorText ?? "Talk to an advisor")}
+                </a>
+              )}
+            </div>
           )}
         </div>
       </motion.div>

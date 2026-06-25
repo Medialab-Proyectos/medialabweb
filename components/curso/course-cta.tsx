@@ -107,9 +107,14 @@ export function CourseCta() {
                 <span className="text-5xl font-bold font-display" style={{ color: 'var(--cyan)' }}>$995</span>
                 <span className="text-foreground/50 text-base">USD</span>
               </div>
-              <p className="text-sm text-foreground/50 mb-5">
-                <span className="font-semibold text-foreground/70 dark:text-foreground/60">$89/</span>
-                {t("semana · menos que una suscripción a herramientas de IA", "week · less than an AI tools subscription")}
+              <p className="text-sm text-foreground/50 mb-1.5">
+                <span className="font-semibold text-foreground/70 dark:text-foreground/60">$124/</span>
+                {t("semana durante ", "week for ")}
+                <span className="font-semibold" style={{ color: 'var(--cyan)' }}>{t("8 semanas", "8 weeks")}</span>
+              </p>
+              <p className="text-sm text-foreground/60 dark:text-foreground/55 mb-5 leading-snug">
+                {t("Lo que otros gastan en lujos que se devalúan, tú lo inviertes en ", "What others spend on depreciating luxuries, you invest in ")}
+                <span className="font-semibold text-foreground/85 dark:text-foreground/75">{t("volverte indispensable", "becoming indispensable")}</span>.
               </p>
 
               {/* Value stack + total — unified box */}

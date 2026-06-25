@@ -2,7 +2,7 @@
 
 import { useRef, useEffect, useCallback, useState } from "react"
 import { motion, useScroll, useTransform } from "framer-motion"
-import { Users, Star, BookOpen, GraduationCap, Download } from "lucide-react"
+import { Star, BookOpen, GraduationCap, Download, Wallet, Shield } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 
 const stagger = {
@@ -343,9 +343,7 @@ export function CourseHero() {
   const { t } = useLanguage()
 
   const trustBadges = [
-    { icon: Users, text: t("40+ productos construidos", "40+ products built") },
-    { icon: Star, text: t("Metodología 90-10", "90-10 methodology") },
-    { icon: BookOpen, text: t("Autores de 'Zero UI'", "Authors of 'Zero UI'") },
+    { icon: BookOpen, text: t("Autores de 'Zero UI'", "Authors of 'Zero UI'"), href: "https://zeroui.me" },
     { icon: GraduationCap, text: t("12+ carreras afines", "12+ related programs") },
   ]
 
@@ -373,7 +371,7 @@ export function CourseHero() {
         <div className="absolute inset-0 course-hero-overlay" />
       </div>
 
-      <motion.div style={{ opacity, y }} className="relative z-10 w-full max-w-6xl mx-auto px-6 lg:px-8 pt-24 md:pt-32 pb-20 md:pb-16">
+      <motion.div style={{ opacity, y }} className="relative z-10 w-full max-w-6xl mx-auto px-6 lg:px-8 pt-32 md:pt-32 pb-20 md:pb-16">
         <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-12 md:gap-16 items-center">
           {/* Left — Text */}
           <motion.div variants={stagger} initial="hidden" animate="visible" className="flex flex-col items-center sm:items-start">
@@ -407,9 +405,10 @@ export function CourseHero() {
             {/* Value prop — 2 líneas max */}
             <motion.p variants={fadeUp} className="text-base md:text-lg dark:text-white/80 text-muted-foreground leading-relaxed mb-8 sm:mb-4 max-w-md text-center sm:text-left">
               {t(
-                "Aprende a estructurar, validar y optimizar productos digitales funcionales con IA en 8 semanas.",
-                "Learn to structure, validate, and optimize functional digital products with AI in 8 weeks."
+                "Aprende a estructurar, validar y optimizar productos digitales funcionales con IA en ",
+                "Learn to structure, validate, and optimize functional digital products with AI in "
               )}
+              <span className="font-semibold" style={{ color: 'var(--cyan)' }}>{t("8 semanas", "8 weeks")}</span>.
             </motion.p>
 
             {/* CTAs — stacked full-width on mobile, side-by-side on desktop */}
@@ -432,34 +431,26 @@ export function CourseHero() {
               </a>
             </motion.div>
 
-            {/* Price anchor — visible before full scroll */}
-            <motion.p variants={fadeUp} className="text-xs dark:text-white/50 text-muted-foreground mb-6 sm:mb-4 text-center sm:text-left">
-              {t("Desde $89/semana · Horario diurno y nocturno · Garantía semana 1", "From $89/week · Day & evening schedule · Week 1 guarantee")}
-            </motion.p>
-
-            <motion.div variants={fadeUp} className="flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-2 text-xs dark:text-white/60 text-muted-foreground mb-6">
-              <span className="flex items-center gap-1.5">
+            {/* Offer + proof — single clean meta row */}
+            <motion.div variants={fadeUp} className="flex flex-wrap items-center justify-center sm:justify-start gap-x-3 gap-y-1.5 text-xs dark:text-white/60 text-muted-foreground mt-4 sm:mt-5 mb-6">
+              <span className="inline-flex items-center gap-1.5">
+                <Wallet className="w-3 h-3" style={{ color: 'var(--cyan)' }} />
+                {t("Desde $124/semana", "From $124/week")}
+              </span>
+              <span className="dark:text-white/20 text-foreground/25" aria-hidden="true">·</span>
+              <span className="inline-flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#00BFA6] animate-pulse" />
                 {t("Cohorte 02 · 30 cupos", "Cohort 02 · 30 seats")}
               </span>
-              <span className="hidden sm:inline dark:text-white/20 text-foreground/20">|</span>
-              <span className="flex items-center gap-1">
+              <span className="dark:text-white/20 text-foreground/25" aria-hidden="true">·</span>
+              <span className="inline-flex items-center gap-1.5">
                 <Star className="w-3 h-3" style={{ color: 'var(--magenta)' }} />
                 {t("Satisfacción 4.7/5", "4.7/5 satisfaction")}
               </span>
-            </motion.div>
-
-            {/* Role pills */}
-            <motion.div variants={fadeUp} className="hidden sm:flex flex-wrap items-center gap-2 mb-6">
-              <span className="text-[10px] tracking-[0.12em] uppercase dark:text-white/65 text-muted-foreground font-medium mr-1">{t("Sales como:", "You become:")}</span>
-              <span className="px-3 py-1 rounded-full border border-[var(--cyan)]/30 bg-[var(--cyan)]/[0.1] text-[11px] font-semibold" style={{ color: 'var(--cyan)' }}>
-                {t("Arquitecto UX con IA", "AI UX Architect")}
-              </span>
-              <span className="px-3 py-1 rounded-full border border-[var(--magenta)]/30 bg-[var(--magenta)]/[0.1] text-[11px] font-semibold" style={{ color: 'var(--magenta)' }}>
-                UX Prompt Designer
-              </span>
-              <span className="px-3 py-1 rounded-full border dark:border-white/20 border-foreground/20 dark:bg-white/[0.06] bg-foreground/[0.06] text-[11px] font-semibold dark:text-white/70 text-foreground/70">
-                {t("Estratega de Producto", "Product Strategist")}
+              <span className="dark:text-white/20 text-foreground/25" aria-hidden="true">·</span>
+              <span className="inline-flex items-center gap-1.5">
+                <Shield className="w-3 h-3 text-green-500" />
+                {t("Garantía semana 1", "Week 1 guarantee")}
               </span>
             </motion.div>
 
@@ -467,10 +458,25 @@ export function CourseHero() {
             <motion.div variants={fadeUp} className="hidden sm:flex flex-col sm:flex-row items-start gap-4 sm:gap-6 pt-4 border-t dark:border-white/[0.12] border-foreground/[0.12]">
               {trustBadges.map((badge, i) => {
                 const Icon = badge.icon
-                return (
-                  <div key={i} className="flex items-center gap-2">
+                const content = (
+                  <>
                     <Icon className="w-3.5 h-3.5 dark:text-white/65 text-muted-foreground" />
                     <span className="text-xs dark:text-white/60 text-muted-foreground">{badge.text}</span>
+                  </>
+                )
+                return badge.href ? (
+                  <a
+                    key={i}
+                    href={badge.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 transition-opacity hover:opacity-100 dark:hover:[&_span]:text-white/90 hover:[&_span]:text-foreground hover:[&_span]:underline underline-offset-4"
+                  >
+                    {content}
+                  </a>
+                ) : (
+                  <div key={i} className="flex items-center gap-2">
+                    {content}
                   </div>
                 )
               })}

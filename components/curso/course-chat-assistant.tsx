@@ -30,8 +30,8 @@ interface QA {
 const courseQA: QA[] = [
   {
     keywords: ["precio", "costo", "cuánto", "cuanto", "inversión", "inversion", "pagar", "price", "cost", "pay", "how much"],
-    es: "El curso tiene un precio de prelanzamiento de $995 USD (precio regular $1,500). Puedes pagarlo desde $89/semana con plan fraccionado. Incluye los 9 módulos, certificación, comunidad de por vida y herramientas premium.",
-    en: "The course has a pre-launch price of $995 USD (regular $1,500). You can pay from $89/week with installment plans. Includes all 9 modules, certification, lifetime community, and premium tools.",
+    es: "El curso tiene un precio de prelanzamiento de $995 USD (precio regular $1,500). Equivale a $124/semana durante las 8 semanas. Incluye los 9 módulos, certificación, comunidad de por vida y herramientas premium.",
+    en: "The course has a pre-launch price of $995 USD (regular $1,500). That's $124/week across the 8 weeks. Includes all 9 modules, certification, lifetime community, and premium tools.",
   },
   {
     keywords: ["duración", "duracion", "semanas", "tiempo", "cuánto dura", "cuanto dura", "duration", "weeks", "how long"],

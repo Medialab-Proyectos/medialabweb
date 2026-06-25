@@ -1,6 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
+import Image from "next/image"
 import { Users, MessageSquare, Lightbulb, Handshake, Zap, Globe } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 
@@ -68,28 +69,39 @@ export function CourseCommunity() {
 
       <div className="relative z-10 max-w-6xl mx-auto px-6 lg:px-8">
         <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
-          {/* Header */}
-          <div className="text-center mb-16">
-            <div className="flex justify-center mb-6">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[var(--cyan)]/20 bg-[var(--cyan)]/[0.06]">
-                <Users size={14} style={{ color: 'var(--cyan)' }} />
-                <span className="text-xs tracking-[0.15em] uppercase font-medium" style={{ color: 'var(--cyan)' }}>
-                  {t("Acceso de por vida", "Lifetime access")}
-                </span>
-              </div>
+          {/* Header — imagen a la izquierda + texto a la derecha */}
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center mb-12 md:mb-16">
+            <div className="relative w-full h-56 md:h-72 lg:h-80 rounded-2xl overflow-hidden border border-foreground/[0.1]">
+              <Image
+                src="/images/curso/comunidad.png"
+                alt={t("Comunidad UX + IA de MediaLab", "MediaLab's UX + AI community")}
+                fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-cover object-center"
+              />
             </div>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground tracking-tight leading-[1.15] mb-5 font-display">
-              {t("No terminas el curso.", "You don't finish the course.")}{" "}
-              <span className="bg-gradient-to-r from-[var(--cyan)] to-[var(--magenta)] bg-clip-text text-transparent">
-                {t("Entras a una comunidad.", "You join a community.")}
-              </span>
-            </h2>
-            <p className="max-w-2xl mx-auto text-lg text-foreground/50 leading-relaxed">
-              {t(
-                "Al graduarte, te unes a la comunidad continua de UX + IA de MediaLab — un espacio para compartir proyectos, colaborar en retos reales y seguir creciendo junto a profesionales que piensan como tú.",
-                "When you graduate, you join MediaLab's ongoing UX + AI community — a space to share projects, collaborate on real challenges, and keep growing alongside professionals who think like you."
-              )}
-            </p>
+            <div className="text-center lg:text-left">
+              <div className="flex justify-center lg:justify-start mb-6">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[var(--cyan)]/20 bg-[var(--cyan)]/[0.06]">
+                  <Users size={14} style={{ color: 'var(--cyan)' }} />
+                  <span className="text-xs tracking-[0.15em] uppercase font-medium" style={{ color: 'var(--cyan)' }}>
+                    {t("Acceso de por vida", "Lifetime access")}
+                  </span>
+                </div>
+              </div>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground tracking-tight leading-[1.15] mb-5 font-display">
+                {t("No terminas el curso.", "You don't finish the course.")}{" "}
+                <span className="bg-gradient-to-r from-[var(--cyan)] to-[var(--magenta)] bg-clip-text text-transparent">
+                  {t("Entras a una comunidad.", "You join a community.")}
+                </span>
+              </h2>
+              <p className="text-lg text-foreground/50 leading-relaxed">
+                {t(
+                  "Al graduarte, te unes a la comunidad continua de UX + IA de MediaLab — un espacio para compartir proyectos, colaborar en retos reales y seguir creciendo junto a profesionales que piensan como tú.",
+                  "When you graduate, you join MediaLab's ongoing UX + AI community — a space to share projects, collaborate on real challenges, and keep growing alongside professionals who think like you."
+                )}
+              </p>
+            </div>
           </div>
 
           {/* Features — carousel on mobile, grid on desktop */}

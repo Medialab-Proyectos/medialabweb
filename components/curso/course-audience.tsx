@@ -58,7 +58,7 @@ export function CourseAudience() {
           <h2 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight leading-tight mb-4 font-display">
             {t("Talento híbrido", "Hybrid talent")}
             <br />
-            <span className="text-foreground/50">{t("UX + IA + Producto + Negocio.", "UX + AI + Product + Business.")}</span>
+            <span className="bg-gradient-to-r from-[var(--cyan)] via-[var(--magenta)] to-[var(--cyan)] bg-clip-text text-transparent">{t("UX + IA + Producto + Negocio.", "UX + AI + Product + Business.")}</span>
           </h2>
           <p className="text-sm text-foreground/60 dark:text-foreground/45">
             {t("Si te identificas con más de un perfil, es buena señal.", "If you identify with more than one profile, that's a good sign.")}

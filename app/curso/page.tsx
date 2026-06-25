@@ -5,7 +5,6 @@ import { CourseHero } from "@/components/curso/course-hero"
 import { CourseProblem } from "@/components/curso/course-problem"
 import { CourseTestimonials } from "@/components/curso/course-testimonials"
 import { CourseComparison } from "@/components/curso/course-comparison"
-import { CourseMethodology } from "@/components/curso/course-methodology"
 import { CourseMidCta } from "@/components/curso/course-mid-cta"
 import { CourseCurriculum } from "@/components/curso/course-curriculum"
 import { CourseTransformation } from "@/components/curso/course-transformation"
@@ -72,9 +71,10 @@ export default function CursoPage({ lang = "es" }: { lang?: "es" | "en" }) {
         headlineEn="You don't have to decide now."
         subtext="Descarga el currículo completo y revísalo con calma. 9 módulos, herramientas, entregables y todo lo que vas a construir."
         subtextEn="Download the full curriculum and review it at your pace. 9 modules, tools, deliverables, and everything you'll build."
-        ctaText="Descargar currículo en PDF →"
-        ctaTextEn="Download curriculum PDF →"
+        ctaText="Descargar currículo en PDF"
+        ctaTextEn="Download curriculum PDF"
         ctaHref="/images/curso/Curso2026.pdf"
+        ctaIcon="download"
         variant="subtle"
       />
 
@@ -93,33 +93,19 @@ export default function CursoPage({ lang = "es" }: { lang?: "es" | "en" }) {
         headlineEn="If any of this resonated, it's not a coincidence."
         subtext="Diseñamos esta metodología para personas como tú."
         subtextEn="We designed this methodology for people like you."
-        ctaText="Inscribirme →"
-        ctaTextEn="Enroll now →"
+        ctaText="Inscribirme"
+        ctaTextEn="Enroll now"
         ctaHref="#registro"
+        ctaIcon="enroll"
         variant="primary"
-        bgImage="/images/curso/midcta-identified.png"
+        bgImage="/images/curso/identified.png"
+        advisorHref="https://wa.me/573054009505?text=Hola%2C%20quiero%20hablar%20con%20un%20asesor%20sobre%20el%20curso%20AI%20UX%20Architect"
       />
 
       {/* 6. Contrast */}
       <CourseComparison />
 
-      {/* 7. System */}
-      <CourseMethodology />
-
-      {/* 8. Commitment escalation */}
-      <CourseMidCta
-        headline="Cada fase existe por una razón."
-        headlineEn="Every phase exists for a reason."
-        subtext="¿Quieres ver qué vas a poder hacer después de cada módulo?"
-        subtextEn="Want to see what you'll be able to do after each module?"
-        ctaText="Ver el programa →"
-        ctaTextEn="See the program →"
-        ctaHref="#programa"
-        variant="subtle"
-        bgImage="/images/curso/midcta-methodology.png"
-      />
-
-      {/* 9. Curriculum */}
+      {/* 7. Programa — metodología + 9 módulos (fusionado) */}
       <CourseCurriculum />
 
       {/* 10. Transformation */}
@@ -137,17 +123,7 @@ export default function CursoPage({ lang = "es" }: { lang?: "es" | "en" }) {
       {/* 14. Community */}
       <CourseCommunity />
 
-      {/* 15. Community statement */}
-      <CourseMidCta
-        headline="La IA evoluciona cada semana. Tu comunidad también."
-        headlineEn="AI evolves every week. So does your community."
-        subtext="Mientras otros profesionales se quedan solos después de un curso, tú tendrás un equipo permanente para navegar cada cambio en la industria."
-        subtextEn="While other professionals are on their own after a course, you'll have a permanent team to navigate every shift in the industry."
-        variant="primary"
-        bgImage="/images/curso/midcta-community.png"
-      />
-
-      {/* 16. Conversion */}
+      {/* 15. Conversion */}
       <CourseCta />
 
       <Footer />

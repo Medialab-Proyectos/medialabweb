@@ -9,11 +9,6 @@ export function CourseValidation() {
 
   const items = [
     {
-      icon: Shield,
-      title: t("NO reemplaza desarrollo", "Does NOT replace development"),
-      desc: t("Acelera decisiones antes de inversión técnica avanzada.", "Accelerates decisions before advanced technical investment."),
-    },
-    {
       icon: Layers,
       title: t("Frontera entre 7 disciplinas", "At the frontier of 7 disciplines"),
       desc: t("UX/UI · Product Design · AI Design · Product Thinking · Digital Architecture · UX Strategy · Human-Centered AI.", "UX/UI · Product Design · AI Design · Product Thinking · Digital Architecture · UX Strategy · Human-Centered AI."),

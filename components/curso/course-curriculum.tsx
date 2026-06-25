@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
+import Image from "next/image"
 import {
   Search, Layers, ShieldCheck, Brain, Rocket,
   Users, Repeat, ClipboardCheck, Sparkles,
@@ -15,6 +16,7 @@ export function CourseCurriculum() {
   const blocks = [
     {
       id: "bloque1",
+      icon: Layers,
       label: t("Bloque 1", "Block 1"),
       title: t("Diseño Funcional", "Functional Design"),
       subtitle: t("De la idea a una aplicación funcional y técnicamente sólida", "From idea to a functional and technically solid application"),
@@ -77,7 +79,7 @@ export function CourseCurriculum() {
           deliverable: t("Interfaz optimizada con carga cognitiva reducida.", "Optimized interface with reduced cognitive load."),
         },
         {
-          icon: Rocket, number: "05",
+          icon: Rocket, number: "05", wide: true,
           title: t("De App a Producto", "From App to Product"),
           subtitle: t("Consolidación UX y adaptación al mercado", "UX consolidation and market adaptation"),
           problem: t("Tener una app que funciona no significa que esté lista para usuarios reales.", "Having an app that works doesn't mean it's ready for real users."),
@@ -95,6 +97,7 @@ export function CourseCurriculum() {
     },
     {
       id: "bloque2",
+      icon: Users,
       label: t("Bloque 2", "Block 2"),
       title: t("Diseño para Masas", "Design for Masses"),
       subtitle: t("De producto funcional a producto que la gente adopta, usa y recomienda", "From functional product to one people adopt, use, and recommend"),
@@ -146,10 +149,11 @@ export function CourseCurriculum() {
     },
     {
       id: "bloque3",
+      icon: ShieldCheck,
       label: t("Bloque 3", "Block 3"),
       title: t("Validación Humana", "Human Validation"),
       subtitle: t("Valida con personas reales y prepara tu producto para evolucionar", "Validate with real people and prepare your product to evolve"),
-      color: "var(--uxgreen, #00BFA6)",
+      color: "#7c3aed",
       modules: [
         {
           icon: ClipboardCheck, number: "08",
@@ -196,20 +200,32 @@ export function CourseCurriculum() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7 }}
-          className="text-center mb-12 md:mb-16"
+          className="text-center mb-10 md:mb-12"
         >
           <span className="inline-block text-xs tracking-[0.2em] uppercase mb-4 font-display" style={{ color: 'var(--cyan)' }}>
-            {t("Programa completo", "Full program")}
+            {t("El programa · una metodología, no un bootcamp", "The program · a methodology, not a bootcamp")}
           </span>
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground tracking-tight leading-snug mb-5 font-display">
             {t("9 módulos. 3 bloques. 1 producto real.", "9 modules. 3 blocks. 1 real product.")}
           </h2>
-          <p className="max-w-2xl mx-auto text-lg text-foreground/50 mb-6">
+          <p className="max-w-4xl mx-auto text-lg text-foreground/50 mb-5">
             {t(
-              "Cada módulo construye sobre el anterior. Al final no tienes 9 ejercicios sueltos — tienes un producto completo listo para mercado.",
-              "Each module builds on the previous one. At the end you don't have 9 loose exercises — you have a complete product ready for market."
+              "Un puente entre Diseño, Producto, Tecnología, Desarrollo y Negocio. Cada módulo construye sobre el anterior y deja entregables que reducen retrabajo — al final tienes un producto completo, no 9 ejercicios sueltos. ",
+              "A bridge between Design, Product, Technology, Development, and Business. Each module builds on the previous and leaves deliverables that reduce rework — at the end you have a complete product, not 9 loose exercises. "
             )}
+            <span className="font-bold text-foreground/70">{t("90% productividad. 10% esfuerzo.", "90% productivity. 10% effort.")}</span>
           </p>
+          <div className="flex flex-nowrap justify-center gap-2 overflow-x-auto no-scrollbar px-2 mb-6">
+            {[
+              t("UX/UI", "UX/UI"), t("Product Design", "Product Design"), t("AI-assisted Design", "AI-assisted Design"),
+              t("Product Thinking", "Product Thinking"), t("Digital Architecture", "Digital Architecture"),
+              t("UX Strategy", "UX Strategy"), t("Human-Centered AI", "Human-Centered AI"),
+            ].map((tag, i) => (
+              <span key={i} className="px-2.5 py-1 rounded-full text-[10px] font-medium border curso-card text-foreground/50 dark:text-foreground/45 whitespace-nowrap shrink-0">
+                {tag}
+              </span>
+            ))}
+          </div>
           <a
             href="/images/curso/Curso2026.pdf"
             target="_blank"
@@ -220,6 +236,22 @@ export function CourseCurriculum() {
             <Download size={16} />
             {t("Descargar currículo en PDF", "Download curriculum PDF")}
           </a>
+        </motion.div>
+
+        {/* Workshop image */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.15 }}
+          className="relative w-full h-44 md:h-64 lg:h-72 rounded-2xl overflow-hidden mb-10 border border-foreground/[0.1]"
+        >
+          <Image
+            src="/images/curso/programa.png"
+            alt={t("Workshop de metodología IA en acción", "AI methodology workshop in action")}
+            fill
+            className="object-cover object-center opacity-90 brightness-110"
+          />
         </motion.div>
 
         {/* Block headers — carousel on mobile, row on desktop */}
@@ -235,13 +267,14 @@ export function CourseCurriculum() {
               }}
             >
               <div className="flex items-center gap-3 p-4 rounded-xl border curso-card hover:border-foreground/20 transition-all duration-300">
-                <div
-                  className="px-3 py-1.5 rounded-full text-[11px] font-semibold tracking-wide uppercase whitespace-nowrap shrink-0"
-                  style={{ background: `color-mix(in srgb, ${block.color} 12%, transparent)`, color: block.color }}
+                <span
+                  className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0"
+                  style={{ background: `color-mix(in srgb, ${block.color} 12%, transparent)` }}
                 >
-                  {block.label}
-                </div>
+                  <block.icon className="w-4 h-4" style={{ color: block.color }} />
+                </span>
                 <div className="min-w-0">
+                  <span className="text-[10px] font-semibold tracking-wide uppercase" style={{ color: block.color }}>{block.label}</span>
                   <h3 className="text-base font-bold text-foreground font-display truncate">{block.title}</h3>
                   <p className="text-[11px] text-foreground/40 truncate">{block.subtitle}</p>
                 </div>
@@ -262,13 +295,14 @@ export function CourseCurriculum() {
                 transition={{ duration: 0.5 }}
                 className="flex items-center gap-4 mb-6"
               >
-                <div
-                  className="px-3 py-1.5 rounded-full text-[11px] font-semibold tracking-wide uppercase whitespace-nowrap"
-                  style={{ background: `color-mix(in srgb, ${block.color} 12%, transparent)`, color: block.color }}
+                <span
+                  className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0"
+                  style={{ background: `color-mix(in srgb, ${block.color} 12%, transparent)` }}
                 >
-                  {block.label}
-                </div>
+                  <block.icon className="w-5 h-5" style={{ color: block.color }} />
+                </span>
                 <div>
+                  <span className="text-[11px] font-semibold tracking-wide uppercase" style={{ color: block.color }}>{block.label}</span>
                   <h3 className="text-lg font-bold text-foreground font-display">{block.title}</h3>
                   <p className="text-xs text-foreground/40">{block.subtitle}</p>
                 </div>
@@ -327,7 +361,7 @@ export function CourseCurriculum() {
 }
 
 function ModuleCard({ mod, blockColor, index, t }: {
-  mod: { icon: any; number: string; title: string; subtitle: string; problem: string; learns: string[]; tools: string[]; deliverable: string; optional?: boolean }
+  mod: { icon: any; number: string; title: string; subtitle: string; problem: string; learns: string[]; tools: string[]; deliverable: string; optional?: boolean; wide?: boolean }
   blockColor: string; index: number; t: (es: string, en: string) => string
 }) {
   const [open, setOpen] = useState(false)
@@ -339,7 +373,7 @@ function ModuleCard({ mod, blockColor, index, t }: {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: 0.1 + index * 0.06, duration: 0.5 }}
-      className={mod.optional ? "md:col-span-2" : ""}
+      className={mod.optional || mod.wide ? "md:col-span-2" : ""}
     >
       <div
         className={`relative rounded-2xl border curso-card hover:border-foreground/20 transition-all duration-300 overflow-hidden cursor-pointer ${mod.optional ? "border-dashed" : ""}`}
