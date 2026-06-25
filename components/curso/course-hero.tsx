@@ -371,7 +371,7 @@ export function CourseHero() {
         <div className="absolute inset-0 course-hero-overlay" />
       </div>
 
-      <motion.div style={{ opacity, y }} className="relative z-10 w-full max-w-6xl mx-auto px-6 lg:px-8 pt-28 md:pt-28 pb-20 md:pb-16">
+      <motion.div style={{ opacity, y }} className="relative z-10 w-full max-w-6xl mx-auto px-6 lg:px-8 pt-20 md:pt-24 pb-20 md:pb-16">
         <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-12 md:gap-16 items-center">
           {/* Left — Text */}
           <motion.div variants={stagger} initial="hidden" animate="visible" className="flex flex-col items-center sm:items-start">

@@ -89,7 +89,7 @@ Ver portafolio completo: https://medialab.design/portafolio
 ## Productos propios destacados
 
 - **SinDeudas:** plataforma de finanzas conductuales que ayuda a las personas a manejar sus finanzas de forma eficiente entendiendo el rol psicológico del dinero.
-- **Electrolineras:** solución de movilidad eléctrica que ayuda a conductores de vehículos eléctricos a decidir mejor sobre energía, autonomía y carga, reduciendo ansiedad y tiempo de planificación.
+- **Cumbreva:** plataforma de movilidad eléctrica que acompaña al conductor antes, durante y después de cada trayecto, convirtiendo información compleja (rutas, autonomía y carga) en decisiones simples.
 
 ## Industrias
 

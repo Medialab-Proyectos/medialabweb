@@ -37,7 +37,7 @@ const ladder: LadderItem[] = [
     backEn: "We optimize every decision point (CRO) with real behavioral data, not assumptions.",
   },
   {
-    n: 4, icon: ShieldCheck, color: "var(--magenta)",
+    n: 4, icon: ShieldCheck, color: "#10b981",
     titleEs: "Se quedan", titleEn: "They stay",
     frontEs: "Vuelven por la experiencia, no por notificaciones.", frontEn: "They return for the experience, not for notifications.",
     backEs: "Performance, accesibilidad y arquitectura que escalan sin romperse, con un solo equipo end-to-end.",

@@ -4,10 +4,10 @@ import { PortfolioContent } from "./portfolio-content"
 export const metadata: Metadata = {
   title: "Portafolio — Casos de Éxito en UX, IA y Productos Digitales",
   description:
-    "Descubre cómo MediaLab Ingeniería ha transformado productos digitales para empresas B2B y B2C, incluyendo SinDeudas para finanzas conductuales y Electrolineras para movilidad eléctrica.",
+    "Descubre cómo MediaLab Ingeniería ha transformado productos digitales para empresas B2B y B2C, incluyendo SinDeudas para finanzas conductuales y Cumbreva para movilidad eléctrica.",
   keywords: [
     "SinDeudas",
-    "Electrolineras",
+    "Cumbreva",
     "finanzas conductuales",
     "psicologia del dinero",
     "vehiculos electricos",
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Portafolio MediaLab | Productos Digitales que Generan Resultados",
     description:
-      "40+ productos diseñados con datos, psicología del consumidor e IA. Incluye SinDeudas para mejorar la relación psicológica con el dinero y Electrolineras para planificar energía, autonomía y carga.",
+      "40+ productos diseñados con datos, psicología del consumidor e IA. Incluye SinDeudas para mejorar la relación psicológica con el dinero y Cumbreva para planificar energía, autonomía y carga.",
     url: "/portafolio",
     images: [{ url: "/images/og-portfolio.png", width: 1200, height: 630 }],
   },
@@ -72,7 +72,7 @@ export default function PortafolioPage() {
         position: 2,
         item: {
           "@type": "SoftwareApplication",
-          name: "Electrolineras",
+          name: "Cumbreva",
           applicationCategory: "TravelApplication",
           operatingSystem: "Web, iOS, Android",
           creator: {
@@ -81,9 +81,9 @@ export default function PortafolioPage() {
             url: "https://medialab.design",
           },
           description:
-            "Electrolineras ayuda a conductores de vehiculos electricos a moverse con tranquilidad, tomar decisiones inteligentes sobre energia, autonomia y carga, y reducir la ansiedad y el tiempo invertido en planificar desplazamientos.",
+            "Cumbreva acompana a conductores de vehiculos electricos antes, durante y despues de cada trayecto: gestion del vehiculo y planificacion inteligente de rutas y carga, convirtiendo informacion compleja en decisiones simples para una experiencia fluida, confiable y centrada en las personas.",
           keywords:
-            "Electrolineras, vehiculos electricos, estaciones de carga, autonomia, energia, movilidad electrica, ansiedad de carga",
+            "Cumbreva, vehiculos electricos, estaciones de carga, autonomia, energia, movilidad electrica, ansiedad de carga",
         },
       },
     ],

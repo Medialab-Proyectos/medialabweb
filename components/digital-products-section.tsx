@@ -37,20 +37,20 @@ export function DigitalProductsSection() {
       image: "/images/sindeudas (1).png",
     },
     {
-      name: "Electrolineras",
+      name: "Cumbreva",
       tagline: t(
-        "App B2C/B2B para Red de Carga Eléctrica",
-        "B2C/B2B App for Electric Charging Network"
+        "La experiencia que transforma la conducción eléctrica",
+        "The experience that transforms electric driving"
       ),
       description: t(
-        "Una aplicación de movilidad sustentable que ayuda a conductores de vehículos eléctricos a moverse con tranquilidad, tomar decisiones inteligentes sobre energía, autonomía y carga, y reducir la ansiedad y el tiempo invertido en planificar desplazamientos.",
-        "A sustainable mobility app that helps electric vehicle drivers move with confidence, make smarter decisions about energy, range, and charging, and reduce the anxiety and time spent planning trips."
+        "Diseñamos una plataforma que acompaña al conductor antes, durante y después de cada trayecto. Desde la gestión del vehículo hasta la planificación inteligente de rutas y carga, Cumbreva convierte información compleja en decisiones simples, ofreciendo una experiencia fluida, confiable y centrada en las personas.",
+        "We designed a platform that supports the driver before, during, and after every trip. From vehicle management to smart route and charging planning, Cumbreva turns complex information into simple decisions, delivering a fluid, reliable, and people-centered experience."
       ),
       color: "var(--cyan)",
       gradient: "linear-gradient(135deg, var(--cyan), oklch(0.55 0.18 220))",
-      tags: [t("Movilidad", "Mobility"), "B2B + B2C", t("Sostenibilidad", "Sustainability")],
+      tags: [t("Movilidad Eléctrica", "Electric Mobility"), "UX/UI", t("Experiencia Digital", "Digital Experience")],
       status: t("En Desarrollo", "In Development"),
-      image: "/images/eletro.png",
+      image: "/images/cumbreva.png",
     },
   ]
 

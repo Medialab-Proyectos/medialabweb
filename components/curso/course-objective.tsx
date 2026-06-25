@@ -110,32 +110,34 @@ export function CourseObjective() {
               })}
             </div>
 
-            {/* Role pills */}
-            <div className="flex items-center gap-2 mb-8 overflow-x-auto no-scrollbar snap-x snap-mandatory sm:flex-wrap sm:justify-center sm:overflow-visible">
-              <span className="shrink-0 text-[10px] tracking-[0.12em] uppercase text-foreground/55 dark:text-white/65 font-medium mr-1">{t("Sales como:", "You become:")}</span>
-              <span className="shrink-0 snap-start px-3 py-1 rounded-full border border-[var(--cyan)]/30 bg-[var(--cyan)]/[0.1] text-[11px] font-semibold" style={{ color: 'var(--cyan)' }}>
-                {t("Arquitecto UX con IA", "AI UX Architect")}
-              </span>
-              <span className="shrink-0 snap-start px-3 py-1 rounded-full border border-[var(--magenta)]/30 bg-[var(--magenta)]/[0.1] text-[11px] font-semibold" style={{ color: 'var(--magenta)' }}>
-                UX Prompt Designer
-              </span>
-              <span className="shrink-0 snap-start px-3 py-1 rounded-full border border-foreground/20 dark:border-white/20 bg-foreground/[0.04] dark:bg-white/[0.06] text-[11px] font-semibold text-foreground/70 dark:text-white/70">
-                {t("Estratega de Producto", "Product Strategist")}
-              </span>
+            {/* Role pills — etiqueta encima, carrusel debajo */}
+            <div className="flex flex-col gap-2 mb-8">
+              <span className="text-[10px] tracking-[0.12em] uppercase text-foreground/55 dark:text-white/65 font-medium sm:text-center">{t("Sales como:", "You become:")}</span>
+              <div className="flex items-center gap-2 overflow-x-auto no-scrollbar snap-x snap-mandatory sm:flex-wrap sm:justify-center sm:overflow-visible">
+                <span className="shrink-0 snap-start px-3 py-1 rounded-full border border-[var(--cyan)]/30 bg-[var(--cyan)]/[0.1] text-[11px] font-semibold" style={{ color: 'var(--cyan)' }}>
+                  {t("Arquitecto UX con IA", "AI UX Architect")}
+                </span>
+                <span className="shrink-0 snap-start px-3 py-1 rounded-full border border-[var(--magenta)]/30 bg-[var(--magenta)]/[0.1] text-[11px] font-semibold" style={{ color: 'var(--magenta)' }}>
+                  UX Prompt Designer
+                </span>
+                <span className="shrink-0 snap-start px-3 py-1 rounded-full border border-foreground/20 dark:border-white/20 bg-foreground/[0.04] dark:bg-white/[0.06] text-[11px] font-semibold text-foreground/70 dark:text-white/70">
+                  {t("Estratega de Producto", "Product Strategist")}
+                </span>
+              </div>
             </div>
 
             {/* CTA */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3">
               <a
                 href="#registro"
-                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-semibold text-white rounded-full transition-all duration-300 hover:scale-[1.03] active:scale-95 shadow-[0_8px_28px_-6px_rgba(232,117,26,0.6)]"
+                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-semibold text-white rounded-full transition-all duration-300 hover:scale-[1.03] active:scale-95 shadow-[0_8px_28px_-6px_rgba(232,117,26,0.6)] w-full sm:w-auto"
                 style={{ background: "var(--magenta)" }}
               >
                 {t("Inscribirme ahora →", "Enroll now →")}
               </a>
               <a
                 href="#programa"
-                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-semibold rounded-full transition-all duration-300 hover:scale-[1.03] active:scale-95 border border-[var(--cyan)]/40 text-[var(--cyan)] hover:bg-[var(--cyan)]/10"
+                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-semibold rounded-full transition-all duration-300 hover:scale-[1.03] active:scale-95 border border-[var(--cyan)]/40 text-[var(--cyan)] hover:bg-[var(--cyan)]/10 w-full sm:w-auto"
               >
                 <BookOpen size={16} />
                 {t("Ver programa completo", "See full program")}

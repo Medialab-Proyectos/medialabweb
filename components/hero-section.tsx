@@ -187,30 +187,26 @@ export function HeroSection() {
               { src: "/images/ecosistema/lab.svg", alt: "UXLab", href: "" },
               { src: "/images/ecosistema/school.svg", alt: "UXSchool", href: "" },
               { src: "/images/curso/logos/UXGENN34.svg", alt: "UXGreen", href: "/uxgreen" },
-              { src: "/images/curso/logos/colorui.fw.png", alt: "ZeroUI", href: "https://www.zeroui.me/" },
-            ].map((logo) =>
-              logo.href ? (
+              { src: "/images/logos/gnegri.fw.png", darkSrc: "/images/logos/gblanco.fw.png", alt: "ZeroUI", href: "https://www.zeroui.me/", w: 180, h: 40 },
+            ].map((logo) => {
+              const img = logo.darkSrc ? (
+                <>
+                  <Image src={logo.src} alt={logo.alt} width={logo.w ?? 150} height={logo.h ?? 40} className="h-6 sm:h-8 md:h-9 w-auto dark:hidden" unoptimized />
+                  <Image src={logo.darkSrc} alt={logo.alt} width={logo.w ?? 150} height={logo.h ?? 40} className="hidden dark:block h-6 sm:h-8 md:h-9 w-auto" unoptimized />
+                </>
+              ) : (
+                <Image src={logo.src} alt={logo.alt} width={logo.w ?? 150} height={logo.h ?? 40} className="h-6 sm:h-8 md:h-9 w-auto dark:brightness-0 dark:invert" unoptimized />
+              )
+              return logo.href ? (
                 <Link key={logo.alt} href={logo.href} target="_blank" rel="noopener noreferrer" className="opacity-65 hover:opacity-95 transition-opacity">
-                  <Image
-                    src={logo.src}
-                    alt={logo.alt}
-                    width={150}
-                    height={40}
-                    className="h-6 sm:h-8 md:h-9 w-auto dark:brightness-0 dark:invert"
-                    unoptimized
-                  />
+                  {img}
                 </Link>
               ) : (
-                <Image
-                  key={logo.alt}
-                  src={logo.src}
-                  alt={logo.alt}
-                  width={150}
-                  height={40}
-                  className="h-6 sm:h-8 md:h-9 w-auto opacity-65 hover:opacity-95 transition-opacity dark:brightness-0 dark:invert"
-                />
+                <span key={logo.alt} className="opacity-65 hover:opacity-95 transition-opacity">
+                  {img}
+                </span>
               )
-            )}
+            })}
           </div>
         </div>
 

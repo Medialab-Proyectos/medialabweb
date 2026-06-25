@@ -13,6 +13,7 @@ export function CourseTools() {
     { name: "v0", category: t("UI Generation", "UI Generation"), logo: "/images/v0-logo-png_seeklogo-605781.png", w: 32, h: 32 },
     { name: "UXpilot", category: t("UX con IA", "UX with AI"), logo: "/images/uxpilot.fw.png", w: 36, h: 36 },
     { name: "Figma AI", category: t("Diseño & Prototipado", "Design & Prototyping"), logo: "/images/curso/logos/figma.svg", w: 28, h: 28 },
+    { name: "Vercel", category: t("Despliegue & Hosting", "Deploy & Hosting"), logo: "/images/logos/logovercel.fw.png", w: 30, h: 30 },
   ]
 
   return (
@@ -36,7 +37,7 @@ export function CourseTools() {
           </h2>
         </motion.div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
           {tools.map((tool, i) => (
             <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 + i * 0.08, duration: 0.5 }} className="group">
               <div className="p-5 md:p-6 rounded-2xl border curso-card hover:border-[var(--cyan)]/30 transition-all duration-500 h-full text-center">

@@ -55,8 +55,8 @@ export function EntryDoorsSection() {
       audienceEn: "Our products",
       title: "UXLab",
       color: "#00BFA6",
-      descEs: "Apps nuestras como SinDeudas y Electrolineras: probamos lo que hacemos usándolo nosotros primero.",
-      descEn: "Our own apps like SinDeudas and Electrolineras: we prove what we do by using it ourselves first.",
+      descEs: "Apps nuestras como SinDeudas y Cumbreva: probamos lo que hacemos usándolo nosotros primero.",
+      descEn: "Our own apps like SinDeudas and Cumbreva: we prove what we do by using it ourselves first.",
       ctaEs: "Conocer los productos",
       ctaEn: "Discover the products",
       href: "/#products",
@@ -80,13 +80,12 @@ export function EntryDoorsSection() {
             {t("Encuentra tu camino", "Find your path")}
           </h2>
           <p className="mt-5 max-w-3xl mx-auto text-base md:text-lg text-foreground/70 dark:text-foreground/60 leading-relaxed">
-            {t("A eso se le llama ", "This is what's called ")}
             <strong className="text-foreground font-semibold">
-              {t("diseño de experiencia (UX)", "experience design (UX)")}
+              {t("El diseño de experiencia (UX)", "Experience design (UX)")}
             </strong>
             {t(
-              ": lograr que tu producto sea claro, fácil y que la gente quiera usarlo. Es la diferencia entre un producto que vende y uno que fracasa.",
-              ": making your product clear, easy, and something people actually want to use. It's the difference between a product that sells and one that fails.",
+              " es lograr que tu producto sea claro, fácil y que la gente quiera usarlo. Es la diferencia entre un producto que vende y uno que fracasa.",
+              " is making your product clear, easy, and something people actually want to use. It's the difference between a product that sells and one that fails.",
             )}
           </p>
         </motion.div>

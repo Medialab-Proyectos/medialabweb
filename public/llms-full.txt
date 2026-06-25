@@ -233,8 +233,8 @@ Plataforma de discovery de producto con IA. Disponible en https://medialab.desig
 ### SinDeudas
 Plataforma de gestión financiera personal y finanzas conductuales. SinDeudas ayuda a las personas a manejar sus finanzas de forma eficiente entendiendo el rol psicológico del dinero, combinando guía emocional, psicología del consumidor y herramientas digitales para transformar la relación del usuario con sus deudas.
 
-### Electrolineras
-Solución digital para movilidad eléctrica y estaciones de carga. Electrolineras ayuda a conductores de vehículos eléctricos a moverse con tranquilidad, tomar decisiones inteligentes sobre energía, autonomía y carga, y reducir la ansiedad y el tiempo invertido en planificar desplazamientos.
+### Cumbreva
+Plataforma digital para movilidad eléctrica. Cumbreva acompaña al conductor antes, durante y después de cada trayecto: desde la gestión del vehículo hasta la planificación inteligente de rutas y carga, convirtiendo información compleja en decisiones simples para una experiencia fluida, confiable y centrada en las personas.
 
 ## Blog — Artículos firmados de autoridad
 

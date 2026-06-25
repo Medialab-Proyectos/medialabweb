@@ -18,7 +18,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     en: boolean
     lastModified: string
   }[] = [
-    { path: "", changeFrequency: "weekly", priority: 1.0, en: true, lastModified: "2026-06-01" },
+    { path: "", changeFrequency: "weekly", priority: 1.0, en: true, lastModified: "2026-06-25" },
     { path: "/servicios", changeFrequency: "monthly", priority: 0.95, en: true, lastModified: "2026-05-20" },
     { path: "/servicios/discovery-con-ia", changeFrequency: "monthly", priority: 0.9, en: true, lastModified: "2026-05-20" },
     { path: "/servicios/diseno-ux-ui", changeFrequency: "monthly", priority: 0.9, en: true, lastModified: "2026-05-20" },
@@ -30,8 +30,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: "/industrias/educacion", changeFrequency: "monthly", priority: 0.8, en: true, lastModified: "2026-05-20" },
     { path: "/industrias/ecommerce", changeFrequency: "monthly", priority: 0.8, en: true, lastModified: "2026-05-20" },
     { path: "/industrias/movilidad", changeFrequency: "monthly", priority: 0.8, en: true, lastModified: "2026-05-20" },
-    { path: "/curso", changeFrequency: "weekly", priority: 1.0, en: true, lastModified: "2026-05-29" },
-    { path: "/portafolio", changeFrequency: "monthly", priority: 0.9, en: true, lastModified: "2026-05-20" },
+    { path: "/curso", changeFrequency: "weekly", priority: 1.0, en: true, lastModified: "2026-06-25" },
+    { path: "/portafolio", changeFrequency: "monthly", priority: 0.9, en: true, lastModified: "2026-06-25" },
     { path: "/sobre-nosotros", changeFrequency: "monthly", priority: 0.85, en: true, lastModified: "2026-05-20" },
     { path: "/contacto", changeFrequency: "monthly", priority: 0.85, en: true, lastModified: "2026-05-20" },
     { path: "/carreras", changeFrequency: "weekly", priority: 0.85, en: true, lastModified: "2026-05-20" },

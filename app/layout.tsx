@@ -235,6 +235,24 @@ export default function RootLayout({
                 'Generative Engine Optimization',
                 'Zero UI',
               ],
+              owns: [
+                {
+                  '@type': 'SoftwareApplication',
+                  name: 'SinDeudas',
+                  applicationCategory: 'FinanceApplication',
+                  operatingSystem: 'Web, iOS, Android',
+                  description:
+                    'Plataforma propia de finanzas conductuales que ayuda a las personas a manejar sus finanzas entendiendo el rol psicológico del dinero.',
+                },
+                {
+                  '@type': 'SoftwareApplication',
+                  name: 'Cumbreva',
+                  applicationCategory: 'TravelApplication',
+                  operatingSystem: 'Web, iOS, Android',
+                  description:
+                    'Plataforma propia de movilidad eléctrica que acompaña al conductor antes, durante y después de cada trayecto, convirtiendo rutas, autonomía y carga en decisiones simples.',
+                },
+              ],
               contactPoint: [
                 {
                   '@type': 'ContactPoint',
