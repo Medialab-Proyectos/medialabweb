@@ -47,7 +47,7 @@ export function StickyCTA({ scrollToId, labelEs, labelEn }: StickyCTAProps) {
 
   return (
     <div
-      className="fixed bottom-0 left-0 right-0 z-50 md:hidden border-t border-border bg-background/95 backdrop-blur-md"
+      className="fixed bottom-0 left-0 right-0 z-50 md:hidden border-t border-border bg-background"
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
       <div className="px-4 py-3">

@@ -142,12 +142,12 @@ export function Navbar() {
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${forceDarkNav ? "uxgreen-nav" : ""} ${
         scrolled
           ? forceDarkNav
-            ? "bg-[#0a0a0a]/95 backdrop-blur-md border-b border-white/[0.06] shadow-sm"
+            ? "bg-[#0a0a0a]/95 md:backdrop-blur-md border-b border-white/[0.06] shadow-sm"
             : isExperienceRadarNote
-              ? "bg-background/95 backdrop-blur-md shadow-sm"
-              : "bg-background/90 backdrop-blur-md border-b border-border/30 shadow-sm"
+              ? "bg-background/95 md:backdrop-blur-md shadow-sm"
+              : "bg-background/95 md:bg-background/90 md:backdrop-blur-md border-b border-border/30 shadow-sm"
           : forceDarkNav
-          ? "bg-[#0a0a0a]/95 backdrop-blur-md"
+          ? "bg-[#0a0a0a]/95 md:backdrop-blur-md"
           : "bg-transparent"
       }`}
     >

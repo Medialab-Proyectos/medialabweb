@@ -112,7 +112,7 @@ export function MatchNoteNav() {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: -60, opacity: 0 }}
           transition={{ duration: 0.3 }}
-          className="fixed top-16 md:top-20 left-0 right-0 z-40 border-b border-foreground/[0.1] bg-background/90 backdrop-blur-xl"
+          className="fixed top-16 md:top-20 left-0 right-0 z-40 border-b border-foreground/[0.1] bg-background/95 md:bg-background/90 md:backdrop-blur-xl"
         >
           <div className="mx-auto max-w-3xl px-2 sm:px-4">
             <div className="flex items-center gap-1 py-2.5">
