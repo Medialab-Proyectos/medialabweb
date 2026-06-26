@@ -2,14 +2,15 @@
 
 import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
-import { Search, Compass, PenTool, Terminal, BarChart3, ChevronRight } from "lucide-react"
+import Link from "next/link"
+import { Search, Compass, PenTool, Terminal, BarChart3, ChevronRight, ArrowRight } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 
 export function MethodSection() {
   const ref = useRef<HTMLDivElement>(null)
   const [visible, setVisible] = useState(false)
   const [activeStep, setActiveStep] = useState(0)
-  const { t } = useLanguage()
+  const { t, localized } = useLanguage()
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -278,6 +279,45 @@ export function MethodSection() {
               </div>
             )
           })}
+        </div>
+
+        {/* Prueba de escala — cierre de la sección */}
+        <div className="relative overflow-hidden grid md:grid-cols-[1fr_auto] gap-5 items-center rounded-2xl border border-[var(--cyan)]/25 bg-card p-6 md:p-7">
+          {/* Imagen de fondo */}
+          <Image
+            src="/images/prueba-escala-2.png"
+            alt=""
+            fill
+            className="object-cover object-right"
+            sizes="(max-width: 768px) 100vw, 70vw"
+          />
+          {/* Scrim: card a la izquierda → imagen a la derecha (texto legible) */}
+          <div
+            aria-hidden="true"
+            className="absolute inset-0"
+            style={{ background: "linear-gradient(to right, var(--card) 0%, var(--card) 44%, color-mix(in srgb, var(--card) 55%, transparent) 72%, transparent 100%)" }}
+          />
+          <div className="relative flex flex-col gap-2">
+            <span className="text-xs font-semibold tracking-widest uppercase text-[var(--cyan)]">
+              {t("Prueba de escala", "Proof of scale")}
+            </span>
+            <h3 className="font-display font-bold text-xl text-foreground">
+              {t("Productos que muchas personas pueden usar sin perder claridad.", "Products many people can use without losing clarity.")}
+            </h3>
+            <p className="text-sm text-muted-foreground leading-relaxed max-w-md">
+              {t(
+                "Crea ADN es una muestra de lo que hacemos cuando un producto debe funcionar para muchos usuarios, roles y contextos al mismo tiempo.",
+                "Crea ADN is a sample of what we do when a product needs to work for many users, roles, and contexts at the same time."
+              )}
+            </p>
+          </div>
+          <Link
+            href={localized("/portafolio") + "#crea-adn"}
+            className="relative inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full font-semibold text-sm border border-[var(--cyan)]/40 text-[var(--cyan)] bg-card/70 backdrop-blur-sm hover:bg-[var(--cyan)]/15 transition-all w-full md:w-auto"
+          >
+            {t("Ver caso Crea ADN", "See Crea ADN case")}
+            <ArrowRight size={15} />
+          </Link>
         </div>
       </div>
     </section>
