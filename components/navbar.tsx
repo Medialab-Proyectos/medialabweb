@@ -388,8 +388,8 @@ export function Navbar() {
           )}
           {/* UXGreen™ block */}
           <div className={`flex items-center gap-2.5 p-3 rounded-xl border ${forceDarkNav ? "border-[#00BFA6]/20 bg-[#00BFA6]/[0.06]" : "border-[#00BFA6]/15 bg-[#00BFA6]/[0.04]"}`}>
-            <span className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center bg-[#00BFA6]/15 border border-[#00BFA6]/40">
-              <Leaf size={15} className="text-[#00BFA6]" />
+            <span className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center bg-[#00BFA6]">
+              <Image src="/images/curso/logos/loguxbalnco.fw.png" alt="UXGreen" width={18} height={18} className="object-contain" unoptimized />
             </span>
             <div>
               <span className="text-xs font-semibold text-[#00BFA6]">UXGreen™</span>

@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from "next/server"
 
+// PageSpeed (mobile) suele tardar 20-40s. Sin esto, la función serverless se
+// corta antes de que PSI responda y el análisis "siempre" falla.
+export const maxDuration = 60
+
 interface UXGreenScores {
   performance: number
   coreWebVitals: number
@@ -184,7 +188,7 @@ export async function POST(req: NextRequest) {
     }).then((r) => (r.ok ? r.json() : Promise.reject("carbon-err"))),
     fetch(
       `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(normalizedUrl)}&strategy=mobile&category=performance&category=accessibility${PAGESPEED_KEY ? `&key=${PAGESPEED_KEY}` : ""}`,
-      { signal: AbortSignal.timeout(20000) }
+      { signal: AbortSignal.timeout(50000) }
     ).then((r) => (r.ok ? r.json() : Promise.reject(`psi-${r.status}`))),
   ])
 

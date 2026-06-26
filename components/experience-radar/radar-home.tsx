@@ -149,7 +149,7 @@ export function RadarHome() {
             >
               <div className="relative h-44 w-full overflow-hidden">
                 <Image
-                  src="/images/radar-event-mundial.png"
+                  src="/images/radar-event-mundial-v3.png"
                   alt={t("Especial Mundial 2026", "World Cup 2026 Special")}
                   fill
                   sizes="(max-width: 768px) 100vw, 500px"

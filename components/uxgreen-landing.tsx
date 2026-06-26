@@ -569,7 +569,7 @@ export function UXGreenLanding() {
         {/* Background image — nature/sustainability */}
         <div className="absolute inset-0 bg-black">
           <Image
-            src="/images/uxgreen-hero-bg.png"
+            src="/images/uxgreen-hero-bg-v2.png"
             alt=""
             fill
             sizes="100vw"
@@ -613,27 +613,6 @@ export function UXGreenLanding() {
         <div
           className={`relative z-10 max-w-4xl mx-auto text-center transition-all duration-1000 ${heroVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
         >
-          {/* Badge pill — hidden on mobile to keep the hero clean */}
-          <div className="hidden sm:flex justify-center mb-8">
-            <div
-              className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full border text-xs font-semibold"
-              style={{
-                borderColor: "rgba(0,191,166,0.35)",
-                background: "rgba(0,191,166,0.08)",
-                color: "#00BFA6",
-              }}
-            >
-              <Image
-                src={UXGREEN_BADGE_WHITE}
-                alt="UXGreen™ Badge"
-                width={28}
-                height={28}
-                className="drop-shadow-sm"
-              />
-              UXGreen™ Framework — by MediaLab
-            </div>
-          </div>
-
           {/* Heading */}
           <h1
             id="uxgreen-hero-heading"
