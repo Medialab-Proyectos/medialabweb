@@ -21,6 +21,10 @@ function recencyTime(a: RadarArticle): number {
   return new Date(a.kickoffAt || `${a.date}T12:00:00`).getTime()
 }
 
+function analysisTime(a: RadarArticle): number {
+  return new Date(a.analyzedFinalAt || a.analyzedPreviaAt || a.updatedAt).getTime()
+}
+
 /**
  * Orden DENTRO de un día: primero los analizados (finalizados, el más reciente primero),
  * luego los que están en vivo y al final los próximos (el más cercano primero). Así la
@@ -34,6 +38,10 @@ function compareWithinDay(a: RadarArticle, b: RadarArticle): number {
   const ta = tier(a)
   const tb = tier(b)
   if (ta !== tb) return ta - tb
+  if (a.date === b.date) {
+    const analyzedDiff = analysisTime(b) - analysisTime(a)
+    if (analyzedDiff !== 0) return analyzedDiff
+  }
   // Próximos: el más cercano primero (asc). Analizados / en vivo: el más reciente primero (desc).
   return ta === 2 ? recencyTime(a) - recencyTime(b) : recencyTime(b) - recencyTime(a)
 }
