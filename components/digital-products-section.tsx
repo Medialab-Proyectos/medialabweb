@@ -67,7 +67,7 @@ export function DigitalProductsSection() {
       tags: [t("Movilidad Electrica", "Electric Mobility"), "UX/UI", t("Experiencia Digital", "Digital Experience")],
       status: t("En Desarrollo", "In Development"),
       image: "/images/cumbreva.png",
-      href: "https://cumbreva.vercel.app/",
+      href: "https://cumbreva.medialab.design/",
     },
   ]
 

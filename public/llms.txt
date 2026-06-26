@@ -89,7 +89,7 @@ Ver portafolio completo: https://medialab.design/portafolio
 ## Productos propios destacados
 
 - **SinDeudas:** plataforma de finanzas conductuales que ayuda a las personas a manejar sus finanzas de forma eficiente entendiendo el rol psicológico del dinero.
-- **Cumbreva:** plataforma de movilidad eléctrica que acompaña al conductor antes, durante y después de cada trayecto, convirtiendo información compleja (rutas, autonomía y carga) en decisiones simples. Sitio: https://cumbreva.vercel.app/
+- **Cumbreva:** plataforma de movilidad eléctrica que acompaña al conductor antes, durante y después de cada trayecto, convirtiendo información compleja (rutas, autonomía y carga) en decisiones simples. Sitio: https://cumbreva.medialab.design/
 
 ## Industrias
 

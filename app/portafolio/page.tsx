@@ -73,7 +73,7 @@ export default function PortafolioPage() {
         item: {
           "@type": "SoftwareApplication",
           name: "Cumbreva",
-          url: "https://cumbreva.vercel.app/",
+          url: "https://cumbreva.medialab.design/",
           applicationCategory: "TravelApplication",
           operatingSystem: "Web, iOS, Android",
           creator: {
