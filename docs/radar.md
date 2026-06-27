@@ -32,6 +32,11 @@ PASOS:
      aporte algo verificable al partido, páginas de data como 365Scores (p. ej. mapa de tiros,
      tiros al arco, momentum o eventos del encuentro). Las cuotas de apuestas NO son fuente
      permitida ni señal editorial válida.
+   - Diferencia obligatoria: una red social o scraper "intentado" NO cuenta como fuente
+     analizada si devuelve 0 señales, bloqueo, CAPTCHA, login requerido o error de conexión.
+     En ese caso repórtalo al final como intento fallido/best-effort y NO escribas en la nota
+     que el sentimiento fue medido en Instagram, YouTube, X o Facebook. Solo usa esas redes en
+     el análisis cuando haya posts, comentarios, hilos o señales públicas verificables.
    - Confirma marcador EXACTO, goleadores con minuto, polémicas arbitrales y frases reales.
    Si un dato no se puede verificar, NO lo incluyas.
 
