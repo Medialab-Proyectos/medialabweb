@@ -38,6 +38,13 @@ DEFAULT_YOUTUBE_CHANNELS = [
     "https://www.youtube.com/c/elenganche/videos",
 ]
 
+DEFAULT_X_QUERIES = [
+    '"World Cup 2026"',
+    '"Mundial 2026"',
+    '"FIFA World Cup"',
+    '"match thread"',
+]
+
 FOOTBALL_WORDS = [
     "world cup",
     "mundial",
@@ -181,7 +188,7 @@ def collect_instagram(terms: list[str]) -> tuple[list[dict], dict]:
         "url": "https://instaloader.github.io/",
         "ok": len(signals) > 0,
         "itemCount": len(signals),
-        "note": "Capturas best-effort desde perfiles públicos. Si Meta bloquea la consulta pública, configura RADAR_INSTAGRAM_USERNAME y RADAR_INSTAGRAM_SESSIONFILE con una sesión propia para mejorar estabilidad.",
+        "note": "Capturas best-effort desde perfiles publicos. Si Meta bloquea la consulta publica, configura RADAR_INSTAGRAM_USERNAME y RADAR_INSTAGRAM_SESSIONFILE con una sesion propia para mejorar estabilidad. Instagrapi queda instalado como alternativa con sesion propia, no como bypass anonimo.",
     }
 
 
@@ -343,22 +350,103 @@ def collect_youtube(terms: list[str]) -> tuple[list[dict], dict]:
         "url": "https://github.com/egbertbouman/youtube-comment-downloader",
         "ok": len(signals) > 0,
         "itemCount": len(signals),
-        "note": "Comentarios de videos recientes en canales de analistas/comentaristas reconocidos, sin usar la API oficial.",
+        "note": "Comentarios de videos recientes en canales de analistas/comentaristas reconocidos, sin usar la API oficial. Chat-downloader queda disponible para directos o watchalongs cuando RADAR_YOUTUBE_CHANNELS incluya enlaces accesibles.",
+    }
+
+
+def _x_query(terms: list[str]) -> str:
+    quoted_terms = []
+    for term in terms[:10]:
+        cleaned = sanitize_text(term, 80).replace('"', "")
+        if not cleaned:
+            continue
+        quoted_terms.append(f'"{cleaned}"' if " " in cleaned else cleaned)
+    if not quoted_terms:
+        quoted_terms = DEFAULT_X_QUERIES
+    return " OR ".join(quoted_terms)
+
+
+def collect_x(terms: list[str]) -> tuple[list[dict], dict]:
+    detected_at = now_iso()
+    query = os.environ.get("RADAR_X_QUERY", "").strip() or _x_query(terms)
+    signals: list[dict] = []
+
+    try:
+        import snscrape.modules.twitter as sntwitter
+    except Exception as exc:
+        return [], {
+            "id": "x-unavailable",
+            "name": "X/Twitter via snscrape",
+            "type": "x",
+            "url": "https://github.com/JustAnotherArchivist/snscrape",
+            "ok": False,
+            "itemCount": 0,
+            "note": f"snscrape no disponible: {sanitize_text(exc, 220)}",
+        }
+
+    error_note = ""
+    try:
+        scraper = sntwitter.TwitterSearchScraper(query)
+        scanned = 0
+        for item in scraper.get_items():
+            scanned += 1
+            text = sanitize_text(getattr(item, "rawContent", "") or getattr(item, "content", ""), 320)
+            if text and is_relevant(text, terms):
+                user = getattr(getattr(item, "user", None), "username", "") or "x"
+                url = getattr(item, "url", "") or f"https://x.com/{user}/status/{getattr(item, 'id', '')}"
+                item_date = getattr(item, "date", None)
+                signals.append({
+                    "id": make_id("x", user, getattr(item, "id", scanned)),
+                    "sourceType": "x",
+                    "sourceName": "X/Twitter via snscrape",
+                    "sourceUrl": "https://x.com/search",
+                    "title": sanitize_text(text.split(".")[0], 180) or f"X: {user}",
+                    "summary": text,
+                    "url": str(url),
+                    "publishedAt": item_date.replace(tzinfo=timezone.utc).isoformat() if item_date else detected_at,
+                    "detectedAt": detected_at,
+                    "category": "Conversacion social",
+                    "players": [],
+                    "teams": [],
+                    "tags": ["X", user],
+                    "score": int(getattr(item, "likeCount", 0) or 0) + int(getattr(item, "retweetCount", 0) or 0) * 2,
+                    "sentiment": infer_sentiment(text),
+                    "classifications": [],
+                })
+            if len(signals) >= 24 or scanned >= 120:
+                break
+    except Exception as exc:
+        error_note = sanitize_text(exc, 240)
+
+    note = "Busqueda best-effort en X sin API oficial. Si X bloquea el endpoint anonimo, twscrape/twikit requieren una sesion/cookies propias antes de producir senales reales."
+    if error_note:
+        note = f"{note} Ultimo error: {error_note}"
+
+    return signals[:24], {
+        "id": "x-snscrape",
+        "name": "X/Twitter via snscrape",
+        "type": "x",
+        "url": "https://github.com/JustAnotherArchivist/snscrape",
+        "ok": len(signals) > 0,
+        "itemCount": len(signals),
+        "note": note,
     }
 
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--platform", required=True, choices=["instagram", "facebook", "youtube"])
+    parser.add_argument("--platform", required=True, choices=["instagram", "facebook", "youtube", "x"])
     parser.add_argument("--terms", default="[]")
     args = parser.parse_args()
 
+    raw_terms = args.terms.strip()
     try:
-        terms = json.loads(args.terms)
+        terms = json.loads(raw_terms)
         if not isinstance(terms, list):
             terms = []
     except Exception:
-        terms = []
+        cleaned = raw_terms.strip().strip("[]")
+        terms = [term.strip().strip("'\"") for term in cleaned.split(",") if term.strip()]
 
     merged_terms = [str(term).strip() for term in terms if str(term).strip()]
     for term in DEFAULT_TERMS:
@@ -369,6 +457,8 @@ def main() -> int:
         signals, source = collect_instagram(merged_terms)
     elif args.platform == "facebook":
         signals, source = collect_facebook(merged_terms)
+    elif args.platform == "x":
+        signals, source = collect_x(merged_terms)
     else:
         signals, source = collect_youtube(merged_terms)
 

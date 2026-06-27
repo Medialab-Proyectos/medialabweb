@@ -363,6 +363,24 @@ Cuando busques sentimiento o conversación para una nota, usa este orden de prio
 > Si alguna plataforma no responde o exige barreras no razonables, sigue con la siguiente y
 > deja constancia breve en el reporte final. El radar debe ser resistente a fuentes caídas.
 
+### Colector local de redes
+
+- Usa `scripts/experience_radar_social.py` para medir voz social con salida estructurada.
+  Plataformas activas: `instagram`, `facebook`, `youtube`, `x`.
+- Entorno instalado: `.venv-radar-social` con `instaloader`, `instagrapi`,
+  `facebook-scraper`, `youtube-comment-downloader`, `chat-downloader`, `snscrape`,
+  `twikit` y `twscrape`.
+- Comando base:
+  `.\.venv-radar-social\Scripts\python.exe scripts\experience_radar_social.py --platform <red> --terms '["Equipo A Equipo B","Mundial 2026"]'`
+- Solo cuenta como sentimiento medido cuando la salida trae `source.ok: true` y
+  `source.itemCount > 0`. Si devuelve `ok: false`, registra el bloqueo o falta de sesion y
+  no afirmes que la hinchada fue medida en esa red.
+- Estado operativo conocido: `snscrape` para X suele bloquearse con 404 anonimo;
+  `twikit`/`twscrape` requieren sesion/cookies propias; Instagram/Facebook pueden devolver
+  403 sin sesion; YouTube depende de canales/videos/chats publicos accesibles. Estas
+  limitaciones no frenan la nota si hay fuentes periodisticas y Reddit/medios suficientes,
+  pero deben quedar transparentes en el reporte final.
+
 ## Submenú de contenido y predicción «Antes» en la nota
 
 Cada **nota de partido** lleva, igual que el home, un **submenú de contenido** que aparece
