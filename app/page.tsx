@@ -26,7 +26,7 @@ import { HomeScrollRestorer } from "@/components/home-scroll-restorer"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Diseño de Productos Digitales con UX, IA y Psicología | MediaLab",
+  title: "Diseño de Productos Digitales con UX, IA y Psicología | MediaLab Ingeniería",
   description:
     "Productos digitales que las personas aman. MediaLab combina UX/UI, inteligencia artificial y psicología del consumidor para diseñar y desarrollar tu producto — de idea a producción en semanas.",
   alternates: {
@@ -43,14 +43,14 @@ export const metadata: Metadata = {
       "Combinamos investigación de usuarios, diseño conductual e IA para crear experiencias digitales que convierten. Prueba UXBox: discovery de producto con IA gratis.",
     url: "/",
     siteName: "MediaLab Ingeniería",
-    images: [{ url: "/images/og-main-brand.png", width: 1200, height: 630 }],
+    images: [{ url: "/images/og-main-brand-1200x630.png", width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",
     title: "MediaLab Ingeniería — UX/UI, IA y Psicología del Consumidor",
     description:
       "Diseñamos productos digitales que las personas aman. UX, IA y psicología del consumidor desde Bogotá para el mundo.",
-    images: ["/images/og-main-brand.png"],
+    images: ["/images/og-main-brand-1200x630.png"],
   },
 }
 
@@ -195,7 +195,7 @@ export default function Home() {
             "description": "Agencia de diseño UX/UI, inteligencia artificial y desarrollo de productos digitales en Bogotá. Especialistas en experiencias B2B y B2C.",
             "url": "https://medialab.design",
             "logo": "https://medialab.design/images/logo-medialab-400.png",
-            "image": "https://medialab.design/images/og-main-brand.png",
+            "image": "https://medialab.design/images/og-main-brand-1200x630.png",
             "telephone": "+57-305-400-9505",
             "email": "info@medialab.design",
             "address": {
@@ -238,7 +238,7 @@ export default function Home() {
             "@id": "https://medialab.design/#professionalservice",
             "name": "MediaLab Ingeniería",
             "url": "https://medialab.design",
-            "image": "https://medialab.design/images/og-main-brand.png",
+            "image": "https://medialab.design/images/og-main-brand-1200x630.png",
             "logo": "https://medialab.design/images/logo-medialab-400.png",
             "description": "Agencia especializada en diseño UX/UI, IA, SEO técnico, CRO, diseño conductual y desarrollo de software para productos digitales B2B y B2C.",
             "areaServed": ["Colombia", "Latinoamérica", "United States", "Worldwide"],
@@ -398,7 +398,7 @@ export default function Home() {
               "reviewCount": "12",
               "bestRating": "5"
             },
-            "screenshot": "https://medialab.design/images/og-main-brand.png",
+            "screenshot": "https://medialab.design/images/og-main-brand-1200x630.png",
             "softwareVersion": "2.0",
             "releaseNotes": "Generación de brief de producto con IA, análisis competitivo automático y prototipado conceptual en minutos."
           })

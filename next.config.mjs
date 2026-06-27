@@ -1,13 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'images.unsplash.com',
-      },
-    ],
-  },
+  // Sin dominios remotos: todas las imágenes viven en /public para conservar
+  // identidad de marca y que LLMs/Google no extraigan stock externo (Unsplash).
   async redirects() {
     return [
       // Experience Radar: migración /articulos → /mundial-2026 (especial Mundial 2026).

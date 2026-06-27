@@ -157,7 +157,7 @@ export function TestimonialsSection() {
                     {/* Semantic Metadata for bots */}
                     <div itemProp="itemReviewed" itemScope itemType="https://schema.org/LocalBusiness">
                       <meta itemProp="name" content="MediaLab Ingeniería" />
-                      <meta itemProp="image" content="https://medialab.design/images/og-main-brand.png" />
+                      <meta itemProp="image" content="https://medialab.design/images/og-main-brand-1200x630.png" />
                       <meta itemProp="telephone" content="+57-305-400-9505" />
                       <meta itemProp="address" content="Bogotá, Colombia" />
                     </div>

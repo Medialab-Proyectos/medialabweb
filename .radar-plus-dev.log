@@ -370,3 +370,19 @@ Creating turbopack project {
  GET /uxgreen 200 in 410ms (compile: 19ms, render: 391ms)
  GET /manifest.webmanifest 200 in 18ms (compile: 8ms, render: 10ms)
   Reload env: .env.local
+ GET / 200 in 5.5s (compile: 1469ms, render: 4.0s)
+ GET /manifest.webmanifest 200 in 1613ms (compile: 1576ms, render: 37ms)
+✓ Finished writing to filesystem cache in 10.6s
+ GET / 200 in 471ms (compile: 28ms, render: 443ms)
+✓ Compiled in 3.8s
+▲ Next.js 16.1.6 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.39.157:3000
+- Environments: .env.local
+
+✓ Starting...
+Creating turbopack project {
+  dir: 'C:\\Users\\coben\\Desktop\\sitiomlab\\medialabweb',
+  testMode: true
+}
+✓ Ready in 2.8s

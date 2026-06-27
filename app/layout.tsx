@@ -100,7 +100,7 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: '/images/og-main-brand.png',
+        url: '/images/og-main-brand-1200x630.png',
         width: 1200,
         height: 630,
         alt: 'MediaLab Ingeniería — Ingeniería de producto digital: UX, IA, Software y SEO técnico',
@@ -108,17 +108,17 @@ export const metadata: Metadata = {
       },
       {
         url: '/images/og-image-gallery.png',
-        width: 1200,
-        height: 630,
+        width: 1024,
+        height: 1024,
         alt: 'MediaLab Ingeniería — Laboratorio de diseño digital y equipo de trabajo',
-        type: 'image/png',
+        type: 'image/jpeg',
       },
       {
         url: '/images/team-collaboration.png',
-        width: 1200,
-        height: 630,
+        width: 1024,
+        height: 1024,
         alt: 'Equipo MediaLab colaborando en diseño UX/UI',
-        type: 'image/png',
+        type: 'image/jpeg',
       },
     ],
   },
@@ -128,7 +128,7 @@ export const metadata: Metadata = {
     creator: '@MediaLabIng',
     title: 'Agencia UX con IA y Discovery de Producto | MediaLab Ingeniería',
     description: 'Productos digitales que las personas aman: UX, IA y psicología del consumidor. Discovery de meses a días, validado con criterio humano.',
-    images: ['/images/og-main-brand.png'],
+    images: ['/images/og-main-brand-1200x630.png'],
   },
   icons: {
     icon: [
@@ -199,7 +199,7 @@ export default function RootLayout({
               url: 'https://medialab.design',
               logo: 'https://medialab.design/images/logo-medialab-400.png',
               image: [
-                'https://medialab.design/images/og-main-brand.png',
+                'https://medialab.design/images/og-main-brand-1200x630.png',
                 'https://medialab.design/images/og-image-gallery.png',
                 'https://medialab.design/images/team-collaboration.png',
                 'https://medialab.design/images/ux-research.png',
@@ -353,7 +353,7 @@ export default function RootLayout({
               '@context': 'https://schema.org',
               '@type': 'WebSite',
               name: 'MediaLab Ingeniería',
-              alternateName: ['MediaLab', 'MediaLab Design', 'medialab.design'],
+              alternateName: ['MediaLab'],
               url: 'https://medialab.design',
               inLanguage: ['es-CO', 'en'],
               description:
