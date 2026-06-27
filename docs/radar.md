@@ -85,8 +85,9 @@ PASOS:
      editorial propia de la previa, descargada y guardada localmente en
      `public/images/experience-radar/mundial-2026/`. No uses imágenes genéricas del radar,
      fallback del sitio ni hotlinks externos para una previa ya analizada. Si no hay foto de
-     Latingoles o Win Sports, insiste con FIFA, The Guardian, AP, Reuters, ESPN, AS, Marca,
-     Goal u otra fuente periodística verificable y registra qué fuente quedó.
+     Latingoles o Win Sports, insiste con FIFA, The Guardian, AP, Reuters, ESPN, ESPN
+     Colombia, AS, Marca, El País, El Mundo, El Diario, Goal u otra fuente periodística
+     verificable y registra qué fuente quedó.
    - userExperience POR EQUIPO: cómo consume y reacciona EN DIGITAL la hinchada de ESE
      país, por etapa { expectativa?, realidad?, percepcion? }. DEBE ser específico de cada
      selección (memes, hashtags, apps, quejas propias de esa afición) y DISTINTO entre los
@@ -128,7 +129,8 @@ PASOS:
      correcta para esa etapa. La búsqueda es OBLIGATORIA e insistente:
      prueba primero el scraping y la noticia específica en `https://latingoles.com/` y
      `https://www.winsports.co/`; si no aparece o bloquea la descarga, continúa con FIFA,
-     AP, Reuters, The Guardian, ESPN, AS, Marca, El País, Cadena SER y otros medios serios.
+     AP, Reuters, The Guardian, ESPN, ESPN Colombia, AS, Marca, El País, El Mundo, El Diario,
+     Cadena SER y otros medios serios.
      No abandones la búsqueda tras una sola URL, un 403 o un CDN bloqueado: prueba la imagen
      original, `og:image`, variantes del CDN y otra fuente periodística. Registra en el
      reporte final qué dominios intentaste y por qué no se obtuvo imagen, si ese fue el caso.
@@ -137,6 +139,11 @@ PASOS:
      `public/images/experience-radar/mundial-2026/`. `imageUrl` debe apuntar a la ruta local
      `/images/experience-radar/mundial-2026/<slug-corto>.jpg`; conserva el crédito y la URL
      de la noticia original en `imageCredit` e `imageSourceUrl`.
+   - NO uses composiciones, collages, pósters de boletería ni gráficos promocionales como
+     imagen principal de una previa, salvo que el usuario lo apruebe explícitamente para un
+     caso concreto. Si no hay foto exacta del cruce, usa una foto real de previa/noticia de
+     uno de los equipos publicada por una fuente autorizada y deja claro en `imageAlt`,
+     `imageCredit` e `imageSourceUrl` qué equipo/fuente corresponde.
    - La descarga y adición de imágenes al repositorio es AUTOMÁTICA: no pidas confirmación
      editorial antes de descargar, validar, guardar y preparar la imagen para publicación.
    - Si encuentras una imagen válida y verificable para la nota correcta, súbela al repo en la
@@ -239,6 +246,25 @@ reglas:
     visibles, frecuencia de publicación, clips/fotos previas y narrativa visual del partido.
   - Si la plataforma endurece límites, úsalo como señal opcional; nunca bloquees la corrida
     completa del radar por depender de Instagram.
+- **Alternativa con sesión propia**: `instagrapi`
+  - Repo: https://github.com/subzeroid/instagrapi
+  - Útil cuando `instaloader` bloquea perfiles públicos; requiere sesión/cookies propias y
+    debe usarse solo para contenido visible con esa sesión.
+
+### X / Twitter (best-effort, sin bearer oficial)
+
+- **Proyecto recomendado con sesión propia**: `twikit`
+  - Repo: https://github.com/d60/twikit
+  - Usa endpoints internos de X/Twitter y no requiere API key/bearer oficial, pero sí puede
+    requerir login/cookies. Úsalo para búsquedas, tweets y respuestas públicas.
+- **Alternativa robusta con rotación de cuentas propias**: `twscrape`
+  - Repo: https://github.com/vladkens/twscrape
+  - Útil para búsquedas, timelines, replies y media usando cookies `auth_token`/`ct0` de una
+    cuenta propia. No lo trates como acceso anónimo garantizado.
+- **Fallback histórico/multired**: `snscrape`
+  - Repo: https://github.com/JustAnotherArchivist/snscrape
+  - Soporta varias redes y salidas JSONL, pero X ha cambiado sus barreras con frecuencia; si
+    falla, registra el fallo y continúa con Reddit/YouTube/medios.
 
 ### Facebook (best-effort)
 
@@ -255,6 +281,10 @@ reglas:
 - **Proyecto ligero recomendado**: `youtube-comment-downloader`
   - Repo: https://github.com/egbertbouman/youtube-comment-downloader
   - Descarga comentarios sin usar la API oficial de YouTube.
+- **Proyecto para chats de transmisiones y directos archivados**: `chat-downloader`
+  - Repo: https://github.com/xenova/chat-downloader
+  - Extrae mensajes de livestreams, videos, clips y broadcasts pasados sin autenticación; úsalo
+    cuando haya watchalongs, directos o chats visibles alrededor del partido.
 - **Proyecto de exploración/archivo**: `youtube-comment-suite`
   - Repo: https://github.com/mattwright324/youtube-comment-suite
   - Útil cuando haga falta revisar muchos videos/canales y detectar temas recurrentes.

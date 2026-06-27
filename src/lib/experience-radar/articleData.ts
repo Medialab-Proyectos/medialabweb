@@ -8055,9 +8055,9 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
       { name: "Reddit r/soccer - search Colombia Portugal World Cup 2026", url: "https://www.reddit.com/r/soccer/search/?q=Colombia%20Portugal%20World%20Cup%202026&restrict_sr=1&sort=new", kind: "conversacion" },
     ],
     imageUrl: "/images/experience-radar/mundial-2026/colombia-portugal-previa.jpg",
-    imageAlt: "Composicion editorial con Colombia y Portugal antes del partido por el liderato del Grupo K",
-    imageCredit: "Composicion editorial MediaLab con imagenes de Win Sports",
-    imageSourceUrl: "https://www.winsports.co/seleccion-colombia/noticias/colombia-vs-congo-donde-ver-el-juego-de-la-copa-mundial-de-la-fifa-440837",
+    imageAlt: "Entrenamiento de Portugal antes del partido por el liderato frente a Colombia",
+    imageCredit: "El Pais / EFE",
+    imageSourceUrl: "https://elpais.com/deportes/mundial-futbol/2026-06-27/portugal-y-colombia-se-juegan-el-primer-puesto-en-el-horno-de-miami.html",
     emotionalRadar: { euforia: 70, confianza: 68, ansiedad: 58, frustracion: 16, incertidumbre: 38, optimismo: 74 },
     analyzedAt: "2026-06-27T10:42:00.000Z",
     teamsData: [
