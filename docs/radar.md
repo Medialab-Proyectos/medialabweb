@@ -236,6 +236,46 @@ reglas:
    Si una página mezcla estadísticas con betting, toma solo los datos deportivos verificables
    y excluye odds, casas, promociones y lenguaje de apuesta.
 
+### ⚠️ Actualización 2026 — herramientas validadas y refuerzo de previas
+
+> Revisión de junio 2026. Corrige el problema reportado: previas que **reciclaban imágenes**
+> y previas **sin voz social real**. Esta sección PREVALECE sobre las recomendaciones de
+> abajo cuando haya conflicto.
+
+**Estado real de las herramientas (verificado):**
+
+- **X / Twitter:** `snscrape` está **MUERTO** en 2026 (roto tras el cierre de endpoints
+  anónimos de X). El colector `scripts/experience_radar_social.py` todavía lo usa para `x`,
+  por eso X devuelve 0 señales. Migrar a **`twscrape`** (https://github.com/vladkens/twscrape)
+  o **`Scweet`** (https://github.com/Altimis/Scweet — cookies + GraphQL, verificado funcional
+  mar-2026), ambos con cuenta/sesión propia y proxy. Mientras tanto **NO afirmes voz de X**.
+- **Bluesky — NUEVA fuente prioritaria (abierta, sin login, sin bloqueo):** API pública
+  `https://public.api.bsky.app` → `app.bsky.feed.searchPosts` **sin API key**. Es hoy la
+  fuente social más fiable para sentimiento de hinchada (no exige cookies ni se rompe cada 2
+  semanas como X/Instagram/Facebook). Úsala ANTES que esas tres. Ejemplo de consulta:
+  `GET https://public.api.bsky.app/xrpc/app.bsky.feed.searchPosts?q=<EquipoA EquipoB>&lang=es&limit=50`
+- **Reddit:** el colector **NO tiene** plataforma `reddit` pese a ser fuente #1. Usa el
+  endpoint público JSON: `https://www.reddit.com/r/<sub>/search.json?q=<términos>&restrict_sr=1&sort=new`
+  o `PRAW` con app gratuita. Subs útiles: r/soccer, r/futbol y el sub de cada selección.
+- **Data del partido (shot map, xG, eventos):** en vez de helpers sueltos de 365Scores, usa
+  **`soccerdata`** (https://github.com/probberechts/soccerdata — mantenido abr-2026: FBref,
+  Sofascore, Understat, WhoScored, ESPN) o **`ScraperFC`**. Devuelven DataFrames estables y
+  cacheados. 365Scores queda como apoyo visual, no como fuente principal.
+
+**Refuerzo de previas (obligatorio):**
+
+1. **Imagen propia o no se publica.** Una `analyzedUpcomingMatch(...)` DEBE tener foto real,
+   específica del cruce, descargada local. Prohibido `pickMatchImage`, fallback del radar o
+   reusar la foto de otro partido (aunque se renombre). Si no hay foto verificable → déjala
+   como `upcomingMatch(...)` (calendario) y documenta el bloqueo. **No recicles.**
+2. **Verificación anti-reciclaje:** antes de aprobar una imagen de previa, confirma que su
+   `imageSourceUrl` y el contenido correspondan a ESE partido. En el cierre, compara las rutas
+   locales nuevas contra las ya existentes y reporta cualquier reutilización detectada.
+3. **Voz social real o se omite.** Para cada previa en la ventana de 24–48 h intenta
+   **Bluesky + Reddit** primero (y X solo si `twscrape`/`Scweet` tienen sesión). Solo afirma
+   "sentimiento medido en <red>" si hay señales públicas observables (`ok && itemCount>0`).
+   Si no hay, **omite** la voz social de esa hinchada — nada de frases comodín.
+
 ### Instagram (best-effort)
 
 - **Proyecto recomendado**: `instaloader`
@@ -261,10 +301,14 @@ reglas:
   - Repo: https://github.com/vladkens/twscrape
   - Útil para búsquedas, timelines, replies y media usando cookies `auth_token`/`ct0` de una
     cuenta propia. No lo trates como acceso anónimo garantizado.
-- **Fallback histórico/multired**: `snscrape`
+- **Alternativa funcional 2026**: `Scweet`
+  - Repo: https://github.com/Altimis/Scweet
+  - Cookies + GraphQL (no endpoints anónimos); verificado funcional en mar-2026. Pooling
+    multi-cuenta y proxies. Úsalo si `twikit`/`twscrape` fallan.
+- **`snscrape` — ⚠️ DEPRECADO (no usar para X en 2026):**
   - Repo: https://github.com/JustAnotherArchivist/snscrape
-  - Soporta varias redes y salidas JSONL, pero X ha cambiado sus barreras con frecuencia; si
-    falla, registra el fallo y continúa con Reddit/YouTube/medios.
+  - Roto tras el cierre de endpoints anónimos de X. El colector aún lo invoca para `x`; hasta
+    migrar a `twscrape`/`Scweet`, X **no** produce voz social. No afirmes sentimiento de X con él.
 
 ### Facebook (best-effort)
 
@@ -352,13 +396,15 @@ elige las pertinentes para el partido y la región.
 
 Cuando busques sentimiento o conversación para una nota, usa este orden de prioridad:
 
-1. Reddit
-2. Instagram
-3. Facebook
-4. YouTube
-5. X
-6. Google Trends
-7. Latingoles / páginas de analistas como capa editorial adicional
+1. Google News (RSS, cobertura mediática inmediata por partido)
+2. Reddit (RSS por defecto; OAuth si hay credenciales)
+3. Bluesky (API pública, sin login ni bloqueo — alta fiabilidad)
+4. Instagram
+5. Facebook
+6. YouTube
+7. X (solo con sesión `twscrape`/`Scweet`; `snscrape` ya no sirve)
+8. Google Trends
+9. Latingoles / páginas de analistas como capa editorial adicional
 
 > Si alguna plataforma no responde o exige barreras no razonables, sigue con la siguiente y
 > deja constancia breve en el reporte final. El radar debe ser resistente a fuentes caídas.
@@ -366,7 +412,28 @@ Cuando busques sentimiento o conversación para una nota, usa este orden de prio
 ### Colector local de redes
 
 - Usa `scripts/experience_radar_social.py` para medir voz social con salida estructurada.
-  Plataformas activas: `instagram`, `facebook`, `youtube`, `x`.
+  Plataformas activas: `google_news`, `bluesky`, `reddit`, `instagram`, `facebook`, `youtube`, `x`.
+  - **`google_news`** (NUEVA, la mejor para arrancar YA): Google News RSS
+    (`news.google.com/rss/search`) sin API key. Cobertura mediática inmediata por partido.
+    Geo/idioma vía `RADAR_GNEWS_GL` (CO) y `RADAR_GNEWS_HL` (es-419). Verificada jun-2026.
+  - **`bluesky`** (recomendada, sin login): API pública vía host `api.bsky.app`
+    (`public.api.bsky.app` da 403). Verificada jun-2026.
+  - **`reddit`**: por defecto usa el **feed RSS público** (`.rss top/day`, sin auth — funciona
+    desde cualquier IP, verificado jun-2026). Si defines `REDDIT_CLIENT_ID`/`REDDIT_CLIENT_SECRET`
+    (app gratuita en reddit.com/prefs/apps) cambia solo a OAuth app-only (búsqueda por partido,
+    más potente). El JSON público suele dar 403 desde datacenter. Subs vía `RADAR_REDDIT_SUBREDDITS`.
+  - **`x`**: sigue con `snscrape` (deprecado/roto); migrar a `twscrape`/`Scweet` con sesión.
+- **Filtro anti-apuestas (`is_betting`)**: el colector descarta odds/picks/markets/casas en TODAS
+  las plataformas (cumple la regla de no usar apuestas como señal editorial).
+- **Más fuentes sin API (conversación indexada / descubrimiento):**
+  - **Google Alerts / Talkwalker Alerts** con operadores `site:reddit.com/r/<sub> "<tema>"`
+    (p. ej. `site:reddit.com/r/soccer "World Cup"`, `site:reddit.com/r/worldcup "Colombia"`).
+    No es tiempo real, pero detecta conversación ya indexada por Google.
+  - **Búsqueda web con operadores** (Google/Bing) para el auditor manual:
+    `site:reddit.com/r/userexperience "design system"` · `site:reddit.com/r/soccer "match reaction"`.
+  - **Reddit RSS directo** admite combos y top del día (úsalos también desde WebFetch):
+    `https://www.reddit.com/r/soccer+worldcup+football+FIFA/top/.rss?sort=top&t=day&limit=50` ·
+    por sub simple `https://www.reddit.com/r/soccer/.rss`.
 - Entorno instalado: `.venv-radar-social` con `instaloader`, `instagrapi`,
   `facebook-scraper`, `youtube-comment-downloader`, `chat-downloader`, `snscrape`,
   `twikit` y `twscrape`.
