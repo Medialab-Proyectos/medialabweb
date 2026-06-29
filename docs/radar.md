@@ -276,6 +276,25 @@ reglas:
    "sentimiento medido en <red>" si hay señales públicas observables (`ok && itemCount>0`).
    Si no hay, **omite** la voz social de esa hinchada — nada de frases comodín.
 
+**Imágenes — NO rendirse pronto + conservar las dos fotos (obligatorio):**
+
+1. **Insiste con varias fuentes; no abandones tras un 403 o una imagen 1×1.** Muchos
+   resizers de noticias bloquean la descarga directa desde IPs de datacenter (devuelven
+   1×1, 118×118 o sin `og:image`): La Nación, CBC, CBS, El Espectador, canal26, Al Jazeera,
+   y los `og:image` de FIFA/Fox/ESPN. **Sí descargan limpio** (pruébalos en este orden):
+   - **WordPress directo** `…/wp-content/uploads/…` (p. ej. futbolcentroamerica, 442/perfil)
+     — el truco más fiable cuando todo lo demás bloquea.
+   - **si.com / minutemedia** (`images2.minutemediacdn.com`, fotos Getty).
+   - **media.cnn.com** (fotos Reuters/AP) y resizers de **Infobae / El Universal** (respetan
+     el token `auth` que viene dentro del `og:image`).
+   Extrae el `og:image`, descarga con User-Agent de navegador + `Referer`, y **verifica
+   visualmente** que la foto corresponda a los equipos correctos antes de aprobarla.
+2. **Conserva SIEMPRE las dos imágenes, y distintas.** Una nota finalizada debe llevar la foto
+   de **previa** (antes) en `previewImageUrl/Alt/Credit/SourceUrl` y una foto de **análisis/
+   finalización** DISTINTA (festejo, gol, acción) en `imageUrl`. Nunca dejes la de "después"
+   igual a la de previa: insiste con el WordPress-directo hasta conseguir una foto real del
+   partido. Comprueba que `md5(imageUrl) ≠ md5(previewImageUrl)`.
+
 ### Instagram (best-effort)
 
 - **Proyecto recomendado**: `instaloader`
