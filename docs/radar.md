@@ -295,6 +295,25 @@ reglas:
    igual a la de previa: insiste con el WordPress-directo hasta conseguir una foto real del
    partido. Comprueba que `md5(imageUrl) ≠ md5(previewImageUrl)`.
 
+**Radar emocional — el "antes" se CONGELA (obligatorio):**
+
+Cada nota tiene tres fases de radar: **`expectativa` (antes)**, **`realidad` (durante)** y
+**`percepcion` (despues)**, cada una con sus 6 ejes. Regla inviolable:
+
+1. El radar de **`expectativa` (antes) se fija EN LA PREVIA y NO se vuelve a tocar** cuando el
+   partido se analiza/finaliza. Es la lectura del animo PREVIO al partido; reescribirla con el
+   resultado ya conocido es **sesgo retrospectivo** y falsea la comparacion antes→durante→despues,
+   que es justo el sentido del radar. Al convertir `analyzedUpcomingMatch` → `finishedMatch`,
+   **copia el `emotionalRadar` de la previa TAL CUAL a `combined.expectativa`** (sin cambiar un solo numero).
+2. Solo se **rellenan/cambian** `combined.realidad` (durante) y `combined.percepcion` (despues).
+3. Igual por equipo en `teamsData`: **conserva el "antes"** que ya quedo en la previa
+   (`expectedEmotion`, `dominantConversation`, `fanConfidence`, `mainNarrative`,
+   `userExperience.expectativa`) sin reescribirlo; al finalizar SOLO agregas lo nuevo:
+   `howTheyArrived`, `whatHappened`, `expectationVsReality`, `mood`, `behaviorEffect`,
+   `current` (durante/despues), `predicted` (proximo partido) y `userExperience.realidad/percepcion`.
+4. Verificacion: `combined.expectativa` del `finishedMatch` debe ser identico al `emotionalRadar`
+   que tenia la `analyzedUpcomingMatch`. Si difiere, lo cambiaste por error: restauralo.
+
 ### Instagram (best-effort)
 
 - **Proyecto recomendado**: `instaloader`
