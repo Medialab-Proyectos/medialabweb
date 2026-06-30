@@ -1,0 +1,193 @@
+%% ─────────────────────────────────────────────────────────────────────────
+%% Organic UX & AI Demand Radar — Mapa maestro de arquitectura y ejecución manual
+%% Autor: MediaLab Ingeniería  |  Sitio objetivo: medialab.design
+%%
+%% CÓMO USARLO:
+%%   · Visual:  pega este archivo en https://mermaid.live  (lo renderiza al instante)
+%%   · CLI:     npx @mermaid-js/mermaid-cli -i organic-ux-ai-demand-radar.mmd -o radar.svg
+%%   · VS Code: extensión "Markdown Preview Mermaid Support" o "Mermaid Preview"
+%%
+%% LEYENDA DE FLECHAS:
+%%   -->   flujo obligatorio        -.->  fuente/paso OPCIONAL (sigue si no está configurado)
+%% ─────────────────────────────────────────────────────────────────────────
+flowchart TD
+
+  %% ===================== 0. ENTRADAS Y COMANDOS =====================
+  subgraph CMD["🟢 COMANDOS MANUALES (npm) — sin cron, sin scheduler"]
+    direction LR
+    K0["npm run test-config<br/>valida .env + APIs"]
+    K1["npm run audit<br/>auditoría general"]
+    K2["npm run audit:morning<br/>reporte mañana"]
+    K3["npm run audit:evening<br/>reporte tarde/noche"]
+    K4["npm run compare<br/>consolida mañana vs noche"]
+    K5["npm run ai-trends<br/>solo tendencias IA"]
+    K6["npm run generate-briefs<br/>briefs accionables"]
+  end
+
+  subgraph CFG["⚙️ CONFIGURACIÓN E INSUMOS (src/config.ts · zod)"]
+    direction LR
+    G1[".env<br/>SITE_URL · GSC · keys opcionales"]
+    G2["data/strategic-keywords.json"]
+    G3["data/competitors.json"]
+    G4["data/ai-trend-categories.json"]
+    G5["data/*.csv<br/>trends · ai-trends · ossinsight · social"]
+    G6["credentials/service-account.json<br/>(Search Console)"]
+  end
+
+  %% ===================== 1. DESCUBRIMIENTO =====================
+  subgraph DISC["1 · DESCUBRIMIENTO DE URLs"]
+    direction LR
+    S1["sitemap.ts<br/>getSitemapUrls()<br/>index + anidados · limpia · prioriza"]
+    S2["robots.ts<br/>respeta reglas · marca bloqueadas"]
+    S1 --> S2
+    S2 --> QUEUE["📋 Cola priorizada<br/>Home→Servicios→Landings→Casos→Blog→Recursos"]
+  end
+
+  %% ===================== 2. AUDITORÍA POR PÁGINA =====================
+  subgraph PAGE["2 · AUDITORÍA POR PÁGINA (por URL, con p-limit + REQUEST_DELAY_MS)"]
+    direction TB
+    A1["crawler.ts · auditPage()<br/>title/meta/H1 · schema · OG · CTAs · tipo de página"]
+    A2["lighthouseAudit.ts<br/>Perf · SEO · A11y · CWV (LCP/CLS/INP)"]
+    A3["accessibilityAudit.ts<br/>axe-core + Pa11y · WCAG"]
+    A4["uxAudit.ts<br/>UXScore heurístico (hero/CTA/prueba social)"]
+    A5["uxAIAudit.ts<br/>AIServicesUXScore (qué hace IA vs humano)"]
+    A6["designAIAudit.ts<br/>DesignAIScore · screenshots desktop+mobile"]
+    A7["developmentOptimization.ts<br/>DevScore · pesos · headers seguridad · 404"]
+    A8["aiSearchReadiness.ts<br/>GEO/AEO Score (respuesta directa · FAQ · schema)"]
+    A6 -.-> SHOT["screenshots/<br/>screenshotUtils.ts (Playwright)"]
+    A6 -.-> AIOPT["IA multimodal OPCIONAL<br/>(OPENAI_API_KEY + USE_AI_ANALYSIS)"]
+  end
+
+  %% ===================== 3. DEMANDA Y TENDENCIAS =====================
+  subgraph DEMAND["3 · DEMANDA, BÚSQUEDA Y TENDENCIAS"]
+    direction TB
+    D1["searchConsole.ts<br/>googleapis · 7 días · QuickWins/CTR bajo/casi top10"]
+    D2["googleTrends.ts<br/>CSV (recom.) · crecimiento mayor a 20% = oportunidad"]
+    D3["aiTrendsAnalyzer.ts<br/>GitHub Trending/Topics/API · OSSInsight · CSV"]
+    D4["youtube.ts<br/>API o CSV · demanda de formato"]
+    D5["reddit.ts<br/>dolores · objeciones · lenguaje real"]
+    D6["instagram.ts · facebook.ts · xSearch.ts<br/>propio o CSV (no publica, no interactúa)"]
+    D7["competitorAnalyzer.ts<br/>máx 10 págs/competidor · gaps IA/UX/dev"]
+  end
+
+  %% ===================== 4. AI TRENDS ANALYZER (detalle) =====================
+  subgraph AITR["3b · AI TRENDS ANALYZER — pipeline interno"]
+    direction LR
+    T1["getGitHubAITrends()<br/>topics: ai-agents·llm·rag·mcp·generative-ui…"]
+    T2["loadAITrendsFromCSV()<br/>fallback sin token"]
+    T3["classifyAITrendCategory()"]
+    T4["calculateAITrendScore()<br/>stars+growth+recency+relevancia+gap"]
+    T5["mapAITrendToMediaLabServices()"]
+    T6["detectAITrendGapsAgainstWebsite()"]
+    T7["generateAITrendRecommendations()"]
+    T1 --> T3
+    T2 --> T3
+    T3 --> T4 --> T5 --> T6 --> T7
+  end
+
+  %% ===================== 5. SÍNTESIS =====================
+  subgraph SYNTH["4 · SÍNTESIS Y PRIORIZACIÓN"]
+    direction TB
+    X1["crossChannelAnalyzer.ts<br/>opportunityScore = trends + GSC + aiTrend + UX +<br/>designAI + dev + youtube + social + reddit +<br/>intención comercial + gap AEO + gap competidor − dificultad"]
+    X2["scoring.ts · intentClassifier.ts · textAnalysis.ts<br/>clasifica: Alta 25+ · Media 15-24 · Baja menor a 15"]
+    X3["prioritizer.ts<br/>P1 crítico (noindex/404/hero/IA mal explicada) ·<br/>P2 alto (8-20, CTR, UX débil, GEO bajo) · P3 menor"]
+    X1 --> X2 --> X3
+    X3 --> BACKLOG["🎯 Backlog accionable<br/>MÁX 5 tareas prioritarias"]
+  end
+
+  %% ===================== 6. SALIDAS =====================
+  subgraph OUT["5 · SALIDAS (reportGenerator.ts)"]
+    direction TB
+    R1["reports/manual-runs/<br/>morning|evening|manual-report-YYYY-MM-DD-HH-mm<br/>.json + .md"]
+    R2["manualComparison.ts → compareLatestManualAudits()<br/>persistente / observar / mejora / prioridad"]
+    R3["reports/comparisons/<br/>manual-comparison-YYYY-MM-DD .md/.json<br/>Estado: saludable · necesita atención · crítico"]
+    R4["briefGenerator.ts → reports/briefs/<br/>landing · artículo · video · carrusel · UX-IA · diseño-IA"]
+    R2 --> R3
+  end
+
+  %% ===================== CONEXIONES PRINCIPALES =====================
+  CFG --> DISC
+  G1 --> CMD
+
+  K1 --> DISC
+  K2 --> DISC
+  K3 --> DISC
+
+  QUEUE --> A1
+  A1 --> A2 --> A3 --> A4 --> A5 --> A6 --> A7 --> A8
+
+  %% Insumos opcionales hacia demanda (continúa aunque falten)
+  G6 -.-> D1
+  G5 -.-> D2
+  G5 -.-> D3
+  G5 -.-> D4
+  G5 -.-> D6
+  G3 --> D7
+  G4 --> D3
+  D3 --> AITR
+
+  %% Comando dedicado de tendencias
+  K5 --> AITR
+  AITR --> X1
+
+  %% Todo converge en la síntesis
+  A8 --> X1
+  D1 --> X1
+  D2 --> X1
+  D4 --> X1
+  D5 --> X1
+  D6 --> X1
+  D7 --> X1
+
+  %% Síntesis → salidas
+  BACKLOG --> R1
+  X1 --> R1
+  AIOPT -.-> R4
+
+  %% Reportes → comparación → briefs
+  R1 --> K4
+  K4 --> R2
+  R3 --> BACKLOG
+  K6 --> R4
+  BACKLOG --> R4
+
+  %% ===================== FLUJO MANUAL RECOMENDADO (diario) =====================
+  subgraph FLOW["🔁 FLUJO MANUAL DIARIO RECOMENDADO"]
+    direction LR
+    F1(["☀️ Mañana<br/>audit:morning"]) --> F2(["🌙 Tarde/Noche<br/>audit:evening"]) --> F3(["🔀 compare"]) --> F4(["🧾 generate-briefs"]) --> F5(["✅ Backlog ≤5 + briefs<br/>listo para ejecutar"])
+  end
+
+  %% ===================== RESILIENCIA (regla transversal) =====================
+  subgraph RES["🛡️ RESILIENCIA (utils/) — nunca detener todo"]
+    direction LR
+    U1["logger.ts · warnings legibles"]
+    U2["rateLimiter.ts · p-limit · REQUEST_DELAY_MS"]
+    U3["csvLoader.ts · fallback sin API"]
+    U4["fileUtils.ts · guarda reporte aunque falten datos"]
+    U5["urlUtils.ts · normaliza · sin duplicados"]
+  end
+
+  PAGE -.-> RES
+  DEMAND -.-> RES
+  SYNTH -.-> RES
+
+  %% ===================== ESTILOS =====================
+  classDef cmd fill:#0f766e,stroke:#5eead4,color:#ecfeff,stroke-width:1px;
+  classDef cfg fill:#1e293b,stroke:#94a3b8,color:#e2e8f0;
+  classDef audit fill:#7c2d12,stroke:#fdba74,color:#fff7ed;
+  classDef demand fill:#1e3a8a,stroke:#93c5fd,color:#eff6ff;
+  classDef synth fill:#4c1d95,stroke:#c4b5fd,color:#f5f3ff;
+  classDef out fill:#064e3b,stroke:#6ee7b7,color:#ecfdf5;
+  classDef flow fill:#111827,stroke:#f59e0b,color:#fffbeb,stroke-width:2px;
+  classDef res fill:#0c4a6e,stroke:#7dd3fc,color:#f0f9ff;
+  classDef key fill:#b91c1c,stroke:#fecaca,color:#fff,stroke-width:2px;
+
+  class K0,K1,K2,K3,K4,K5,K6 cmd;
+  class G1,G2,G3,G4,G5,G6 cfg;
+  class S1,S2,QUEUE,A1,A2,A3,A4,A5,A6,A7,A8,SHOT,AIOPT audit;
+  class D1,D2,D3,D4,D5,D6,D7,T1,T2,T3,T4,T5,T6,T7 demand;
+  class X1,X2,X3 synth;
+  class BACKLOG key;
+  class R1,R2,R3,R4 out;
+  class F1,F2,F3,F4,F5 flow;
+  class U1,U2,U3,U4,U5 res;

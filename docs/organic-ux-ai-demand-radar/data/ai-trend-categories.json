@@ -1,0 +1,12 @@
+[
+  { "category": "AI Agents", "keywords": ["agent", "agentic", "autonomous agent", "multi-agent", "workflow agent"], "relevanceToMediaLab": "automatización de flujos, investigación UX asistida, operaciones internas y productos digitales" },
+  { "category": "AI Coding", "keywords": ["coding assistant", "vibe coding", "code agent", "dev agent", "copilot", "cursor", "codex"], "relevanceToMediaLab": "optimización de desarrollo, prototipado rápido, reducción de tiempo en frontend" },
+  { "category": "AI Design", "keywords": ["ai design", "design assistant", "figma ai", "generative ui", "ui generation", "design system ai"], "relevanceToMediaLab": "diseño aumentado con IA, aceleración de diseño UI y sistemas de diseño" },
+  { "category": "RAG", "keywords": ["rag", "retrieval augmented generation", "knowledge base", "vector search"], "relevanceToMediaLab": "asistentes de conocimiento, documentación, soporte, investigación y UX conversacional" },
+  { "category": "MCP", "keywords": ["mcp", "model context protocol", "mcp server"], "relevanceToMediaLab": "integración de agentes con herramientas, workflows y automatización" },
+  { "category": "AI Search / GEO", "keywords": ["ai search", "geo", "aeo", "ai overview", "answer engine", "generative engine optimization"], "relevanceToMediaLab": "posicionamiento en buscadores de IA y contenido preparado para respuestas generativas" },
+  { "category": "UX Research AI", "keywords": ["user research ai", "ux research", "interview analysis", "survey analysis", "sentiment analysis"], "relevanceToMediaLab": "investigación UX más rápida, análisis de entrevistas, síntesis de insights" },
+  { "category": "AI Accessibility", "keywords": ["accessibility ai", "wcag ai", "alt text generation", "a11y"], "relevanceToMediaLab": "auditoría de accesibilidad, contenido inclusivo y diseño universal" },
+  { "category": "Generative UI", "keywords": ["generative ui", "ui generation", "ai ui builder", "text to ui", "prompt to ui"], "relevanceToMediaLab": "prototipado rápido, validación temprana y diseño de interfaces asistido por IA" },
+  { "category": "AI Product Strategy", "keywords": ["ai product", "ai product management", "ai product strategy", "product ai"], "relevanceToMediaLab": "consultoría para crear productos digitales con IA centrados en humanos" }
+]

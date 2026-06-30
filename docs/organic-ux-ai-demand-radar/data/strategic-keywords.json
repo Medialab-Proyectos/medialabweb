@@ -1,0 +1,16 @@
+[
+  { "keyword": "agencia ux ui colombia", "intent": "commercial", "priority": "high", "recommendedType": "landing" },
+  { "keyword": "diseño ux ui colombia", "intent": "commercial", "priority": "high", "recommendedType": "landing" },
+  { "keyword": "consultoría ux colombia", "intent": "commercial", "priority": "high", "recommendedType": "landing" },
+  { "keyword": "auditoría ux página web", "intent": "commercial", "priority": "high", "recommendedType": "landing" },
+  { "keyword": "ux con ia", "intent": "commercial", "priority": "high", "recommendedType": "landing" },
+  { "keyword": "diseño con ia", "intent": "informational", "priority": "medium", "recommendedType": "blog" },
+  { "keyword": "diseño aumentado con ia", "intent": "commercial", "priority": "high", "recommendedType": "landing" },
+  { "keyword": "optimización ux con inteligencia artificial", "intent": "commercial", "priority": "high", "recommendedType": "landing" },
+  { "keyword": "optimización de desarrollo frontend", "intent": "commercial", "priority": "medium", "recommendedType": "landing" },
+  { "keyword": "cómo mejorar conversión página web", "intent": "informational", "priority": "high", "recommendedType": "blog" },
+  { "keyword": "diseño de agentes ia", "intent": "commercial", "priority": "high", "recommendedType": "landing" },
+  { "keyword": "investigación ux con ia", "intent": "commercial", "priority": "high", "recommendedType": "landing" },
+  { "keyword": "accesibilidad web con ia", "intent": "commercial", "priority": "medium", "recommendedType": "landing" },
+  { "keyword": "posicionamiento en buscadores ia", "intent": "commercial", "priority": "high", "recommendedType": "landing" }
+]

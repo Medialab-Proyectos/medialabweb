@@ -1,0 +1,44 @@
+{
+  "runType": "morning",
+  "date": "2026-06-27",
+  "time": "05:29",
+  "site": "medialab.design",
+  "status": "necesita atención",
+  "scores": {
+    "seo": 74,
+    "ux": 72,
+    "uxAI": 55,
+    "designAI": 60,
+    "development": 68,
+    "accessibility": 70,
+    "aeoReadiness": 58,
+    "aiTrends": 82
+  },
+  "scoreNotes": {
+    "designAI": "aproximado — sin screenshots",
+    "development": "security headers sin verificar en vivo",
+    "accessibility": "heurístico — sin axe/Pa11y"
+  },
+  "pagesAudited": [
+    { "url": "/", "type": "home", "status": "bueno", "issues": ["hero no menciona agencia UX/UI Colombia/Latam en primer pantallazo"] },
+    { "url": "/servicios", "type": "service", "status": "revisar", "issues": ["doble H1", "sin FAQ", "IA sin delimitar IA vs humano"] },
+    { "url": "/curso", "type": "landing", "status": "fuerte", "issues": ["contador de urgencia en 00:00 (roto)"] },
+    { "url": "/portafolio", "type": "case-study", "status": "fuerte", "issues": [] }
+  ],
+  "inventoryGaps": ["/ux-con-ia", "/diseno-agentes-ia", "/auditoria-ux", "/posicionamiento-en-buscadores-ia", "/diseno-aumentado-con-ia", "/optimizacion-frontend-con-ia"],
+  "aiTrends": [
+    { "category": "AI Agents", "score": 90, "coverage": "none", "opportunity": "/diseno-agentes-ia" },
+    { "category": "MCP", "score": 80, "coverage": "none", "opportunity": "artículo de autoridad MCP" },
+    { "category": "Generative UI", "score": 78, "coverage": "none", "opportunity": "artículo Generative UI" },
+    { "category": "RAG privado", "score": 75, "coverage": "none", "opportunity": "landing experiencias conversacionales" },
+    { "category": "AI Coding", "score": 72, "coverage": "weak", "opportunity": "/optimizacion-frontend-con-ia" }
+  ],
+  "backlog": [
+    { "priority": "P1", "task": "Desplegar correcciones ya hechas (title, OG 1200x630, imágenes blog locales, alternateName)", "signal": "trabajo previo sin publicar" },
+    { "priority": "P1", "task": "Crear landing /ux-con-ia", "signal": "gap de inventario + AI-Trends 82" },
+    { "priority": "P1", "task": "Crear landing /diseno-agentes-ia", "signal": "tendencia #1 2026 + keyword estratégica" },
+    { "priority": "P2", "task": "Arreglar /servicios: doble H1 + sección IA-vs-humano + FAQ", "signal": "UX-IA 55 + AEO 58" },
+    { "priority": "P2", "task": "Crear landing /auditoria-ux", "signal": "gap inventario + intención comercial" }
+  ],
+  "warnings": ["GSC no pegado", "PageSpeed no pegado", "competidores placeholder", "WebFetch no parsea <head> (validado contra código)"]
+}
