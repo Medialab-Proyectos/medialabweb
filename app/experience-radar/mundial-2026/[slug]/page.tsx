@@ -379,16 +379,17 @@ function resolveTeamPhases(
     const tr = article.teamRadars?.find((x) => x.team === team)
     if (tr) {
       const realidad = tr.current.emotional
-      const built: MatchPhases = { expectativa: projectExpectation(realidad) }
+      const built: MatchPhases = { expectativa: tr.before?.emotional ?? phases.expectativa }
       if (phases.realidad) built.realidad = realidad
       if (phases.percepcion && canProjectNextMatch) built.percepcion = tr.predicted.emotional
       return { team, phases: built, nextOpponent, eliminated }
     }
     const collective = article.collectiveByTeam?.find((c) => c.team === team)
-    const lean = teamLean(team, `${collective?.mood ?? ""} ${collective?.behaviorEffect ?? ""}`)
-    const built: MatchPhases = { expectativa: leanEmotional(phases.expectativa, lean) }
-    if (phases.realidad) built.realidad = leanEmotional(phases.realidad, lean)
-    if (phases.percepcion && canProjectNextMatch) built.percepcion = leanEmotional(phases.percepcion, lean)
+    const beforeLean = teamLean(team, "")
+    const afterLean = teamLean(team, `${collective?.mood ?? ""} ${collective?.behaviorEffect ?? ""}`)
+    const built: MatchPhases = { expectativa: leanEmotional(phases.expectativa, beforeLean) }
+    if (phases.realidad) built.realidad = leanEmotional(phases.realidad, afterLean)
+    if (phases.percepcion && canProjectNextMatch) built.percepcion = leanEmotional(phases.percepcion, afterLean)
     return { team, phases: built, nextOpponent, eliminated }
   })
 }

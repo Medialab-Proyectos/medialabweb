@@ -69,6 +69,7 @@ export interface TeamRadarState {
  */
 export interface TeamRadar {
   team: string
+  before?: TeamRadarState
   current: TeamRadarState
   predicted: TeamRadarState
 }

@@ -174,6 +174,7 @@ interface FinishedTeam {
   expectationVsReality: string
   mood: string
   behaviorEffect: string
+  before?: EmotionalRadarValues
   current: EmotionalRadarValues
   predicted: EmotionalRadarValues
   /** Experiencia de usuario vivida ESPECÍFICA de esta hinchada, por etapa (opcional). */
@@ -232,6 +233,10 @@ function finishedMatch(input: {
 }): RadarArticleInput {
   const teamRadars: TeamRadar[] = input.teamsData.map((t) => ({
     team: t.team,
+    before: {
+      score: avgEmo(t.before ?? input.combined.expectativa),
+      emotional: t.before ?? input.combined.expectativa,
+    },
     current: { score: avgEmo(t.current), emotional: t.current },
     predicted: { score: avgEmo(t.predicted), emotional: t.predicted },
   }))
