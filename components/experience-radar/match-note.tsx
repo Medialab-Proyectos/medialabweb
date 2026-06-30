@@ -478,11 +478,10 @@ function FanJourney({
   // así no hay un clic extra y la emoción del paso no se pierde dentro de su caja.
   const showPrediction = current === "percepcion" && !!prediction && !!phases.percepcion
 
-  // Predicción «Antes»: nace de un análisis previo (la nota anterior de esta selección, donde
-  // ya se proyectó cómo llegaría) o, si no existe, de la voz de la hinchada en esta nota
-  // (radar de expectativa). Aparece al elegir «Antes», igual que el pronóstico en «Predicción».
+  // Predicción «Antes»: usa primero la expectativa congelada de esta nota. La nota anterior
+  // queda solo como fallback para casos heredados sin previa propia.
   const prior = selectedTeam ? priorByTeam?.[selectedTeam] : undefined
-  const anteEmotional = prior?.emotional ?? phases.expectativa
+  const anteEmotional = phases.expectativa ?? prior?.emotional
   const antePrediction = fanPrediction(anteEmotional)
   const showAnte = current === "expectativa" && !!antePrediction && !!phases.expectativa
 
