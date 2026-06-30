@@ -37,6 +37,7 @@ export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
   const [fontIndex, setFontIndex] = useState(0)
+  const [activeHash, setActiveHash] = useState("")
   const { theme, setTheme } = useTheme()
   const { lang, setLang, localized } = useLanguage()
   const pathname = usePathname()
@@ -137,6 +138,36 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
+  // Scroll-spy: en el home, subraya el enlace cuya sección está a la vista
+  // (Servicios → #services, UXBox → #uxbox). IntersectionObserver, no scroll-bound.
+  useEffect(() => {
+    if (!isHome) {
+      setActiveHash("")
+      return
+    }
+    const ids = currentLinks
+      .filter((l) => l.href.startsWith("/#"))
+      .map((l) => l.href.replace("/#", ""))
+    const els = ids
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => el !== null)
+    if (!els.length) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.filter((e) => e.isIntersecting)
+        if (!visible.length) return
+        const best = visible.reduce((a, b) =>
+          Math.abs(a.boundingClientRect.top) < Math.abs(b.boundingClientRect.top) ? a : b,
+        )
+        setActiveHash(best.target.id)
+      },
+      { rootMargin: "-30% 0px -55% 0px", threshold: [0, 0.2, 0.5] },
+    )
+    els.forEach((el) => observer.observe(el))
+    return () => observer.disconnect()
+  }, [isHome, currentLinks])
+
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${forceDarkNav ? "uxgreen-nav" : ""} ${
@@ -206,7 +237,11 @@ export function Navbar() {
                     ? "text-[#00BFA6]/80 hover:text-[#00BFA6]"
                     : "text-[#00BFA6]/70 hover:text-[#00BFA6]"
                   : linkIdle
-              } ${isLinkActive(link.href) ? "after:!w-full" : ""}`}
+              } ${
+                isLinkActive(link.href) || (isHome && link.href === `/#${activeHash}`)
+                  ? "after:!w-full"
+                  : ""
+              }`}
             >
               {(link as any).highlight && (
                 <span className="absolute -top-1 -right-1.5 w-1.5 h-1.5 rounded-full bg-[var(--magenta)] animate-pulse" />
