@@ -43,6 +43,26 @@ export type BlogPost = {
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: "el-gol-en-pausa",
+    categoryEs: "UX y Comportamiento Humano",
+    categoryEn: "UX & Human Behavior",
+    titleEs: "El Gol en Pausa: Cómo el VAR Está Cambiando la Emoción y el Comportamiento del Hincha",
+    titleEn: "The Goal on Pause: How VAR Is Changing Fan Emotion and Behavior",
+    shortTitleEs: "El Gol en Pausa: el VAR y la Emoción del Hincha",
+    shortTitleEn: "The Goal on Pause: VAR and Fan Emotion",
+    excerptEs:
+      "Una solución puede ser técnicamente correcta y emocionalmente dañina. El VAR es la metáfora perfecta del diseño tecnológico que se obsesiona con tener razón y olvida cómo se siente usarlo.",
+    excerptEn:
+      "A solution can be technically correct and emotionally damaging. VAR is the perfect metaphor for technology that obsesses over being right and forgets how it feels to use it.",
+    readTime: "12 min",
+    dateEs: "Junio 2026",
+    dateEn: "June 2026",
+    image: "/images/blog-gol-en-pausa.png",
+    color: "#2AABB3",
+    lastModified: "2026-06-30",
+    priority: 0.85,
+  },
+  {
     slug: "dirigir-inteligencias",
     categoryEs: "IA y Futuro del Trabajo",
     categoryEn: "AI & Future of Work",
