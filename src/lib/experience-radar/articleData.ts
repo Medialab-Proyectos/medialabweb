@@ -233,10 +233,7 @@ function finishedMatch(input: {
 }): RadarArticleInput {
   const teamRadars: TeamRadar[] = input.teamsData.map((t) => ({
     team: t.team,
-    before: {
-      score: avgEmo(t.before ?? input.combined.expectativa),
-      emotional: t.before ?? input.combined.expectativa,
-    },
+    ...(t.before ? { before: { score: avgEmo(t.before), emotional: t.before } } : {}),
     current: { score: avgEmo(t.current), emotional: t.current },
     predicted: { score: avgEmo(t.predicted), emotional: t.predicted },
   }))
@@ -9332,9 +9329,10 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
         expectationVsReality: "La expectativa era incomodar; la realidad fue estar muy cerca de llevar al favorito a prorroga.",
         mood: "Orgullo triste.",
         behaviorEffect: "La conversacion marfilena queda menos en derrota y mas en reconocimiento a Amad y a una eliminacion con dignidad competitiva.",
+        before: { euforia: 70, confianza: 64, ansiedad: 68, frustracion: 16, incertidumbre: 52, optimismo: 66 },
         current: { euforia: 28, confianza: 58, ansiedad: 32, frustracion: 72, incertidumbre: 36, optimismo: 50 },
         predicted: { euforia: 38, confianza: 54, ansiedad: 34, frustracion: 58, incertidumbre: 42, optimismo: 48 },
-        userExperience: { realidad: "El gol de Amad transformo el feed marfileno de resistencia a posibilidad real.", percepcion: "Tras el 86', la eliminacion se proceso con orgullo por haber obligado a Haaland a resolver la noche." },
+        userExperience: { expectativa: "La comunidad marfilena llega con menos ruido global, pero con expectativa fuerte de incomodar al favorito narrativo.", realidad: "El gol de Amad transformo el feed marfileno de resistencia a posibilidad real.", percepcion: "Tras el 86', la eliminacion se proceso con orgullo por haber obligado a Haaland a resolver la noche." },
       },
       {
         team: "Noruega",
@@ -9347,9 +9345,10 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
         expectationVsReality: "La expectativa era ganar con figura; la realidad fue sufrir y aun asi encontrar la respuesta de jerarquia.",
         mood: "Euforia historica.",
         behaviorEffect: "La audiencia noruega adopta el triunfo como prueba de pertenencia: ya no es solo estar en el Mundial, es ganar un cruce.",
+        before: { euforia: 72, confianza: 70, ansiedad: 66, frustracion: 14, incertidumbre: 48, optimismo: 74 },
         current: { euforia: 96, confianza: 88, ansiedad: 14, frustracion: 8, incertidumbre: 18, optimismo: 92 },
         predicted: { euforia: 78, confianza: 74, ansiedad: 44, frustracion: 14, incertidumbre: 46, optimismo: 76 },
-        userExperience: { realidad: "El 1-1 aumento la recarga ansiosa: cada ataque marfileno hacia parecer fragil la historia noruega.", percepcion: "El gol de Haaland reencuadro la noche como hito nacional y como antesala de un duelo enorme ante Brasil." },
+        userExperience: { expectativa: "La audiencia noruega consume la previa como examen de madurez: ganar cuando el foco externo ya los mira como favoritos.", realidad: "El 1-1 aumento la recarga ansiosa: cada ataque marfileno hacia parecer fragil la historia noruega.", percepcion: "El gol de Haaland reencuadro la noche como hito nacional y como antesala de un duelo enorme ante Brasil." },
       },
     ],
     lessons: [
@@ -9427,9 +9426,10 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
         expectationVsReality: "La expectativa era controlar; la realidad fue una victoria limpia que redujo dudas.",
         mood: "Autoridad satisfecha.",
         behaviorEffect: "La hinchada francesa pasa de exigir senales tempranas a compartir una lectura de candidatura reforzada.",
+        before: { euforia: 78, confianza: 86, ansiedad: 49, frustracion: 11, incertidumbre: 37, optimismo: 86 },
         current: { euforia: 88, confianza: 90, ansiedad: 12, frustracion: 8, incertidumbre: 16, optimismo: 92 },
         predicted: { euforia: 78, confianza: 82, ansiedad: 36, frustracion: 14, incertidumbre: 34, optimismo: 84 },
-        userExperience: { realidad: "El gol al 45' bajo la ansiedad acumulada y cambio el tono del consumo digital hacia celebracion de jerarquia.", percepcion: "El doblete de Mbappe y el impacto de Barcola dejaron una memoria de equipo profundo, no solo de figura." },
+        userExperience: { expectativa: "La hinchada francesa busca una senal temprana de autoridad para no convertir la previa en ansiedad acumulada.", realidad: "El gol al 45' bajo la ansiedad acumulada y cambio el tono del consumo digital hacia celebracion de jerarquia.", percepcion: "El doblete de Mbappe y el impacto de Barcola dejaron una memoria de equipo profundo, no solo de figura." },
       },
       {
         team: "Suecia",
@@ -9442,9 +9442,10 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
         expectationVsReality: "La expectativa era competir cerrado; la realidad fue quedar expuesta ante la profundidad francesa.",
         mood: "Frustracion resignada.",
         behaviorEffect: "La conversacion sueca queda en clave de diferencia de nivel y de oportunidades no convertidas antes del primer gol.",
+        before: { euforia: 58, confianza: 62, ansiedad: 67, frustracion: 17, incertidumbre: 47, optimismo: 62 },
         current: { euforia: 12, confianza: 28, ansiedad: 52, frustracion: 82, incertidumbre: 58, optimismo: 20 },
         predicted: { euforia: 24, confianza: 34, ansiedad: 48, frustracion: 66, incertidumbre: 54, optimismo: 30 },
-        userExperience: { realidad: "La primera media hora sostuvo esperanza, pero el 1-0 al 45' se vivio como corte de energia.", percepcion: "Tras el 3-0, el recuerdo digital se ordeno alrededor de la superioridad francesa y de una eliminacion sin polemica salvadora." },
+        userExperience: { expectativa: "La audiencia sueca llega con esperanza prudente: menos expectativa de dominio, mas atencion a momentos puntuales.", realidad: "La primera media hora sostuvo esperanza, pero el 1-0 al 45' se vivio como corte de energia.", percepcion: "Tras el 3-0, el recuerdo digital se ordeno alrededor de la superioridad francesa y de una eliminacion sin polemica salvadora." },
       },
     ],
     lessons: [
@@ -9522,9 +9523,10 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
         expectationVsReality: "La expectativa era controlar la presion; la realidad fue convertirla en arranque decisivo.",
         mood: "Liberacion colectiva.",
         behaviorEffect: "La hinchada mexicana paso de presion previa a celebracion masiva por romper una barrera emocional de decadas.",
+        before: { euforia: 86, confianza: 72, ansiedad: 82, frustracion: 16, incertidumbre: 52, optimismo: 78 },
         current: { euforia: 98, confianza: 92, ansiedad: 16, frustracion: 8, incertidumbre: 18, optimismo: 96 },
         predicted: { euforia: 84, confianza: 80, ansiedad: 42, frustracion: 14, incertidumbre: 40, optimismo: 84 },
-        userExperience: { realidad: "Los goles de Quinones y Jimenez hicieron que el feed mexicano pasara de tension local a descarga de orgullo inmediato.", percepcion: "El relato posterior se ordena alrededor de romper la sequia y de creer que el anfitrion puede ir mas lejos." },
+        userExperience: { expectativa: "La hinchada mexicana llega en modo movilizacion total: horarios, accesos, cantos y presion previa forman parte de la experiencia.", realidad: "Los goles de Quinones y Jimenez hicieron que el feed mexicano pasara de tension local a descarga de orgullo inmediato.", percepcion: "El relato posterior se ordena alrededor de romper la sequia y de creer que el anfitrion puede ir mas lejos." },
       },
       {
         team: "Ecuador",
@@ -9537,9 +9539,10 @@ const ARTICLE_INPUTS: RadarArticleInput[] = [
         expectationVsReality: "La expectativa era resistencia; la realidad fue quedar demasiado pronto obligado a perseguir.",
         mood: "Frustracion y cierre abrupto.",
         behaviorEffect: "La comunidad ecuatoriana paso del orgullo defensivo a una conversacion de oportunidad perdida y fin de ciclo.",
+        before: { euforia: 64, confianza: 68, ansiedad: 72, frustracion: 14, incertidumbre: 48, optimismo: 70 },
         current: { euforia: 10, confianza: 30, ansiedad: 54, frustracion: 88, incertidumbre: 64, optimismo: 18 },
         predicted: { euforia: 20, confianza: 34, ansiedad: 50, frustracion: 70, incertidumbre: 58, optimismo: 24 },
-        userExperience: { realidad: "El 2-0 temprano obligo a consumir el partido desde urgencia permanente, no desde el plan defensivo esperado.", percepcion: "La roja de Hincapie y la salida del torneo concentraron la frustracion digital ecuatoriana." },
+        userExperience: { expectativa: "La comunidad ecuatoriana consume la previa como prueba de resistencia emocional ante estadio, ruido y una narrativa local enorme.", realidad: "El 2-0 temprano obligo a consumir el partido desde urgencia permanente, no desde el plan defensivo esperado.", percepcion: "La roja de Hincapie y la salida del torneo concentraron la frustracion digital ecuatoriana." },
       },
     ],
     lessons: [
