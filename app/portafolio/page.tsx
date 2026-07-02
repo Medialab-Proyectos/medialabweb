@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import { PortfolioContent } from "./portfolio-content"
 
 export const metadata: Metadata = {
-  title: "Portafolio — Casos de Éxito en UX, IA y Productos Digitales",
+  title: { absolute: "Portafolio UX, IA y Producto Digital en Colombia | MediaLab" },
   description:
     "Descubre cómo MediaLab Ingeniería ha transformado productos digitales para empresas B2B y B2C, incluyendo SinDeudas para finanzas conductuales y Cumbreva para movilidad eléctrica.",
   keywords: [

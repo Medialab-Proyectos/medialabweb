@@ -1,0 +1,51 @@
+{
+  "type": "morning",
+  "date": "2026-06-30",
+  "time": "04:01",
+  "site": "medialab.design",
+  "status": "necesita atención",
+  "method": "live WebFetch (home, /servicios, /servicios/diseno-ux-ui, /curso, /portafolio, /llms.txt) + source-of-truth code (read-only) + WebSearch/News trends. Reddit RSS blocked. GSC/PageSpeed not provided.",
+  "scores": {
+    "seoTecnico": 76,
+    "uxHeuristico": 76,
+    "uxParaIA": 58,
+    "disenoIA": 62,
+    "desarrollo": 71,
+    "accesibilidad": 72,
+    "aeoAiReadiness": 66,
+    "aiTrendsOportunidad": 84
+  },
+  "pages": [
+    { "url": "/", "type": "home", "status": "bueno", "issues": ["title 77 chars sin Colombia", "hero sin ubicación arriba"], "h1": 1, "faq": true },
+    { "url": "/servicios", "type": "service", "status": "revisar", "issues": ["sin FAQ", "IA vs humano sin delimitar"], "h1": 1, "faq": false, "words": 2300 },
+    { "url": "/servicios/diseno-ux-ui", "type": "landing", "status": "solido", "issues": ["sin casos visibles", "sin mención Colombia"], "h1": 1, "faq": true, "words": 1250 },
+    { "url": "/curso", "type": "landing", "status": "bug", "issues": ["contador 00d 00h 00m 00s (urgencia rota)"], "h1": 1, "faq": true },
+    { "url": "/portafolio", "type": "case-study", "status": "fuerte", "issues": ["texto fino ~350 palabras"], "h1": 1, "casos": 6 },
+    { "url": "/llms.txt", "type": "geo-asset", "status": "vivo", "issues": [] }
+  ],
+  "trends": [
+    { "category": "Generative UI", "signal": "tendencia #1 2026 (UX Tigers, Stan.vision)", "service": "diseño aumentado con IA", "format": "landing+articulo", "score": 86 },
+    { "category": "AI Agents", "signal": "60% diseñadores impacto mayor 2026 (UXmatters)", "service": "flujos con IA / agentes", "format": "landing+caso", "score": 84 },
+    { "category": "AI Search/GEO", "signal": "AI Overviews CTR -50/61%, citados +35% (Seer/Ahrefs)", "service": "visibilidad propia", "format": "schema+autoría", "score": 80 },
+    { "category": "AI Design tools", "signal": "Figma AI, Google Stitch, GenUI (News CO/LatAm)", "service": "curso + diseño con IA", "format": "articulo/reel", "score": 72 }
+  ],
+  "backlog": [
+    { "p": 1, "task": "Reparar/quitar contador del curso (00d 00h 00m)", "signal": "WebFetch /curso persistente desde 2026-06-27", "scope": "bug-conversion" },
+    { "p": 1, "task": "SEO local + AEO: Colombia/LatAm en titles y metadescriptions Home + servicios", "signal": "keyword #1 + AIO premia entidad geográfica", "scope": "seo", "applied": true },
+    { "p": 2, "task": "FAQ real + FAQPage schema en /servicios (IA vs humano)", "signal": "WebFetch /servicios sin FAQ", "scope": "content+seo" },
+    { "p": 2, "task": "Abrir landing tendencia IA (/diseno-aumentado-con-ia o /diseno-agentes-ia)", "signal": "GenUI+agentes pico, cobertura 0", "scope": "content" },
+    { "p": 3, "task": "Engordar /portafolio a >=500 palabras + validar ItemList", "signal": "WebFetch /portafolio ~350 palabras", "scope": "content+seo" }
+  ],
+  "warnings": [
+    "GSC no disponible (pegar export CSV)",
+    "PageSpeed/CWV no medido",
+    "Reddit RSS bloqueado (429/red)",
+    "competitors.json con placeholders",
+    "scores diseño-IA/a11y/dev heurísticos"
+  ],
+  "appliedFixes": [
+    "home title localizado+acortado (Colombia, ~55 chars)",
+    "metadescriptions home + /servicios con entidad geográfica",
+    "titles /servicios y /portafolio afinados con ubicación"
+  ]
+}

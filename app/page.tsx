@@ -26,9 +26,9 @@ import { HomeScrollRestorer } from "@/components/home-scroll-restorer"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Diseño de Productos Digitales con UX, IA y Psicología | MediaLab Ingeniería",
+  title: "Agencia de Diseño UX/UI con IA en Colombia | MediaLab",
   description:
-    "Productos digitales que las personas aman. MediaLab combina UX/UI, inteligencia artificial y psicología del consumidor para diseñar y desarrollar tu producto — de idea a producción en semanas.",
+    "Agencia de diseño UX/UI con IA y psicología del consumidor en Colombia y LatAm. Diseñamos y desarrollamos productos digitales que las personas aman — de idea a producción en semanas.",
   alternates: {
     canonical: "/",
     languages: {

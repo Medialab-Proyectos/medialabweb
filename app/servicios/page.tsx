@@ -6,9 +6,9 @@ import { CTASection } from "@/components/cta-section"
 import { Footer } from "@/components/footer"
 
 export const metadata: Metadata = {
-  title: "Servicios de Diseño UX/UI e IA",
+  title: "Servicios de Diseño UX/UI, IA y Desarrollo en Colombia",
   description:
-    "Diseño UX/UI conductual, discovery de producto con IA (UXBox), SEO técnico, CRO y desarrollo de software a medida para empresas B2B y marcas B2C.",
+    "Agencia en Colombia y LatAm: diseño UX/UI conductual, discovery de producto con IA (UXBox), CRO y desarrollo de software a medida para empresas B2B y marcas B2C.",
   alternates: {
     canonical: "/servicios",
     languages: {

@@ -1,0 +1,83 @@
+import "server-only"
+import { getServiceClient } from "./db"
+import type { Empleado, Rol } from "./types"
+
+const COLS =
+  "id,cedula,nombre,email,must_change_password,rol,lider_id,cargo,fecha_ingreso,fecha_egreso,particularidades,estado,creado_en,actualizado_en"
+
+export async function getEmpleadoByCedula(cedula: string) {
+  const sb = getServiceClient()
+  const { data, error } = await sb
+    .from("empleados")
+    .select(`${COLS},password_hash`)
+    .eq("cedula", cedula.trim())
+    .maybeSingle()
+  if (error) throw error
+  return data as (Empleado & { password_hash: string }) | null
+}
+
+export async function getEmpleadoById(id: string) {
+  const sb = getServiceClient()
+  const { data, error } = await sb.from("empleados").select(COLS).eq("id", id).maybeSingle()
+  if (error) throw error
+  return data as Empleado | null
+}
+
+export async function listEmpleados() {
+  const sb = getServiceClient()
+  const { data, error } = await sb.from("empleados").select(COLS).order("nombre")
+  if (error) throw error
+  return (data ?? []) as Empleado[]
+}
+
+/** Empleados a cargo de un líder (para su evaluación / equipo). */
+export async function listReportes(liderId: string) {
+  const sb = getServiceClient()
+  const { data, error } = await sb.from("empleados").select(COLS).eq("lider_id", liderId).order("nombre")
+  if (error) throw error
+  return (data ?? []) as Empleado[]
+}
+
+export type NuevoEmpleado = {
+  cedula: string
+  nombre: string
+  email: string
+  password_hash: string
+  rol: Rol
+  lider_id: string | null
+  cargo: string | null
+  fecha_ingreso: string | null
+  particularidades: string | null
+}
+
+export async function crearEmpleado(e: NuevoEmpleado) {
+  const sb = getServiceClient()
+  const { data, error } = await sb
+    .from("empleados")
+    .insert({ ...e, must_change_password: true, estado: "activo" })
+    .select(COLS)
+    .single()
+  if (error) throw error
+  return data as Empleado
+}
+
+export type CambiosEmpleado = Partial<{
+  nombre: string
+  email: string
+  rol: Rol
+  lider_id: string | null
+  cargo: string | null
+  fecha_ingreso: string | null
+  fecha_egreso: string | null
+  particularidades: string | null
+  estado: "activo" | "terminado"
+  password_hash: string
+  must_change_password: boolean
+}>
+
+export async function actualizarEmpleado(id: string, cambios: CambiosEmpleado) {
+  const sb = getServiceClient()
+  const { data, error } = await sb.from("empleados").update(cambios).eq("id", id).select(COLS).single()
+  if (error) throw error
+  return data as Empleado
+}
