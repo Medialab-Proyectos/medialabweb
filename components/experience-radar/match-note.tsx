@@ -610,7 +610,7 @@ function FanJourney({
       )}
       {eliminated && (
         <p className="mt-2 text-[11px] leading-relaxed text-[#DC2626]">
-          {selectedTeam ?? "Esta selección"} ya está eliminada del torneo, pero todavía puede cambiar la percepción emocional de su cierre en el próximo partido.
+          {selectedTeam ?? "Esta selección"} ya está eliminada del torneo; no se muestra pronóstico porque no tiene próximo partido.
         </p>
       )}
     </div>

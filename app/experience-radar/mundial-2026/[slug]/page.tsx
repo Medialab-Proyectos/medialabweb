@@ -372,10 +372,10 @@ function resolveTeamPhases(
 ): TeamPhaseRadar[] {
   return article.teams.map((team) => {
     // Eliminada SOLO con dato explícito del agente (no se infiere de un mapa incompleto).
-    // Aun eliminada, si todavía tiene rival pendiente, se conserva la percepción/pronóstico.
+    // Si está eliminada, nunca se muestra pronóstico futuro aunque exista predicted heredado.
     const eliminated = article.eliminatedTeams?.includes(team) ?? false
-    const nextOpponent = nextOpponentByTeam[team] ?? NEXT_OPPONENT[team]
-    const canProjectNextMatch = !!nextOpponent
+    const nextOpponent = eliminated ? undefined : nextOpponentByTeam[team] ?? NEXT_OPPONENT[team]
+    const canProjectNextMatch = !eliminated && !!nextOpponent
     const tr = article.teamRadars?.find((x) => x.team === team)
     const approach = article.teamApproach?.find((a) => a.team === team)
     const beforeMood = `${approach?.expectedEmotion ?? ""} ${approach?.dominantConversation ?? ""} ${approach?.fanConfidence ?? ""} ${approach?.mainNarrative ?? ""} ${approach?.userExperience?.expectativa ?? ""}`
