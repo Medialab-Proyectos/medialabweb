@@ -3,7 +3,7 @@ import { ArrowLeft, Download, FileSignature } from "lucide-react"
 import { requireEmpleado } from "@/lib/empleados/auth"
 import { getEmpleadoById } from "@/lib/empleados/queries"
 import { listContratos } from "@/lib/empleados/contrato-queries"
-import { condicionesVigentes, totalMensualContrato, TIPO_VERSION_LABEL, type Contrato } from "@/lib/empleados/contrato"
+import { condicionesVigentes, totalMensualContrato, inicioContrato, TIPO_VERSION_LABEL, type Contrato } from "@/lib/empleados/contrato"
 import { formatCOP } from "@/lib/empleados/desprendible"
 import { PortalHeader } from "../portal-header"
 
@@ -48,7 +48,7 @@ export default async function ContratoEmpleadoPage() {
             <section className="rounded-2xl border border-[var(--cyan)]/25 bg-[var(--cyan)]/[0.05] p-6">
               <div className="mb-4 flex items-center justify-between">
                 <h2 className="text-sm font-semibold text-[#fff]/85">Condiciones vigentes</h2>
-                <span className="text-[11px] text-[#fff]/45">desde {vigente.vigente_desde}</span>
+                <span className="text-[11px] text-[#fff]/45">desde {inicioContrato(vigente, empleado?.fecha_ingreso ?? null)}</span>
               </div>
               <div className="grid gap-4 sm:grid-cols-2">
                 <Dato k="Salario básico" v={formatCOP(vigente.salario_basico)} />
@@ -78,7 +78,7 @@ export default async function ContratoEmpleadoPage() {
                     <li key={c.id} className="rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-4">
                       <div className="flex items-center justify-between">
                         <span className="rounded-full bg-white/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[#fff]/70">{TIPO_VERSION_LABEL[c.tipo]}</span>
-                        <span className="text-xs text-[#fff]/45">desde {c.vigente_desde}</span>
+                        <span className="text-xs text-[#fff]/45">desde {inicioContrato(c, empleado?.fecha_ingreso ?? null)}</span>
                       </div>
                       <p className="mt-2 text-sm text-[#fff]/85">{formatCOP(totalMensualContrato(c))} / mes</p>
                       <p className="text-[11px] text-[#fff]/45">Básico {formatCOP(c.salario_basico)} · Aux. transporte {formatCOP(c.auxilio_transporte)}</p>

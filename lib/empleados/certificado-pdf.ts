@@ -13,6 +13,17 @@ function logoBytes(): Buffer {
   return logoCache
 }
 
+let firmaCache: Buffer | null = null
+function firmaBytes(): Buffer | null {
+  if (firmaCache) return firmaCache
+  try {
+    firmaCache = readFileSync(path.join(process.cwd(), "public/images/firma-ceo.png"))
+    return firmaCache
+  } catch {
+    return null // sin firma escaneada: se deja solo la línea
+  }
+}
+
 function safe(s: string): string {
   return (s ?? "")
     .replace(/[‘’]/g, "'").replace(/[“”]/g, '"').replace(/[–—]/g, "-").replace(/[•]/g, "-").replace(/…/g, "...")
@@ -29,7 +40,7 @@ type EmpleadoCert = {
   cargo: string | null
   fecha_ingreso: string | null
   fecha_egreso: string | null
-  estado: "activo" | "terminado"
+  estado: "activo" | "terminado" | "suspendido"
 }
 
 export type CertOpciones = { conValor: boolean; ciudad?: string }
@@ -62,6 +73,8 @@ export async function generarCertificadoPDF(
   const font = await pdf.embedFont(StandardFonts.Helvetica)
   const bold = await pdf.embedFont(StandardFonts.HelveticaBold)
   const logo = await pdf.embedPng(logoBytes())
+  const firmaData = firmaBytes()
+  const firma = firmaData ? await pdf.embedPng(firmaData) : null
 
   const H = page.getHeight()
   const W = page.getWidth()
@@ -120,9 +133,15 @@ export async function generarCertificadoPDF(
   }
 
   // ── Firma ───────────────────────────────────────────────────────────────────
-  top += 90
+  top += 84
   T(M, top, "Cordialmente,", 11, font, dark)
-  top += 60
+  top += 78
+  // Firma manuscrita del representante legal, apoyada sobre la línea.
+  if (firma) {
+    const firmaW = 120
+    const firmaH = (firma.height / firma.width) * firmaW
+    page.drawImage(firma, { x: M + 6, y: H - top + 3, width: firmaW, height: firmaH })
+  }
   page.drawLine({ start: { x: M, y: H - top }, end: { x: M + 230, y: H - top }, thickness: 0.8, color: dark })
   top += 15
   T(M, top, "CHRISTIAN ORLANDO BENAVIDES", 11, bold)

@@ -1,7 +1,8 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
-import { Loader2, Plus, Trash2, Download, Save, Calculator, FileText, CheckCircle2, FileSignature } from "lucide-react"
+import Link from "next/link"
+import { Loader2, Plus, Trash2, Download, Save, Calculator, FileText, CheckCircle2, FileSignature, ArrowLeft } from "lucide-react"
 import type { Empleado } from "@/lib/empleados/types"
 import type { Desprendible } from "@/lib/empleados/desprendible"
 import { MESES, formatCOP, totales, numeroALetras } from "@/lib/empleados/desprendible"
@@ -205,6 +206,9 @@ export function DesprendiblesAdminClient({ empleados }: { empleados: Empleado[] 
 
   return (
     <div>
+      <Link href="/empleados/admin" className="mb-6 inline-flex items-center gap-1.5 text-sm text-[#fff]/55 hover:text-[#fff]">
+        <ArrowLeft size={15} /> Volver al panel
+      </Link>
       <div className="mb-6 flex items-center gap-2.5">
         <FileText size={20} className="text-[var(--cyan)]" />
         <h1 className="font-display text-xl font-bold">Generar desprendibles de pago</h1>

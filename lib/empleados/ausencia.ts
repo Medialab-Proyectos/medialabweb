@@ -2,6 +2,7 @@
 
 export type TipoAusencia =
   | "vacaciones"
+  | "adelanto_vacaciones"
   | "permiso_no_remunerado"
   | "licencia_maternidad"
   | "licencia_paternidad"
@@ -14,6 +15,7 @@ export type EstadoAusencia = "pendiente" | "aprobada" | "rechazada"
 
 export const TIPO_AUSENCIA_LABEL: Record<TipoAusencia, string> = {
   vacaciones: "Vacaciones",
+  adelanto_vacaciones: "Adelanto de vacaciones",
   permiso_no_remunerado: "Permiso no remunerado",
   licencia_maternidad: "Licencia de maternidad",
   licencia_paternidad: "Licencia de paternidad",
@@ -22,6 +24,9 @@ export const TIPO_AUSENCIA_LABEL: Record<TipoAusencia, string> = {
   dia_votacion: "Día de votación",
   otra: "Otra",
 }
+
+/** Tipos que descuentan del saldo de vacaciones. */
+export const TIPOS_VACACIONALES: TipoAusencia[] = ["vacaciones", "adelanto_vacaciones"]
 
 export const ESTADO_AUSENCIA_LABEL: Record<EstadoAusencia, string> = {
   pendiente: "Pendiente",
@@ -47,7 +52,7 @@ export type SolicitudAusencia = {
 
 // Vacaciones en Colombia: 15 días hábiles por año.
 export const DIAS_VACACIONES_ANIO = 15
-// Se pueden solicitar hasta 2 días hábiles por adelantado.
+// Adelanto de vacaciones: máximo 2 días hábiles.
 export const DIAS_ADELANTO = 2
 
 export function todayISO(): string {
@@ -67,12 +72,46 @@ export function acumuladoVacaciones(corteISO: string | null, hoyISO = todayISO()
   return (dias / 365.25) * DIAS_VACACIONES_ANIO
 }
 
+/**
+ * Separa el acumulado por AÑO CALENDARIO:
+ *  - `vencido`: lo causado en años anteriores (hasta el 31/dic del año pasado) →
+ *    ya disponible para tomar.
+ *  - `enCurso`: lo causado en el año calendario actual → aún se va causando y se
+ *    libera al cerrar el año.
+ * Ej: a mitad de 2026, todo lo de 2025 y antes está vigente; lo de 2026 va "en curso".
+ */
+export function desgloseAcumulado(
+  corteISO: string | null,
+  hoyISO = todayISO(),
+): { vencido: number; enCurso: number } {
+  if (!corteISO) return { vencido: 0, enCurso: 0 }
+  const porDia = DIAS_VACACIONES_ANIO / 365.25
+  // Inicio del año calendario actual (frontera entre "vencido" y "en curso").
+  const inicioAnio = `${hoyISO.slice(0, 4)}-01-01`
+  // Vencido: desde el corte hasta el 1 de enero de este año (si el corte es anterior).
+  const diasVencido = Math.max(0, diasEntre(corteISO, inicioAnio))
+  // En curso: desde el 1 de enero (o el corte, si ingresó este año) hasta hoy.
+  const inicioCurso = corteISO > inicioAnio ? corteISO : inicioAnio
+  const diasCurso = Math.max(0, diasEntre(inicioCurso, hoyISO))
+  return {
+    vencido: diasVencido * porDia,
+    enCurso: diasCurso * porDia,
+  }
+}
+
 export type SaldoVacaciones = {
   saldoInicial: number
   acumulado: number
+  /** Días ya causados (años cumplidos) — disponibles. */
+  vencido: number
+  /** Proporcional del año en curso — todavía no disponible. */
+  enCurso: number
   tomado: number
   pendiente: number
+  /** Disponible real = saldo inicial + vencido - tomado - pendiente. */
   disponible: number
+  /** Del año en curso, aún no exigible (informativo). */
+  noDisponible: number
   /** Máximo solicitable = disponible + adelanto permitido. */
   maxSolicitable: number
 }
@@ -83,18 +122,23 @@ export function calcularSaldoVacaciones(
   solicitudes: SolicitudAusencia[],
   hoyISO = todayISO(),
 ): SaldoVacaciones {
-  const acumulado = acumuladoVacaciones(corteISO, hoyISO)
-  const vac = solicitudes.filter((s) => s.tipo === "vacaciones")
+  const { vencido, enCurso } = desgloseAcumulado(corteISO, hoyISO)
+  // Vacaciones y adelantos de vacaciones descuentan del saldo.
+  const vac = solicitudes.filter((s) => TIPOS_VACACIONALES.includes(s.tipo))
   const tomado = vac.filter((s) => s.estado === "aprobada").reduce((a, s) => a + Number(s.dias_habiles || 0), 0)
   const pendiente = vac.filter((s) => s.estado === "pendiente").reduce((a, s) => a + Number(s.dias_habiles || 0), 0)
-  const disponible = saldoInicial + acumulado - tomado - pendiente
+  const disponible = saldoInicial + vencido - tomado - pendiente
   return {
     saldoInicial,
-    acumulado: round1(acumulado),
+    acumulado: round1(vencido + enCurso),
+    vencido: round1(vencido),
+    enCurso: round1(enCurso),
     tomado,
     pendiente,
     disponible: round1(disponible),
-    maxSolicitable: round1(disponible + DIAS_ADELANTO),
+    noDisponible: round1(enCurso),
+    // Vacaciones normales: solo lo disponible (vencido). El adelanto (máx 2) va por su propio tipo.
+    maxSolicitable: round1(Math.max(0, disponible)),
   }
 }
 

@@ -8,10 +8,11 @@ import {
 import type { Empleado } from "@/lib/empleados/types"
 import { formatCOP } from "@/lib/empleados/desprendible"
 import {
-  type Contrato, condicionesVigentes, totalMensualContrato, TIPO_VERSION_LABEL,
+  type Contrato, condicionesVigentes, totalMensualContrato, inicioContrato, TIPO_VERSION_LABEL,
 } from "@/lib/empleados/contrato"
 import { TIPOS_CONTRATO, JORNADAS } from "@/lib/empleados/catalogos-co"
 import { MoneyInput } from "../../money-input"
+import { ConfirmDialog } from "../../confirm-dialog"
 
 type Linea = { concepto: string; valor: number }
 
@@ -40,12 +41,19 @@ export function ContratosAdminClient({ empleados }: { empleados: Empleado[] }) {
   const [motivo, setMotivo] = useState("")
   const [archivo, setArchivo] = useState<File | null>(null)
   const archivoRef = useRef<HTMLInputElement>(null)
+  const [confirmarEliminar, setConfirmarEliminar] = useState<string | null>(null)
+  const [eliminando, setEliminando] = useState(false)
 
   const vigente = useMemo(() => condicionesVigentes(contratos), [contratos])
   const esInicial = contratos.length === 0
+  const fechaIngresoSel = useMemo(
+    () => empleados.find((e) => e.id === empleadoId)?.fecha_ingreso ?? null,
+    [empleados, empleadoId],
+  )
 
   function prefill(from: Contrato | null, emp?: Empleado) {
-    setVigenteDesde(hoy)
+    // El contrato inicial arranca en la fecha de ingreso; un otrosí, hoy por defecto.
+    setVigenteDesde(from ? hoy : (emp?.fecha_ingreso ?? hoy))
     setBasico(from ? Number(from.salario_basico) || 0 : 0)
     setAuxilio(from ? Number(from.auxilio_transporte) || 0 : 0)
     setOtros(from ? (from.otros_devengos ?? []).map((l) => ({ concepto: l.concepto, valor: Number(l.valor) || 0 })) : [])
@@ -124,14 +132,18 @@ export function ContratosAdminClient({ empleados }: { empleados: Empleado[] }) {
   }
 
   async function eliminar(id: string) {
-    if (!confirm("¿Eliminar esta versión del contrato? Esta acción no se puede deshacer.")) return
+    setError(""); setMsg(""); setEliminando(true)
     try {
       const res = await fetch(`/api/empleados/admin/contratos?id=${id}`, { method: "DELETE" })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error)
+      setConfirmarEliminar(null)
       await cargar(empleadoId)
     } catch (e) {
-      alert(e instanceof Error ? e.message : "Error al eliminar.")
+      setError(e instanceof Error ? e.message : "Error al eliminar.")
+      setConfirmarEliminar(null)
+    } finally {
+      setEliminando(false)
     }
   }
 
@@ -183,7 +195,7 @@ export function ContratosAdminClient({ empleados }: { empleados: Empleado[] }) {
               <section className="rounded-2xl border border-[var(--cyan)]/25 bg-[var(--cyan)]/[0.05] p-5">
                 <div className="mb-3 flex items-center justify-between">
                   <h2 className="text-sm font-semibold text-[#fff]/85">Condiciones vigentes</h2>
-                  <span className="text-[11px] text-[#fff]/45">desde {vigente.vigente_desde}</span>
+                  <span className="text-[11px] text-[#fff]/45">desde {inicioContrato(vigente, fechaIngresoSel)}</span>
                 </div>
                 <div className="grid gap-3 sm:grid-cols-2">
                   <Dato k="Salario básico" v={formatCOP(vigente.salario_basico)} />
@@ -306,9 +318,9 @@ export function ContratosAdminClient({ empleados }: { empleados: Empleado[] }) {
                     <li key={c.id} className="rounded-xl border border-white/10 bg-black/20 p-3">
                       <div className="flex items-center justify-between">
                         <span className="rounded-full bg-white/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[#fff]/70">{TIPO_VERSION_LABEL[c.tipo]}</span>
-                        <button onClick={() => eliminar(c.id)} className="rounded p-1 text-red-300/60 hover:bg-red-500/10 hover:text-red-300"><Trash2 size={13} /></button>
+                        <button onClick={() => setConfirmarEliminar(c.id)} className="rounded p-1 text-red-300/60 hover:bg-red-500/10 hover:text-red-300"><Trash2 size={13} /></button>
                       </div>
-                      <p className="mt-2 text-xs text-[#fff]/50">Vigente desde {c.vigente_desde}</p>
+                      <p className="mt-2 text-xs text-[#fff]/50">Vigente desde {inicioContrato(c, fechaIngresoSel)}</p>
                       <p className="mt-1 text-sm text-[#fff]/85">{formatCOP(totalMensualContrato(c))} / mes</p>
                       <p className="text-[11px] text-[#fff]/45">Básico {formatCOP(c.salario_basico)} · Aux. {formatCOP(c.auxilio_transporte)}</p>
                       {c.motivo && <p className="mt-1 text-xs italic text-[#fff]/55">“{c.motivo}”</p>}
@@ -329,6 +341,17 @@ export function ContratosAdminClient({ empleados }: { empleados: Empleado[] }) {
           </aside>
         </div>
       )}
+
+      <ConfirmDialog
+        abierto={!!confirmarEliminar}
+        titulo="Eliminar versión del contrato"
+        mensaje="¿Eliminar esta versión del contrato? Esta acción no se puede deshacer."
+        confirmLabel="Eliminar"
+        tone="danger"
+        cargando={eliminando}
+        onConfirm={() => confirmarEliminar && eliminar(confirmarEliminar)}
+        onCancel={() => setConfirmarEliminar(null)}
+      />
     </div>
   )
 }

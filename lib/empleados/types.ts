@@ -1,5 +1,5 @@
 export type Rol = "ceo" | "lider" | "empleado"
-export type EstadoEmpleado = "activo" | "terminado"
+export type EstadoEmpleado = "activo" | "terminado" | "suspendido"
 
 export type Empleado = {
   id: string

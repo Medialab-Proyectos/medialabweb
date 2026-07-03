@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation"
 import Link from "next/link"
-import { FileText, FileSignature, CalendarClock, BadgeCheck, GraduationCap, Gift, ShieldCheck, Clock, ArrowRight, Plane, ClipboardCheck, PiggyBank, Target } from "lucide-react"
+import { FileText, FileSignature, BadgeCheck, GraduationCap, Gift, ShieldCheck, Clock, ArrowRight, Plane, ClipboardCheck, Target } from "lucide-react"
 import { requireEmpleado } from "@/lib/empleados/auth"
 import { getEmpleadoById } from "@/lib/empleados/queries"
 import { PortalHeader } from "../portal-header"
@@ -31,29 +31,11 @@ const secciones: Seccion[] = [
   {
     key: "desprendibles",
     icon: FileText,
-    titulo: "Desprendibles de pago",
-    desc: "Descarga tus comprobantes de pago mensuales en PDF.",
+    titulo: "Desprendibles",
+    desc: "Desprendibles de pago, prima de servicios y cesantías en un solo lugar.",
     estado: "activo",
     color: "var(--cyan)",
-    href: "/empleados/desprendibles",
-  },
-  {
-    key: "prima",
-    icon: CalendarClock,
-    titulo: "Prima de servicios",
-    desc: "Descarga tu comprobante de prima de junio y diciembre.",
-    estado: "activo",
-    color: "var(--magenta)",
-    href: "/empleados/primas",
-  },
-  {
-    key: "cesantias",
-    icon: PiggyBank,
-    titulo: "Cesantías",
-    desc: "Descarga tu comprobante anual de cesantías e intereses.",
-    estado: "activo",
-    color: "#00BFA6",
-    href: "/empleados/cesantias",
+    href: "/empleados/pagos",
   },
   {
     key: "evaluaciones",

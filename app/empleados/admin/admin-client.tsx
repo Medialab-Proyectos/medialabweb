@@ -1,13 +1,22 @@
 "use client"
 
 import Link from "next/link"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import {
-  UserPlus, Pencil, KeyRound, Ban, RotateCcw, Loader2, X, Copy, CheckCircle2, Users, FileText, FileSignature, Gift, PiggyBank, ArrowLeft,
+  UserPlus, Pencil, KeyRound, Ban, RotateCcw, Loader2, X, Copy, CheckCircle2, Users, FileText, FileSignature, Gift, PiggyBank, ArrowLeft, Plane, ChevronDown, PauseCircle,
 } from "lucide-react"
 import type { Empleado, Rol } from "@/lib/empleados/types"
 import { ROL_LABEL } from "@/lib/empleados/types"
 import { CAJAS_COMPENSACION } from "@/lib/empleados/catalogos-co"
+import { ConfirmDialog } from "../confirm-dialog"
+
+type AccionConfirmable = "cerrar_contrato" | "suspender" | "resetear_clave"
+type Tone = "danger" | "warn" | "default"
+const CONFIRM_ACCIONES: Record<AccionConfirmable, (nombre: string) => { titulo: string; mensaje: string; confirmLabel: string; tone: Tone }> = {
+  cerrar_contrato: (n) => ({ titulo: "Cerrar contrato", mensaje: `¿Cerrar el contrato de ${n}? Se marcará como terminado con fecha de egreso hoy y no podrá volver a entrar al sistema.`, confirmLabel: "Cerrar contrato", tone: "danger" }),
+  suspender: (n) => ({ titulo: "Suspender acceso", mensaje: `¿Suspender el acceso de ${n}? No podrá entrar al sistema hasta que lo reactives (el contrato sigue vigente).`, confirmLabel: "Suspender", tone: "warn" }),
+  resetear_clave: (n) => ({ titulo: "Resetear contraseña", mensaje: `¿Generar una nueva contraseña temporal para ${n}? La contraseña actual dejará de funcionar.`, confirmLabel: "Generar contraseña", tone: "default" }),
+}
 
 type FormState = {
   id?: string
@@ -39,6 +48,9 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
   const [error, setError] = useState("")
   const [tempPass, setTempPass] = useState<{ nombre: string; pass: string; correo: boolean } | null>(null)
   const [copiado, setCopiado] = useState(false)
+  const [confirmar, setConfirmar] = useState<null | { titulo: string; mensaje: string; confirmLabel: string; tone: Tone; run: () => Promise<void> }>(null)
+  const [confirmLoading, setConfirmLoading] = useState(false)
+  const [aviso, setAviso] = useState("")
 
   const nombrePorId = useMemo(() => {
     const m = new Map<string, string>()
@@ -73,6 +85,13 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
   async function guardar(ev: React.FormEvent) {
     ev.preventDefault()
     if (!form) return
+    // Validaciones de formulario
+    if (!form.id && !/^\d{5,}$/.test(form.cedula.trim())) {
+      return setError("La cédula debe ser numérica (solo dígitos).")
+    }
+    if (form.fecha_ingreso && form.fecha_egreso && form.fecha_egreso < form.fecha_ingreso) {
+      return setError("La fecha de egreso no puede ser anterior a la de ingreso.")
+    }
     setError(""); setSaving(true)
     try {
       if (form.id) {
@@ -115,9 +134,8 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
     }
   }
 
-  async function accion(id: string, tipo: "cerrar_contrato" | "reactivar" | "resetear_clave", emp: Empleado) {
-    if (tipo === "cerrar_contrato" && !confirm(`¿Cerrar el contrato de ${emp.nombre}? Se marcará como terminado con fecha de egreso hoy.`)) return
-    if (tipo === "resetear_clave" && !confirm(`¿Generar una nueva contraseña temporal para ${emp.nombre}?`)) return
+  async function ejecutarAccion(id: string, tipo: "cerrar_contrato" | "suspender" | "reactivar" | "resetear_clave", emp: Empleado) {
+    setAviso(""); setConfirmLoading(true)
     try {
       const res = await fetch("/api/empleados/admin", {
         method: "PATCH",
@@ -128,9 +146,20 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
       if (!res.ok) throw new Error(data.error)
       if (data.empleado) upsertLocal(data.empleado)
       if (data.passwordTemporal) setTempPass({ nombre: emp.nombre, pass: data.passwordTemporal, correo: data.correoEnviado })
+      setConfirmar(null)
     } catch (err) {
-      alert(err instanceof Error ? err.message : "Error.")
+      setAviso(err instanceof Error ? err.message : "Error al ejecutar la acción.")
+      setConfirmar(null)
+    } finally {
+      setConfirmLoading(false)
     }
+  }
+
+  function accion(id: string, tipo: "cerrar_contrato" | "suspender" | "reactivar" | "resetear_clave", emp: Empleado) {
+    // Reactivar es directo; las demás piden confirmación en un diálogo dentro de la app.
+    if (tipo === "reactivar") { ejecutarAccion(id, tipo, emp); return }
+    const cfg = CONFIRM_ACCIONES[tipo](emp.nombre)
+    setConfirmar({ ...cfg, run: () => ejecutarAccion(id, tipo, emp) })
   }
 
   return (
@@ -151,23 +180,12 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
           >
             <FileSignature size={15} /> Contratos
           </Link>
+          <DesprendiblesMenu />
           <Link
-            href="/empleados/admin/desprendibles"
+            href="/empleados/admin/vacaciones"
             className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-[#fff]/80 transition hover:bg-white/5"
           >
-            <FileText size={15} /> Desprendibles
-          </Link>
-          <Link
-            href="/empleados/admin/primas"
-            className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-[#fff]/80 transition hover:bg-white/5"
-          >
-            <Gift size={15} /> Primas
-          </Link>
-          <Link
-            href="/empleados/admin/cesantias"
-            className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-[#fff]/80 transition hover:bg-white/5"
-          >
-            <PiggyBank size={15} /> Cesantías
+            <Plane size={15} /> Vacaciones
           </Link>
           <button
             onClick={abrirNuevo}
@@ -203,6 +221,13 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
         </div>
       )}
 
+      {aviso && (
+        <div className="mb-6 flex items-center justify-between gap-3 rounded-xl border border-red-500/25 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+          <span>{aviso}</span>
+          <button onClick={() => setAviso("")} className="text-red-200/70 hover:text-red-100"><X size={15} /></button>
+        </div>
+      )}
+
       {/* Tabla */}
       <div className="overflow-x-auto rounded-2xl border border-white/10">
         <table className="w-full min-w-[720px] text-left text-sm">
@@ -235,15 +260,20 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
                 <td className="px-4 py-3">
                   {e.estado === "activo"
                     ? <span className="text-emerald-300/90">Activo</span>
-                    : <span className="text-amber-300/80">Terminado</span>}
+                    : e.estado === "suspendido"
+                      ? <span className="text-amber-300/80">Suspendido</span>
+                      : <span className="text-red-300/80">Terminado</span>}
                 </td>
                 <td className="px-4 py-3">
                   <div className="flex items-center justify-end gap-1">
                     <button onClick={() => abrirEditar(e)} title="Editar" className="rounded-lg p-1.5 text-[#fff]/60 hover:bg-white/5 hover:text-[#fff]"><Pencil size={15} /></button>
                     <button onClick={() => accion(e.id, "resetear_clave", e)} title="Resetear contraseña" className="rounded-lg p-1.5 text-[#fff]/60 hover:bg-white/5 hover:text-[#fff]"><KeyRound size={15} /></button>
+                    {e.estado === "activo" && (
+                      <button onClick={() => accion(e.id, "suspender", e)} disabled={e.id === ceoId} title="Suspender acceso" className="rounded-lg p-1.5 text-amber-300/70 hover:bg-amber-500/10 hover:text-amber-300 disabled:opacity-30"><PauseCircle size={15} /></button>
+                    )}
                     {e.estado === "activo"
                       ? <button onClick={() => accion(e.id, "cerrar_contrato", e)} disabled={e.id === ceoId} title="Cerrar contrato" className="rounded-lg p-1.5 text-red-300/70 hover:bg-red-500/10 hover:text-red-300 disabled:opacity-30"><Ban size={15} /></button>
-                      : <button onClick={() => accion(e.id, "reactivar", e)} title="Reactivar" className="rounded-lg p-1.5 text-emerald-300/70 hover:bg-emerald-500/10 hover:text-emerald-300"><RotateCcw size={15} /></button>}
+                      : <button onClick={() => accion(e.id, "reactivar", e)} title="Reactivar acceso" className="rounded-lg p-1.5 text-emerald-300/70 hover:bg-emerald-500/10 hover:text-emerald-300"><RotateCcw size={15} /></button>}
                   </div>
                 </td>
               </tr>
@@ -332,6 +362,72 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
               </button>
             </div>
           </form>
+        </div>
+      )}
+
+      <ConfirmDialog
+        abierto={!!confirmar}
+        titulo={confirmar?.titulo ?? ""}
+        mensaje={confirmar?.mensaje ?? ""}
+        confirmLabel={confirmar?.confirmLabel}
+        tone={confirmar?.tone}
+        cargando={confirmLoading}
+        onConfirm={() => confirmar?.run()}
+        onCancel={() => setConfirmar(null)}
+      />
+    </div>
+  )
+}
+
+/** Agrupa Desprendibles de pago, Primas y Cesantías en un solo menú "Desprendibles". */
+function DesprendiblesMenu() {
+  const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!open) return
+    function onDoc(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
+    }
+    function onEsc(e: KeyboardEvent) { if (e.key === "Escape") setOpen(false) }
+    document.addEventListener("mousedown", onDoc)
+    document.addEventListener("keydown", onEsc)
+    return () => { document.removeEventListener("mousedown", onDoc); document.removeEventListener("keydown", onEsc) }
+  }, [open])
+
+  const items = [
+    { href: "/empleados/admin/desprendibles", icon: FileText, label: "Desprendibles de pago" },
+    { href: "/empleados/admin/primas", icon: Gift, label: "Primas" },
+    { href: "/empleados/admin/cesantias", icon: PiggyBank, label: "Cesantías" },
+  ]
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        onClick={() => setOpen((v) => !v)}
+        aria-haspopup="menu"
+        aria-expanded={open}
+        className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-[#fff]/80 transition hover:bg-white/5"
+      >
+        <FileText size={15} /> Desprendibles
+        <ChevronDown size={14} className={`transition ${open ? "rotate-180" : ""}`} />
+      </button>
+      {open && (
+        <div role="menu" className="absolute right-0 z-30 mt-2 w-56 overflow-hidden rounded-xl border border-white/10 bg-[#12151c] p-1 shadow-2xl">
+          {items.map((it) => {
+            const Icon = it.icon
+            return (
+              <Link
+                key={it.href}
+                href={it.href}
+                role="menuitem"
+                onClick={() => setOpen(false)}
+                className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-[#fff]/80 transition hover:bg-white/5 hover:text-[#fff]"
+              >
+                <Icon size={15} className="text-[var(--cyan)]" /> {it.label}
+              </Link>
+            )
+          })}
         </div>
       )}
     </div>

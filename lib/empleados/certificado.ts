@@ -52,9 +52,16 @@ export function fraseTipoContrato(tipo: string | null): string {
  *      desde el 1 de octubre de 2025 con contrato a término indefinido"
  */
 export function narrativaVinculacion(contratos: Contrato[], fechaIngreso: string | null): string {
+  // El inicio real del vínculo es la fecha de ingreso del empleado, no la fecha en que
+  // se registró el contrato inicial en el sistema (vigente_desde por defecto = hoy).
+  // Los otrosíes sí conservan su fecha de vigencia real.
+  const inicio = (c: Contrato): string =>
+    c.tipo === "inicial" && fechaIngreso ? fechaIngreso : c.vigente_desde
+
   const hist = [...contratos]
     .filter((c) => c.vigente_desde)
-    .sort((a, b) => a.vigente_desde.localeCompare(b.vigente_desde))
+    .map((c) => ({ ...c, _inicio: inicio(c) }))
+    .sort((a, b) => a._inicio.localeCompare(b._inicio))
 
   if (hist.length === 0) {
     return fechaIngreso
@@ -62,7 +69,7 @@ export function narrativaVinculacion(contratos: Contrato[], fechaIngreso: string
       : "vinculado a MediaLab Ingeniería"
   }
 
-  const items = hist.map((c) => ({ frase: fraseTipoContrato(c.tipo_contrato), fecha: fechaLarga(c.vigente_desde) }))
+  const items = hist.map((c) => ({ frase: fraseTipoContrato(c.tipo_contrato), fecha: fechaLarga(c._inicio) }))
   let texto: string
   if (items.length === 1) {
     texto = `con contrato ${items[0].frase} desde el ${items[0].fecha}`

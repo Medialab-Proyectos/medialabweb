@@ -1,6 +1,6 @@
 import "server-only"
 import { getServiceClient } from "./db"
-import type { Empleado, Rol } from "./types"
+import type { Empleado, Rol, EstadoEmpleado } from "./types"
 
 const COLS =
   "id,cedula,nombre,email,must_change_password,rol,lider_id,cargo,caja_compensacion,fecha_ingreso,fecha_egreso,particularidades,estado,creado_en,actualizado_en"
@@ -72,7 +72,7 @@ export type CambiosEmpleado = Partial<{
   fecha_ingreso: string | null
   fecha_egreso: string | null
   particularidades: string | null
-  estado: "activo" | "terminado"
+  estado: EstadoEmpleado
   password_hash: string
   must_change_password: boolean
 }>

@@ -48,7 +48,9 @@ export async function listSolicitudesDeEmpleados(ids: string[], soloPendientes =
   const sb = getServiceClient()
   let q = sb
     .from("solicitudes_ausencia")
-    .select(`${COLS}, empleado:empleados(nombre,cedula)`)
+    // Desambiguar la FK: solicitudes_ausencia tiene dos referencias a empleados
+    // (empleado_id y aprobado_por); sin el hint el embed es ambiguo y falla.
+    .select(`${COLS}, empleado:empleados!empleado_id(nombre,cedula)`)
     .in("empleado_id", ids)
   if (soloPendientes) q = q.eq("estado", "pendiente")
   const { data, error } = await q.order("creado_en", { ascending: false })

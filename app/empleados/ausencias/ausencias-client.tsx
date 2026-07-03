@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react"
 import { Loader2, Plane, Send, CheckCircle2, XCircle, Clock } from "lucide-react"
 import {
   type SolicitudAusencia, type SaldoVacaciones, type TipoAusencia,
-  TIPO_AUSENCIA_LABEL, ESTADO_AUSENCIA_LABEL,
+  TIPO_AUSENCIA_LABEL, ESTADO_AUSENCIA_LABEL, DIAS_ADELANTO,
 } from "@/lib/empleados/ausencia"
 import { contarDiasHabiles, contarDiasCalendario } from "@/lib/empleados/festivos-co"
 
@@ -12,7 +12,7 @@ const inputCls = "w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2
 const lblCls = "text-[11px] font-semibold uppercase tracking-wide text-[#fff]/50"
 
 const TIPOS: TipoAusencia[] = [
-  "vacaciones", "permiso_no_remunerado", "licencia_maternidad", "licencia_paternidad",
+  "vacaciones", "adelanto_vacaciones", "permiso_no_remunerado", "licencia_maternidad", "licencia_paternidad",
   "licencia_luto", "dia_familia", "dia_votacion", "otra",
 ]
 
@@ -53,8 +53,26 @@ export function AusenciasClient() {
     return { habiles: contarDiasHabiles(inicio, fin), calendario: contarDiasCalendario(inicio, fin) }
   }, [inicio, fin])
 
+  // Validaciones de la solicitud (espejo de las del servidor)
+  const validacion = useMemo(() => {
+    if (!inicio || !fin) return { ok: false, aviso: "" as string | null }
+    if (fin < inicio) return { ok: false, aviso: "La fecha final no puede ser anterior a la inicial." }
+    if (tipo === "adelanto_vacaciones") {
+      if (!preview || preview.habiles <= 0) return { ok: false, aviso: "El rango elegido no tiene días hábiles (solo fines de semana o festivos)." }
+      if (preview.habiles > DIAS_ADELANTO) return { ok: false, aviso: `El adelanto de vacaciones es máximo ${DIAS_ADELANTO} días hábiles.` }
+    }
+    if (tipo === "vacaciones") {
+      if (!preview || preview.habiles <= 0) return { ok: false, aviso: "El rango elegido no tiene días hábiles (solo fines de semana o festivos)." }
+      if (saldo && preview.habiles > saldo.maxSolicitable) {
+        return { ok: false, aviso: `Solicitas ${preview.habiles} días hábiles pero solo tienes ${saldo.disponible} disponibles. Para hasta ${DIAS_ADELANTO} días extra usa “Adelanto de vacaciones”.` }
+      }
+    }
+    return { ok: true, aviso: null }
+  }, [inicio, fin, tipo, preview, saldo])
+
   async function enviar(e: React.FormEvent) {
     e.preventDefault()
+    if (!validacion.ok) { setError(validacion.aviso || "Revisa los datos de la solicitud."); return }
     setError(""); setMsg(""); setEnviando(true)
     try {
       const res = await fetch("/api/empleados/ausencias", {
@@ -82,14 +100,22 @@ export function AusenciasClient() {
             <Plane size={16} className="text-[var(--cyan)]" />
             <h2 className="text-sm font-semibold">Saldo de vacaciones</h2>
           </div>
-          <p className="mt-2 font-display text-3xl font-bold text-[var(--cyan)]">{saldo.disponible} <span className="text-base font-medium text-[#fff]/50">días hábiles disponibles</span></p>
-          <div className="mt-3 grid grid-cols-2 gap-x-6 gap-y-1 text-xs text-[#fff]/55 sm:grid-cols-4">
-            <span>Inicial: <b className="text-[#fff]/80">{saldo.saldoInicial}</b></span>
-            <span>Acumulado: <b className="text-[#fff]/80">{saldo.acumulado}</b></span>
+          <div className="mt-2 flex flex-wrap items-end gap-x-8 gap-y-2">
+            <p className="font-display text-3xl font-bold text-[var(--cyan)]">{saldo.disponible} <span className="text-base font-medium text-[#fff]/50">días disponibles</span></p>
+            {saldo.noDisponible > 0 && (
+              <p className="font-display text-xl font-bold text-[#fff]/50">+{saldo.noDisponible} <span className="text-sm font-medium text-[#fff]/40">en curso (aún no disponibles)</span></p>
+            )}
+          </div>
+          <div className="mt-3 grid grid-cols-2 gap-x-6 gap-y-1 text-xs text-[#fff]/55 sm:grid-cols-3 lg:grid-cols-5">
+            <span>Año anterior: <b className="text-[#fff]/80">{saldo.saldoInicial}</b></span>
+            <span>Causadas: <b className="text-[#fff]/80">{saldo.vencido}</b></span>
+            <span>Este año: <b className="text-[#fff]/80">{saldo.enCurso}</b></span>
             <span>Pendiente: <b className="text-[#fff]/80">{saldo.pendiente}</b></span>
             <span>Tomado: <b className="text-[#fff]/80">{saldo.tomado}</b></span>
           </div>
-          <p className="mt-2 text-[11px] text-[#fff]/40">Puedes solicitar hasta {saldo.maxSolicitable} días (incluye 2 adelantados).</p>
+          <p className="mt-2 text-[11px] text-[#fff]/40">
+            Puedes solicitar hasta {saldo.disponible} días disponibles. Si necesitas hasta {DIAS_ADELANTO} días extra, usa el tipo “Adelanto de vacaciones”. Lo de “este año” se libera al cerrar el año.
+          </p>
         </div>
       )}
 
@@ -122,10 +148,13 @@ export function AusenciasClient() {
             <b className="text-[var(--cyan)]">{preview.habiles}</b> días hábiles ({preview.calendario} calendario), descontando fines de semana y festivos colombianos.
           </p>
         )}
+        {inicio && fin && validacion.aviso && (
+          <p className="mt-3 rounded-lg bg-amber-400/10 px-3 py-2 text-xs text-amber-200">{validacion.aviso}</p>
+        )}
         {error && <p className="mt-3 rounded-lg bg-red-500/10 px-3 py-2 text-sm text-red-300">{error}</p>}
         {msg && <p className="mt-3 rounded-lg bg-emerald-400/10 px-3 py-2 text-sm text-emerald-200">{msg}</p>}
 
-        <button type="submit" disabled={enviando} className="mt-4 inline-flex items-center gap-2 rounded-lg bg-[var(--cyan)] px-5 py-2.5 text-sm font-semibold text-[#04191b] transition hover:brightness-110 disabled:opacity-60">
+        <button type="submit" disabled={enviando || !validacion.ok} className="mt-4 inline-flex items-center gap-2 rounded-lg bg-[var(--cyan)] px-5 py-2.5 text-sm font-semibold text-[#04191b] transition hover:brightness-110 disabled:opacity-60 disabled:cursor-not-allowed">
           {enviando ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} />} Enviar solicitud
         </button>
       </form>

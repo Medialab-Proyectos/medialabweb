@@ -110,7 +110,7 @@ export async function POST(req: Request) {
 // ── PATCH: editar / cerrar contrato / resetear clave ─────────────────────────
 const editarSchema = z.object({
   id: z.string().uuid(),
-  accion: z.enum(["actualizar", "cerrar_contrato", "reactivar", "resetear_clave"]).default("actualizar"),
+  accion: z.enum(["actualizar", "cerrar_contrato", "suspender", "reactivar", "resetear_clave"]).default("actualizar"),
   nombre: z.string().trim().min(2).max(120).optional(),
   email: z.string().trim().email().optional(),
   cargo: z.string().trim().max(120).nullable().optional(),
@@ -147,7 +147,7 @@ export async function PATCH(req: Request) {
     return NextResponse.json({ ok: true, passwordTemporal: password, correoEnviado: correo.sent })
   }
 
-  // Cerrar contrato
+  // Cerrar contrato (fin del vínculo → bloquea el acceso)
   if (body.accion === "cerrar_contrato") {
     const empleado = await actualizarEmpleado(body.id, {
       estado: "terminado",
@@ -156,7 +156,13 @@ export async function PATCH(req: Request) {
     return NextResponse.json({ empleado })
   }
 
-  // Reactivar
+  // Suspender (bloqueo temporal → sin fecha de egreso, se puede reactivar)
+  if (body.accion === "suspender") {
+    const empleado = await actualizarEmpleado(body.id, { estado: "suspendido" })
+    return NextResponse.json({ empleado })
+  }
+
+  // Reactivar (desde terminado o suspendido)
   if (body.accion === "reactivar") {
     const empleado = await actualizarEmpleado(body.id, { estado: "activo", fecha_egreso: null })
     return NextResponse.json({ empleado })
@@ -166,6 +172,11 @@ export async function PATCH(req: Request) {
   const cambios: Record<string, unknown> = {}
   for (const k of ["nombre", "email", "cargo", "caja_compensacion", "rol", "lider_id", "fecha_ingreso", "fecha_egreso", "particularidades"] as const) {
     if (body[k] !== undefined) cambios[k] = body[k]
+  }
+  const ingresoEf = (body.fecha_ingreso !== undefined ? body.fecha_ingreso : actual.fecha_ingreso) as string | null
+  const egresoEf = (body.fecha_egreso !== undefined ? body.fecha_egreso : actual.fecha_egreso) as string | null
+  if (ingresoEf && egresoEf && egresoEf < ingresoEf) {
+    return NextResponse.json({ error: "La fecha de egreso no puede ser anterior a la de ingreso." }, { status: 400 })
   }
   if (Object.keys(cambios).length === 0) return NextResponse.json({ error: "Nada para actualizar." }, { status: 400 })
   const empleado = await actualizarEmpleado(body.id, cambios)

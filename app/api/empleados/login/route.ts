@@ -29,6 +29,14 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Cédula o contraseña incorrecta." }, { status: 401 })
   }
 
+  // Solo los empleados activos pueden entrar. Terminados o suspendidos quedan bloqueados.
+  if (emp.estado !== "activo") {
+    const detalle = emp.estado === "suspendido"
+      ? "Tu acceso está suspendido temporalmente."
+      : "Tu vínculo con la empresa fue finalizado."
+    return NextResponse.json({ error: `${detalle} Si crees que es un error, contacta a RRHH.` }, { status: 403 })
+  }
+
   await setSession({ sub: emp.id, cedula: emp.cedula, rol: emp.rol, nombre: emp.nombre })
   return NextResponse.json({ ok: true, rol: emp.rol, mustChange: emp.must_change_password })
 }

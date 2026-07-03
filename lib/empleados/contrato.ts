@@ -73,6 +73,15 @@ export function condicionesVigentes(contratos: Contrato[], fechaISO?: string): C
   return vigentes.length ? vigentes[vigentes.length - 1] : ordenados[0]
 }
 
+/**
+ * Fecha real de inicio de una versión de contrato. El contrato inicial arranca en
+ * la fecha de ingreso del empleado, NO en la fecha en que se registró en el sistema
+ * (vigente_desde por defecto = hoy). Los otrosíes conservan su propia vigencia.
+ */
+export function inicioContrato(c: Pick<Contrato, "tipo" | "vigente_desde">, fechaIngreso: string | null): string {
+  return c.tipo === "inicial" && fechaIngreso ? fechaIngreso : c.vigente_desde
+}
+
 /** Total mensual devengado según el contrato: básico + auxilio de transporte + otros devengos fijos. */
 export function totalMensualContrato(
   c: Pick<Contrato, "salario_basico" | "auxilio_transporte" | "otros_devengos">,

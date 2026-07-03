@@ -3,7 +3,7 @@ import { z } from "zod"
 import { getSession } from "@/lib/empleados/auth"
 import { portalConfigurado } from "@/lib/empleados/db"
 import { getEmpleadoVacacion, listSolicitudes, crearSolicitud } from "@/lib/empleados/ausencia-queries"
-import { calcularSaldoVacaciones } from "@/lib/empleados/ausencia"
+import { calcularSaldoVacaciones, DIAS_ADELANTO } from "@/lib/empleados/ausencia"
 import { contarDiasHabiles, contarDiasCalendario } from "@/lib/empleados/festivos-co"
 
 export const runtime = "nodejs"
@@ -32,7 +32,7 @@ export async function GET() {
 
 const schema = z.object({
   tipo: z.enum([
-    "vacaciones", "permiso_no_remunerado", "licencia_maternidad", "licencia_paternidad",
+    "vacaciones", "adelanto_vacaciones", "permiso_no_remunerado", "licencia_maternidad", "licencia_paternidad",
     "licencia_luto", "dia_familia", "dia_votacion", "otra",
   ]),
   fecha_inicio: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
@@ -63,6 +63,15 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "No tienes un líder asignado para aprobar la solicitud. Contacta a RRHH." }, { status: 400 })
     }
 
+    if (b.tipo === "adelanto_vacaciones") {
+      if (diasHabiles <= 0) {
+        return NextResponse.json({ error: "El rango elegido no tiene días hábiles (solo fines de semana o festivos)." }, { status: 400 })
+      }
+      if (diasHabiles > DIAS_ADELANTO) {
+        return NextResponse.json({ error: `El adelanto de vacaciones es máximo ${DIAS_ADELANTO} días hábiles.` }, { status: 400 })
+      }
+    }
+
     if (b.tipo === "vacaciones") {
       if (diasHabiles <= 0) {
         return NextResponse.json({ error: "El rango elegido no tiene días hábiles (solo fines de semana o festivos)." }, { status: 400 })
@@ -72,7 +81,7 @@ export async function POST(req: Request) {
       const saldo = calcularSaldoVacaciones(Number(emp?.vacaciones_saldo_inicial) || 0, corte, solicitudes)
       if (diasHabiles > saldo.maxSolicitable) {
         return NextResponse.json(
-          { error: `Solicitas ${diasHabiles} días hábiles pero solo puedes pedir hasta ${saldo.maxSolicitable} (disponible ${saldo.disponible} + 2 adelantados).` },
+          { error: `Solicitas ${diasHabiles} días hábiles pero solo tienes ${saldo.disponible} disponibles. Si necesitas hasta ${DIAS_ADELANTO} días extra, usa “Adelanto de vacaciones”.` },
           { status: 400 },
         )
       }
