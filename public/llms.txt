@@ -167,6 +167,7 @@ Experience Radar es el observatorio editorial de MediaLab sobre comportamiento h
 
 ## Artículos del blog
 
+- Moriyasu UX — Diseñar interfaces para usuarios bajo presión (UX y comportamiento humano; señales mínimas y accionables en momentos de tensión): https://medialab.design/blog/moriyasu-ux
 - El Gol en Pausa — Cómo el VAR cambia la emoción y el comportamiento del hincha (UX y comportamiento humano): https://medialab.design/blog/el-gol-en-pausa
 - Ya No Aprendemos a Trabajar, Aprendemos a Dirigir Inteligencias (El Fin de los Prompts): https://medialab.design/blog/dirigir-inteligencias
 - La Arquitectura de la Percepción: https://medialab.design/blog/arquitectura-percepcion

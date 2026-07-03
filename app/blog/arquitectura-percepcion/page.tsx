@@ -3,7 +3,6 @@ import Image from "next/image"
 import {
   BlogChromeBackLink,
   BlogChromeMeta,
-  BlogChromeEnNotice,
   BlogChromeAuthorLine,
   BlogChromeCTA,
 } from "@/components/blog/blog-chrome"
@@ -119,7 +118,6 @@ export default function BlogArquitecturaPercepcionPage() {
       {/* Back link */}
       <div className="max-w-3xl mx-auto px-6 pt-8">
         <BlogChromeBackLink />
-        <BlogChromeEnNotice />
       </div>
 
       {/* Article body */}

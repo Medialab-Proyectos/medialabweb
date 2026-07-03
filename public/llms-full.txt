@@ -244,6 +244,10 @@ URL del blog: https://medialab.design/blog
 
 ### Artículos publicados
 
+**Moriyasu UX: Diseñar Interfaces para Cuando el Usuario No Puede Pensar con Calma** (Julio 2026, 11 min)
+Patrón de diseño para momentos de presión, inspirado en la pizarra con números grandes del entrenador Hajime Moriyasu (fútbol). Tesis: cuando el usuario está bajo tensión, la interfaz debe mostrar lo mínimo necesario para tomar la siguiente decisión correcta — reducir ambigüedad, no explicar más. Fundamento en psicología cognitiva (memoria de trabajo limitada, deterioro del control ejecutivo bajo estrés). No reemplaza las heurísticas de Nielsen: las operacionaliza en escenarios extremos (ruido, fatiga, poco tiempo, alto costo del error). 5 principios: una sola señal dominante; convertir información en acción; menos opciones en el momento crítico; externalizar la memoria; gramática de estados críticos consistente. Ejemplos: app de asistencia vehicular en carretera y formularios complejos. Diseño conductual ético (no urgencia falsa ni manipulación).
+https://medialab.design/blog/moriyasu-ux
+
 **El Gol en Pausa: Cómo el VAR Está Cambiando la Emoción, la Atención y el Comportamiento del Hincha** (Junio 2026, 12 min)
 El VAR como caso de estudio de experiencia humana: una solución puede ser técnicamente correcta y emocionalmente dañina. El VAR mejora la exactitud arbitral (de ~92,1 % a ~98,3 %) pero rompe la espontaneidad, el ritmo y la celebración. Datos: 91,7 % de aficionados siente que eliminó la alegría espontánea (Football Supporters' Association, 2026); 72 % de espectadores de Premier League lo ve menos disfrutable pero solo 18 % quiere eliminarlo (YouGov). Estudios en PLOS ONE (643.251 tuits) y Scientific Reports (smartwatches de 229 fans) confirman el impacto emocional y fisiológico. Lección de diseño: la tecnología no solo debe resolver problemas, debe cuidar el estado emocional del usuario mientras los resuelve. Cuando la tecnología se obsesiona con tener razón, olvida cómo se siente usarla.
 https://medialab.design/blog/el-gol-en-pausa

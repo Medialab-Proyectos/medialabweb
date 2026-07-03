@@ -43,6 +43,27 @@ export type BlogPost = {
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: "moriyasu-ux",
+    categoryEs: "UX y Comportamiento Humano",
+    categoryEn: "UX & Human Behavior",
+    titleEs: "Moriyasu UX: Diseñar Interfaces para Cuando el Usuario No Puede Pensar con Calma",
+    titleEn: "Moriyasu UX: Designing Interfaces for When the User Can't Think Calmly",
+    shortTitleEs: "Moriyasu UX: Diseñar Bajo Presión",
+    shortTitleEn: "Moriyasu UX: Designing Under Pressure",
+    excerptEs:
+      "En momentos de tensión, una buena interfaz no explica más: reduce ambigüedad, muestra lo urgente y guía la siguiente acción segura. Lo que una pizarra de fútbol enseña sobre UX bajo presión.",
+    excerptEn:
+      "Under pressure, a good interface doesn't explain more: it reduces ambiguity, shows what's urgent, and guides the next safe action. What a football whiteboard teaches about UX under stress.",
+    readTime: "11 min",
+    dateEs: "Julio 2026",
+    dateEn: "July 2026",
+    image: "/images/blog-moriyasu-ux.png",
+    color: "#8b5cf6",
+    lastModified: "2026-07-03",
+    priority: 0.85,
+    translated: true,
+  },
+  {
     slug: "el-gol-en-pausa",
     categoryEs: "UX y Comportamiento Humano",
     categoryEn: "UX & Human Behavior",
@@ -61,6 +82,7 @@ export const BLOG_POSTS: BlogPost[] = [
     color: "#2AABB3",
     lastModified: "2026-06-30",
     priority: 0.85,
+    translated: true,
   },
   {
     slug: "dirigir-inteligencias",
@@ -101,6 +123,7 @@ export const BLOG_POSTS: BlogPost[] = [
     image: "/images/blog-arquitectura-percepcion.jpg",
     color: "#E8751A",
     lastModified: "2026-05-14",
+    translated: true,
   },
   {
     slug: "adn-del-significado",
