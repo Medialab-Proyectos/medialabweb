@@ -57,12 +57,13 @@ export async function generarPrimaPDF(
   const semestre = (p.semestre === 2 ? 2 : 1) as 1 | 2
 
   // ── Encabezado ──────────────────────────────────────────────────────────────
-  const logoW = 104
+  const logoW = 54
   const logoH = (logo.height / logo.width) * logoW
-  page.drawImage(logo, { x: M, y: H - 40 - logoH, width: logoW, height: logoH })
-  T(M + 120, 56, "MEDIALAB INGENIERIA E.U.", 12.5, bold)
-  T(M + 120, 71, "NIT 901.575.423-8", 9, font, gray)
-  T(M + 120, 85, "Comprobante de prima de servicios", 9.5, bold, cyan)
+  page.drawImage(logo, { x: M, y: H - 44 - logoH, width: logoW, height: logoH })
+  const hx = M + logoW + 16
+  T(hx, 58, "MEDIALAB INGENIERIA E.U.", 12, bold)
+  T(hx, 72, "NIT 901.575.423-8", 8.5, font, gray)
+  T(hx, 85, "Comprobante de prima de servicios", 9, bold, cyan)
 
   TR(W - M, 56, `${SEMESTRE_LABEL[semestre].split(" (")[0]}`, 12, bold)
   TR(W - M, 71, `Año ${p.anio}`, 9, font, gray)
@@ -90,7 +91,6 @@ export async function generarPrimaPDF(
   const filas: [string, string][] = [
     ["Base de liquidacion (salario basico + auxilio de transporte)", formatCOP(p.base)],
     ["Dias del semestre liquidados", String(p.dias)],
-    ["Formula: base x dias / 360", ""],
   ]
   let top = headTop + 22
   for (const [c, v] of filas) {

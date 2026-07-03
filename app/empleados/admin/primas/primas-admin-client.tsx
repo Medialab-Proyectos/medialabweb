@@ -6,6 +6,7 @@ import { ArrowLeft, Loader2, Save, Download, Calculator, Gift, CheckCircle2 } fr
 import type { Empleado } from "@/lib/empleados/types"
 import { formatCOP } from "@/lib/empleados/desprendible"
 import { type PrimaDoc, type Contrato, condicionesVigentes, calcularPrima, SEMESTRE_LABEL } from "@/lib/empleados/contrato"
+import { MoneyInput } from "../../money-input"
 
 const inputCls = "w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm text-[#fff] outline-none transition focus:border-[var(--cyan)]/60"
 const lblCls = "text-[11px] font-semibold uppercase tracking-wide text-[#fff]/50"
@@ -151,15 +152,15 @@ export function PrimasAdminClient({ empleados }: { empleados: Empleado[] }) {
           <div className="grid gap-3 sm:grid-cols-3">
             <label className="flex flex-col gap-1.5">
               <span className={lblCls}>Base (básico + auxilio)</span>
-              <input type="number" value={base} onChange={(e) => { const v = Number(e.target.value); setBase(v); recalcular(v, dias) }} className={inputCls} />
+              <MoneyInput value={base} onChange={(v) => { setBase(v); recalcular(v, dias) }} className={inputCls} />
             </label>
             <label className="flex flex-col gap-1.5">
               <span className={lblCls}>Días liquidados</span>
-              <input type="number" value={dias} onChange={(e) => { const v = Number(e.target.value); setDias(v); recalcular(base, v) }} className={inputCls} />
+              <input type="number" inputMode="numeric" value={dias} onChange={(e) => { const v = Number(e.target.value); setDias(v); recalcular(base, v) }} className={inputCls} />
             </label>
             <label className="flex flex-col gap-1.5">
               <span className={lblCls}>Valor prima</span>
-              <input type="number" value={valor} onChange={(e) => setValor(Number(e.target.value))} className={inputCls} />
+              <MoneyInput value={valor} onChange={setValor} className={inputCls} />
             </label>
           </div>
           <div className="mt-3">

@@ -105,12 +105,12 @@ export function EvaluarClient() {
 
           <div className="flex flex-col gap-2.5">
             {COMPETENCIAS.map((c) => (
-              <div key={c.clave} className="flex items-center justify-between gap-3">
+              <div key={c.clave} className="flex flex-col gap-1.5 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
                 <span className="text-sm text-[#fff]/80">{c.etiqueta}</span>
                 <select
                   value={comp[c.clave] ?? 0}
                   onChange={(e) => setComp({ ...comp, [c.clave]: Number(e.target.value) })}
-                  className={`${inputCls} w-48 shrink-0`}
+                  className={`${inputCls} w-full sm:w-48 sm:shrink-0`}
                 >
                   <option value={0}>— Sin calificar —</option>
                   {NIVELES.map((n) => <option key={n.v} value={n.v}>{n.label}</option>)}

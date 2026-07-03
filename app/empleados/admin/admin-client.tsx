@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { useMemo, useState } from "react"
 import {
-  UserPlus, Pencil, KeyRound, Ban, RotateCcw, Loader2, X, Copy, CheckCircle2, Users, FileText, FileSignature, Gift, PiggyBank,
+  UserPlus, Pencil, KeyRound, Ban, RotateCcw, Loader2, X, Copy, CheckCircle2, Users, FileText, FileSignature, Gift, PiggyBank, ArrowLeft,
 } from "lucide-react"
 import type { Empleado, Rol } from "@/lib/empleados/types"
 import { ROL_LABEL } from "@/lib/empleados/types"
@@ -135,7 +135,10 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
 
   return (
     <div>
-      <div className="mb-6 flex items-center justify-between">
+      <Link href="/empleados/inicio" className="mb-6 inline-flex items-center gap-1.5 text-sm text-[#fff]/55 hover:text-[#fff]">
+        <ArrowLeft size={15} /> Volver al inicio
+      </Link>
+      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-2.5">
           <Users size={20} className="text-[var(--cyan)]" />
           <h1 className="font-display text-xl font-bold">Gestión de empleados</h1>

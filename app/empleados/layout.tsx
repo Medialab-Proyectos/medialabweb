@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 }
 
 export default function EmpleadosLayout({ children }: { children: React.ReactNode }) {
-  return <div className="min-h-screen bg-[#0b0d12] text-[#fff] antialiased">{children}</div>
+  return <div className="emp-portal min-h-screen bg-[#0b0d12] text-[#fff] antialiased">{children}</div>
 }
