@@ -143,6 +143,7 @@ export const BLOG_POSTS: BlogPost[] = [
     image: "/images/blog-adn-del-significado.jpg",
     color: "#2AABB3",
     lastModified: "2026-05-14",
+    translated: true,
   },
   {
     slug: "trono-de-la-decision",
@@ -162,6 +163,7 @@ export const BLOG_POSTS: BlogPost[] = [
     image: "/images/blog-zero-ui-decision.png",
     color: "#E8751A",
     lastModified: "2026-05-14",
+    translated: true,
   },
   {
     slug: "influencia-sin-erosion",
@@ -181,6 +183,7 @@ export const BLOG_POSTS: BlogPost[] = [
     image: "/images/blog-influencia-sin-erosion.jpg",
     color: "#2AABB3",
     lastModified: "2026-05-14",
+    translated: true,
   },
   {
     slug: "psicologia-adopcion",
@@ -200,6 +203,7 @@ export const BLOG_POSTS: BlogPost[] = [
     image: "/images/blog-behavioral.jpg",
     color: "#E8751A",
     lastModified: "2026-05-14",
+    translated: true,
   },
   {
     slug: "discovery-ia",
@@ -219,6 +223,7 @@ export const BLOG_POSTS: BlogPost[] = [
     image: "/images/blog-ai.jpg",
     color: "#2AABB3",
     lastModified: "2026-05-14",
+    translated: true,
   },
   {
     slug: "ux-fintech",
@@ -238,6 +243,7 @@ export const BLOG_POSTS: BlogPost[] = [
     image: "/images/blog-fintech.jpg",
     color: "#E8751A",
     lastModified: "2026-05-14",
+    translated: true,
   },
   {
     slug: "mvp-escala",
@@ -257,6 +263,7 @@ export const BLOG_POSTS: BlogPost[] = [
     image: "/images/blog-mvp.jpg",
     color: "#2AABB3",
     lastModified: "2026-05-14",
+    translated: true,
   },
 ]
 

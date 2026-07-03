@@ -41,7 +41,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ]
 
   // Artículos del blog — derivados del registro único (lib/blog-posts.ts).
-  // Son prosa en español (en: false) → solo URL ES con x-default.
+  // Cada post tiene versión ES + EN real (translated:true) → se emite el
+  // espejo /en/blog/<slug> indexable con hreflang. Si algún post futuro no
+  // está traducido (translated ausente) va solo con URL ES + x-default.
   const blogRoutes = BLOG_POSTS.map((post) => ({
     path: `/blog/${post.slug}`,
     changeFrequency: "monthly" as const,

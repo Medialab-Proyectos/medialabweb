@@ -3,7 +3,6 @@ import Image from "next/image"
 import {
   BlogChromeBackLink,
   BlogChromeMeta,
-  BlogChromeEnNotice,
   BlogChromeCTA,
 } from "@/components/blog/blog-chrome"
 import { BlogRelatedArticles } from "@/components/blog/blog-related"
@@ -81,7 +80,6 @@ export default function BlogDiscoveryIAPage() {
 
       <div className="max-w-3xl mx-auto px-6 pt-8">
         <BlogChromeBackLink />
-        <BlogChromeEnNotice />
       </div>
 
       <article className="max-w-3xl mx-auto px-6 py-12 md:py-16">
