@@ -3,7 +3,7 @@ import { getServiceClient } from "./db"
 import type { Empleado, Rol } from "./types"
 
 const COLS =
-  "id,cedula,nombre,email,must_change_password,rol,lider_id,cargo,fecha_ingreso,fecha_egreso,particularidades,estado,creado_en,actualizado_en"
+  "id,cedula,nombre,email,must_change_password,rol,lider_id,cargo,caja_compensacion,fecha_ingreso,fecha_egreso,particularidades,estado,creado_en,actualizado_en"
 
 export async function getEmpleadoByCedula(cedula: string) {
   const sb = getServiceClient()
@@ -46,6 +46,7 @@ export type NuevoEmpleado = {
   rol: Rol
   lider_id: string | null
   cargo: string | null
+  caja_compensacion: string | null
   fecha_ingreso: string | null
   particularidades: string | null
 }
@@ -67,6 +68,7 @@ export type CambiosEmpleado = Partial<{
   rol: Rol
   lider_id: string | null
   cargo: string | null
+  caja_compensacion: string | null
   fecha_ingreso: string | null
   fecha_egreso: string | null
   particularidades: string | null

@@ -3,10 +3,11 @@
 import Link from "next/link"
 import { useMemo, useState } from "react"
 import {
-  UserPlus, Pencil, KeyRound, Ban, RotateCcw, Loader2, X, Copy, CheckCircle2, Users, FileText, FileSignature, Gift,
+  UserPlus, Pencil, KeyRound, Ban, RotateCcw, Loader2, X, Copy, CheckCircle2, Users, FileText, FileSignature, Gift, PiggyBank,
 } from "lucide-react"
 import type { Empleado, Rol } from "@/lib/empleados/types"
 import { ROL_LABEL } from "@/lib/empleados/types"
+import { CAJAS_COMPENSACION } from "@/lib/empleados/catalogos-co"
 
 type FormState = {
   id?: string
@@ -14,6 +15,7 @@ type FormState = {
   nombre: string
   email: string
   cargo: string
+  caja_compensacion: string
   rol: Rol
   lider_id: string
   fecha_ingreso: string
@@ -22,7 +24,7 @@ type FormState = {
 }
 
 const vacío: FormState = {
-  cedula: "", nombre: "", email: "", cargo: "", rol: "empleado",
+  cedula: "", nombre: "", email: "", cargo: "", caja_compensacion: "", rol: "empleado",
   lider_id: "", fecha_ingreso: "", fecha_egreso: "", particularidades: "",
 }
 
@@ -54,6 +56,7 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
     setError("")
     setForm({
       id: e.id, cedula: e.cedula, nombre: e.nombre, email: e.email, cargo: e.cargo ?? "",
+      caja_compensacion: e.caja_compensacion ?? "",
       rol: e.rol, lider_id: e.lider_id ?? "", fecha_ingreso: e.fecha_ingreso ?? "",
       fecha_egreso: e.fecha_egreso ?? "", particularidades: e.particularidades ?? "",
     })
@@ -79,6 +82,7 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
           body: JSON.stringify({
             id: form.id, accion: "actualizar",
             nombre: form.nombre, email: form.email, cargo: form.cargo || null,
+            caja_compensacion: form.caja_compensacion || null,
             rol: form.rol, lider_id: form.lider_id || null,
             fecha_ingreso: form.fecha_ingreso || null, fecha_egreso: form.fecha_egreso || null,
             particularidades: form.particularidades || null,
@@ -93,6 +97,7 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             cedula: form.cedula, nombre: form.nombre, email: form.email, cargo: form.cargo || null,
+            caja_compensacion: form.caja_compensacion || null,
             rol: form.rol, lider_id: form.lider_id || null,
             fecha_ingreso: form.fecha_ingreso || null, particularidades: form.particularidades || null,
           }),
@@ -154,6 +159,12 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
             className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-[#fff]/80 transition hover:bg-white/5"
           >
             <Gift size={15} /> Primas
+          </Link>
+          <Link
+            href="/empleados/admin/cesantias"
+            className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-[#fff]/80 transition hover:bg-white/5"
+          >
+            <PiggyBank size={15} /> Cesantías
           </Link>
           <button
             onClick={abrirNuevo}
@@ -266,6 +277,11 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
               <label className="flex flex-col gap-1.5">
                 <span className={lblCls}>Cargo</span>
                 <input value={form.cargo} onChange={(e) => setForm({ ...form, cargo: e.target.value })} placeholder="Ej: Diseñador UX" className={inputCls} />
+              </label>
+              <label className="flex flex-col gap-1.5">
+                <span className={lblCls}>Caja de compensación</span>
+                <input list="cat-cajas" value={form.caja_compensacion} onChange={(e) => setForm({ ...form, caja_compensacion: e.target.value })} placeholder="Elige o escribe…" className={inputCls} />
+                <datalist id="cat-cajas">{CAJAS_COMPENSACION.map((x) => <option key={x} value={x} />)}</datalist>
               </label>
               <label className="flex flex-col gap-1.5">
                 <span className={lblCls}>Rol</span>

@@ -1,0 +1,1186 @@
+{
+  "generatedAt": "2026-07-03T04:00:53.157367-05:00",
+  "state": "necesita atencion",
+  "scores": {
+    "seo": 82,
+    "ux": 100,
+    "ux_ai": 83,
+    "dev": 64,
+    "a11y": 99,
+    "aeo": 89,
+    "ai_trends": 88
+  },
+  "pages": [
+    {
+      "url": "https://medialab.design/",
+      "path": "/",
+      "status": 200,
+      "bytes": 313723,
+      "title": "Agencia de Diseño UX/UI con IA en Colombia | MediaLab",
+      "titleLen": 53,
+      "description": "Agencia de diseño UX/UI con IA y psicología del consumidor en Colombia y LatAm. Diseñamos y desarrollamos productos digitales que las personas aman — de idea a producción en semanas.",
+      "descriptionLen": 182,
+      "canonical": "https://medialab.design",
+      "h1Count": 1,
+      "h1": [
+        "Diseñamos productos digitales que la gente ama"
+      ],
+      "h2Count": 13,
+      "schemaTypes": [
+        "Book",
+        "FAQPage",
+        "ImageGallery",
+        "ItemList",
+        "LocalBusiness",
+        "Organization",
+        "ProfessionalService",
+        "SoftwareApplication",
+        "WebSite"
+      ],
+      "wordCount": 1894,
+      "images": 68,
+      "missingAlt": 2,
+      "ctaCount": 7,
+      "ctas": [
+        "Iniciar proyecto",
+        "Cuéntanos tu desafío",
+        "Contáctanos",
+        "WhatsApp",
+        "Escríbenos por WhatsApp",
+        "Comunidad WhatsApp",
+        "Contacto"
+      ],
+      "internalLinks": 35,
+      "seo": 88,
+      "ux": 100,
+      "ux_ai": 88,
+      "aeo": 100,
+      "dev": 59,
+      "a11y": 100,
+      "issues": [
+        "Meta description fuera de rango (182 chars)",
+        "UX-IA incompleto: limites/fallback",
+        "CSP no detectada en headers",
+        "Varias imagenes no WebP/AVIF",
+        "Alto numero aparente de scripts"
+      ],
+      "warnings": []
+    },
+    {
+      "url": "https://medialab.design/servicios",
+      "path": "/servicios",
+      "status": 200,
+      "bytes": 101648,
+      "title": "Servicios de Diseño UX/UI, IA y Desarrollo en Colombia | MediaLab Ingeniería",
+      "titleLen": 76,
+      "description": "Agencia en Colombia y LatAm: diseño UX/UI conductual, discovery de producto con IA (UXBox), CRO y desarrollo de software a medida para empresas B2B y marcas B2C.",
+      "descriptionLen": 161,
+      "canonical": "https://medialab.design/servicios",
+      "h1Count": 1,
+      "h1": [
+        "Servicios de Diseño UX/UI, IA y Desarrollo de Software — MediaLab"
+      ],
+      "h2Count": 3,
+      "schemaTypes": [
+        "ItemList",
+        "Organization",
+        "WebSite"
+      ],
+      "wordCount": 585,
+      "images": 8,
+      "missingAlt": 0,
+      "ctaCount": 6,
+      "ctas": [
+        "Iniciar proyecto",
+        "Quiero mejorar mi experiencia",
+        "Escríbenos por WhatsApp",
+        "Comunidad WhatsApp",
+        "WhatsApp",
+        "Contacto"
+      ],
+      "internalLinks": 20,
+      "seo": 88,
+      "ux": 100,
+      "ux_ai": 76,
+      "aeo": 85,
+      "dev": 59,
+      "a11y": 100,
+      "issues": [
+        "Title fuera de rango (76 chars)",
+        "UX-IA incompleto: que hace la IA vs humano, limites/fallback",
+        "CSP no detectada en headers",
+        "Varias imagenes no WebP/AVIF",
+        "Alto numero aparente de scripts"
+      ],
+      "warnings": []
+    },
+    {
+      "url": "https://medialab.design/servicios/diseno-ux-ui",
+      "path": "/servicios/diseno-ux-ui",
+      "status": 200,
+      "bytes": 86193,
+      "title": "Diseño UX/UI con IA y psicología del consumidor | MediaLab Ingeniería",
+      "titleLen": 69,
+      "description": "Agencia de diseño UX/UI con IA, investigación de usuarios y diseño conductual. Creamos productos digitales B2B y B2C que las personas entienden, usan y recomiendan.",
+      "descriptionLen": 164,
+      "canonical": "https://medialab.design/servicios/diseno-ux-ui",
+      "h1Count": 1,
+      "h1": [
+        "Diseño UX/UI con IA y psicología del consumidor"
+      ],
+      "h2Count": 4,
+      "schemaTypes": [
+        "BreadcrumbList",
+        "FAQPage",
+        "ItemList",
+        "Organization",
+        "Service",
+        "WebSite"
+      ],
+      "wordCount": 419,
+      "images": 4,
+      "missingAlt": 0,
+      "ctaCount": 2,
+      "ctas": [
+        "Iniciar proyecto",
+        "Contacto"
+      ],
+      "internalLinks": 26,
+      "seo": 90,
+      "ux": 100,
+      "ux_ai": 88,
+      "aeo": 85,
+      "dev": 67,
+      "a11y": 100,
+      "issues": [
+        "Contenido comercial corto (419 palabras)",
+        "UX-IA incompleto: limites/fallback",
+        "CSP no detectada en headers",
+        "Alto numero aparente de scripts"
+      ],
+      "warnings": []
+    },
+    {
+      "url": "https://medialab.design/servicios/discovery-con-ia",
+      "path": "/servicios/discovery-con-ia",
+      "status": 200,
+      "bytes": 89986,
+      "title": "Discovery de producto con IA para startups y equipos B2B | MediaLab Ingeniería",
+      "titleLen": 78,
+      "description": "Acelera tu discovery de producto con IA, investigación UX y criterio humano. De idea vaga a roadmap accionable en días, con MediaLab.",
+      "descriptionLen": 133,
+      "canonical": "https://medialab.design/servicios/discovery-con-ia",
+      "h1Count": 1,
+      "h1": [
+        "Discovery de producto con IA sin perder criterio humano"
+      ],
+      "h2Count": 6,
+      "schemaTypes": [
+        "BreadcrumbList",
+        "FAQPage",
+        "ItemList",
+        "Organization",
+        "Service",
+        "WebSite"
+      ],
+      "wordCount": 470,
+      "images": 4,
+      "missingAlt": 0,
+      "ctaCount": 3,
+      "ctas": [
+        "Iniciar proyecto",
+        "Genera tu brief con UXBox",
+        "Contacto"
+      ],
+      "internalLinks": 27,
+      "seo": 78,
+      "ux": 100,
+      "ux_ai": 88,
+      "aeo": 85,
+      "dev": 67,
+      "a11y": 100,
+      "issues": [
+        "Title fuera de rango (78 chars)",
+        "Contenido comercial corto (470 palabras)",
+        "UX-IA incompleto: limites/fallback",
+        "CSP no detectada en headers",
+        "Alto numero aparente de scripts"
+      ],
+      "warnings": []
+    },
+    {
+      "url": "https://medialab.design/servicios/desarrollo-producto-digital",
+      "path": "/servicios/desarrollo-producto-digital",
+      "status": 200,
+      "bytes": 84240,
+      "title": "Desarrollo de producto digital con IA y software a medida | MediaLab Ingeniería",
+      "titleLen": 79,
+      "description": "Desarrollo de software a medida: plataformas web B2B, apps B2C, MVPs y arquitecturas escalables con React, Next.js, Node.js e integración de IA.",
+      "descriptionLen": 144,
+      "canonical": "https://medialab.design/servicios/desarrollo-producto-digital",
+      "h1Count": 1,
+      "h1": [
+        "Desarrollo de producto digital con IA"
+      ],
+      "h2Count": 4,
+      "schemaTypes": [
+        "BreadcrumbList",
+        "FAQPage",
+        "ItemList",
+        "Organization",
+        "Service",
+        "WebSite"
+      ],
+      "wordCount": 403,
+      "images": 4,
+      "missingAlt": 0,
+      "ctaCount": 2,
+      "ctas": [
+        "Iniciar proyecto",
+        "Contacto"
+      ],
+      "internalLinks": 26,
+      "seo": 78,
+      "ux": 100,
+      "ux_ai": 76,
+      "aeo": 85,
+      "dev": 67,
+      "a11y": 100,
+      "issues": [
+        "Title fuera de rango (79 chars)",
+        "Contenido comercial corto (403 palabras)",
+        "UX-IA incompleto: que hace la IA vs humano, limites/fallback",
+        "CSP no detectada en headers",
+        "Alto numero aparente de scripts"
+      ],
+      "warnings": []
+    },
+    {
+      "url": "https://medialab.design/servicios/cro-saas",
+      "path": "/servicios/cro-saas",
+      "status": 200,
+      "bytes": 82301,
+      "title": "CRO para SaaS: optimización de conversión con datos e IA | MediaLab Ingeniería",
+      "titleLen": 78,
+      "description": "Optimización de la tasa de conversión (CRO) para SaaS: activación, retención y expansión. Más conversión sin gastar más en tráfico, con datos, UX e IA.",
+      "descriptionLen": 151,
+      "canonical": "https://medialab.design/servicios/cro-saas",
+      "h1Count": 1,
+      "h1": [
+        "CRO para SaaS: convierte más sin gastar más en tráfico"
+      ],
+      "h2Count": 5,
+      "schemaTypes": [
+        "BreadcrumbList",
+        "FAQPage",
+        "ItemList",
+        "Organization",
+        "Service",
+        "WebSite"
+      ],
+      "wordCount": 400,
+      "images": 4,
+      "missingAlt": 0,
+      "ctaCount": 2,
+      "ctas": [
+        "Iniciar proyecto",
+        "Contacto"
+      ],
+      "internalLinks": 23,
+      "seo": 78,
+      "ux": 100,
+      "ux_ai": 76,
+      "aeo": 85,
+      "dev": 67,
+      "a11y": 100,
+      "issues": [
+        "Title fuera de rango (78 chars)",
+        "Contenido comercial corto (400 palabras)",
+        "UX-IA incompleto: que hace la IA vs humano, limites/fallback",
+        "CSP no detectada en headers",
+        "Alto numero aparente de scripts"
+      ],
+      "warnings": []
+    },
+    {
+      "url": "https://medialab.design/curso",
+      "path": "/curso",
+      "status": 200,
+      "bytes": 252299,
+      "title": "Curso AI UX Architect | MediaLab Ingeniería",
+      "titleLen": 43,
+      "description": "Domina UX, psicología de adopción digital e IA en 8 semanas. Conviértete en AI UX Architect y diseña productos digitales que las personas aman y los algoritmos priorizan.",
+      "descriptionLen": 170,
+      "canonical": "https://medialab.design/curso",
+      "h1Count": 2,
+      "h1": [
+        "Curso de Certificación AI UX Architect — MediaLab",
+        "La IA construye.Tú diseñas la experiencia y la estrategia."
+      ],
+      "h2Count": 12,
+      "schemaTypes": [
+        "Course",
+        "FAQPage",
+        "ItemList",
+        "Organization",
+        "Product",
+        "WebSite"
+      ],
+      "wordCount": 1404,
+      "images": 17,
+      "missingAlt": 1,
+      "ctaCount": 4,
+      "ctas": [
+        "Inscribirme",
+        "Inscribirme →",
+        "Inscribirme ahora →",
+        "Contacto"
+      ],
+      "internalLinks": 20,
+      "seo": 74,
+      "ux": 100,
+      "ux_ai": 100,
+      "aeo": 100,
+      "dev": 59,
+      "a11y": 92,
+      "issues": [
+        "Meta description fuera de rango (170 chars)",
+        "H1 esperado=1, encontrado=2",
+        "CSP no detectada en headers",
+        "Varias imagenes no WebP/AVIF",
+        "Alto numero aparente de scripts"
+      ],
+      "warnings": []
+    },
+    {
+      "url": "https://medialab.design/portafolio",
+      "path": "/portafolio",
+      "status": 200,
+      "bytes": 129956,
+      "title": "Portafolio UX, IA y Producto Digital en Colombia | MediaLab",
+      "titleLen": 59,
+      "description": "Descubre cómo MediaLab Ingeniería ha transformado productos digitales para empresas B2B y B2C, incluyendo SinDeudas para finanzas conductuales y Cumbreva para movilidad eléctrica.",
+      "descriptionLen": 179,
+      "canonical": "https://medialab.design/portafolio",
+      "h1Count": 1,
+      "h1": [
+        "Estos productos ya están generando resultados."
+      ],
+      "h2Count": 2,
+      "schemaTypes": [
+        "ItemList",
+        "Organization",
+        "WebSite"
+      ],
+      "wordCount": 744,
+      "images": 9,
+      "missingAlt": 0,
+      "ctaCount": 6,
+      "ctas": [
+        "Iniciar proyecto",
+        "¿Tienes una idea? Contáctanos",
+        "Escríbenos por WhatsApp",
+        "Comunidad WhatsApp",
+        "WhatsApp",
+        "Contacto"
+      ],
+      "internalLinks": 20,
+      "seo": 88,
+      "ux": 100,
+      "ux_ai": 76,
+      "aeo": 100,
+      "dev": 59,
+      "a11y": 100,
+      "issues": [
+        "Meta description fuera de rango (179 chars)",
+        "UX-IA incompleto: que hace la IA vs humano, limites/fallback",
+        "CSP no detectada en headers",
+        "Varias imagenes no WebP/AVIF",
+        "Alto numero aparente de scripts"
+      ],
+      "warnings": []
+    },
+    {
+      "url": "https://medialab.design/recursos/analizador-ux-ia",
+      "path": "/recursos/analizador-ux-ia",
+      "status": 200,
+      "bytes": 71448,
+      "title": "UX + AI Discovery Analyzer: diagnostica tu producto digital (gratis) | MediaLab Ingeniería",
+      "titleLen": 90,
+      "description": "Diagnóstico interactivo gratuito: mide la madurez de tu producto en claridad, UX, IA, diferenciación y conversión. Score, bloqueadores y quick wins al instante.",
+      "descriptionLen": 160,
+      "canonical": "https://medialab.design/recursos/analizador-ux-ia",
+      "h1Count": 1,
+      "h1": [
+        "UX + AI Discovery Analyzer"
+      ],
+      "h2Count": 3,
+      "schemaTypes": [
+        "BreadcrumbList",
+        "FAQPage",
+        "ItemList",
+        "Organization",
+        "WebApplication",
+        "WebSite"
+      ],
+      "wordCount": 244,
+      "images": 3,
+      "missingAlt": 0,
+      "ctaCount": 2,
+      "ctas": [
+        "Iniciar proyecto",
+        "Contacto"
+      ],
+      "internalLinks": 19,
+      "seo": 78,
+      "ux": 100,
+      "ux_ai": 76,
+      "aeo": 85,
+      "dev": 67,
+      "a11y": 100,
+      "issues": [
+        "Title fuera de rango (90 chars)",
+        "Contenido comercial corto (244 palabras)",
+        "UX-IA incompleto: que hace la IA vs humano, limites/fallback",
+        "CSP no detectada en headers",
+        "Alto numero aparente de scripts"
+      ],
+      "warnings": []
+    },
+    {
+      "url": "https://medialab.design/uxgreen",
+      "path": "/uxgreen",
+      "status": 200,
+      "bytes": 128718,
+      "title": "UXGreen™ — Certificación de Eficiencia Digital Sostenible | MediaLab | MediaLab Ingeniería",
+      "titleLen": 90,
+      "description": "UXGreen™ es el primer estándar que une performance, accesibilidad, IA y sostenibilidad digital. Analiza tu sitio y obtén tu score gratuito. Certificación verificable para productos digitales de clase mundial.",
+      "descriptionLen": 208,
+      "canonical": "https://medialab.design/uxgreen",
+      "h1Count": 1,
+      "h1": [
+        "La ineficiencia energética digital tiene un costo real."
+      ],
+      "h2Count": 6,
+      "schemaTypes": [
+        "BreadcrumbList",
+        "Certification",
+        "FAQPage",
+        "ItemList",
+        "Organization",
+        "WebApplication",
+        "WebSite"
+      ],
+      "wordCount": 770,
+      "images": 10,
+      "missingAlt": 2,
+      "ctaCount": 2,
+      "ctas": [
+        "Iniciar proyecto",
+        "Contacto"
+      ],
+      "internalLinks": 19,
+      "seo": 76,
+      "ux": 100,
+      "ux_ai": 88,
+      "aeo": 100,
+      "dev": 59,
+      "a11y": 88,
+      "issues": [
+        "Title fuera de rango (90 chars)",
+        "Meta description fuera de rango (208 chars)",
+        "UX-IA incompleto: limites/fallback",
+        "CSP no detectada en headers",
+        "Varias imagenes no WebP/AVIF",
+        "Alto numero aparente de scripts",
+        "Inputs con labels potencialmente incompletos"
+      ],
+      "warnings": []
+    },
+    {
+      "url": "https://medialab.design/industrias/fintech",
+      "path": "/industrias/fintech",
+      "status": 200,
+      "bytes": 79539,
+      "title": "Diseño UX para Fintech: experiencias que generan confianza | MediaLab Ingeniería",
+      "titleLen": 80,
+      "description": "Diseño UX y conductual para fintech, banca, pagos y crédito. Reducimos fricción y ansiedad en onboarding y KYC con investigación, psicología del consumidor e IA.",
+      "descriptionLen": 161,
+      "canonical": "https://medialab.design/industrias/fintech",
+      "h1Count": 1,
+      "h1": [
+        "Diseño UX para Fintech: donde la confianza se siente, no se explica"
+      ],
+      "h2Count": 5,
+      "schemaTypes": [
+        "BreadcrumbList",
+        "FAQPage",
+        "ItemList",
+        "Organization",
+        "Service",
+        "WebSite"
+      ],
+      "wordCount": 416,
+      "images": 3,
+      "missingAlt": 0,
+      "ctaCount": 2,
+      "ctas": [
+        "Iniciar proyecto",
+        "Contacto"
+      ],
+      "internalLinks": 21,
+      "seo": 78,
+      "ux": 100,
+      "ux_ai": 76,
+      "aeo": 85,
+      "dev": 67,
+      "a11y": 100,
+      "issues": [
+        "Title fuera de rango (80 chars)",
+        "Contenido comercial corto (416 palabras)",
+        "UX-IA incompleto: que hace la IA vs humano, limites/fallback",
+        "CSP no detectada en headers",
+        "Alto numero aparente de scripts"
+      ],
+      "warnings": []
+    },
+    {
+      "url": "https://medialab.design/industrias/startups",
+      "path": "/industrias/startups",
+      "status": 200,
+      "bytes": 79424,
+      "title": "UX y diseño de producto para startups: de idea a MVP validado | MediaLab Ingeniería",
+      "titleLen": 83,
+      "description": "Validamos, diseñamos y construimos productos para startups con discovery con IA, UX y desarrollo de MVP. De idea vaga a producto validado antes de quedarte sin runway.",
+      "descriptionLen": 167,
+      "canonical": "https://medialab.design/industrias/startups",
+      "h1Count": 1,
+      "h1": [
+        "UX y producto para startups: de idea a producto validado"
+      ],
+      "h2Count": 5,
+      "schemaTypes": [
+        "BreadcrumbList",
+        "FAQPage",
+        "ItemList",
+        "Organization",
+        "Service",
+        "WebSite"
+      ],
+      "wordCount": 414,
+      "images": 3,
+      "missingAlt": 0,
+      "ctaCount": 2,
+      "ctas": [
+        "Iniciar proyecto",
+        "Contacto"
+      ],
+      "internalLinks": 20,
+      "seo": 66,
+      "ux": 100,
+      "ux_ai": 76,
+      "aeo": 85,
+      "dev": 67,
+      "a11y": 100,
+      "issues": [
+        "Title fuera de rango (83 chars)",
+        "Meta description fuera de rango (167 chars)",
+        "Contenido comercial corto (414 palabras)",
+        "UX-IA incompleto: que hace la IA vs humano, limites/fallback",
+        "CSP no detectada en headers",
+        "Alto numero aparente de scripts"
+      ],
+      "warnings": []
+    },
+    {
+      "url": "https://medialab.design/industrias/banca",
+      "path": "/industrias/banca",
+      "status": 200,
+      "bytes": 79050,
+      "title": "Diseño UX para banca: experiencias digitales que generan confianza | MediaLab Ingeniería",
+      "titleLen": 88,
+      "description": "Diseño UX y conductual para banca digital: confianza, accesibilidad y omnicanalidad. Modernizamos la experiencia bancaria con investigación, psicología del consumidor e IA.",
+      "descriptionLen": 172,
+      "canonical": "https://medialab.design/industrias/banca",
+      "h1Count": 1,
+      "h1": [
+        "Diseño UX para banca: experiencias que eliminan la ansiedad del usuario"
+      ],
+      "h2Count": 5,
+      "schemaTypes": [
+        "BreadcrumbList",
+        "FAQPage",
+        "ItemList",
+        "Organization",
+        "Service",
+        "WebSite"
+      ],
+      "wordCount": 416,
+      "images": 3,
+      "missingAlt": 0,
+      "ctaCount": 2,
+      "ctas": [
+        "Iniciar proyecto",
+        "Contacto"
+      ],
+      "internalLinks": 21,
+      "seo": 66,
+      "ux": 100,
+      "ux_ai": 76,
+      "aeo": 85,
+      "dev": 67,
+      "a11y": 100,
+      "issues": [
+        "Title fuera de rango (88 chars)",
+        "Meta description fuera de rango (172 chars)",
+        "Contenido comercial corto (416 palabras)",
+        "UX-IA incompleto: que hace la IA vs humano, limites/fallback",
+        "CSP no detectada en headers",
+        "Alto numero aparente de scripts"
+      ],
+      "warnings": []
+    },
+    {
+      "url": "https://medialab.design/industrias/ecommerce",
+      "path": "/industrias/ecommerce",
+      "status": 200,
+      "bytes": 78302,
+      "title": "Diseño UX para e-commerce: experiencias de compra que convierten | MediaLab Ingeniería",
+      "titleLen": 86,
+      "description": "Diseño UX, conductual y CRO para e-commerce. Reducimos el abandono de carrito y aumentamos la conversión y la recompra con investigación, psicología del consumidor e IA.",
+      "descriptionLen": 169,
+      "canonical": "https://medialab.design/industrias/ecommerce",
+      "h1Count": 1,
+      "h1": [
+        "Diseño UX para e-commerce: experiencias de compra que convierten"
+      ],
+      "h2Count": 5,
+      "schemaTypes": [
+        "BreadcrumbList",
+        "FAQPage",
+        "ItemList",
+        "Organization",
+        "Service",
+        "WebSite"
+      ],
+      "wordCount": 399,
+      "images": 3,
+      "missingAlt": 0,
+      "ctaCount": 2,
+      "ctas": [
+        "Iniciar proyecto",
+        "Contacto"
+      ],
+      "internalLinks": 20,
+      "seo": 66,
+      "ux": 100,
+      "ux_ai": 76,
+      "aeo": 85,
+      "dev": 67,
+      "a11y": 100,
+      "issues": [
+        "Title fuera de rango (86 chars)",
+        "Meta description fuera de rango (169 chars)",
+        "Contenido comercial corto (399 palabras)",
+        "UX-IA incompleto: que hace la IA vs humano, limites/fallback",
+        "CSP no detectada en headers",
+        "Alto numero aparente de scripts"
+      ],
+      "warnings": []
+    },
+    {
+      "url": "https://medialab.design/blog",
+      "path": "/blog",
+      "status": 200,
+      "bytes": 96999,
+      "title": "Blog de UX, IA y Producto Digital | MediaLab Ingeniería",
+      "titleLen": 55,
+      "description": "Ideas sobre diseño UX, inteligencia artificial, psicología del consumidor y productos digitales B2B/B2C por MediaLab Ingeniería. Lecturas para fundadores, diseñadores y product managers.",
+      "descriptionLen": 186,
+      "canonical": "https://medialab.design/blog",
+      "h1Count": 1,
+      "h1": [
+        "Ideas sobre diseño UX, IA y experiencias B2B/B2C"
+      ],
+      "h2Count": 10,
+      "schemaTypes": [
+        "Blog",
+        "ItemList",
+        "Organization",
+        "WebSite"
+      ],
+      "wordCount": 360,
+      "images": 13,
+      "missingAlt": 0,
+      "ctaCount": 3,
+      "ctas": [
+        "Iniciar proyecto",
+        "Fintech UX en Fintech: Diseñar para la Confianza Estrategias de diseño UX específicas para productos fintech que necesitan construir confianza desde el primer contacto. 8 min Marzo 2026 Leer",
+        "Contacto"
+      ],
+      "internalLinks": 29,
+      "seo": 88,
+      "ux": 100,
+      "ux_ai": 88,
+      "aeo": 85,
+      "dev": 59,
+      "a11y": 100,
+      "issues": [
+        "Meta description fuera de rango (186 chars)",
+        "UX-IA incompleto: limites/fallback",
+        "CSP no detectada en headers",
+        "Varias imagenes no WebP/AVIF",
+        "Alto numero aparente de scripts"
+      ],
+      "warnings": []
+    },
+    {
+      "url": "https://medialab.design/blog/discovery-ia",
+      "path": "/blog/discovery-ia",
+      "status": 200,
+      "bytes": 82036,
+      "title": "Discovery con IA: El Fin de los Workshops Interminables | MediaLab Ingeniería",
+      "titleLen": 77,
+      "description": "Cómo las herramientas inteligentes están reemplazando semanas de sesiones con stakeholders y comprimiendo el discovery de producto a días.",
+      "descriptionLen": 138,
+      "canonical": "https://medialab.design/blog/discovery-ia",
+      "h1Count": 1,
+      "h1": [
+        "Discovery con IA: El Fin de los Workshops Interminables"
+      ],
+      "h2Count": 4,
+      "schemaTypes": [
+        "BlogPosting",
+        "BreadcrumbList",
+        "ItemList",
+        "Organization",
+        "WebSite"
+      ],
+      "wordCount": 441,
+      "images": 4,
+      "missingAlt": 0,
+      "ctaCount": 3,
+      "ctas": [
+        "Iniciar proyecto",
+        "Agendar llamada",
+        "Contacto"
+      ],
+      "internalLinks": 23,
+      "seo": 88,
+      "ux": 100,
+      "ux_ai": 88,
+      "aeo": 85,
+      "dev": 67,
+      "a11y": 100,
+      "issues": [
+        "Title fuera de rango (77 chars)",
+        "UX-IA incompleto: limites/fallback",
+        "CSP no detectada en headers",
+        "Alto numero aparente de scripts"
+      ],
+      "warnings": []
+    },
+    {
+      "url": "https://medialab.design/blog/ux-fintech",
+      "path": "/blog/ux-fintech",
+      "status": 200,
+      "bytes": 84300,
+      "title": "Diseñando para la Confianza: UX y Comportamiento Financiero | MediaLab Ingeniería",
+      "titleLen": 81,
+      "description": "Los principios de diseño UX que hacen que las personas se sientan seguras tomando decisiones financieras digitalmente. Estrategias para fintech y banca.",
+      "descriptionLen": 152,
+      "canonical": "https://medialab.design/blog/ux-fintech",
+      "h1Count": 1,
+      "h1": [
+        "Diseñando para la Confianza: UX y Comportamiento Financiero"
+      ],
+      "h2Count": 3,
+      "schemaTypes": [
+        "BlogPosting",
+        "BreadcrumbList",
+        "ItemList",
+        "Organization",
+        "WebSite"
+      ],
+      "wordCount": 529,
+      "images": 4,
+      "missingAlt": 0,
+      "ctaCount": 3,
+      "ctas": [
+        "Iniciar proyecto",
+        "Agendar llamada",
+        "Contacto"
+      ],
+      "internalLinks": 23,
+      "seo": 88,
+      "ux": 100,
+      "ux_ai": 88,
+      "aeo": 85,
+      "dev": 67,
+      "a11y": 100,
+      "issues": [
+        "Title fuera de rango (81 chars)",
+        "UX-IA incompleto: limites/fallback",
+        "CSP no detectada en headers",
+        "Alto numero aparente de scripts"
+      ],
+      "warnings": []
+    },
+    {
+      "url": "https://medialab.design/sobre-nosotros",
+      "path": "/sobre-nosotros",
+      "status": 200,
+      "bytes": 119339,
+      "title": "Sobre MediaLab — Diseño UX/UI e IA | MediaLab Ingeniería",
+      "titleLen": 56,
+      "description": "Conoce a MediaLab Ingeniería: agencia de diseño UX/UI, IA y desarrollo de productos digitales fundada en 2020 por Christian Benavides, autor de Zero UI. 40+ productos entregados, 7 países.",
+      "descriptionLen": 188,
+      "canonical": "https://medialab.design/sobre-nosotros",
+      "h1Count": 1,
+      "h1": [
+        "Sobre Nosotros — MediaLab Ingeniería"
+      ],
+      "h2Count": 5,
+      "schemaTypes": [
+        "ItemList",
+        "Organization",
+        "WebSite"
+      ],
+      "wordCount": 742,
+      "images": 10,
+      "missingAlt": 1,
+      "ctaCount": 6,
+      "ctas": [
+        "Iniciar proyecto",
+        "Cuéntanos tu desafío",
+        "Escríbenos por WhatsApp",
+        "Comunidad WhatsApp",
+        "WhatsApp",
+        "Contacto"
+      ],
+      "internalLinks": 21,
+      "seo": 88,
+      "ux": 100,
+      "ux_ai": 88,
+      "aeo": 100,
+      "dev": 59,
+      "a11y": 100,
+      "issues": [
+        "Meta description fuera de rango (188 chars)",
+        "UX-IA incompleto: limites/fallback",
+        "CSP no detectada en headers",
+        "Varias imagenes no WebP/AVIF",
+        "Alto numero aparente de scripts"
+      ],
+      "warnings": []
+    },
+    {
+      "url": "https://medialab.design/contacto",
+      "path": "/contacto",
+      "status": 200,
+      "bytes": 77168,
+      "title": "Contacto | MediaLab Ingeniería",
+      "titleLen": 30,
+      "description": "Cuéntanos qué quieres construir o mejorar. MediaLab Ingeniería te responde en 24 horas para revisar tu producto, idea o plataforma digital.",
+      "descriptionLen": 139,
+      "canonical": "https://medialab.design/contacto",
+      "h1Count": 1,
+      "h1": [
+        "Contacto — Agenda tu Discovery Gratuito con MediaLab"
+      ],
+      "h2Count": 2,
+      "schemaTypes": [
+        "ItemList",
+        "Organization",
+        "WebSite"
+      ],
+      "wordCount": 422,
+      "images": 3,
+      "missingAlt": 0,
+      "ctaCount": 5,
+      "ctas": [
+        "Iniciar proyecto",
+        "Escríbenos por WhatsApp",
+        "Comunidad WhatsApp",
+        "WhatsApp",
+        "Contacto"
+      ],
+      "internalLinks": 20,
+      "seo": 100,
+      "ux": 100,
+      "ux_ai": 88,
+      "aeo": 85,
+      "dev": 67,
+      "a11y": 100,
+      "issues": [
+        "UX-IA incompleto: limites/fallback",
+        "CSP no detectada en headers",
+        "Alto numero aparente de scripts"
+      ],
+      "warnings": []
+    },
+    {
+      "url": "https://medialab.design/carreras",
+      "path": "/carreras",
+      "status": 200,
+      "bytes": 88739,
+      "title": "Carreras — Únete al equipo de diseño UX/UI + IA | MediaLab Ingeniería",
+      "titleLen": 69,
+      "description": "Trabaja en MediaLab Ingeniería: diseño UX/UI remoto, mentoría en IA, proyectos globales y una cultura que prioriza tu crecimiento. Vacantes abiertas en Bogotá.",
+      "descriptionLen": 159,
+      "canonical": "https://medialab.design/carreras",
+      "h1Count": 1,
+      "h1": [
+        "Diseña el futuro con nosotros."
+      ],
+      "h2Count": 3,
+      "schemaTypes": [
+        "ItemList",
+        "Organization",
+        "WebSite"
+      ],
+      "wordCount": 325,
+      "images": 8,
+      "missingAlt": 0,
+      "ctaCount": 2,
+      "ctas": [
+        "Iniciar proyecto",
+        "Contacto"
+      ],
+      "internalLinks": 19,
+      "seo": 100,
+      "ux": 100,
+      "ux_ai": 88,
+      "aeo": 85,
+      "dev": 59,
+      "a11y": 100,
+      "issues": [
+        "UX-IA incompleto: limites/fallback",
+        "CSP no detectada en headers",
+        "Varias imagenes no WebP/AVIF",
+        "Alto numero aparente de scripts"
+      ],
+      "warnings": []
+    }
+  ],
+  "signals": {
+    "googleNews": [
+      {
+        "query": "AI Overviews SEO UX",
+        "ok": true,
+        "items": [
+          {
+            "title": "AI Overviews: cómo cambia el SEO y el SEM con la nueva búsqueda de Google - IEBS",
+            "link": "https://news.google.com/rss/articles/CBMisAFBVV95cUxPWFluUF9fMVF1T0JqTXFUb3I0NUhXamJwdzVHQWo5N25XRlRyblRZLTVFRHBOVW0yVkhoYmtjVVFqQVhoV3FFRk01dEtSeFdzcG9QUnNQVmNQUTVTU3BiYnh5S3hfRkFLNkNtUDNrWGJCSUlPV21QelU0MHhlZkVaV2JlWUZNRU9SVXJiNFZQaFFQQ1ZuWmZ1NDVsdENadmo3Tjllb0ZWUHlibElWVldpTg?oc=5"
+          },
+          {
+            "title": "El equipo de relaciones con la búsqueda de Google publicó: «Guía de optimización de tu sitio web para funciones de IA generativa en la Búsqueda de Google» - Frikipandi",
+            "link": "https://news.google.com/rss/articles/CBMiowJBVV95cUxNaXN6blAyQlBYbzZJYlplWDk4akhFLWhPVlE4OEtxaGVBQXExR1hTQXhzTE8zQnp3Mkw4T0ViVmpUSkpqQmR2Y1g3WDBMdDVqSHc0cEJfdUtCTERqUUowcHJXengzU1VzSzhBMUZ5eFk2b3FkZjJxNnQzbzd2ZzU3czA5MjFqWk5fVW8zdzI4b0hBbHBPVXo5N2g4SVJhXzBaWUNCVy14bEtOclMtRVotX0l4SFFKTzRBWTF5OFlRcDZnOHhJMVg0OGhNSThlM1VYbmUwX3BHMFBFYjlVX2dYcm9UWDRJSFBpREtLampJcFEzcHRfb2JlTUN3WnhGSkNWNU1OZkhWbVh0dlJrcVZ3VlN1ZGQyRER5VW5RNG9lT1hMWHfSAagCQVVfeXFMT0tobk4wSndIYU5CT3NRMzMyaWlSNjRxakFsbUJBR0s0c1JmQkN6YkJ2WjdORWdHY0d0VmU4RTAybWFYTFlNbEZrUDhyVUxTb2Y3clk5SmVRLWxCUE1TcE5oa2pWd21qdTVBcFZ6dWZKZXZkX2lqU18zRTZ3b3o0X1I4SkZHdDcxQktnR3lGVDZzeVpwRDczb3V4cUFNdl8wb0hrVVlJNlV2cXpvLVFJU3VYVkJKOEx4R21pa1ZfdFJxWVBERHJaMmkwaEFlOWZFUnR1S2tmQ2szSE9NR3dPa1gwUU56OUVDdkU1NlNrbWQwVDk3TlBVeFhjWWFnaFhLTmhNNFo0UldEWDAwYnFsWmw4dVJtRktiei0wNURwN01IZnFLVEVKTXo?oc=5"
+          },
+          {
+            "title": "Optimización de contenido con IA: cómo optimizar el contenido para AI Overviews, motores de respuesta y chatbots - fullpress.it",
+            "link": "https://news.google.com/rss/articles/CBMif0FVX3lxTE16WUhjUmtyWmRVS01uQjA2cy1Db1pNY3FPeFVFOENPOVctMmRjbUZaLU1henR4azdfcU1VRUs2SXpEMGFGLTBaZV9qemc1NXhpRl8xYjZUX2paLUNVQ014MDhJVTJvVzRKTEZCU1NMSDZtcUxpTURBQzAwRERKd0U?oc=5"
+          },
+          {
+            "title": "Mejores agencias de SEO en 2026: Líderes en ChatGPT, Gemini y Google - Elplural.com",
+            "link": "https://news.google.com/rss/articles/CBMiowFBVV95cUxOSjZ6UTFVa1pfZjBXTkJ5SDNyX0FfNktZM1dzcGZfZkVmYmw3aXRVcnAxRkhoNl9aeURYTU1UVkhiRExxZ19TTTRNOG13c0pKQVFXdUdpTVJLaThROVBRb3hLa29pb3NJak95d2duNlY5dWlFQmducnZXeWFGNUY5b1hVZFJlUTE1eXdwWTdkU0FoS2ZpUm4xS0N6SWRQdkdwLVpJ0gGoAUFVX3lxTE5OLUh0Vk1XSHVZVGxQd2w1UFFkVGZuOXNieWJvTXhmV3cxdjlmLXlCRWVBbnQ3alpRdWE4Z3VHM1Q3QURMS1N2QVVUemc1VGNhR0dmMlBuQUMxb0U2c3FHejJUWF84MExWODFzLUVaSC1MVllDVkhKNGcxMDN6TDNhSkFvT1gwTzk5WmQ1aHpiU0Zvb0ZHanJnZzRGbWJlNkVYM0Nudi1SaQ?oc=5"
+          },
+          {
+            "title": "Cómo Afrontar La Etapa Más Fragmentada Del SEO - Control Publicidad",
+            "link": "https://news.google.com/rss/articles/CBMirAFBVV95cUxPRU0yNHhHNElDWmREOHJYRWV3VkMyLVFXaElwRTkyeW9JOTAtT1k4R1pRbG9JMWhQSVdUYXJZaWd1OHFRVUtYYWg2Sk5Ta0FSWEQxQm5XTXByQUthNmpKX01HeHBhSzVaUlJneW5hMWlMR2x6eU5RTnJCNng1cFY0Y1J3dEQwekFGaWpwbWFiMnFjSWE2UVB4YmRaQ2VEVVF4UDhabmVRd1JyZ2RH?oc=5"
+          },
+          {
+            "title": "Peec AI alcanza $10M ARR: lecciones para founders - Ecosistema Startup",
+            "link": "https://news.google.com/rss/articles/CBMihAFBVV95cUxQbkNIMUNtWl9lUUFWTDVJZXZUN0tCTERzUVhsQzFfWHlBMU1oazJnZG5od3lQLXNhX2ZQd3NlMDN4SkhhTFZDeHplSmpfYjVZVC13U3lHNUYzaGo5NnlWczc3X1I5SjhhSWpfcDFEUHpOT29ybXZDZ25tQjB4MldRUW1xbWs?oc=5"
+          },
+          {
+            "title": "Modo de IA de Google: lo que los expertos en SEO deben hacer antes de 2026. \"10 trucos a tener en cuenta para salir en el nuevas búsquedas de modo IA de Google\" - Frikipandi",
+            "link": "https://news.google.com/rss/articles/CBMirAJBVV95cUxONWdlaVo5Wk8xREQwNktiWTA3UnJtS1VIT1FYX0xqVFFKclRrM09IX0Zsb182TzNqTFYwUzZkRW5RZ2NCTi1hRWhsZ3ZhRXZSUkJZb3lRZTBWS3Jha3dtNERkN3ZBTWtrMVZOWjJqb203V3FIYktDdUxFZmZBNVg5MXlWTEdKbEEyc0lnaVViVXBXT2NDOGhkVy1nYjh3ajNFT1hqeFd3UEs2bVIyVXkzUGhlaEx5NjhaU0R1bHlLeDloNlA5eWhtN3R1aldXLWNLSHpJTWpSemtQNERweG9Zd3JOMjM4d0VRT3huYXhYTGN1VVZyV2l3aWVYRDN4YWdnXzdFbFFibTQzZkVyNE5XZ3hoclJoNDdxSE9PdDA5QUdNRXJRRkp5SjZPS28?oc=5"
+          },
+          {
+            "title": "Conoce las mejores agencias GEO (SEO IA) en México (2026) - Marketing4eCommerce México",
+            "link": "https://news.google.com/rss/articles/CBMib0FVX3lxTFA5OHVvblQ5WWdCUEZ3aVVjeHpsbVpLYWRuaHVRR2xtVXZjTW51U1h2aGgyNE9EQTBPaXlQOUY4ZkFTZzVtY1dtdU1uSW04a1FHQ3FSVEtEWFFnWEZjdjR3a1VNVGdXRk1GN3FNckxDdw?oc=5"
+          }
+        ]
+      },
+      {
+        "query": "dise?o UX inteligencia artificial Colombia",
+        "ok": true,
+        "items": [
+          {
+            "title": "Estas son las profesiones con peor futuro en el mercado laboral en 2026, según la inteligencia artificial - ELTIEMPO.com",
+            "link": "https://news.google.com/rss/articles/CBMi6wFBVV95cUxOUHNmNm5fbVBVaE1TaC0yd3NHYm9sTnpFdlo4c2ZSZ254NE1VbG5JT3lIdGVZVU1vbVVSVGFKVkRrY0F5M0hlb09TNm05ZnZxUkxpSnNIMXZOcXdLUXJDYXFiZHg5Uk85T3pLVEFJTGtyTE1CaVlNV1NwS3RncVVLUm1USVNjMjlGNE9lYVlod190T2cya1FiZE9TOGlzV0piNkk4eHpZMzhhaVdSc01iODdhMW92XzdUc1ZaeGkzZWdlaXpiSnk5ZW9ROVZFRm03WHA4R25rSlYzU1VSdWIxM1p5ZHAzY0lVdWtv0gHwAUFVX3lxTFBDWThDNVcxdHp4Z0hXenBhcXBrMElJRlBfUm1NU0VFYkl2Yk5oVFdDeC1iSzExVkY4Ym14R3RKVzRZM3Fta2t5Y0lCSVltY0ZfeVFiZm8xTzVmWUpWMy0xUi1oQnFqbDZVbUk4VzZ1MFF4NFFJVnFLcTdHWEpRVnNGeGlFTWs5bFMyalRoWlNVX2FRWDJrbVY2eksyNnNScTBiSjA0Y2tIMGhPR253eklvR0NCdHVWYmE3eHh6S21KMnk3NnVHS1MtSkFRczEzVEY2WDF6MzFQLXNPX2RYaUhmOG1RUUJGdDl5aFhJa3ZndQ?oc=5"
+          },
+          {
+            "title": "Google libera 12 certificados gratis: aprende ciberseguridad y diseño UX desde casa - Infobae",
+            "link": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxPbnpCdlgzUnNtUFBlbGxYNEhQTHg2UVFOQWFjNkxCOEVENHctVmVPZnZkaWtBVUlocUNZdFdzbnB2TEY0akgxTnMtR1A3Y2Vfb0VHcEdhUThKMUprVTlCS2VNQUxqYm5QdGNKWUdXWUZPNWtXQnBtWEliOTExRU0wZEVFUlFrc3p1aVlnUkhkOHJzSHlmRFZ5WXlJTWdtTjlCQVN5Z0c2emNLVUdybWxxQUdIS2RVQmdCa2lBcnFsVzJQQdIB3AFBVV95cUxPVmVnZGIwQkUtbnhhdEFTVm1kbzB6cmVRQzhwWmhsVUFmMm5UMUpUMjFuVW5QOTcweHhrVjVnbk1QYmtWUXUtRGNmQURoOWhMVEpTMlRuQzBMUTBSZ1UwWWVuYTVzYXp3WEp2Yy16TlRBT3FnSWg0UkUwQVBjVWVfRVRORnppaTVQZFdNWHlqbGF1NGJHOEVaYmF0Q1lwXzVBQTZvV1d6ZmI5MDlVbjBKaDRIX08tbXRTNy13VC1rS0RvWjdyTGNuMjUyTlJ4VnQ0V1hiVjE0U0xVckFz?oc=5"
+          },
+          {
+            "title": "Volvo actualizará 2,5 millones de vehículos con la nueva interfaz Volvo Car UX - noticias.autocosmos.com.co",
+            "link": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxPMndvSlNrSy0yWDdEQzBpVWJKVElMM3V4dDdPNzVteTY1RlBJRW85MktjWWp6Tk9WZTlFbHhzQ1NVNGhEeHBJejV2MDFGa2k5eDhhX01VN25rNDRzUmx1WTZLczl5RWlob2J2U0s2dUJRVVFwYTdKN3BoMzFLMlpkRUl6VjRZTlo2SVJxTlk0eTkzM2dFUGFpWk5Ob3JPWFdPdVlKV1pKVUtfZ2hUbE1sZEE1eVUyTVAtZUg4Z21tdkY?oc=5"
+          },
+          {
+            "title": "Franco Pellegrini, diseñador UX experto: \"Ya no diseñamos objetos, diseñamos la atmósfera que respiramos\" - El Cronista",
+            "link": "https://news.google.com/rss/articles/CBMi6gFBVV95cUxPaDUzZkdJdVVVaXVld3JJMFBESFJBSTZDWmw2V1pDN3RQa190M2dXd2ticDlBWGttaGU0Nk0yUFNRS3pLOTJRRWpwdlVoQnEwUUROYVdVNE9nTGFaZFZBajhsUWEzQU9BYW9VVE1uT0h4RXRzaTJ3UHFjaXpRdk9UQjNOa0RVcDZnczZzV2ZXM1g3UF9JSFJlNS1STkxzWUc0TzVxendaanN4eURqRUZzcE02ZEtkcGVTQl84R1pGZ1Z6YjdWRTlDWmNaRDNaWThvY2JVVjZuR3Q4dnJPa3NUaVV0MGtIVjBYbGfSAYQCQVVfeXFMT3Fma3dtc3pNdmZULUtVc1JuNzNnVGozMnQ0YmpPN3JjOTZDQ0c5VkZaRFBEeVFzb3FMMnE3d1BlZFF6MXJtRVJFV3hiLTdFc00ycklkbkh0UG1wNmRJS0NyNDhwRy1aUVkwcnlxbUNlSndQN2Q0MzJDMjhxSGg4VkdjX3l0MmVBRWFlNVgxRVJ5eFh1STdxOVdHNWxSYm4wZjVnVlpMYUtIaXgySGVQb3l5MWxWbUloM1RraG9GanFnMGhQaWNxQTB1cmlval9IV0JUbDF3bThUX2JJbGxsZjFQZGR6eEExQ2xGSHJxeFlTX0hJVjltbzVRSl9NYWRfSXBhbjQ?oc=5"
+          },
+          {
+            "title": "UNI ofrece cursos gratis: LINK de la inscripción y conoce cuáles son las materias disponibles - Infobae",
+            "link": "https://news.google.com/rss/articles/CBMirAFBVV95cUxPYVpOZVUwNUNXMUxrNXdmUnFQb0Fnd1hjalkwUXYzS3NBc0E3a3cxOFBVVjBNU0xIbVIzT0ZPZnZsdlJ0TFpxT2lXRDV3cTRsUzZpS3JFaXZJZmZhTnUtaFUyRllMS041RWdISlU1bjlLRmwxZ3NWQlJWX3g1Nm5Jb0JwOXc1eDZnVFNNaWs1S2dSZHhVM1lWOUt2b0hXeW9yWjdraV9oM0MtRTdG0gHHAUFVX3lxTE1SM3BIbUp3QUdoZmI4Uk4xQ0ZkWWI1UGZyZmJxUTZ4V19FMHpTcF9lUmZySGtRY1NGMzBKX1I5Z0drYmVUTjF5NUwyYmVMTzlhV0lZOXhNenc0bHFJaUxldlprVHN4WmNSXzdHMGpHUXNibElMX2JMcDNMZDVjMzJFbmZhNXRadGFoSWV3c1JwbmR0eFVDUGRCTzBFb0R0ZVN4clFrVmFqeV93OTR5QTN6NXNtdkZLTUxqV1pBMTFyZ0RFWVpkVWM?oc=5"
+          },
+          {
+            "title": "Binance lanza nueva interfaz UI/UX potenciada por inteligencia artificial: permite personalizar experiencia - Valora Analitik",
+            "link": "https://news.google.com/rss/articles/CBMibkFVX3lxTFBsbmJtZEpDcWp0TWJkeEoxa2ZtZFQyVHdZOGpvTy0wQ3NNS3pBNGxZQVg2aHJMRGVPdk9hazdZRThzakpmOXhZSGRmQlRwcGROblBCTDAyeGpnMWRvc2stQ3NlSDdkRldjZTZNUk5B0gFzQVVfeXFMTldzYjZSTjFKMDZCTkRPVWRJOGlmQmozMFFLaDNuQklhSEtISjhHTWNLSnVZRDdsMVREZjNFcVFXTVZKZHRnbThpZjBhLU5xZjhpaTdQbTRZaEFhc0V4azhhanRuMnhJckV0cG1NYTJCVWhJQQ?oc=5"
+          },
+          {
+            "title": "Mercado Libre echó a 119 empleados y los reemplazó con inteligencia artificial - Diario Huarpe",
+            "link": "https://news.google.com/rss/articles/CBMiswFBVV95cUxObEhNbXJQZ2ktOGVnTFZkczRCTkJmVlVkSVBkbGF0NFV3U1FYTHpRZWJTSHhtb3U2OC1aeng2QzJydWRBTG1qakdETlJVRnBHTkx0Ukw0U0VfaGFMOXI4V1ZKb0NPUnlSNmUxVE10LVA1QS1YSzM1Sy10V2FUSnlINkpVdm4zWHJ4UktzeGs0X0NINWdELXRmRUxzQWxJZUlTd01fS3ZXYzBWbDVBbndmVW8wQQ?oc=5"
+          },
+          {
+            "title": "Mercado Libre echó por Zoom a más de 30 personas en Argentina y aseguran que las reemplazará con IA - ADNSUR",
+            "link": "https://news.google.com/rss/articles/CBMi8gFBVV95cUxQOFVkTTI2Szc3elFWUWljWm1GbUNBTXJsMVhsV3VkX1J3NFpZUUUyaktOTUhjV21Vc2M2c19hYkFlUlpTS1BxbG1FbnpxZGdCVFdVUDFhd19GQ2xmWUZPZkZQUXZxRTJBWHNIWUR3LWxGdFBNdElKQm41TU9jc25WbnU2dmlRRHNKdHpiTG1oT0tPQS1lMzhPd2dJdzMxb2JSdTNOa0NCT2JTZmRJZ2hHSjJRVV9hVGRNdDBUc2o3T0hSMnd6U0FuOTh3Q1pEamFpVXpULVVRTi1MTmkzQUQtUDJ0SkRiUWd5Rzh6QXNlWVJMZw?oc=5"
+          }
+        ]
+      },
+      {
+        "query": "AI agents product design",
+        "ok": true,
+        "items": [
+          {
+            "title": "Siemens powers the next phase of industrial AI with Intelligence Center X - Siemens Newsroom",
+            "link": "https://news.google.com/rss/articles/CBMibkFVX3lxTE1ROGI4UTFvQW1NY09QWUFzZ2dMWE94cHNOSjd1bjktY0F1ZnNkVFFJR1lSS2JWZlp5cS1wREtvOUFmNEVJUkp4S2RSTmpLU3JJTlY1MkQzTVZyZmR5YnpYVmR1UG5EMEw1NnVodkZ3?oc=5"
+          },
+          {
+            "title": "How Balyasny Asset Management built an AI research engine - OpenAI",
+            "link": "https://news.google.com/rss/articles/CBMiakFVX3lxTFBJdDdEbjRYRmRKalZmRlF5Q3lQSWdjQ0xYaTE0WndHbFhNMVpwaFl2emk2b01qVXl3X3o0LXEyMVFSUU9EVk1pdEp3LUk2T294WTJ1SGZOQU1NSzNRb2VqeVBHVkxSOWdWemc?oc=5"
+          },
+          {
+            "title": "INHD Stock, Which Has Seen 2 Reverse Splits Over 6 Months, Has Soared Nearly 700% Today – Everything To Know About Its Latest Partnership - TradingView",
+            "link": "https://news.google.com/rss/articles/CBMinAJBVV95cUxNYzNWSktVeEJYTkZNbmV0SWQ4RjJOSTFna2R2RzV6SVhIbkZ2OGM1TVRUZVBvb1ZwV3ZOWU8xRWdJZVRDZzVkSHhGT0tMODkxQWdOS25XOW1rWElaOEdSeEMwNEFCZnpHTUxpTnhZdkI0TG9hRVhxTWhpNm5DTl9tSDh1TU9LODVhSzM3cHk3VjVWWjRNUHhlWkt5X0NPY2puMUQ0MTBwd283MGtweDRzMnBhMm5PVXQ5Z1FwZjdweHZ3c1B0bGo3U2FCVS1wZjdXT0x6dHdIX05uLUlNT3RfSUt2R09Del9vcHIwd3prU2xreGZQZGFKQlpLeGJfNWxyNHRBVWhTbVlkMDVHUGdUbXJFd0dOdTUtUDBVeA?oc=5"
+          },
+          {
+            "title": "‘DeveloperWeek 2025′: todo lo que hay saber sobre el evento más grande para desarrolladores - EL PAÍS",
+            "link": "https://news.google.com/rss/articles/CBMixAFBVV95cUxPUVFSVXVjY001MW1yak5IdFNaQ1BPR0lzRDl0bFFxUWdha2owN2g3NDBjZUV2dVdXTGFHbllZcDIwRllUYmNtLUZURlZ4MUZ0VmdwNkx4MFI2MnZ2UHpIVnlqUmJUS0FnUF8wdU1XNUhTRENVTlpUajJUVUlCcVZEZHR0dGVSb0dENlg0UUQ5eDdKVGp2cENWVGlrbUR1RjZFckFOQi1CX1JNOE10c2o3cmJ5YVRvb2YtTXpDdmhCVnBaMFdO0gHYAUFVX3lxTE9RUXBfaDVFSE8wUVROd0pWcHhMVm1WU0ZYby1ONVhkWWtMdVJHMU5YdHl2dUxUdF80clIzZ2FSX3JxZnRZa2EtV1dnS195ZENIcGxwMENLTmpWcFVSWDJSVjhSUEpOckhneGJlYlhobEFGd1RHbld4SDJpT3FJeFhzcXZwUlpRUUlVSTBvXzVLTDl4b29BZnNSS2JVUVRSY2lnZEhkOUtJeTRVLVdURVB5VE15THZQdHJ4dkRJMEVqT1ZRR3ZSVlFUYVhfOTJEajVESmtkSjBZOA?oc=5"
+          },
+          {
+            "title": "Fault Lines in the AI Ecosystem - www.trendmicro.com",
+            "link": "https://news.google.com/rss/articles/CBMizwFBVV95cUxQVzY1WU9sNWwzRU15NU8wV0VUbl9vbEVBdVVySDY5aW9XZG5Rcjd2c3Z4MHk1el81TXRJR3lyUkNycHh4WGlld3dwNVNWTlBFX3BCVngwMG9SakNpZ1VqQnMwdVV3Qlk5SWZHZzQ5b2NBRjl0X092YTNtWTFTZWJYa1RPbS14M001eTlqcWotS0RVZ1BSX3ZzY1FGbzMzSG9yVmpkb3VtbFlfLUE0aDVEQ3ZiNjZuQV9KX2k1dmNKRjBodTg3cVZvbG1HQ0VfM0E?oc=5"
+          },
+          {
+            "title": "Atos launches the Atos Polaris AI Platform to accelerate digital transformation with Agentic AI - Atos",
+            "link": "https://news.google.com/rss/articles/CBMi3gFBVV95cUxPRHNOcmlsMlljWjI4a3dOampyS3prcHE3Vmxra29CX3pHelN1VnlmaFRxLTNieWhXVldzMVlwLWYyakd2WFYwdzBqQjA0VEc0VlRBQ1BYd1VxUzRuc241ekktUW16SXp4TFhDNUxuQ2RodEQwYVd5dVowT29Vd2pkQ1paTzc2Tm1mVHhuMzJGN2hsb3FyUF9zdldnOHdwbTdSOHk1V3BkTHplWXpvN2FoeGczN1VFVTMxV1RDQ1FRSW1FZWMzbGY3M1pOM2RqMHp3Tk9hTzJtMDVhNFNZOWc?oc=5"
+          },
+          {
+            "title": "METiS TechBio and Boulevard Bio Enter Global License Agreement for Trispecific T-cell Engager - TradingView",
+            "link": "https://news.google.com/rss/articles/CBMi6AFBVV95cUxPVDBQR1QxU3RIWm1rVEhiRW00U0FaaWM0dTUtclV2SlpHbXpNZjAxQ00yb2tMTUpicmszRVN2WUthclFZUVdWNVJKbVE4ams0c051QUVwcUZfakdZQlU0NHVmeUI3M19hNk8yV2twTHhYR1QtR1REVjVuUFB5bEl5NkN6U3VxT3lfUWpMaTg5cUtNRzh1NFZfdjFBMlNIWXZydWJsVXBvRlNDWjBsQjREV080YzBJV2tOQllIVDg5MHRDWVM3bnVjeVpkakxISzlsQTNWWE9YOWFRUVQwd2lRNlhDUE9sYzBj?oc=5"
+          },
+          {
+            "title": "Milei promises tech firms new laws and ‘unregulated’ AI in Argentina - Buenos Aires Times",
+            "link": "https://news.google.com/rss/articles/CBMitAFBVV95cUxQMTZlNWFSb2ZFV1ZiSmhtaHNsd2o5SlF6aUFBWHcwdVRzZkdkVjFtRkRmcnBydE1Tam1XbTdEUWYtZHRnbnl4Q0tTMG5LUjM5S0JsZ05ZaUl5aUNFTDVrM3JsVW5Xc3drcGdrQnpXbjktQXZZM1lFWHl4Wml0di1VQ3pueS1qRTZkeFlzeGhuYTZybVVlN29KcmUxN0d3c043eWlzRU8xeTBNdUVMWWZzdWNLRlnSAboBQVVfeXFMT2pLZFdmTl9lVjFsQm00QzRhbFhDeU5jektqV0I5czZGLUd3eVRrVlFQZDVsU2JhZjBzZUNDcVlYcjVRZ2l6N1ZhY1hnZGd6d0Z5d2pqeE1vME1CVnVVVndFMlBZaFRhU3BNVGdBQXZnUWhrSWVud3hnbUhEWDh5TUhDNWhGTnV6a3VlX1l0WHF6T25JenNpSzhoSl9FMnZyWDVPQ05lRTNzbGltSHBndWhNMzd2SUtlb2Rn?oc=5"
+          }
+        ]
+      },
+      {
+        "query": "generative UI design systems",
+        "ok": true,
+        "items": []
+      }
+    ],
+    "reddit": [
+      {
+        "subreddit": "SEO",
+        "ok": true,
+        "items": [
+          {
+            "title": "Fact checking ai content is taking longer than just writing from scratch",
+            "link": "https://www.reddit.com/r/SEO/comments/1ujoay0/fact_checking_ai_content_is_taking_longer_than/"
+          },
+          {
+            "title": "Fraudulent DMCA Takedowns Wreak Havoc In Google Search",
+            "link": "https://www.reddit.com/r/SEO/comments/1ukladi/fraudulent_dmca_takedowns_wreak_havoc_in_google/"
+          },
+          {
+            "title": "How do I choose an seo agency for my small business?",
+            "link": "https://www.reddit.com/r/SEO/comments/1ugov8v/how_do_i_choose_an_seo_agency_for_my_small/"
+          },
+          {
+            "title": "I've been put in charge of SEO, despite having no knowledge in it, help.",
+            "link": "https://www.reddit.com/r/SEO/comments/1uh7u9q/ive_been_put_in_charge_of_seo_despite_having_no/"
+          },
+          {
+            "title": "Are local Chamber of Commerce backlinks actually worth anything for SEO in 2026?",
+            "link": "https://www.reddit.com/r/SEO/comments/1uigdnv/are_local_chamber_of_commerce_backlinks_actually/"
+          },
+          {
+            "title": "Monthly LLM citation analysis across 8M+ citations and 8 models: YouTube citations up 56%, Wikipedia up 55%, press releases losing ground",
+            "link": "https://www.reddit.com/r/SEO/comments/1ujwjo3/monthly_llm_citation_analysis_across_8m_citations/"
+          },
+          {
+            "title": "Starting a blog just to practice SEO || is this the right move? What should I keep in mind?",
+            "link": "https://www.reddit.com/r/SEO/comments/1uhst1v/starting_a_blog_just_to_practice_seo_is_this_the/"
+          },
+          {
+            "title": "just me and my rant about authority again. and also what i learned.",
+            "link": "https://www.reddit.com/r/SEO/comments/1uhh9zl/just_me_and_my_rant_about_authority_again_and/"
+          }
+        ]
+      },
+      {
+        "subreddit": "UXDesign",
+        "ok": false,
+        "error": "HTTP Error 429: Too Many Requests",
+        "items": []
+      },
+      {
+        "subreddit": "userexperience",
+        "ok": false,
+        "error": "HTTP Error 429: Too Many Requests",
+        "items": []
+      },
+      {
+        "subreddit": "artificial",
+        "ok": false,
+        "error": "HTTP Error 429: Too Many Requests",
+        "items": []
+      },
+      {
+        "subreddit": "ChatGPT",
+        "ok": false,
+        "error": "HTTP Error 429: Too Many Requests",
+        "items": []
+      }
+    ]
+  },
+  "warnings": [
+    "GSC no disponible: no hay CSV/exports de Search Console en data/.",
+    "Google Trends CSV no disponible; se usaron se?ales RSS/WebSearch aproximadas.",
+    "Competidores reales no configurados: data/competitors.json contiene placeholders."
+  ],
+  "backlog": [
+    {
+      "priority": "P1",
+      "task": "Revisar headers de seguridad/performance en produccion: CSP, formatos de imagen modernos y presupuesto de scripts por plantilla.",
+      "signal": "DevScore promedio 64/100; CSP no detectada y scripts/imagenes aparecen como brecha heuristica."
+    },
+    {
+      "priority": "P1",
+      "task": "Completar transparencia UX-IA en Discovery con IA, Analizador UX-IA, Curso y servicios: que hace la IA, que decide el humano, datos, privacidad, limites y supervision.",
+      "signal": "UX-IA promedio 83/100; el runbook exige explicar IA vs humano y limites."
+    },
+    {
+      "priority": "P2",
+      "task": "Ajustar titles y metas de servicios/industrias para evitar truncamiento y mejorar CTR potencial.",
+      "signal": "Titles de 76-90 caracteres y metas sobre 165 caracteres se repiten en servicios, industrias, home y recursos."
+    },
+    {
+      "priority": "P2",
+      "task": "Aumentar profundidad comercial en servicios e industrias: casos, metricas, evidencia, objeciones y enlaces al portafolio desde cada servicio.",
+      "signal": "Varias paginas comerciales quedan cerca de 400-470 palabras; falta evidencia mas escaneable."
+    },
+    {
+      "priority": "P3",
+      "task": "Elevar AEO/GEO de bueno a citable: resumen directo arriba, FAQ con preguntas reales y schema especifico en paginas de mayor intencion.",
+      "signal": "AEO promedio 89/100; la base es buena, la oportunidad es aparecer mejor en respuestas de IA."
+    }
+  ],
+  "note": "Reporte regenerado en ASCII limpio para evitar mojibake en PowerShell/PDF."
+}

@@ -34,6 +34,21 @@ export type PrimaDoc = {
   actualizado_en: string
 }
 
+export type CesantiasDoc = {
+  id: string
+  empleado_id: string
+  anio: number
+  dias: number                    // días trabajados en el año (máx 360)
+  base: number                    // salario básico + auxilio de transporte
+  cesantias: number               // valor liquidado (editable)
+  intereses: number               // intereses 12% anual (editable)
+  fondo: string | null            // fondo de cesantías (Porvenir, FNA…)
+  observaciones: string | null
+  publicado: boolean
+  creado_en: string
+  actualizado_en: string
+}
+
 export const TIPO_VERSION_LABEL: Record<TipoContratoVersion, string> = {
   inicial: "Contrato inicial",
   otrosi: "Otrosí / ajuste",
@@ -74,4 +89,17 @@ export function calcularPrima(input: { basico: number; auxilio: number; dias: nu
   const base = (Number(input.basico) || 0) + (Number(input.auxilio) || 0)
   const dias = Number(input.dias) || 0
   return Math.round((base * dias) / 360)
+}
+
+/**
+ * Cesantías (Colombia): (salario básico + auxilio de transporte) × días ÷ 360.
+ * En un año completo (360 días) equivale a un mes de salario base.
+ */
+export function calcularCesantias(base: number, dias: number): number {
+  return Math.round(((Number(base) || 0) * (Number(dias) || 0)) / 360)
+}
+
+/** Intereses a las cesantías: 12% anual proporcional = cesantías × días × 0.12 ÷ 360. */
+export function calcularInteresesCesantias(cesantias: number, dias: number): number {
+  return Math.round(((Number(cesantias) || 0) * (Number(dias) || 0) * 0.12) / 360)
 }

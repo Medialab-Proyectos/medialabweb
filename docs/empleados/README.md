@@ -16,6 +16,8 @@ pronto"; Cursos y Beneficios → deshabilitadas).
 3. (Para Fase 2) corre `docs/empleados/schema-fase2-desprendibles.sql`.
 4. (Para Fase 3) corre `docs/empleados/schema-fase3-contratos.sql` **y** crea el bucket
    **privado** `contratos` en **Storage** → *New bucket* (para los adjuntos de contrato/otrosí).
+5. (Para Fase 4 — vacaciones/ausencias) corre `docs/empleados/schema-fase4-ausencias.sql`.
+6. (Para Fase 5 — cesantías) corre `docs/empleados/schema-fase5-cesantias.sql`.
 
 ## 2. Variables de entorno
 En `.env.local` (local) **y** en *Vercel → Settings → Environment Variables* (producción):

@@ -34,14 +34,38 @@ export const EPS_CO = [
   "Pijaos Salud",
 ]
 
+/** Fondos de cesantías. */
+export const FONDOS_CESANTIAS = [
+  "Porvenir",
+  "Protección",
+  "Colfondos",
+  "Skandia",
+  "Fondo Nacional del Ahorro (FNA)",
+]
+
 /** Tipos de contrato laboral en Colombia. */
 export const TIPOS_CONTRATO = [
   "Término indefinido",
   "Término fijo",
   "Obra o labor",
   "Aprendizaje (SENA)",
+  "Práctica profesional (solo ARL)",
   "Ocasional / transitorio",
   "Prestación de servicios",
+]
+
+/** Cajas de compensación familiar. */
+export const CAJAS_COMPENSACION = [
+  "Compensar",
+  "Colsubsidio",
+  "Cafam",
+  "Comfama",
+  "Comfenalco Valle",
+  "Comfandi",
+  "Cajacopi",
+  "Comfacundi",
+  "Comfamiliar Risaralda",
+  "Comfenalco Antioquia",
 ]
 
 /** Jornada / modalidad de trabajo. */

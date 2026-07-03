@@ -10,6 +10,7 @@ export type Empleado = {
   rol: Rol
   lider_id: string | null
   cargo: string | null
+  caja_compensacion: string | null
   fecha_ingreso: string | null
   fecha_egreso: string | null
   particularidades: string | null

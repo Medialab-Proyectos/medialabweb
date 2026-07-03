@@ -75,9 +75,10 @@ function centenaEnLetras(n: number): string {
   return out
 }
 
-export function numeroALetras(valor: number): string {
+/** Número a palabras SIN sufijo de moneda (ej. 12 → "DOCE", 2350308 → "DOS MILLONES ..."). */
+export function numeroALetrasBase(valor: number): string {
   const n = Math.round(Math.abs(valor))
-  if (n === 0) return "CERO PESOS M/CTE."
+  if (n === 0) return "CERO"
   const millones = Math.floor(n / 1_000_000)
   const miles = Math.floor((n % 1_000_000) / 1000)
   const cientos = n % 1000
@@ -85,5 +86,9 @@ export function numeroALetras(valor: number): string {
   if (millones > 0) partes.push(millones === 1 ? "UN MILLON" : `${centenaEnLetras(millones)} MILLONES`)
   if (miles > 0) partes.push(miles === 1 ? "MIL" : `${centenaEnLetras(miles)} MIL`)
   if (cientos > 0) partes.push(centenaEnLetras(cientos))
-  return `${partes.join(" ").trim()} PESOS CON CERO CVS M/CTE.`
+  return partes.join(" ").trim()
+}
+
+export function numeroALetras(valor: number): string {
+  return `${numeroALetrasBase(valor)} PESOS CON CERO CVS M/CTE.`
 }

@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation"
 import Link from "next/link"
-import { FileText, FileSignature, CalendarClock, BadgeCheck, GraduationCap, Gift, ShieldCheck, Clock, ArrowRight } from "lucide-react"
+import { FileText, FileSignature, CalendarClock, BadgeCheck, GraduationCap, Gift, ShieldCheck, Clock, ArrowRight, Plane, ClipboardCheck, PiggyBank, Target } from "lucide-react"
 import { requireEmpleado } from "@/lib/empleados/auth"
 import { getEmpleadoById } from "@/lib/empleados/queries"
 import { PortalHeader } from "../portal-header"
@@ -47,12 +47,40 @@ const secciones: Seccion[] = [
     href: "/empleados/primas",
   },
   {
+    key: "cesantias",
+    icon: PiggyBank,
+    titulo: "Cesantías",
+    desc: "Descarga tu comprobante anual de cesantías e intereses.",
+    estado: "activo",
+    color: "#00BFA6",
+    href: "/empleados/cesantias",
+  },
+  {
+    key: "evaluaciones",
+    icon: Target,
+    titulo: "Mis evaluaciones",
+    desc: "Consulta tus evaluaciones de desempeño trimestrales.",
+    estado: "activo",
+    color: "#8b5cf6",
+    href: "/empleados/evaluaciones",
+  },
+  {
     key: "certificado",
     icon: BadgeCheck,
     titulo: "Certificado laboral",
     desc: "Genera tu certificación laboral con tus fechas y cargo.",
-    estado: "pronto",
+    estado: "activo",
     color: "var(--magenta)",
+    href: "/empleados/certificado",
+  },
+  {
+    key: "vacaciones",
+    icon: Plane,
+    titulo: "Vacaciones y ausencias",
+    desc: "Solicita vacaciones, permisos o licencias y consulta tu saldo.",
+    estado: "activo",
+    color: "#00BFA6",
+    href: "/empleados/ausencias",
   },
   {
     key: "cursos",
@@ -112,6 +140,42 @@ export default async function InicioPage() {
               </div>
             </div>
             <ArrowRight size={16} className="text-[var(--cyan)]" />
+          </Link>
+        )}
+
+        {(empleado.rol === "lider" || empleado.rol === "ceo") && (
+          <Link
+            href="/empleados/aprobaciones"
+            className="mb-8 flex items-center justify-between rounded-2xl border border-[var(--magenta)]/25 bg-[var(--magenta)]/[0.06] px-5 py-4 transition hover:bg-[var(--magenta)]/[0.1]"
+          >
+            <div className="flex items-center gap-3">
+              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--magenta)]/15">
+                <ClipboardCheck size={18} className="text-[var(--magenta)]" />
+              </span>
+              <div>
+                <p className="text-sm font-semibold">Aprobaciones de ausencias</p>
+                <p className="text-xs text-[#fff]/55">Revisa y decide las solicitudes de tu equipo.</p>
+              </div>
+            </div>
+            <ArrowRight size={16} className="text-[var(--magenta)]" />
+          </Link>
+        )}
+
+        {(empleado.rol === "lider" || empleado.rol === "ceo") && (
+          <Link
+            href="/empleados/evaluar"
+            className="mb-8 flex items-center justify-between rounded-2xl border border-[#8b5cf6]/25 bg-[#8b5cf6]/[0.06] px-5 py-4 transition hover:bg-[#8b5cf6]/[0.1]"
+          >
+            <div className="flex items-center gap-3">
+              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#8b5cf6]/15">
+                <Target size={18} className="text-[#8b5cf6]" />
+              </span>
+              <div>
+                <p className="text-sm font-semibold">Evaluar a mi equipo</p>
+                <p className="text-xs text-[#fff]/55">Evaluación de desempeño trimestral de tu equipo.</p>
+              </div>
+            </div>
+            <ArrowRight size={16} className="text-[#8b5cf6]" />
           </Link>
         )}
 

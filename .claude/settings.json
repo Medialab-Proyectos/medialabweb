@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(node -e \"require\\('pdf-lib'\\); console.log\\('pdf-lib OK'\\)\")",
-      "WebSearch"
+      "WebSearch",
+      "Bash(pdftotext -layout \"docs/empleados/Certificado_SO.pdf\" -)"
     ]
   }
 }

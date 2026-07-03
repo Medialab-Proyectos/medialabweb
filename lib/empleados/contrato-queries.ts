@@ -1,6 +1,6 @@
 import "server-only"
 import { getServiceClient } from "./db"
-import type { Contrato, PrimaDoc } from "./contrato"
+import type { Contrato, PrimaDoc, CesantiasDoc } from "./contrato"
 
 const BUCKET = "contratos"
 
@@ -125,4 +125,37 @@ export async function eliminarPrima(id: string) {
   const sb = getServiceClient()
   const { error } = await sb.from("primas").delete().eq("id", id)
   if (error) throw error
+}
+
+// ── Cesantías ────────────────────────────────────────────────────────────────
+const CESANTIAS_COLS =
+  "id,empleado_id,anio,dias,base,cesantias,intereses,fondo,observaciones,publicado,creado_en,actualizado_en"
+
+export async function listCesantiasEmpleado(empleadoId: string, soloPublicadas = true) {
+  const sb = getServiceClient()
+  let q = sb.from("cesantias").select(CESANTIAS_COLS).eq("empleado_id", empleadoId)
+  if (soloPublicadas) q = q.eq("publicado", true)
+  const { data, error } = await q.order("anio", { ascending: false })
+  if (error) throw error
+  return (data ?? []) as CesantiasDoc[]
+}
+
+export async function getCesantias(id: string) {
+  const sb = getServiceClient()
+  const { data, error } = await sb.from("cesantias").select(CESANTIAS_COLS).eq("id", id).maybeSingle()
+  if (error) throw error
+  return data as CesantiasDoc | null
+}
+
+export type CesantiasInput = Omit<CesantiasDoc, "id" | "creado_en" | "actualizado_en">
+
+export async function upsertCesantias(input: CesantiasInput) {
+  const sb = getServiceClient()
+  const { data, error } = await sb
+    .from("cesantias")
+    .upsert(input, { onConflict: "empleado_id,anio" })
+    .select(CESANTIAS_COLS)
+    .single()
+  if (error) throw error
+  return data as CesantiasDoc
 }

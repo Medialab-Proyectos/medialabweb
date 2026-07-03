@@ -64,6 +64,7 @@ const crearSchema = z.object({
   nombre: z.string().trim().min(2).max(120),
   email: z.string().trim().email(),
   cargo: z.string().trim().max(120).optional().nullable(),
+  caja_compensacion: z.string().trim().max(120).optional().nullable(),
   rol: z.enum(["ceo", "lider", "empleado"]).default("empleado"),
   lider_id: z.string().uuid().optional().nullable(),
   fecha_ingreso: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional().nullable(),
@@ -96,6 +97,7 @@ export async function POST(req: Request) {
     rol: body.rol,
     lider_id: body.lider_id ?? null,
     cargo: body.cargo ?? null,
+    caja_compensacion: body.caja_compensacion ?? null,
     fecha_ingreso: body.fecha_ingreso ?? null,
     particularidades: body.particularidades ?? null,
   })
@@ -112,6 +114,7 @@ const editarSchema = z.object({
   nombre: z.string().trim().min(2).max(120).optional(),
   email: z.string().trim().email().optional(),
   cargo: z.string().trim().max(120).nullable().optional(),
+  caja_compensacion: z.string().trim().max(120).nullable().optional(),
   rol: z.enum(["ceo", "lider", "empleado"]).optional(),
   lider_id: z.string().uuid().nullable().optional(),
   fecha_ingreso: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullable().optional(),
@@ -161,7 +164,7 @@ export async function PATCH(req: Request) {
 
   // Actualizar datos generales
   const cambios: Record<string, unknown> = {}
-  for (const k of ["nombre", "email", "cargo", "rol", "lider_id", "fecha_ingreso", "fecha_egreso", "particularidades"] as const) {
+  for (const k of ["nombre", "email", "cargo", "caja_compensacion", "rol", "lider_id", "fecha_ingreso", "fecha_egreso", "particularidades"] as const) {
     if (body[k] !== undefined) cambios[k] = body[k]
   }
   if (Object.keys(cambios).length === 0) return NextResponse.json({ error: "Nada para actualizar." }, { status: 400 })
