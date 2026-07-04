@@ -310,6 +310,66 @@ function finishedMatch(input: {
 const avgEmo = (e: EmotionalRadarValues): number =>
   Math.round(Object.values(e).reduce((a, b) => a + b, 0) / Object.values(e).length)
 
+function recentFinishedMatch(input: {
+  date: string
+  kickoffAt: string
+  slug: string
+  home: string
+  away: string
+  homeGoals: number
+  awayGoals: number
+  scoreDetail: string
+  seoTitle: string
+  hook: string
+  matchSummary: string
+  quickSummary: string
+  whatHappened: string
+  aiSummary: string
+  uxFinding: string
+  keyPlays: string[]
+  controversies: string[]
+  statements: string[]
+  combined: { expectativa: EmotionalRadarValues; realidad: EmotionalRadarValues; percepcion: EmotionalRadarValues }
+  homeNarrative: Omit<FinishedTeam, "team">
+  awayNarrative: Omit<FinishedTeam, "team">
+  humanBehavior: string
+  emotionalReaction: string
+  digitalPatterns: string
+  fanPulse: { concerns: string[]; emotions: string[]; frustrations: string[]; enthusiasm: string[] }
+  sources: Array<{ name: string; url: string; kind: ArticleSourceRef["kind"] }>
+  imageUrl: string
+  imageAlt: string
+  imageCredit: string
+  imageSourceUrl: string
+  previewImageUrl: string
+  previewImageAlt: string
+  previewImageCredit: string
+  previewImageSourceUrl: string
+  analyzedAt: string
+  eliminatedTeams: string[]
+  nextOpponents: Record<string, string>
+}): RadarArticleInput {
+  return finishedMatch({
+    ...input,
+    group: "Dieciseisavos de final",
+    teamsData: [
+      { team: input.home, ...input.homeNarrative },
+      { team: input.away, ...input.awayNarrative },
+    ],
+    lessons: [
+      { term: "Cierre emocional", explanation: "El recuerdo del evento se concentra en la secuencia que define continuidad o eliminacion." },
+      { term: "Contexto verificable", explanation: "Marcador, minutos, fuentes y estado de eliminado reducen ambiguedad para usuarios, SEO y LLMs." },
+      { term: "Ruta posterior", explanation: "El ganador necesita proximo rival; el eliminado debe cerrar pronostico y pasar a memoria del partido." },
+    ],
+    cognitiveBiases: ["Regla pico-fin", "Sesgo de confirmacion", "Aversion a la perdida"],
+    productApplications: [
+      { sector: "Producto digital", application: "Mostrar marcador, estado y proximo paso evita que la audiencia convierta incertidumbre en desconfianza." },
+      { sector: "Medios", application: "Separar resultado, momentos y reaccion de hinchadas mejora lectura rapida y actualizacion editorial." },
+      { sector: "SEO/GEO", application: "Titulares con marcador exacto, goleadores y siguiente rival responden a buscadores clasicos y generativos." },
+    ],
+  })
+}
+
 const ARTICLE_INPUTS: RadarArticleInput[] = [
   {
     category: "Fan Experience",
@@ -10445,7 +10505,298 @@ const JULY3_RADAR_INPUTS: RadarArticleInput[] = [
   }),
 ]
 
-export const RADAR_ARTICLE_SEED: RadarArticle[] = [...ARTICLE_INPUTS, ...JULY2_RADAR_INPUTS, ...JULY3_RADAR_INPUTS].map(generateRadarArticle)
+const JULY4_RADAR_INPUTS: RadarArticleInput[] = [
+  recentFinishedMatch({
+    date: "2026-07-03",
+    kickoffAt: "2026-07-03T18:00:00.000Z",
+    slug: "australia-egipto-mundial-2026",
+    home: "Australia",
+    away: "Egipto",
+    homeGoals: 1,
+    awayGoals: 1,
+    scoreDetail: "Egipto: Emam Ashour 13'. Australia: Mohamed Hany autogol 55'. Egipto gano 4-2 en penales.",
+    seoTitle: "Australia 1-1 Egipto: Egipto gano 4-2 en penales y convirtio ansiedad en historia",
+    hook: "Egipto fue perfecto desde el punto penal y convirtio una noche de maxima ansiedad en clasificacion historica.",
+    matchSummary: "Australia y Egipto empataron 1-1 tras tiempo extra en Dallas. Emam Ashour adelanto a Egipto al 13', Australia igualo al 55' con autogol de Mohamed Hany y Egipto gano 4-2 en la tanda de penales.",
+    quickSummary: "Australia 1-1 Egipto: Ashour marco primero, Australia empato por autogol de Hany y Egipto avanzo 4-2 en penales.",
+    whatHappened: "La previa anticipaba ansiedad alta. El gol temprano de Emam Ashour puso a Australia en persecucion, el autogol de Mohamed Hany reabrio el partido y la tanda concentro toda la experiencia. Egipto no fallo desde los once metros, Australia fallo dos cobros y la lectura final paso de desgaste a historia para los africanos.",
+    aiSummary: "Experience Radar lee el 1-1 y 4-2 en penales como una experiencia de tolerancia a la presion: Egipto sostuvo claridad en el momento mas incierto y Australia quedo atrapada en la memoria de la tanda.",
+    uxFinding: "Cuando una experiencia termina en penales, el usuario recuerda menos el volumen de juego y mas la claridad del cierre.",
+    keyPlays: ["13': Emam Ashour cabeceo el 0-1 para Egipto.", "55': Mohamed Hany marco en propia puerta y Australia empato 1-1.", "La prorroga mantuvo la ansiedad sin romper el empate.", "Egipto gano 4-2 en penales; Australia fallo dos lanzamientos."],
+    controversies: ["No se verifico polemica arbitral central; las fuentes concentraron el relato en la tanda de penales, los fallos australianos y la eficacia egipcia."],
+    statements: ["FIFA reporto que Egipto hizo historia tras imponerse en penales.", "The Guardian y The Analyst registraron el 1-1 tras prorroga y el 4-2 egipcio en la tanda.", "Publicaciones sociales de ESPN y Socceroos amplificaron el golpe emocional australiano y la clasificacion egipcia."],
+    combined: {
+      expectativa: { euforia: 72, confianza: 64, ansiedad: 72, frustracion: 14, incertidumbre: 58, optimismo: 72 },
+      realidad: { euforia: 62, confianza: 56, ansiedad: 88, frustracion: 44, incertidumbre: 72, optimismo: 60 },
+      percepcion: { euforia: 78, confianza: 72, ansiedad: 40, frustracion: 34, incertidumbre: 36, optimismo: 78 },
+    },
+    homeNarrative: {
+      expectedEmotion: "Orgullo competitivo con ansiedad por no ceder el primer golpe.",
+      dominantConversation: "Resistir, ganar duelos aereos y llevar el partido al terreno fisico australiano.",
+      fanConfidence: "Media antes; golpeada despues.",
+      mainNarrative: "El equipo que queria convertir resistencia en otra noche de supervivencia.",
+      howTheyArrived: "Con una previa de intensidad, confianza fisica y necesidad de resolver detalles en ataque.",
+      whatHappened: "Australia reacciono al gol de Ashour y empato, pero la tanda dejo dos fallos que definieron la eliminacion.",
+      expectationVsReality: "La expectativa era empujar desde el orden; la realidad fue quedar a merced de la precision emocional en penales.",
+      mood: "Desilusion por una oportunidad que estuvo al alcance.",
+      behaviorEffect: "La conversacion australiana se desplaza del orgullo por competir al dolor por los penales fallados.",
+      before: { euforia: 72, confianza: 64, ansiedad: 72, frustracion: 14, incertidumbre: 58, optimismo: 72 },
+      current: { euforia: 20, confianza: 34, ansiedad: 62, frustracion: 86, incertidumbre: 54, optimismo: 24 },
+      predicted: { euforia: 26, confianza: 38, ansiedad: 54, frustracion: 72, incertidumbre: 52, optimismo: 32 },
+      userExperience: { expectativa: "La hinchada australiana esperaba un partido incomodo, pero con ventaja si el cuerpo y la presion sostenian el ritmo.", realidad: "El empate alivio la persecucion; la tanda transformo cada cobro en prueba de control emocional.", percepcion: "La memoria queda atada a los fallos desde el punto penal, no solo al empate trabajado." },
+    },
+    awayNarrative: {
+      expectedEmotion: "Orgullo con ansiedad por defender una ventaja corta lejos de casa.",
+      dominantConversation: "Ashour, Salah, disciplina defensiva y la opcion de escribir una noche historica.",
+      fanConfidence: "Media-alta antes; muy alta despues.",
+      mainNarrative: "La seleccion que necesitaba transformar tension en legitimidad mundialista.",
+      howTheyArrived: "Con expectativa por la calidad ofensiva y dudas sobre si podria resistir un partido largo.",
+      whatHappened: "Egipto golpeo primero, sufrio el empate por autogol y luego ejecuto una tanda sin fisuras.",
+      expectationVsReality: "La expectativa era competir desde orden y talento; la realidad fue ganar desde nervio y precision.",
+      mood: "Euforia historica.",
+      behaviorEffect: "La comunidad egipcia convierte la tanda perfecta en prueba de caracter antes del cruce con Argentina.",
+      before: { euforia: 76, confianza: 70, ansiedad: 64, frustracion: 12, incertidumbre: 50, optimismo: 76 },
+      current: { euforia: 94, confianza: 86, ansiedad: 28, frustracion: 10, incertidumbre: 22, optimismo: 92 },
+      predicted: { euforia: 78, confianza: 70, ansiedad: 60, frustracion: 16, incertidumbre: 48, optimismo: 76 },
+      userExperience: { expectativa: "La audiencia egipcia llego buscando una senal de madurez competitiva mas alla del nombre propio.", realidad: "El autogol aumento la amenaza, pero la tanda devolvio control con una narrativa de precision.", percepcion: "La clasificacion se procesa como historia compartida y como puerta a un partido enorme ante Argentina." },
+    },
+    humanBehavior: "Las hinchadas reinterpretan todo el partido desde la tanda: el penal convertido se vuelve prueba de temple y el fallado se vuelve simbolo de oportunidad perdida.",
+    emotionalReaction: "Egipto paso de ansiedad a orgullo historico; Australia quedo en frustracion por una eliminacion decidida por detalles individuales.",
+    digitalPatterns: "La conversacion publica concentro clips del gol de Ashour, el autogol de Hany, la entrada de Mat Ryan para penales y el cobro decisivo de Hossam Abdelmaguid.",
+    fanPulse: { concerns: ["El golpe australiano tras fallar dos penales", "El desgaste egipcio antes de enfrentar a Argentina", "La lectura del autogol de Hany"], emotions: ["Euforia egipcia", "Frustracion australiana", "Ansiedad extrema por penales"], frustrations: ["Australia no pudo convertir la reaccion en pase", "La tanda redujo el margen de explicacion tactica"], enthusiasm: ["Ashour abrio el camino", "Egipto perfecto desde el punto penal", "Clasificacion historica"] },
+    sources: [
+      { name: "FIFA - Australia v Egypt match report", url: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/australia-egypt-match-report-highlights", kind: "oficial" },
+      { name: "The Guardian - Australia v Egypt player ratings", url: "https://www.theguardian.com/football/2026/jul/04/australia-egypt-player-ratings-world-cup-last-round-32", kind: "referencia" },
+      { name: "The Analyst - Australia vs Egypt stats", url: "https://theanalyst.com/articles/australia-vs-egypt-stats-world-cup-2026", kind: "referencia" },
+      { name: "Instagram - ESPN FC Australia Egypt", url: "https://www.instagram.com/p/DaWFopOgp2l/", kind: "conversacion" },
+    ],
+    imageUrl: "/images/experience-radar/mundial-2026/australia-egipto.jpg",
+    imageAlt: "Australia y Egipto disputan un balon aereo durante el cruce mundialista",
+    imageCredit: "The Guardian / Getty Images",
+    imageSourceUrl: "https://www.theguardian.com/football/2026/jul/04/australia-egypt-player-ratings-world-cup-last-round-32",
+    previewImageUrl: "/images/experience-radar/mundial-2026/australia-egipto-previa.jpg",
+    previewImageAlt: "Australia entrena en Dallas antes del cruce mundialista ante Egipto",
+    previewImageCredit: "Socceroos",
+    previewImageSourceUrl: "https://socceroos.com.au/news/match-preview-australia-v-egypt-fifa-world-cup-2026tm-round-32",
+    analyzedAt: "2026-07-04T14:05:00.000Z",
+    eliminatedTeams: ["Australia"],
+    nextOpponents: { Egipto: "Argentina" },
+  }),
+  recentFinishedMatch({
+    date: "2026-07-03",
+    kickoffAt: "2026-07-03T22:00:00.000Z",
+    slug: "argentina-cabo-verde-mundial-2026",
+    home: "Argentina",
+    away: "Cabo Verde",
+    homeGoals: 3,
+    awayGoals: 2,
+    scoreDetail: "Argentina: Lionel Messi 29', Lisandro Martinez 92', Diney Borges autogol 111'. Cabo Verde: Deroy Duarte 59', Sidny Lopes Cabral 103'.",
+    seoTitle: "Argentina 3-2 Cabo Verde: Messi, Lisandro y un autogol evitaron la hazana africana",
+    hook: "Cabo Verde llevo a Argentina al limite de la eliminacion emocional, pero la campeona sobrevivio en la prorroga y avanzo hacia Egipto.",
+    matchSummary: "Argentina vencio 3-2 a Cabo Verde tras tiempo extra. Messi abrio el marcador, Deroy Duarte empato, Lisandro Martinez marco en la prorroga, Sidny Lopes Cabral igualo de nuevo y un autogol de Diney Borges tras accion de Romero decidio el pase.",
+    quickSummary: "Argentina 3-2 Cabo Verde: Messi marco, Cabo Verde igualo dos veces y un autogol en la prorroga salvo a la campeona.",
+    whatHappened: "La previa hablaba de jerarquia argentina contra el orgullo de una revelacion africana. Messi abrio una noche que parecia controlada, Cabo Verde empato y obligo a Argentina a convivir con el panico. Lisandro Martinez devolvio ventaja, Sidny Lopes Cabral igualo otra vez y el autogol de Diney Borges al 111' cerro una experiencia de sufrimiento total para la campeona.",
+    aiSummary: "Experience Radar interpreta el 3-2 como una experiencia de supervivencia de marca: Argentina no entrego control, pero sostuvo identidad en el tramo que podia romper su relato.",
+    uxFinding: "Cuando un favorito sobrevive a una amenaza inesperada, la confianza no sube por dominio sino por alivio de continuidad.",
+    keyPlays: ["29': Lionel Messi puso el 1-0.", "59': Deroy Duarte empato para Cabo Verde.", "92': Lisandro Martinez devolvio ventaja a Argentina.", "103': Sidny Lopes Cabral marco el 2-2.", "111': Diney Borges, en propia puerta, sello el 3-2 argentino."],
+    controversies: ["No se verifico una polemica arbitral central; la tension estuvo en la resistencia de Cabo Verde, la prorroga y el autogol decisivo."],
+    statements: ["ESPN y AP registraron el 3-2 argentino tras prorroga y la secuencia de goles.", "Latingoles describio el sufrimiento argentino y el autogol de Diney Borges tras accion de Romero.", "Publicaciones sociales resaltaron el intento historico de Cabo Verde y el alivio argentino tras el cierre."],
+    combined: {
+      expectativa: { euforia: 82, confianza: 76, ansiedad: 58, frustracion: 10, incertidumbre: 44, optimismo: 82 },
+      realidad: { euforia: 76, confianza: 62, ansiedad: 88, frustracion: 34, incertidumbre: 70, optimismo: 72 },
+      percepcion: { euforia: 84, confianza: 74, ansiedad: 42, frustracion: 18, incertidumbre: 38, optimismo: 82 },
+    },
+    homeNarrative: {
+      expectedEmotion: "Confianza de campeon con ansiedad por no alimentar una historia de sorpresa.",
+      dominantConversation: "Messi, jerarquia, prorroga y la obligacion de evitar que el partido se volviera mito rival.",
+      fanConfidence: "Muy alta antes; alta pero advertida despues.",
+      mainNarrative: "La campeona que debia ganar sin convertir el cruce en drama.",
+      howTheyArrived: "Con favoritismo alto, simbolos fuertes y una audiencia que esperaba control desde temprano.",
+      whatHappened: "Argentina marco primero, sufrio dos empates y necesito la prorroga para escapar con un autogol decisivo.",
+      expectationVsReality: "La expectativa era una clasificacion controlada; la realidad fue una prueba de supervivencia emocional.",
+      mood: "Alivio exigente.",
+      behaviorEffect: "La hinchada celebra el pase, pero reevalua riesgos defensivos y gestion de partidos ante rivales de menor reputacion.",
+      before: { euforia: 88, confianza: 82, ansiedad: 54, frustracion: 10, incertidumbre: 40, optimismo: 88 },
+      current: { euforia: 86, confianza: 76, ansiedad: 38, frustracion: 18, incertidumbre: 34, optimismo: 84 },
+      predicted: { euforia: 82, confianza: 76, ansiedad: 52, frustracion: 16, incertidumbre: 42, optimismo: 80 },
+      userExperience: { expectativa: "La audiencia argentina entro con seguridad de favorito y deseo de una noche sin sobresaltos.", realidad: "Cada empate de Cabo Verde transformo la experiencia en vigilancia y miedo a la sorpresa historica.", percepcion: "El pase se recuerda como alivio mas que como autoridad; la ruta sigue, pero con alerta emocional." },
+    },
+    awayNarrative: {
+      expectedEmotion: "Orgullo y optimismo por desafiar a la campeona sin cargar favoritismo.",
+      dominantConversation: "Vozinha, diaspora, resistencia y oportunidad de una hazana mundialista.",
+      fanConfidence: "Media emocional antes; orgullosa despues.",
+      mainNarrative: "La seleccion pequena que queria convertir presencia en memoria global.",
+      howTheyArrived: "Con historia, orden y una comunidad lista para celebrar cada minuto de resistencia.",
+      whatHappened: "Cabo Verde empato dos veces y empujo a Argentina al limite antes de caer por autogol en la prorroga.",
+      expectationVsReality: "La expectativa era competir con dignidad; la realidad fue rozar una hazana que quedara en la memoria.",
+      mood: "Orgullo roto.",
+      behaviorEffect: "La eliminacion no activa prediccion futura: la conversacion queda en reconocimiento, duelo y orgullo por haber llevado a Argentina al limite.",
+      before: { euforia: 70, confianza: 56, ansiedad: 66, frustracion: 8, incertidumbre: 60, optimismo: 74 },
+      current: { euforia: 42, confianza: 58, ansiedad: 54, frustracion: 76, incertidumbre: 48, optimismo: 50 },
+      predicted: { euforia: 36, confianza: 52, ansiedad: 46, frustracion: 66, incertidumbre: 44, optimismo: 44 },
+      userExperience: { expectativa: "La comunidad caboverdiana consumio la previa como una celebracion de pertenencia y una oportunidad improbable.", realidad: "Los dos empates crearon una experiencia de posibilidad real, no solo resistencia simbolica.", percepcion: "La derrota duele, pero la memoria colectiva queda mas cerca del orgullo que de la resignacion." },
+    },
+    humanBehavior: "Las comunidades de favoritos sienten alivio como euforia cuando la amenaza fue real; las comunidades eliminadas pueden convertir la derrota en orgullo si la identidad quedo validada.",
+    emotionalReaction: "Argentina termino en alivio intenso; Cabo Verde en dolor orgulloso por haber estado a minutos de una hazana mundialista.",
+    digitalPatterns: "La conversacion publica se movio entre clips de Messi, elogios a Cabo Verde, debate por el sufrimiento argentino y celebracion del autogol que mantuvo viva la ruta.",
+    fanPulse: { concerns: ["La gestion argentina de partidos cerrados", "El costo emocional antes de enfrentar a Egipto", "El cierre del sueno caboverdiano sin proximo partido"], emotions: ["Alivio argentino", "Orgullo caboverdiano", "Tension neutral por la casi hazana"], frustrations: ["Argentina sufrio mas de lo previsto", "Cabo Verde quedo eliminado por un autogol tardio"], enthusiasm: ["Messi abrio el marcador", "Cabo Verde empato dos veces", "Argentina sigue en carrera"] },
+    sources: [
+      { name: "ESPN - Argentina break Cape Verde hearts", url: "https://www.espn.com/soccer/story/_/id/49263170/argentina-break-cape-verde-hearts-extra-world-cup-lionel-messi-scores", kind: "referencia" },
+      { name: "AP - Argentina and Cape Verde extra time", url: "https://www.wral.com/news/ap/5fc40-argentina-and-cape-verde-head-to-extra-time-at-world-cup-after-ending-regulation-tied-at-1-1/", kind: "referencia" },
+      { name: "Latingoles - Argentina evita la hazana de Cabo Verde", url: "https://latingoles.com/3-2-argentina-suda-para-pasar-a-octavos-y-evita-la-hazana-de-cabo-verde-y-vozinha/", kind: "referencia" },
+      { name: "Instagram - Argentina Cape Verde social reel", url: "https://www.instagram.com/reel/DaXLpFMtXZb/", kind: "conversacion" },
+    ],
+    imageUrl: "/images/experience-radar/mundial-2026/argentina-cabo-verde.jpg",
+    imageAlt: "Lionel Messi celebra durante el Argentina 3-2 Cabo Verde",
+    imageCredit: "Latingoles / EFE",
+    imageSourceUrl: "https://latingoles.com/3-2-argentina-suda-para-pasar-a-octavos-y-evita-la-hazana-de-cabo-verde-y-vozinha/",
+    previewImageUrl: "/images/experience-radar/mundial-2026/argentina-cabo-verde-previa.jpg",
+    previewImageAlt: "Lionel Messi entrena con Argentina antes del cruce ante Cabo Verde",
+    previewImageCredit: "Al Jazeera / AFP",
+    previewImageSourceUrl: "https://www.aljazeera.com/sports/2026/7/3/argentina-vs-cape-verde-world-cup-round-of-32-messi-vozinha-prediction-kickoff",
+    analyzedAt: "2026-07-04T14:10:00.000Z",
+    eliminatedTeams: ["Cabo Verde"],
+    nextOpponents: { Argentina: "Egipto" },
+  }),
+  recentFinishedMatch({
+    date: "2026-07-03",
+    kickoffAt: "2026-07-04T01:30:00.000Z",
+    slug: "colombia-ghana-mundial-2026",
+    home: "Colombia",
+    away: "Ghana",
+    homeGoals: 1,
+    awayGoals: 0,
+    scoreDetail: "Colombia: Jhon Arias 14'.",
+    seoTitle: "Colombia 1-0 Ghana: Arias marco temprano y la defensa convirtio tension en control",
+    hook: "Colombia no necesito una goleada para cambiar el pulso emocional: el gol de Jhon Arias al 14' y los cero remates al arco de Ghana sostuvieron la clasificacion.",
+    matchSummary: "Colombia vencio 1-0 a Ghana en Kansas City con gol de Jhon Arias al minuto 14. El equipo tuvo 20 remates, 8 al arco y no permitio tiros a puerta de Ghana; ahora enfrentara a Suiza en Vancouver.",
+    quickSummary: "Colombia 1-0 Ghana: Jhon Arias marco al 14', Ghana no remato al arco y Colombia avanzo para enfrentar a Suiza.",
+    whatHappened: "La previa exigia a Colombia controlar la ansiedad si el partido se volvia fisico. El gol temprano de Jhon Arias cambio el viaje emocional: la hinchada paso de expectativa alta a vigilancia de ventaja. Ghana intento sostener energia, pero no encontro remate al arco y la defensa colombiana hizo que el 1-0 se sintiera mas de control que de supervivencia.",
+    aiSummary: "Experience Radar lee el 1-0 como una experiencia de control funcional: Colombia no produjo una descarga numerica, pero redujo la amenaza rival hasta convertir la tension en confianza.",
+    uxFinding: "Un marcador corto puede sentirse seguro si la experiencia muestra evidencia constante de control y poca amenaza rival.",
+    keyPlays: ["14': Jhon Arias marco el 1-0 para Colombia.", "Colombia registro 20 remates y 8 al arco.", "Ghana termino sin remates a puerta.", "Colombia avanzo para enfrentar a Suiza en Vancouver."],
+    controversies: ["No se verifico polemica arbitral central; la lectura de fuentes se concentro en dominio colombiano, orden defensivo y falta de precision ghanesa."],
+    statements: ["ESPN confirmo el 1-0 de Colombia y el proximo duelo ante Suiza.", "Win Sports registro marcador, minuto del gol, estadio, arbitro y estadisticas del partido.", "The Guardian destaco que Ghana no tuvo remates al arco y que Colombia sostuvo una noche dominante."],
+    combined: {
+      expectativa: { euforia: 84, confianza: 72, ansiedad: 74, frustracion: 12, incertidumbre: 56, optimismo: 80 },
+      realidad: { euforia: 76, confianza: 78, ansiedad: 58, frustracion: 20, incertidumbre: 42, optimismo: 78 },
+      percepcion: { euforia: 88, confianza: 86, ansiedad: 28, frustracion: 12, incertidumbre: 22, optimismo: 90 },
+    },
+    homeNarrative: {
+      expectedEmotion: "Euforia alta con ansiedad por no convertir el favoritismo emocional en urgencia.",
+      dominantConversation: "Luis Diaz, Arias, control defensivo y la posibilidad de seguir empujando una narrativa continental.",
+      fanConfidence: "Alta antes; muy alta despues.",
+      mainNarrative: "La seleccion que queria hacer de la energia de su hinchada una ventaja ordenada.",
+      howTheyArrived: "Con expectativa fuerte, volumen social alto y necesidad de no exponerse a transiciones ghanesas.",
+      whatHappened: "Colombia golpeo temprano, sostuvo volumen ofensivo y no permitio remates al arco.",
+      expectationVsReality: "La expectativa era sufrir con intensidad; la realidad fue controlar desde el 1-0.",
+      mood: "Confianza amarilla.",
+      behaviorEffect: "La hinchada convierte un triunfo corto en prueba de madurez antes del duelo ante Suiza.",
+      before: { euforia: 88, confianza: 76, ansiedad: 72, frustracion: 10, incertidumbre: 52, optimismo: 84 },
+      current: { euforia: 92, confianza: 88, ansiedad: 24, frustracion: 10, incertidumbre: 18, optimismo: 92 },
+      predicted: { euforia: 82, confianza: 80, ansiedad: 46, frustracion: 14, incertidumbre: 38, optimismo: 84 },
+      userExperience: { expectativa: "La audiencia colombiana llego con ilusion muy alta, pero sensible a cualquier tramo de desorden.", realidad: "El gol de Arias redujo ansiedad y el cero remates al arco de Ghana sostuvo control emocional.", percepcion: "La memoria queda como victoria corta pero madura: menos carnaval de goles, mas evidencia de solidez." },
+    },
+    awayNarrative: {
+      expectedEmotion: "Orgullo competitivo con esperanza de castigar espacios colombianos.",
+      dominantConversation: "Resistir el ambiente amarillo, correr transiciones y convertir un detalle en partido largo.",
+      fanConfidence: "Media antes; baja despues.",
+      mainNarrative: "El equipo que necesitaba transformar energia fisica en amenaza real.",
+      howTheyArrived: "Con expectativa de duelo fisico y necesidad de contener a los creativos colombianos.",
+      whatHappened: "Ghana recibio temprano y nunca produjo remate al arco para cambiar la narrativa.",
+      expectationVsReality: "La expectativa era incomodar; la realidad fue quedar neutralizada.",
+      mood: "Frustracion sin descarga.",
+      behaviorEffect: "La eliminacion cierra cualquier prediccion futura y desplaza la conversacion a balance del ciclo.",
+      before: { euforia: 70, confianza: 66, ansiedad: 68, frustracion: 14, incertidumbre: 56, optimismo: 72 },
+      current: { euforia: 16, confianza: 30, ansiedad: 46, frustracion: 82, incertidumbre: 52, optimismo: 22 },
+      predicted: { euforia: 22, confianza: 36, ansiedad: 44, frustracion: 68, incertidumbre: 50, optimismo: 30 },
+      userExperience: { expectativa: "La comunidad ghanesa esperaba un partido de oportunidad si Colombia se aceleraba.", realidad: "El gol temprano obligo a perseguir y la falta de tiros al arco redujo esperanza progresivamente.", percepcion: "La eliminacion se procesa como impotencia ofensiva mas que como injusticia puntual." },
+    },
+    humanBehavior: "La audiencia no necesita abundancia para confiar: necesita senales repetidas de que el riesgo esta contenido.",
+    emotionalReaction: "Colombia paso de ansiedad vibrante a orgullo controlado; Ghana termino en frustracion por no haber convertido energia en amenaza.",
+    digitalPatterns: "La conversacion publica concentro el gol de Arias, la ola amarilla en Kansas City, el dato de cero remates al arco de Ghana y el cruce ante Suiza.",
+    fanPulse: { concerns: ["El duelo ante Suiza", "La gestion de partidos cerrados", "El cierre ofensivo de Ghana tras quedar sin remates al arco"], emotions: ["Orgullo colombiano", "Alivio por control defensivo", "Frustracion ghanesa"], frustrations: ["Ghana no genero remates al arco", "Colombia no liquido pese al volumen ofensivo"], enthusiasm: ["Jhon Arias al 14'", "Defensa colombiana", "Clasificacion ante marea amarilla"] },
+    sources: [
+      { name: "ESPN - Ghana Colombia match", url: "https://www.espn.com/soccer/match/_/gameId/760501/ghana-colombia", kind: "referencia" },
+      { name: "Win Sports - Colombia vs Ghana partido", url: "https://www.winsports.co/futbol-internacional/copa-del-mundo/partidos/2026-canada-mexico-usa-dieciseisavos-de-final-colombia-vs-ghana", kind: "referencia" },
+      { name: "The Guardian - Colombia Ghana match report", url: "https://www.theguardian.com/football/2026/jul/04/colombia-ghana-world-cup-2026-last-32-match-report", kind: "referencia" },
+      { name: "Instagram - Colombia 1-0 Ghana social post", url: "https://www.instagram.com/p/DaW2zatF2Kj/", kind: "conversacion" },
+    ],
+    imageUrl: "/images/experience-radar/mundial-2026/colombia-ghana.jpg",
+    imageAlt: "Jhon Arias celebra el gol de Colombia ante Ghana",
+    imageCredit: "Win Sports / @fifaworldcup_es",
+    imageSourceUrl: "https://www.winsports.co/seleccion-colombia/noticias/colombia-vs-ghana-mira-el-1x1-de-la-clasificacion-a-octavos-443263",
+    previewImageUrl: "/images/experience-radar/mundial-2026/colombia-ghana-previa.jpg",
+    previewImageAlt: "Luis Diaz entrena con Colombia antes del partido ante Ghana",
+    previewImageCredit: "Win Sports / FCFSeleccion",
+    previewImageSourceUrl: "https://www.winsports.co/seleccion-colombia/noticias/colombia-alista-plan-a-b-y-c-para-desafiar-a-ghana-442705",
+    analyzedAt: "2026-07-04T14:15:00.000Z",
+    eliminatedTeams: ["Ghana"],
+    nextOpponents: { Colombia: "Suiza" },
+  }),
+  analyzedUpcomingMatch({
+    date: "2026-07-04",
+    kickoffAt: "2026-07-04T17:00:00.000Z",
+    slug: "canada-marruecos-mundial-2026",
+    teams: ["Canada", "Marruecos"],
+    group: "Octavos de final",
+    seoTitle: "Canada vs Marruecos: previa y radar emocional del anfitrion ante una hinchada global",
+    hook: "Canada juega en Houston con responsabilidad de anfitrion y Marruecos llega con memoria de gigante emocional capaz de convertir cada estadio en casa compartida.",
+    quickSummary: "Canada vs Marruecos se juega este sabado 4 de julio a las 12:00 p. m. de Colombia / 1:00 p. m. ET en Houston. El ganador enfrentara al vencedor de Paraguay vs Francia.",
+    whatHappened: "La agenda de octavos ubica a Canada vs Marruecos como el primer partido del dia. Canada carga el impulso local y el foco sobre Jonathan David; Marruecos llega con una conversacion de diaspora, disciplina y orgullo que suele amplificar cada cruce eliminatorio.",
+    uxFinding: "Cuando el anfitrion juega eliminatoria, la experiencia previa mezcla servicio local, orgullo nacional y miedo a que una fiesta publica termine demasiado pronto.",
+    keyPlays: ["12:00 Bogota / 13:00 ET: inicio en Houston.", "Canada llega con Jonathan David como foco ofensivo y presion de anfitrion.", "Marruecos llega con una hinchada global que suele convertir el entorno en ventaja emocional.", "El ganador enfrentara al vencedor de Paraguay vs Francia."],
+    statements: ["ESPN publico el horario de Canada vs Marruecos en Houston.", "Al Jazeera incluyo el cruce en la programacion de octavos.", "SBNation previo el bloque Canada-Marruecos junto a Paraguay-Francia como ruta de cuartos."],
+    sources: [
+      { name: "ESPN - World Cup fixtures and schedule", url: "https://www.espn.com/soccer/story/_/id/48939282/2026-fifa-world-cup-fixtures-results-match-schedule-group-stage-knockout-rounds-bracket", kind: "referencia" },
+      { name: "Al Jazeera - Round of 16 schedule", url: "https://www.aljazeera.com/sports/2026/7/4/fifa-world-cup-round-of-16-match-schedule-which-teams-qualified", kind: "referencia" },
+      { name: "SBNation - Canada vs Morocco preview", url: "https://weaintgotnohistory.sbnation.com/chelsea-fc-international-duty/169939/2026-world-cup-round-of-16-canada-vs-morocco-paraguay-vs-france", kind: "referencia" },
+      { name: "NY Post - How to watch Canada vs Morocco", url: "https://nypost.com/2026/07/04/sports/how-to-watch-canada-vs-morocco-live-for-free-round-of-16-time-livestream/", kind: "tendencia" },
+    ],
+    imageUrl: "/images/experience-radar/mundial-2026/canada-marruecos-previa.jpg",
+    imageAlt: "Jonathan David celebra con Canada antes del cruce mundialista ante Marruecos",
+    imageCredit: "FanSided / Getty Images",
+    imageSourceUrl: "https://fansided.com/soccer/south-africa-vs-canada-live-score-team-player-stats-world-cup-group-stage",
+    emotionalRadar: { euforia: 78, confianza: 68, ansiedad: 70, frustracion: 14, incertidumbre: 52, optimismo: 76 },
+    analyzedAt: "2026-07-04T14:20:00.000Z",
+    teamsData: [
+      { team: "Canada", expectedEmotion: "Euforia local con ansiedad por no desperdiciar una eliminatoria en casa.", dominantConversation: "Jonathan David, presion de anfitrion y la oportunidad de sostener la fiesta canadiense.", fanConfidence: "Media-alta pero nerviosa.", mainNarrative: "El anfitrion que quiere que la infraestructura emocional del torneo siga teniendo equipo propio.", userExperience: { expectativa: "La audiencia canadiense busca horario, acceso y senales de que el peso local sera ventaja, no carga." } },
+      { team: "Marruecos", expectedEmotion: "Orgullo global y confianza en competir con identidad defensiva y transiciones.", dominantConversation: "Diaspora, disciplina, memoria competitiva y opcion de silenciar al anfitrion.", fanConfidence: "Alta emocionalmente.", mainNarrative: "La hinchada que convierte distancia geografica en presencia colectiva.", userExperience: { expectativa: "La comunidad marroqui consume la previa como una extension de pertenencia global, con alta sensibilidad al primer golpe." } },
+    ],
+  }),
+  analyzedUpcomingMatch({
+    date: "2026-07-04",
+    kickoffAt: "2026-07-04T21:00:00.000Z",
+    slug: "paraguay-francia-mundial-2026",
+    teams: ["Paraguay", "Francia"],
+    group: "Octavos de final",
+    seoTitle: "Paraguay vs Francia: previa y radar emocional de resistencia contra jerarquia",
+    hook: "Paraguay llega despues de eliminar a Alemania en penales; Francia trae jerarquia, foco global y la obligacion de no permitir otra historia de resistencia.",
+    quickSummary: "Paraguay vs Francia se juega este sabado 4 de julio a las 4:00 p. m. de Colombia / 5:00 p. m. ET en Philadelphia. El ganador enfrentara a Canada o Marruecos.",
+    whatHappened: "La previa combina dos emociones opuestas: Paraguay llega con el combustible de una eliminacion historica a Alemania, mientras Francia carga la expectativa de favorito y el riesgo reputacional de enfrentar a un equipo que ya demostro que puede vivir en la incomodidad.",
+    uxFinding: "Un underdog que ya sobrevivio una tanda cambia la experiencia del favorito: cada minuto sin ventaja aumenta ansiedad publica y narrativa de sorpresa.",
+    keyPlays: ["16:00 Bogota / 17:00 ET: inicio en Philadelphia.", "Paraguay llega con narrativa de resistencia tras eliminar a Alemania en penales.", "Francia necesita imponer jerarquia antes de que el partido se vuelva emocionalmente paraguayo.", "El ganador enfrentara a Canada o Marruecos."],
+    statements: ["ESPN y Al Jazeera publicaron el horario del cruce de octavos.", "Win Sports registro el partido como programado en Philadelphia con arbitraje de Ilgiz Tantashev.", "SBNation contextualizo a Paraguay como rival defensivo y resiliente despues de eliminar a Alemania."],
+    sources: [
+      { name: "ESPN - World Cup fixtures and schedule", url: "https://www.espn.com/soccer/story/_/id/48939282/2026-fifa-world-cup-fixtures-results-match-schedule-group-stage-knockout-rounds-bracket", kind: "referencia" },
+      { name: "Win Sports - Paraguay vs Francia partido", url: "https://www.winsports.co/futbol-internacional/copa-del-mundo/partidos/2026-canada-mexico-usa-octavos-de-final-paraguay-vs-francia", kind: "referencia" },
+      { name: "Lincoln Financial Field - Paraguay vs France", url: "https://www.lincolnfinancialfield.com/events/2026-fifa-world-cup-round-of-16/", kind: "oficial" },
+      { name: "SBNation - Paraguay vs France preview", url: "https://weaintgotnohistory.sbnation.com/chelsea-fc-international-duty/169939/2026-world-cup-round-of-16-canada-vs-morocco-paraguay-vs-france", kind: "tendencia" },
+    ],
+    imageUrl: "/images/experience-radar/mundial-2026/paraguay-francia-previa.jpg",
+    imageAlt: "Jugadores de Paraguay celebran antes del cruce mundialista ante Francia",
+    imageCredit: "Turkiye Today / Getty Images",
+    imageSourceUrl: "https://www.turkiyetoday.com/sports/paraguay-declares-public-holiday-after-world-cup-win-over-germany-3222926",
+    emotionalRadar: { euforia: 76, confianza: 64, ansiedad: 74, frustracion: 12, incertidumbre: 58, optimismo: 74 },
+    analyzedAt: "2026-07-04T14:25:00.000Z",
+    teamsData: [
+      { team: "Paraguay", expectedEmotion: "Euforia de underdog con ansiedad por sostener otra noche larga.", dominantConversation: "Penales ante Alemania, resiliencia defensiva y la ilusion de convertir sufrimiento en identidad.", fanConfidence: "Alta emocionalmente, prudente tacticamente.", mainNarrative: "El equipo que ya rompio una prediccion grande y quiere volver a incomodar al favorito.", userExperience: { expectativa: "La audiencia paraguaya llega buscando confirmacion de que la hazana anterior no fue accidente." } },
+      { team: "Francia", expectedEmotion: "Confianza de jerarquia con ansiedad por no quedar atrapada en el relato del underdog.", dominantConversation: "Calidad ofensiva, gestion de ritmo y necesidad de marcar antes de que crezca la duda.", fanConfidence: "Alta.", mainNarrative: "La favorita que debe convertir talento en control temprano.", userExperience: { expectativa: "La comunidad francesa consume la previa con confianza, pero sensible a cualquier tramo sin gol por la memoria reciente de Paraguay." } },
+    ],
+  }),
+]
+
+export const RADAR_ARTICLE_SEED: RadarArticle[] = [...ARTICLE_INPUTS, ...JULY2_RADAR_INPUTS, ...JULY3_RADAR_INPUTS, ...JULY4_RADAR_INPUTS].map(generateRadarArticle)
 const LOCKED_SEED_IMAGES = new Map(
   RADAR_ARTICLE_SEED
     .filter((article) => Boolean(article.imageUrl))
