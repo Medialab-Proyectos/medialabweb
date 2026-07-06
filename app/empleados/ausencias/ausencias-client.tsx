@@ -49,6 +49,7 @@ export function AusenciasClient() {
   useEffect(() => { cargar() }, [])
 
   const media = esMediaJornada(tipo)
+  const esVacacional = tipo === "vacaciones" || tipo === "adelanto_vacaciones"
 
   // La media jornada se pide sobre un solo día: mantenemos fin = inicio.
   useEffect(() => {
@@ -164,6 +165,11 @@ export function AusenciasClient() {
               <b className="text-[var(--cyan)]">{preview.habiles}</b> días hábiles ({preview.calendario} calendario), descontando fines de semana y festivos colombianos.
             </p>
           )
+        )}
+        {!media && !esVacacional && preview && (
+          <p className="mt-2 text-[11px] text-[#fff]/45">
+            Este permiso/licencia no descuenta de tu saldo de vacaciones; lo aprueba tu líder directo.
+          </p>
         )}
         {inicio && fin && validacion.aviso && (
           <p className="mt-3 rounded-lg bg-amber-400/10 px-3 py-2 text-xs text-amber-200">{validacion.aviso}</p>

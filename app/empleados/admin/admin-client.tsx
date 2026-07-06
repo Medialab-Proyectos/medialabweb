@@ -128,8 +128,10 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
           body: JSON.stringify({
             id: form.id, accion: "actualizar",
             nombre: form.nombre, email: form.email,
-            telefono: form.telefono || null, direccion: form.direccion || null, eps: form.eps || null,
-            fondo_cesantias: form.fondo_cesantias || null, fondo_pension: form.fondo_pension || null,
+            telefono: form.telefono || null, direccion: form.direccion || null,
+            eps: porFactura ? null : (form.eps || null),
+            fondo_cesantias: porFactura ? null : (form.fondo_cesantias || null),
+            fondo_pension: porFactura ? null : (form.fondo_pension || null),
             rol: form.rol, tipo_vinculacion: form.tipo_vinculacion,
             lider_id: porFactura ? (form.lider_id || null) : undefined,
             fecha_ingreso: porFactura ? (form.fecha_ingreso || null) : undefined,
@@ -146,8 +148,10 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             cedula: form.cedula, nombre: form.nombre, email: form.email,
-            telefono: form.telefono || null, direccion: form.direccion || null, eps: form.eps || null,
-            fondo_cesantias: form.fondo_cesantias || null, fondo_pension: form.fondo_pension || null,
+            telefono: form.telefono || null, direccion: form.direccion || null,
+            eps: porFactura ? null : (form.eps || null),
+            fondo_cesantias: porFactura ? null : (form.fondo_cesantias || null),
+            fondo_pension: porFactura ? null : (form.fondo_pension || null),
             rol: form.rol, tipo_vinculacion: form.tipo_vinculacion,
             lider_id: porFactura ? (form.lider_id || null) : undefined,
             fecha_ingreso: porFactura ? (form.fecha_ingreso || null) : undefined,
@@ -458,21 +462,25 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
                 <span className={lblCls}>Dirección</span>
                 <input value={form.direccion} onChange={(e) => setForm({ ...form, direccion: e.target.value })} placeholder="Dirección de residencia" className={inputCls} />
               </label>
-              <label className="flex flex-col gap-1.5">
-                <span className={lblCls}>EPS (salud)</span>
-                <input list="cat-eps" value={form.eps} onChange={(e) => setForm({ ...form, eps: e.target.value })} placeholder="Elige o escribe…" className={inputCls} />
-                <datalist id="cat-eps">{EPS_CO.map((x) => <option key={x} value={x} />)}</datalist>
-              </label>
-              <label className="flex flex-col gap-1.5">
-                <span className={lblCls}>Fondo de cesantías</span>
-                <input list="cat-cesantias" value={form.fondo_cesantias} onChange={(e) => setForm({ ...form, fondo_cesantias: e.target.value })} placeholder="Elige o escribe…" className={inputCls} />
-                <datalist id="cat-cesantias">{FONDOS_CESANTIAS.map((x) => <option key={x} value={x} />)}</datalist>
-              </label>
-              <label className="flex flex-col gap-1.5">
-                <span className={lblCls}>Fondo de pensiones</span>
-                <input list="cat-pension" value={form.fondo_pension} onChange={(e) => setForm({ ...form, fondo_pension: e.target.value })} placeholder="Elige o escribe…" className={inputCls} />
-                <datalist id="cat-pension">{FONDOS_PENSION.map((x) => <option key={x} value={x} />)}</datalist>
-              </label>
+              {form.tipo_vinculacion === "empleado" && (
+                <>
+                  <label className="flex flex-col gap-1.5">
+                    <span className={lblCls}>EPS (salud)</span>
+                    <input list="cat-eps" value={form.eps} onChange={(e) => setForm({ ...form, eps: e.target.value })} placeholder="Elige o escribe…" className={inputCls} />
+                    <datalist id="cat-eps">{EPS_CO.map((x) => <option key={x} value={x} />)}</datalist>
+                  </label>
+                  <label className="flex flex-col gap-1.5">
+                    <span className={lblCls}>Fondo de cesantías</span>
+                    <input list="cat-cesantias" value={form.fondo_cesantias} onChange={(e) => setForm({ ...form, fondo_cesantias: e.target.value })} placeholder="Elige o escribe…" className={inputCls} />
+                    <datalist id="cat-cesantias">{FONDOS_CESANTIAS.map((x) => <option key={x} value={x} />)}</datalist>
+                  </label>
+                  <label className="flex flex-col gap-1.5">
+                    <span className={lblCls}>Fondo de pensiones</span>
+                    <input list="cat-pension" value={form.fondo_pension} onChange={(e) => setForm({ ...form, fondo_pension: e.target.value })} placeholder="Elige o escribe…" className={inputCls} />
+                    <datalist id="cat-pension">{FONDOS_PENSION.map((x) => <option key={x} value={x} />)}</datalist>
+                  </label>
+                </>
+              )}
               <label className="flex flex-col gap-1.5">
                 <span className={lblCls}>Rol</span>
                 <select value={form.rol} onChange={(e) => setForm({ ...form, rol: e.target.value as Rol })} className={inputCls}>

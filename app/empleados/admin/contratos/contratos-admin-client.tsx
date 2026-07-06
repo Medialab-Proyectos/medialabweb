@@ -49,10 +49,8 @@ export function ContratosAdminClient({ empleados }: { empleados: Empleado[] }) {
 
   const vigente = useMemo(() => condicionesVigentes(contratos), [contratos])
   const esInicial = contratos.length === 0
-  const fechaIngresoSel = useMemo(
-    () => empleados.find((e) => e.id === empleadoId)?.fecha_ingreso ?? null,
-    [empleados, empleadoId],
-  )
+  const empSel = useMemo(() => empleados.find((e) => e.id === empleadoId) ?? null, [empleados, empleadoId])
+  const fechaIngresoSel = empSel?.fecha_ingreso ?? null
   const posiblesLideres = useMemo(
     () => empleados.filter((e) => (e.rol === "lider" || e.rol === "ceo") && e.id !== empleadoId),
     [empleados, empleadoId],
@@ -99,7 +97,8 @@ export function ContratosAdminClient({ empleados }: { empleados: Empleado[] }) {
 
   async function guardar() {
     if (!empleadoId) return setError("Selecciona un empleado.")
-    if (!vigenteDesde) return setError("Indica la fecha de vigencia.")
+    if (esInicial && !fechaIngreso) return setError("Indica la fecha de ingreso.")
+    if (!esInicial && !vigenteDesde) return setError("Indica la fecha de vigencia del ajuste.")
     if (!esInicial && !motivo.trim()) return setError("Describe el motivo del ajuste (otrosí).")
     if (!esInicial && !archivo) return setError("Adjunta el documento del otrosí (PDF). Es obligatorio para registrar un cambio.")
     setError(""); setMsg(""); setGuardando(true)
@@ -107,7 +106,8 @@ export function ContratosAdminClient({ empleados }: { empleados: Empleado[] }) {
       const body = {
         empleado_id: empleadoId,
         tipo: esInicial ? "inicial" : "otrosi",
-        vigente_desde: vigenteDesde,
+        // En el inicial, la fecha de ingreso ES la vigencia; en un otrosí, la fecha del ajuste.
+        vigente_desde: esInicial ? (fechaIngreso || hoy) : vigenteDesde,
         salario_basico: Number(basico) || 0,
         auxilio_transporte: Number(auxilio) || 0,
         otros_devengos: otros.filter((l) => l.concepto.trim()).map((l) => ({ concepto: l.concepto, valor: Number(l.valor) || 0 })),
@@ -115,7 +115,7 @@ export function ContratosAdminClient({ empleados }: { empleados: Empleado[] }) {
         jornada: jornada || null,
         cargo: cargo || null,
         lider_id: liderId || null,
-        fecha_ingreso: fechaIngreso || null,
+        fecha_ingreso: esInicial ? (fechaIngreso || null) : null,
         motivo: motivo || null,
       }
       const res = await fetch("/api/empleados/admin/contratos", {
@@ -187,8 +187,9 @@ export function ContratosAdminClient({ empleados }: { empleados: Empleado[] }) {
         <span className={lblCls}>Empleado</span>
         <select value={empleadoId} onChange={(e) => setEmpleadoId(e.target.value)} className={inputCls}>
           <option value="">— Selecciona —</option>
-          {empleados.map((e) => <option key={e.id} value={e.id}>{e.nombre} · CC {e.cedula}</option>)}
+          {empleados.filter((e) => e.tipo_vinculacion === "empleado").map((e) => <option key={e.id} value={e.id}>{e.nombre} · CC {e.cedula}</option>)}
         </select>
+        <span className="text-[11px] text-[#fff]/40">Solo empleados con vinculación laboral. Freelance y prestación de servicios facturan, no llevan contrato.</span>
       </label>
 
       {!empleadoId ? (
@@ -238,8 +239,22 @@ export function ContratosAdminClient({ empleados }: { empleados: Empleado[] }) {
                   ? "Este empleado aún no tiene contrato. Define las condiciones de arranque."
                   : "Se guarda como una nueva versión con su fecha de vigencia; las anteriores quedan en el historial."}
               </p>
+
+              {/* Datos personales del empleado (vienen de su ficha; aquí solo se muestran). */}
+              {empSel && (
+                <div className="mb-4 grid grid-cols-2 gap-x-4 gap-y-1 rounded-lg border border-white/10 bg-black/20 px-3 py-2.5 text-[11px] text-[#fff]/55 sm:grid-cols-3">
+                  <span>EPS: <b className="text-[#fff]/80">{empSel.eps || "—"}</b></span>
+                  <span>Cesantías: <b className="text-[#fff]/80">{empSel.fondo_cesantias || "—"}</b></span>
+                  <span>Pensión: <b className="text-[#fff]/80">{empSel.fondo_pension || "—"}</b></span>
+                </div>
+              )}
+
               <div className="grid gap-3 sm:grid-cols-2">
-                <Campo label="Vigente desde"><input type="date" value={vigenteDesde} onChange={(e) => setVigenteDesde(e.target.value)} className={inputCls} /></Campo>
+                {esInicial ? (
+                  <Campo label="Fecha de ingreso"><input type="date" value={fechaIngreso} onChange={(e) => setFechaIngreso(e.target.value)} className={inputCls} /></Campo>
+                ) : (
+                  <Campo label="Vigente desde (fecha del ajuste)"><input type="date" value={vigenteDesde} onChange={(e) => setVigenteDesde(e.target.value)} className={inputCls} /></Campo>
+                )}
                 <Campo label="Cargo"><input value={cargo} onChange={(e) => setCargo(e.target.value)} className={inputCls} /></Campo>
                 <Campo label="Salario básico"><MoneyInput value={basico} onChange={setBasico} className={inputCls} /></Campo>
                 <Campo label="Auxilio de transporte"><MoneyInput value={auxilio} onChange={setAuxilio} className={inputCls} /></Campo>
@@ -251,11 +266,6 @@ export function ContratosAdminClient({ empleados }: { empleados: Empleado[] }) {
                     {posiblesLideres.map((l) => <option key={l.id} value={l.id}>{l.nombre} · {ROL_LABEL[l.rol]}</option>)}
                   </select>
                 </Campo>
-                {esInicial && (
-                  <Campo label="Fecha de ingreso">
-                    <input type="date" value={fechaIngreso} onChange={(e) => setFechaIngreso(e.target.value)} className={inputCls} />
-                  </Campo>
-                )}
                 <datalist id="cat-tipos-contrato">{TIPOS_CONTRATO.map((x) => <option key={x} value={x} />)}</datalist>
                 <datalist id="cat-jornadas">{JORNADAS.map((x) => <option key={x} value={x} />)}</datalist>
               </div>
