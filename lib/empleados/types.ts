@@ -21,6 +21,7 @@ export type Empleado = {
   direccion: string | null
   eps: string | null
   fondo_cesantias: string | null
+  fondo_pension: string | null
   fecha_ingreso: string | null
   fecha_egreso: string | null
   particularidades: string | null

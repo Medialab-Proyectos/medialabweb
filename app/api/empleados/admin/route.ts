@@ -69,6 +69,7 @@ const crearSchema = z.object({
   direccion: z.string().trim().max(200).optional().nullable(),
   eps: z.string().trim().max(120).optional().nullable(),
   fondo_cesantias: z.string().trim().max(120).optional().nullable(),
+  fondo_pension: z.string().trim().max(120).optional().nullable(),
   rol: z.enum(["ceo", "lider", "empleado"]).default("empleado"),
   tipo_vinculacion: z.enum(["empleado", "freelance", "prestacion_servicios"]).default("empleado"),
   tipo_contrato: z.string().trim().max(60).optional().nullable(),
@@ -112,6 +113,7 @@ export async function POST(req: Request) {
     direccion: body.direccion ?? null,
     eps: body.eps ?? null,
     fondo_cesantias: body.fondo_cesantias ?? null,
+    fondo_pension: body.fondo_pension ?? null,
   })
 
   const correo = await enviarCredenciales(body.email, body.nombre, body.cedula, password)
@@ -131,6 +133,7 @@ const editarSchema = z.object({
   direccion: z.string().trim().max(200).nullable().optional(),
   eps: z.string().trim().max(120).nullable().optional(),
   fondo_cesantias: z.string().trim().max(120).nullable().optional(),
+  fondo_pension: z.string().trim().max(120).nullable().optional(),
   rol: z.enum(["ceo", "lider", "empleado"]).optional(),
   tipo_vinculacion: z.enum(["empleado", "freelance", "prestacion_servicios"]).optional(),
   tipo_contrato: z.string().trim().max(60).nullable().optional(),
@@ -189,7 +192,7 @@ export async function PATCH(req: Request) {
 
   // Actualizar datos generales
   const cambios: Record<string, unknown> = {}
-  for (const k of ["nombre", "email", "cargo", "caja_compensacion", "telefono", "direccion", "eps", "fondo_cesantias", "rol", "tipo_vinculacion", "tipo_contrato", "lider_id", "fecha_ingreso", "fecha_egreso", "fecha_fin_probable", "particularidades"] as const) {
+  for (const k of ["nombre", "email", "cargo", "caja_compensacion", "telefono", "direccion", "eps", "fondo_cesantias", "fondo_pension", "rol", "tipo_vinculacion", "tipo_contrato", "lider_id", "fecha_ingreso", "fecha_egreso", "fecha_fin_probable", "particularidades"] as const) {
     if (body[k] !== undefined) cambios[k] = body[k]
   }
   const ingresoEf = (body.fecha_ingreso !== undefined ? body.fecha_ingreso : actual.fecha_ingreso) as string | null
