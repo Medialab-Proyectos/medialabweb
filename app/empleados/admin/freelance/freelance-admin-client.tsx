@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react"
 import Link from "next/link"
-import { ArrowLeft, Loader2, FileText, CheckCircle2, XCircle, Paperclip, RotateCcw, X, Wallet } from "lucide-react"
+import { ArrowLeft, Loader2, FileText, CheckCircle2, XCircle, Paperclip, RotateCcw, X, Wallet, Download } from "lucide-react"
 import {
   type FacturaFreelance, type EstadoFactura, ESTADO_FACTURA_LABEL, formatMoneda,
 } from "@/lib/empleados/freelance"
@@ -142,11 +142,9 @@ export function FreelanceAdminClient() {
                   </p>
                 </div>
                 <div className="flex shrink-0 items-center gap-2">
-                  {r.archivo_path && (
-                    <a href={`/api/empleados/freelance/${r.id}/archivo`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 rounded-lg border border-white/15 px-2.5 py-1.5 text-xs text-[#fff]/75 hover:bg-white/5">
-                      <Paperclip size={12} /> Factura
-                    </a>
-                  )}
+                  <a href={`/api/empleados/freelance/${r.id}/pdf`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 rounded-lg border border-white/15 px-2.5 py-1.5 text-xs text-[#fff]/75 hover:bg-white/5">
+                    <Download size={12} /> Factura PDF
+                  </a>
                   {r.soporte_path && (
                     <a href={`/api/empleados/freelance/${r.id}/soporte`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 rounded-lg border border-emerald-400/30 px-2.5 py-1.5 text-xs text-emerald-200/90 hover:bg-emerald-400/10">
                       <Paperclip size={12} /> Soporte

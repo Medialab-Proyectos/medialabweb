@@ -2,19 +2,14 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
-import { ArrowLeft, Gift, HeartPulse, Cake, CalendarClock, Loader2, CheckCircle2, Clock, ExternalLink } from "lucide-react"
-import {
-  type Beneficio, type DatosMedicinaPrepagada, ESTADO_BENEFICIO_LABEL, MEDPLUS,
-} from "@/lib/empleados/beneficio"
+import { ArrowLeft, Gift, HeartPulse, Cake, CalendarClock, Loader2, CheckCircle2, Clock, ExternalLink, Phone } from "lucide-react"
+import { type Beneficio, ESTADO_BENEFICIO_LABEL, MEDPLUS } from "@/lib/empleados/beneficio"
 
 export function BeneficiosClient() {
   const [beneficios, setBeneficios] = useState<Beneficio[]>([])
   const [cargando, setCargando] = useState(true)
   const [activando, setActivando] = useState(false)
   const [error, setError] = useState("")
-  const [mostrarForm, setMostrarForm] = useState(false)
-  const [plan, setPlan] = useState("")
-  const [beneficiarios, setBeneficiarios] = useState(0)
 
   async function cargar() {
     setCargando(true)
@@ -30,22 +25,16 @@ export function BeneficiosClient() {
   useEffect(() => { cargar() }, [])
 
   const medicina = beneficios.find((b) => b.tipo === "medicina_prepagada") ?? null
-  const datosMedicina = (medicina?.datos ?? {}) as DatosMedicinaPrepagada
 
   async function activarMedicina() {
     setError(""); setActivando(true)
     try {
       const res = await fetch("/api/empleados/beneficios", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          tipo: "medicina_prepagada",
-          plan: plan || null,
-          beneficiarios: beneficiarios || null,
-        }),
+        body: JSON.stringify({ tipo: "medicina_prepagada" }),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error)
-      setMostrarForm(false)
       await cargar()
     } catch (e) {
       setError(e instanceof Error ? e.message : "Error al activar.")
@@ -87,50 +76,45 @@ export function BeneficiosClient() {
                   <HeartPulse size={20} style={{ color: MEDPLUS.color }} />
                 </span>
                 <div>
-                  <h2 className="text-base font-semibold">Medicina prepagada</h2>
+                  <h2 className="text-base font-semibold">Medicina prepagada · {MEDPLUS.plan}</h2>
                   <p className="mt-0.5 text-sm text-[#fff]/55">
                     Cobertura de salud complementaria con {MEDPLUS.nombre}. Si aún no la tienes, actívala aquí y RRHH gestiona la afiliación.
                   </p>
                 </div>
               </div>
 
-              {medicina ? (
-                <div className="mt-4 flex flex-col gap-2">
-                  <EstadoBadge b={medicina} />
-                  {(datosMedicina.plan || datosMedicina.beneficiarios) && (
-                    <p className="text-xs text-[#fff]/55">
-                      {datosMedicina.plan ? <>Plan: <b className="text-[#fff]/80">{datosMedicina.plan}</b></> : null}
-                      {datosMedicina.plan && datosMedicina.beneficiarios ? " · " : null}
-                      {datosMedicina.beneficiarios ? <>Beneficiarios: <b className="text-[#fff]/80">{datosMedicina.beneficiarios}</b></> : null}
-                    </p>
-                  )}
-                  {medicina.estado === "solicitado" && (
-                    <p className="text-xs text-[#fff]/45">Tu solicitud está en trámite. RRHH confirmará la afiliación con {medicina.proveedor || MEDPLUS.nombre}.</p>
-                  )}
-                </div>
-              ) : mostrarForm ? (
-                <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                  <label className="flex flex-col gap-1.5">
-                    <span className="text-[11px] font-semibold uppercase tracking-wide text-[#fff]/50">Plan (opcional)</span>
-                    <input list="medplus-planes" value={plan} onChange={(e) => setPlan(e.target.value)} placeholder="Elige o escribe…" className="w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm text-[#fff] outline-none focus:border-[var(--cyan)]/60" />
-                    <datalist id="medplus-planes">{MEDPLUS.planes.map((p) => <option key={p} value={p} />)}</datalist>
-                  </label>
-                  <label className="flex flex-col gap-1.5">
-                    <span className="text-[11px] font-semibold uppercase tracking-wide text-[#fff]/50">Beneficiarios adicionales</span>
-                    <input type="number" min={0} max={50} value={beneficiarios || ""} onChange={(e) => setBeneficiarios(Number(e.target.value))} placeholder="0" className="w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm text-[#fff] outline-none focus:border-[var(--cyan)]/60" />
-                  </label>
-                  <div className="flex items-center gap-2 sm:col-span-2">
-                    <button onClick={activarMedicina} disabled={activando} className="inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold text-[#0a1400] transition hover:brightness-110 disabled:opacity-60" style={{ background: MEDPLUS.color }}>
-                      {activando ? <Loader2 size={14} className="animate-spin" /> : <HeartPulse size={14} />} Solicitar activación
-                    </button>
-                    <button onClick={() => setMostrarForm(false)} className="rounded-lg px-3 py-2 text-sm text-[#fff]/60 hover:text-[#fff]">Cancelar</button>
+              {/* Coberturas del plan */}
+              <ul className="mt-4 grid gap-1.5 sm:grid-cols-2">
+                {MEDPLUS.coberturas.map((c) => (
+                  <li key={c} className="flex items-start gap-2 text-xs text-[#fff]/65">
+                    <CheckCircle2 size={13} className="mt-0.5 shrink-0" style={{ color: MEDPLUS.color }} /> {c}
+                  </li>
+                ))}
+              </ul>
+
+              {/* Teléfonos MedPlus */}
+              <div className="mt-3 flex flex-wrap gap-2">
+                {MEDPLUS.telefonos.map((t) => (
+                  <span key={t.numero} className="inline-flex items-center gap-1.5 rounded-full bg-white/5 px-2.5 py-1 text-[11px] text-[#fff]/60">
+                    <Phone size={11} /> {t.label}: <b className="text-[#fff]/80">{t.numero}</b>
+                  </span>
+                ))}
+              </div>
+
+              <div className="mt-4">
+                {medicina ? (
+                  <div className="flex flex-col gap-2">
+                    <EstadoBadge b={medicina} />
+                    {medicina.estado === "solicitado" && (
+                      <p className="text-xs text-[#fff]/45">Tu solicitud está en trámite. RRHH confirmará la afiliación con {medicina.proveedor || MEDPLUS.nombre}.</p>
+                    )}
                   </div>
-                </div>
-              ) : (
-                <button onClick={() => setMostrarForm(true)} className="mt-4 inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold text-[#0a1400] transition hover:brightness-110" style={{ background: MEDPLUS.color }}>
-                  <HeartPulse size={14} /> Activar medicina prepagada
-                </button>
-              )}
+                ) : (
+                  <button onClick={activarMedicina} disabled={activando} className="inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold text-[#0a1400] transition hover:brightness-110 disabled:opacity-60" style={{ background: MEDPLUS.color }}>
+                    {activando ? <Loader2 size={14} className="animate-spin" /> : <HeartPulse size={14} />} Activar medicina prepagada
+                  </button>
+                )}
+              </div>
             </div>
           </section>
 

@@ -63,7 +63,7 @@ const facturaSchema = z.object({
   anio: z.number().int().min(2000).max(2100),
   mes: z.number().int().min(1).max(12),
   numero: z.string().max(60).nullable().optional(),
-  concepto: z.string().max(500).nullable().optional(),
+  concepto: z.string().trim().min(1, "El concepto es obligatorio.").max(1000),
   moneda: z.enum(["COP", "USD"]),
   valor: z.number().min(0),
   banco: z.string().max(120).nullable().optional(),

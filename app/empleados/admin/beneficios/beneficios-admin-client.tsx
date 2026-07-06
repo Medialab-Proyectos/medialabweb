@@ -79,9 +79,8 @@ export function BeneficiosAdminClient() {
                 <p className="text-xs text-[#fff]/55">
                   {TIPO_BENEFICIO_LABEL[r.tipo]}{r.proveedor ? ` · ${r.proveedor}` : ""}
                   {(() => {
-                    const d = (r.datos ?? {}) as { plan?: string; beneficiarios?: number }
-                    const partes = [d.plan, d.beneficiarios ? `${d.beneficiarios} benef.` : null].filter(Boolean)
-                    return partes.length ? ` · ${partes.join(" · ")}` : ""
+                    const d = (r.datos ?? {}) as { plan?: string }
+                    return d.plan ? ` · ${d.plan}` : ""
                   })()}
                 </p>
               </div>

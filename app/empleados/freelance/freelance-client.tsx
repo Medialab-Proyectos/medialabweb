@@ -2,12 +2,13 @@
 
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
-import { ArrowLeft, Loader2, Save, Send, Upload, Paperclip, FileText, CheckCircle2, Clock, XCircle, Landmark } from "lucide-react"
+import { ArrowLeft, Loader2, Save, Send, Upload, Paperclip, FileText, CheckCircle2, Clock, XCircle, Landmark, Download } from "lucide-react"
 import {
   type FacturaFreelance, type PerfilFreelance, type Moneda,
   ESTADO_FACTURA_LABEL, MONEDAS, formatMoneda,
 } from "@/lib/empleados/freelance"
 import { MESES } from "@/lib/empleados/desprendible"
+import { MoneyInput } from "../money-input"
 
 const inputCls = "w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm text-[#fff] outline-none transition focus:border-[var(--cyan)]/60"
 const lblCls = "text-[11px] font-semibold uppercase tracking-wide text-[#fff]/50"
@@ -47,7 +48,6 @@ export function FreelanceClient({ nombre, esPrestacion = false }: { nombre: stri
   const [valor, setValor] = useState(0)
   const [firma, setFirma] = useState(false)
   const [enviando, setEnviando] = useState(false)
-  const fileRefs = useRef<Record<string, HTMLInputElement | null>>({})
   const soporteRefs = useRef<Record<string, HTMLInputElement | null>>({})
 
   function aplicarPerfil(p: PerfilFreelance | null) {
@@ -94,14 +94,15 @@ export function FreelanceClient({ nombre, esPrestacion = false }: { nombre: stri
 
   async function enviarFactura(e: React.FormEvent) {
     e.preventDefault()
-    if (!firma) return setError("Debes firmar la factura marcando la casilla.")
+    if (!concepto.trim()) return setError("El concepto de la factura es obligatorio.")
     if (!valor || valor <= 0) return setError("Indica el valor de la factura.")
+    if (!firma) return setError("Debes firmar la factura marcando la casilla.")
     setError(""); setMsg(""); setEnviando(true)
     try {
       const res = await fetch("/api/empleados/freelance", {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          accion: "factura", anio, mes, numero: numero || null, concepto: concepto || null,
+          accion: "factura", anio, mes, numero: numero || null, concepto: concepto.trim(),
           moneda, valor, banco: banco || null, cuenta: cuenta || null,
           tipo_cuenta: tipoCuenta || null, titular: titular || null, firmante: nombre,
         }),
@@ -109,7 +110,7 @@ export function FreelanceClient({ nombre, esPrestacion = false }: { nombre: stri
       const data = await res.json()
       if (!res.ok) throw new Error(data.error)
       setNumero(""); setConcepto(""); setValor(0); setFirma(false)
-      setMsg("✓ Factura enviada y firmada. Ya puedes adjuntar el PDF de tu factura.")
+      setMsg("✓ Factura enviada y firmada. Ya puedes descargarla en PDF.")
       await cargar()
     } catch (e) {
       setError(e instanceof Error ? e.message : "Error al enviar la factura.")
@@ -143,7 +144,7 @@ export function FreelanceClient({ nombre, esPrestacion = false }: { nombre: stri
           <h1 className="font-display text-xl font-bold">Freelance · Facturación</h1>
         </div>
         <p className="mt-1 text-sm text-[#fff]/55">
-          Sube tu factura firmada cada mes para tramitar el pago.
+          Registra tu factura firmada cada mes; se genera en PDF para descargar y tramitar el pago.
           {esPrestacion && " Como prestación de servicios, adjunta también el soporte de pago de prestaciones sociales (seguridad social)."}
         </p>
       </div>
@@ -189,8 +190,8 @@ export function FreelanceClient({ nombre, esPrestacion = false }: { nombre: stri
                 <input value={documento} onChange={(e) => setDocumento(e.target.value)} className={inputCls} placeholder="Cédula / ID" />
               </label>
               <label className="flex flex-col gap-1.5 sm:col-span-2">
-                <span className={lblCls}>Notas</span>
-                <input value={notas} onChange={(e) => setNotas(e.target.value)} className={inputCls} placeholder="Instrucciones adicionales de pago" />
+                <span className={lblCls}>Notas del pago</span>
+                <textarea rows={3} value={notas} onChange={(e) => setNotas(e.target.value)} className={inputCls} placeholder="Instrucciones adicionales de pago (banco intermediario, referencia, horario, etc.)" />
               </label>
             </div>
             <button type="submit" disabled={guardandoPerfil} className="mt-4 inline-flex items-center gap-2 rounded-lg border border-white/15 px-4 py-2 text-sm text-[#fff]/85 hover:bg-white/5 disabled:opacity-60">
@@ -218,11 +219,11 @@ export function FreelanceClient({ nombre, esPrestacion = false }: { nombre: stri
               </label>
               <label className="flex flex-col gap-1.5">
                 <span className={lblCls}>Valor ({moneda})</span>
-                <input type="number" step="0.01" min="0" value={valor || ""} onChange={(e) => setValor(Number(e.target.value))} className={inputCls} placeholder="0" />
+                <MoneyInput value={valor} onChange={setValor} className={inputCls} />
               </label>
               <label className="flex flex-col gap-1.5 sm:col-span-2">
-                <span className={lblCls}>Concepto</span>
-                <input value={concepto} onChange={(e) => setConcepto(e.target.value)} className={inputCls} placeholder="Servicios prestados en el mes" />
+                <span className={lblCls}>Concepto *</span>
+                <textarea rows={3} value={concepto} onChange={(e) => setConcepto(e.target.value)} className={inputCls} placeholder="Describe los servicios prestados en el mes…" />
               </label>
             </div>
 
@@ -255,20 +256,9 @@ export function FreelanceClient({ nombre, esPrestacion = false }: { nombre: stri
                         </p>
                       </div>
                       <div className="flex items-center gap-2">
-                        <input
-                          ref={(el) => { fileRefs.current[f.id] = el }}
-                          type="file" accept="application/pdf,image/*" className="hidden"
-                          onChange={(e) => { const file = e.target.files?.[0]; if (file) subirArchivo(f.id, file, "archivo"); e.target.value = "" }}
-                        />
-                        {f.archivo_path ? (
-                          <a href={`/api/empleados/freelance/${f.id}/archivo`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 rounded-lg border border-white/15 px-2.5 py-1.5 text-xs text-[#fff]/75 hover:bg-white/5">
-                            <Paperclip size={12} /> Factura
-                          </a>
-                        ) : (
-                          <button onClick={() => fileRefs.current[f.id]?.click()} className="inline-flex items-center gap-1 rounded-lg border border-white/15 px-2.5 py-1.5 text-xs text-[#fff]/75 hover:bg-white/5">
-                            <Upload size={12} /> Factura
-                          </button>
-                        )}
+                        <a href={`/api/empleados/freelance/${f.id}/pdf`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 rounded-lg border border-white/15 px-2.5 py-1.5 text-xs text-[#fff]/75 hover:bg-white/5">
+                          <Download size={12} /> Factura PDF
+                        </a>
                         {esPrestacion && (
                           <>
                             <input

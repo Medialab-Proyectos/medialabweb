@@ -3,7 +3,7 @@ import { z } from "zod"
 import { getSession } from "@/lib/empleados/auth"
 import { portalConfigurado } from "@/lib/empleados/db"
 import { listBeneficiosEmpleado, solicitarBeneficio } from "@/lib/empleados/beneficio-queries"
-import { PROVEEDOR_MEDICINA_PREPAGADA } from "@/lib/empleados/beneficio"
+import { PROVEEDOR_MEDICINA_PREPAGADA, MEDPLUS } from "@/lib/empleados/beneficio"
 
 export const runtime = "nodejs"
 
@@ -26,11 +26,7 @@ export async function GET() {
   }
 }
 
-const schema = z.object({
-  tipo: z.enum(["medicina_prepagada"]),
-  plan: z.string().max(120).nullable().optional(),
-  beneficiarios: z.number().int().min(0).max(50).nullable().optional(),
-})
+const schema = z.object({ tipo: z.enum(["medicina_prepagada"]) })
 
 export async function POST(req: Request) {
   if (!portalConfigurado()) return NextResponse.json({ error: "Portal sin configurar." }, { status: 503 })
@@ -45,11 +41,8 @@ export async function POST(req: Request) {
   }
 
   const proveedor = b.tipo === "medicina_prepagada" ? PROVEEDOR_MEDICINA_PREPAGADA : null
-  const datos: Record<string, unknown> = {}
-  if (b.plan) datos.plan = b.plan
-  if (b.beneficiarios != null) datos.beneficiarios = b.beneficiarios
   try {
-    const beneficio = await solicitarBeneficio(s.sub, b.tipo, proveedor, Object.keys(datos).length ? datos : undefined)
+    const beneficio = await solicitarBeneficio(s.sub, b.tipo, proveedor, { plan: MEDPLUS.plan })
     return NextResponse.json({ beneficio })
   } catch (e) {
     const f = faltaTabla(e)
