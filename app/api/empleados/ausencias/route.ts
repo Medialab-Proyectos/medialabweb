@@ -3,8 +3,9 @@ import { z } from "zod"
 import { getSession } from "@/lib/empleados/auth"
 import { portalConfigurado } from "@/lib/empleados/db"
 import { getEmpleadoVacacion, listSolicitudes, crearSolicitud } from "@/lib/empleados/ausencia-queries"
-import { calcularSaldoVacaciones, DIAS_ADELANTO, esMediaJornada, DIAS_MEDIA_JORNADA } from "@/lib/empleados/ausencia"
+import { calcularSaldoVacaciones, DIAS_ADELANTO, esMediaJornada, DIAS_MEDIA_JORNADA, TIPO_AUSENCIA_LABEL } from "@/lib/empleados/ausencia"
 import { contarDiasHabiles, contarDiasCalendario } from "@/lib/empleados/festivos-co"
+import { notificarCEO } from "@/lib/empleados/notificar"
 
 export const runtime = "nodejs"
 
@@ -98,6 +99,11 @@ export async function POST(req: Request) {
       dias_calendario: diasCalendario,
       motivo: b.motivo ?? null,
     })
+    // Aviso al CEO de que hay una solicitud por aprobar (best-effort).
+    await notificarCEO(
+      `Nueva solicitud de ${emp?.nombre ?? "un empleado"}`,
+      `${emp?.nombre ?? "Un empleado"} solicitó ${TIPO_AUSENCIA_LABEL[b.tipo]} del ${b.fecha_inicio} al ${b.fecha_fin}.\n\nApruébala en el portal: /empleados/aprobaciones`,
+    )
     return NextResponse.json({ solicitud })
   } catch (e) {
     const msg = e instanceof Error ? e.message : "Error"

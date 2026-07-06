@@ -1,0 +1,239 @@
+"use client"
+
+import { useEffect, useMemo, useState } from "react"
+import Link from "next/link"
+import { ArrowLeft, FileText, Loader2, Plus, Pencil, Trash2, X, Download } from "lucide-react"
+import {
+  type CuentaCobro, type EmisorCuentaCobro, type ModoCuentaCobro, type EstadoCuentaCobro,
+  EMISOR_LABEL, MODO_LABEL, ESTADO_CC_LABEL, totalCuentaCobro,
+} from "@/lib/empleados/cuenta-cobro"
+import type { Empresa, Cuenta } from "@/lib/empleados/contabilidad"
+import type { Moneda } from "@/lib/empleados/freelance"
+import { formatMoneda } from "@/lib/empleados/freelance"
+import { ConfirmDialog } from "../../confirm-dialog"
+
+const inputCls = "w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm text-[#fff] outline-none transition focus:border-[var(--cyan)]/60"
+const lblCls = "text-[11px] font-semibold uppercase tracking-wide text-[#fff]/50"
+
+function hoyISO() {
+  const d = new Date(); const p = (x: number) => String(x).padStart(2, "0")
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`
+}
+
+type Form = {
+  id?: string; numero: string; emisor: EmisorCuentaCobro; empresa_id: string; modo: ModoCuentaCobro
+  cantidad: number; tarifa: number; moneda: Moneda; mes_servicio: string; concepto: string
+  cuenta_id: string; fecha_emision: string; fecha_pago: string; observaciones: string; estado: EstadoCuentaCobro
+}
+const vacio: Form = {
+  numero: "", emisor: "empresa", empresa_id: "", modo: "por_mes", cantidad: 1, tarifa: 0, moneda: "COP",
+  mes_servicio: "", concepto: "", cuenta_id: "", fecha_emision: hoyISO(), fecha_pago: "", observaciones: "", estado: "borrador",
+}
+
+const estadoStyle: Record<EstadoCuentaCobro, string> = {
+  borrador: "bg-white/5 text-[#fff]/55",
+  emitida: "bg-amber-400/10 text-amber-300",
+  pagada: "bg-emerald-400/10 text-emerald-300",
+}
+
+export function CuentasCobroClient() {
+  const [items, setItems] = useState<CuentaCobro[]>([])
+  const [empresas, setEmpresas] = useState<Empresa[]>([])
+  const [cuentas, setCuentas] = useState<Cuenta[]>([])
+  const [cargando, setCargando] = useState(true)
+  const [error, setError] = useState("")
+  const [form, setForm] = useState<Form | null>(null)
+  const [saving, setSaving] = useState(false)
+  const [confirmar, setConfirmar] = useState<CuentaCobro | null>(null)
+  const [confirmLoading, setConfirmLoading] = useState(false)
+
+  const nombreEmpresa = useMemo(() => new Map(empresas.map((x) => [x.id, x.nombre])), [empresas])
+
+  async function cargar() {
+    setCargando(true)
+    try {
+      const [rc, re, rcu] = await Promise.all([
+        fetch("/api/empleados/admin/cuentas-cobro"),
+        fetch("/api/empleados/admin/contabilidad/empresas"),
+        fetch("/api/empleados/admin/contabilidad/cuentas"),
+      ])
+      const dc = await rc.json()
+      if (rc.ok) setItems(dc.cuentasCobro ?? []); else setError(dc.error || "Error al cargar.")
+      const de = await re.json(); if (re.ok) setEmpresas(de.empresas ?? [])
+      const dcu = await rcu.json(); if (rcu.ok) setCuentas(dcu.cuentas ?? [])
+    } finally {
+      setCargando(false)
+    }
+  }
+  useEffect(() => { cargar() }, [])
+
+  async function guardar(e: React.FormEvent) {
+    e.preventDefault(); if (!form) return
+    setSaving(true); setError("")
+    try {
+      const res = await fetch("/api/empleados/admin/cuentas-cobro", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...(form.id ? { id: form.id } : {}),
+          numero: form.numero || null, emisor: form.emisor, empresa_id: form.empresa_id || null,
+          modo: form.modo, cantidad: form.cantidad, tarifa: form.tarifa, moneda: form.moneda,
+          mes_servicio: form.mes_servicio || null, concepto: form.concepto || null, cuenta_id: form.cuenta_id || null,
+          fecha_emision: form.fecha_emision || null, fecha_pago: form.fecha_pago || null,
+          observaciones: form.observaciones || null, estado: form.estado,
+        }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error)
+      await cargar(); setForm(null)
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Error al guardar.")
+    } finally { setSaving(false) }
+  }
+
+  async function eliminar(cc: CuentaCobro) {
+    setConfirmLoading(true)
+    try {
+      const res = await fetch(`/api/empleados/admin/cuentas-cobro?id=${cc.id}`, { method: "DELETE" })
+      const data = await res.json(); if (!res.ok) throw new Error(data.error)
+      setItems((prev) => prev.filter((x) => x.id !== cc.id)); setConfirmar(null)
+    } catch (e) { setError(e instanceof Error ? e.message : "Error al eliminar."); setConfirmar(null) }
+    finally { setConfirmLoading(false) }
+  }
+
+  const total = form ? totalCuentaCobro(form) : 0
+
+  return (
+    <div>
+      <Link href="/empleados/admin/contabilidad" className="mb-6 inline-flex items-center gap-1.5 text-sm text-[#fff]/55 hover:text-[#fff]">
+        <ArrowLeft size={15} /> Volver a Contabilidad
+      </Link>
+      <div className="mb-4 flex items-center justify-between">
+        <div className="flex items-center gap-2.5">
+          <FileText size={20} className="text-[var(--cyan)]" />
+          <h1 className="font-display text-xl font-bold">Cuentas de cobro</h1>
+          <span className="rounded-full bg-white/5 px-2 py-0.5 text-xs text-[#fff]/50">{items.length}</span>
+        </div>
+        <button onClick={() => { setError(""); setForm({ ...vacio }) }} disabled={empresas.length === 0} className="inline-flex items-center gap-2 rounded-full bg-[var(--cyan)] px-4 py-2 text-sm font-semibold text-[#04191b] transition hover:brightness-110 disabled:opacity-40">
+          <Plus size={15} /> Nueva
+        </button>
+      </div>
+      <p className="mb-4 text-sm text-[#fff]/55">Genera el documento (con logo de empresa o a tu nombre) y descárgalo en PDF para enviarlo.</p>
+      {empresas.length === 0 && <p className="mb-4 rounded-lg bg-amber-400/10 px-3 py-2 text-xs text-amber-200">Primero registra al menos una empresa en Contabilidad para poder emitir cuentas de cobro.</p>}
+
+      {error && <p className="mb-4 rounded-lg bg-red-500/10 px-3 py-2 text-sm text-red-300">{error}</p>}
+
+      {cargando ? (
+        <div className="flex items-center gap-2 py-10 text-[#fff]/60"><Loader2 size={16} className="animate-spin" /> Cargando…</div>
+      ) : items.length === 0 ? (
+        <p className="rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-10 text-center text-sm text-[#fff]/50">Aún no hay cuentas de cobro.</p>
+      ) : (
+        <div className="flex flex-col gap-2">
+          {items.map((cc) => (
+            <div key={cc.id} className="flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3">
+              <div className="min-w-0">
+                <p className="text-sm font-medium">
+                  {cc.numero ? `N.º ${cc.numero} · ` : ""}{nombreEmpresa.get(cc.empresa_id ?? "") ?? "Sin empresa"} · <span className="text-[var(--cyan)]">{formatMoneda(totalCuentaCobro(cc), cc.moneda)}</span>
+                </p>
+                <p className="text-xs text-[#fff]/50">
+                  {MODO_LABEL[cc.modo]} · {cc.cantidad} × {formatMoneda(cc.tarifa, cc.moneda)}
+                  {cc.mes_servicio ? ` · ${cc.mes_servicio}` : ""}
+                  {cc.fecha_pago ? ` · pago ${cc.fecha_pago}` : ""}
+                </p>
+              </div>
+              <div className="flex shrink-0 items-center gap-1">
+                <span className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${estadoStyle[cc.estado]}`}>{ESTADO_CC_LABEL[cc.estado]}</span>
+                <a href={`/api/empleados/admin/cuentas-cobro/${cc.id}/pdf`} target="_blank" rel="noreferrer" title="Descargar PDF" className="rounded-lg p-1.5 text-[#fff]/60 hover:bg-white/5 hover:text-[#fff]"><Download size={15} /></a>
+                <button onClick={() => { setError(""); setForm({ id: cc.id, numero: cc.numero ?? "", emisor: cc.emisor, empresa_id: cc.empresa_id ?? "", modo: cc.modo, cantidad: Number(cc.cantidad) || 0, tarifa: Number(cc.tarifa) || 0, moneda: cc.moneda, mes_servicio: cc.mes_servicio ?? "", concepto: cc.concepto ?? "", cuenta_id: cc.cuenta_id ?? "", fecha_emision: cc.fecha_emision ?? "", fecha_pago: cc.fecha_pago ?? "", observaciones: cc.observaciones ?? "", estado: cc.estado }) }} className="rounded-lg p-1.5 text-[#fff]/60 hover:bg-white/5 hover:text-[#fff]"><Pencil size={15} /></button>
+                <button onClick={() => setConfirmar(cc)} className="rounded-lg p-1.5 text-red-300/70 hover:bg-red-500/10 hover:text-red-300"><Trash2 size={15} /></button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Modal */}
+      {form && (
+        <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/70 p-4 py-10">
+          <form onSubmit={guardar} className="w-full max-w-lg rounded-2xl border border-white/10 bg-[#12151c] p-6">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="text-lg font-semibold">{form.id ? "Editar cuenta de cobro" : "Nueva cuenta de cobro"}</h2>
+              <button type="button" onClick={() => setForm(null)} className="text-[#fff]/50 hover:text-[#fff]"><X size={18} /></button>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <label className="flex flex-col gap-1.5"><span className={lblCls}>Emisor</span>
+                <select value={form.emisor} onChange={(e) => setForm({ ...form, emisor: e.target.value as EmisorCuentaCobro })} className={inputCls}>
+                  <option value="empresa">{EMISOR_LABEL.empresa}</option>
+                  <option value="personal">{EMISOR_LABEL.personal}</option>
+                </select></label>
+              <label className="flex flex-col gap-1.5"><span className={lblCls}>N.º (opcional)</span>
+                <input value={form.numero} onChange={(e) => setForm({ ...form, numero: e.target.value })} className={inputCls} placeholder="CC-001" /></label>
+              <label className="flex flex-col gap-1.5 sm:col-span-2"><span className={lblCls}>Cobrar a (empresa)</span>
+                <select value={form.empresa_id} onChange={(e) => setForm({ ...form, empresa_id: e.target.value })} className={inputCls}>
+                  <option value="">— Selecciona —</option>
+                  {empresas.map((x) => <option key={x.id} value={x.id}>{x.nombre}{x.nit ? ` · NIT ${x.nit}` : ""}</option>)}
+                </select></label>
+              <label className="flex flex-col gap-1.5"><span className={lblCls}>Modo</span>
+                <select value={form.modo} onChange={(e) => setForm({ ...form, modo: e.target.value as ModoCuentaCobro })} className={inputCls}>
+                  <option value="por_mes">Por mes</option>
+                  <option value="por_hora">Por hora</option>
+                </select></label>
+              <label className="flex flex-col gap-1.5"><span className={lblCls}>Moneda</span>
+                <select value={form.moneda} onChange={(e) => setForm({ ...form, moneda: e.target.value as Moneda })} className={inputCls}>
+                  <option value="COP">COP</option>
+                  <option value="USD">USD</option>
+                </select></label>
+              <label className="flex flex-col gap-1.5"><span className={lblCls}>{form.modo === "por_hora" ? "N.º de horas" : "N.º de meses"}</span>
+                <input type="number" step="0.01" min="0" value={form.cantidad || ""} onChange={(e) => setForm({ ...form, cantidad: Number(e.target.value) })} className={inputCls} placeholder="1" /></label>
+              <label className="flex flex-col gap-1.5"><span className={lblCls}>{form.modo === "por_hora" ? "Costo por hora" : "Costo por mes"}</span>
+                <input type="number" step="0.01" min="0" value={form.tarifa || ""} onChange={(e) => setForm({ ...form, tarifa: Number(e.target.value) })} className={inputCls} placeholder="0" /></label>
+              <label className="flex flex-col gap-1.5"><span className={lblCls}>Mes / periodo de servicio</span>
+                <input value={form.mes_servicio} onChange={(e) => setForm({ ...form, mes_servicio: e.target.value })} className={inputCls} placeholder="Julio 2026" /></label>
+              <label className="flex flex-col gap-1.5"><span className={lblCls}>Consignar a (cuenta)</span>
+                <select value={form.cuenta_id} onChange={(e) => setForm({ ...form, cuenta_id: e.target.value })} className={inputCls}>
+                  <option value="">— Selecciona —</option>
+                  {cuentas.map((c) => <option key={c.id} value={c.id}>{c.nombre} ({c.moneda})</option>)}
+                </select></label>
+              <label className="flex flex-col gap-1.5 sm:col-span-2"><span className={lblCls}>Concepto</span>
+                <input value={form.concepto} onChange={(e) => setForm({ ...form, concepto: e.target.value })} className={inputCls} placeholder="Servicios de diseño UX…" /></label>
+              <label className="flex flex-col gap-1.5"><span className={lblCls}>Fecha de emisión</span>
+                <input type="date" value={form.fecha_emision} onChange={(e) => setForm({ ...form, fecha_emision: e.target.value })} className={inputCls} /></label>
+              <label className="flex flex-col gap-1.5"><span className={lblCls}>Fecha de pago (opcional)</span>
+                <input type="date" value={form.fecha_pago} onChange={(e) => setForm({ ...form, fecha_pago: e.target.value })} className={inputCls} /></label>
+              <label className="flex flex-col gap-1.5"><span className={lblCls}>Estado</span>
+                <select value={form.estado} onChange={(e) => setForm({ ...form, estado: e.target.value as EstadoCuentaCobro })} className={inputCls}>
+                  <option value="borrador">Borrador</option>
+                  <option value="emitida">Emitida</option>
+                  <option value="pagada">Pagada</option>
+                </select></label>
+              <label className="flex flex-col gap-1.5 sm:col-span-2"><span className={lblCls}>Observaciones</span>
+                <input value={form.observaciones} onChange={(e) => setForm({ ...form, observaciones: e.target.value })} className={inputCls} placeholder="Opcional" /></label>
+            </div>
+
+            <div className="mt-4 flex items-center justify-between border-t border-white/10 pt-3">
+              <span className="text-xs text-[#fff]/50">Total</span>
+              <span className="font-display text-xl font-bold text-[var(--cyan)]">{formatMoneda(total, form.moneda)}</span>
+            </div>
+
+            <div className="mt-4 flex justify-end gap-2">
+              <button type="button" onClick={() => setForm(null)} className="rounded-lg px-4 py-2 text-sm text-[#fff]/60 hover:text-[#fff]">Cancelar</button>
+              <button type="submit" disabled={saving} className="inline-flex items-center gap-2 rounded-lg bg-[var(--cyan)] px-5 py-2 text-sm font-semibold text-[#04191b] transition hover:brightness-110 disabled:opacity-60">
+                {saving ? <Loader2 size={14} className="animate-spin" /> : null} Guardar
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
+
+      <ConfirmDialog
+        abierto={!!confirmar}
+        titulo="Eliminar cuenta de cobro"
+        mensaje="¿Eliminar esta cuenta de cobro? Esta acción no se puede deshacer."
+        confirmLabel="Eliminar"
+        tone="danger"
+        cargando={confirmLoading}
+        onConfirm={() => confirmar && eliminar(confirmar)}
+        onCancel={() => setConfirmar(null)}
+      />
+    </div>
+  )
+}

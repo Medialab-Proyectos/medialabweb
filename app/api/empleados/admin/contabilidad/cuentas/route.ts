@@ -36,6 +36,7 @@ const schema = z.object({
   id: z.string().uuid().optional(),
   nombre: z.string().trim().min(1).max(120),
   banco: z.string().max(120).nullable().optional(),
+  plataforma: z.string().max(120).nullable().optional(),
   moneda: z.enum(["COP", "USD"]).default("COP"),
   saldo_inicial: z.number().default(0),
   activa: z.boolean().default(true),
@@ -57,7 +58,7 @@ export async function POST(req: Request) {
   try {
     const cuenta = await upsertCuenta({
       ...(b.id ? { id: b.id } : {}),
-      nombre: b.nombre, banco: b.banco ?? null, moneda: b.moneda,
+      nombre: b.nombre, banco: b.banco ?? null, plataforma: b.plataforma ?? null, moneda: b.moneda,
       saldo_inicial: b.saldo_inicial, activa: b.activa, orden: b.orden,
     })
     return NextResponse.json({ cuenta })

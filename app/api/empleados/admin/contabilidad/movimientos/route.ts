@@ -41,7 +41,11 @@ const schema = z.object({
   categoria: z.string().max(60).nullable().optional(),
   concepto: z.string().max(300).nullable().optional(),
   contraparte: z.string().max(160).nullable().optional(),
+  empresa_id: z.string().uuid().nullable().optional(),
   valor: z.number().min(0),
+  tasa: z.number().min(0).nullable().optional(),
+  costo: z.number().min(0).default(0),
+  valor_destino: z.number().min(0).nullable().optional(),
   estado: z.enum(["pendiente", "realizado"]).default("realizado"),
   referencia: z.string().max(120).nullable().optional(),
 })
@@ -68,16 +72,21 @@ export async function POST(req: Request) {
   const creadoPor = b.id ? (await getMovimiento(b.id))?.creado_por ?? g.session!.sub : g.session!.sub
 
   try {
+    const esTraslado = b.tipo === "traslado"
     const movimiento = await upsertMovimiento({
       ...(b.id ? { id: b.id } : {}),
       cuenta_id: b.cuenta_id,
-      cuenta_destino_id: b.tipo === "traslado" ? b.cuenta_destino_id ?? null : null,
+      cuenta_destino_id: esTraslado ? b.cuenta_destino_id ?? null : null,
       fecha: b.fecha,
       tipo: b.tipo,
       categoria: b.categoria ?? null,
       concepto: b.concepto ?? null,
       contraparte: b.contraparte ?? null,
+      empresa_id: b.empresa_id ?? null,
       valor: b.valor,
+      tasa: esTraslado ? b.tasa ?? null : null,
+      costo: esTraslado ? b.costo : 0,
+      valor_destino: esTraslado ? b.valor_destino ?? null : null,
       estado: b.estado,
       referencia: b.referencia ?? null,
       creado_por: creadoPor,

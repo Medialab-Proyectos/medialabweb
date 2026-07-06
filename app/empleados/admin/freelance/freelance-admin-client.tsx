@@ -27,6 +27,8 @@ export function FreelanceAdminClient() {
   const [filtro, setFiltro] = useState<"todas" | EstadoFactura>("todas")
   const [pagar, setPagar] = useState<FacturaRow | null>(null)
   const [cuentaSel, setCuentaSel] = useState("")
+  const [rechazar, setRechazar] = useState<FacturaRow | null>(null)
+  const [motivo, setMotivo] = useState("")
 
   async function cargar() {
     setCargando(true)
@@ -48,12 +50,12 @@ export function FreelanceAdminClient() {
 
   const visibles = useMemo(() => (filtro === "todas" ? rows : rows.filter((r) => r.estado === filtro)), [rows, filtro])
 
-  async function setEstado(id: string, estado: EstadoFactura, cuentaId?: string | null) {
+  async function setEstado(id: string, estado: EstadoFactura, cuentaId?: string | null, obs?: string | null) {
     setError(""); setMsg(""); setGuardandoId(id)
     try {
       const res = await fetch("/api/empleados/admin/freelance", {
         method: "PATCH", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id, estado, cuenta_id: cuentaId ?? null }),
+        body: JSON.stringify({ id, estado, cuenta_id: cuentaId ?? null, observaciones: obs ?? undefined }),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error)
@@ -79,6 +81,17 @@ export function FreelanceAdminClient() {
     const f = pagar
     setPagar(null)
     await setEstado(f.id, "pagada", registrar ? cuentaSel : null)
+  }
+
+  function abrirRechazo(r: FacturaRow) {
+    setError(""); setMsg(""); setMotivo(r.observaciones ?? ""); setRechazar(r)
+  }
+
+  async function confirmarRechazo() {
+    if (!rechazar) return
+    const f = rechazar
+    setRechazar(null)
+    await setEstado(f.id, "rechazada", null, motivo || null)
   }
 
   return (
@@ -134,6 +147,11 @@ export function FreelanceAdminClient() {
                       <Paperclip size={12} /> Factura
                     </a>
                   )}
+                  {r.soporte_path && (
+                    <a href={`/api/empleados/freelance/${r.id}/soporte`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 rounded-lg border border-emerald-400/30 px-2.5 py-1.5 text-xs text-emerald-200/90 hover:bg-emerald-400/10">
+                      <Paperclip size={12} /> Soporte
+                    </a>
+                  )}
                   <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold ${estadoStyle[r.estado]}`}>
                     {ESTADO_FACTURA_LABEL[r.estado]}
                   </span>
@@ -145,7 +163,7 @@ export function FreelanceAdminClient() {
                         <button onClick={() => abrirPagar(r)} title="Marcar pagada" className="rounded-lg p-1.5 text-emerald-300/70 hover:bg-emerald-500/10 hover:text-emerald-300"><CheckCircle2 size={15} /></button>
                       )}
                       {r.estado !== "rechazada" && (
-                        <button onClick={() => setEstado(r.id, "rechazada")} title="Rechazar" className="rounded-lg p-1.5 text-red-300/70 hover:bg-red-500/10 hover:text-red-300"><XCircle size={15} /></button>
+                        <button onClick={() => abrirRechazo(r)} title="Rechazar con motivo" className="rounded-lg p-1.5 text-red-300/70 hover:bg-red-500/10 hover:text-red-300"><XCircle size={15} /></button>
                       )}
                       {r.estado !== "enviada" && (
                         <button onClick={() => setEstado(r.id, "enviada")} title="Volver a enviada" className="rounded-lg p-1.5 text-amber-300/70 hover:bg-amber-500/10 hover:text-amber-300"><RotateCcw size={15} /></button>
@@ -197,6 +215,27 @@ export function FreelanceAdminClient() {
           </div>
         )
       })()}
+
+      {/* Modal: rechazar con motivo */}
+      {rechazar && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
+          <div className="w-full max-w-md rounded-2xl border border-white/10 bg-[#12151c] p-6">
+            <div className="mb-3 flex items-center justify-between">
+              <h2 className="flex items-center gap-2 text-base font-semibold"><XCircle size={17} className="text-red-300" /> Rechazar factura</h2>
+              <button onClick={() => setRechazar(null)} className="text-[#fff]/50 hover:text-[#fff]"><X size={17} /></button>
+            </div>
+            <p className="text-sm text-[#fff]/65">{rechazar.empleado?.nombre ?? "Freelance"} · {formatMoneda(rechazar.valor, rechazar.moneda)} ({MESES[rechazar.mes - 1]} {rechazar.anio})</p>
+            <label className="mt-4 flex flex-col gap-1.5">
+              <span className="text-[11px] font-semibold uppercase tracking-wide text-[#fff]/50">Motivo del rechazo (lo verá el freelance)</span>
+              <textarea rows={3} value={motivo} onChange={(e) => setMotivo(e.target.value)} placeholder="Ej: falta el soporte de prestaciones sociales; corrige la cuenta bancaria…" className="w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm text-[#fff] outline-none focus:border-[var(--cyan)]/60" />
+            </label>
+            <div className="mt-5 flex justify-end gap-2">
+              <button onClick={() => setRechazar(null)} className="rounded-lg px-4 py-2 text-sm text-[#fff]/60 hover:text-[#fff]">Cancelar</button>
+              <button onClick={confirmarRechazo} disabled={!motivo.trim()} className="rounded-lg bg-red-500/90 px-4 py-2 text-sm font-semibold text-[#fff] transition hover:bg-red-500 disabled:opacity-50">Rechazar y avisar</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

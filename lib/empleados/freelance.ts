@@ -30,6 +30,7 @@ export type FacturaFreelance = {
   tipo_cuenta: string | null
   titular: string | null
   archivo_path: string | null
+  soporte_path: string | null   // soporte de prestaciones sociales (solo prestación de servicios)
   firmado: boolean
   firmante: string | null
   firmado_en: string | null

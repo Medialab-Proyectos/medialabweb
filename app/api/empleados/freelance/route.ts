@@ -3,9 +3,13 @@ import { z } from "zod"
 import { getSession } from "@/lib/empleados/auth"
 import { portalConfigurado } from "@/lib/empleados/db"
 import { getEmpleadoById } from "@/lib/empleados/queries"
+import { esVinculacionPorFactura } from "@/lib/empleados/types"
 import {
   getPerfilFreelance, upsertPerfilFreelance, listFacturasEmpleado, crearFactura,
 } from "@/lib/empleados/freelance-queries"
+import { formatMoneda } from "@/lib/empleados/freelance"
+import { MESES } from "@/lib/empleados/desprendible"
+import { notificarCEO } from "@/lib/empleados/notificar"
 
 export const runtime = "nodejs"
 
@@ -21,8 +25,8 @@ async function guardFreelance() {
   if (!s) return { error: NextResponse.json({ error: "No autorizado." }, { status: 401 }) }
   const emp = await getEmpleadoById(s.sub)
   if (!emp) return { error: NextResponse.json({ error: "Empleado no encontrado." }, { status: 404 }) }
-  if (emp.tipo_vinculacion !== "freelance") {
-    return { error: NextResponse.json({ error: "Este módulo es solo para vinculación freelance." }, { status: 403 }) }
+  if (!esVinculacionPorFactura(emp.tipo_vinculacion)) {
+    return { error: NextResponse.json({ error: "Este módulo es solo para vinculación freelance o prestación de servicios." }, { status: 403 }) }
   }
   return { session: s, empleado: emp }
 }
@@ -116,6 +120,11 @@ export async function POST(req: Request) {
       firmante: b.firmante,
       firmado_en: new Date().toISOString(),
     })
+    // Aviso al CEO de que hay una nueva factura por revisar/pagar (best-effort).
+    await notificarCEO(
+      `Nueva factura de ${g.empleado!.nombre}`,
+      `${g.empleado!.nombre} envió una factura por ${formatMoneda(factura.valor, factura.moneda)} (${MESES[factura.mes - 1]} ${factura.anio}).\n\nRevísala en el portal: /empleados/admin/freelance`,
+    )
     return NextResponse.json({ factura })
   } catch (e) {
     const f = faltaTabla(e)

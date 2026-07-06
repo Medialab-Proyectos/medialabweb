@@ -77,6 +77,23 @@ export async function solicitarBeneficio(
   return data as Beneficio
 }
 
+/** El CEO asigna directamente un beneficio a un empleado (upsert por empleado+tipo). */
+export async function asignarBeneficio(
+  empleadoId: string,
+  tipo: TipoBeneficio,
+  estado: EstadoBeneficio,
+  proveedor: string | null,
+) {
+  const sb = getServiceClient()
+  const { data, error } = await sb
+    .from("beneficios")
+    .upsert({ empleado_id: empleadoId, tipo, estado, proveedor }, { onConflict: "empleado_id,tipo" })
+    .select(COLS)
+    .single()
+  if (error) throw error
+  return data as Beneficio
+}
+
 /** El CEO cambia el estado de un beneficio (activarlo tras la afiliación, o darlo de baja). */
 export async function setEstadoBeneficio(
   id: string,

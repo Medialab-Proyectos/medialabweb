@@ -3,12 +3,17 @@
 import Link from "next/link"
 import { useEffect, useMemo, useRef, useState } from "react"
 import {
-  UserPlus, Pencil, KeyRound, Ban, RotateCcw, Loader2, X, Copy, CheckCircle2, Users, FileText, FileSignature, Gift, PiggyBank, ArrowLeft, Plane, ChevronDown, PauseCircle, FileWarning, Receipt, Wallet,
+  UserPlus, Pencil, KeyRound, Ban, RotateCcw, Loader2, X, Copy, CheckCircle2, Users, FileText, FileSignature, Gift, PiggyBank, ArrowLeft, Plane, ChevronDown, PauseCircle, FileWarning, Receipt, Search,
 } from "lucide-react"
 import type { Empleado, Rol, TipoVinculacion } from "@/lib/empleados/types"
 import { ROL_LABEL } from "@/lib/empleados/types"
+import type { Beneficio, TipoBeneficio } from "@/lib/empleados/beneficio"
+import { TIPO_BENEFICIO_LABEL, ESTADO_BENEFICIO_LABEL } from "@/lib/empleados/beneficio"
 import { CAJAS_COMPENSACION } from "@/lib/empleados/catalogos-co"
 import { ConfirmDialog } from "../confirm-dialog"
+
+/** Beneficios que el CEO puede asignar desde la tabla. */
+const BENEFICIOS_ASIGNABLES: TipoBeneficio[] = ["medicina_prepagada"]
 
 type AccionConfirmable = "cerrar_contrato" | "suspender" | "resetear_clave"
 type Tone = "danger" | "warn" | "default"
@@ -53,6 +58,19 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
   const [confirmar, setConfirmar] = useState<null | { titulo: string; mensaje: string; confirmLabel: string; tone: Tone; run: () => Promise<void> }>(null)
   const [confirmLoading, setConfirmLoading] = useState(false)
   const [aviso, setAviso] = useState("")
+  const [q, setQ] = useState("")
+  const [benefEmp, setBenefEmp] = useState<Empleado | null>(null)
+  const [benefItems, setBenefItems] = useState<Beneficio[]>([])
+  const [benefLoading, setBenefLoading] = useState(false)
+  const [benefBusy, setBenefBusy] = useState<TipoBeneficio | null>(null)
+
+  const visibles = useMemo(() => {
+    const t = q.trim().toLowerCase()
+    if (!t) return empleados
+    return empleados.filter((e) =>
+      e.nombre.toLowerCase().includes(t) || e.cedula.toLowerCase().includes(t) || (e.cargo ?? "").toLowerCase().includes(t),
+    )
+  }, [empleados, q])
 
   const nombrePorId = useMemo(() => {
     const m = new Map<string, string>()
@@ -165,6 +183,93 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
     setConfirmar({ ...cfg, run: () => ejecutarAccion(id, tipo, emp) })
   }
 
+  // ── Beneficios por empleado ─────────────────────────────────────────────────
+  async function abrirBeneficios(e: Empleado) {
+    setBenefEmp(e); setBenefItems([]); setBenefLoading(true); setAviso("")
+    try {
+      const res = await fetch(`/api/empleados/admin/beneficios?empleado_id=${e.id}`)
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error)
+      setBenefItems(data.beneficios ?? [])
+    } catch (err) {
+      setAviso(err instanceof Error ? err.message : "Error al cargar beneficios.")
+    } finally {
+      setBenefLoading(false)
+    }
+  }
+
+  async function asignarBenef(tipo: TipoBeneficio) {
+    if (!benefEmp) return
+    setBenefBusy(tipo); setAviso("")
+    try {
+      const res = await fetch("/api/empleados/admin/beneficios", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ empleado_id: benefEmp.id, tipo, estado: "activo" }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error)
+      setBenefItems((prev) => {
+        const i = prev.findIndex((x) => x.tipo === tipo)
+        if (i === -1) return [data.beneficio as Beneficio, ...prev]
+        const copy = [...prev]; copy[i] = data.beneficio as Beneficio; return copy
+      })
+    } catch (err) {
+      setAviso(err instanceof Error ? err.message : "Error al asignar.")
+    } finally {
+      setBenefBusy(null)
+    }
+  }
+
+  async function cambiarEstadoBenef(id: string, tipo: TipoBeneficio, estado: "activo" | "inactivo") {
+    setBenefBusy(tipo); setAviso("")
+    try {
+      const res = await fetch("/api/empleados/admin/beneficios", {
+        method: "PATCH", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, estado }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error)
+      setBenefItems((prev) => prev.map((x) => (x.id === id ? (data.beneficio as Beneficio) : x)))
+    } catch (err) {
+      setAviso(err instanceof Error ? err.message : "Error al actualizar.")
+    } finally {
+      setBenefBusy(null)
+    }
+  }
+
+  // Acciones de fila (compartidas por la tabla y las tarjetas móviles).
+  function acciones(e: Empleado) {
+    return (
+      <div className="flex items-center gap-1">
+        <button onClick={() => abrirEditar(e)} title="Editar" className="rounded-lg p-1.5 text-[#fff]/60 hover:bg-white/5 hover:text-[#fff]"><Pencil size={15} /></button>
+        <button onClick={() => abrirBeneficios(e)} title="Beneficios" className="rounded-lg p-1.5 text-[#E8751A]/80 hover:bg-[#E8751A]/10 hover:text-[#E8751A]"><Gift size={15} /></button>
+        <Link href={`/empleados/admin/liquidaciones?empleado=${e.id}`} title="Liquidar" className="rounded-lg p-1.5 text-[#fff]/60 hover:bg-white/5 hover:text-[#fff]"><FileWarning size={15} /></Link>
+        <button onClick={() => accion(e.id, "resetear_clave", e)} title="Resetear contraseña" className="rounded-lg p-1.5 text-[#fff]/60 hover:bg-white/5 hover:text-[#fff]"><KeyRound size={15} /></button>
+        {e.estado === "activo" && (
+          <button onClick={() => accion(e.id, "suspender", e)} disabled={e.id === ceoId} title="Suspender acceso" className="rounded-lg p-1.5 text-amber-300/70 hover:bg-amber-500/10 hover:text-amber-300 disabled:opacity-30"><PauseCircle size={15} /></button>
+        )}
+        {e.estado === "activo"
+          ? <button onClick={() => accion(e.id, "cerrar_contrato", e)} disabled={e.id === ceoId} title="Cerrar contrato" className="rounded-lg p-1.5 text-red-300/70 hover:bg-red-500/10 hover:text-red-300 disabled:opacity-30"><Ban size={15} /></button>
+          : <button onClick={() => accion(e.id, "reactivar", e)} title="Reactivar acceso" className="rounded-lg p-1.5 text-emerald-300/70 hover:bg-emerald-500/10 hover:text-emerald-300"><RotateCcw size={15} /></button>}
+      </div>
+    )
+  }
+
+  const rolBadge = (rol: Rol) => (
+    <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${
+      rol === "ceo" ? "bg-[var(--magenta)]/15 text-[var(--magenta)]"
+        : rol === "lider" ? "bg-[var(--cyan)]/15 text-[var(--cyan)]"
+        : "bg-white/5 text-[#fff]/70"
+    }`}>{ROL_LABEL[rol]}</span>
+  )
+
+  const estadoBadge = (estado: Empleado["estado"]) =>
+    estado === "activo"
+      ? <span className="text-emerald-300/90">Activo</span>
+      : estado === "suspendido"
+        ? <span className="text-amber-300/80">Suspendido</span>
+        : <span className="text-red-300/80">Terminado</span>
+
   return (
     <div>
       <Link href="/empleados/inicio" className="mb-6 inline-flex items-center gap-1.5 text-sm text-[#fff]/55 hover:text-[#fff]">
@@ -190,30 +295,6 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
           >
             <Plane size={15} /> Vacaciones
           </Link>
-          <Link
-            href="/empleados/admin/liquidaciones"
-            className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-[#fff]/80 transition hover:bg-white/5"
-          >
-            <FileWarning size={15} /> Liquidaciones
-          </Link>
-          <Link
-            href="/empleados/admin/beneficios"
-            className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-[#fff]/80 transition hover:bg-white/5"
-          >
-            <Gift size={15} /> Beneficios
-          </Link>
-          <Link
-            href="/empleados/admin/freelance"
-            className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-[#fff]/80 transition hover:bg-white/5"
-          >
-            <Receipt size={15} /> Freelance
-          </Link>
-          <Link
-            href="/empleados/admin/contabilidad"
-            className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-[#fff]/80 transition hover:bg-white/5"
-          >
-            <Wallet size={15} /> Contabilidad
-          </Link>
           <button
             onClick={abrirNuevo}
             className="inline-flex items-center gap-2 rounded-full bg-[var(--cyan)] px-4 py-2 text-sm font-semibold text-[#04191b] transition hover:brightness-110"
@@ -221,6 +302,17 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
             <UserPlus size={15} /> Nuevo empleado
           </button>
         </div>
+      </div>
+
+      {/* Buscador */}
+      <div className="mb-4 relative">
+        <Search size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#fff]/40" />
+        <input
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          placeholder="Buscar por nombre, cédula o cargo…"
+          className="w-full rounded-xl border border-white/10 bg-black/30 py-2.5 pl-9 pr-3 text-sm text-[#fff] outline-none transition focus:border-[var(--cyan)]/60"
+        />
       </div>
 
       {/* Banner de contraseña temporal */}
@@ -255,8 +347,8 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
         </div>
       )}
 
-      {/* Tabla */}
-      <div className="overflow-x-auto rounded-2xl border border-white/10">
+      {/* Tabla (desktop) */}
+      <div className="hidden overflow-x-auto rounded-2xl border border-white/10 md:block">
         <table className="w-full min-w-[720px] text-left text-sm">
           <thead className="bg-white/[0.03] text-xs uppercase tracking-wide text-[#fff]/50">
             <tr>
@@ -269,7 +361,7 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
             </tr>
           </thead>
           <tbody>
-            {empleados.map((e) => (
+            {visibles.map((e) => (
               <tr key={e.id} className="border-t border-white/[0.06]">
                 <td className="px-4 py-3">
                   <p className="flex items-center gap-1.5 font-medium text-[#fff]">
@@ -281,40 +373,48 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
                   <p className="text-xs text-[#fff]/45">CC {e.cedula}</p>
                 </td>
                 <td className="px-4 py-3 text-[#fff]/70">{e.cargo || "—"}</td>
-                <td className="px-4 py-3">
-                  <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${
-                    e.rol === "ceo" ? "bg-[var(--magenta)]/15 text-[var(--magenta)]"
-                      : e.rol === "lider" ? "bg-[var(--cyan)]/15 text-[var(--cyan)]"
-                      : "bg-white/5 text-[#fff]/70"
-                  }`}>{ROL_LABEL[e.rol]}</span>
-                </td>
+                <td className="px-4 py-3">{rolBadge(e.rol)}</td>
                 <td className="px-4 py-3 text-[#fff]/70">{e.lider_id ? nombrePorId.get(e.lider_id) ?? "—" : "—"}</td>
-                <td className="px-4 py-3">
-                  {e.estado === "activo"
-                    ? <span className="text-emerald-300/90">Activo</span>
-                    : e.estado === "suspendido"
-                      ? <span className="text-amber-300/80">Suspendido</span>
-                      : <span className="text-red-300/80">Terminado</span>}
-                </td>
-                <td className="px-4 py-3">
-                  <div className="flex items-center justify-end gap-1">
-                    <button onClick={() => abrirEditar(e)} title="Editar" className="rounded-lg p-1.5 text-[#fff]/60 hover:bg-white/5 hover:text-[#fff]"><Pencil size={15} /></button>
-                    <button onClick={() => accion(e.id, "resetear_clave", e)} title="Resetear contraseña" className="rounded-lg p-1.5 text-[#fff]/60 hover:bg-white/5 hover:text-[#fff]"><KeyRound size={15} /></button>
-                    {e.estado === "activo" && (
-                      <button onClick={() => accion(e.id, "suspender", e)} disabled={e.id === ceoId} title="Suspender acceso" className="rounded-lg p-1.5 text-amber-300/70 hover:bg-amber-500/10 hover:text-amber-300 disabled:opacity-30"><PauseCircle size={15} /></button>
-                    )}
-                    {e.estado === "activo"
-                      ? <button onClick={() => accion(e.id, "cerrar_contrato", e)} disabled={e.id === ceoId} title="Cerrar contrato" className="rounded-lg p-1.5 text-red-300/70 hover:bg-red-500/10 hover:text-red-300 disabled:opacity-30"><Ban size={15} /></button>
-                      : <button onClick={() => accion(e.id, "reactivar", e)} title="Reactivar acceso" className="rounded-lg p-1.5 text-emerald-300/70 hover:bg-emerald-500/10 hover:text-emerald-300"><RotateCcw size={15} /></button>}
-                  </div>
-                </td>
+                <td className="px-4 py-3">{estadoBadge(e.estado)}</td>
+                <td className="px-4 py-3"><div className="flex justify-end">{acciones(e)}</div></td>
               </tr>
             ))}
-            {empleados.length === 0 && (
-              <tr><td colSpan={6} className="px-4 py-10 text-center text-[#fff]/45">Aún no hay empleados. Crea el primero.</td></tr>
+            {visibles.length === 0 && (
+              <tr><td colSpan={6} className="px-4 py-10 text-center text-[#fff]/45">{empleados.length === 0 ? "Aún no hay empleados. Crea el primero." : "Sin resultados para tu búsqueda."}</td></tr>
             )}
           </tbody>
         </table>
+      </div>
+
+      {/* Tarjetas (móvil) */}
+      <div className="flex flex-col gap-3 md:hidden">
+        {visibles.map((e) => (
+          <div key={e.id} className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <p className="flex flex-wrap items-center gap-1.5 font-medium text-[#fff]">
+                  {e.nombre}
+                  {e.tipo_vinculacion === "freelance" && (
+                    <span className="inline-flex items-center gap-1 rounded-full bg-[var(--cyan)]/15 px-1.5 py-0.5 text-[10px] font-semibold text-[var(--cyan)]"><Receipt size={9} /> Freelance</span>
+                  )}
+                </p>
+                <p className="text-xs text-[#fff]/45">CC {e.cedula}</p>
+                <p className="mt-1 text-sm text-[#fff]/70">{e.cargo || "—"}</p>
+              </div>
+              {estadoBadge(e.estado)}
+            </div>
+            <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-[#fff]/55">
+              {rolBadge(e.rol)}
+              {e.lider_id && <span>Líder: {nombrePorId.get(e.lider_id) ?? "—"}</span>}
+            </div>
+            <div className="mt-3 border-t border-white/[0.06] pt-2">{acciones(e)}</div>
+          </div>
+        ))}
+        {visibles.length === 0 && (
+          <p className="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-8 text-center text-sm text-[#fff]/45">
+            {empleados.length === 0 ? "Aún no hay empleados. Crea el primero." : "Sin resultados para tu búsqueda."}
+          </p>
+        )}
       </div>
 
       {/* Modal formulario */}
@@ -361,6 +461,7 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
                 <select value={form.tipo_vinculacion} onChange={(e) => setForm({ ...form, tipo_vinculacion: e.target.value as TipoVinculacion })} className={inputCls}>
                   <option value="empleado">Empleado (laboral)</option>
                   <option value="freelance">Freelance (por factura)</option>
+                  <option value="prestacion_servicios">Prestación de servicios (factura + soporte)</option>
                 </select>
               </label>
               <label className="flex flex-col gap-1.5 sm:col-span-2">
@@ -401,6 +502,48 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
               </button>
             </div>
           </form>
+        </div>
+      )}
+
+      {/* Modal beneficios por empleado */}
+      {benefEmp && (
+        <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/70 p-4 py-10">
+          <div className="w-full max-w-md rounded-2xl border border-white/10 bg-[#12151c] p-6">
+            <div className="mb-1 flex items-center justify-between">
+              <h2 className="flex items-center gap-2 text-lg font-semibold"><Gift size={18} className="text-[#E8751A]" /> Beneficios</h2>
+              <button onClick={() => setBenefEmp(null)} className="text-[#fff]/50 hover:text-[#fff]"><X size={18} /></button>
+            </div>
+            <p className="mb-4 text-sm text-[#fff]/55">{benefEmp.nombre} · CC {benefEmp.cedula}</p>
+
+            {benefLoading ? (
+              <div className="flex items-center gap-2 py-6 text-[#fff]/60"><Loader2 size={16} className="animate-spin" /> Cargando…</div>
+            ) : (
+              <div className="flex flex-col gap-2">
+                {BENEFICIOS_ASIGNABLES.map((tipo) => {
+                  const b = benefItems.find((x) => x.tipo === tipo) ?? null
+                  const busy = benefBusy === tipo
+                  return (
+                    <div key={tipo} className="flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3">
+                      <div>
+                        <p className="text-sm font-medium">{TIPO_BENEFICIO_LABEL[tipo]}</p>
+                        <p className="text-xs text-[#fff]/50">{b ? ESTADO_BENEFICIO_LABEL[b.estado] : "No asignado"}</p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {busy ? (
+                          <Loader2 size={15} className="animate-spin text-[#fff]/50" />
+                        ) : !b || b.estado === "inactivo" ? (
+                          <button onClick={() => (b ? cambiarEstadoBenef(b.id, tipo, "activo") : asignarBenef(tipo))} className="rounded-lg bg-[#E8751A] px-3 py-1.5 text-xs font-semibold text-[#1a0f04] hover:brightness-110">Asignar</button>
+                        ) : (
+                          <button onClick={() => cambiarEstadoBenef(b.id, tipo, "inactivo")} className="rounded-lg border border-white/15 px-3 py-1.5 text-xs text-[#fff]/80 hover:bg-white/5">Quitar</button>
+                        )}
+                      </div>
+                    </div>
+                  )
+                })}
+                <p className="mt-2 text-[11px] text-[#fff]/40">El empleado también puede activar beneficios desde su portal; aquí quedan como asignados por RRHH.</p>
+              </div>
+            )}
+          </div>
         </div>
       )}
 

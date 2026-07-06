@@ -4,11 +4,11 @@ import { useEffect, useMemo, useState } from "react"
 import Link from "next/link"
 import {
   ArrowLeft, Loader2, Plus, Pencil, Trash2, X, Wallet, ArrowDownCircle, ArrowUpCircle, ArrowLeftRight,
-  CheckCircle2, Clock, Landmark,
+  CheckCircle2, Clock, Landmark, Building2, FileText,
 } from "lucide-react"
 import {
-  type Cuenta, type Movimiento, type TipoMovimiento, type Moneda,
-  CATEGORIAS, CATEGORIA_LABEL, TIPO_MOV_LABEL, MONEDAS_ORDEN, formatMoneda, resumen,
+  type Cuenta, type Movimiento, type TipoMovimiento, type Moneda, type Empresa, type MetodoPago,
+  CATEGORIAS, CATEGORIA_LABEL, TIPO_MOV_LABEL, MONEDAS_ORDEN, formatMoneda, resumen, saldosPorPlataforma,
 } from "@/lib/empleados/contabilidad"
 import { MESES } from "@/lib/empleados/desprendible"
 import { ConfirmDialog } from "../../confirm-dialog"
@@ -23,21 +23,27 @@ function hoyISO() {
   return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`
 }
 
-type CuentaForm = { id?: string; nombre: string; banco: string; moneda: Moneda; saldo_inicial: number; activa: boolean }
+type CuentaForm = { id?: string; nombre: string; banco: string; plataforma: string; moneda: Moneda; saldo_inicial: number; activa: boolean }
 type MovForm = {
   id?: string; cuenta_id: string; cuenta_destino_id: string; fecha: string; tipo: TipoMovimiento
-  categoria: string; concepto: string; contraparte: string; valor: number; estado: "pendiente" | "realizado"; referencia: string
+  categoria: string; concepto: string; contraparte: string; empresa_id: string
+  valor: number; tasa: number; costo: number; valor_destino: number
+  estado: "pendiente" | "realizado"; referencia: string
 }
+type EmpresaForm = { id?: string; nombre: string; nit: string; contacto: string; notas: string }
 
 export function ContabilidadClient() {
   const [cuentas, setCuentas] = useState<Cuenta[]>([])
   const [movimientos, setMovimientos] = useState<Movimiento[]>([])
+  const [empresas, setEmpresas] = useState<Empresa[]>([])
+  const [metodos, setMetodos] = useState<MetodoPago[]>([])
   const [cargando, setCargando] = useState(true)
   const [error, setError] = useState("")
   const [anio, setAnio] = useState(anioActual)
   const [mes, setMes] = useState(mesActual)
   const [formCuenta, setFormCuenta] = useState<CuentaForm | null>(null)
   const [formMov, setFormMov] = useState<MovForm | null>(null)
+  const [formEmpresa, setFormEmpresa] = useState<EmpresaForm | null>(null)
   const [saving, setSaving] = useState(false)
   const [confirmar, setConfirmar] = useState<null | { titulo: string; mensaje: string; run: () => Promise<void> }>(null)
   const [confirmLoading, setConfirmLoading] = useState(false)
@@ -45,14 +51,18 @@ export function ContabilidadClient() {
   async function cargar() {
     setCargando(true); setError("")
     try {
-      const [rc, rm] = await Promise.all([
+      const [rc, rm, re, rmet] = await Promise.all([
         fetch("/api/empleados/admin/contabilidad/cuentas"),
         fetch("/api/empleados/admin/contabilidad/movimientos"),
+        fetch("/api/empleados/admin/contabilidad/empresas"),
+        fetch("/api/empleados/admin/contabilidad/metodos"),
       ])
       const dc = await rc.json(); const dm = await rm.json()
       if (!rc.ok) throw new Error(dc.error)
       if (!rm.ok) throw new Error(dm.error)
       setCuentas(dc.cuentas ?? []); setMovimientos(dm.movimientos ?? [])
+      const de = await re.json(); if (re.ok) setEmpresas(de.empresas ?? [])
+      const dmet = await rmet.json(); if (rmet.ok) setMetodos(dmet.metodos ?? [])
     } catch (e) {
       setError(e instanceof Error ? e.message : "Error al cargar.")
     } finally {
@@ -60,6 +70,9 @@ export function ContabilidadClient() {
     }
   }
   useEffect(() => { cargar() }, [])
+
+  const nombreEmpresa = useMemo(() => new Map(empresas.map((x) => [x.id, x.nombre])), [empresas])
+  const porPlataforma = useMemo(() => saldosPorPlataforma(cuentas, movimientos), [cuentas, movimientos])
 
   const res = useMemo(() => resumen(cuentas, movimientos, { anio, mes }), [cuentas, movimientos, anio, mes])
   const saldoPorCuenta = useMemo(() => new Map(res.porCuenta.map((p) => [p.cuenta.id, p.saldo])), [res])
@@ -80,8 +93,8 @@ export function ContabilidadClient() {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...(formCuenta.id ? { id: formCuenta.id } : {}),
-          nombre: formCuenta.nombre, banco: formCuenta.banco || null, moneda: formCuenta.moneda,
-          saldo_inicial: formCuenta.saldo_inicial, activa: formCuenta.activa,
+          nombre: formCuenta.nombre, banco: formCuenta.banco || null, plataforma: formCuenta.plataforma || null,
+          moneda: formCuenta.moneda, saldo_inicial: formCuenta.saldo_inicial, activa: formCuenta.activa,
         }),
       })
       const data = await res.json()
@@ -113,21 +126,34 @@ export function ContabilidadClient() {
     setError("")
     setFormMov({
       cuenta_id: cuentas[0]?.id ?? "", cuenta_destino_id: "", fecha: hoyISO(), tipo: "ingreso",
-      categoria: "", concepto: "", contraparte: "", valor: 0, estado: "realizado", referencia: "",
+      categoria: "", concepto: "", contraparte: "", empresa_id: "",
+      valor: 0, tasa: 0, costo: 0, valor_destino: 0, estado: "realizado", referencia: "",
     })
   }
   function editarMov(m: Movimiento) {
     setError("")
     setFormMov({
       id: m.id, cuenta_id: m.cuenta_id, cuenta_destino_id: m.cuenta_destino_id ?? "", fecha: m.fecha, tipo: m.tipo,
-      categoria: m.categoria ?? "", concepto: m.concepto ?? "", contraparte: m.contraparte ?? "",
-      valor: Number(m.valor) || 0, estado: m.estado, referencia: m.referencia ?? "",
+      categoria: m.categoria ?? "", concepto: m.concepto ?? "", contraparte: m.contraparte ?? "", empresa_id: m.empresa_id ?? "",
+      valor: Number(m.valor) || 0, tasa: Number(m.tasa) || 0, costo: Number(m.costo) || 0, valor_destino: Number(m.valor_destino) || 0,
+      estado: m.estado, referencia: m.referencia ?? "",
     })
   }
+
+  // Monedas de origen/destino del traslado en edición (para saber si es cross-currency).
+  const movMonedaOrigen = formMov ? cuentas.find((c) => c.id === formMov.cuenta_id)?.moneda : undefined
+  const movMonedaDestino = formMov ? cuentas.find((c) => c.id === formMov.cuenta_destino_id)?.moneda : undefined
+  const trasladoCrossMoneda = !!formMov && formMov.tipo === "traslado" && !!movMonedaDestino && movMonedaOrigen !== movMonedaDestino
 
   async function guardarMov(e: React.FormEvent) {
     e.preventDefault(); if (!formMov) return
     if (!formMov.cuenta_id) return setError("Selecciona una cuenta.")
+    if (formMov.tipo === "traslado" && !formMov.cuenta_destino_id) return setError("El traslado necesita cuenta destino.")
+    // valor_destino: en cross-moneda usa el ingresado (o valor×tasa−costo); si es misma moneda, valor−costo.
+    const valorDestino = formMov.tipo !== "traslado" ? null
+      : trasladoCrossMoneda
+        ? (formMov.valor_destino || Math.round((formMov.valor * (formMov.tasa || 0) - (formMov.costo || 0)) * 100) / 100)
+        : Math.max(0, formMov.valor - (formMov.costo || 0))
     setSaving(true); setError("")
     try {
       const res = await fetch("/api/empleados/admin/contabilidad/movimientos", {
@@ -137,8 +163,12 @@ export function ContabilidadClient() {
           cuenta_id: formMov.cuenta_id,
           cuenta_destino_id: formMov.tipo === "traslado" ? formMov.cuenta_destino_id || null : null,
           fecha: formMov.fecha, tipo: formMov.tipo, categoria: formMov.categoria || null,
-          concepto: formMov.concepto || null, contraparte: formMov.contraparte || null,
-          valor: formMov.valor, estado: formMov.estado, referencia: formMov.referencia || null,
+          concepto: formMov.concepto || null, contraparte: formMov.contraparte || null, empresa_id: formMov.empresa_id || null,
+          valor: formMov.valor,
+          tasa: formMov.tipo === "traslado" ? (formMov.tasa || null) : null,
+          costo: formMov.tipo === "traslado" ? (formMov.costo || 0) : 0,
+          valor_destino: valorDestino,
+          estado: formMov.estado, referencia: formMov.referencia || null,
         }),
       })
       const data = await res.json()
@@ -149,6 +179,52 @@ export function ContabilidadClient() {
     } finally { setSaving(false) }
   }
 
+  // ── Empresas ─────────────────────────────────────────────────────────────
+  async function guardarEmpresa(e: React.FormEvent) {
+    e.preventDefault(); if (!formEmpresa) return
+    setSaving(true); setError("")
+    try {
+      const res = await fetch("/api/empleados/admin/contabilidad/empresas", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...(formEmpresa.id ? { id: formEmpresa.id } : {}),
+          nombre: formEmpresa.nombre, nit: formEmpresa.nit || null, contacto: formEmpresa.contacto || null, notas: formEmpresa.notas || null,
+        }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error)
+      await cargar(); setFormEmpresa(null)
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Error al guardar la empresa.")
+    } finally { setSaving(false) }
+  }
+
+  function pedirEliminarEmpresa(x: Empresa) {
+    setConfirmar({
+      titulo: "Eliminar empresa",
+      mensaje: `¿Eliminar "${x.nombre}"? Los movimientos que la referencian quedarán sin empresa.`,
+      run: async () => {
+        setConfirmLoading(true)
+        try {
+          const res = await fetch(`/api/empleados/admin/contabilidad/empresas?id=${x.id}`, { method: "DELETE" })
+          const data = await res.json(); if (!res.ok) throw new Error(data.error)
+          await cargar(); setConfirmar(null)
+        } catch (e) { setError(e instanceof Error ? e.message : "Error al eliminar."); setConfirmar(null) }
+        finally { setConfirmLoading(false) }
+      },
+    })
+  }
+
+  async function agregarMetodo(nombre: string) {
+    const n = nombre.trim(); if (!n) return
+    try {
+      const res = await fetch("/api/empleados/admin/contabilidad/metodos", {
+        method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ nombre: n }),
+      })
+      const data = await res.json(); if (res.ok) setMetodos(data.metodos ?? [])
+    } catch { /* no bloquea */ }
+  }
+
   async function toggleEstado(m: Movimiento) {
     setError("")
     try {
@@ -157,7 +233,8 @@ export function ContabilidadClient() {
         body: JSON.stringify({
           id: m.id, cuenta_id: m.cuenta_id, cuenta_destino_id: m.cuenta_destino_id,
           fecha: m.fecha, tipo: m.tipo, categoria: m.categoria, concepto: m.concepto,
-          contraparte: m.contraparte, valor: Number(m.valor) || 0,
+          contraparte: m.contraparte, empresa_id: m.empresa_id, valor: Number(m.valor) || 0,
+          tasa: m.tasa, costo: Number(m.costo) || 0, valor_destino: m.valor_destino,
           estado: m.estado === "realizado" ? "pendiente" : "realizado", referencia: m.referencia,
         }),
       })
@@ -195,7 +272,10 @@ export function ContabilidadClient() {
           <Wallet size={20} className="text-[var(--cyan)]" />
           <h1 className="font-display text-xl font-bold">Contabilidad</h1>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          <Link href="/empleados/admin/cuentas-cobro" className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-[#fff]/80 transition hover:bg-white/5">
+            <FileText size={15} /> Cuentas de cobro
+          </Link>
           <select value={mes} onChange={(e) => setMes(Number(e.target.value))} className={`${inputCls} w-auto`}>
             {MESES.map((m, i) => <option key={m} value={i + 1}>{m}</option>)}
           </select>
@@ -235,11 +315,26 @@ export function ContabilidadClient() {
             })
           )}
 
+          {/* Dinero por método de pago */}
+          {porPlataforma.length > 0 && (
+            <section>
+              <h2 className="mb-3 text-sm font-semibold text-[#fff]/80">Dinero por método de pago</h2>
+              <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                {porPlataforma.map((p) => (
+                  <div key={`${p.plataforma}-${p.moneda}`} className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3">
+                    <p className="text-xs text-[#fff]/50">{p.plataforma} · {p.moneda}</p>
+                    <p className="text-sm font-semibold text-[var(--cyan)]">{formatMoneda(p.saldo, p.moneda)}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
           {/* Cuentas */}
           <section>
             <div className="mb-3 flex items-center justify-between">
               <h2 className="flex items-center gap-2 text-sm font-semibold text-[#fff]/80"><Landmark size={15} /> Cuentas</h2>
-              <button onClick={() => setFormCuenta({ nombre: "", banco: "", moneda: "COP", saldo_inicial: 0, activa: true })} className="inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--cyan)] hover:underline">
+              <button onClick={() => setFormCuenta({ nombre: "", banco: "", plataforma: "", moneda: "COP", saldo_inicial: 0, activa: true })} className="inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--cyan)] hover:underline">
                 <Plus size={13} /> Nueva cuenta
               </button>
             </div>
@@ -251,12 +346,40 @@ export function ContabilidadClient() {
                   <div key={c.id} className="flex items-center justify-between rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3">
                     <div>
                       <p className="text-sm font-medium">{c.nombre} {!c.activa && <span className="text-[10px] text-[#fff]/40">(inactiva)</span>}</p>
-                      <p className="text-xs text-[#fff]/50">{c.banco || "—"} · {c.moneda}</p>
+                      <p className="text-xs text-[#fff]/50">{[c.plataforma, c.banco].filter(Boolean).join(" · ") || "—"} · {c.moneda}</p>
                       <p className="mt-0.5 text-sm font-semibold text-[var(--cyan)]">{formatMoneda(saldoPorCuenta.get(c.id) ?? 0, c.moneda)}</p>
                     </div>
                     <div className="flex items-center gap-1">
-                      <button onClick={() => setFormCuenta({ id: c.id, nombre: c.nombre, banco: c.banco ?? "", moneda: c.moneda, saldo_inicial: Number(c.saldo_inicial) || 0, activa: c.activa })} className="rounded-lg p-1.5 text-[#fff]/60 hover:bg-white/5 hover:text-[#fff]"><Pencil size={14} /></button>
+                      <button onClick={() => setFormCuenta({ id: c.id, nombre: c.nombre, banco: c.banco ?? "", plataforma: c.plataforma ?? "", moneda: c.moneda, saldo_inicial: Number(c.saldo_inicial) || 0, activa: c.activa })} className="rounded-lg p-1.5 text-[#fff]/60 hover:bg-white/5 hover:text-[#fff]"><Pencil size={14} /></button>
                       <button onClick={() => pedirEliminarCuenta(c)} className="rounded-lg p-1.5 text-red-300/70 hover:bg-red-500/10 hover:text-red-300"><Trash2 size={14} /></button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </section>
+
+          {/* Empresas */}
+          <section>
+            <div className="mb-3 flex items-center justify-between">
+              <h2 className="flex items-center gap-2 text-sm font-semibold text-[#fff]/80"><Building2 size={15} /> Empresas</h2>
+              <button onClick={() => setFormEmpresa({ nombre: "", nit: "", contacto: "", notas: "" })} className="inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--cyan)] hover:underline">
+                <Plus size={13} /> Nueva empresa
+              </button>
+            </div>
+            {empresas.length === 0 ? (
+              <p className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-6 text-center text-sm text-[#fff]/45">Registra las empresas/contrapartes con su NIT.</p>
+            ) : (
+              <div className="grid gap-2 sm:grid-cols-2">
+                {empresas.map((x) => (
+                  <div key={x.id} className="flex items-center justify-between rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3">
+                    <div>
+                      <p className="text-sm font-medium">{x.nombre}</p>
+                      <p className="text-xs text-[#fff]/50">{x.nit ? `NIT ${x.nit}` : "Sin NIT"}{x.contacto ? ` · ${x.contacto}` : ""}</p>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <button onClick={() => setFormEmpresa({ id: x.id, nombre: x.nombre, nit: x.nit ?? "", contacto: x.contacto ?? "", notas: x.notas ?? "" })} className="rounded-lg p-1.5 text-[#fff]/60 hover:bg-white/5 hover:text-[#fff]"><Pencil size={14} /></button>
+                      <button onClick={() => pedirEliminarEmpresa(x)} className="rounded-lg p-1.5 text-red-300/70 hover:bg-red-500/10 hover:text-red-300"><Trash2 size={14} /></button>
                     </div>
                   </div>
                 ))}
@@ -290,14 +413,20 @@ export function ContabilidadClient() {
                           </p>
                           <p className="text-xs text-[#fff]/50">
                             {m.fecha} · {nombreCuenta.get(m.cuenta_id) ?? "—"}
-                            {m.contraparte ? ` · ${m.contraparte}` : ""}
+                            {m.empresa_id ? ` · ${nombreEmpresa.get(m.empresa_id) ?? ""}` : m.contraparte ? ` · ${m.contraparte}` : ""}
                             {m.categoria ? ` · ${CATEGORIA_LABEL[m.categoria] ?? m.categoria}` : ""}
+                            {m.estado === "pendiente" ? " · pendiente" : ""}
                           </p>
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className={`text-sm font-semibold ${tipoColor[m.tipo]}`}>
+                        <span className={`text-right text-sm font-semibold ${tipoColor[m.tipo]}`}>
                           {m.tipo === "egreso" ? "−" : m.tipo === "ingreso" ? "+" : ""}{formatMoneda(m.valor, mo)}
+                          {m.tipo === "traslado" && (() => {
+                            const md = monedaCuenta.get(m.cuenta_destino_id ?? "") ?? mo
+                            const vd = m.valor_destino != null ? Number(m.valor_destino) : Number(m.valor)
+                            return md !== mo ? <span className="block text-[10px] font-normal text-[#fff]/45">→ {formatMoneda(vd, md)}</span> : null
+                          })()}
                         </span>
                         <button onClick={() => toggleEstado(m)} title={m.estado === "realizado" ? "Marcar pendiente" : "Marcar realizado"} className={`rounded-full p-1 ${m.estado === "realizado" ? "text-emerald-300" : "text-amber-300"}`}>
                           {m.estado === "realizado" ? <CheckCircle2 size={16} /> : <Clock size={16} />}
@@ -325,8 +454,17 @@ export function ContabilidadClient() {
             <div className="grid gap-3 sm:grid-cols-2">
               <label className="flex flex-col gap-1.5 sm:col-span-2"><span className={lblCls}>Nombre</span>
                 <input required value={formCuenta.nombre} onChange={(e) => setFormCuenta({ ...formCuenta, nombre: e.target.value })} className={inputCls} placeholder="Cuenta principal" /></label>
-              <label className="flex flex-col gap-1.5"><span className={lblCls}>Banco</span>
-                <input value={formCuenta.banco} onChange={(e) => setFormCuenta({ ...formCuenta, banco: e.target.value })} className={inputCls} placeholder="Bancolombia…" /></label>
+              <label className="flex flex-col gap-1.5"><span className={lblCls}>Método de pago</span>
+                <input
+                  list="cat-metodos" value={formCuenta.plataforma}
+                  onChange={(e) => setFormCuenta({ ...formCuenta, plataforma: e.target.value })}
+                  onBlur={(e) => { const v = e.target.value.trim(); if (v && !metodos.some((m) => m.nombre.toLowerCase() === v.toLowerCase())) agregarMetodo(v) }}
+                  className={inputCls} placeholder="Elige o escribe uno nuevo…"
+                />
+                <datalist id="cat-metodos">{metodos.map((m) => <option key={m.id} value={m.nombre} />)}</datalist>
+              </label>
+              <label className="flex flex-col gap-1.5"><span className={lblCls}>Banco / entidad</span>
+                <input value={formCuenta.banco} onChange={(e) => setFormCuenta({ ...formCuenta, banco: e.target.value })} className={inputCls} placeholder="Caja Social, Nº cuenta…" /></label>
               <label className="flex flex-col gap-1.5"><span className={lblCls}>Moneda</span>
                 <select value={formCuenta.moneda} onChange={(e) => setFormCuenta({ ...formCuenta, moneda: e.target.value as Moneda })} className={inputCls}>
                   {MONEDAS_ORDEN.map((m) => <option key={m} value={m}>{m}</option>)}
@@ -375,7 +513,7 @@ export function ContabilidadClient() {
                     {cuentas.filter((c) => c.id !== formMov.cuenta_id).map((c) => <option key={c.id} value={c.id}>{c.nombre} ({c.moneda})</option>)}
                   </select></label>
               )}
-              <label className="flex flex-col gap-1.5"><span className={lblCls}>Valor</span>
+              <label className="flex flex-col gap-1.5"><span className={lblCls}>Valor {movMonedaOrigen ? `(${movMonedaOrigen})` : ""}</span>
                 <input type="number" step="0.01" min="0" value={formMov.valor || ""} onChange={(e) => setFormMov({ ...formMov, valor: Number(e.target.value) })} className={inputCls} placeholder="0" /></label>
               {formMov.tipo !== "traslado" && (
                 <label className="flex flex-col gap-1.5"><span className={lblCls}>Categoría</span>
@@ -384,11 +522,39 @@ export function ContabilidadClient() {
                     {CATEGORIAS.map((c) => <option key={c} value={c}>{CATEGORIA_LABEL[c]}</option>)}
                   </select></label>
               )}
+
+              {/* Traslado: costo de plataforma + (cross-moneda) tasa y valor destino */}
+              {formMov.tipo === "traslado" && (
+                <>
+                  <label className="flex flex-col gap-1.5"><span className={lblCls}>Costo / comisión plataforma</span>
+                    <input type="number" step="0.01" min="0" value={formMov.costo || ""} onChange={(e) => setFormMov({ ...formMov, costo: Number(e.target.value) })} className={inputCls} placeholder="0" /></label>
+                  {trasladoCrossMoneda && (
+                    <>
+                      <label className="flex flex-col gap-1.5"><span className={lblCls}>Tasa {movMonedaOrigen}→{movMonedaDestino} (del día)</span>
+                        <input type="number" step="0.0001" min="0" value={formMov.tasa || ""} onChange={(e) => setFormMov({ ...formMov, tasa: Number(e.target.value) })} className={inputCls} placeholder="Ej: 4000" /></label>
+                      <label className="flex flex-col gap-1.5"><span className={lblCls}>Llega al destino ({movMonedaDestino})</span>
+                        <input type="number" step="0.01" min="0"
+                          value={formMov.valor_destino || (formMov.valor && formMov.tasa ? Math.round((formMov.valor * formMov.tasa - (formMov.costo || 0)) * 100) / 100 : "") }
+                          onChange={(e) => setFormMov({ ...formMov, valor_destino: Number(e.target.value) })}
+                          className={inputCls} placeholder="valor × tasa − costo" /></label>
+                    </>
+                  )}
+                  <p className="sm:col-span-2 rounded-lg bg-amber-400/10 px-3 py-2 text-[11px] text-amber-200/90">
+                    Deja el traslado como <b>Pendiente</b> hasta validar la tasa del día y el costo real; luego márcalo <b>Realizado</b>.
+                  </p>
+                </>
+              )}
+
               <label className="flex flex-col gap-1.5 sm:col-span-2"><span className={lblCls}>Concepto</span>
                 <input value={formMov.concepto} onChange={(e) => setFormMov({ ...formMov, concepto: e.target.value })} className={inputCls} placeholder="Descripción" /></label>
               <label className="flex flex-col gap-1.5"><span className={lblCls}>Contraparte</span>
                 <input value={formMov.contraparte} onChange={(e) => setFormMov({ ...formMov, contraparte: e.target.value })} className={inputCls} placeholder="De quién / a quién" /></label>
-              <label className="flex flex-col gap-1.5"><span className={lblCls}>Referencia</span>
+              <label className="flex flex-col gap-1.5"><span className={lblCls}>Empresa</span>
+                <select value={formMov.empresa_id} onChange={(e) => setFormMov({ ...formMov, empresa_id: e.target.value })} className={inputCls}>
+                  <option value="">— Ninguna —</option>
+                  {empresas.map((x) => <option key={x.id} value={x.id}>{x.nombre}{x.nit ? ` · NIT ${x.nit}` : ""}</option>)}
+                </select></label>
+              <label className="flex flex-col gap-1.5 sm:col-span-2"><span className={lblCls}>Referencia</span>
                 <input value={formMov.referencia} onChange={(e) => setFormMov({ ...formMov, referencia: e.target.value })} className={inputCls} placeholder="N.º transferencia / factura" /></label>
               <label className="flex flex-col gap-1.5 sm:col-span-2"><span className={lblCls}>Estado</span>
                 <select value={formMov.estado} onChange={(e) => setFormMov({ ...formMov, estado: e.target.value as "pendiente" | "realizado" })} className={inputCls}>
@@ -398,6 +564,34 @@ export function ContabilidadClient() {
             </div>
             <div className="mt-5 flex justify-end gap-2">
               <button type="button" onClick={() => setFormMov(null)} className="rounded-lg px-4 py-2 text-sm text-[#fff]/60 hover:text-[#fff]">Cancelar</button>
+              <button type="submit" disabled={saving} className="inline-flex items-center gap-2 rounded-lg bg-[var(--cyan)] px-5 py-2 text-sm font-semibold text-[#04191b] transition hover:brightness-110 disabled:opacity-60">
+                {saving ? <Loader2 size={14} className="animate-spin" /> : null} Guardar
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
+
+      {/* Modal empresa */}
+      {formEmpresa && (
+        <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/70 p-4 py-10">
+          <form onSubmit={guardarEmpresa} className="w-full max-w-md rounded-2xl border border-white/10 bg-[#12151c] p-6">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="text-lg font-semibold">{formEmpresa.id ? "Editar empresa" : "Nueva empresa"}</h2>
+              <button type="button" onClick={() => setFormEmpresa(null)} className="text-[#fff]/50 hover:text-[#fff]"><X size={18} /></button>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <label className="flex flex-col gap-1.5 sm:col-span-2"><span className={lblCls}>Nombre / razón social</span>
+                <input required value={formEmpresa.nombre} onChange={(e) => setFormEmpresa({ ...formEmpresa, nombre: e.target.value })} className={inputCls} placeholder="Empresa S.A.S" /></label>
+              <label className="flex flex-col gap-1.5"><span className={lblCls}>NIT (si tiene)</span>
+                <input value={formEmpresa.nit} onChange={(e) => setFormEmpresa({ ...formEmpresa, nit: e.target.value })} className={inputCls} placeholder="900.123.456-7" /></label>
+              <label className="flex flex-col gap-1.5"><span className={lblCls}>Contacto</span>
+                <input value={formEmpresa.contacto} onChange={(e) => setFormEmpresa({ ...formEmpresa, contacto: e.target.value })} className={inputCls} placeholder="Correo / teléfono" /></label>
+              <label className="flex flex-col gap-1.5 sm:col-span-2"><span className={lblCls}>Notas</span>
+                <input value={formEmpresa.notas} onChange={(e) => setFormEmpresa({ ...formEmpresa, notas: e.target.value })} className={inputCls} placeholder="Opcional" /></label>
+            </div>
+            <div className="mt-5 flex justify-end gap-2">
+              <button type="button" onClick={() => setFormEmpresa(null)} className="rounded-lg px-4 py-2 text-sm text-[#fff]/60 hover:text-[#fff]">Cancelar</button>
               <button type="submit" disabled={saving} className="inline-flex items-center gap-2 rounded-lg bg-[var(--cyan)] px-5 py-2 text-sm font-semibold text-[#04191b] transition hover:brightness-110 disabled:opacity-60">
                 {saving ? <Loader2 size={14} className="animate-spin" /> : null} Guardar
               </button>

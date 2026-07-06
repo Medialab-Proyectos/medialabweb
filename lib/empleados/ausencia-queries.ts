@@ -58,6 +58,17 @@ export async function listSolicitudesDeEmpleados(ids: string[], soloPendientes =
   return (data ?? []) as unknown as SolicitudConEmpleado[]
 }
 
+/** Nº de solicitudes de ausencia pendientes (global) — para alertas del CEO. */
+export async function contarAusenciasPendientes() {
+  const sb = getServiceClient()
+  const { count, error } = await sb
+    .from("solicitudes_ausencia")
+    .select("id", { count: "exact", head: true })
+    .eq("estado", "pendiente")
+  if (error) throw error
+  return count ?? 0
+}
+
 export async function getSolicitud(id: string) {
   const sb = getServiceClient()
   const { data, error } = await sb.from("solicitudes_ausencia").select(COLS).eq("id", id).maybeSingle()

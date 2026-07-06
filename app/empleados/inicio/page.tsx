@@ -1,8 +1,10 @@
 import { redirect } from "next/navigation"
 import Link from "next/link"
-import { FileText, FileSignature, BadgeCheck, GraduationCap, Gift, ShieldCheck, Clock, ArrowRight, Plane, ClipboardCheck, Target, Receipt } from "lucide-react"
+import { FileText, FileSignature, BadgeCheck, GraduationCap, Gift, ShieldCheck, Clock, ArrowRight, Plane, ClipboardCheck, Target, Receipt, Wrench } from "lucide-react"
 import { requireEmpleado } from "@/lib/empleados/auth"
 import { getEmpleadoById } from "@/lib/empleados/queries"
+import { esVinculacionPorFactura } from "@/lib/empleados/types"
+import { ModuleNav } from "../admin/module-nav"
 import { PortalHeader } from "../portal-header"
 import { CambiarClaveCard } from "../cambiar-clave-card"
 
@@ -100,6 +102,15 @@ const secciones: Seccion[] = [
     color: "#E8751A",
     href: "/empleados/beneficios",
   },
+  {
+    key: "herramientas",
+    icon: Wrench,
+    titulo: "Herramientas",
+    desc: "Accesos y credenciales de las herramientas del equipo.",
+    estado: "activo",
+    color: "#8b5cf6",
+    href: "/empleados/herramientas",
+  },
 ]
 
 export default async function InicioPage() {
@@ -107,8 +118,8 @@ export default async function InicioPage() {
   const empleado = await getEmpleadoById(sesion.sub)
   if (!empleado) redirect("/empleados")
 
-  const esFreelance = empleado.tipo_vinculacion === "freelance"
-  // Los freelancers no ven las tarjetas laborales; los laborales no ven la de freelance.
+  const esFreelance = esVinculacionPorFactura(empleado.tipo_vinculacion)
+  // Los freelancers/prestación no ven las tarjetas laborales; los laborales no ven la de freelance.
   const seccionesVisibles = secciones.filter((s) =>
     esFreelance ? !s.laboral : !s.soloFreelance,
   )
@@ -134,21 +145,13 @@ export default async function InicioPage() {
         <CambiarClaveCard obligatorio={empleado.must_change_password} />
 
         {empleado.rol === "ceo" && (
-          <Link
-            href="/empleados/admin"
-            className="mb-8 flex items-center justify-between rounded-2xl border border-[var(--cyan)]/25 bg-[var(--cyan)]/[0.06] px-5 py-4 transition hover:bg-[var(--cyan)]/[0.1]"
-          >
-            <div className="flex items-center gap-3">
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--cyan)]/15">
-                <ShieldCheck size={18} className="text-[var(--cyan)]" />
-              </span>
-              <div>
-                <p className="text-sm font-semibold">Panel de administración</p>
-                <p className="text-xs text-[#fff]/55">Empleados, jerarquía y desprendibles de pago.</p>
-              </div>
+          <div className="mb-8">
+            <div className="mb-3 flex items-center gap-2">
+              <ShieldCheck size={16} className="text-[var(--cyan)]" />
+              <h2 className="text-sm font-semibold">Panel de administración</h2>
             </div>
-            <ArrowRight size={16} className="text-[var(--cyan)]" />
-          </Link>
+            <ModuleNav />
+          </div>
         )}
 
         {(empleado.rol === "lider" || empleado.rol === "ceo") && (

@@ -6,7 +6,7 @@ const BUCKET = "facturas"
 
 const PERFIL_COLS = "empleado_id,moneda,banco,cuenta,tipo_cuenta,titular,documento,notas,actualizado_en"
 const FACT_COLS =
-  "id,empleado_id,anio,mes,numero,concepto,moneda,valor,banco,cuenta,tipo_cuenta,titular,archivo_path,firmado,firmante,firmado_en,estado,pagado_en,observaciones,creado_en,actualizado_en"
+  "id,empleado_id,anio,mes,numero,concepto,moneda,valor,banco,cuenta,tipo_cuenta,titular,archivo_path,soporte_path,firmado,firmante,firmado_en,estado,pagado_en,observaciones,creado_en,actualizado_en"
 
 // ── Perfil de pago ────────────────────────────────────────────────────────────
 export async function getPerfilFreelance(empleadoId: string) {
@@ -56,6 +56,14 @@ export async function listFacturas() {
   return (data ?? []) as unknown as FacturaConEmpleado[]
 }
 
+/** Nº de facturas enviadas (por revisar/pagar) — para alertas. */
+export async function contarFacturasPorPagar() {
+  const sb = getServiceClient()
+  const { count, error } = await sb.from("freelance_facturas").select("id", { count: "exact", head: true }).eq("estado", "enviada")
+  if (error) throw error
+  return count ?? 0
+}
+
 export async function getFactura(id: string) {
   const sb = getServiceClient()
   const { data, error } = await sb.from("freelance_facturas").select(FACT_COLS).eq("id", id).maybeSingle()
@@ -65,7 +73,7 @@ export async function getFactura(id: string) {
 
 export type FacturaInput = Omit<
   FacturaFreelance,
-  "id" | "archivo_path" | "estado" | "pagado_en" | "observaciones" | "creado_en" | "actualizado_en"
+  "id" | "archivo_path" | "soporte_path" | "estado" | "pagado_en" | "observaciones" | "creado_en" | "actualizado_en"
 >
 
 export async function crearFactura(input: FacturaInput) {
@@ -107,4 +115,16 @@ export async function getArchivoFactura(path: string): Promise<{ bytes: Uint8Arr
   if (error) throw error
   const buf = new Uint8Array(await data.arrayBuffer())
   return { bytes: buf, mime: data.type || "application/octet-stream" }
+}
+
+/** Soporte de prestaciones sociales (solo prestación de servicios). */
+export async function subirSoporteFactura(f: FacturaFreelance, bytes: Uint8Array, mime: string) {
+  const sb = getServiceClient()
+  const ext = mime.includes("pdf") ? "pdf" : mime.includes("png") ? "png" : mime.includes("jpeg") ? "jpg" : "bin"
+  const path = `${f.empleado_id}/${f.id}-soporte.${ext}`
+  const { error: upErr } = await sb.storage.from(BUCKET).upload(path, bytes, { contentType: mime, upsert: true })
+  if (upErr) throw upErr
+  const { data, error } = await sb.from("freelance_facturas").update({ soporte_path: path }).eq("id", f.id).select(FACT_COLS).single()
+  if (error) throw error
+  return data as FacturaFreelance
 }

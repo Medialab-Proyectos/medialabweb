@@ -1,6 +1,11 @@
 export type Rol = "ceo" | "lider" | "empleado"
 export type EstadoEmpleado = "activo" | "terminado" | "suspendido"
-export type TipoVinculacion = "empleado" | "freelance"
+export type TipoVinculacion = "empleado" | "freelance" | "prestacion_servicios"
+
+/** Vinculaciones que cobran por factura/cuenta de cobro (no laborales). */
+export function esVinculacionPorFactura(t: TipoVinculacion): boolean {
+  return t === "freelance" || t === "prestacion_servicios"
+}
 
 export type Empleado = {
   id: string
@@ -39,4 +44,5 @@ export const ROL_LABEL: Record<Rol, string> = {
 export const VINCULACION_LABEL: Record<TipoVinculacion, string> = {
   empleado: "Empleado (laboral)",
   freelance: "Freelance",
+  prestacion_servicios: "Prestación de servicios",
 }

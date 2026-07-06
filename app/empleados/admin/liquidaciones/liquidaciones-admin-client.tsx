@@ -26,8 +26,8 @@ function hoyISO(): string {
   return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`
 }
 
-export function LiquidacionesAdminClient({ empleados }: { empleados: Empleado[] }) {
-  const [empleadoId, setEmpleadoId] = useState("")
+export function LiquidacionesAdminClient({ empleados, empleadoInicial = "" }: { empleados: Empleado[]; empleadoInicial?: string }) {
+  const [empleadoId, setEmpleadoId] = useState(empleadoInicial)
   const [existingId, setExistingId] = useState<string | null>(null)
   const [estado, setEstado] = useState<"borrador" | "generada">("borrador")
   const [cartaPath, setCartaPath] = useState<string | null>(null)

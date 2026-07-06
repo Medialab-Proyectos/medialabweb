@@ -22,7 +22,7 @@ const EstadoIcon = { enviada: Clock, pagada: CheckCircle2, rechazada: XCircle }
 const anioActual = new Date().getFullYear()
 const mesActual = new Date().getMonth() + 1
 
-export function FreelanceClient({ nombre }: { nombre: string }) {
+export function FreelanceClient({ nombre, esPrestacion = false }: { nombre: string; esPrestacion?: boolean }) {
   const [perfil, setPerfil] = useState<PerfilFreelance | null>(null)
   const [facturas, setFacturas] = useState<FacturaFreelance[]>([])
   const [cargando, setCargando] = useState(true)
@@ -48,6 +48,7 @@ export function FreelanceClient({ nombre }: { nombre: string }) {
   const [firma, setFirma] = useState(false)
   const [enviando, setEnviando] = useState(false)
   const fileRefs = useRef<Record<string, HTMLInputElement | null>>({})
+  const soporteRefs = useRef<Record<string, HTMLInputElement | null>>({})
 
   function aplicarPerfil(p: PerfilFreelance | null) {
     if (!p) return
@@ -117,15 +118,15 @@ export function FreelanceClient({ nombre }: { nombre: string }) {
     }
   }
 
-  async function subirArchivo(id: string, file: File) {
+  async function subirArchivo(id: string, file: File, tipo: "archivo" | "soporte") {
     setError(""); setMsg("")
     const fd = new FormData(); fd.append("archivo", file)
     try {
-      const res = await fetch(`/api/empleados/freelance/${id}/archivo`, { method: "POST", body: fd })
+      const res = await fetch(`/api/empleados/freelance/${id}/${tipo}`, { method: "POST", body: fd })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error)
       setFacturas((prev) => prev.map((f) => (f.id === id ? (data.factura as FacturaFreelance) : f)))
-      setMsg("✓ Archivo de factura adjuntado.")
+      setMsg(tipo === "soporte" ? "✓ Soporte de prestaciones adjuntado." : "✓ Archivo de factura adjuntado.")
     } catch (e) {
       setError(e instanceof Error ? e.message : "Error al subir el archivo.")
     }
@@ -141,7 +142,10 @@ export function FreelanceClient({ nombre }: { nombre: string }) {
           <FileText size={20} className="text-[var(--cyan)]" />
           <h1 className="font-display text-xl font-bold">Freelance · Facturación</h1>
         </div>
-        <p className="mt-1 text-sm text-[#fff]/55">Sube tu factura firmada cada mes para tramitar el pago.</p>
+        <p className="mt-1 text-sm text-[#fff]/55">
+          Sube tu factura firmada cada mes para tramitar el pago.
+          {esPrestacion && " Como prestación de servicios, adjunta también el soporte de pago de prestaciones sociales (seguridad social)."}
+        </p>
       </div>
 
       {error && <p className="rounded-lg bg-red-500/10 px-3 py-2 text-sm text-red-300">{error}</p>}
@@ -254,16 +258,34 @@ export function FreelanceClient({ nombre }: { nombre: string }) {
                         <input
                           ref={(el) => { fileRefs.current[f.id] = el }}
                           type="file" accept="application/pdf,image/*" className="hidden"
-                          onChange={(e) => { const file = e.target.files?.[0]; if (file) subirArchivo(f.id, file); e.target.value = "" }}
+                          onChange={(e) => { const file = e.target.files?.[0]; if (file) subirArchivo(f.id, file, "archivo"); e.target.value = "" }}
                         />
                         {f.archivo_path ? (
                           <a href={`/api/empleados/freelance/${f.id}/archivo`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 rounded-lg border border-white/15 px-2.5 py-1.5 text-xs text-[#fff]/75 hover:bg-white/5">
-                            <Paperclip size={12} /> Ver
+                            <Paperclip size={12} /> Factura
                           </a>
                         ) : (
                           <button onClick={() => fileRefs.current[f.id]?.click()} className="inline-flex items-center gap-1 rounded-lg border border-white/15 px-2.5 py-1.5 text-xs text-[#fff]/75 hover:bg-white/5">
-                            <Upload size={12} /> Adjuntar PDF
+                            <Upload size={12} /> Factura
                           </button>
+                        )}
+                        {esPrestacion && (
+                          <>
+                            <input
+                              ref={(el) => { soporteRefs.current[f.id] = el }}
+                              type="file" accept="application/pdf,image/*" className="hidden"
+                              onChange={(e) => { const file = e.target.files?.[0]; if (file) subirArchivo(f.id, file, "soporte"); e.target.value = "" }}
+                            />
+                            {f.soporte_path ? (
+                              <a href={`/api/empleados/freelance/${f.id}/soporte`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 rounded-lg border border-emerald-400/30 px-2.5 py-1.5 text-xs text-emerald-200/90 hover:bg-emerald-400/10">
+                                <Paperclip size={12} /> Soporte
+                              </a>
+                            ) : (
+                              <button onClick={() => soporteRefs.current[f.id]?.click()} className="inline-flex items-center gap-1 rounded-lg border border-amber-400/30 px-2.5 py-1.5 text-xs text-amber-200/90 hover:bg-amber-400/10">
+                                <Upload size={12} /> Soporte prestaciones
+                              </button>
+                            )}
+                          </>
                         )}
                         <span className={`inline-flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold ${estadoStyle[f.estado]}`}>
                           <Icon size={11} /> {ESTADO_FACTURA_LABEL[f.estado]}

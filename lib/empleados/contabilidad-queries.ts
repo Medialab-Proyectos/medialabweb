@@ -1,10 +1,10 @@
 import "server-only"
 import { getServiceClient } from "./db"
-import type { Cuenta, Movimiento } from "./contabilidad"
+import type { Cuenta, Movimiento, Empresa, MetodoPago } from "./contabilidad"
 
-const CUENTA_COLS = "id,nombre,banco,moneda,saldo_inicial,activa,orden,creado_en,actualizado_en"
+const CUENTA_COLS = "id,nombre,banco,plataforma,moneda,saldo_inicial,activa,orden,creado_en,actualizado_en"
 const MOV_COLS =
-  "id,cuenta_id,cuenta_destino_id,fecha,tipo,categoria,concepto,contraparte,valor,estado,referencia,creado_por,creado_en,actualizado_en"
+  "id,cuenta_id,cuenta_destino_id,fecha,tipo,categoria,concepto,contraparte,empresa_id,valor,tasa,costo,valor_destino,estado,referencia,creado_por,creado_en,actualizado_en"
 
 // ── Cuentas ───────────────────────────────────────────────────────────────────
 export async function listCuentas() {
@@ -69,4 +69,52 @@ export async function eliminarMovimiento(id: string) {
   const sb = getServiceClient()
   const { error } = await sb.from("movimientos").delete().eq("id", id)
   if (error) throw error
+}
+
+// ── Empresas ────────────────────────────────────────────────────────────────
+const EMPRESA_COLS = "id,nombre,nit,contacto,notas,creado_en,actualizado_en"
+
+export async function listEmpresas() {
+  const sb = getServiceClient()
+  const { data, error } = await sb.from("empresas").select(EMPRESA_COLS).order("nombre")
+  if (error) throw error
+  return (data ?? []) as Empresa[]
+}
+
+export async function getEmpresa(id: string) {
+  const sb = getServiceClient()
+  const { data, error } = await sb.from("empresas").select(EMPRESA_COLS).eq("id", id).maybeSingle()
+  if (error) throw error
+  return data as Empresa | null
+}
+
+export type EmpresaInput = Omit<Empresa, "id" | "creado_en" | "actualizado_en"> & { id?: string }
+
+export async function upsertEmpresa(input: EmpresaInput) {
+  const sb = getServiceClient()
+  const { data, error } = await sb.from("empresas").upsert(input).select(EMPRESA_COLS).single()
+  if (error) throw error
+  return data as Empresa
+}
+
+export async function eliminarEmpresa(id: string) {
+  const sb = getServiceClient()
+  const { error } = await sb.from("empresas").delete().eq("id", id)
+  if (error) throw error
+}
+
+// ── Métodos de pago (catálogo) ──────────────────────────────────────────────
+export async function listMetodosPago() {
+  const sb = getServiceClient()
+  const { data, error } = await sb.from("metodos_pago").select("id,nombre,creado_en").order("nombre")
+  if (error) throw error
+  return (data ?? []) as MetodoPago[]
+}
+
+/** Añade un método si no existe (idempotente por nombre). Devuelve el catálogo actualizado. */
+export async function crearMetodoPago(nombre: string) {
+  const sb = getServiceClient()
+  const { error } = await sb.from("metodos_pago").upsert({ nombre }, { onConflict: "nombre" })
+  if (error) throw error
+  return listMetodosPago()
 }

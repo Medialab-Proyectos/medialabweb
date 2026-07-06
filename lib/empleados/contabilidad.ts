@@ -10,6 +10,7 @@ export type Cuenta = {
   id: string
   nombre: string
   banco: string | null
+  plataforma: string | null   // método de pago (Bancolombia, Payoneer, Global66…)
   moneda: Moneda
   saldo_inicial: number
   activa: boolean
@@ -27,13 +28,29 @@ export type Movimiento = {
   categoria: string | null
   concepto: string | null
   contraparte: string | null
+  empresa_id: string | null
   valor: number
+  tasa: number | null           // traslado: tasa de cambio origen→destino
+  costo: number                 // traslado: costo/comisión de la plataforma
+  valor_destino: number | null  // traslado: valor que llega al destino (moneda destino)
   estado: EstadoMovimiento
   referencia: string | null
   creado_por: string | null
   creado_en: string
   actualizado_en: string
 }
+
+export type Empresa = {
+  id: string
+  nombre: string
+  nit: string | null
+  contacto: string | null
+  notas: string | null
+  creado_en: string
+  actualizado_en: string
+}
+
+export type MetodoPago = { id: string; nombre: string; creado_en: string }
 
 export const TIPO_MOV_LABEL: Record<TipoMovimiento, string> = {
   ingreso: "Ingreso",
@@ -62,6 +79,11 @@ export const CATEGORIA_LABEL: Record<string, string> = {
 
 const n = (x: unknown) => Number(x) || 0
 
+/** Valor que llega al destino de un traslado (moneda destino): valor_destino si viene, si no el mismo valor. */
+export function valorDestino(m: Movimiento): number {
+  return m.valor_destino != null ? n(m.valor_destino) : n(m.valor)
+}
+
 /** Saldo REALIZADO actual de una cuenta (acumulado, todas las fechas). */
 export function saldoCuenta(cuenta: Cuenta, movimientos: Movimiento[]): number {
   let saldo = n(cuenta.saldo_inicial)
@@ -70,11 +92,28 @@ export function saldoCuenta(cuenta: Cuenta, movimientos: Movimiento[]): number {
     if (m.tipo === "ingreso" && m.cuenta_id === cuenta.id) saldo += n(m.valor)
     else if (m.tipo === "egreso" && m.cuenta_id === cuenta.id) saldo -= n(m.valor)
     else if (m.tipo === "traslado") {
+      // El origen se debita en su moneda; el destino se acredita en la suya (valor_destino).
       if (m.cuenta_id === cuenta.id) saldo -= n(m.valor)
-      if (m.cuenta_destino_id === cuenta.id) saldo += n(m.valor)
+      if (m.cuenta_destino_id === cuenta.id) saldo += valorDestino(m)
     }
   }
   return saldo
+}
+
+/** Saldos agrupados por plataforma/método de pago y moneda (para el dashboard). */
+export function saldosPorPlataforma(
+  cuentas: Cuenta[],
+  movimientos: Movimiento[],
+): { plataforma: string; moneda: Moneda; saldo: number }[] {
+  const map = new Map<string, { plataforma: string; moneda: Moneda; saldo: number }>()
+  for (const c of cuentas) {
+    const plataforma = c.plataforma || "Sin método"
+    const key = `${plataforma}__${c.moneda}`
+    const cur = map.get(key) ?? { plataforma, moneda: c.moneda, saldo: 0 }
+    cur.saldo += saldoCuenta(c, movimientos)
+    map.set(key, cur)
+  }
+  return [...map.values()].sort((a, b) => a.plataforma.localeCompare(b.plataforma))
 }
 
 export type ResumenMoneda = {
