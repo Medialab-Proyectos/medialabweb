@@ -1,9 +1,17 @@
 import "server-only"
+import { readFileSync } from "node:fs"
+import path from "node:path"
 import { PDFDocument, StandardFonts, rgb, type PDFFont, type PDFPage } from "pdf-lib"
 import type { FacturaFreelance } from "./freelance"
 import { formatMoneda } from "./freelance"
 import { numeroALetrasBase, MESES } from "./desprendible"
 import { MEDIALAB_EMISOR } from "./cuenta-cobro"
+
+let logoCache: Buffer | null = null
+function logoBytes(): Buffer {
+  if (!logoCache) logoCache = readFileSync(path.join(process.cwd(), "public/images/logo-medialab-400.png"))
+  return logoCache
+}
 
 function safe(s: string | null | undefined): string {
   return (s ?? "")
@@ -49,22 +57,27 @@ export async function generarFacturaFreelancePDF(
   const hline = (top: number, x1 = M, x2 = W - M, color = linec, thickness = 0.6) =>
     page.drawLine({ start: { x: x1, y: H - top }, end: { x: x2, y: H - top }, thickness, color })
 
-  // ── Encabezado (emisor: el freelance) ─────────────────────────────────────
-  T(M, 58, emisor.nombre, 12, bold)
-  T(M, 72, `C.C. ${emisor.cedula}`, 8.5, font, gray)
+  // ── Encabezado con logo de MediaLab ───────────────────────────────────────
+  const logo = await pdf.embedPng(logoBytes())
+  const logoW = 54
+  const logoH = (logo.height / logo.width) * logoW
+  page.drawImage(logo, { x: M, y: H - 44 - logoH, width: logoW, height: logoH })
+  const hx = M + logoW + 16
+  T(hx, 58, MEDIALAB_EMISOR.nombre, 12, bold)
+  T(hx, 72, `NIT ${MEDIALAB_EMISOR.nit}`, 8.5, font, gray)
   TR(W - M, 56, "CUENTA DE COBRO", 12, bold)
   if (f.numero) TR(W - M, 71, `N.º ${f.numero}`, 9, font, gray)
   TR(W - M, 85, `${MESES[f.mes - 1]} ${f.anio}`, 8.5, font, gray)
 
   hline(100)
 
-  // ── Destinatario ──────────────────────────────────────────────────────────
+  // ── Emisor (quien cobra) y destinatario (quien paga) ──────────────────────
   box(M, 108, W - 2 * M, 40)
-  const colL = M + 14, valL = M + 92
+  const colL = M + 14, valL = M + 70
   const lbl = (x: number, top: number, s: string) => T(x, top, s, 7.5, bold, gray)
   const val = (x: number, top: number, s: string) => T(x, top, s || "-", 9.5, bold, dark)
-  lbl(colL, 126, "COBRAR A"); val(valL, 126, MEDIALAB_EMISOR.nombre)
-  lbl(colL, 143, "NIT"); val(valL, 143, MEDIALAB_EMISOR.nit)
+  lbl(colL, 126, "DE"); val(valL, 126, `${emisor.nombre}  -  C.C. ${emisor.cedula}`)
+  lbl(colL, 143, "PARA"); val(valL, 143, `${MEDIALAB_EMISOR.nombre}  -  NIT ${MEDIALAB_EMISOR.nit}`)
 
   // ── Detalle ───────────────────────────────────────────────────────────────
   const headTop = 182
