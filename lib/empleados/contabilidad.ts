@@ -46,6 +46,10 @@ export type Empresa = {
   nit: string | null
   contacto: string | null
   notas: string | null
+  // Condiciones de facturación (opcionales): las cuentas de cobro las heredan.
+  modo: "por_hora" | "por_mes" | null
+  tarifa: number
+  moneda: Moneda
   creado_en: string
   actualizado_en: string
 }

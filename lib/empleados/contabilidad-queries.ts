@@ -72,7 +72,7 @@ export async function eliminarMovimiento(id: string) {
 }
 
 // ── Empresas ────────────────────────────────────────────────────────────────
-const EMPRESA_COLS = "id,nombre,nit,contacto,notas,creado_en,actualizado_en"
+const EMPRESA_COLS = "id,nombre,nit,contacto,notas,modo,tarifa,moneda,creado_en,actualizado_en"
 
 export async function listEmpresas() {
   const sb = getServiceClient()

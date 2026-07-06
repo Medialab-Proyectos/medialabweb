@@ -30,7 +30,6 @@ type MovForm = {
   valor: number; tasa: number; costo: number; valor_destino: number
   estado: "pendiente" | "realizado"; referencia: string
 }
-type EmpresaForm = { id?: string; nombre: string; nit: string; contacto: string; notas: string }
 
 export function ContabilidadClient() {
   const [cuentas, setCuentas] = useState<Cuenta[]>([])
@@ -43,7 +42,6 @@ export function ContabilidadClient() {
   const [mes, setMes] = useState(mesActual)
   const [formCuenta, setFormCuenta] = useState<CuentaForm | null>(null)
   const [formMov, setFormMov] = useState<MovForm | null>(null)
-  const [formEmpresa, setFormEmpresa] = useState<EmpresaForm | null>(null)
   const [saving, setSaving] = useState(false)
   const [confirmar, setConfirmar] = useState<null | { titulo: string; mensaje: string; run: () => Promise<void> }>(null)
   const [confirmLoading, setConfirmLoading] = useState(false)
@@ -179,42 +177,6 @@ export function ContabilidadClient() {
     } finally { setSaving(false) }
   }
 
-  // ── Empresas ─────────────────────────────────────────────────────────────
-  async function guardarEmpresa(e: React.FormEvent) {
-    e.preventDefault(); if (!formEmpresa) return
-    setSaving(true); setError("")
-    try {
-      const res = await fetch("/api/empleados/admin/contabilidad/empresas", {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...(formEmpresa.id ? { id: formEmpresa.id } : {}),
-          nombre: formEmpresa.nombre, nit: formEmpresa.nit || null, contacto: formEmpresa.contacto || null, notas: formEmpresa.notas || null,
-        }),
-      })
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.error)
-      await cargar(); setFormEmpresa(null)
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Error al guardar la empresa.")
-    } finally { setSaving(false) }
-  }
-
-  function pedirEliminarEmpresa(x: Empresa) {
-    setConfirmar({
-      titulo: "Eliminar empresa",
-      mensaje: `¿Eliminar "${x.nombre}"? Los movimientos que la referencian quedarán sin empresa.`,
-      run: async () => {
-        setConfirmLoading(true)
-        try {
-          const res = await fetch(`/api/empleados/admin/contabilidad/empresas?id=${x.id}`, { method: "DELETE" })
-          const data = await res.json(); if (!res.ok) throw new Error(data.error)
-          await cargar(); setConfirmar(null)
-        } catch (e) { setError(e instanceof Error ? e.message : "Error al eliminar."); setConfirmar(null) }
-        finally { setConfirmLoading(false) }
-      },
-    })
-  }
-
   async function agregarMetodo(nombre: string) {
     const n = nombre.trim(); if (!n) return
     try {
@@ -273,6 +235,9 @@ export function ContabilidadClient() {
           <h1 className="font-display text-xl font-bold">Contabilidad</h1>
         </div>
         <div className="flex flex-wrap items-center gap-2">
+          <Link href="/empleados/admin/empresas" className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-[#fff]/80 transition hover:bg-white/5">
+            <Building2 size={15} /> Empresas
+          </Link>
           <Link href="/empleados/admin/cuentas-cobro" className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-[#fff]/80 transition hover:bg-white/5">
             <FileText size={15} /> Cuentas de cobro
           </Link>
@@ -352,34 +317,6 @@ export function ContabilidadClient() {
                     <div className="flex items-center gap-1">
                       <button onClick={() => setFormCuenta({ id: c.id, nombre: c.nombre, banco: c.banco ?? "", plataforma: c.plataforma ?? "", moneda: c.moneda, saldo_inicial: Number(c.saldo_inicial) || 0, activa: c.activa })} className="rounded-lg p-1.5 text-[#fff]/60 hover:bg-white/5 hover:text-[#fff]"><Pencil size={14} /></button>
                       <button onClick={() => pedirEliminarCuenta(c)} className="rounded-lg p-1.5 text-red-300/70 hover:bg-red-500/10 hover:text-red-300"><Trash2 size={14} /></button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </section>
-
-          {/* Empresas */}
-          <section>
-            <div className="mb-3 flex items-center justify-between">
-              <h2 className="flex items-center gap-2 text-sm font-semibold text-[#fff]/80"><Building2 size={15} /> Empresas</h2>
-              <button onClick={() => setFormEmpresa({ nombre: "", nit: "", contacto: "", notas: "" })} className="inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--cyan)] hover:underline">
-                <Plus size={13} /> Nueva empresa
-              </button>
-            </div>
-            {empresas.length === 0 ? (
-              <p className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-6 text-center text-sm text-[#fff]/45">Registra las empresas/contrapartes con su NIT.</p>
-            ) : (
-              <div className="grid gap-2 sm:grid-cols-2">
-                {empresas.map((x) => (
-                  <div key={x.id} className="flex items-center justify-between rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3">
-                    <div>
-                      <p className="text-sm font-medium">{x.nombre}</p>
-                      <p className="text-xs text-[#fff]/50">{x.nit ? `NIT ${x.nit}` : "Sin NIT"}{x.contacto ? ` · ${x.contacto}` : ""}</p>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <button onClick={() => setFormEmpresa({ id: x.id, nombre: x.nombre, nit: x.nit ?? "", contacto: x.contacto ?? "", notas: x.notas ?? "" })} className="rounded-lg p-1.5 text-[#fff]/60 hover:bg-white/5 hover:text-[#fff]"><Pencil size={14} /></button>
-                      <button onClick={() => pedirEliminarEmpresa(x)} className="rounded-lg p-1.5 text-red-300/70 hover:bg-red-500/10 hover:text-red-300"><Trash2 size={14} /></button>
                     </div>
                   </div>
                 ))}
@@ -564,34 +501,6 @@ export function ContabilidadClient() {
             </div>
             <div className="mt-5 flex justify-end gap-2">
               <button type="button" onClick={() => setFormMov(null)} className="rounded-lg px-4 py-2 text-sm text-[#fff]/60 hover:text-[#fff]">Cancelar</button>
-              <button type="submit" disabled={saving} className="inline-flex items-center gap-2 rounded-lg bg-[var(--cyan)] px-5 py-2 text-sm font-semibold text-[#04191b] transition hover:brightness-110 disabled:opacity-60">
-                {saving ? <Loader2 size={14} className="animate-spin" /> : null} Guardar
-              </button>
-            </div>
-          </form>
-        </div>
-      )}
-
-      {/* Modal empresa */}
-      {formEmpresa && (
-        <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/70 p-4 py-10">
-          <form onSubmit={guardarEmpresa} className="w-full max-w-md rounded-2xl border border-white/10 bg-[#12151c] p-6">
-            <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-lg font-semibold">{formEmpresa.id ? "Editar empresa" : "Nueva empresa"}</h2>
-              <button type="button" onClick={() => setFormEmpresa(null)} className="text-[#fff]/50 hover:text-[#fff]"><X size={18} /></button>
-            </div>
-            <div className="grid gap-3 sm:grid-cols-2">
-              <label className="flex flex-col gap-1.5 sm:col-span-2"><span className={lblCls}>Nombre / razón social</span>
-                <input required value={formEmpresa.nombre} onChange={(e) => setFormEmpresa({ ...formEmpresa, nombre: e.target.value })} className={inputCls} placeholder="Empresa S.A.S" /></label>
-              <label className="flex flex-col gap-1.5"><span className={lblCls}>NIT (si tiene)</span>
-                <input value={formEmpresa.nit} onChange={(e) => setFormEmpresa({ ...formEmpresa, nit: e.target.value })} className={inputCls} placeholder="900.123.456-7" /></label>
-              <label className="flex flex-col gap-1.5"><span className={lblCls}>Contacto</span>
-                <input value={formEmpresa.contacto} onChange={(e) => setFormEmpresa({ ...formEmpresa, contacto: e.target.value })} className={inputCls} placeholder="Correo / teléfono" /></label>
-              <label className="flex flex-col gap-1.5 sm:col-span-2"><span className={lblCls}>Notas</span>
-                <input value={formEmpresa.notas} onChange={(e) => setFormEmpresa({ ...formEmpresa, notas: e.target.value })} className={inputCls} placeholder="Opcional" /></label>
-            </div>
-            <div className="mt-5 flex justify-end gap-2">
-              <button type="button" onClick={() => setFormEmpresa(null)} className="rounded-lg px-4 py-2 text-sm text-[#fff]/60 hover:text-[#fff]">Cancelar</button>
               <button type="submit" disabled={saving} className="inline-flex items-center gap-2 rounded-lg bg-[var(--cyan)] px-5 py-2 text-sm font-semibold text-[#04191b] transition hover:brightness-110 disabled:opacity-60">
                 {saving ? <Loader2 size={14} className="animate-spin" /> : null} Guardar
               </button>

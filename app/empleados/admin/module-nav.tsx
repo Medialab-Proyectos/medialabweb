@@ -1,18 +1,19 @@
 import Link from "next/link"
-import { Users, HeartHandshake, Wallet } from "lucide-react"
+import { Users, HeartHandshake, Wallet, Home } from "lucide-react"
 
-type Modulo = "empleados" | "talento" | "contabilidad"
+type Modulo = "empleado" | "empleados" | "talento" | "contabilidad"
 
 const MODULOS: { key: Modulo; href: string; icon: React.ElementType; label: string }[] = [
+  { key: "empleado", href: "/empleados/inicio", icon: Home, label: "Mi portal" },
   { key: "empleados", href: "/empleados/admin", icon: Users, label: "Gestión de empleados" },
   { key: "talento", href: "/empleados/admin/talento", icon: HeartHandshake, label: "Talento Humano" },
   { key: "contabilidad", href: "/empleados/admin/contabilidad", icon: Wallet, label: "Contabilidad" },
 ]
 
-/** Navegación de los 3 módulos grandes del panel del CEO. */
+/** Navegación de los 4 módulos grandes del panel del CEO. */
 export function ModuleNav({ active }: { active?: Modulo }) {
   return (
-    <div className="mb-6 grid gap-2 sm:grid-cols-3">
+    <div className="mb-6 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
       {MODULOS.map((m) => {
         const Icon = m.icon
         const on = m.key === active

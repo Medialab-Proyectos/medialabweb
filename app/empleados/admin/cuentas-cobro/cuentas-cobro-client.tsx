@@ -168,10 +168,24 @@ export function CuentasCobroClient() {
               <label className="flex flex-col gap-1.5"><span className={lblCls}>N.º (opcional)</span>
                 <input value={form.numero} onChange={(e) => setForm({ ...form, numero: e.target.value })} className={inputCls} placeholder="CC-001" /></label>
               <label className="flex flex-col gap-1.5 sm:col-span-2"><span className={lblCls}>Cobrar a (empresa)</span>
-                <select value={form.empresa_id} onChange={(e) => setForm({ ...form, empresa_id: e.target.value })} className={inputCls}>
+                <select
+                  value={form.empresa_id}
+                  onChange={(e) => {
+                    const emp = empresas.find((x) => x.id === e.target.value)
+                    // Hereda las condiciones de facturación de la empresa, si las tiene.
+                    setForm({
+                      ...form,
+                      empresa_id: e.target.value,
+                      ...(emp?.modo ? { modo: emp.modo, tarifa: Number(emp.tarifa) || 0, moneda: emp.moneda } : {}),
+                    })
+                  }}
+                  className={inputCls}
+                >
                   <option value="">— Selecciona —</option>
-                  {empresas.map((x) => <option key={x.id} value={x.id}>{x.nombre}{x.nit ? ` · NIT ${x.nit}` : ""}</option>)}
-                </select></label>
+                  {empresas.map((x) => <option key={x.id} value={x.id}>{x.nombre}{x.nit ? ` · NIT ${x.nit}` : ""}{x.modo ? ` · ${x.modo === "por_hora" ? "x hora" : "x mes"}` : ""}</option>)}
+                </select>
+                <span className="text-[10px] text-[#fff]/40">Al elegir la empresa se cargan su modo y tarifa; solo ajustas la cantidad.</span>
+              </label>
               <label className="flex flex-col gap-1.5"><span className={lblCls}>Modo</span>
                 <select value={form.modo} onChange={(e) => setForm({ ...form, modo: e.target.value as ModoCuentaCobro })} className={inputCls}>
                   <option value="por_mes">Por mes</option>

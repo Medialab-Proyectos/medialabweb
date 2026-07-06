@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation"
 import Link from "next/link"
-import { FileText, FileSignature, BadgeCheck, GraduationCap, Gift, ShieldCheck, Clock, ArrowRight, Plane, ClipboardCheck, Target, Receipt, Wrench } from "lucide-react"
+import { FileText, FileSignature, BadgeCheck, GraduationCap, Gift, Clock, ArrowRight, Plane, ClipboardCheck, Target, Receipt, Wrench } from "lucide-react"
 import { requireEmpleado } from "@/lib/empleados/auth"
 import { getEmpleadoById } from "@/lib/empleados/queries"
 import { esVinculacionPorFactura } from "@/lib/empleados/types"
@@ -144,17 +144,9 @@ export default async function InicioPage() {
 
         <CambiarClaveCard obligatorio={empleado.must_change_password} />
 
-        {empleado.rol === "ceo" && (
-          <div className="mb-8">
-            <div className="mb-3 flex items-center gap-2">
-              <ShieldCheck size={16} className="text-[var(--cyan)]" />
-              <h2 className="text-sm font-semibold">Panel de administración</h2>
-            </div>
-            <ModuleNav />
-          </div>
-        )}
+        {empleado.rol === "ceo" && <ModuleNav active="empleado" />}
 
-        {(empleado.rol === "lider" || empleado.rol === "ceo") && (
+        {empleado.rol === "lider" && (
           <Link
             href="/empleados/aprobaciones"
             className="mb-8 flex items-center justify-between rounded-2xl border border-[var(--magenta)]/25 bg-[var(--magenta)]/[0.06] px-5 py-4 transition hover:bg-[var(--magenta)]/[0.1]"
@@ -172,7 +164,7 @@ export default async function InicioPage() {
           </Link>
         )}
 
-        {(empleado.rol === "lider" || empleado.rol === "ceo") && (
+        {empleado.rol === "lider" && (
           <Link
             href="/empleados/evaluar"
             className="mb-8 flex items-center justify-between rounded-2xl border border-[#8b5cf6]/25 bg-[#8b5cf6]/[0.06] px-5 py-4 transition hover:bg-[#8b5cf6]/[0.1]"
