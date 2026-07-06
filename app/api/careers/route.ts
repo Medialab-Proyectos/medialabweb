@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
   </div>
   <div class="body">
     <div class="tag">Aplicación de empleo</div>
-    <div class="position-badge">${position || "Diseñador/a UX/UI Middle"}</div>
+    <div class="position-badge">${position || "Vacante MediaLab"}</div>
     <div class="field">
       <div class="field-label">Nombre</div>
       <div class="field-value">${name}</div>
@@ -75,7 +75,7 @@ export async function POST(req: NextRequest) {
     ${portfolio ? `<div class="field"><div class="field-label">Portafolio</div><div class="field-value"><a href="${portfolio}" style="color:#E8751A">${portfolio}</a></div></div>` : ""}
     ${resume ? `<div class="field"><div class="field-label">Currículum</div><div class="field-value"><a href="${resume}" style="color:#E8751A">${resume}</a></div></div>` : ""}
     <div class="field">
-      <div class="field-label">Mayor reto en UX</div>
+      <div class="field-label">Mayor reto profesional</div>
       <div class="field-value">${challenge}</div>
     </div>
   </div>
@@ -171,7 +171,7 @@ export async function POST(req: NextRequest) {
                 </table>
               </td>
               <td valign="top" style="font-size:14px;color:#555555;line-height:1.55;padding-top:6px;font-family:'Segoe UI',Arial,sans-serif;">
-                <strong style="color:#1a1a1a;">Revisión de perfil</strong> — Evaluamos tu experiencia, portafolio y tu respuesta sobre UX.
+                <strong style="color:#1a1a1a;">Revisión de perfil</strong> — Evaluamos tu experiencia, portafolio y tu respuesta.
               </td>
             </tr>
           </table>
@@ -207,7 +207,7 @@ export async function POST(req: NextRequest) {
                 </table>
               </td>
               <td valign="top" style="font-size:14px;color:#555555;line-height:1.55;padding-top:6px;font-family:'Segoe UI',Arial,sans-serif;">
-                <strong style="color:#1a1a1a;">Challenge técnico</strong> — Un ejercicio real de diseño (max 3h) para ver cómo piensas.
+                <strong style="color:#1a1a1a;">Challenge técnico</strong> — Un ejercicio real (max 3h) para ver cómo piensas.
               </td>
             </tr>
           </table>
@@ -296,7 +296,7 @@ export async function POST(req: NextRequest) {
         from: FROM_EMAIL,
         to: [ADMIN_EMAIL],
         replyTo: email,
-        subject: `Postulación — ${name} · ${position || "Diseñador/a UX/UI Middle"}`,
+        subject: `Postulación — ${name} · ${position || "Vacante MediaLab"}`,
         html: adminHtml,
       }),
       resend.emails.send({

@@ -14,117 +14,44 @@ import { useLanguage } from "@/lib/language-context"
 /* ── Job listing data ── */
 const POSITIONS = [
   {
-    id: "ux-ui-middle-bogota",
-    titleEs: "Diseñador/a UX/UI Middle",
-    titleEn: "UX/UI Middle Designer",
+    id: "frontend-fullstack-junior",
+    titleEs: "Desarrollador/a Front-End / FullStack Junior",
+    titleEn: "Front-End / FullStack Junior Developer",
     locationEs: "Remoto · Bogotá, Colombia",
     locationEn: "Remote · Bogotá, Colombia",
     typeEs: "Tiempo completo",
     typeEn: "Full-time",
-    levelEs: "Middle (3-5 años)",
-    levelEn: "Middle (3-5 years)",
-    descEs: "Buscamos un/a diseñador/a UX/UI con experiencia intermedia que quiera crecer dentro de un equipo que combina investigación de usuarios con inteligencia artificial. Vas a trabajar en proyectos reales para marcas B2B y B2C en LATAM y USA, con mentoría directa del equipo senior.",
-    descEn: "We're looking for a mid-level UX/UI designer who wants to grow within a team that combines user research with artificial intelligence. You'll work on real projects for B2B and B2C brands in LATAM and USA, with direct mentorship from the senior team.",
+    levelEs: "Junior (0-2 años)",
+    levelEn: "Junior (0-2 years)",
+    descEs: "Estamos buscando un/a Desarrollador/a Front-End Junior con muchas ganas de aprender, proactivo/a y con bases en tecnologías modernas. Trabajarás en productos reales junto a un equipo que combina desarrollo, UX e inteligencia artificial.",
+    descEn: "We're looking for a Junior Front-End Developer eager to learn, proactive, and with a foundation in modern technologies. You'll work on real products alongside a team that combines development, UX, and artificial intelligence.",
     responsibilitiesEs: [
-      "Diseñar flujos e interfaces para productos web y móviles en Figma",
-      "Participar en sesiones de investigación de usuarios y síntesis de hallazgos",
-      "Colaborar con desarrolladores para asegurar la fidelidad del diseño",
-      "Iterar basándote en datos, pruebas de usabilidad y feedback real",
-      "Contribuir al sistema de diseño y a la documentación de patrones UX",
-      "Explorar cómo la IA puede optimizar procesos de diseño",
+      "Apoyar en la maquetación e implementación de nuevas vistas y componentes",
+      "Resolver bugs y optimizar interfaces existentes",
+      "Consumo e implementación de endpoints dentro de las vistas y componentes",
+      "Mantenimiento y refactorización de código",
     ],
     responsibilitiesEn: [
-      "Design flows and interfaces for web and mobile products in Figma",
-      "Participate in user research sessions and findings synthesis",
-      "Collaborate with developers to ensure design fidelity",
-      "Iterate based on data, usability testing, and real feedback",
-      "Contribute to the design system and UX pattern documentation",
-      "Explore how AI can optimize design processes",
+      "Support the markup and implementation of new views and components",
+      "Fix bugs and optimize existing interfaces",
+      "Consume and implement endpoints within views and components",
+      "Code maintenance and refactoring",
     ],
     requirementsEs: [
-      "3-5 años de experiencia en diseño UX/UI",
-      "Portafolio con proyectos reales (no solo ejercicios académicos)",
-      "Dominio de Figma y herramientas de prototipado",
-      "Conocimiento de principios de diseño conductual y psicología del usuario",
-      "Familiaridad con sistemas de diseño (tokens, componentes, variantes)",
-      "Español fluido (inglés intermedio es un plus)",
+      "Conocimientos sólidos en HTML, CSS y JavaScript",
+      "Experiencia (incluso en proyectos personales) con React y Node.js",
     ],
     requirementsEn: [
-      "3-5 years of UX/UI design experience",
-      "Portfolio with real projects (not just academic exercises)",
-      "Figma and prototyping tools proficiency",
-      "Knowledge of behavioral design principles and user psychology",
-      "Familiarity with design systems (tokens, components, variants)",
-      "Fluent Spanish (intermediate English is a plus)",
+      "Solid knowledge of HTML, CSS, and JavaScript",
+      "Experience (even in personal projects) with React and Node.js",
     ],
     bonusEs: [
-      "Experiencia con herramientas de IA (ChatGPT, Midjourney, v0, Cursor)",
-      "Conocimiento de HTML/CSS básico",
-      "Experiencia en metodologías ágiles (Scrum/Kanban)",
-      "Haber participado en hackathons o comunidades de diseño",
+      "Conocimientos en C#, Azure Repos y Azure Web Apps",
+      "Experiencia en bases de datos SQL y Stored Procedures",
     ],
     bonusEn: [
-      "Experience with AI tools (ChatGPT, Midjourney, v0, Cursor)",
-      "Basic HTML/CSS knowledge",
-      "Experience with agile methodologies (Scrum/Kanban)",
-      "Participation in hackathons or design communities",
-    ],
-  },
-  {
-    id: "ux-junior-ia-bogota",
-    titleEs: "Diseñador/a UX Junior IA",
-    titleEn: "UX Junior AI Designer",
-    locationEs: "Remoto · Bogotá, Colombia",
-    locationEn: "Remote · Bogotá, Colombia",
-    typeEs: "Tiempo completo",
-    typeEn: "Full-time",
-    levelEs: "Junior (1-2 años)",
-    levelEn: "Junior (1-2 years)",
-    descEs: "¿Estás empezando tu carrera en UX y te apasiona la inteligencia artificial? Buscamos un/a diseñador/a junior con hambre de aprender, curiosidad por la IA y ganas de trabajar en productos reales desde el día uno. Tendrás mentoría directa del equipo senior y acceso completo a nuestro curso UX + IA.",
-    descEn: "Are you starting your UX career and passionate about artificial intelligence? We're looking for a junior designer with a hunger to learn, curiosity about AI, and the desire to work on real products from day one. You'll have direct mentorship from the senior team and full access to our UX + AI course.",
-    responsibilitiesEs: [
-      "Apoyar en el diseño de interfaces y flujos de usuario en Figma",
-      "Participar en investigación de usuarios bajo la guía del equipo senior",
-      "Explorar y proponer el uso de herramientas de IA en procesos de diseño",
-      "Crear componentes para el sistema de diseño",
-      "Documentar patrones UX y hallazgos de investigación",
-      "Iterar diseños basándote en feedback del equipo y pruebas de usabilidad",
-    ],
-    responsibilitiesEn: [
-      "Support interface and user flow design in Figma",
-      "Participate in user research under senior team guidance",
-      "Explore and propose AI tool usage in design processes",
-      "Create components for the design system",
-      "Document UX patterns and research findings",
-      "Iterate designs based on team feedback and usability testing",
-    ],
-    requirementsEs: [
-      "1-2 años de experiencia en diseño UX/UI (proyectos académicos cuentan)",
-      "Portafolio que demuestre proceso de diseño, no solo pantallas bonitas",
-      "Conocimiento básico de Figma",
-      "Curiosidad genuina por la inteligencia artificial y sus aplicaciones en diseño",
-      "Capacidad de recibir feedback y actuar rápido sobre él",
-      "Español fluido",
-    ],
-    requirementsEn: [
-      "1-2 years of UX/UI design experience (academic projects count)",
-      "Portfolio demonstrating design process, not just pretty screens",
-      "Basic Figma knowledge",
-      "Genuine curiosity about artificial intelligence and its design applications",
-      "Ability to receive feedback and act on it quickly",
-      "Fluent Spanish",
-    ],
-    bonusEs: [
-      "Haber usado ChatGPT, Midjourney o herramientas de IA para diseño",
-      "Conocimiento básico de HTML/CSS",
-      "Haber tomado cursos de UX online (Google, Coursera, etc.)",
-      "Participar en comunidades de diseño o tener un blog/proyecto personal",
-    ],
-    bonusEn: [
-      "Experience using ChatGPT, Midjourney or AI tools for design",
-      "Basic HTML/CSS knowledge",
-      "Completed online UX courses (Google, Coursera, etc.)",
-      "Active in design communities or maintaining a blog/personal project",
+      "Knowledge of C#, Azure Repos, and Azure Web Apps",
+      "Experience with SQL databases and Stored Procedures",
     ],
   },
 ]
@@ -208,7 +135,7 @@ export function CareersLanding() {
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
       newErrors.email = t("Ingresa un email válido.", "Enter a valid email.")
     if (!resume) newErrors.resume = t("El currículum es obligatorio.", "Resume is required.")
-    if (!challenge) newErrors.challenge = t("Cuéntanos tu mayor reto en UX.", "Tell us your biggest UX challenge.")
+    if (!challenge) newErrors.challenge = t("Cuéntanos tu mayor reto profesional.", "Tell us your biggest professional challenge.")
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors)
       return
@@ -701,8 +628,8 @@ export function CareersLanding() {
                   <ol className="flex flex-col gap-4 text-left w-full max-w-sm">
                     {[
                       {
-                        es: "Revisaremos tu perfil, portafolio y tu historia UX con detalle.",
-                        en: "We'll review your profile, portfolio and UX story in detail.",
+                        es: "Revisaremos tu perfil, portafolio y tu experiencia con detalle.",
+                        en: "We'll review your profile, portfolio and experience in detail.",
                       },
                       {
                         es: "Te contactamos en máximo 1 semana.",
@@ -858,7 +785,7 @@ export function CareersLanding() {
                   {/* Biggest UX Challenge */}
                   <div className="flex flex-col gap-1.5">
                     <label htmlFor="career-challenge" className="text-xs text-white/50 font-medium">
-                      {t("¿Cuál ha sido tu mayor reto en UX?", "What has been your biggest UX challenge?")} *
+                      {t("¿Cuál ha sido tu mayor reto profesional?", "What has been your biggest professional challenge?")} *
                     </label>
                     <textarea
                       id="career-challenge"
@@ -866,8 +793,8 @@ export function CareersLanding() {
                       rows={3}
                       onChange={() => setErrors((p) => ({ ...p, challenge: "" }))}
                       placeholder={t(
-                        "Cuéntanos brevemente sobre un proyecto o situación donde aprendiste algo valioso como diseñador/a...",
-                        "Briefly tell us about a project or situation where you learned something valuable as a designer..."
+                        "Cuéntanos brevemente sobre un proyecto o situación donde aprendiste algo valioso en tu carrera...",
+                        "Briefly tell us about a project or situation where you learned something valuable in your career..."
                       )}
                       className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/20 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[var(--magenta)]/50 focus:ring-1 focus:ring-[var(--magenta)]/30 transition-all resize-none"
                     />
