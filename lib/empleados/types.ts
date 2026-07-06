@@ -1,5 +1,6 @@
 export type Rol = "ceo" | "lider" | "empleado"
 export type EstadoEmpleado = "activo" | "terminado" | "suspendido"
+export type TipoVinculacion = "empleado" | "freelance"
 
 export type Empleado = {
   id: string
@@ -15,6 +16,7 @@ export type Empleado = {
   fecha_egreso: string | null
   particularidades: string | null
   estado: EstadoEmpleado
+  tipo_vinculacion: TipoVinculacion
   creado_en: string
   actualizado_en: string
 }
@@ -32,4 +34,9 @@ export const ROL_LABEL: Record<Rol, string> = {
   ceo: "CEO / Administrador",
   lider: "Líder",
   empleado: "Empleado",
+}
+
+export const VINCULACION_LABEL: Record<TipoVinculacion, string> = {
+  empleado: "Empleado (laboral)",
+  freelance: "Freelance",
 }

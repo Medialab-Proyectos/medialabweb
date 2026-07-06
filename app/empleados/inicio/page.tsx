@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation"
 import Link from "next/link"
-import { FileText, FileSignature, BadgeCheck, GraduationCap, Gift, ShieldCheck, Clock, ArrowRight, Plane, ClipboardCheck, Target } from "lucide-react"
+import { FileText, FileSignature, BadgeCheck, GraduationCap, Gift, ShieldCheck, Clock, ArrowRight, Plane, ClipboardCheck, Target, Receipt } from "lucide-react"
 import { requireEmpleado } from "@/lib/empleados/auth"
 import { getEmpleadoById } from "@/lib/empleados/queries"
 import { PortalHeader } from "../portal-header"
@@ -16,9 +16,23 @@ type Seccion = {
   estado: "activo" | "pronto" | "deshabilitado"
   color: string
   href?: string
+  /** Solo aplica a vinculación laboral (se oculta a freelancers). */
+  laboral?: boolean
+  /** Solo para freelancers (se oculta a empleados laborales). */
+  soloFreelance?: boolean
 }
 
 const secciones: Seccion[] = [
+  {
+    key: "freelance",
+    icon: Receipt,
+    titulo: "Freelance · Facturación",
+    desc: "Sube tu factura firmada cada mes y gestiona tus datos de pago.",
+    estado: "activo",
+    color: "var(--cyan)",
+    href: "/empleados/freelance",
+    soloFreelance: true,
+  },
   {
     key: "contrato",
     icon: FileSignature,
@@ -27,6 +41,7 @@ const secciones: Seccion[] = [
     estado: "activo",
     color: "var(--cyan)",
     href: "/empleados/contrato",
+    laboral: true,
   },
   {
     key: "desprendibles",
@@ -36,6 +51,7 @@ const secciones: Seccion[] = [
     estado: "activo",
     color: "var(--cyan)",
     href: "/empleados/pagos",
+    laboral: true,
   },
   {
     key: "evaluaciones",
@@ -45,6 +61,7 @@ const secciones: Seccion[] = [
     estado: "activo",
     color: "#8b5cf6",
     href: "/empleados/evaluaciones",
+    laboral: true,
   },
   {
     key: "certificado",
@@ -54,6 +71,7 @@ const secciones: Seccion[] = [
     estado: "activo",
     color: "var(--magenta)",
     href: "/empleados/certificado",
+    laboral: true,
   },
   {
     key: "vacaciones",
@@ -63,6 +81,7 @@ const secciones: Seccion[] = [
     estado: "activo",
     color: "#00BFA6",
     href: "/empleados/ausencias",
+    laboral: true,
   },
   {
     key: "cursos",
@@ -76,9 +95,10 @@ const secciones: Seccion[] = [
     key: "beneficios",
     icon: Gift,
     titulo: "Beneficios",
-    desc: "Beneficios y reconocimientos otorgados.",
-    estado: "deshabilitado",
+    desc: "Activa medicina prepagada y pide tus permisos de media jornada.",
+    estado: "activo",
     color: "#E8751A",
+    href: "/empleados/beneficios",
   },
 ]
 
@@ -86,6 +106,12 @@ export default async function InicioPage() {
   const sesion = await requireEmpleado()
   const empleado = await getEmpleadoById(sesion.sub)
   if (!empleado) redirect("/empleados")
+
+  const esFreelance = empleado.tipo_vinculacion === "freelance"
+  // Los freelancers no ven las tarjetas laborales; los laborales no ven la de freelance.
+  const seccionesVisibles = secciones.filter((s) =>
+    esFreelance ? !s.laboral : !s.soloFreelance,
+  )
 
   return (
     <>
@@ -163,7 +189,7 @@ export default async function InicioPage() {
 
         {/* Secciones */}
         <div className="grid gap-4 sm:grid-cols-2">
-          {secciones.map((s) => {
+          {seccionesVisibles.map((s) => {
             const Icon = s.icon
             const off = s.estado === "deshabilitado"
             const activo = s.estado === "activo" && s.href

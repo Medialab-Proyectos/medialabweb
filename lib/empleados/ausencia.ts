@@ -9,6 +9,8 @@ export type TipoAusencia =
   | "licencia_luto"
   | "dia_familia"
   | "dia_votacion"
+  | "media_jornada_cumpleanos"
+  | "media_jornada_evento"
   | "otra"
 
 export type EstadoAusencia = "pendiente" | "aprobada" | "rechazada"
@@ -22,11 +24,24 @@ export const TIPO_AUSENCIA_LABEL: Record<TipoAusencia, string> = {
   licencia_luto: "Licencia de luto",
   dia_familia: "Día de la familia",
   dia_votacion: "Día de votación",
+  media_jornada_cumpleanos: "Media jornada de cumpleaños (beneficio)",
+  media_jornada_evento: "Media jornada por evento (beneficio)",
   otra: "Otra",
 }
 
 /** Tipos que descuentan del saldo de vacaciones. */
 export const TIPOS_VACACIONALES: TipoAusencia[] = ["vacaciones", "adelanto_vacaciones"]
+
+/**
+ * Permisos-beneficio de MEDIA JORNADA (0.5 día hábil): política interna, no de ley.
+ * No descuentan del saldo de vacaciones y se piden sobre un solo día.
+ */
+export const TIPOS_MEDIA_JORNADA: TipoAusencia[] = ["media_jornada_cumpleanos", "media_jornada_evento"]
+export const DIAS_MEDIA_JORNADA = 0.5
+
+export function esMediaJornada(tipo: TipoAusencia): boolean {
+  return TIPOS_MEDIA_JORNADA.includes(tipo)
+}
 
 export const ESTADO_AUSENCIA_LABEL: Record<EstadoAusencia, string> = {
   pendiente: "Pendiente",

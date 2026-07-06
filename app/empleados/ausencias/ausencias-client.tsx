@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react"
 import { Loader2, Plane, Send, CheckCircle2, XCircle, Clock } from "lucide-react"
 import {
   type SolicitudAusencia, type SaldoVacaciones, type TipoAusencia,
-  TIPO_AUSENCIA_LABEL, ESTADO_AUSENCIA_LABEL, DIAS_ADELANTO,
+  TIPO_AUSENCIA_LABEL, ESTADO_AUSENCIA_LABEL, DIAS_ADELANTO, esMediaJornada,
 } from "@/lib/empleados/ausencia"
 import { contarDiasHabiles, contarDiasCalendario } from "@/lib/empleados/festivos-co"
 
@@ -13,7 +13,7 @@ const lblCls = "text-[11px] font-semibold uppercase tracking-wide text-[#fff]/50
 
 const TIPOS: TipoAusencia[] = [
   "vacaciones", "adelanto_vacaciones", "permiso_no_remunerado", "licencia_maternidad", "licencia_paternidad",
-  "licencia_luto", "dia_familia", "dia_votacion", "otra",
+  "licencia_luto", "dia_familia", "dia_votacion", "media_jornada_cumpleanos", "media_jornada_evento", "otra",
 ]
 
 const estadoStyle: Record<string, string> = {
@@ -48,13 +48,22 @@ export function AusenciasClient() {
   }
   useEffect(() => { cargar() }, [])
 
+  const media = esMediaJornada(tipo)
+
+  // La media jornada se pide sobre un solo día: mantenemos fin = inicio.
+  useEffect(() => {
+    if (media && inicio) setFin(inicio)
+  }, [media, inicio])
+
   const preview = useMemo(() => {
+    if (media) return inicio ? { habiles: 0.5, calendario: 1 } : null
     if (!inicio || !fin || fin < inicio) return null
     return { habiles: contarDiasHabiles(inicio, fin), calendario: contarDiasCalendario(inicio, fin) }
-  }, [inicio, fin])
+  }, [inicio, fin, media])
 
   // Validaciones de la solicitud (espejo de las del servidor)
   const validacion = useMemo(() => {
+    if (media) return { ok: !!inicio, aviso: null as string | null }
     if (!inicio || !fin) return { ok: false, aviso: "" as string | null }
     if (fin < inicio) return { ok: false, aviso: "La fecha final no puede ser anterior a la inicial." }
     if (tipo === "adelanto_vacaciones") {
@@ -68,7 +77,7 @@ export function AusenciasClient() {
       }
     }
     return { ok: true, aviso: null }
-  }, [inicio, fin, tipo, preview, saldo])
+  }, [inicio, fin, tipo, preview, saldo, media])
 
   async function enviar(e: React.FormEvent) {
     e.preventDefault()
@@ -130,13 +139,15 @@ export function AusenciasClient() {
             </select>
           </label>
           <label className="flex flex-col gap-1.5">
-            <span className={lblCls}>Desde</span>
+            <span className={lblCls}>{media ? "Día" : "Desde"}</span>
             <input type="date" value={inicio} onChange={(e) => setInicio(e.target.value)} required className={inputCls} />
           </label>
-          <label className="flex flex-col gap-1.5">
-            <span className={lblCls}>Hasta</span>
-            <input type="date" value={fin} min={inicio} onChange={(e) => setFin(e.target.value)} required className={inputCls} />
-          </label>
+          {!media && (
+            <label className="flex flex-col gap-1.5">
+              <span className={lblCls}>Hasta</span>
+              <input type="date" value={fin} min={inicio} onChange={(e) => setFin(e.target.value)} required className={inputCls} />
+            </label>
+          )}
           <label className="flex flex-col gap-1.5 sm:col-span-2">
             <span className={lblCls}>Motivo (opcional)</span>
             <input value={motivo} onChange={(e) => setMotivo(e.target.value)} placeholder="Breve descripción" className={inputCls} />
@@ -144,9 +155,15 @@ export function AusenciasClient() {
         </div>
 
         {preview && (
-          <p className="mt-3 text-xs text-[#fff]/55">
-            <b className="text-[var(--cyan)]">{preview.habiles}</b> días hábiles ({preview.calendario} calendario), descontando fines de semana y festivos colombianos.
-          </p>
+          media ? (
+            <p className="mt-3 text-xs text-[#fff]/55">
+              Permiso de <b className="text-[var(--cyan)]">media jornada</b> (0.5 día). Es un beneficio interno; no descuenta de tu saldo de vacaciones.
+            </p>
+          ) : (
+            <p className="mt-3 text-xs text-[#fff]/55">
+              <b className="text-[var(--cyan)]">{preview.habiles}</b> días hábiles ({preview.calendario} calendario), descontando fines de semana y festivos colombianos.
+            </p>
+          )
         )}
         {inicio && fin && validacion.aviso && (
           <p className="mt-3 rounded-lg bg-amber-400/10 px-3 py-2 text-xs text-amber-200">{validacion.aviso}</p>

@@ -1,0 +1,135 @@
+// Tipos y utilidades de contabilidad (puros, cliente y servidor).
+import type { Moneda } from "./freelance"
+export { formatMoneda } from "./freelance"
+export type { Moneda } from "./freelance"
+
+export type TipoMovimiento = "ingreso" | "egreso" | "traslado"
+export type EstadoMovimiento = "pendiente" | "realizado"
+
+export type Cuenta = {
+  id: string
+  nombre: string
+  banco: string | null
+  moneda: Moneda
+  saldo_inicial: number
+  activa: boolean
+  orden: number
+  creado_en: string
+  actualizado_en: string
+}
+
+export type Movimiento = {
+  id: string
+  cuenta_id: string
+  cuenta_destino_id: string | null
+  fecha: string
+  tipo: TipoMovimiento
+  categoria: string | null
+  concepto: string | null
+  contraparte: string | null
+  valor: number
+  estado: EstadoMovimiento
+  referencia: string | null
+  creado_por: string | null
+  creado_en: string
+  actualizado_en: string
+}
+
+export const TIPO_MOV_LABEL: Record<TipoMovimiento, string> = {
+  ingreso: "Ingreso",
+  egreso: "Egreso",
+  traslado: "Traslado",
+}
+
+export const CATEGORIAS = [
+  "salario", "liquidacion", "honorarios", "factura_freelance", "servicio", "impuesto",
+  "arriendo", "venta", "reembolso", "software", "otro",
+] as const
+
+export const CATEGORIA_LABEL: Record<string, string> = {
+  salario: "Salario",
+  liquidacion: "Liquidación",
+  honorarios: "Honorarios",
+  factura_freelance: "Factura freelance",
+  servicio: "Servicio",
+  impuesto: "Impuesto",
+  arriendo: "Arriendo",
+  venta: "Venta / ingreso",
+  reembolso: "Reembolso",
+  software: "Software / herramientas",
+  otro: "Otro",
+}
+
+const n = (x: unknown) => Number(x) || 0
+
+/** Saldo REALIZADO actual de una cuenta (acumulado, todas las fechas). */
+export function saldoCuenta(cuenta: Cuenta, movimientos: Movimiento[]): number {
+  let saldo = n(cuenta.saldo_inicial)
+  for (const m of movimientos) {
+    if (m.estado !== "realizado") continue
+    if (m.tipo === "ingreso" && m.cuenta_id === cuenta.id) saldo += n(m.valor)
+    else if (m.tipo === "egreso" && m.cuenta_id === cuenta.id) saldo -= n(m.valor)
+    else if (m.tipo === "traslado") {
+      if (m.cuenta_id === cuenta.id) saldo -= n(m.valor)
+      if (m.cuenta_destino_id === cuenta.id) saldo += n(m.valor)
+    }
+  }
+  return saldo
+}
+
+export type ResumenMoneda = {
+  saldo: number
+  porCobrar: number       // ingresos pendientes
+  porPagar: number        // egresos pendientes
+  porTrasladar: number    // traslados pendientes
+  ingresosMes: number     // ingresos realizados del mes
+  egresosMes: number      // egresos realizados del mes
+}
+
+export type Resumen = {
+  porCuenta: { cuenta: Cuenta; saldo: number }[]
+  porMoneda: Record<Moneda, ResumenMoneda>
+}
+
+function vacio(): ResumenMoneda {
+  return { saldo: 0, porCobrar: 0, porPagar: 0, porTrasladar: 0, ingresosMes: 0, egresosMes: 0 }
+}
+
+/** Resumen por cuenta y agregado por moneda. `mes` filtra ingresos/egresos del mes (1-12). */
+export function resumen(
+  cuentas: Cuenta[],
+  movimientos: Movimiento[],
+  periodo?: { anio: number; mes: number },
+): Resumen {
+  const monedaDe = new Map(cuentas.map((c) => [c.id, c.moneda]))
+  const porMoneda: Record<Moneda, ResumenMoneda> = { COP: vacio(), USD: vacio() }
+
+  const porCuenta = cuentas.map((c) => {
+    const saldo = saldoCuenta(c, movimientos)
+    const r = porMoneda[c.moneda]
+    if (r) r.saldo += saldo
+    return { cuenta: c, saldo }
+  })
+
+  const enPeriodo = (m: Movimiento) =>
+    !periodo || (Number(m.fecha.slice(0, 4)) === periodo.anio && Number(m.fecha.slice(5, 7)) === periodo.mes)
+
+  for (const m of movimientos) {
+    const moneda = monedaDe.get(m.cuenta_id)
+    if (!moneda) continue
+    const r = porMoneda[moneda]
+    if (!r) continue
+    if (m.estado === "pendiente") {
+      if (m.tipo === "ingreso") r.porCobrar += n(m.valor)
+      else if (m.tipo === "egreso") r.porPagar += n(m.valor)
+      else r.porTrasladar += n(m.valor)
+    } else if (enPeriodo(m)) {
+      if (m.tipo === "ingreso") r.ingresosMes += n(m.valor)
+      else if (m.tipo === "egreso") r.egresosMes += n(m.valor)
+    }
+  }
+
+  return { porCuenta, porMoneda }
+}
+
+export const MONEDAS_ORDEN: Moneda[] = ["COP", "USD"]

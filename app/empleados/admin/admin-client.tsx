@@ -3,9 +3,9 @@
 import Link from "next/link"
 import { useEffect, useMemo, useRef, useState } from "react"
 import {
-  UserPlus, Pencil, KeyRound, Ban, RotateCcw, Loader2, X, Copy, CheckCircle2, Users, FileText, FileSignature, Gift, PiggyBank, ArrowLeft, Plane, ChevronDown, PauseCircle,
+  UserPlus, Pencil, KeyRound, Ban, RotateCcw, Loader2, X, Copy, CheckCircle2, Users, FileText, FileSignature, Gift, PiggyBank, ArrowLeft, Plane, ChevronDown, PauseCircle, FileWarning, Receipt, Wallet,
 } from "lucide-react"
-import type { Empleado, Rol } from "@/lib/empleados/types"
+import type { Empleado, Rol, TipoVinculacion } from "@/lib/empleados/types"
 import { ROL_LABEL } from "@/lib/empleados/types"
 import { CAJAS_COMPENSACION } from "@/lib/empleados/catalogos-co"
 import { ConfirmDialog } from "../confirm-dialog"
@@ -13,7 +13,7 @@ import { ConfirmDialog } from "../confirm-dialog"
 type AccionConfirmable = "cerrar_contrato" | "suspender" | "resetear_clave"
 type Tone = "danger" | "warn" | "default"
 const CONFIRM_ACCIONES: Record<AccionConfirmable, (nombre: string) => { titulo: string; mensaje: string; confirmLabel: string; tone: Tone }> = {
-  cerrar_contrato: (n) => ({ titulo: "Cerrar contrato", mensaje: `¿Cerrar el contrato de ${n}? Se marcará como terminado con fecha de egreso hoy y no podrá volver a entrar al sistema.`, confirmLabel: "Cerrar contrato", tone: "danger" }),
+  cerrar_contrato: (n) => ({ titulo: "Cerrar contrato", mensaje: `¿Cerrar el contrato de ${n}? Se marcará como terminado con fecha de egreso hoy y no podrá volver a entrar al sistema. Si vas a liquidarlo, mejor hazlo desde "Liquidaciones": al generar la liquidación el contrato se cierra automáticamente.`, confirmLabel: "Cerrar contrato", tone: "danger" }),
   suspender: (n) => ({ titulo: "Suspender acceso", mensaje: `¿Suspender el acceso de ${n}? No podrá entrar al sistema hasta que lo reactives (el contrato sigue vigente).`, confirmLabel: "Suspender", tone: "warn" }),
   resetear_clave: (n) => ({ titulo: "Resetear contraseña", mensaje: `¿Generar una nueva contraseña temporal para ${n}? La contraseña actual dejará de funcionar.`, confirmLabel: "Generar contraseña", tone: "default" }),
 }
@@ -26,6 +26,7 @@ type FormState = {
   cargo: string
   caja_compensacion: string
   rol: Rol
+  tipo_vinculacion: TipoVinculacion
   lider_id: string
   fecha_ingreso: string
   fecha_egreso: string
@@ -34,6 +35,7 @@ type FormState = {
 
 const vacío: FormState = {
   cedula: "", nombre: "", email: "", cargo: "", caja_compensacion: "", rol: "empleado",
+  tipo_vinculacion: "empleado",
   lider_id: "", fecha_ingreso: "", fecha_egreso: "", particularidades: "",
 }
 
@@ -69,7 +71,8 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
     setForm({
       id: e.id, cedula: e.cedula, nombre: e.nombre, email: e.email, cargo: e.cargo ?? "",
       caja_compensacion: e.caja_compensacion ?? "",
-      rol: e.rol, lider_id: e.lider_id ?? "", fecha_ingreso: e.fecha_ingreso ?? "",
+      rol: e.rol, tipo_vinculacion: e.tipo_vinculacion ?? "empleado",
+      lider_id: e.lider_id ?? "", fecha_ingreso: e.fecha_ingreso ?? "",
       fecha_egreso: e.fecha_egreso ?? "", particularidades: e.particularidades ?? "",
     })
   }
@@ -102,7 +105,7 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
             id: form.id, accion: "actualizar",
             nombre: form.nombre, email: form.email, cargo: form.cargo || null,
             caja_compensacion: form.caja_compensacion || null,
-            rol: form.rol, lider_id: form.lider_id || null,
+            rol: form.rol, tipo_vinculacion: form.tipo_vinculacion, lider_id: form.lider_id || null,
             fecha_ingreso: form.fecha_ingreso || null, fecha_egreso: form.fecha_egreso || null,
             particularidades: form.particularidades || null,
           }),
@@ -117,7 +120,7 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
           body: JSON.stringify({
             cedula: form.cedula, nombre: form.nombre, email: form.email, cargo: form.cargo || null,
             caja_compensacion: form.caja_compensacion || null,
-            rol: form.rol, lider_id: form.lider_id || null,
+            rol: form.rol, tipo_vinculacion: form.tipo_vinculacion, lider_id: form.lider_id || null,
             fecha_ingreso: form.fecha_ingreso || null, particularidades: form.particularidades || null,
           }),
         })
@@ -187,6 +190,30 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
           >
             <Plane size={15} /> Vacaciones
           </Link>
+          <Link
+            href="/empleados/admin/liquidaciones"
+            className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-[#fff]/80 transition hover:bg-white/5"
+          >
+            <FileWarning size={15} /> Liquidaciones
+          </Link>
+          <Link
+            href="/empleados/admin/beneficios"
+            className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-[#fff]/80 transition hover:bg-white/5"
+          >
+            <Gift size={15} /> Beneficios
+          </Link>
+          <Link
+            href="/empleados/admin/freelance"
+            className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-[#fff]/80 transition hover:bg-white/5"
+          >
+            <Receipt size={15} /> Freelance
+          </Link>
+          <Link
+            href="/empleados/admin/contabilidad"
+            className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-[#fff]/80 transition hover:bg-white/5"
+          >
+            <Wallet size={15} /> Contabilidad
+          </Link>
           <button
             onClick={abrirNuevo}
             className="inline-flex items-center gap-2 rounded-full bg-[var(--cyan)] px-4 py-2 text-sm font-semibold text-[#04191b] transition hover:brightness-110"
@@ -245,7 +272,12 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
             {empleados.map((e) => (
               <tr key={e.id} className="border-t border-white/[0.06]">
                 <td className="px-4 py-3">
-                  <p className="font-medium text-[#fff]">{e.nombre}</p>
+                  <p className="flex items-center gap-1.5 font-medium text-[#fff]">
+                    {e.nombre}
+                    {e.tipo_vinculacion === "freelance" && (
+                      <span className="inline-flex items-center gap-1 rounded-full bg-[var(--cyan)]/15 px-1.5 py-0.5 text-[10px] font-semibold text-[var(--cyan)]"><Receipt size={9} /> Freelance</span>
+                    )}
+                  </p>
                   <p className="text-xs text-[#fff]/45">CC {e.cedula}</p>
                 </td>
                 <td className="px-4 py-3 text-[#fff]/70">{e.cargo || "—"}</td>
@@ -322,6 +354,13 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
                   <option value="empleado">Empleado</option>
                   <option value="lider">Líder</option>
                   <option value="ceo">CEO</option>
+                </select>
+              </label>
+              <label className="flex flex-col gap-1.5">
+                <span className={lblCls}>Vinculación</span>
+                <select value={form.tipo_vinculacion} onChange={(e) => setForm({ ...form, tipo_vinculacion: e.target.value as TipoVinculacion })} className={inputCls}>
+                  <option value="empleado">Empleado (laboral)</option>
+                  <option value="freelance">Freelance (por factura)</option>
                 </select>
               </label>
               <label className="flex flex-col gap-1.5 sm:col-span-2">

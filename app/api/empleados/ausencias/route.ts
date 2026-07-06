@@ -3,7 +3,7 @@ import { z } from "zod"
 import { getSession } from "@/lib/empleados/auth"
 import { portalConfigurado } from "@/lib/empleados/db"
 import { getEmpleadoVacacion, listSolicitudes, crearSolicitud } from "@/lib/empleados/ausencia-queries"
-import { calcularSaldoVacaciones, DIAS_ADELANTO } from "@/lib/empleados/ausencia"
+import { calcularSaldoVacaciones, DIAS_ADELANTO, esMediaJornada, DIAS_MEDIA_JORNADA } from "@/lib/empleados/ausencia"
 import { contarDiasHabiles, contarDiasCalendario } from "@/lib/empleados/festivos-co"
 
 export const runtime = "nodejs"
@@ -33,7 +33,7 @@ export async function GET() {
 const schema = z.object({
   tipo: z.enum([
     "vacaciones", "adelanto_vacaciones", "permiso_no_remunerado", "licencia_maternidad", "licencia_paternidad",
-    "licencia_luto", "dia_familia", "dia_votacion", "otra",
+    "licencia_luto", "dia_familia", "dia_votacion", "media_jornada_cumpleanos", "media_jornada_evento", "otra",
   ]),
   fecha_inicio: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   fecha_fin: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
@@ -54,8 +54,10 @@ export async function POST(req: Request) {
   }
   if (b.fecha_fin < b.fecha_inicio) return NextResponse.json({ error: "La fecha final no puede ser anterior a la inicial." }, { status: 400 })
 
-  const diasHabiles = contarDiasHabiles(b.fecha_inicio, b.fecha_fin)
-  const diasCalendario = contarDiasCalendario(b.fecha_inicio, b.fecha_fin)
+  // Media jornada (beneficio): 0.5 día hábil fijo, sobre un solo día.
+  const media = esMediaJornada(b.tipo)
+  const diasHabiles = media ? DIAS_MEDIA_JORNADA : contarDiasHabiles(b.fecha_inicio, b.fecha_fin)
+  const diasCalendario = media ? 1 : contarDiasCalendario(b.fecha_inicio, b.fecha_fin)
 
   try {
     const emp = await getEmpleadoVacacion(s.sub)

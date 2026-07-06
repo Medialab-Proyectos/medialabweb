@@ -66,6 +66,7 @@ const crearSchema = z.object({
   cargo: z.string().trim().max(120).optional().nullable(),
   caja_compensacion: z.string().trim().max(120).optional().nullable(),
   rol: z.enum(["ceo", "lider", "empleado"]).default("empleado"),
+  tipo_vinculacion: z.enum(["empleado", "freelance"]).default("empleado"),
   lider_id: z.string().uuid().optional().nullable(),
   fecha_ingreso: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional().nullable(),
   particularidades: z.string().trim().max(2000).optional().nullable(),
@@ -100,6 +101,7 @@ export async function POST(req: Request) {
     caja_compensacion: body.caja_compensacion ?? null,
     fecha_ingreso: body.fecha_ingreso ?? null,
     particularidades: body.particularidades ?? null,
+    tipo_vinculacion: body.tipo_vinculacion,
   })
 
   const correo = await enviarCredenciales(body.email, body.nombre, body.cedula, password)
@@ -116,6 +118,7 @@ const editarSchema = z.object({
   cargo: z.string().trim().max(120).nullable().optional(),
   caja_compensacion: z.string().trim().max(120).nullable().optional(),
   rol: z.enum(["ceo", "lider", "empleado"]).optional(),
+  tipo_vinculacion: z.enum(["empleado", "freelance"]).optional(),
   lider_id: z.string().uuid().nullable().optional(),
   fecha_ingreso: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullable().optional(),
   fecha_egreso: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullable().optional(),
@@ -170,7 +173,7 @@ export async function PATCH(req: Request) {
 
   // Actualizar datos generales
   const cambios: Record<string, unknown> = {}
-  for (const k of ["nombre", "email", "cargo", "caja_compensacion", "rol", "lider_id", "fecha_ingreso", "fecha_egreso", "particularidades"] as const) {
+  for (const k of ["nombre", "email", "cargo", "caja_compensacion", "rol", "tipo_vinculacion", "lider_id", "fecha_ingreso", "fecha_egreso", "particularidades"] as const) {
     if (body[k] !== undefined) cambios[k] = body[k]
   }
   const ingresoEf = (body.fecha_ingreso !== undefined ? body.fecha_ingreso : actual.fecha_ingreso) as string | null
