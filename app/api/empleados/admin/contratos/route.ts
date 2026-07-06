@@ -29,6 +29,8 @@ const schema = z.object({
   tipo_contrato: z.string().max(60).nullable().optional(),
   jornada: z.string().max(60).nullable().optional(),
   cargo: z.string().max(120).nullable().optional(),
+  lider_id: z.string().uuid().nullable().optional(),
+  fecha_ingreso: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullable().optional(),
   motivo: z.string().max(500).nullable().optional(),
 })
 
@@ -76,13 +78,19 @@ export async function POST(req: Request) {
       tipo_contrato: b.tipo_contrato ?? null,
       jornada: b.jornada ?? null,
       cargo: b.cargo ?? null,
+      lider_id: b.lider_id ?? null,
+      fecha_ingreso: b.fecha_ingreso ?? null,
       motivo: b.motivo ?? null,
       archivo_path: null,
       creado_por: g.session!.sub,
     })
-    // El cargo vigente del empleado se sincroniza con el del último contrato (para la
-    // tabla y los PDF de desprendibles/certificado).
-    if (b.cargo) await actualizarEmpleado(b.empleado_id, { cargo: b.cargo }).catch(() => {})
+    // Se sincronizan a la ficha del empleado el cargo, el líder (a quién reporta) y la
+    // fecha de ingreso, para la tabla, aprobaciones, certificado, vacaciones y liquidación.
+    const cambios: Record<string, unknown> = {}
+    if (b.cargo) cambios.cargo = b.cargo
+    if (b.lider_id !== undefined) cambios.lider_id = b.lider_id ?? null
+    if (b.fecha_ingreso) cambios.fecha_ingreso = b.fecha_ingreso
+    if (Object.keys(cambios).length) await actualizarEmpleado(b.empleado_id, cambios).catch(() => {})
     return NextResponse.json({ contrato })
   } catch (e) {
     const msg = e instanceof Error ? e.message : "Error"

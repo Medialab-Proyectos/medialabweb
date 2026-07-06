@@ -14,6 +14,8 @@ export type Contrato = {
   tipo_contrato: string | null    // término fijo / indefinido / obra o labor
   jornada: string | null
   cargo: string | null
+  lider_id: string | null         // a quién reporta (se sincroniza a empleados.lider_id)
+  fecha_ingreso: string | null    // fecha de ingreso (contrato inicial → empleados.fecha_ingreso)
   motivo: string | null
   archivo_path: string | null     // adjunto en Storage (contrato físico / otrosí)
   creado_por: string | null

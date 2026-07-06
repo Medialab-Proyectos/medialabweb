@@ -117,6 +117,8 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
     if (form.fecha_ingreso && form.fecha_egreso && form.fecha_egreso < form.fecha_ingreso) {
       return setError("La fecha de egreso no puede ser anterior a la de ingreso.")
     }
+    // Líder y fecha de ingreso: solo para vinculación por factura; en laboral los define el Contrato.
+    const porFactura = esVinculacionPorFactura(form.tipo_vinculacion)
     setError(""); setSaving(true)
     try {
       if (form.id) {
@@ -128,9 +130,11 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
             nombre: form.nombre, email: form.email,
             telefono: form.telefono || null, direccion: form.direccion || null, eps: form.eps || null,
             fondo_cesantias: form.fondo_cesantias || null, fondo_pension: form.fondo_pension || null,
-            rol: form.rol, tipo_vinculacion: form.tipo_vinculacion, lider_id: form.lider_id || null,
-            fecha_ingreso: form.fecha_ingreso || null, fecha_egreso: form.fecha_egreso || null,
-            fecha_fin_probable: esVinculacionPorFactura(form.tipo_vinculacion) ? (form.fecha_fin_probable || null) : null,
+            rol: form.rol, tipo_vinculacion: form.tipo_vinculacion,
+            lider_id: porFactura ? (form.lider_id || null) : undefined,
+            fecha_ingreso: porFactura ? (form.fecha_ingreso || null) : undefined,
+            fecha_egreso: form.fecha_egreso || null,
+            fecha_fin_probable: porFactura ? (form.fecha_fin_probable || null) : null,
           }),
         })
         const data = await res.json()
@@ -144,8 +148,9 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
             cedula: form.cedula, nombre: form.nombre, email: form.email,
             telefono: form.telefono || null, direccion: form.direccion || null, eps: form.eps || null,
             fondo_cesantias: form.fondo_cesantias || null, fondo_pension: form.fondo_pension || null,
-            rol: form.rol, tipo_vinculacion: form.tipo_vinculacion, lider_id: form.lider_id || null,
-            fecha_ingreso: form.fecha_ingreso || null,
+            rol: form.rol, tipo_vinculacion: form.tipo_vinculacion,
+            lider_id: porFactura ? (form.lider_id || null) : undefined,
+            fecha_ingreso: porFactura ? (form.fecha_ingreso || null) : undefined,
           }),
         })
         const data = await res.json()
@@ -486,22 +491,26 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
               </label>
               {form.tipo_vinculacion === "empleado" && (
                 <p className="rounded-lg bg-white/[0.03] px-3 py-2 text-[11px] text-[#fff]/45 sm:col-span-2">
-                  El <b className="text-[#fff]/70">cargo</b>, la <b className="text-[#fff]/70">modalidad</b> (indefinido/fijo/obra) y el <b className="text-[#fff]/70">salario</b> se definen en <b className="text-[#fff]/70">Contratos</b> (no aquí).
+                  El <b className="text-[#fff]/70">cargo</b>, la <b className="text-[#fff]/70">modalidad</b> (indefinido/fijo/obra), el <b className="text-[#fff]/70">salario</b>, el <b className="text-[#fff]/70">líder</b> (a quién reporta) y la <b className="text-[#fff]/70">fecha de ingreso</b> se definen en <b className="text-[#fff]/70">Contratos</b> (no aquí).
                 </p>
               )}
-              <label className="flex flex-col gap-1.5 sm:col-span-2">
-                <span className={lblCls}>Líder (a quién reporta)</span>
-                <select value={form.lider_id} onChange={(e) => setForm({ ...form, lider_id: e.target.value })} className={inputCls}>
-                  <option value="">— Sin líder (reporta al CEO) —</option>
-                  {posiblesLideres.filter((l) => l.id !== form.id).map((l) => (
-                    <option key={l.id} value={l.id}>{l.nombre} · {ROL_LABEL[l.rol]}</option>
-                  ))}
-                </select>
-              </label>
-              <label className="flex flex-col gap-1.5">
-                <span className={lblCls}>Fecha de ingreso</span>
-                <input type="date" value={form.fecha_ingreso} onChange={(e) => setForm({ ...form, fecha_ingreso: e.target.value })} className={inputCls} />
-              </label>
+              {esVinculacionPorFactura(form.tipo_vinculacion) && (
+                <>
+                  <label className="flex flex-col gap-1.5 sm:col-span-2">
+                    <span className={lblCls}>Líder (a quién reporta)</span>
+                    <select value={form.lider_id} onChange={(e) => setForm({ ...form, lider_id: e.target.value })} className={inputCls}>
+                      <option value="">— Sin líder (reporta al CEO) —</option>
+                      {posiblesLideres.filter((l) => l.id !== form.id).map((l) => (
+                        <option key={l.id} value={l.id}>{l.nombre} · {ROL_LABEL[l.rol]}</option>
+                      ))}
+                    </select>
+                  </label>
+                  <label className="flex flex-col gap-1.5">
+                    <span className={lblCls}>Fecha de ingreso</span>
+                    <input type="date" value={form.fecha_ingreso} onChange={(e) => setForm({ ...form, fecha_ingreso: e.target.value })} className={inputCls} />
+                  </label>
+                </>
+              )}
               {form.id && (
                 <label className="flex flex-col gap-1.5">
                   <span className={lblCls}>Fecha de egreso</span>

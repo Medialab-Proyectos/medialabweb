@@ -6,6 +6,7 @@ import {
   ArrowLeft, Loader2, Plus, Trash2, Save, FileSignature, Upload, Download, History,
 } from "lucide-react"
 import type { Empleado } from "@/lib/empleados/types"
+import { ROL_LABEL } from "@/lib/empleados/types"
 import { formatCOP } from "@/lib/empleados/desprendible"
 import {
   type Contrato, condicionesVigentes, totalMensualContrato, inicioContrato, TIPO_VERSION_LABEL,
@@ -38,6 +39,8 @@ export function ContratosAdminClient({ empleados }: { empleados: Empleado[] }) {
   const [tipoContrato, setTipoContrato] = useState("")
   const [jornada, setJornada] = useState("")
   const [cargo, setCargo] = useState("")
+  const [liderId, setLiderId] = useState("")
+  const [fechaIngreso, setFechaIngreso] = useState("")
   const [motivo, setMotivo] = useState("")
   const [archivo, setArchivo] = useState<File | null>(null)
   const archivoRef = useRef<HTMLInputElement>(null)
@@ -50,6 +53,10 @@ export function ContratosAdminClient({ empleados }: { empleados: Empleado[] }) {
     () => empleados.find((e) => e.id === empleadoId)?.fecha_ingreso ?? null,
     [empleados, empleadoId],
   )
+  const posiblesLideres = useMemo(
+    () => empleados.filter((e) => (e.rol === "lider" || e.rol === "ceo") && e.id !== empleadoId),
+    [empleados, empleadoId],
+  )
 
   function prefill(from: Contrato | null, emp?: Empleado) {
     // El contrato inicial arranca en la fecha de ingreso; un otrosí, hoy por defecto.
@@ -60,6 +67,8 @@ export function ContratosAdminClient({ empleados }: { empleados: Empleado[] }) {
     setTipoContrato(from?.tipo_contrato ?? "")
     setJornada(from?.jornada ?? "")
     setCargo(from?.cargo ?? emp?.cargo ?? "")
+    setLiderId(from?.lider_id ?? emp?.lider_id ?? "")
+    setFechaIngreso(from?.fecha_ingreso ?? emp?.fecha_ingreso ?? "")
     setMotivo("")
   }
 
@@ -105,6 +114,8 @@ export function ContratosAdminClient({ empleados }: { empleados: Empleado[] }) {
         tipo_contrato: tipoContrato || null,
         jornada: jornada || null,
         cargo: cargo || null,
+        lider_id: liderId || null,
+        fecha_ingreso: fechaIngreso || null,
         motivo: motivo || null,
       }
       const res = await fetch("/api/empleados/admin/contratos", {
@@ -234,6 +245,17 @@ export function ContratosAdminClient({ empleados }: { empleados: Empleado[] }) {
                 <Campo label="Auxilio de transporte"><MoneyInput value={auxilio} onChange={setAuxilio} className={inputCls} /></Campo>
                 <Campo label="Tipo de contrato"><input list="cat-tipos-contrato" value={tipoContrato} onChange={(e) => setTipoContrato(e.target.value)} placeholder="Elige o escribe…" className={inputCls} /></Campo>
                 <Campo label="Jornada"><input list="cat-jornadas" value={jornada} onChange={(e) => setJornada(e.target.value)} placeholder="Elige o escribe…" className={inputCls} /></Campo>
+                <Campo label="Líder (a quién reporta)">
+                  <select value={liderId} onChange={(e) => setLiderId(e.target.value)} className={inputCls}>
+                    <option value="">— Reporta al CEO —</option>
+                    {posiblesLideres.map((l) => <option key={l.id} value={l.id}>{l.nombre} · {ROL_LABEL[l.rol]}</option>)}
+                  </select>
+                </Campo>
+                {esInicial && (
+                  <Campo label="Fecha de ingreso">
+                    <input type="date" value={fechaIngreso} onChange={(e) => setFechaIngreso(e.target.value)} className={inputCls} />
+                  </Campo>
+                )}
                 <datalist id="cat-tipos-contrato">{TIPOS_CONTRATO.map((x) => <option key={x} value={x} />)}</datalist>
                 <datalist id="cat-jornadas">{JORNADAS.map((x) => <option key={x} value={x} />)}</datalist>
               </div>

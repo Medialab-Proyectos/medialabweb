@@ -6,7 +6,7 @@ const BUCKET = "contratos"
 
 // ── Contratos ────────────────────────────────────────────────────────────────
 const COLS =
-  "id,empleado_id,tipo,vigente_desde,salario_basico,auxilio_transporte,otros_devengos,tipo_contrato,jornada,cargo,motivo,archivo_path,creado_por,creado_en"
+  "id,empleado_id,tipo,vigente_desde,salario_basico,auxilio_transporte,otros_devengos,tipo_contrato,jornada,cargo,lider_id,fecha_ingreso,motivo,archivo_path,creado_por,creado_en"
 
 /** Historial completo de condiciones de un empleado (más reciente primero). */
 export async function listContratos(empleadoId: string) {
