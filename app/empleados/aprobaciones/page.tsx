@@ -1,5 +1,4 @@
 import Link from "next/link"
-import { redirect } from "next/navigation"
 import { ArrowLeft, ClipboardCheck } from "lucide-react"
 import { requireEmpleado } from "@/lib/empleados/auth"
 import { getEmpleadoById, listReportes } from "@/lib/empleados/queries"
@@ -15,8 +14,7 @@ export default async function AprobacionesPage() {
     getEmpleadoById(sesion.sub),
     esCEO ? Promise.resolve([]) : listReportes(sesion.sub),
   ])
-  // Solo el CEO o quien tenga personas a cargo entra aquí.
-  if (!esCEO && reportes.length === 0) redirect("/empleados/inicio")
+  const sinEquipo = !esCEO && reportes.length === 0
 
   return (
     <>
@@ -32,7 +30,18 @@ export default async function AprobacionesPage() {
         <p className="mb-8 text-sm text-[#fff]/55">
           Revisa y decide las solicitudes de {esCEO ? "todo el equipo" : "las personas a tu cargo"}.
         </p>
-        <AprobacionesClient />
+
+        {sinEquipo ? (
+          <div className="rounded-2xl border border-white/10 bg-white/[0.03] px-6 py-10 text-center text-sm text-[#fff]/60">
+            <p className="font-medium text-[#fff]/80">Aún no tienes personas a tu cargo.</p>
+            <p className="mt-1 text-[#fff]/55">
+              Cada empleado se asigna a un líder en su <b className="text-[#fff]/75">Contrato</b> (campo “Líder / a quién reporta”).
+              Cuando alguien te tenga como líder, sus solicitudes aparecerán aquí.
+            </p>
+          </div>
+        ) : (
+          <AprobacionesClient />
+        )}
       </main>
     </>
   )
