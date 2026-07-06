@@ -66,7 +66,8 @@ const crearSchema = z.object({
   cargo: z.string().trim().max(120).optional().nullable(),
   caja_compensacion: z.string().trim().max(120).optional().nullable(),
   rol: z.enum(["ceo", "lider", "empleado"]).default("empleado"),
-  tipo_vinculacion: z.enum(["empleado", "freelance"]).default("empleado"),
+  tipo_vinculacion: z.enum(["empleado", "freelance", "prestacion_servicios"]).default("empleado"),
+  tipo_contrato: z.string().trim().max(60).optional().nullable(),
   lider_id: z.string().uuid().optional().nullable(),
   fecha_ingreso: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional().nullable(),
   particularidades: z.string().trim().max(2000).optional().nullable(),
@@ -102,6 +103,7 @@ export async function POST(req: Request) {
     fecha_ingreso: body.fecha_ingreso ?? null,
     particularidades: body.particularidades ?? null,
     tipo_vinculacion: body.tipo_vinculacion,
+    tipo_contrato: body.tipo_contrato ?? null,
   })
 
   const correo = await enviarCredenciales(body.email, body.nombre, body.cedula, password)
@@ -118,7 +120,8 @@ const editarSchema = z.object({
   cargo: z.string().trim().max(120).nullable().optional(),
   caja_compensacion: z.string().trim().max(120).nullable().optional(),
   rol: z.enum(["ceo", "lider", "empleado"]).optional(),
-  tipo_vinculacion: z.enum(["empleado", "freelance"]).optional(),
+  tipo_vinculacion: z.enum(["empleado", "freelance", "prestacion_servicios"]).optional(),
+  tipo_contrato: z.string().trim().max(60).nullable().optional(),
   lider_id: z.string().uuid().nullable().optional(),
   fecha_ingreso: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullable().optional(),
   fecha_egreso: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullable().optional(),
@@ -174,7 +177,7 @@ export async function PATCH(req: Request) {
 
   // Actualizar datos generales
   const cambios: Record<string, unknown> = {}
-  for (const k of ["nombre", "email", "cargo", "caja_compensacion", "rol", "tipo_vinculacion", "lider_id", "fecha_ingreso", "fecha_egreso", "fecha_fin_probable", "particularidades"] as const) {
+  for (const k of ["nombre", "email", "cargo", "caja_compensacion", "rol", "tipo_vinculacion", "tipo_contrato", "lider_id", "fecha_ingreso", "fecha_egreso", "fecha_fin_probable", "particularidades"] as const) {
     if (body[k] !== undefined) cambios[k] = body[k]
   }
   const ingresoEf = (body.fecha_ingreso !== undefined ? body.fecha_ingreso : actual.fecha_ingreso) as string | null
