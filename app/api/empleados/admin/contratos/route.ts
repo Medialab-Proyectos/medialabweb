@@ -3,6 +3,7 @@ import { z } from "zod"
 import { getSession } from "@/lib/empleados/auth"
 import { portalConfigurado } from "@/lib/empleados/db"
 import { listContratos, crearContrato, eliminarContrato } from "@/lib/empleados/contrato-queries"
+import { actualizarEmpleado } from "@/lib/empleados/queries"
 
 export const runtime = "nodejs"
 
@@ -79,6 +80,9 @@ export async function POST(req: Request) {
       archivo_path: null,
       creado_por: g.session!.sub,
     })
+    // El cargo vigente del empleado se sincroniza con el del último contrato (para la
+    // tabla y los PDF de desprendibles/certificado).
+    if (b.cargo) await actualizarEmpleado(b.empleado_id, { cargo: b.cargo }).catch(() => {})
     return NextResponse.json({ contrato })
   } catch (e) {
     const msg = e instanceof Error ? e.message : "Error"

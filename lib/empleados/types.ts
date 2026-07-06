@@ -17,6 +17,10 @@ export type Empleado = {
   lider_id: string | null
   cargo: string | null
   caja_compensacion: string | null
+  telefono: string | null
+  direccion: string | null
+  eps: string | null
+  fondo_cesantias: string | null
   fecha_ingreso: string | null
   fecha_egreso: string | null
   particularidades: string | null

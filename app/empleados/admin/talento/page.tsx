@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Receipt, Gift, ClipboardCheck, Target, ArrowRight, Wrench } from "lucide-react"
+import { Receipt, Gift, ClipboardCheck, Target, ArrowRight, Wrench, Building2 } from "lucide-react"
 import { requireCEO } from "@/lib/empleados/auth"
 import { getEmpleadoById } from "@/lib/empleados/queries"
 import { PortalHeader } from "../../portal-header"
@@ -14,6 +14,7 @@ const HERRAMIENTAS = [
   { href: "/empleados/aprobaciones", icon: ClipboardCheck, color: "var(--magenta)", titulo: "Aprobaciones de ausencias", desc: "Vacaciones, permisos y licencias por aprobar." },
   { href: "/empleados/evaluar", icon: Target, color: "#8b5cf6", titulo: "Evaluaciones de desempeño", desc: "Evalúa a tu equipo por periodo." },
   { href: "/empleados/admin/herramientas", icon: Wrench, color: "#8b5cf6", titulo: "Herramientas", desc: "Cuentas compartidas y accesos del equipo; notifica al cambiar credenciales." },
+  { href: "/empleados/admin/empresa-config", icon: Building2, color: "var(--cyan)", titulo: "Datos de la empresa", desc: "Configuración común: caja de compensación de toda la empresa." },
 ]
 
 export default async function TalentoHumanoPage() {

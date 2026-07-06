@@ -3,7 +3,7 @@ import { getServiceClient } from "./db"
 import type { Empleado, Rol, EstadoEmpleado, TipoVinculacion } from "./types"
 
 const COLS =
-  "id,cedula,nombre,email,must_change_password,rol,lider_id,cargo,caja_compensacion,fecha_ingreso,fecha_egreso,particularidades,estado,tipo_vinculacion,tipo_contrato,convenio_path,fecha_fin_probable,creado_en,actualizado_en"
+  "id,cedula,nombre,email,must_change_password,rol,lider_id,cargo,caja_compensacion,telefono,direccion,eps,fondo_cesantias,fecha_ingreso,fecha_egreso,particularidades,estado,tipo_vinculacion,tipo_contrato,convenio_path,fecha_fin_probable,creado_en,actualizado_en"
 
 export async function getEmpleadoByCedula(cedula: string) {
   const sb = getServiceClient()
@@ -47,6 +47,10 @@ export type NuevoEmpleado = {
   lider_id: string | null
   cargo: string | null
   caja_compensacion: string | null
+  telefono?: string | null
+  direccion?: string | null
+  eps?: string | null
+  fondo_cesantias?: string | null
   fecha_ingreso: string | null
   particularidades: string | null
   tipo_vinculacion?: TipoVinculacion
@@ -71,6 +75,10 @@ export type CambiosEmpleado = Partial<{
   lider_id: string | null
   cargo: string | null
   caja_compensacion: string | null
+  telefono: string | null
+  direccion: string | null
+  eps: string | null
+  fondo_cesantias: string | null
   fecha_ingreso: string | null
   fecha_egreso: string | null
   particularidades: string | null
@@ -102,6 +110,27 @@ export async function subirConvenioEmpleado(empleadoId: string, bytes: Uint8Arra
   const { data, error } = await sb.from("empleados").update({ convenio_path: path }).eq("id", empleadoId).select(COLS).single()
   if (error) throw error
   return data as Empleado
+}
+
+// ── Configuración de empresa (fila única) ─────────────────────────────────────
+export type ConfigEmpresa = { caja_compensacion: string | null }
+
+export async function getConfigEmpresa(): Promise<ConfigEmpresa> {
+  const sb = getServiceClient()
+  const { data, error } = await sb.from("empresa_config").select("caja_compensacion").eq("id", 1).maybeSingle()
+  if (error) throw error
+  return (data as ConfigEmpresa) ?? { caja_compensacion: null }
+}
+
+export async function setConfigEmpresa(cambios: ConfigEmpresa) {
+  const sb = getServiceClient()
+  const { data, error } = await sb
+    .from("empresa_config")
+    .upsert({ id: 1, ...cambios })
+    .select("caja_compensacion")
+    .single()
+  if (error) throw error
+  return data as ConfigEmpresa
 }
 
 export async function getConvenioEmpleado(path: string): Promise<{ bytes: Uint8Array; mime: string }> {

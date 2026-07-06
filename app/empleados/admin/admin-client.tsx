@@ -7,12 +7,9 @@ import {
 } from "lucide-react"
 import type { Empleado, Rol, TipoVinculacion } from "@/lib/empleados/types"
 import { ROL_LABEL, esVinculacionPorFactura } from "@/lib/empleados/types"
-
-/** Tipos de contrato para vinculación laboral. */
-const TIPOS_CONTRATO_LABORAL = ["Término indefinido", "Término fijo", "Obra o labor"]
 import type { Beneficio, TipoBeneficio } from "@/lib/empleados/beneficio"
 import { TIPO_BENEFICIO_LABEL, ESTADO_BENEFICIO_LABEL } from "@/lib/empleados/beneficio"
-import { CAJAS_COMPENSACION } from "@/lib/empleados/catalogos-co"
+import { EPS_CO, FONDOS_CESANTIAS } from "@/lib/empleados/catalogos-co"
 import { ConfirmDialog } from "../confirm-dialog"
 
 /** Beneficios que el CEO puede asignar desde la tabla. */
@@ -31,11 +28,12 @@ type FormState = {
   cedula: string
   nombre: string
   email: string
-  cargo: string
-  caja_compensacion: string
+  telefono: string
+  direccion: string
+  eps: string
+  fondo_cesantias: string
   rol: Rol
   tipo_vinculacion: TipoVinculacion
-  tipo_contrato: string
   lider_id: string
   fecha_ingreso: string
   fecha_egreso: string
@@ -45,8 +43,8 @@ type FormState = {
 }
 
 const vacío: FormState = {
-  cedula: "", nombre: "", email: "", cargo: "", caja_compensacion: "", rol: "empleado",
-  tipo_vinculacion: "empleado", tipo_contrato: "",
+  cedula: "", nombre: "", email: "", telefono: "", direccion: "", eps: "", fondo_cesantias: "",
+  rol: "empleado", tipo_vinculacion: "empleado",
   lider_id: "", fecha_ingreso: "", fecha_egreso: "", fecha_fin_probable: "", convenio_path: null, particularidades: "",
 }
 
@@ -95,9 +93,9 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
   function abrirEditar(e: Empleado) {
     setError("")
     setForm({
-      id: e.id, cedula: e.cedula, nombre: e.nombre, email: e.email, cargo: e.cargo ?? "",
-      caja_compensacion: e.caja_compensacion ?? "",
-      rol: e.rol, tipo_vinculacion: e.tipo_vinculacion ?? "empleado", tipo_contrato: e.tipo_contrato ?? "",
+      id: e.id, cedula: e.cedula, nombre: e.nombre, email: e.email,
+      telefono: e.telefono ?? "", direccion: e.direccion ?? "", eps: e.eps ?? "", fondo_cesantias: e.fondo_cesantias ?? "",
+      rol: e.rol, tipo_vinculacion: e.tipo_vinculacion ?? "empleado",
       lider_id: e.lider_id ?? "", fecha_ingreso: e.fecha_ingreso ?? "",
       fecha_egreso: e.fecha_egreso ?? "", fecha_fin_probable: e.fecha_fin_probable ?? "",
       convenio_path: e.convenio_path ?? null, particularidades: e.particularidades ?? "",
@@ -130,10 +128,9 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             id: form.id, accion: "actualizar",
-            nombre: form.nombre, email: form.email, cargo: form.cargo || null,
-            caja_compensacion: form.caja_compensacion || null,
+            nombre: form.nombre, email: form.email,
+            telefono: form.telefono || null, direccion: form.direccion || null, eps: form.eps || null, fondo_cesantias: form.fondo_cesantias || null,
             rol: form.rol, tipo_vinculacion: form.tipo_vinculacion, lider_id: form.lider_id || null,
-            tipo_contrato: form.tipo_vinculacion === "empleado" ? (form.tipo_contrato || null) : null,
             fecha_ingreso: form.fecha_ingreso || null, fecha_egreso: form.fecha_egreso || null,
             fecha_fin_probable: esVinculacionPorFactura(form.tipo_vinculacion) ? (form.fecha_fin_probable || null) : null,
             particularidades: form.particularidades || null,
@@ -147,10 +144,9 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            cedula: form.cedula, nombre: form.nombre, email: form.email, cargo: form.cargo || null,
-            caja_compensacion: form.caja_compensacion || null,
+            cedula: form.cedula, nombre: form.nombre, email: form.email,
+            telefono: form.telefono || null, direccion: form.direccion || null, eps: form.eps || null, fondo_cesantias: form.fondo_cesantias || null,
             rol: form.rol, tipo_vinculacion: form.tipo_vinculacion, lider_id: form.lider_id || null,
-            tipo_contrato: form.tipo_vinculacion === "empleado" ? (form.tipo_contrato || null) : null,
             fecha_ingreso: form.fecha_ingreso || null, particularidades: form.particularidades || null,
           }),
         })
@@ -469,8 +465,22 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
                 <input required type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="correo@ejemplo.com" className={inputCls} />
               </label>
               <label className="flex flex-col gap-1.5">
-                <span className={lblCls}>Cargo</span>
-                <input value={form.cargo} onChange={(e) => setForm({ ...form, cargo: e.target.value })} placeholder="Ej: Diseñador UX" className={inputCls} />
+                <span className={lblCls}>Teléfono</span>
+                <input value={form.telefono} onChange={(e) => setForm({ ...form, telefono: e.target.value })} placeholder="Celular" className={inputCls} />
+              </label>
+              <label className="flex flex-col gap-1.5">
+                <span className={lblCls}>Dirección</span>
+                <input value={form.direccion} onChange={(e) => setForm({ ...form, direccion: e.target.value })} placeholder="Dirección de residencia" className={inputCls} />
+              </label>
+              <label className="flex flex-col gap-1.5">
+                <span className={lblCls}>EPS (salud)</span>
+                <input list="cat-eps" value={form.eps} onChange={(e) => setForm({ ...form, eps: e.target.value })} placeholder="Elige o escribe…" className={inputCls} />
+                <datalist id="cat-eps">{EPS_CO.map((x) => <option key={x} value={x} />)}</datalist>
+              </label>
+              <label className="flex flex-col gap-1.5">
+                <span className={lblCls}>Fondo de cesantías</span>
+                <input list="cat-cesantias" value={form.fondo_cesantias} onChange={(e) => setForm({ ...form, fondo_cesantias: e.target.value })} placeholder="Elige o escribe…" className={inputCls} />
+                <datalist id="cat-cesantias">{FONDOS_CESANTIAS.map((x) => <option key={x} value={x} />)}</datalist>
               </label>
               <label className="flex flex-col gap-1.5">
                 <span className={lblCls}>Rol</span>
@@ -489,13 +499,9 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
                 </select>
               </label>
               {form.tipo_vinculacion === "empleado" && (
-                <label className="flex flex-col gap-1.5">
-                  <span className={lblCls}>Tipo de contrato</span>
-                  <select value={form.tipo_contrato} onChange={(e) => setForm({ ...form, tipo_contrato: e.target.value })} className={inputCls}>
-                    <option value="">— Selecciona —</option>
-                    {TIPOS_CONTRATO_LABORAL.map((t) => <option key={t} value={t}>{t}</option>)}
-                  </select>
-                </label>
+                <p className="rounded-lg bg-white/[0.03] px-3 py-2 text-[11px] text-[#fff]/45 sm:col-span-2">
+                  El <b className="text-[#fff]/70">cargo</b>, la <b className="text-[#fff]/70">modalidad</b> (indefinido/fijo/obra) y el <b className="text-[#fff]/70">salario</b> se definen en <b className="text-[#fff]/70">Contratos</b> (no aquí).
+                </p>
               )}
               <label className="flex flex-col gap-1.5 sm:col-span-2">
                 <span className={lblCls}>Líder (a quién reporta)</span>
@@ -538,11 +544,6 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
                   </div>
                 </div>
               )}
-              <label className="flex flex-col gap-1.5">
-                <span className={lblCls}>Caja de compensación</span>
-                <input list="cat-cajas" value={form.caja_compensacion} onChange={(e) => setForm({ ...form, caja_compensacion: e.target.value })} placeholder="Elige o escribe…" className={inputCls} />
-                <datalist id="cat-cajas">{CAJAS_COMPENSACION.map((x) => <option key={x} value={x} />)}</datalist>
-              </label>
               <label className="flex flex-col gap-1.5 sm:col-span-2">
                 <span className={lblCls}>Particularidades (otrosíes, cambios de cargo…)</span>
                 <textarea rows={3} value={form.particularidades} onChange={(e) => setForm({ ...form, particularidades: e.target.value })} placeholder="Notas relevantes del contrato" className={inputCls} />
