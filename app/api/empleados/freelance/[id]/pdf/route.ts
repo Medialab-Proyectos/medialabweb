@@ -23,7 +23,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
   const emp = await getEmpleadoById(factura.empleado_id)
   if (!emp) return NextResponse.json({ error: "Empleado no encontrado." }, { status: 404 })
 
-  const bytes = await generarFacturaFreelancePDF(factura, { nombre: emp.nombre, cedula: emp.cedula })
+  const bytes = await generarFacturaFreelancePDF(factura, { nombre: emp.nombre, cedula: emp.cedula, telefono: emp.telefono, email: emp.email })
   const nombreArchivo = `factura-${factura.numero || `${factura.anio}-${factura.mes}`}-${emp.cedula}.pdf`
   return new Response(Buffer.from(bytes), {
     headers: {

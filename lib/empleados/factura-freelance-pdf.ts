@@ -35,7 +35,7 @@ const linec = rgb(0.85, 0.86, 0.88)
 /** Genera la factura / cuenta de cobro del freelance (emitida por él a MediaLab). */
 export async function generarFacturaFreelancePDF(
   f: FacturaFreelance,
-  emisor: { nombre: string; cedula: string },
+  emisor: { nombre: string; cedula: string; telefono?: string | null; email?: string | null },
 ): Promise<Uint8Array> {
   const pdf = await PDFDocument.create()
   const page: PDFPage = pdf.addPage([595.28, 841.89]) // A4
@@ -130,7 +130,10 @@ export async function generarFacturaFreelancePDF(
   hline(firmaTop, M, M + 200, dark, 0.8)
   T(M, firmaTop + 14, emisor.nombre, 9, bold)
   T(M, firmaTop + 27, `C.C. ${emisor.cedula}`, 8, font, gray)
-  if (f.firmado) T(M, firmaTop + 40, `Firmada digitalmente el ${fechaCorta(f.firmado_en)}.`, 7.5, font, gray)
+  let sy = firmaTop + 40
+  const contacto = [emisor.email, emisor.telefono].filter(Boolean).join("   -   ")
+  if (contacto) { T(M, sy, contacto, 7.5, font, gray); sy += 12 }
+  if (f.firmado) T(M, sy, `Firmada digitalmente el ${fechaCorta(f.firmado_en)}.`, 7.5, font, gray)
 
   const generado = new Date().toLocaleString("es-CO", { timeZone: "America/Bogota" })
   T(M, H - 34, `Documento generado por el Portal de MediaLab el ${generado}.`, 7, font, gray)
