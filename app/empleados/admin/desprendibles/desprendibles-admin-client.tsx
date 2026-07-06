@@ -157,7 +157,7 @@ export function DesprendiblesAdminClient({ empleados }: { empleados: Empleado[] 
       const data = await res.json()
       if (!res.ok) throw new Error(data.error)
       const vigente = condicionesVigentes((data.contratos ?? []) as Contrato[])
-      if (!vigente) return setError("Este empleado no tiene contrato definido todavía.")
+      if (!vigente) return setError("Este empleado aún no tiene contrato (condiciones salariales) registrado. Créalo en Gestión de empleados → Contratos, o escribe el salario a mano abajo.")
       setBasico(Number(vigente.salario_basico) || 0)
       if (vigente.cargo) setCargo(vigente.cargo)
       const nuevos: Linea[] = []

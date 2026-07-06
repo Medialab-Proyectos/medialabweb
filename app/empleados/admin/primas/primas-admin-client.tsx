@@ -66,7 +66,7 @@ export function PrimasAdminClient({ empleados }: { empleados: Empleado[] }) {
       const data = await res.json()
       if (!res.ok) throw new Error(data.error)
       const vigente = condicionesVigentes((data.contratos ?? []) as Contrato[])
-      if (!vigente) return setError("Este empleado no tiene contrato definido todavía.")
+      if (!vigente) return setError("Este empleado aún no tiene contrato (condiciones salariales) registrado. Créalo en Gestión de empleados → Contratos, o escribe el salario a mano abajo.")
       const b = (Number(vigente.salario_basico) || 0) + (Number(vigente.auxilio_transporte) || 0)
       setBase(b)
       setValor(calcularPrima({ basico: vigente.salario_basico, auxilio: vigente.auxilio_transporte, dias }))

@@ -153,7 +153,7 @@ export function LiquidacionesAdminClient({ empleados, empleadoInicial = "" }: { 
       const data = await res.json()
       if (!res.ok) throw new Error(data.error)
       const vigente = condicionesVigentes((data.contratos ?? []) as Contrato[])
-      if (!vigente) return setError("Este empleado no tiene contrato definido todavía.")
+      if (!vigente) return setError("Este empleado aún no tiene contrato (condiciones salariales) registrado. Créalo en Gestión de empleados → Contratos, o escribe el salario a mano abajo.")
 
       const basico = Number(vigente.salario_basico) || 0
       const aux = Number(vigente.auxilio_transporte) || 0

@@ -71,7 +71,7 @@ export function CesantiasAdminClient({ empleados }: { empleados: Empleado[] }) {
       const data = await res.json()
       if (!res.ok) throw new Error(data.error)
       const vigente = condicionesVigentes((data.contratos ?? []) as Contrato[])
-      if (!vigente) return setError("Este empleado no tiene contrato definido todavía.")
+      if (!vigente) return setError("Este empleado aún no tiene contrato (condiciones salariales) registrado. Créalo en Gestión de empleados → Contratos, o escribe el salario a mano abajo.")
       const b = (Number(vigente.salario_basico) || 0) + (Number(vigente.auxilio_transporte) || 0)
       const ces = calcularCesantias(b, dias)
       setBase(b); setCesantias(ces); setIntereses(calcularInteresesCesantias(ces, dias))
