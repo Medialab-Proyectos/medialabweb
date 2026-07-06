@@ -39,13 +39,12 @@ type FormState = {
   fecha_egreso: string
   fecha_fin_probable: string
   convenio_path: string | null
-  particularidades: string
 }
 
 const vacío: FormState = {
   cedula: "", nombre: "", email: "", telefono: "", direccion: "", eps: "", fondo_cesantias: "",
   rol: "empleado", tipo_vinculacion: "empleado",
-  lider_id: "", fecha_ingreso: "", fecha_egreso: "", fecha_fin_probable: "", convenio_path: null, particularidades: "",
+  lider_id: "", fecha_ingreso: "", fecha_egreso: "", fecha_fin_probable: "", convenio_path: null,
 }
 
 const inputCls =
@@ -98,7 +97,7 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
       rol: e.rol, tipo_vinculacion: e.tipo_vinculacion ?? "empleado",
       lider_id: e.lider_id ?? "", fecha_ingreso: e.fecha_ingreso ?? "",
       fecha_egreso: e.fecha_egreso ?? "", fecha_fin_probable: e.fecha_fin_probable ?? "",
-      convenio_path: e.convenio_path ?? null, particularidades: e.particularidades ?? "",
+      convenio_path: e.convenio_path ?? null,
     })
   }
 
@@ -133,7 +132,6 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
             rol: form.rol, tipo_vinculacion: form.tipo_vinculacion, lider_id: form.lider_id || null,
             fecha_ingreso: form.fecha_ingreso || null, fecha_egreso: form.fecha_egreso || null,
             fecha_fin_probable: esVinculacionPorFactura(form.tipo_vinculacion) ? (form.fecha_fin_probable || null) : null,
-            particularidades: form.particularidades || null,
           }),
         })
         const data = await res.json()
@@ -147,7 +145,7 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
             cedula: form.cedula, nombre: form.nombre, email: form.email,
             telefono: form.telefono || null, direccion: form.direccion || null, eps: form.eps || null, fondo_cesantias: form.fondo_cesantias || null,
             rol: form.rol, tipo_vinculacion: form.tipo_vinculacion, lider_id: form.lider_id || null,
-            fecha_ingreso: form.fecha_ingreso || null, particularidades: form.particularidades || null,
+            fecha_ingreso: form.fecha_ingreso || null,
           }),
         })
         const data = await res.json()
@@ -544,10 +542,6 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
                   </div>
                 </div>
               )}
-              <label className="flex flex-col gap-1.5 sm:col-span-2">
-                <span className={lblCls}>Particularidades (otrosíes, cambios de cargo…)</span>
-                <textarea rows={3} value={form.particularidades} onChange={(e) => setForm({ ...form, particularidades: e.target.value })} placeholder="Notas relevantes del contrato" className={inputCls} />
-              </label>
             </div>
 
             {error && <p className="mt-3 rounded-lg bg-red-500/10 px-3 py-2 text-sm text-red-300">{error}</p>}
