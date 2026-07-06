@@ -122,6 +122,7 @@ const editarSchema = z.object({
   lider_id: z.string().uuid().nullable().optional(),
   fecha_ingreso: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullable().optional(),
   fecha_egreso: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullable().optional(),
+  fecha_fin_probable: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullable().optional(),
   particularidades: z.string().trim().max(2000).nullable().optional(),
 })
 
@@ -173,7 +174,7 @@ export async function PATCH(req: Request) {
 
   // Actualizar datos generales
   const cambios: Record<string, unknown> = {}
-  for (const k of ["nombre", "email", "cargo", "caja_compensacion", "rol", "tipo_vinculacion", "lider_id", "fecha_ingreso", "fecha_egreso", "particularidades"] as const) {
+  for (const k of ["nombre", "email", "cargo", "caja_compensacion", "rol", "tipo_vinculacion", "lider_id", "fecha_ingreso", "fecha_egreso", "fecha_fin_probable", "particularidades"] as const) {
     if (body[k] !== undefined) cambios[k] = body[k]
   }
   const ingresoEf = (body.fecha_ingreso !== undefined ? body.fecha_ingreso : actual.fecha_ingreso) as string | null

@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { useEffect, useMemo, useRef, useState } from "react"
 import {
-  UserPlus, Pencil, KeyRound, Ban, RotateCcw, Loader2, X, Copy, CheckCircle2, Users, FileText, FileSignature, Gift, PiggyBank, ArrowLeft, Plane, ChevronDown, PauseCircle, FileWarning, Receipt, Search,
+  UserPlus, Pencil, KeyRound, Ban, RotateCcw, Loader2, X, Copy, CheckCircle2, Users, FileText, FileSignature, Gift, PiggyBank, ArrowLeft, Plane, ChevronDown, PauseCircle, FileWarning, Receipt, Search, Upload,
 } from "lucide-react"
 import type { Empleado, Rol, TipoVinculacion } from "@/lib/empleados/types"
 import { ROL_LABEL } from "@/lib/empleados/types"
@@ -35,13 +35,15 @@ type FormState = {
   lider_id: string
   fecha_ingreso: string
   fecha_egreso: string
+  fecha_fin_probable: string
+  convenio_path: string | null
   particularidades: string
 }
 
 const vacío: FormState = {
   cedula: "", nombre: "", email: "", cargo: "", caja_compensacion: "", rol: "empleado",
   tipo_vinculacion: "empleado",
-  lider_id: "", fecha_ingreso: "", fecha_egreso: "", particularidades: "",
+  lider_id: "", fecha_ingreso: "", fecha_egreso: "", fecha_fin_probable: "", convenio_path: null, particularidades: "",
 }
 
 const inputCls =
@@ -63,6 +65,8 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
   const [benefItems, setBenefItems] = useState<Beneficio[]>([])
   const [benefLoading, setBenefLoading] = useState(false)
   const [benefBusy, setBenefBusy] = useState<TipoBeneficio | null>(null)
+  const [subiendoConvenio, setSubiendoConvenio] = useState(false)
+  const convenioRef = useRef<HTMLInputElement>(null)
 
   const visibles = useMemo(() => {
     const t = q.trim().toLowerCase()
@@ -91,7 +95,8 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
       caja_compensacion: e.caja_compensacion ?? "",
       rol: e.rol, tipo_vinculacion: e.tipo_vinculacion ?? "empleado",
       lider_id: e.lider_id ?? "", fecha_ingreso: e.fecha_ingreso ?? "",
-      fecha_egreso: e.fecha_egreso ?? "", particularidades: e.particularidades ?? "",
+      fecha_egreso: e.fecha_egreso ?? "", fecha_fin_probable: e.fecha_fin_probable ?? "",
+      convenio_path: e.convenio_path ?? null, particularidades: e.particularidades ?? "",
     })
   }
 
@@ -125,6 +130,7 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
             caja_compensacion: form.caja_compensacion || null,
             rol: form.rol, tipo_vinculacion: form.tipo_vinculacion, lider_id: form.lider_id || null,
             fecha_ingreso: form.fecha_ingreso || null, fecha_egreso: form.fecha_egreso || null,
+            fecha_fin_probable: form.fecha_fin_probable || null,
             particularidades: form.particularidades || null,
           }),
         })
@@ -234,6 +240,23 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
       setAviso(err instanceof Error ? err.message : "Error al actualizar.")
     } finally {
       setBenefBusy(null)
+    }
+  }
+
+  async function subirConvenio(file: File) {
+    if (!form?.id) return
+    setError(""); setSubiendoConvenio(true)
+    const fd = new FormData(); fd.append("archivo", file)
+    try {
+      const res = await fetch(`/api/empleados/admin/empleado/${form.id}/convenio`, { method: "POST", body: fd })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error)
+      upsertLocal(data.empleado)
+      setForm((f) => (f ? { ...f, convenio_path: (data.empleado as Empleado).convenio_path } : f))
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Error al subir el convenio.")
+    } finally {
+      setSubiendoConvenio(false)
     }
   }
 
@@ -482,6 +505,26 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
                   <span className={lblCls}>Fecha de egreso</span>
                   <input type="date" value={form.fecha_egreso} onChange={(e) => setForm({ ...form, fecha_egreso: e.target.value })} className={inputCls} />
                 </label>
+              )}
+              <label className="flex flex-col gap-1.5">
+                <span className={lblCls}>Fecha probable de finalización</span>
+                <input type="date" value={form.fecha_fin_probable} onChange={(e) => setForm({ ...form, fecha_fin_probable: e.target.value })} className={inputCls} />
+              </label>
+              {form.id && (
+                <div className="flex flex-col gap-1.5 sm:col-span-2">
+                  <span className={lblCls}>Contrato / convenio (documento)</span>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <input ref={convenioRef} type="file" accept="application/pdf,image/*" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) subirConvenio(f); e.target.value = "" }} />
+                    <button type="button" onClick={() => convenioRef.current?.click()} disabled={subiendoConvenio} className="inline-flex items-center gap-2 rounded-lg border border-white/15 px-3 py-2 text-sm text-[#fff]/80 hover:bg-white/5 disabled:opacity-60">
+                      {subiendoConvenio ? <Loader2 size={14} className="animate-spin" /> : <Upload size={14} />} {form.convenio_path ? "Reemplazar" : "Adjuntar"}
+                    </button>
+                    {form.convenio_path && (
+                      <a href={`/api/empleados/admin/empleado/${form.id}/convenio`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 rounded-lg border border-white/15 px-3 py-2 text-sm text-[#fff]/80 hover:bg-white/5">
+                        <FileSignature size={14} /> Ver convenio
+                      </a>
+                    )}
+                  </div>
+                </div>
               )}
               <label className="flex flex-col gap-1.5 sm:col-span-2">
                 <span className={lblCls}>Particularidades (otrosíes, cambios de cargo…)</span>

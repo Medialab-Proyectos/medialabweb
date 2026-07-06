@@ -22,6 +22,8 @@ export type Empleado = {
   particularidades: string | null
   estado: EstadoEmpleado
   tipo_vinculacion: TipoVinculacion
+  convenio_path: string | null
+  fecha_fin_probable: string | null
   creado_en: string
   actualizado_en: string
 }
