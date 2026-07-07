@@ -3,16 +3,17 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import Link from "next/link"
 import {
-  ArrowLeft, Loader2, Plus, Trash2, Save, FileSignature, Upload, Download, History,
+  ArrowLeft, Loader2, Plus, Trash2, Save, FileSignature, Upload, Download, History, Pencil, Send, Clock, CheckCircle2, FileDown, ListChecks,
 } from "lucide-react"
 import type { Empleado, Rol, TipoVinculacion, FreelanceModo } from "@/lib/empleados/types"
 import { ROL_LABEL, FREELANCE_MODO_LABEL, esVinculacionPorFactura } from "@/lib/empleados/types"
 import { formatCOP } from "@/lib/empleados/desprendible"
 import { formatMoneda, type Moneda } from "@/lib/empleados/freelance"
 import {
-  type Contrato, condicionesVigentes, totalMensualContrato, inicioContrato, TIPO_VERSION_LABEL, contratoEsPorFactura,
+  type Contrato, condicionesVigentes, condicionesVigentesFirmadas, esFirmado, totalMensualContrato, inicioContrato, TIPO_VERSION_LABEL, ESTADO_CONTRATO_LABEL, contratoEsPorFactura,
 } from "@/lib/empleados/contrato"
 import { TIPOS_CONTRATO, JORNADAS } from "@/lib/empleados/catalogos-co"
+import type { RolFunciones } from "@/lib/empleados/roles-funciones"
 import { MoneyInput } from "../../money-input"
 import { ConfirmDialog } from "../../confirm-dialog"
 
@@ -24,7 +25,7 @@ const OTROS_SUGERIDOS = ["Auxilio conectividad", "Auxilio de rodamiento", "Bonif
 const inputCls = "w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm text-[#fff] outline-none transition focus:border-[var(--cyan)]/60"
 const lblCls = "text-[11px] font-semibold uppercase tracking-wide text-[#fff]/50"
 
-export function ContratosAdminClient({ empleados }: { empleados: Empleado[] }) {
+export function ContratosAdminClient({ empleados, config }: { empleados: Empleado[]; config: { caja_compensacion: string | null; arl: string | null } }) {
   const [empleadoId, setEmpleadoId] = useState("")
   const [contratos, setContratos] = useState<Contrato[]>([])
   const [cargando, setCargando] = useState(false)
@@ -32,7 +33,8 @@ export function ContratosAdminClient({ empleados }: { empleados: Empleado[] }) {
   const [error, setError] = useState("")
   const [msg, setMsg] = useState("")
 
-  // Form de nueva versión
+  // Form de nueva versión (o edición de una existente)
+  const [editId, setEditId] = useState<string | null>(null)   // id de la versión que se edita (null = nueva)
   const [vigenteDesde, setVigenteDesde] = useState(hoy)
   const [rol, setRol] = useState<Rol>("empleado")
   const [vinculacion, setVinculacion] = useState<TipoVinculacion>("empleado")
@@ -42,19 +44,36 @@ export function ContratosAdminClient({ empleados }: { empleados: Empleado[] }) {
   const [flModo, setFlModo] = useState<"" | FreelanceModo>("")
   const [flTarifa, setFlTarifa] = useState(0)
   const [flMoneda, setFlMoneda] = useState<Moneda>("COP")
+  const [flMeses, setFlMeses] = useState(1)
   const [tipoContrato, setTipoContrato] = useState("")
   const [jornada, setJornada] = useState("")
   const [cargo, setCargo] = useState("")
+  const [descripcion, setDescripcion] = useState("")
+  const [condicionesAdic, setCondicionesAdic] = useState("")
+  const [rolFuncionesId, setRolFuncionesId] = useState("")
+  const [rolesFunciones, setRolesFunciones] = useState<RolFunciones[]>([])
   const [liderId, setLiderId] = useState("")
   const [fechaIngreso, setFechaIngreso] = useState("")
+  const [fechaFinProbable, setFechaFinProbable] = useState("")
   const [motivo, setMotivo] = useState("")
   const [archivo, setArchivo] = useState<File | null>(null)
+  // Cómo se firma: "enviar" = generar y avisar al empleado; "subir" = el CEO ya lo tiene firmado.
+  const [firmaMetodo, setFirmaMetodo] = useState<"enviar" | "subir">("enviar")
   const archivoRef = useRef<HTMLInputElement>(null)
   const [confirmarEliminar, setConfirmarEliminar] = useState<string | null>(null)
   const [eliminando, setEliminando] = useState(false)
+  const [finalizarFecha, setFinalizarFecha] = useState(hoy)
+  const [finalizando, setFinalizando] = useState(false)
 
-  const vigente = useMemo(() => condicionesVigentes(contratos), [contratos])
+  // Condiciones vigentes = última versión FIRMADA (las pendientes no mandan).
+  const vigente = useMemo(() => condicionesVigentesFirmadas(contratos), [contratos])
+  const pendientes = useMemo(() => contratos.filter((c) => !esFirmado(c)), [contratos])
+  // Al editar una versión existente NO estamos definiendo el inicial; solo si no hay contratos.
   const esInicial = contratos.length === 0
+  const editando = editId != null
+  const editEsInicial = useMemo(() => contratos.find((c) => c.id === editId)?.tipo === "inicial", [contratos, editId])
+  // El bloque de "definir/registrar" actúa como inicial solo cuando de verdad no hay contratos.
+  const modoInicial = esInicial && !editando
   const empSel = useMemo(() => empleados.find((e) => e.id === empleadoId) ?? null, [empleados, empleadoId])
   const fechaIngresoSel = empSel?.fecha_ingreso ?? null
   const posiblesLideres = useMemo(
@@ -63,6 +82,8 @@ export function ContratosAdminClient({ empleados }: { empleados: Empleado[] }) {
   )
 
   function prefill(from: Contrato | null, emp?: Empleado) {
+    // Prefill del form "nueva versión" (no de edición): parte del contrato vigente.
+    setEditId(null)
     // El contrato inicial arranca en la fecha de ingreso; un otrosí, hoy por defecto.
     setVigenteDesde(from ? hoy : (emp?.fecha_ingreso ?? hoy))
     setRol(from?.rol ?? emp?.rol ?? "empleado")
@@ -73,12 +94,59 @@ export function ContratosAdminClient({ empleados }: { empleados: Empleado[] }) {
     setFlModo(from?.freelance_modo ?? emp?.freelance_modo ?? "")
     setFlTarifa(from ? Number(from.freelance_tarifa) || 0 : Number(emp?.freelance_tarifa) || 0)
     setFlMoneda(from?.freelance_moneda ?? emp?.freelance_moneda ?? "COP")
+    setFlMeses(from?.freelance_meses ?? 1)
     setTipoContrato(from?.tipo_contrato ?? "")
     setJornada(from?.jornada ?? "")
     setCargo(from?.cargo ?? emp?.cargo ?? "")
+    setDescripcion(from?.descripcion ?? "")
+    setCondicionesAdic(from?.condiciones_adicionales ?? "")
+    setRolFuncionesId(from?.rol_funciones_id ?? "")
     setLiderId(from?.lider_id ?? emp?.lider_id ?? "")
     setFechaIngreso(from?.fecha_ingreso ?? emp?.fecha_ingreso ?? "")
+    setFechaFinProbable(from?.fecha_fin_probable ?? emp?.fecha_fin_probable ?? "")
     setMotivo("")
+  }
+
+  // Catálogo de funciones por rol (para el otrosí / contrato).
+  useEffect(() => {
+    fetch("/api/empleados/admin/roles-funciones")
+      .then((r) => r.json())
+      .then((d) => setRolesFunciones(d.roles ?? []))
+      .catch(() => {})
+  }, [])
+
+  /** Carga una versión existente en el formulario para EDITARLA en el sitio. */
+  function editarVersion(c: Contrato) {
+    setError(""); setMsg("")
+    setEditId(c.id)
+    setVigenteDesde(c.vigente_desde)
+    setRol(c.rol ?? "empleado")
+    setVinculacion(c.tipo_vinculacion ?? "empleado")
+    setBasico(Number(c.salario_basico) || 0)
+    setAuxilio(Number(c.auxilio_transporte) || 0)
+    setOtros((c.otros_devengos ?? []).map((l) => ({ concepto: l.concepto, valor: Number(l.valor) || 0 })))
+    setFlModo(c.freelance_modo ?? "")
+    setFlTarifa(Number(c.freelance_tarifa) || 0)
+    setFlMoneda(c.freelance_moneda ?? "COP")
+    setFlMeses(c.freelance_meses ?? 1)
+    setTipoContrato(c.tipo_contrato ?? "")
+    setJornada(c.jornada ?? "")
+    setCargo(c.cargo ?? "")
+    setDescripcion(c.descripcion ?? "")
+    setCondicionesAdic(c.condiciones_adicionales ?? "")
+    setRolFuncionesId(c.rol_funciones_id ?? "")
+    setLiderId(c.lider_id ?? "")
+    setFechaIngreso(c.fecha_ingreso ?? "")
+    setFechaFinProbable(c.fecha_fin_probable ?? "")
+    setMotivo(c.motivo ?? "")
+    setArchivo(null)
+    if (archivoRef.current) archivoRef.current.value = ""
+    if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" })
+  }
+
+  function cancelarEdicion() {
+    prefill(condicionesVigentes(contratos), empSel ?? undefined)
+    setError(""); setMsg("")
   }
 
   async function cargar(empId: string) {
@@ -108,56 +176,114 @@ export function ContratosAdminClient({ empleados }: { empleados: Empleado[] }) {
 
   const porFactura = esVinculacionPorFactura(vinculacion)
 
+  const condicionesBody = () => ({
+    rol,
+    tipo_vinculacion: vinculacion,
+    salario_basico: porFactura ? 0 : Number(basico) || 0,
+    auxilio_transporte: porFactura ? 0 : Number(auxilio) || 0,
+    otros_devengos: porFactura ? [] : otros.filter((l) => l.concepto.trim()).map((l) => ({ concepto: l.concepto, valor: Number(l.valor) || 0 })),
+    freelance_modo: porFactura ? (flModo || null) : null,
+    freelance_tarifa: porFactura ? (Number(flTarifa) || 0) : null,
+    freelance_moneda: porFactura ? flMoneda : null,
+    freelance_meses: porFactura && flModo === "por_proyecto" ? (Number(flMeses) || 1) : null,
+    tipo_contrato: porFactura ? null : (tipoContrato || null),
+    jornada: porFactura ? null : (jornada || null),
+    cargo: cargo || null,
+    descripcion: descripcion || null,
+    condiciones_adicionales: condicionesAdic || null,
+    rol_funciones_id: rolFuncionesId || null,
+    lider_id: liderId || null,
+    fecha_fin_probable: fechaFinProbable || null,
+  })
+
+  async function subirArchivoA(id: string) {
+    if (!archivo) return
+    const fd = new FormData()
+    fd.append("archivo", archivo)
+    const r2 = await fetch(`/api/empleados/admin/contratos/${id}/archivo`, { method: "POST", body: fd })
+    const d2 = await r2.json().catch(() => ({}))
+    if (!r2.ok) throw new Error(d2.error || "El contrato se guardó pero falló la subida del documento.")
+  }
+
   async function guardar() {
     if (!empleadoId) return setError("Selecciona un empleado.")
-    if (esInicial && !fechaIngreso) return setError("Indica la fecha de ingreso.")
-    if (!esInicial && !vigenteDesde) return setError("Indica la fecha de vigencia del ajuste.")
-    if (porFactura && !flModo) return setError("Elige el modo de pago del freelance (por hora, por mes o valor fijo).")
-    if (!esInicial && !motivo.trim()) return setError("Describe el motivo del ajuste (otrosí).")
-    if (!esInicial && !archivo) return setError("Adjunta el documento del otrosí (PDF). Es obligatorio para registrar un cambio.")
+    if (porFactura && !flModo) return setError("Elige el modo de pago (por hora, por mes, valor fijo o por proyecto).")
+
     setError(""); setMsg(""); setGuardando(true)
     try {
+      // ── Editar una versión existente (corregir el inicial o un otrosí) ──────
+      if (editId) {
+        if (!vigenteDesde) { setGuardando(false); return setError("Indica la fecha de vigencia.") }
+        const res = await fetch("/api/empleados/admin/contratos", {
+          method: "PATCH", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ accion: "editar", id: editId, vigente_desde: vigenteDesde, motivo: motivo || null, fecha_ingreso: fechaIngreso || null, ...condicionesBody() }),
+        })
+        const data = await res.json()
+        if (!res.ok) throw new Error(data.error)
+        if (archivo) await subirArchivoA(editId)
+        setArchivo(null); if (archivoRef.current) archivoRef.current.value = ""
+        setEditId(null)
+        setMsg("✓ Contrato actualizado.")
+        await cargar(empleadoId)
+        return
+      }
+
+      // ── Crear (contrato inicial u otrosí) ──────────────────────────────────
+      if (modoInicial && !fechaIngreso) { setGuardando(false); return setError("Indica la fecha de ingreso.") }
+      if (!modoInicial && !vigenteDesde) { setGuardando(false); return setError("Indica la fecha de vigencia del ajuste.") }
+      if (!modoInicial && !motivo.trim()) { setGuardando(false); return setError("Describe el motivo del ajuste (otrosí).") }
+      // El documento firmado es obligatorio para que el contrato quede válido/vigente.
+      // Se sube ahora (el CEO ya lo tiene) o lo firma el empleado (se le avisa).
+      if (firmaMetodo === "subir" && !archivo) { setGuardando(false); return setError("Adjunta el documento firmado, o elige «Generar y enviar al empleado».") }
+
       const body = {
         empleado_id: empleadoId,
-        tipo: esInicial ? "inicial" : "otrosi",
+        tipo: modoInicial ? "inicial" : "otrosi",
         // En el inicial, la fecha de ingreso ES la vigencia; en un otrosí, la fecha del ajuste.
-        vigente_desde: esInicial ? (fechaIngreso || hoy) : vigenteDesde,
-        rol,
-        tipo_vinculacion: vinculacion,
-        salario_basico: porFactura ? 0 : Number(basico) || 0,
-        auxilio_transporte: porFactura ? 0 : Number(auxilio) || 0,
-        otros_devengos: porFactura ? [] : otros.filter((l) => l.concepto.trim()).map((l) => ({ concepto: l.concepto, valor: Number(l.valor) || 0 })),
-        freelance_modo: porFactura ? (flModo || null) : null,
-        freelance_tarifa: porFactura ? (Number(flTarifa) || 0) : null,
-        freelance_moneda: porFactura ? flMoneda : null,
-        tipo_contrato: porFactura ? null : (tipoContrato || null),
-        jornada: porFactura ? null : (jornada || null),
-        cargo: cargo || null,
-        lider_id: liderId || null,
-        fecha_ingreso: esInicial ? (fechaIngreso || null) : null,
+        vigente_desde: modoInicial ? (fechaIngreso || hoy) : vigenteDesde,
+        fecha_ingreso: modoInicial ? (fechaIngreso || null) : null,
         motivo: motivo || null,
+        enviar_para_firma: firmaMetodo === "enviar",
+        ...condicionesBody(),
       }
       const res = await fetch("/api/empleados/admin/contratos", {
         method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error)
-      // Subir el adjunto (obligatorio en otrosí, opcional en inicial)
-      if (archivo && data.contrato?.id) {
-        const fd = new FormData()
-        fd.append("archivo", archivo)
-        const r2 = await fetch(`/api/empleados/admin/contratos/${data.contrato.id}/archivo`, { method: "POST", body: fd })
-        const d2 = await r2.json().catch(() => ({}))
-        if (!r2.ok) throw new Error(d2.error || "El contrato se guardó pero falló la subida del documento.")
-      }
+      // Si el CEO ya tiene el firmado, se sube ahora y la versión queda firmada (activa).
+      if (firmaMetodo === "subir" && archivo && data.contrato?.id) await subirArchivoA(data.contrato.id)
       setArchivo(null)
       if (archivoRef.current) archivoRef.current.value = ""
-      setMsg(esInicial ? "✓ Contrato inicial definido." : "✓ Otrosí registrado con su documento en el historial.")
+      setMsg(
+        firmaMetodo === "subir"
+          ? "✓ Contrato registrado y firmado (activo)."
+          : "✓ Contrato generado. Se avisó al empleado para que lo descargue, firme y suba. Queda pendiente de firma.",
+      )
       await cargar(empleadoId)
     } catch (e) {
       setError(e instanceof Error ? e.message : "Error al guardar.")
     } finally {
       setGuardando(false)
+    }
+  }
+
+  async function finalizar(fechaFin: string | null) {
+    if (!vigente) return
+    setError(""); setMsg(""); setFinalizando(true)
+    try {
+      const res = await fetch("/api/empleados/admin/contratos", {
+        method: "PATCH", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ accion: "finalizar", id: vigente.id, fecha_fin: fechaFin }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error)
+      setMsg(fechaFin ? "✓ Contrato finalizado." : "✓ Contrato reabierto.")
+      await cargar(empleadoId)
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Error al finalizar.")
+    } finally {
+      setFinalizando(false)
     }
   }
 
@@ -197,9 +323,14 @@ export function ContratosAdminClient({ empleados }: { empleados: Empleado[] }) {
       <Link href="/empleados/admin" className="mb-6 inline-flex items-center gap-1.5 text-sm text-[#fff]/55 hover:text-[#fff]">
         <ArrowLeft size={15} /> Volver al panel
       </Link>
-      <div className="mb-6 flex items-center gap-2.5">
-        <FileSignature size={20} className="text-[var(--cyan)]" />
-        <h1 className="font-display text-xl font-bold">Contratos y condiciones</h1>
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-2.5">
+          <FileSignature size={20} className="text-[var(--cyan)]" />
+          <h1 className="font-display text-xl font-bold">Contratos y condiciones</h1>
+        </div>
+        <Link href="/empleados/admin/roles-funciones" className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-[#fff]/80 transition hover:bg-white/5">
+          <ListChecks size={15} /> Funciones por rol
+        </Link>
       </div>
 
       <label className="mb-6 flex max-w-md flex-col gap-1.5">
@@ -223,6 +354,12 @@ export function ContratosAdminClient({ empleados }: { empleados: Empleado[] }) {
         <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
           {/* Columna principal: condiciones vigentes + form */}
           <div className="flex flex-col gap-6">
+            {/* Aviso de versiones pendientes de firma */}
+            {pendientes.length > 0 && (
+              <div className="rounded-2xl border border-amber-400/25 bg-amber-400/[0.06] px-4 py-3 text-sm text-amber-100/90">
+                <b>{pendientes.length}</b> versión{pendientes.length === 1 ? "" : "es"} <b>pendiente{pendientes.length === 1 ? "" : "s"} de firma</b> — no {pendientes.length === 1 ? "es vigente" : "son vigentes"} hasta subir el documento firmado. {!vigente && "Mientras no se firme el contrato inicial, el empleado no puede activar la plataforma."} Genera el PDF en el historial y súbelo firmado (o lo firma el empleado).
+              </div>
+            )}
             {/* Condiciones vigentes */}
             {vigente && (
               <section className="rounded-2xl border border-[var(--cyan)]/25 bg-[var(--cyan)]/[0.05] p-5">
@@ -264,18 +401,56 @@ export function ContratosAdminClient({ empleados }: { empleados: Empleado[] }) {
                     </div>
                   </>
                 )}
+
+                {/* Objeto del contrato, seguridad social de la empresa y fechas */}
+                {vigente.descripcion && (
+                  <div className="mt-3 border-t border-white/10 pt-3">
+                    <p className="text-[11px] text-[#fff]/45">Objeto del contrato</p>
+                    <p className="text-sm text-[#fff]/80">{vigente.descripcion}</p>
+                  </div>
+                )}
+                <div className="mt-3 grid grid-cols-2 gap-x-4 gap-y-1.5 border-t border-white/10 pt-3 text-[11px] text-[#fff]/55 sm:grid-cols-3">
+                  {config.arl && <span>ARL: <b className="text-[#fff]/80">{config.arl}</b></span>}
+                  {config.caja_compensacion && <span>Caja: <b className="text-[#fff]/80">{config.caja_compensacion}</b></span>}
+                  {vigente.fecha_fin_probable && <span>Fin probable: <b className="text-[#fff]/80">{vigente.fecha_fin_probable}</b></span>}
+                </div>
+
+                {/* Finalizar / reabrir contrato */}
+                <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-white/10 pt-3">
+                  {vigente.fecha_fin ? (
+                    <>
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-red-500/10 px-2.5 py-1 text-[11px] font-semibold text-red-300">Contrato finalizado el {vigente.fecha_fin}</span>
+                      <button onClick={() => finalizar(null)} disabled={finalizando} className="text-[11px] text-[#fff]/55 hover:text-[#fff] disabled:opacity-50">Reabrir</button>
+                    </>
+                  ) : (
+                    <>
+                      <span className="text-[11px] text-[#fff]/45">Finalizar contrato:</span>
+                      <input type="date" value={finalizarFecha} onChange={(e) => setFinalizarFecha(e.target.value)} className="rounded-lg border border-white/10 bg-black/30 px-2 py-1 text-[11px] text-[#fff] outline-none focus:border-[var(--cyan)]/60" />
+                      <button onClick={() => finalizar(finalizarFecha)} disabled={finalizando} className="inline-flex items-center gap-1.5 rounded-lg border border-red-400/40 bg-red-500/10 px-2.5 py-1 text-[11px] font-semibold text-red-300 hover:bg-red-500/20 disabled:opacity-50">
+                        {finalizando ? <Loader2 size={11} className="animate-spin" /> : null} Finalizar
+                      </button>
+                    </>
+                  )}
+                </div>
               </section>
             )}
 
-            {/* Form nueva versión */}
-            <section className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-              <h2 className="mb-1 text-sm font-semibold text-[#fff]/85">
-                {esInicial ? "Definir contrato inicial" : "Registrar otrosí / ajuste"}
-              </h2>
+            {/* Form nueva versión / edición */}
+            <section className={`rounded-2xl border p-5 ${editando ? "border-amber-400/40 bg-amber-400/[0.05]" : "border-white/10 bg-white/[0.03]"}`}>
+              <div className="mb-1 flex items-center justify-between gap-2">
+                <h2 className="text-sm font-semibold text-[#fff]/85">
+                  {editando ? "Editar esta versión del contrato" : modoInicial ? "Definir contrato inicial" : "Registrar otrosí / ajuste"}
+                </h2>
+                {editando && (
+                  <button onClick={cancelarEdicion} className="text-[11px] text-[#fff]/55 hover:text-[#fff]">Cancelar edición</button>
+                )}
+              </div>
               <p className="mb-4 text-xs text-[#fff]/45">
-                {esInicial
-                  ? "Este empleado aún no tiene contrato. Define las condiciones de arranque."
-                  : "Se guarda como una nueva versión con su fecha de vigencia; las anteriores quedan en el historial."}
+                {editando
+                  ? "Estás corrigiendo una versión ya registrada; se guardan los cambios sobre la misma fila."
+                  : modoInicial
+                    ? "Este empleado aún no tiene contrato. Define las condiciones de arranque."
+                    : "Se guarda como una nueva versión con su fecha de vigencia; las anteriores quedan en el historial."}
               </p>
 
               {/* Datos personales del empleado (vienen de su ficha; aquí solo se muestran). */}
@@ -288,10 +463,13 @@ export function ContratosAdminClient({ empleados }: { empleados: Empleado[] }) {
               )}
 
               <div className="grid gap-3 sm:grid-cols-2">
-                {esInicial ? (
+                {modoInicial ? (
                   <Campo label="Fecha de ingreso"><input type="date" value={fechaIngreso} onChange={(e) => setFechaIngreso(e.target.value)} className={inputCls} /></Campo>
                 ) : (
-                  <Campo label="Vigente desde (fecha del ajuste)"><input type="date" value={vigenteDesde} onChange={(e) => setVigenteDesde(e.target.value)} className={inputCls} /></Campo>
+                  <Campo label={editando ? "Vigente desde" : "Vigente desde (fecha del ajuste)"}><input type="date" value={vigenteDesde} onChange={(e) => setVigenteDesde(e.target.value)} className={inputCls} /></Campo>
+                )}
+                {editando && editEsInicial && (
+                  <Campo label="Fecha de ingreso"><input type="date" value={fechaIngreso} onChange={(e) => setFechaIngreso(e.target.value)} className={inputCls} /></Campo>
                 )}
                 <Campo label="Cargo"><input value={cargo} onChange={(e) => setCargo(e.target.value)} className={inputCls} /></Campo>
                 <Campo label="Vinculación">
@@ -330,7 +508,7 @@ export function ContratosAdminClient({ empleados }: { empleados: Empleado[] }) {
                 /* Pago acordado del freelance / prestación de servicios */
                 <div className="mt-4 rounded-lg border border-white/10 bg-white/[0.03] p-3">
                   <p className="mb-1 text-[11px] font-semibold uppercase tracking-wide text-[var(--cyan)]">Pago acordado</p>
-                  <p className="mb-3 text-[11px] text-[#fff]/45">El freelance lo verá en su portal (solo lectura). Si es por mes o valor fijo, se le precarga al crear su factura.</p>
+                  <p className="mb-3 text-[11px] text-[#fff]/45">El freelance lo verá en su portal (solo lectura). Si es por mes o valor fijo, se le precarga al crear su factura; por hora, factura las horas × tarifa.</p>
                   <div className="grid gap-3 sm:grid-cols-3">
                     <Campo label="Modo">
                       <select value={flModo} onChange={(e) => setFlModo(e.target.value as "" | FreelanceModo)} className={inputCls}>
@@ -338,9 +516,10 @@ export function ContratosAdminClient({ empleados }: { empleados: Empleado[] }) {
                         <option value="por_hora">{FREELANCE_MODO_LABEL.por_hora}</option>
                         <option value="por_mes">{FREELANCE_MODO_LABEL.por_mes}</option>
                         <option value="fijo">{FREELANCE_MODO_LABEL.fijo}</option>
+                        <option value="por_proyecto">{FREELANCE_MODO_LABEL.por_proyecto}</option>
                       </select>
                     </Campo>
-                    <Campo label={flModo === "por_hora" ? "Valor por hora" : flModo === "por_mes" ? "Valor por mes" : "Valor"}>
+                    <Campo label={flModo === "por_hora" ? "Valor por hora" : flModo === "por_mes" ? "Valor por mes" : flModo === "por_proyecto" ? "Valor total del proyecto" : "Valor"}>
                       <MoneyInput value={flTarifa} onChange={setFlTarifa} className={inputCls} />
                     </Campo>
                     <Campo label="Moneda">
@@ -350,6 +529,18 @@ export function ContratosAdminClient({ empleados }: { empleados: Empleado[] }) {
                       </select>
                     </Campo>
                   </div>
+                  {flModo === "por_proyecto" && (
+                    <div className="mt-3">
+                      <Campo label="Dividir el proyecto en (nº de meses)">
+                        <input type="number" min={1} max={120} value={flMeses || ""} onChange={(e) => setFlMeses(Number(e.target.value) || 1)} className={inputCls} placeholder="1 = pago único" />
+                      </Campo>
+                      <p className="mt-1 text-[11px] text-[#fff]/45">
+                        {flMeses > 1
+                          ? <>El valor total se paga en {flMeses} cuotas de <b className="text-[#fff]/70">{formatMoneda(Math.round((Number(flTarifa) || 0) / flMeses), flMoneda)}</b> / mes.</>
+                          : "1 mes = pago único al terminar el proyecto."}
+                      </p>
+                    </div>
+                  )}
                 </div>
               ) : (
                 <>
@@ -383,38 +574,101 @@ export function ContratosAdminClient({ empleados }: { empleados: Empleado[] }) {
                 </>
               )}
 
-              {!esInicial && (
+              {/* Descripción / objeto del contrato + fecha probable de fin */}
+              <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                <label className="flex flex-col gap-1.5 sm:col-span-2">
+                  <span className={lblCls}>Descripción / objeto del contrato</span>
+                  <textarea rows={2} value={descripcion} onChange={(e) => setDescripcion(e.target.value)} placeholder="Objeto, alcance o notas del contrato…" className={inputCls} />
+                </label>
+                <Campo label="Fecha probable de finalización (opcional)">
+                  <input type="date" value={fechaFinProbable} onChange={(e) => setFechaFinProbable(e.target.value)} className={inputCls} />
+                </Campo>
+              </div>
+
+              {/* Funciones por rol (catálogo) + condiciones adicionales */}
+              <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                <label className="flex flex-col gap-1.5">
+                  <span className={lblCls}>Funciones del cargo (perfil de rol)</span>
+                  <select value={rolFuncionesId} onChange={(e) => setRolFuncionesId(e.target.value)} className={inputCls}>
+                    <option value="">— Sin funciones / no aplica —</option>
+                    {rolesFunciones.map((r) => <option key={r.id} value={r.id}>{r.nombre}</option>)}
+                  </select>
+                  <span className="text-[11px] text-[#fff]/40">Se insertan en el contrato/otrosí generado. Edítalas en <b className="text-[#fff]/55">Funciones por rol</b>.</span>
+                </label>
+                {rolFuncionesId && (
+                  <div className="rounded-lg border border-white/10 bg-black/20 p-3 text-[11px] text-[#fff]/55">
+                    <p className="mb-1 font-semibold text-[#fff]/70">Vista previa</p>
+                    <ul className="flex list-disc flex-col gap-0.5 pl-4">
+                      {(rolesFunciones.find((r) => r.id === rolFuncionesId)?.funciones ?? []).slice(0, 4).map((f, i) => <li key={i} className="line-clamp-1">{f}</li>)}
+                      {(rolesFunciones.find((r) => r.id === rolFuncionesId)?.funciones.length ?? 0) > 4 && <li className="list-none text-[#fff]/40">…y más</li>}
+                    </ul>
+                  </div>
+                )}
+                <label className="flex flex-col gap-1.5 sm:col-span-2">
+                  <span className={lblCls}>Condiciones adicionales (cláusulas del otrosí)</span>
+                  <textarea rows={3} value={condicionesAdic} onChange={(e) => setCondicionesAdic(e.target.value)} placeholder="Ej.: régimen de actividades freelance, cambios de exclusividad, beneficios especiales… (se agregan como cláusula al documento)" className={inputCls} />
+                </label>
+              </div>
+
+              {!modoInicial && !editando && (
                 <div className="mt-4">
                   <span className={lblCls}>Motivo del ajuste</span>
                   <input value={motivo} onChange={(e) => setMotivo(e.target.value)} placeholder="Aumento salarial, nuevo auxilio…" className={`${inputCls} mt-1.5`} />
                 </div>
               )}
+              {editando && (
+                <div className="mt-4">
+                  <span className={lblCls}>Motivo (opcional)</span>
+                  <input value={motivo} onChange={(e) => setMotivo(e.target.value)} placeholder="Motivo del ajuste…" className={`${inputCls} mt-1.5`} />
+                </div>
+              )}
 
               {/* Documento adjunto: obligatorio en otrosí, opcional en inicial */}
-              <div className="mt-4">
-                <span className={lblCls}>
-                  {esInicial ? "Documento del contrato (opcional)" : "Documento del otrosí (obligatorio)"}
-                </span>
-                <input
-                  ref={archivoRef}
-                  type="file"
-                  accept="application/pdf,image/*"
-                  onChange={(e) => setArchivo(e.target.files?.[0] ?? null)}
-                  className="mt-1.5 block w-full text-sm text-[#fff]/70 file:mr-3 file:rounded-lg file:border-0 file:bg-white/10 file:px-3 file:py-2 file:text-sm file:font-medium file:text-[#fff] hover:file:bg-white/15"
-                />
-                <p className="mt-1 text-[11px] text-[#fff]/40">
-                  {esInicial
-                    ? "Puedes subir el contrato físico ahora o más adelante."
-                    : "Adjunta el PDF del otrosí firmado. Sin documento no se puede registrar el cambio."}
-                </p>
-              </div>
+              {editando ? (
+                <div className="mt-4">
+                  <span className={lblCls}>Reemplazar documento firmado (opcional)</span>
+                  <input
+                    ref={archivoRef}
+                    type="file"
+                    accept="application/pdf,image/*"
+                    onChange={(e) => setArchivo(e.target.files?.[0] ?? null)}
+                    className="mt-1.5 block w-full text-sm text-[#fff]/70 file:mr-3 file:rounded-lg file:border-0 file:bg-white/10 file:px-3 file:py-2 file:text-sm file:font-medium file:text-[#fff] hover:file:bg-white/15"
+                  />
+                  <p className="mt-1 text-[11px] text-[#fff]/40">Sube el documento firmado si quieres reemplazar el adjunto actual (queda firmado/activo).</p>
+                </div>
+              ) : (
+                /* Firma del contrato: el documento firmado es obligatorio para activarlo */
+                <div className="mt-4 rounded-lg border border-white/10 bg-black/20 p-3">
+                  <span className={lblCls}>Firma del contrato</span>
+                  <p className="mb-2 mt-1 text-[11px] text-[#fff]/45">El contrato solo queda válido y vigente con el documento firmado. Elige cómo:</p>
+                  <div className="flex flex-col gap-2">
+                    <label className="flex items-start gap-2 text-sm text-[#fff]/80">
+                      <input type="radio" name="firma" checked={firmaMetodo === "enviar"} onChange={() => setFirmaMetodo("enviar")} className="mt-1 accent-[var(--cyan)]" />
+                      <span>Generar y <b className="text-[#fff]">enviar al empleado</b> para firma — se le avisa por correo; queda pendiente hasta que lo suba firmado.</span>
+                    </label>
+                    <label className="flex items-start gap-2 text-sm text-[#fff]/80">
+                      <input type="radio" name="firma" checked={firmaMetodo === "subir"} onChange={() => setFirmaMetodo("subir")} className="mt-1 accent-[var(--cyan)]" />
+                      <span>Ya lo tengo <b className="text-[#fff]">firmado</b> — subirlo ahora (queda activo). Útil para reconstruir historia laboral.</span>
+                    </label>
+                  </div>
+                  {firmaMetodo === "subir" && (
+                    <input
+                      ref={archivoRef}
+                      type="file"
+                      accept="application/pdf,image/*"
+                      onChange={(e) => setArchivo(e.target.files?.[0] ?? null)}
+                      className="mt-3 block w-full text-sm text-[#fff]/70 file:mr-3 file:rounded-lg file:border-0 file:bg-white/10 file:px-3 file:py-2 file:text-sm file:font-medium file:text-[#fff] hover:file:bg-white/15"
+                    />
+                  )}
+                </div>
+              )}
 
               {error && <p className="mt-3 rounded-lg bg-red-500/10 px-3 py-2 text-xs text-red-300">{error}</p>}
               {msg && <p className="mt-3 rounded-lg bg-emerald-400/10 px-3 py-2 text-xs text-emerald-200">{msg}</p>}
 
               <div className="mt-4 flex items-center gap-3">
                 <button onClick={guardar} disabled={guardando} className="inline-flex items-center justify-center gap-2 rounded-lg bg-[var(--cyan)] px-4 py-2.5 text-sm font-semibold text-[#04191b] transition hover:brightness-110 disabled:opacity-60">
-                  {guardando ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />} {esInicial ? "Definir contrato" : "Registrar otrosí"}
+                  {guardando ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />} {editando ? "Guardar cambios" : modoInicial ? "Definir contrato" : "Registrar otrosí"}
                 </button>
                 <span className="text-sm text-[#fff]/50">
                   {porFactura
@@ -439,10 +693,22 @@ export function ContratosAdminClient({ empleados }: { empleados: Empleado[] }) {
                   {contratos.map((c) => (
                     <li key={c.id} className="rounded-xl border border-white/10 bg-black/20 p-3">
                       <div className="flex items-center justify-between">
-                        <span className="rounded-full bg-white/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[#fff]/70">{TIPO_VERSION_LABEL[c.tipo]}</span>
-                        <button onClick={() => setConfirmarEliminar(c.id)} className="rounded p-1 text-red-300/60 hover:bg-red-500/10 hover:text-red-300"><Trash2 size={13} /></button>
+                        <span className="flex items-center gap-1.5">
+                          <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${editId === c.id ? "bg-amber-400/20 text-amber-200" : "bg-white/10 text-[#fff]/70"}`}>{TIPO_VERSION_LABEL[c.tipo]}</span>
+                          {esFirmado(c) ? (
+                            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-400/10 px-1.5 py-0.5 text-[9px] font-semibold text-emerald-300"><CheckCircle2 size={9} /> {ESTADO_CONTRATO_LABEL.firmado}</span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 rounded-full bg-amber-400/10 px-1.5 py-0.5 text-[9px] font-semibold text-amber-300"><Clock size={9} /> {ESTADO_CONTRATO_LABEL.pendiente_firma}</span>
+                          )}
+                        </span>
+                        <span className="flex items-center gap-0.5">
+                          <button onClick={() => editarVersion(c)} title="Editar esta versión" className="rounded p-1 text-[#fff]/50 hover:bg-white/5 hover:text-[#fff]"><Pencil size={13} /></button>
+                          <button onClick={() => setConfirmarEliminar(c.id)} title="Eliminar" className="rounded p-1 text-red-300/60 hover:bg-red-500/10 hover:text-red-300"><Trash2 size={13} /></button>
+                        </span>
                       </div>
                       <p className="mt-2 text-xs text-[#fff]/50">Vigente desde {inicioContrato(c, fechaIngresoSel)}</p>
+                      {c.firmado_por && <p className="text-[11px] text-[#fff]/40">Firmado por {c.firmado_por === "empleado" ? "el empleado" : "el CEO"}</p>}
+                      {c.fecha_fin && <p className="text-[11px] font-semibold text-red-300/80">Finalizado el {c.fecha_fin}</p>}
                       {contratoEsPorFactura(c) ? (
                         <>
                           <p className="mt-1 text-sm text-[#fff]/85">{formatMoneda(Number(c.freelance_tarifa) || 0, c.freelance_moneda ?? "COP")}</p>
@@ -455,10 +721,13 @@ export function ContratosAdminClient({ empleados }: { empleados: Empleado[] }) {
                         </>
                       )}
                       {c.motivo && <p className="mt-1 text-xs italic text-[#fff]/55">“{c.motivo}”</p>}
-                      <div className="mt-2 border-t border-white/10 pt-2">
+                      <div className="mt-2 flex flex-col gap-1.5 border-t border-white/10 pt-2">
+                        <a href={`/api/empleados/contratos/${c.id}/generado`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-[11px] text-[#fff]/60 hover:text-[#fff]">
+                          <FileDown size={12} /> Generar contrato (PDF para firmar)
+                        </a>
                         {c.archivo_path ? (
                           <a href={`/api/empleados/contratos/${c.id}/archivo`} className="inline-flex items-center gap-1.5 text-[11px] text-[var(--cyan)] hover:underline">
-                            <Download size={12} /> Descargar adjunto
+                            <Download size={12} /> Descargar firmado
                           </a>
                         ) : (
                           <SubirBoton onFile={(f) => subirAdjunto(c.id, f)} />

@@ -1,13 +1,13 @@
 import "server-only"
 import { getServiceClient } from "./db"
-import { condicionesVigentes, type Contrato, type PrimaDoc, type CesantiasDoc } from "./contrato"
+import { condicionesVigentesFirmadas, esFirmado, type Contrato, type PrimaDoc, type CesantiasDoc } from "./contrato"
 import { actualizarEmpleado } from "./queries"
 
 const BUCKET = "contratos"
 
 // ── Contratos ────────────────────────────────────────────────────────────────
 const COLS =
-  "id,empleado_id,tipo,vigente_desde,rol,tipo_vinculacion,salario_basico,auxilio_transporte,otros_devengos,freelance_modo,freelance_tarifa,freelance_moneda,tipo_contrato,jornada,cargo,lider_id,fecha_ingreso,motivo,archivo_path,creado_por,creado_en"
+  "id,empleado_id,tipo,vigente_desde,rol,tipo_vinculacion,salario_basico,auxilio_transporte,otros_devengos,freelance_modo,freelance_tarifa,freelance_moneda,freelance_meses,tipo_contrato,jornada,cargo,descripcion,condiciones_adicionales,rol_funciones_id,lider_id,fecha_ingreso,fecha_fin_probable,fecha_fin,motivo,archivo_path,estado,firmado_por,firmado_en,creado_por,creado_en"
 
 /** Historial completo de condiciones de un empleado (más reciente primero). */
 export async function listContratos(empleadoId: string) {
@@ -38,6 +38,22 @@ export async function crearContrato(input: ContratoInput) {
   return data as Contrato
 }
 
+/** Edita una versión existente del contrato (corregir el inicial o un otrosí). */
+export async function actualizarContrato(id: string, cambios: Partial<ContratoInput>) {
+  const sb = getServiceClient()
+  const { data, error } = await sb.from("contratos").update(cambios).eq("id", id).select(COLS).single()
+  if (error) throw error
+  return data as Contrato
+}
+
+/** Marca un contrato como finalizado en una fecha (o lo reabre con fecha_fin = null). */
+export async function finalizarContrato(id: string, fechaFin: string | null) {
+  const sb = getServiceClient()
+  const { data, error } = await sb.from("contratos").update({ fecha_fin: fechaFin }).eq("id", id).select(COLS).single()
+  if (error) throw error
+  return data as Contrato
+}
+
 export async function eliminarContrato(id: string) {
   const sb = getServiceClient()
   const actual = await getContrato(id)
@@ -56,17 +72,20 @@ export async function eliminarContrato(id: string) {
  */
 export async function sincronizarEmpleadoDesdeContratos(empleadoId: string) {
   const contratos = await listContratos(empleadoId)
-  const vigente = condicionesVigentes(contratos)
+  // Solo los contratos FIRMADOS mandan sobre rol/pago/estado. Un 'pendiente_firma'
+  // no cambia nada hasta que se suba el documento firmado.
+  const vigente = condicionesVigentesFirmadas(contratos)
   if (!vigente) {
     await actualizarEmpleado(empleadoId, {
       rol: "empleado", tipo_vinculacion: "empleado",
-      freelance_modo: null, freelance_tarifa: null, freelance_moneda: null,
+      freelance_modo: null, freelance_tarifa: null, freelance_moneda: null, freelance_meses: null,
     }).catch(() => {})
     return
   }
   const porFactura = vigente.tipo_vinculacion === "freelance" || vigente.tipo_vinculacion === "prestacion_servicios"
-  // La fecha de ingreso la fija el contrato inicial (un otrosí no la trae).
-  const inicial = contratos.find((c) => c.tipo === "inicial") ?? contratos[contratos.length - 1]
+  // La fecha de ingreso la fija el contrato inicial FIRMADO (un otrosí no la trae).
+  const firmados = contratos.filter(esFirmado)
+  const inicial = firmados.find((c) => c.tipo === "inicial") ?? firmados[firmados.length - 1]
   await actualizarEmpleado(empleadoId, {
     rol: vigente.rol ?? "empleado",
     tipo_vinculacion: vigente.tipo_vinculacion ?? "empleado",
@@ -74,9 +93,11 @@ export async function sincronizarEmpleadoDesdeContratos(empleadoId: string) {
     tipo_contrato: vigente.tipo_contrato ?? null,
     lider_id: vigente.lider_id ?? null,
     fecha_ingreso: inicial?.fecha_ingreso ?? vigente.fecha_ingreso ?? null,
+    fecha_fin_probable: vigente.fecha_fin_probable ?? null,
     freelance_modo: porFactura ? vigente.freelance_modo ?? null : null,
     freelance_tarifa: porFactura ? vigente.freelance_tarifa ?? null : null,
     freelance_moneda: porFactura ? vigente.freelance_moneda ?? null : null,
+    freelance_meses: porFactura ? vigente.freelance_meses ?? null : null,
   }).catch(() => {})
 }
 
@@ -92,8 +113,11 @@ export async function tieneContrato(empleadoId: string) {
 }
 
 // ── Adjuntos (Supabase Storage, bucket privado 'contratos') ───────────────────
-/** Sube el PDF del contrato/otrosí y guarda su ruta en la fila. Devuelve el contrato actualizado. */
-export async function subirArchivoContrato(contrato: Contrato, bytes: Uint8Array, mime: string) {
+/**
+ * Sube el documento FIRMADO del contrato/otrosí. Al subirlo, la versión pasa a
+ * 'firmado' (queda válida/vigente). `firmadoPor` = quién lo subió (empleado o CEO).
+ */
+export async function subirArchivoContrato(contrato: Contrato, bytes: Uint8Array, mime: string, firmadoPor: "empleado" | "ceo" = "ceo") {
   const sb = getServiceClient()
   const ext = mime.includes("pdf") ? "pdf" : "bin"
   const path = `${contrato.empleado_id}/${contrato.id}.${ext}`
@@ -103,7 +127,7 @@ export async function subirArchivoContrato(contrato: Contrato, bytes: Uint8Array
   if (upErr) throw upErr
   const { data, error } = await sb
     .from("contratos")
-    .update({ archivo_path: path })
+    .update({ archivo_path: path, estado: "firmado", firmado_por: firmadoPor, firmado_en: new Date().toISOString() })
     .eq("id", contrato.id)
     .select(COLS)
     .single()

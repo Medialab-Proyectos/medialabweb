@@ -47,6 +47,9 @@ const schema = z.object({
   fecha_emision: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullable().optional(),
   fecha_pago: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullable().optional(),
   observaciones: z.string().max(1000).nullable().optional(),
+  iva_tipo: z.enum(["na", "incluido", "exento"]).nullable().optional(),
+  iva_valor: z.number().min(0).nullable().optional(),
+  fee: z.number().min(0).nullable().optional(),
   estado: z.enum(["borrador", "emitida", "pagada"]).default("borrador"),
 })
 
@@ -71,7 +74,9 @@ export async function POST(req: Request) {
       modo: b.modo, cantidad: b.cantidad, tarifa: b.tarifa, moneda: b.moneda,
       mes_servicio: b.mes_servicio ?? null, concepto: b.concepto ?? null, cuenta_id: b.cuenta_id ?? null,
       fecha_emision: b.fecha_emision ?? null, fecha_pago: b.fecha_pago ?? null,
-      observaciones: b.observaciones ?? null, estado: b.estado, creado_por: g.session!.sub,
+      observaciones: b.observaciones ?? null,
+      iva_tipo: b.iva_tipo ?? null, iva_valor: b.iva_valor ?? null, fee: b.fee ?? null,
+      estado: b.estado, creado_por: g.session!.sub,
     })
     return NextResponse.json({ cuentaCobro })
   } catch (e) {

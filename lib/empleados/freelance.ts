@@ -25,6 +25,7 @@ export type FacturaFreelance = {
   concepto: string | null
   moneda: Moneda
   valor: number
+  horas: number | null          // horas trabajadas del mes (facturas por hora)
   banco: string | null
   cuenta: string | null
   tipo_cuenta: string | null

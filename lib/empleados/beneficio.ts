@@ -1,7 +1,11 @@
 // Tipos y utilidades de beneficios (puros, cliente y servidor).
 
-export type TipoBeneficio = "medicina_prepagada"
+// El tipo es un slug del catálogo (beneficios_tipos). 'medicina_prepagada' es el
+// tipo especial con tarjeta enriquecida (MedPlus); el resto son del catálogo libre.
+export type TipoBeneficio = string
 export type EstadoBeneficio = "solicitado" | "activo" | "inactivo"
+
+export const TIPO_MEDICINA = "medicina_prepagada"
 
 export type Beneficio = {
   id: string
@@ -15,9 +19,25 @@ export type Beneficio = {
   actualizado_en: string
 }
 
-export const TIPO_BENEFICIO_LABEL: Record<TipoBeneficio, string> = {
+/** Tipo de beneficio del catálogo (lo gestiona el CEO). */
+export type BeneficioTipo = {
+  id: string
+  slug: string
+  nombre: string
+  descripcion: string | null
+  proveedor: string | null
+  activo: boolean
+  orden: number
+  creado_en: string
+}
+
+/** Etiqueta legible de un tipo, con las conocidas por defecto. */
+const LABELS_BASE: Record<string, string> = {
   medicina_prepagada: "Medicina prepagada",
 }
+export const TIPO_BENEFICIO_LABEL = new Proxy(LABELS_BASE, {
+  get: (target, prop) => (typeof prop === "string" ? target[prop] ?? prop : undefined),
+}) as Record<string, string>
 
 export const ESTADO_BENEFICIO_LABEL: Record<EstadoBeneficio, string> = {
   solicitado: "Activación solicitada",

@@ -2,8 +2,8 @@ import { NextResponse } from "next/server"
 import { z } from "zod"
 import { getSession } from "@/lib/empleados/auth"
 import { portalConfigurado } from "@/lib/empleados/db"
-import { listBeneficios, listBeneficiosEmpleado, setEstadoBeneficio, asignarBeneficio } from "@/lib/empleados/beneficio-queries"
-import { PROVEEDOR_MEDICINA_PREPAGADA } from "@/lib/empleados/beneficio"
+import { listBeneficios, listBeneficiosEmpleado, setEstadoBeneficio, asignarBeneficio, listTiposBeneficio } from "@/lib/empleados/beneficio-queries"
+import { PROVEEDOR_MEDICINA_PREPAGADA, TIPO_MEDICINA } from "@/lib/empleados/beneficio"
 
 export const runtime = "nodejs"
 
@@ -34,7 +34,7 @@ export async function GET(req: Request) {
 
 const asignarSchema = z.object({
   empleado_id: z.string().uuid(),
-  tipo: z.enum(["medicina_prepagada"]),
+  tipo: z.string().min(1).max(60),
   estado: z.enum(["solicitado", "activo", "inactivo"]).default("activo"),
 })
 
@@ -51,7 +51,14 @@ export async function POST(req: Request) {
     const msg = e instanceof z.ZodError ? e.issues[0]?.message : "Datos inválidos."
     return NextResponse.json({ error: msg }, { status: 400 })
   }
-  const proveedor = b.tipo === "medicina_prepagada" ? PROVEEDOR_MEDICINA_PREPAGADA : null
+  let proveedor: string | null = b.tipo === TIPO_MEDICINA ? PROVEEDOR_MEDICINA_PREPAGADA : null
+  if (!proveedor) {
+    // Toma el proveedor del catálogo si el tipo lo define (best-effort).
+    try {
+      const tipos = await listTiposBeneficio()
+      proveedor = tipos.find((t) => t.slug === b.tipo)?.proveedor ?? null
+    } catch { /* catálogo puede no existir aún */ }
+  }
   try {
     const beneficio = await asignarBeneficio(b.empleado_id, b.tipo, b.estado, proveedor)
     return NextResponse.json({ beneficio })

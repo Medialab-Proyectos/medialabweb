@@ -104,6 +104,10 @@ export async function generarFacturaFreelancePDF(
     if (i === 0) TR(W - M - 12, top, formatMoneda(f.valor, f.moneda), 9)
     top += 15
   })
+  if (f.horas != null && Number(f.horas) > 0) {
+    T(colL, top, `${Number(f.horas)} horas trabajadas`, 8.5, font, gray)
+    top += 13
+  }
   T(colL, top, `Periodo de servicio: ${MESES[f.mes - 1]} ${f.anio}`, 8.5, font, gray)
   top += 6
   hline(top, M, W - M, rgb(0.92, 0.93, 0.95), 0.4)
@@ -135,8 +139,7 @@ export async function generarFacturaFreelancePDF(
   if (contacto) { T(M, sy, contacto, 7.5, font, gray); sy += 12 }
   if (f.firmado) T(M, sy, `Firmada digitalmente el ${fechaCorta(f.firmado_en)}.`, 7.5, font, gray)
 
-  const generado = new Date().toLocaleString("es-CO", { timeZone: "America/Bogota" })
-  T(M, H - 34, `Documento generado por el Portal de MediaLab el ${generado}.`, 7, font, gray)
+  T(M, H - 26, "https://medialab.design/ · +57 305 4009505 · hello@medialab.design", 7, font, gray)
 
   return pdf.save()
 }

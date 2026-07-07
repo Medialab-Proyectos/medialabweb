@@ -7,13 +7,10 @@ import {
 } from "lucide-react"
 import type { Empleado, Rol } from "@/lib/empleados/types"
 import { ROL_LABEL } from "@/lib/empleados/types"
-import type { Beneficio, TipoBeneficio } from "@/lib/empleados/beneficio"
-import { TIPO_BENEFICIO_LABEL, ESTADO_BENEFICIO_LABEL } from "@/lib/empleados/beneficio"
+import type { Beneficio, BeneficioTipo, TipoBeneficio } from "@/lib/empleados/beneficio"
+import { ESTADO_BENEFICIO_LABEL } from "@/lib/empleados/beneficio"
 import { EPS_CO, FONDOS_CESANTIAS, FONDOS_PENSION } from "@/lib/empleados/catalogos-co"
 import { ConfirmDialog } from "../confirm-dialog"
-
-/** Beneficios que el CEO puede asignar desde la tabla. */
-const BENEFICIOS_ASIGNABLES: TipoBeneficio[] = ["medicina_prepagada"]
 
 type AccionConfirmable = "cerrar_contrato" | "suspender" | "resetear_clave"
 type Tone = "danger" | "warn" | "default"
@@ -33,12 +30,10 @@ type FormState = {
   eps: string
   fondo_cesantias: string
   fondo_pension: string
-  convenio_path: string | null
 }
 
 const vacío: FormState = {
   cedula: "", nombre: "", email: "", telefono: "", direccion: "", eps: "", fondo_cesantias: "", fondo_pension: "",
-  convenio_path: null,
 }
 
 const inputCls =
@@ -60,6 +55,15 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
   const [benefItems, setBenefItems] = useState<Beneficio[]>([])
   const [benefLoading, setBenefLoading] = useState(false)
   const [benefBusy, setBenefBusy] = useState<TipoBeneficio | null>(null)
+  const [catalogo, setCatalogo] = useState<BeneficioTipo[]>([])
+
+  // Catálogo de tipos de beneficio (para asignar desde la fila del empleado).
+  useEffect(() => {
+    fetch("/api/empleados/admin/beneficios/tipos")
+      .then((r) => r.json())
+      .then((d) => setCatalogo((d.tipos ?? []).filter((t: BeneficioTipo) => t.activo)))
+      .catch(() => {})
+  }, [])
 
   const visibles = useMemo(() => {
     const t = q.trim().toLowerCase()
@@ -82,7 +86,6 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
       id: e.id, cedula: e.cedula, nombre: e.nombre, email: e.email,
       telefono: e.telefono ?? "", direccion: e.direccion ?? "", eps: e.eps ?? "",
       fondo_cesantias: e.fondo_cesantias ?? "", fondo_pension: e.fondo_pension ?? "",
-      convenio_path: e.convenio_path ?? null,
     })
   }
 
@@ -496,13 +499,19 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
               <div className="flex items-center gap-2 py-6 text-[#fff]/60"><Loader2 size={16} className="animate-spin" /> Cargando…</div>
             ) : (
               <div className="flex flex-col gap-2">
-                {BENEFICIOS_ASIGNABLES.map((tipo) => {
+                {catalogo.length === 0 && (
+                  <p className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-xs text-[#fff]/50">
+                    Aún no hay beneficios en el catálogo. Créalos en <b className="text-[#fff]/70">Talento Humano → Beneficios</b>.
+                  </p>
+                )}
+                {catalogo.map((t) => {
+                  const tipo = t.slug
                   const b = benefItems.find((x) => x.tipo === tipo) ?? null
                   const busy = benefBusy === tipo
                   return (
                     <div key={tipo} className="flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3">
                       <div>
-                        <p className="text-sm font-medium">{TIPO_BENEFICIO_LABEL[tipo]}</p>
+                        <p className="text-sm font-medium">{t.nombre}</p>
                         <p className="text-xs text-[#fff]/50">{b ? ESTADO_BENEFICIO_LABEL[b.estado] : "No asignado"}</p>
                       </div>
                       <div className="flex items-center gap-2">
@@ -517,7 +526,7 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
                     </div>
                   )
                 })}
-                <p className="mt-2 text-[11px] text-[#fff]/40">El empleado también puede activar beneficios desde su portal; aquí quedan como asignados por RRHH.</p>
+                <p className="mt-2 text-[11px] text-[#fff]/40">Solo el CEO activa beneficios. El empleado solo los ve en su portal cuando quedan activos.</p>
               </div>
             )}
           </div>
@@ -558,6 +567,7 @@ function DesprendiblesMenu() {
     { href: "/empleados/admin/desprendibles", icon: FileText, label: "Desprendibles de pago" },
     { href: "/empleados/admin/primas", icon: Gift, label: "Primas" },
     { href: "/empleados/admin/cesantias", icon: PiggyBank, label: "Cesantías" },
+    { href: "/empleados/admin/ingresos-retenciones", icon: FileText, label: "Ingresos y retenciones" },
   ]
 
   return (

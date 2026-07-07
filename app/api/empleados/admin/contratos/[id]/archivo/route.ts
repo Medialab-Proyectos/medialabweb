@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 import { getSession } from "@/lib/empleados/auth"
 import { portalConfigurado } from "@/lib/empleados/db"
-import { getContrato, subirArchivoContrato } from "@/lib/empleados/contrato-queries"
+import { getContrato, subirArchivoContrato, sincronizarEmpleadoDesdeContratos } from "@/lib/empleados/contrato-queries"
 
 export const runtime = "nodejs"
 
@@ -29,7 +29,9 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
 
   const bytes = new Uint8Array(await file.arrayBuffer())
   try {
-    const actualizado = await subirArchivoContrato(contrato, bytes, mime)
+    // El CEO sube el documento firmado (mantiene consistencia); la versión queda firmada y activa.
+    const actualizado = await subirArchivoContrato(contrato, bytes, mime, "ceo")
+    await sincronizarEmpleadoDesdeContratos(contrato.empleado_id)
     return NextResponse.json({ contrato: actualizado })
   } catch (e) {
     const msg = e instanceof Error ? e.message : "Error al subir."

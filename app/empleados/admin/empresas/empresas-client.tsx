@@ -6,6 +6,7 @@ import { ArrowLeft, Building2, Loader2, Plus, Pencil, Trash2, X, FileSignature }
 import type { Empresa, ContratoEmpresa, ModoFacturacion } from "@/lib/empleados/contabilidad"
 import { formatMoneda, PAISES } from "@/lib/empleados/contabilidad"
 import type { Moneda } from "@/lib/empleados/freelance"
+import { MoneyInput } from "../../money-input"
 import { ConfirmDialog } from "../../confirm-dialog"
 
 const inputCls = "w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm text-[#fff] outline-none transition focus:border-[var(--cyan)]/60"
@@ -218,8 +219,8 @@ export function EmpresasClient() {
                   <option value="COP">COP</option>
                   <option value="USD">USD</option>
                 </select></label>
-              <label className="flex flex-col gap-1.5 sm:col-span-2"><span className={lblCls}>{formContrato.modo === "por_hora" ? "Valor por hora" : "Valor por mes"}</span>
-                <input type="number" step="0.01" min="0" value={formContrato.tarifa || ""} onChange={(e) => setFormContrato({ ...formContrato, tarifa: Number(e.target.value) })} className={inputCls} placeholder="0" /></label>
+              <label className="flex flex-col gap-1.5 sm:col-span-2"><span className={lblCls}>{formContrato.modo === "por_hora" ? "Valor por hora" : "Valor por mes"} ({formContrato.moneda})</span>
+                <MoneyInput value={formContrato.tarifa} onChange={(n) => setFormContrato({ ...formContrato, tarifa: n })} className={inputCls} /></label>
               <label className="flex items-center gap-2 text-sm text-[#fff]/75 sm:col-span-2">
                 <input type="checkbox" checked={formContrato.activo} onChange={(e) => setFormContrato({ ...formContrato, activo: e.target.checked })} className="h-4 w-4 accent-[var(--cyan)]" /> Contrato activo
               </label>

@@ -6,7 +6,7 @@ const BUCKET = "facturas"
 
 const PERFIL_COLS = "empleado_id,moneda,banco,cuenta,tipo_cuenta,titular,documento,notas,actualizado_en"
 const FACT_COLS =
-  "id,empleado_id,anio,mes,numero,concepto,moneda,valor,banco,cuenta,tipo_cuenta,titular,archivo_path,soporte_path,firmado,firmante,firmado_en,estado,pagado_en,observaciones,creado_en,actualizado_en"
+  "id,empleado_id,anio,mes,numero,concepto,moneda,valor,horas,banco,cuenta,tipo_cuenta,titular,archivo_path,soporte_path,firmado,firmante,firmado_en,estado,pagado_en,observaciones,creado_en,actualizado_en"
 
 // ── Perfil de pago ────────────────────────────────────────────────────────────
 export async function getPerfilFreelance(empleadoId: string) {

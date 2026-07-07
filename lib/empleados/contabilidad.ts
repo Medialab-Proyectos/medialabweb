@@ -5,6 +5,14 @@ export type { Moneda } from "./freelance"
 
 export type TipoMovimiento = "ingreso" | "egreso" | "traslado"
 export type EstadoMovimiento = "pendiente" | "realizado"
+/** IVA de un movimiento/cuenta de cobro: nacional (incluido) vs internacional (exento). */
+export type TipoIVA = "na" | "incluido" | "exento"
+
+export const IVA_LABEL: Record<TipoIVA, string> = {
+  na: "Sin IVA",
+  incluido: "IVA incluido (nacional)",
+  exento: "Exento (internacional)",
+}
 
 export type Cuenta = {
   id: string
@@ -29,10 +37,13 @@ export type Movimiento = {
   concepto: string | null
   contraparte: string | null
   empresa_id: string | null
+  empleado_id: string | null    // pago de nómina vinculado a un empleado
   valor: number
   tasa: number | null           // traslado: tasa de cambio origen→destino
-  costo: number                 // traslado: costo/comisión de la plataforma
+  costo: number                 // fee/comisión (traslado o banco); resta al neto
   valor_destino: number | null  // traslado: valor que llega al destino (moneda destino)
+  iva_tipo: TipoIVA | null      // nacional (incluido) vs internacional (exento)
+  iva_valor: number | null
   estado: EstadoMovimiento
   referencia: string | null
   creado_por: string | null
@@ -82,22 +93,43 @@ export const TIPO_MOV_LABEL: Record<TipoMovimiento, string> = {
 }
 
 export const CATEGORIAS = [
-  "salario", "liquidacion", "honorarios", "factura_freelance", "servicio", "impuesto",
-  "arriendo", "venta", "reembolso", "software", "otro",
+  "salario", "seguridad_social", "liquidacion", "honorarios", "factura_freelance", "servicio",
+  "suscripcion", "dominio", "contador", "impuesto", "arriendo", "evento", "reparacion",
+  "venta", "reembolso", "software", "otro",
 ] as const
 
 export const CATEGORIA_LABEL: Record<string, string> = {
-  salario: "Salario",
+  salario: "Salario / nómina",
+  seguridad_social: "Seguridad social",
   liquidacion: "Liquidación",
   honorarios: "Honorarios",
   factura_freelance: "Factura freelance",
   servicio: "Servicio",
+  suscripcion: "Suscripción / software",
+  dominio: "Dominio / hosting",
+  contador: "Contador / contabilidad",
   impuesto: "Impuesto",
   arriendo: "Arriendo",
+  evento: "Evento / encuentro",
+  reparacion: "Reparación / mantenimiento",
   venta: "Venta / ingreso",
   reembolso: "Reembolso",
   software: "Software / herramientas",
   otro: "Otro",
+}
+
+/** Gasto recurrente del catálogo (Google, dominio, ChatGPT, Claude, Figma, contador…). */
+export type GastoRecurrente = {
+  id: string
+  nombre: string
+  categoria: string | null
+  proveedor: string | null
+  moneda: Moneda
+  valor: number
+  cuenta_id: string | null
+  activo: boolean
+  orden: number
+  creado_en: string
 }
 
 const n = (x: unknown) => Number(x) || 0

@@ -34,16 +34,18 @@ export type Empleado = {
   freelance_modo: FreelanceModo | null
   freelance_tarifa: number | null
   freelance_moneda: "COP" | "USD" | null
+  freelance_meses: number | null   // pago por proyecto: nº de meses (1 = pago único)
   creado_en: string
   actualizado_en: string
 }
 
-export type FreelanceModo = "por_hora" | "por_mes" | "fijo"
+export type FreelanceModo = "por_hora" | "por_mes" | "fijo" | "por_proyecto"
 
 export const FREELANCE_MODO_LABEL: Record<FreelanceModo, string> = {
   por_hora: "Por hora",
   por_mes: "Por mes",
   fijo: "Valor fijo",
+  por_proyecto: "Por proyecto",
 }
 
 /** Datos que viajan (firmados) en la cookie de sesión. */

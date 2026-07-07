@@ -45,6 +45,12 @@ export function fraseTipoContrato(tipo: string | null): string {
   return tipo ? `de ${tipo.toLowerCase()}` : ""
 }
 
+/** Frase de respaldo desde la vinculación cuando no hay tipo de contrato (freelance). */
+export function fraseVinculacion(vinc: string | null): string {
+  if (vinc === "freelance" || vinc === "prestacion_servicios") return "de prestación de servicios"
+  return "laboral"
+}
+
 /**
  * Narrativa de vinculación desde el historial de contratos (ordenado por fecha).
  * Ej: "vinculado a MediaLab Ingeniería con contrato de prestación de servicios desde el
@@ -69,7 +75,7 @@ export function narrativaVinculacion(contratos: Contrato[], fechaIngreso: string
       : "vinculado a MediaLab Ingeniería"
   }
 
-  const items = hist.map((c) => ({ frase: fraseTipoContrato(c.tipo_contrato), fecha: fechaLarga(c._inicio) }))
+  const items = hist.map((c) => ({ frase: fraseTipoContrato(c.tipo_contrato) || fraseVinculacion(c.tipo_vinculacion), fecha: fechaLarga(c._inicio) }))
   let texto: string
   if (items.length === 1) {
     texto = `con contrato ${items[0].frase} desde el ${items[0].fecha}`

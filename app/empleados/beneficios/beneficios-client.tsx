@@ -3,10 +3,11 @@
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { ArrowLeft, Gift, HeartPulse, Cake, CalendarClock, Loader2, CheckCircle2, Clock, ExternalLink, Phone } from "lucide-react"
-import { type Beneficio, ESTADO_BENEFICIO_LABEL, MEDPLUS } from "@/lib/empleados/beneficio"
+import { type Beneficio, type BeneficioTipo, ESTADO_BENEFICIO_LABEL, MEDPLUS, TIPO_MEDICINA } from "@/lib/empleados/beneficio"
 
 export function BeneficiosClient() {
   const [beneficios, setBeneficios] = useState<Beneficio[]>([])
+  const [tipos, setTipos] = useState<BeneficioTipo[]>([])
   const [cargando, setCargando] = useState(true)
   const [error, setError] = useState("")
 
@@ -15,7 +16,7 @@ export function BeneficiosClient() {
     try {
       const res = await fetch("/api/empleados/beneficios")
       const data = await res.json()
-      if (res.ok) setBeneficios(data.beneficios ?? [])
+      if (res.ok) { setBeneficios(data.beneficios ?? []); setTipos(data.tipos ?? []) }
       else setError(data.error || "Error al cargar.")
     } finally {
       setCargando(false)
@@ -23,7 +24,10 @@ export function BeneficiosClient() {
   }
   useEffect(() => { cargar() }, [])
 
-  const medicina = beneficios.find((b) => b.tipo === "medicina_prepagada") ?? null
+  const medicina = beneficios.find((b) => b.tipo === TIPO_MEDICINA) ?? null
+  // Otros beneficios del catálogo asignados (no medicina, no dados de baja).
+  const otros = beneficios.filter((b) => b.tipo !== TIPO_MEDICINA && b.estado !== "inactivo")
+  const tipoDe = (slug: string) => tipos.find((t) => t.slug === slug)
 
   return (
     <div>
@@ -95,6 +99,30 @@ export function BeneficiosClient() {
             </div>
           </section>
           )}
+
+          {/* Otros beneficios del catálogo (asignados por la empresa) */}
+          {otros.map((b) => {
+            const t = tipoDe(b.tipo)
+            return (
+              <section key={b.id} className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-start gap-3">
+                    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#E8751A]/15">
+                      <Gift size={20} className="text-[#E8751A]" />
+                    </span>
+                    <div>
+                      <h2 className="text-base font-semibold">{t?.nombre ?? b.tipo}</h2>
+                      {t?.descripcion && <p className="mt-0.5 text-sm text-[#fff]/55">{t.descripcion}</p>}
+                      {(b.proveedor || t?.proveedor) && (
+                        <p className="mt-0.5 text-xs text-[#fff]/40">Proveedor: {b.proveedor || t?.proveedor}</p>
+                      )}
+                    </div>
+                  </div>
+                  <EstadoBadge b={b} />
+                </div>
+              </section>
+            )
+          })}
 
           {/* Permisos de media jornada (se piden en Vacaciones y ausencias) */}
           <section className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">

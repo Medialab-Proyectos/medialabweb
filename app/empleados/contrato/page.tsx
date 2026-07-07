@@ -1,13 +1,14 @@
 import Link from "next/link"
 import { ArrowLeft, Download, FileSignature, Wallet } from "lucide-react"
 import { requireEmpleado } from "@/lib/empleados/auth"
-import { getEmpleadoById } from "@/lib/empleados/queries"
+import { getEmpleadoById, getConfigEmpresa } from "@/lib/empleados/queries"
 import { listContratos } from "@/lib/empleados/contrato-queries"
-import { condicionesVigentes, totalMensualContrato, inicioContrato, TIPO_VERSION_LABEL, type Contrato } from "@/lib/empleados/contrato"
+import { condicionesVigentesFirmadas, esFirmado, totalMensualContrato, inicioContrato, TIPO_VERSION_LABEL, type Contrato } from "@/lib/empleados/contrato"
 import { formatCOP } from "@/lib/empleados/desprendible"
 import { formatMoneda } from "@/lib/empleados/freelance"
 import { esVinculacionPorFactura, FREELANCE_MODO_LABEL } from "@/lib/empleados/types"
 import { PortalHeader } from "../portal-header"
+import { FirmarContrato } from "./firmar-contrato"
 
 export const dynamic = "force-dynamic"
 
@@ -23,8 +24,13 @@ export default async function ContratoEmpleadoPage() {
   } catch {
     sinConfigurar = true
   }
-  const vigente = condicionesVigentes(contratos)
+  const vigente = condicionesVigentesFirmadas(contratos)
   const conArchivo = contratos.filter((c) => c.archivo_path)
+  // Versiones generadas que faltan por firmar (el empleado descarga y sube firmado).
+  const pendientesFirma = contratos.filter((c) => !esFirmado(c))
+  const config = await getConfigEmpresa().catch(() => ({ caja_compensacion: null, arl: null }))
+  const modoLabelValor = (m: NonNullable<typeof empleado>["freelance_modo"]) =>
+    m === "por_hora" ? "Valor por hora" : m === "por_mes" ? "Valor por mes" : m === "por_proyecto" ? "Valor del proyecto" : "Valor fijo"
 
   return (
     <>
@@ -38,6 +44,25 @@ export default async function ContratoEmpleadoPage() {
           <h1 className="font-display text-2xl font-bold">Mi contrato</h1>
         </div>
 
+        {/* Pendientes de firma: descargar el generado, firmar y subir */}
+        {pendientesFirma.length > 0 && (
+          <div className="mb-6 flex flex-col gap-4">
+            {pendientesFirma.map((c) => (
+              <section key={c.id} className="rounded-2xl border border-[var(--magenta)]/30 bg-[var(--magenta)]/[0.07] p-6">
+                <h2 className="text-base font-semibold text-[#fff]">
+                  {c.tipo === "inicial" ? "Tienes tu contrato por firmar" : "Tienes un otrosí por firmar"}
+                </h2>
+                <p className="mb-4 mt-1 text-sm text-[#fff]/70">
+                  {!vigente && c.tipo === "inicial"
+                    ? "Para activar tu portal y tus beneficios, descarga tu contrato, fírmalo y súbelo aquí."
+                    : "Descárgalo, fírmalo y súbelo para dejarlo vigente."}
+                </p>
+                <FirmarContrato id={c.id} etiqueta={c.tipo === "inicial" ? "contrato" : "otrosí"} />
+              </section>
+            ))}
+          </div>
+        )}
+
         {esFreelance ? (
           <div className="flex flex-col gap-6">
             {/* Pago acordado */}
@@ -50,15 +75,34 @@ export default async function ContratoEmpleadoPage() {
                 <div className="grid gap-4 sm:grid-cols-2">
                   <Dato k="Modalidad" v={FREELANCE_MODO_LABEL[empleado.freelance_modo]} />
                   <Dato
-                    k={empleado.freelance_modo === "por_hora" ? "Valor por hora" : empleado.freelance_modo === "por_mes" ? "Valor por mes" : "Valor fijo"}
+                    k={modoLabelValor(empleado.freelance_modo)}
                     v={formatMoneda(Number(empleado.freelance_tarifa) || 0, empleado.freelance_moneda ?? "COP")}
                   />
+                  {empleado.fecha_ingreso && <Dato k="Fecha de ingreso" v={empleado.fecha_ingreso} />}
+                  {empleado.fecha_fin_probable && <Dato k="Fecha posible de terminación" v={empleado.fecha_fin_probable} />}
                 </div>
               ) : (
                 <p className="text-sm text-[#fff]/55">Tu pago acordado aún no está definido en el portal. Consúltalo con administración.</p>
               )}
               {empleado?.freelance_modo === "por_hora" && (
-                <p className="mt-4 border-t border-white/10 pt-3 text-xs text-[#fff]/50">Al facturar, multiplica este valor por las horas trabajadas en el mes.</p>
+                <p className="mt-4 border-t border-white/10 pt-3 text-xs text-[#fff]/50">Al facturar, indica las horas trabajadas del mes: se multiplican por este valor.</p>
+              )}
+              {empleado?.freelance_modo === "por_proyecto" && (empleado.freelance_meses ?? 1) > 1 && (
+                <p className="mt-4 border-t border-white/10 pt-3 text-xs text-[#fff]/50">
+                  Proyecto pagado en {empleado.freelance_meses} cuotas de {formatMoneda(Math.round((Number(empleado.freelance_tarifa) || 0) / (empleado.freelance_meses ?? 1)), empleado.freelance_moneda ?? "COP")} / mes.
+                </p>
+              )}
+              {vigente?.descripcion && (
+                <div className="mt-4 border-t border-white/10 pt-3">
+                  <p className="text-[11px] text-[#fff]/45">Objeto del contrato</p>
+                  <p className="text-sm text-[#fff]/80">{vigente.descripcion}</p>
+                </div>
+              )}
+              {(config.arl || config.caja_compensacion) && (
+                <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-1.5 border-t border-white/10 pt-3 text-[11px] text-[#fff]/55">
+                  {config.arl && <span>ARL: <b className="text-[#fff]/80">{config.arl}</b></span>}
+                  {config.caja_compensacion && <span>Caja: <b className="text-[#fff]/80">{config.caja_compensacion}</b></span>}
+                </div>
               )}
             </section>
 
@@ -115,6 +159,18 @@ export default async function ContratoEmpleadoPage() {
               <div className="mt-4 border-t border-white/10 pt-4">
                 <p className="text-xs text-[#fff]/50">Total mensual devengado</p>
                 <p className="font-display text-3xl font-bold text-[var(--cyan)]">{formatCOP(totalMensualContrato(vigente))}</p>
+              </div>
+              {vigente.descripcion && (
+                <div className="mt-4 border-t border-white/10 pt-3">
+                  <p className="text-[11px] text-[#fff]/45">Objeto del contrato</p>
+                  <p className="text-sm text-[#fff]/80">{vigente.descripcion}</p>
+                </div>
+              )}
+              <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-1.5 border-t border-white/10 pt-3 text-[11px] text-[#fff]/55 sm:grid-cols-3">
+                {config.arl && <span>ARL: <b className="text-[#fff]/80">{config.arl}</b></span>}
+                {config.caja_compensacion && <span>Caja: <b className="text-[#fff]/80">{config.caja_compensacion}</b></span>}
+                {vigente.fecha_fin_probable && <span>Fin probable: <b className="text-[#fff]/80">{vigente.fecha_fin_probable}</b></span>}
+                {vigente.fecha_fin && <span className="text-red-300/80">Finalizado: <b>{vigente.fecha_fin}</b></span>}
               </div>
             </section>
 

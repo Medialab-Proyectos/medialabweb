@@ -10,6 +10,7 @@ const lblCls = "text-[11px] font-semibold uppercase tracking-wide text-[#fff]/50
 
 export function EmpresaConfigClient() {
   const [caja, setCaja] = useState("")
+  const [arl, setArl] = useState("")
   const [cargando, setCargando] = useState(true)
   const [guardando, setGuardando] = useState(false)
   const [error, setError] = useState("")
@@ -22,7 +23,7 @@ export function EmpresaConfigClient() {
         const res = await fetch("/api/empleados/admin/empresa-config")
         const data = await res.json()
         if (cancel) return
-        if (res.ok) setCaja(data.config?.caja_compensacion ?? "")
+        if (res.ok) { setCaja(data.config?.caja_compensacion ?? ""); setArl(data.config?.arl ?? "") }
         else setError(data.error || "Error al cargar.")
       } finally {
         if (!cancel) setCargando(false)
@@ -37,7 +38,7 @@ export function EmpresaConfigClient() {
     try {
       const res = await fetch("/api/empleados/admin/empresa-config", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ caja_compensacion: caja || null }),
+        body: JSON.stringify({ caja_compensacion: caja || null, arl: arl || null }),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error)
@@ -62,11 +63,18 @@ export function EmpresaConfigClient() {
         <div className="flex items-center gap-2 py-10 text-[#fff]/60"><Loader2 size={16} className="animate-spin" /> Cargando…</div>
       ) : (
         <form onSubmit={guardar} className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-          <label className="flex max-w-sm flex-col gap-1.5">
-            <span className={lblCls}>Caja de compensación</span>
-            <input list="cat-cajas" value={caja} onChange={(e) => setCaja(e.target.value)} placeholder="Elige o escribe…" className={inputCls} />
-            <datalist id="cat-cajas">{CAJAS_COMPENSACION.map((x) => <option key={x} value={x} />)}</datalist>
-          </label>
+          <div className="grid max-w-xl gap-4 sm:grid-cols-2">
+            <label className="flex flex-col gap-1.5">
+              <span className={lblCls}>Caja de compensación</span>
+              <input list="cat-cajas" value={caja} onChange={(e) => setCaja(e.target.value)} placeholder="Elige o escribe…" className={inputCls} />
+              <datalist id="cat-cajas">{CAJAS_COMPENSACION.map((x) => <option key={x} value={x} />)}</datalist>
+            </label>
+            <label className="flex flex-col gap-1.5">
+              <span className={lblCls}>ARL (riesgos laborales)</span>
+              <input value={arl} onChange={(e) => setArl(e.target.value)} placeholder="Ej: SURA, Positiva, Colmena…" className={inputCls} />
+              <span className="text-[11px] text-[#fff]/40">Aparece como parte del contrato de los empleados.</span>
+            </label>
+          </div>
 
           {error && <p className="mt-3 rounded-lg bg-red-500/10 px-3 py-2 text-sm text-red-300">{error}</p>}
           {msg && <p className="mt-3 rounded-lg bg-emerald-400/10 px-3 py-2 text-sm text-emerald-200">{msg}</p>}

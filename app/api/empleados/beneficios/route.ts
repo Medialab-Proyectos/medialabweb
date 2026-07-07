@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 import { getSession } from "@/lib/empleados/auth"
 import { portalConfigurado } from "@/lib/empleados/db"
-import { listBeneficiosEmpleado } from "@/lib/empleados/beneficio-queries"
+import { listBeneficiosEmpleado, listTiposBeneficio } from "@/lib/empleados/beneficio-queries"
 
 export const runtime = "nodejs"
 
@@ -17,10 +17,12 @@ export async function GET() {
   if (!s) return NextResponse.json({ error: "No autorizado." }, { status: 401 })
   try {
     const beneficios = await listBeneficiosEmpleado(s.sub)
-    return NextResponse.json({ beneficios })
+    // El catálogo da nombre/descripción/proveedor de cada tipo (best-effort).
+    const tipos = await listTiposBeneficio(true).catch(() => [])
+    return NextResponse.json({ beneficios, tipos })
   } catch (e) {
     const f = faltaTabla(e)
-    return NextResponse.json({ error: f.msg, beneficios: [] }, { status: f.status })
+    return NextResponse.json({ error: f.msg, beneficios: [], tipos: [] }, { status: f.status })
   }
 }
 

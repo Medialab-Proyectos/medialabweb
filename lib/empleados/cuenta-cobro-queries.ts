@@ -3,7 +3,7 @@ import { getServiceClient } from "./db"
 import type { CuentaCobro } from "./cuenta-cobro"
 
 const COLS =
-  "id,numero,emisor,empresa_id,contrato_empresa_id,modo,cantidad,tarifa,moneda,mes_servicio,concepto,cuenta_id,fecha_emision,fecha_pago,observaciones,estado,creado_por,creado_en,actualizado_en"
+  "id,numero,emisor,empresa_id,contrato_empresa_id,modo,cantidad,tarifa,moneda,mes_servicio,concepto,cuenta_id,fecha_emision,fecha_pago,observaciones,iva_tipo,iva_valor,fee,estado,creado_por,creado_en,actualizado_en"
 
 export async function listCuentasCobro() {
   const sb = getServiceClient()

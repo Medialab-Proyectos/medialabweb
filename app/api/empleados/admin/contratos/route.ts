@@ -2,7 +2,9 @@ import { NextResponse } from "next/server"
 import { z } from "zod"
 import { getSession } from "@/lib/empleados/auth"
 import { portalConfigurado } from "@/lib/empleados/db"
-import { listContratos, crearContrato, eliminarContrato, getContrato, sincronizarEmpleadoDesdeContratos } from "@/lib/empleados/contrato-queries"
+import { listContratos, crearContrato, actualizarContrato, finalizarContrato, eliminarContrato, getContrato, sincronizarEmpleadoDesdeContratos } from "@/lib/empleados/contrato-queries"
+import { getEmpleadoById } from "@/lib/empleados/queries"
+import { notificarEmpleado } from "@/lib/empleados/notificar"
 
 export const runtime = "nodejs"
 
@@ -27,15 +29,23 @@ const schema = z.object({
   salario_basico: z.number().min(0).default(0),
   auxilio_transporte: z.number().min(0).default(0),
   otros_devengos: z.array(linea).default([]),
-  freelance_modo: z.enum(["por_hora", "por_mes", "fijo"]).nullable().optional(),
+  freelance_modo: z.enum(["por_hora", "por_mes", "fijo", "por_proyecto"]).nullable().optional(),
   freelance_tarifa: z.number().min(0).nullable().optional(),
   freelance_moneda: z.enum(["COP", "USD"]).nullable().optional(),
+  freelance_meses: z.number().int().min(1).max(120).nullable().optional(),
   tipo_contrato: z.string().max(60).nullable().optional(),
   jornada: z.string().max(60).nullable().optional(),
   cargo: z.string().max(120).nullable().optional(),
+  descripcion: z.string().max(2000).nullable().optional(),
+  condiciones_adicionales: z.string().max(6000).nullable().optional(),
+  rol_funciones_id: z.string().uuid().nullable().optional(),
   lider_id: z.string().uuid().nullable().optional(),
   fecha_ingreso: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullable().optional(),
+  fecha_fin_probable: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullable().optional(),
+  fecha_fin: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullable().optional(),
   motivo: z.string().max(500).nullable().optional(),
+  // Si es true, se avisa al empleado para que descargue, firme y suba el contrato.
+  enviar_para_firma: z.boolean().optional(),
 })
 
 export async function GET(req: Request) {
@@ -86,18 +96,40 @@ export async function POST(req: Request) {
       freelance_modo: porFactura ? b.freelance_modo ?? null : null,
       freelance_tarifa: porFactura ? b.freelance_tarifa ?? null : null,
       freelance_moneda: porFactura ? b.freelance_moneda ?? null : null,
+      freelance_meses: porFactura && b.freelance_modo === "por_proyecto" ? b.freelance_meses ?? null : null,
       tipo_contrato: b.tipo_contrato ?? null,
       jornada: b.jornada ?? null,
       cargo: b.cargo ?? null,
+      descripcion: b.descripcion ?? null,
+      condiciones_adicionales: b.condiciones_adicionales ?? null,
+      rol_funciones_id: b.rol_funciones_id ?? null,
       lider_id: b.lider_id ?? null,
       fecha_ingreso: b.fecha_ingreso ?? null,
+      fecha_fin_probable: b.fecha_fin_probable ?? null,
+      fecha_fin: b.fecha_fin ?? null,
       motivo: b.motivo ?? null,
       archivo_path: null,
+      // Nace pendiente de firma; se activa cuando se sube el documento firmado
+      // (por el empleado, o por el CEO al adjuntarlo). No cambia el estado hasta entonces.
+      estado: "pendiente_firma",
+      firmado_por: null,
+      firmado_en: null,
       creado_por: g.session!.sub,
     })
-    // El contrato manda: se sincronizan rol, vinculación, líder, fecha de ingreso,
-    // cargo y pago a la ficha (para login, tabla, certificado, vacaciones, liquidación…).
+    // El contrato manda: al firmar se sincronizan rol, vinculación, etc. (aquí aún es
+    // pendiente, así que no altera la ficha; la sync se hace efectiva al subir el firmado).
     await sincronizarEmpleadoDesdeContratos(b.empleado_id)
+    // Aviso al empleado para que descargue, firme y suba su contrato.
+    if (b.enviar_para_firma) {
+      const emp = await getEmpleadoById(b.empleado_id)
+      if (emp) {
+        await notificarEmpleado(
+          emp.email,
+          `Tienes un ${b.tipo === "inicial" ? "contrato" : "otrosí"} por firmar`,
+          `Hola ${emp.nombre},\n\nSe generó tu ${b.tipo === "inicial" ? "contrato" : "otrosí"} en el portal. Ingresa a /empleados/contrato, descárgalo, fírmalo y súbelo firmado. Hasta entonces no queda activo.\n\nMediaLab`,
+        )
+      }
+    }
     return NextResponse.json({ contrato })
   } catch (e) {
     const msg = e instanceof Error ? e.message : "Error"
@@ -110,6 +142,68 @@ export async function POST(req: Request) {
       },
       { status: falta ? 409 : 500 },
     )
+  }
+}
+
+const patchSchema = z.discriminatedUnion("accion", [
+  // Editar una versión existente (corregir el contrato inicial o un otrosí).
+  schema.partial().extend({ accion: z.literal("editar"), id: z.string().uuid() }),
+  // Finalizar (o reabrir) un contrato con una fecha de finalización real.
+  z.object({ accion: z.literal("finalizar"), id: z.string().uuid(), fecha_fin: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullable() }),
+])
+
+export async function PATCH(req: Request) {
+  if (!portalConfigurado()) return NextResponse.json({ error: "Portal sin configurar." }, { status: 503 })
+  const g = await guardCEO()
+  if (g.error) return g.error
+
+  let b: z.infer<typeof patchSchema>
+  try {
+    b = patchSchema.parse(await req.json())
+  } catch (e) {
+    const msg = e instanceof z.ZodError ? e.issues[0]?.message : "Datos inválidos."
+    return NextResponse.json({ error: msg }, { status: 400 })
+  }
+
+  try {
+    const previo = await getContrato(b.id)
+    if (!previo) return NextResponse.json({ error: "Contrato no encontrado." }, { status: 404 })
+
+    if (b.accion === "finalizar") {
+      const contrato = await finalizarContrato(b.id, b.fecha_fin)
+      return NextResponse.json({ contrato })
+    }
+
+    // Editar: solo campos de condiciones (no se toca el adjunto ni el creador).
+    const porFactura = (b.tipo_vinculacion ?? previo.tipo_vinculacion) === "freelance" || (b.tipo_vinculacion ?? previo.tipo_vinculacion) === "prestacion_servicios"
+    const modo = b.freelance_modo ?? previo.freelance_modo
+    const contrato = await actualizarContrato(b.id, {
+      ...(b.vigente_desde !== undefined ? { vigente_desde: b.vigente_desde } : {}),
+      ...(b.rol !== undefined ? { rol: b.rol } : {}),
+      ...(b.tipo_vinculacion !== undefined ? { tipo_vinculacion: b.tipo_vinculacion } : {}),
+      salario_basico: porFactura ? 0 : b.salario_basico ?? previo.salario_basico,
+      auxilio_transporte: porFactura ? 0 : b.auxilio_transporte ?? previo.auxilio_transporte,
+      otros_devengos: porFactura ? [] : b.otros_devengos ?? previo.otros_devengos,
+      freelance_modo: porFactura ? modo : null,
+      freelance_tarifa: porFactura ? b.freelance_tarifa ?? previo.freelance_tarifa : null,
+      freelance_moneda: porFactura ? b.freelance_moneda ?? previo.freelance_moneda : null,
+      freelance_meses: porFactura && modo === "por_proyecto" ? b.freelance_meses ?? previo.freelance_meses : null,
+      ...(b.tipo_contrato !== undefined ? { tipo_contrato: b.tipo_contrato } : {}),
+      ...(b.jornada !== undefined ? { jornada: b.jornada } : {}),
+      ...(b.cargo !== undefined ? { cargo: b.cargo } : {}),
+      ...(b.descripcion !== undefined ? { descripcion: b.descripcion } : {}),
+      ...(b.condiciones_adicionales !== undefined ? { condiciones_adicionales: b.condiciones_adicionales } : {}),
+      ...(b.rol_funciones_id !== undefined ? { rol_funciones_id: b.rol_funciones_id } : {}),
+      ...(b.lider_id !== undefined ? { lider_id: b.lider_id } : {}),
+      ...(b.fecha_ingreso !== undefined ? { fecha_ingreso: b.fecha_ingreso } : {}),
+      ...(b.fecha_fin_probable !== undefined ? { fecha_fin_probable: b.fecha_fin_probable } : {}),
+      ...(b.motivo !== undefined ? { motivo: b.motivo } : {}),
+    })
+    await sincronizarEmpleadoDesdeContratos(previo.empleado_id)
+    return NextResponse.json({ contrato })
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : "Error"
+    return NextResponse.json({ error: msg }, { status: 500 })
   }
 }
 

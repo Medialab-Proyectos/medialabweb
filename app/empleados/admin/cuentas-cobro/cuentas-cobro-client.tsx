@@ -5,11 +5,13 @@ import Link from "next/link"
 import { ArrowLeft, FileText, Loader2, Plus, Pencil, Trash2, X, Download } from "lucide-react"
 import {
   type CuentaCobro, type EmisorCuentaCobro, type ModoCuentaCobro, type EstadoCuentaCobro,
-  EMISOR_LABEL, MODO_LABEL, ESTADO_CC_LABEL, totalCuentaCobro,
+  EMISOR_LABEL, MODO_LABEL, ESTADO_CC_LABEL, totalCuentaCobro, netoCuentaCobro,
 } from "@/lib/empleados/cuenta-cobro"
-import type { Empresa, Cuenta, ContratoEmpresa } from "@/lib/empleados/contabilidad"
+import type { Empresa, Cuenta, ContratoEmpresa, TipoIVA } from "@/lib/empleados/contabilidad"
+import { IVA_LABEL } from "@/lib/empleados/contabilidad"
 import type { Moneda } from "@/lib/empleados/freelance"
 import { formatMoneda } from "@/lib/empleados/freelance"
+import { MoneyInput } from "../../money-input"
 import { ConfirmDialog } from "../../confirm-dialog"
 
 const inputCls = "w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm text-[#fff] outline-none transition focus:border-[var(--cyan)]/60"
@@ -23,11 +25,13 @@ function hoyISO() {
 type Form = {
   id?: string; numero: string; emisor: EmisorCuentaCobro; empresa_id: string; contrato_empresa_id: string; modo: ModoCuentaCobro
   cantidad: number; tarifa: number; moneda: Moneda; mes_servicio: string; concepto: string
-  cuenta_id: string; fecha_emision: string; fecha_pago: string; observaciones: string; estado: EstadoCuentaCobro
+  cuenta_id: string; fecha_emision: string; fecha_pago: string; observaciones: string
+  iva_tipo: TipoIVA; iva_valor: number; fee: number; estado: EstadoCuentaCobro
 }
 const vacio: Form = {
   numero: "", emisor: "empresa", empresa_id: "", contrato_empresa_id: "", modo: "por_mes", cantidad: 1, tarifa: 0, moneda: "COP",
-  mes_servicio: "", concepto: "", cuenta_id: "", fecha_emision: hoyISO(), fecha_pago: "", observaciones: "", estado: "borrador",
+  mes_servicio: "", concepto: "", cuenta_id: "", fecha_emision: hoyISO(), fecha_pago: "", observaciones: "",
+  iva_tipo: "na", iva_valor: 0, fee: 0, estado: "borrador",
 }
 
 const estadoStyle: Record<EstadoCuentaCobro, string> = {
@@ -83,7 +87,9 @@ export function CuentasCobroClient() {
           modo: form.modo, cantidad: form.cantidad, tarifa: form.tarifa, moneda: form.moneda,
           mes_servicio: form.mes_servicio || null, concepto: form.concepto || null, cuenta_id: form.cuenta_id || null,
           fecha_emision: form.fecha_emision || null, fecha_pago: form.fecha_pago || null,
-          observaciones: form.observaciones || null, estado: form.estado,
+          observaciones: form.observaciones || null,
+          iva_tipo: form.iva_tipo, iva_valor: form.iva_valor || null, fee: form.fee || null,
+          estado: form.estado,
         }),
       })
       const data = await res.json()
@@ -103,7 +109,8 @@ export function CuentasCobroClient() {
           id: cc.id, numero: cc.numero, emisor: cc.emisor, empresa_id: cc.empresa_id,
           contrato_empresa_id: cc.contrato_empresa_id, modo: cc.modo, cantidad: cc.cantidad, tarifa: cc.tarifa,
           moneda: cc.moneda, mes_servicio: cc.mes_servicio, concepto: cc.concepto, cuenta_id: cc.cuenta_id,
-          fecha_emision: cc.fecha_emision, fecha_pago: cc.fecha_pago, observaciones: cc.observaciones, estado,
+          fecha_emision: cc.fecha_emision, fecha_pago: cc.fecha_pago, observaciones: cc.observaciones,
+          iva_tipo: cc.iva_tipo, iva_valor: cc.iva_valor, fee: cc.fee, estado,
         }),
       })
       const data = await res.json(); if (!res.ok) throw new Error(data.error)
@@ -166,7 +173,7 @@ export function CuentasCobroClient() {
                   {(["borrador", "emitida", "pagada"] as EstadoCuentaCobro[]).map((s) => <option key={s} value={s} className="bg-[#12151c] text-[#fff]">{ESTADO_CC_LABEL[s]}</option>)}
                 </select>
                 <a href={`/api/empleados/admin/cuentas-cobro/${cc.id}/pdf`} target="_blank" rel="noreferrer" title="Descargar PDF" className="rounded-lg p-1.5 text-[#fff]/60 hover:bg-white/5 hover:text-[#fff]"><Download size={15} /></a>
-                <button onClick={() => { setError(""); setForm({ id: cc.id, numero: cc.numero ?? "", emisor: cc.emisor, empresa_id: cc.empresa_id ?? "", contrato_empresa_id: cc.contrato_empresa_id ?? "", modo: cc.modo, cantidad: Number(cc.cantidad) || 0, tarifa: Number(cc.tarifa) || 0, moneda: cc.moneda, mes_servicio: cc.mes_servicio ?? "", concepto: cc.concepto ?? "", cuenta_id: cc.cuenta_id ?? "", fecha_emision: cc.fecha_emision ?? "", fecha_pago: cc.fecha_pago ?? "", observaciones: cc.observaciones ?? "", estado: cc.estado }) }} className="rounded-lg p-1.5 text-[#fff]/60 hover:bg-white/5 hover:text-[#fff]"><Pencil size={15} /></button>
+                <button onClick={() => { setError(""); setForm({ id: cc.id, numero: cc.numero ?? "", emisor: cc.emisor, empresa_id: cc.empresa_id ?? "", contrato_empresa_id: cc.contrato_empresa_id ?? "", modo: cc.modo, cantidad: Number(cc.cantidad) || 0, tarifa: Number(cc.tarifa) || 0, moneda: cc.moneda, mes_servicio: cc.mes_servicio ?? "", concepto: cc.concepto ?? "", cuenta_id: cc.cuenta_id ?? "", fecha_emision: cc.fecha_emision ?? "", fecha_pago: cc.fecha_pago ?? "", observaciones: cc.observaciones ?? "", iva_tipo: cc.iva_tipo ?? "na", iva_valor: Number(cc.iva_valor) || 0, fee: Number(cc.fee) || 0, estado: cc.estado }) }} className="rounded-lg p-1.5 text-[#fff]/60 hover:bg-white/5 hover:text-[#fff]"><Pencil size={15} /></button>
                 <button onClick={() => setConfirmar(cc)} className="rounded-lg p-1.5 text-red-300/70 hover:bg-red-500/10 hover:text-red-300"><Trash2 size={15} /></button>
               </div>
             </div>
@@ -224,8 +231,8 @@ export function CuentasCobroClient() {
                 </select></label>
               <label className="flex flex-col gap-1.5"><span className={lblCls}>{form.modo === "por_hora" ? "N.º de horas" : "N.º de meses"}</span>
                 <input type="number" step="0.01" min="0" value={form.cantidad || ""} onChange={(e) => setForm({ ...form, cantidad: Number(e.target.value) })} className={inputCls} placeholder="1" /></label>
-              <label className="flex flex-col gap-1.5"><span className={lblCls}>{form.modo === "por_hora" ? "Costo por hora" : "Costo por mes"}</span>
-                <input type="number" step="0.01" min="0" value={form.tarifa || ""} onChange={(e) => setForm({ ...form, tarifa: Number(e.target.value) })} className={inputCls} placeholder="0" /></label>
+              <label className="flex flex-col gap-1.5"><span className={lblCls}>{form.modo === "por_hora" ? "Valor por hora" : "Valor por mes"} ({form.moneda})</span>
+                <MoneyInput value={form.tarifa} onChange={(n) => setForm({ ...form, tarifa: n })} className={inputCls} /></label>
               <label className="flex flex-col gap-1.5"><span className={lblCls}>Mes / periodo de servicio</span>
                 <input value={form.mes_servicio} onChange={(e) => setForm({ ...form, mes_servicio: e.target.value })} className={inputCls} placeholder="Julio 2026" /></label>
               <label className="flex flex-col gap-1.5"><span className={lblCls}>Consignar a (cuenta)</span>
@@ -239,6 +246,18 @@ export function CuentasCobroClient() {
                 <input type="date" value={form.fecha_emision} onChange={(e) => setForm({ ...form, fecha_emision: e.target.value })} className={inputCls} /></label>
               <label className="flex flex-col gap-1.5"><span className={lblCls}>Fecha de pago (opcional)</span>
                 <input type="date" value={form.fecha_pago} onChange={(e) => setForm({ ...form, fecha_pago: e.target.value })} className={inputCls} /></label>
+              <label className="flex flex-col gap-1.5"><span className={lblCls}>IVA</span>
+                <select value={form.iva_tipo} onChange={(e) => setForm({ ...form, iva_tipo: e.target.value as TipoIVA })} className={inputCls}>
+                  <option value="na">{IVA_LABEL.na}</option>
+                  <option value="incluido">{IVA_LABEL.incluido}</option>
+                  <option value="exento">{IVA_LABEL.exento}</option>
+                </select></label>
+              {form.iva_tipo === "incluido" ? (
+                <label className="flex flex-col gap-1.5"><span className={lblCls}>Valor del IVA ({form.moneda})</span>
+                  <MoneyInput value={form.iva_valor} onChange={(n) => setForm({ ...form, iva_valor: n })} className={inputCls} /></label>
+              ) : <div className="hidden sm:block" />}
+              <label className="flex flex-col gap-1.5"><span className={lblCls}>Fee / costo bancario ({form.moneda})</span>
+                <MoneyInput value={form.fee} onChange={(n) => setForm({ ...form, fee: n })} className={inputCls} /></label>
               <label className="flex flex-col gap-1.5"><span className={lblCls}>Estado</span>
                 <select value={form.estado} onChange={(e) => setForm({ ...form, estado: e.target.value as EstadoCuentaCobro })} className={inputCls}>
                   <option value="borrador">Borrador</option>
@@ -249,9 +268,17 @@ export function CuentasCobroClient() {
                 <input value={form.observaciones} onChange={(e) => setForm({ ...form, observaciones: e.target.value })} className={inputCls} placeholder="Opcional" /></label>
             </div>
 
-            <div className="mt-4 flex items-center justify-between border-t border-white/10 pt-3">
-              <span className="text-xs text-[#fff]/50">Total</span>
-              <span className="font-display text-xl font-bold text-[var(--cyan)]">{formatMoneda(total, form.moneda)}</span>
+            <div className="mt-4 border-t border-white/10 pt-3">
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-[#fff]/50">Total</span>
+                <span className="font-display text-xl font-bold text-[var(--cyan)]">{formatMoneda(total, form.moneda)}</span>
+              </div>
+              {form.fee > 0 && (
+                <div className="mt-1 flex items-center justify-between text-xs text-[#fff]/55">
+                  <span>Neto tras fee (−{formatMoneda(form.fee, form.moneda)})</span>
+                  <span className="font-semibold text-[#fff]/80">{formatMoneda(netoCuentaCobro(form), form.moneda)}</span>
+                </div>
+              )}
             </div>
 
             <div className="mt-4 flex justify-end gap-2">

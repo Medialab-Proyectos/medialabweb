@@ -140,6 +140,7 @@ export async function generarLiquidacionPDF(
   // ── Pie ─────────────────────────────────────────────────────────────────────
   const generado = new Date().toLocaleString("es-CO", { timeZone: "America/Bogota" })
   T(M, H - 40, `Documento generado por el Portal de Empleados de MediaLab Ingenieria el ${generado}.`, 7, font, gray)
+  T(M, H - 30, "https://medialab.design/  ·  +57 305 4009505  ·  hello@medialab.design", 7, font, gray)
   T(M, H - 30, "Liquidacion definitiva de prestaciones sociales.", 7, font, gray)
 
   return pdf.save()

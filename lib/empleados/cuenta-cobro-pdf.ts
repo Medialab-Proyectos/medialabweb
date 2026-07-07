@@ -121,6 +121,8 @@ export async function generarCuentaCobroPDF(cc: CuentaCobro, datos: DatosCuentaC
 
   const monedaPalabra = cc.moneda === "USD" ? "DOLARES" : "PESOS"
   T(M, netoTop + 40, `Son: ${numeroALetrasBase(total)} ${monedaPalabra} M/CTE.`, 8.5, font, gray)
+  if (cc.iva_tipo === "incluido") T(M, netoTop + 52, `IVA incluido: ${formatMoneda(Number(cc.iva_valor) || 0, cc.moneda)}.`, 8, font, gray)
+  else if (cc.iva_tipo === "exento") T(M, netoTop + 52, "Operacion exenta de IVA (servicio internacional).", 8, font, gray)
 
   // ── Cuenta para consignar ─────────────────────────────────────────────────
   let y = netoTop + 66
@@ -145,6 +147,8 @@ export async function generarCuentaCobroPDF(cc: CuentaCobro, datos: DatosCuentaC
     T(M, firmaTop + 14, datos.emisorPersonal?.nombre || "-", 9, bold)
     if (datos.emisorPersonal?.cedula) T(M, firmaTop + 27, `C.C. ${datos.emisorPersonal.cedula}`, 8, font, gray)
   }
+
+  T(M, H - 26, "https://medialab.design/ · +57 305 4009505 · hello@medialab.design", 7, font, gray)
 
   return pdf.save()
 }

@@ -3,6 +3,8 @@ import Link from "next/link"
 import { FileText, FileSignature, BadgeCheck, GraduationCap, Gift, Clock, ArrowRight, Plane, ClipboardCheck, Target, Receipt, Wrench } from "lucide-react"
 import { requireEmpleado } from "@/lib/empleados/auth"
 import { getEmpleadoById } from "@/lib/empleados/queries"
+import { listContratos } from "@/lib/empleados/contrato-queries"
+import { tieneContratoFirmado } from "@/lib/empleados/contrato"
 import { esVinculacionPorFactura } from "@/lib/empleados/types"
 import { ModuleNav } from "../admin/module-nav"
 import { PortalHeader } from "../portal-header"
@@ -79,10 +81,19 @@ const secciones: Seccion[] = [
     key: "certificado",
     icon: BadgeCheck,
     titulo: "Certificado laboral",
-    desc: "Genera tu certificación laboral con tus fechas y cargo.",
+    desc: "Genera tu certificación de vinculación con tus fechas y cargo.",
     estado: "activo",
     color: "var(--magenta)",
     href: "/empleados/certificado",
+  },
+  {
+    key: "ingresos-retenciones",
+    icon: FileText,
+    titulo: "Ingresos y retenciones",
+    desc: "Descarga tu certificado de ingresos y retenciones (DIAN) por año.",
+    estado: "activo",
+    color: "#8b5cf6",
+    href: "/empleados/ingresos-retenciones",
     laboral: true,
   },
   {
@@ -134,6 +145,16 @@ export default async function InicioPage() {
     esFreelance ? !s.laboral : !s.soloFreelance,
   )
 
+  // Bloqueo por firma: si hay contrato pero NINGUNO firmado, el primer contrato está
+  // pendiente → el portal no se activa hasta que el empleado suba el firmado. El CEO nunca se bloquea.
+  let bloqueadoPorFirma = false
+  if (empleado.rol !== "ceo") {
+    try {
+      const contratos = await listContratos(empleado.id)
+      bloqueadoPorFirma = contratos.length > 0 && !tieneContratoFirmado(contratos)
+    } catch { /* sin tabla de contratos: no bloquear */ }
+  }
+
   return (
     <>
       <PortalHeader nombre={empleado.nombre} rol={empleado.rol} />
@@ -154,6 +175,24 @@ export default async function InicioPage() {
 
         <CambiarClaveCard obligatorio={empleado.must_change_password} />
 
+        {bloqueadoPorFirma ? (
+          <Link
+            href="/empleados/contrato"
+            className="flex items-center justify-between rounded-2xl border border-[var(--magenta)]/30 bg-[var(--magenta)]/[0.08] px-5 py-5 transition hover:bg-[var(--magenta)]/[0.12]"
+          >
+            <div className="flex items-center gap-3">
+              <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[var(--magenta)]/15">
+                <FileSignature size={20} className="text-[var(--magenta)]" />
+              </span>
+              <div>
+                <p className="text-base font-semibold">Firma tu contrato para activar tu portal</p>
+                <p className="text-sm text-[#fff]/60">Descarga tu contrato, fírmalo y súbelo. Hasta entonces el resto del portal y los beneficios están inactivos.</p>
+              </div>
+            </div>
+            <ArrowRight size={18} className="text-[var(--magenta)]" />
+          </Link>
+        ) : (
+        <>
         {empleado.rol === "ceo" && <ModuleNav active="empleado" />}
 
         {empleado.rol === "lider" && (
@@ -230,6 +269,8 @@ export default async function InicioPage() {
             )
           })}
         </div>
+        </>
+        )}
 
         <p className="mt-10 text-center text-xs text-[#fff]/35">
           MediaLab Ingeniería · Portal interno · Tus datos se tratan conforme a la Ley 1581 (Habeas Data).

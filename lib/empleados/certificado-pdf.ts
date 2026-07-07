@@ -151,6 +151,7 @@ export async function generarCertificadoPDF(
   // ── Pie ─────────────────────────────────────────────────────────────────────
   T(M, H - 46, "MediaLab Ingeniería · NIT 901.575.423-8 · Bogotá, Colombia", 8, font, gray)
   T(M, H - 34, "Documento generado por el Portal de Empleados. Válido sin firma manuscrita.", 8, font, gray)
+  T(M, H - 22, "https://medialab.design/ · +57 305 4009505 · hello@medialab.design", 7.5, font, gray)
 
   return pdf.save()
 }

@@ -50,6 +50,7 @@ export function FreelanceClient({ nombre, esPrestacion = false }: { nombre: stri
   const [numero, setNumero] = useState("")
   const [concepto, setConcepto] = useState("")
   const [valor, setValor] = useState(0)
+  const [horas, setHoras] = useState(0)
   const [firma, setFirma] = useState(false)
   const [enviando, setEnviando] = useState(false)
   const soporteRefs = useRef<Record<string, HTMLInputElement | null>>({})
@@ -116,13 +117,14 @@ export function FreelanceClient({ nombre, esPrestacion = false }: { nombre: stri
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           accion: "factura", anio, mes, numero: numero || null, concepto: concepto.trim(),
-          moneda, valor, banco: banco || null, cuenta: cuenta || null,
+          moneda, valor, horas: pago?.modo === "por_hora" ? (horas || null) : null,
+          banco: banco || null, cuenta: cuenta || null,
           tipo_cuenta: tipoCuenta || null, titular: titular || null, firmante: nombre,
         }),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error)
-      setNumero(""); setConcepto(""); setValor(0); setFirma(false)
+      setNumero(""); setConcepto(""); setValor(0); setHoras(0); setFirma(false)
       setMsg("✓ Factura enviada y firmada. Ya puedes descargarla en PDF.")
       await cargar()
     } catch (e) {
@@ -179,7 +181,7 @@ export function FreelanceClient({ nombre, esPrestacion = false }: { nombre: stri
               <div className="flex flex-wrap items-baseline gap-x-6 gap-y-1">
                 <span className="text-sm text-[#fff]/60">Modalidad: <b className="text-[#fff]/90">{FREELANCE_MODO_LABEL[pago.modo]}</b></span>
                 <span className="text-sm text-[#fff]/60">
-                  {pago.modo === "por_hora" ? "Valor por hora: " : pago.modo === "por_mes" ? "Valor por mes: " : "Valor fijo: "}
+                  {pago.modo === "por_hora" ? "Valor por hora: " : pago.modo === "por_mes" ? "Valor por mes: " : pago.modo === "por_proyecto" ? "Valor del proyecto: " : "Valor fijo: "}
                   <b className="font-display text-lg text-[var(--cyan)]">{formatMoneda(pago.tarifa, pago.moneda)}</b>
                 </span>
               </div>
@@ -256,6 +258,22 @@ export function FreelanceClient({ nombre, esPrestacion = false }: { nombre: stri
                 <span className={lblCls}>N.º de factura (opcional)</span>
                 <input value={numero} onChange={(e) => setNumero(e.target.value)} className={inputCls} placeholder="Ej: FE-0012" />
               </label>
+              {pago?.modo === "por_hora" && (
+                <label className="flex flex-col gap-1.5">
+                  <span className={lblCls}>Horas trabajadas</span>
+                  <input
+                    type="number" step="0.5" min="0" value={horas || ""}
+                    onChange={(e) => {
+                      const h = Number(e.target.value)
+                      setHoras(h)
+                      // Valor = horas × tarifa acordada (editable después si hace falta).
+                      setValor(Math.round(h * (pago?.tarifa || 0)))
+                    }}
+                    className={inputCls} placeholder="Ej: 80"
+                  />
+                  <span className="text-[11px] text-[#fff]/40">× {formatMoneda(pago.tarifa, pago.moneda)} por hora</span>
+                </label>
+              )}
               <label className="flex flex-col gap-1.5">
                 <span className={lblCls}>Valor ({moneda})</span>
                 <MoneyInput value={valor} onChange={setValor} className={inputCls} />
@@ -288,7 +306,7 @@ export function FreelanceClient({ nombre, esPrestacion = false }: { nombre: stri
                   return (
                     <div key={f.id} className="flex flex-col gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
                       <div>
-                        <p className="text-sm font-medium">{MESES[f.mes - 1]} {f.anio} · {formatMoneda(f.valor, f.moneda)}</p>
+                        <p className="text-sm font-medium">{MESES[f.mes - 1]} {f.anio} · {formatMoneda(f.valor, f.moneda)}{f.horas ? ` · ${Number(f.horas)}h` : ""}</p>
                         <p className="text-xs text-[#fff]/50">
                           {f.numero ? `N.º ${f.numero} · ` : ""}{f.concepto || "Sin concepto"}
                           {f.observaciones ? ` · "${f.observaciones}"` : ""}

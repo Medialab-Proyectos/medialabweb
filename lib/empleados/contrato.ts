@@ -20,15 +20,39 @@ export type Contrato = {
   freelance_modo: FreelanceModo | null
   freelance_tarifa: number | null
   freelance_moneda: Moneda | null
+  freelance_meses: number | null  // pago por proyecto: nº de meses (1 = pago único)
   tipo_contrato: string | null    // término fijo / indefinido / obra o labor
   jornada: string | null
   cargo: string | null
+  descripcion: string | null      // descripción / objeto del contrato
+  condiciones_adicionales: string | null // cláusulas adicionales (texto libre, otrosí)
+  rol_funciones_id: string | null // perfil de funciones (catálogo roles_funciones)
   lider_id: string | null         // a quién reporta (se sincroniza a empleados.lider_id)
   fecha_ingreso: string | null    // fecha de ingreso (contrato inicial → empleados.fecha_ingreso)
+  fecha_fin_probable: string | null // fecha probable de finalización (freelance / término fijo)
+  fecha_fin: string | null        // finalización real del contrato (contrato finalizado)
   motivo: string | null
-  archivo_path: string | null     // adjunto en Storage (contrato físico / otrosí)
+  archivo_path: string | null     // documento FIRMADO en Storage (contrato / otrosí)
+  estado: EstadoContrato | null   // 'pendiente_firma' hasta subir el firmado; luego 'firmado'
+  firmado_por: "empleado" | "ceo" | null
+  firmado_en: string | null
   creado_por: string | null
   creado_en: string
+}
+
+export type EstadoContrato = "pendiente_firma" | "firmado"
+
+export const ESTADO_CONTRATO_LABEL: Record<EstadoContrato, string> = {
+  pendiente_firma: "Pendiente de firma",
+  firmado: "Firmado",
+}
+
+/**
+ * ¿La versión está firmada (válida)? Los contratos antiguos sin `estado` (null) se
+ * consideran firmados para no bloquear a quien ya tenía contrato.
+ */
+export function esFirmado(c: Pick<Contrato, "estado">): boolean {
+  return c.estado !== "pendiente_firma"
 }
 
 /** ¿La vinculación del contrato cobra por factura (freelance / prestación)? */
@@ -87,6 +111,20 @@ export function condicionesVigentes(contratos: Contrato[], fechaISO?: string): C
   const ordenados = [...contratos].sort((a, b) => a.vigente_desde.localeCompare(b.vigente_desde))
   const vigentes = ordenados.filter((c) => c.vigente_desde <= hoy)
   return vigentes.length ? vigentes[vigentes.length - 1] : ordenados[0]
+}
+
+/**
+ * Condiciones vigentes considerando SOLO versiones firmadas. Las versiones
+ * 'pendiente_firma' no se hacen vigentes (no cambian rol/pago/estado) hasta que se
+ * suba el documento firmado. Es la fuente de verdad para login, pago y beneficios.
+ */
+export function condicionesVigentesFirmadas(contratos: Contrato[], fechaISO?: string): Contrato | null {
+  return condicionesVigentes(contratos.filter(esFirmado), fechaISO)
+}
+
+/** ¿Hay al menos una versión firmada? (Si hay contratos pero ninguno firmado → bloqueo). */
+export function tieneContratoFirmado(contratos: Contrato[]): boolean {
+  return contratos.some(esFirmado)
 }
 
 /**

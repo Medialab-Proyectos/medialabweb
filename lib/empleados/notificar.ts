@@ -22,6 +22,22 @@ export async function notificarCEO(subject: string, text: string): Promise<{ sen
   }
 }
 
+/** Envía un correo a un empleado puntual (best-effort, nunca lanza). */
+export async function notificarEmpleado(email: string, subject: string, text: string): Promise<{ sent: boolean; reason?: string }> {
+  const apiKey = process.env.RESEND_API_KEY
+  const from = process.env.FROM_EMAIL || "MediaLab <no-reply@medialab.design>"
+  if (!apiKey) return { sent: false, reason: "sin RESEND_API_KEY" }
+  if (!email) return { sent: false, reason: "sin correo" }
+  try {
+    const { Resend } = await import("resend")
+    const resend = new Resend(apiKey)
+    await resend.emails.send({ from, to: email, subject: `[Portal MediaLab] ${subject}`, text })
+    return { sent: true }
+  } catch (e) {
+    return { sent: false, reason: e instanceof Error ? e.message : "error" }
+  }
+}
+
 /** Envía un correo a TODOS los empleados activos (best-effort). */
 export async function notificarEmpleadosActivos(subject: string, text: string): Promise<{ sent: boolean; reason?: string }> {
   const apiKey = process.env.RESEND_API_KEY

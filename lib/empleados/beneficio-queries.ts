@@ -1,8 +1,41 @@
 import "server-only"
 import { getServiceClient } from "./db"
-import type { Beneficio, TipoBeneficio, EstadoBeneficio } from "./beneficio"
+import type { Beneficio, BeneficioTipo, TipoBeneficio, EstadoBeneficio } from "./beneficio"
 
 const COLS = "id,empleado_id,tipo,estado,proveedor,datos,observaciones,creado_en,actualizado_en"
+const TIPO_COLS = "id,slug,nombre,descripcion,proveedor,activo,orden,creado_en"
+
+// ── Catálogo de tipos de beneficio (lo gestiona el CEO) ───────────────────────
+export async function listTiposBeneficio(soloActivos = false) {
+  const sb = getServiceClient()
+  let q = sb.from("beneficios_tipos").select(TIPO_COLS)
+  if (soloActivos) q = q.eq("activo", true)
+  const { data, error } = await q.order("orden").order("nombre")
+  if (error) throw error
+  return (data ?? []) as BeneficioTipo[]
+}
+
+export type TipoBeneficioInput = {
+  slug: string
+  nombre: string
+  descripcion: string | null
+  proveedor: string | null
+  activo: boolean
+}
+
+export async function upsertTipoBeneficio(input: TipoBeneficioInput & { id?: string }) {
+  const sb = getServiceClient()
+  const row = input.id ? input : { ...input }
+  const { data, error } = await sb.from("beneficios_tipos").upsert(row, { onConflict: "slug" }).select(TIPO_COLS).single()
+  if (error) throw error
+  return data as BeneficioTipo
+}
+
+export async function eliminarTipoBeneficio(id: string) {
+  const sb = getServiceClient()
+  const { error } = await sb.from("beneficios_tipos").delete().eq("id", id)
+  if (error) throw error
+}
 
 /** Beneficios (activaciones) de un empleado. */
 export async function listBeneficiosEmpleado(empleadoId: string) {

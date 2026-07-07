@@ -4,11 +4,11 @@ import { useEffect, useMemo, useState } from "react"
 import Link from "next/link"
 import {
   ArrowLeft, Loader2, Plus, Pencil, Trash2, X, Wallet, ArrowDownCircle, ArrowUpCircle, ArrowLeftRight,
-  CheckCircle2, Clock, Landmark, Building2, FileText,
+  CheckCircle2, Clock, Landmark, Building2, FileText, AlertTriangle, BarChart3, Users, Repeat,
 } from "lucide-react"
 import {
-  type Cuenta, type Movimiento, type TipoMovimiento, type Moneda, type Empresa, type MetodoPago,
-  CATEGORIAS, CATEGORIA_LABEL, TIPO_MOV_LABEL, MONEDAS_ORDEN, formatMoneda, resumen, saldosPorPlataforma,
+  type Cuenta, type Movimiento, type TipoMovimiento, type Moneda, type Empresa, type MetodoPago, type TipoIVA,
+  CATEGORIAS, CATEGORIA_LABEL, TIPO_MOV_LABEL, IVA_LABEL, MONEDAS_ORDEN, formatMoneda, resumen, saldosPorPlataforma,
 } from "@/lib/empleados/contabilidad"
 import { MESES } from "@/lib/empleados/desprendible"
 import { ConfirmDialog } from "../../confirm-dialog"
@@ -28,6 +28,7 @@ type MovForm = {
   id?: string; cuenta_id: string; cuenta_destino_id: string; fecha: string; tipo: TipoMovimiento
   categoria: string; concepto: string; contraparte: string; empresa_id: string
   valor: number; tasa: number; costo: number; valor_destino: number
+  iva_tipo: TipoIVA; iva_valor: number
   estado: "pendiente" | "realizado"; referencia: string
 }
 
@@ -82,6 +83,36 @@ export function ContabilidadClient() {
   )
   const monedasUsadas = MONEDAS_ORDEN.filter((mo) => cuentas.some((c) => c.moneda === mo))
 
+  // Analítica del dashboard: cuentas por pagar por categoría + ingresos/egresos del mes + alertas.
+  const analitica = useMemo(() => {
+    const num = (x: unknown) => Number(x) || 0
+    const monedaDe = new Map(cuentas.map((c) => [c.id, c.moneda]))
+    const base = () => ({ porPagarTotal: 0, nPorPagar: 0, porCobrarTotal: 0, ingresosMes: 0, egresosMes: 0, cats: new Map<string, number>() })
+    const acc: Record<string, ReturnType<typeof base>> = {}
+    for (const mo of monedasUsadas) acc[mo] = base()
+    for (const m of movimientos) {
+      const mo = monedaDe.get(m.cuenta_id)
+      if (!mo || !acc[mo]) continue
+      if (m.estado === "pendiente") {
+        if (m.tipo === "egreso") {
+          acc[mo].porPagarTotal += num(m.valor); acc[mo].nPorPagar += 1
+          const cat = m.categoria || "otro"
+          acc[mo].cats.set(cat, (acc[mo].cats.get(cat) ?? 0) + num(m.valor))
+        } else if (m.tipo === "ingreso") acc[mo].porCobrarTotal += num(m.valor)
+      } else if (Number(m.fecha.slice(0, 4)) === anio && Number(m.fecha.slice(5, 7)) === mes) {
+        if (m.tipo === "ingreso") acc[mo].ingresosMes += num(m.valor)
+        else if (m.tipo === "egreso") acc[mo].egresosMes += num(m.valor)
+      }
+    }
+    return monedasUsadas.map((mo) => {
+      const a = acc[mo]
+      const porPagar = [...a.cats.entries()].map(([cat, valor]) => ({ cat, valor })).sort((x, y) => y.valor - x.valor)
+      return { moneda: mo, ...a, porPagar, maxCat: porPagar.reduce((mx, b) => Math.max(mx, b.valor), 0) }
+    })
+  }, [cuentas, movimientos, monedasUsadas, anio, mes])
+
+  const alertas = analitica.filter((a) => a.porPagarTotal > 0 || a.porCobrarTotal > 0)
+
   // ── Cuentas ────────────────────────────────────────────────────────────────
   async function guardarCuenta(e: React.FormEvent) {
     e.preventDefault(); if (!formCuenta) return
@@ -125,7 +156,7 @@ export function ContabilidadClient() {
     setFormMov({
       cuenta_id: cuentas[0]?.id ?? "", cuenta_destino_id: "", fecha: hoyISO(), tipo: "ingreso",
       categoria: "", concepto: "", contraparte: "", empresa_id: "",
-      valor: 0, tasa: 0, costo: 0, valor_destino: 0, estado: "realizado", referencia: "",
+      valor: 0, tasa: 0, costo: 0, valor_destino: 0, iva_tipo: "na", iva_valor: 0, estado: "realizado", referencia: "",
     })
   }
   function editarMov(m: Movimiento) {
@@ -134,6 +165,7 @@ export function ContabilidadClient() {
       id: m.id, cuenta_id: m.cuenta_id, cuenta_destino_id: m.cuenta_destino_id ?? "", fecha: m.fecha, tipo: m.tipo,
       categoria: m.categoria ?? "", concepto: m.concepto ?? "", contraparte: m.contraparte ?? "", empresa_id: m.empresa_id ?? "",
       valor: Number(m.valor) || 0, tasa: Number(m.tasa) || 0, costo: Number(m.costo) || 0, valor_destino: Number(m.valor_destino) || 0,
+      iva_tipo: (m.iva_tipo ?? "na") as TipoIVA, iva_valor: Number(m.iva_valor) || 0,
       estado: m.estado, referencia: m.referencia ?? "",
     })
   }
@@ -164,8 +196,11 @@ export function ContabilidadClient() {
           concepto: formMov.concepto || null, contraparte: formMov.contraparte || null, empresa_id: formMov.empresa_id || null,
           valor: formMov.valor,
           tasa: formMov.tipo === "traslado" ? (formMov.tasa || null) : null,
-          costo: formMov.tipo === "traslado" ? (formMov.costo || 0) : 0,
+          // El fee/comisión bancaria aplica a cualquier tipo de movimiento.
+          costo: formMov.costo || 0,
           valor_destino: valorDestino,
+          iva_tipo: formMov.tipo === "traslado" ? null : formMov.iva_tipo,
+          iva_valor: formMov.tipo === "traslado" ? null : (formMov.iva_valor || null),
           estado: formMov.estado, referencia: formMov.referencia || null,
         }),
       })
@@ -195,8 +230,9 @@ export function ContabilidadClient() {
         body: JSON.stringify({
           id: m.id, cuenta_id: m.cuenta_id, cuenta_destino_id: m.cuenta_destino_id,
           fecha: m.fecha, tipo: m.tipo, categoria: m.categoria, concepto: m.concepto,
-          contraparte: m.contraparte, empresa_id: m.empresa_id, valor: Number(m.valor) || 0,
+          contraparte: m.contraparte, empresa_id: m.empresa_id, empleado_id: m.empleado_id, valor: Number(m.valor) || 0,
           tasa: m.tasa, costo: Number(m.costo) || 0, valor_destino: m.valor_destino,
+          iva_tipo: m.iva_tipo, iva_valor: m.iva_valor,
           estado: m.estado === "realizado" ? "pendiente" : "realizado", referencia: m.referencia,
         }),
       })
@@ -235,6 +271,12 @@ export function ContabilidadClient() {
           <h1 className="font-display text-xl font-bold">Contabilidad</h1>
         </div>
         <div className="flex flex-wrap items-center gap-2">
+          <Link href="/empleados/admin/contabilidad/nomina" className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-[#fff]/80 transition hover:bg-white/5">
+            <Users size={15} /> Pagos a empleados
+          </Link>
+          <Link href="/empleados/admin/contabilidad/recurrentes" className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-[#fff]/80 transition hover:bg-white/5">
+            <Repeat size={15} /> Gastos recurrentes
+          </Link>
           <Link href="/empleados/admin/empresas" className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-[#fff]/80 transition hover:bg-white/5">
             <Building2 size={15} /> Gestionar empresas
           </Link>
@@ -254,6 +296,28 @@ export function ContabilidadClient() {
         <div className="flex items-center gap-2 py-10 text-[#fff]/60"><Loader2 size={16} className="animate-spin" /> Cargando…</div>
       ) : (
         <div className="flex flex-col gap-6">
+          {/* Alertas importantes */}
+          {alertas.length > 0 && (
+            <section className="rounded-2xl border border-amber-400/25 bg-amber-400/[0.06] p-4">
+              <div className="mb-2 flex items-center gap-2">
+                <AlertTriangle size={16} className="text-amber-300" />
+                <h2 className="text-sm font-semibold text-amber-100/90">Alertas importantes</h2>
+              </div>
+              <div className="flex flex-col gap-1.5 text-sm">
+                {alertas.map((a) => (
+                  <div key={a.moneda} className="flex flex-wrap items-center gap-x-4 gap-y-1">
+                    {a.porPagarTotal > 0 && (
+                      <span className="text-[#fff]/75">Por pagar {a.moneda}: <b className="text-red-300">{formatMoneda(a.porPagarTotal, a.moneda)}</b> <span className="text-[#fff]/45">({a.nPorPagar} pendiente{a.nPorPagar === 1 ? "" : "s"})</span></span>
+                    )}
+                    {a.porCobrarTotal > 0 && (
+                      <span className="text-[#fff]/75">Por cobrar {a.moneda}: <b className="text-emerald-300">{formatMoneda(a.porCobrarTotal, a.moneda)}</b></span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
           {/* Resumen por moneda */}
           {monedasUsadas.length === 0 ? (
             <div className="rounded-2xl border border-white/10 bg-white/[0.03] px-6 py-10 text-center text-sm text-[#fff]/50">
@@ -291,6 +355,61 @@ export function ContabilidadClient() {
                     <p className="text-sm font-semibold text-[var(--cyan)]">{formatMoneda(p.saldo, p.moneda)}</p>
                   </div>
                 ))}
+              </div>
+            </section>
+          )}
+
+          {/* Gráficas: cuentas por pagar + ingresos vs egresos */}
+          {analitica.some((a) => a.porPagar.length > 0 || a.ingresosMes > 0 || a.egresosMes > 0) && (
+            <section>
+              <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold text-[#fff]/80"><BarChart3 size={15} /> Estadísticas</h2>
+              <div className="grid gap-4 lg:grid-cols-2">
+                {analitica.filter((a) => a.porPagar.length > 0 || a.ingresosMes > 0 || a.egresosMes > 0).map((a) => {
+                  const maxIE = Math.max(a.ingresosMes, a.egresosMes, 1)
+                  return (
+                    <div key={a.moneda} className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+                      <p className="mb-4 text-xs font-semibold uppercase tracking-wide text-[#fff]/45">{a.moneda}</p>
+
+                      {/* Cuentas por pagar por categoría */}
+                      {a.porPagar.length > 0 && (
+                        <div className="mb-5">
+                          <div className="mb-2 flex items-baseline justify-between">
+                            <p className="text-xs text-[#fff]/60">Cuentas por pagar por categoría</p>
+                            <p className="text-xs font-semibold text-red-300">{formatMoneda(a.porPagarTotal, a.moneda)}</p>
+                          </div>
+                          <div className="flex flex-col gap-2">
+                            {a.porPagar.map((b) => (
+                              <div key={b.cat}>
+                                <div className="mb-0.5 flex items-baseline justify-between gap-2 text-[11px]">
+                                  <span className="text-[#fff]/65">{CATEGORIA_LABEL[b.cat] ?? b.cat}</span>
+                                  <span className="text-[#fff]/80">{formatMoneda(b.valor, a.moneda)}</span>
+                                </div>
+                                <div className="h-2 overflow-hidden rounded-full bg-white/5">
+                                  <div className="h-full rounded-full bg-red-400/70" style={{ width: `${Math.max(4, (b.valor / a.maxCat) * 100)}%` }} />
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Ingresos vs egresos del mes */}
+                      <div>
+                        <p className="mb-2 text-xs text-[#fff]/60">Ingresos vs egresos · {MESES[mes - 1]} {anio}</p>
+                        <div className="flex flex-col gap-2">
+                          <div>
+                            <div className="mb-0.5 flex items-baseline justify-between text-[11px]"><span className="text-[#fff]/65">Ingresos</span><span className="text-emerald-300">{formatMoneda(a.ingresosMes, a.moneda)}</span></div>
+                            <div className="h-2 overflow-hidden rounded-full bg-white/5"><div className="h-full rounded-full bg-emerald-400/70" style={{ width: `${Math.max(2, (a.ingresosMes / maxIE) * 100)}%` }} /></div>
+                          </div>
+                          <div>
+                            <div className="mb-0.5 flex items-baseline justify-between text-[11px]"><span className="text-[#fff]/65">Egresos</span><span className="text-red-300">{formatMoneda(a.egresosMes, a.moneda)}</span></div>
+                            <div className="h-2 overflow-hidden rounded-full bg-white/5"><div className="h-full rounded-full bg-red-400/70" style={{ width: `${Math.max(2, (a.egresosMes / maxIE) * 100)}%` }} /></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )
+                })}
               </div>
             </section>
           )}
@@ -458,6 +577,22 @@ export function ContabilidadClient() {
                     <option value="">— Sin categoría —</option>
                     {CATEGORIAS.map((c) => <option key={c} value={c}>{CATEGORIA_LABEL[c]}</option>)}
                   </select></label>
+              )}
+              {formMov.tipo !== "traslado" && (
+                <>
+                  <label className="flex flex-col gap-1.5"><span className={lblCls}>IVA</span>
+                    <select value={formMov.iva_tipo} onChange={(e) => setFormMov({ ...formMov, iva_tipo: e.target.value as TipoIVA })} className={inputCls}>
+                      <option value="na">{IVA_LABEL.na}</option>
+                      <option value="incluido">{IVA_LABEL.incluido}</option>
+                      <option value="exento">{IVA_LABEL.exento}</option>
+                    </select></label>
+                  {formMov.iva_tipo === "incluido" && (
+                    <label className="flex flex-col gap-1.5"><span className={lblCls}>Valor del IVA</span>
+                      <input type="number" step="0.01" min="0" value={formMov.iva_valor || ""} onChange={(e) => setFormMov({ ...formMov, iva_valor: Number(e.target.value) })} className={inputCls} placeholder="0" /></label>
+                  )}
+                  <label className="flex flex-col gap-1.5"><span className={lblCls}>Fee / costo bancario</span>
+                    <input type="number" step="0.01" min="0" value={formMov.costo || ""} onChange={(e) => setFormMov({ ...formMov, costo: Number(e.target.value) })} className={inputCls} placeholder="0" /></label>
+                </>
               )}
 
               {/* Traslado: costo de plataforma + (cross-moneda) tasa y valor destino */}

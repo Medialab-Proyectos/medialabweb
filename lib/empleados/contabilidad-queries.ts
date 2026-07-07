@@ -1,10 +1,10 @@
 import "server-only"
 import { getServiceClient } from "./db"
-import type { Cuenta, Movimiento, Empresa, MetodoPago, ContratoEmpresa } from "./contabilidad"
+import type { Cuenta, Movimiento, Empresa, MetodoPago, ContratoEmpresa, GastoRecurrente } from "./contabilidad"
 
 const CUENTA_COLS = "id,nombre,banco,plataforma,moneda,saldo_inicial,activa,orden,creado_en,actualizado_en"
 const MOV_COLS =
-  "id,cuenta_id,cuenta_destino_id,fecha,tipo,categoria,concepto,contraparte,empresa_id,valor,tasa,costo,valor_destino,estado,referencia,creado_por,creado_en,actualizado_en"
+  "id,cuenta_id,cuenta_destino_id,fecha,tipo,categoria,concepto,contraparte,empresa_id,empleado_id,valor,tasa,costo,valor_destino,iva_tipo,iva_valor,estado,referencia,creado_por,creado_en,actualizado_en"
 
 // ── Cuentas ───────────────────────────────────────────────────────────────────
 export async function listCuentas() {
@@ -68,6 +68,31 @@ export async function upsertMovimiento(input: MovimientoInput) {
 export async function eliminarMovimiento(id: string) {
   const sb = getServiceClient()
   const { error } = await sb.from("movimientos").delete().eq("id", id)
+  if (error) throw error
+}
+
+// ── Gastos recurrentes (catálogo) ─────────────────────────────────────────────
+const GASTO_COLS = "id,nombre,categoria,proveedor,moneda,valor,cuenta_id,activo,orden,creado_en"
+
+export async function listGastosRecurrentes() {
+  const sb = getServiceClient()
+  const { data, error } = await sb.from("gastos_recurrentes").select(GASTO_COLS).order("orden").order("nombre")
+  if (error) throw error
+  return (data ?? []) as GastoRecurrente[]
+}
+
+export type GastoRecurrenteInput = Omit<GastoRecurrente, "id" | "creado_en"> & { id?: string }
+
+export async function upsertGastoRecurrente(input: GastoRecurrenteInput) {
+  const sb = getServiceClient()
+  const { data, error } = await sb.from("gastos_recurrentes").upsert(input).select(GASTO_COLS).single()
+  if (error) throw error
+  return data as GastoRecurrente
+}
+
+export async function eliminarGastoRecurrente(id: string) {
+  const sb = getServiceClient()
+  const { error } = await sb.from("gastos_recurrentes").delete().eq("id", id)
   if (error) throw error
 }
 

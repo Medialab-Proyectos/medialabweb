@@ -1,5 +1,6 @@
 // Tipos y utilidades de cuentas de cobro (puros, cliente y servidor).
 import type { Moneda } from "./freelance"
+import type { TipoIVA } from "./contabilidad"
 
 export type EmisorCuentaCobro = "empresa" | "personal"
 export type ModoCuentaCobro = "por_hora" | "por_mes"
@@ -21,6 +22,9 @@ export type CuentaCobro = {
   fecha_emision: string | null
   fecha_pago: string | null
   observaciones: string | null
+  iva_tipo: TipoIVA | null       // nacional (incluido) vs internacional (exento)
+  iva_valor: number | null
+  fee: number | null             // costo del banco / transferencia al recibir el pago
   estado: EstadoCuentaCobro
   creado_por: string | null
   creado_en: string
@@ -49,4 +53,9 @@ export const MEDIALAB_EMISOR = { nombre: "MEDIALAB INGENIERIA E.U.", nit: "901.5
 /** Total = cantidad × tarifa. */
 export function totalCuentaCobro(cc: Pick<CuentaCobro, "cantidad" | "tarifa">): number {
   return (Number(cc.cantidad) || 0) * (Number(cc.tarifa) || 0)
+}
+
+/** Neto que efectivamente llega = total − fee (costo del banco / transferencia). */
+export function netoCuentaCobro(cc: Pick<CuentaCobro, "cantidad" | "tarifa" | "fee">): number {
+  return Math.max(0, totalCuentaCobro(cc) - (Number(cc.fee) || 0))
 }
