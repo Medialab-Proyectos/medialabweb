@@ -20,9 +20,9 @@ function safe(s: string | null | undefined): string {
 const dark = rgb(0.06, 0.07, 0.09)
 const gray = rgb(0.42, 0.44, 0.5)
 
-export type EmpleadoExport = { nombre: string; email: string; telefono: string | null; direccion: string | null }
+export type EmpleadoExport = { cedula: string; nombre: string; email: string; telefono: string | null; direccion: string | null }
 
-/** PDF con la lista de empleados activos (nombre, correo, celular, dirección). A4 horizontal. */
+/** PDF con la lista de empleados activos (cédula, nombre, correo, celular, dirección). A4 horizontal. */
 export async function generarEmpleadosActivosPDF(empleados: EmpleadoExport[]): Promise<Uint8Array> {
   const pdf = await PDFDocument.create()
   const font = await pdf.embedFont(StandardFonts.Helvetica)
@@ -31,12 +31,13 @@ export async function generarEmpleadosActivosPDF(empleados: EmpleadoExport[]): P
 
   const W = 841.89, H = 595.28 // A4 horizontal
   const M = 40
-  // Columnas: Nombre, Correo, Celular, Dirección
+  // Columnas: Cédula, Nombre, Correo, Celular, Dirección
   const cols = [
-    { x: M, w: 200, label: "NOMBRE" },
-    { x: M + 200, w: 220, label: "CORREO" },
-    { x: M + 420, w: 110, label: "CELULAR" },
-    { x: M + 530, w: W - M - (M + 530), label: "DIRECCIÓN" },
+    { x: M, w: 95, label: "CÉDULA" },
+    { x: M + 95, w: 170, label: "NOMBRE" },
+    { x: M + 265, w: 200, label: "CORREO" },
+    { x: M + 465, w: 100, label: "CELULAR" },
+    { x: M + 565, w: W - M - (M + 565), label: "DIRECCIÓN" },
   ]
 
   let page!: PDFPage
@@ -54,11 +55,13 @@ export async function generarEmpleadosActivosPDF(empleados: EmpleadoExport[]): P
     T(M + logoW + 14, 64, "Empleados activos", 9, font, gray)
     const generado = new Date().toLocaleString("es-CO", { timeZone: "America/Bogota" })
     page.drawText(safe(`Generado el ${generado}`), { x: W - M - font.widthOfTextAtSize(safe(`Generado el ${generado}`), 8), y: H - 40, size: 8, font, color: gray })
-    // Encabezado de tabla
-    const headTop = 92
-    page.drawRectangle({ x: M, y: H - headTop - 14, width: W - 2 * M, height: 18, color: rgb(0.10, 0.11, 0.14) })
-    cols.forEach((c) => page.drawText(c.label, { x: c.x + 6, y: H - headTop, size: 8, font: bold, color: rgb(1, 1, 1) }))
-    y = headTop + 24
+    // Encabezado de tabla (la barra oscura envuelve por completo el texto)
+    const barTop = 84            // borde superior de la barra (coordenada "top")
+    const barH = 20
+    const labelBaseline = barTop + 13.5   // baseline centrado dentro de la barra
+    page.drawRectangle({ x: M, y: H - barTop - barH, width: W - 2 * M, height: barH, color: rgb(0.10, 0.11, 0.14) })
+    cols.forEach((c) => page.drawText(c.label, { x: c.x + 6, y: H - labelBaseline, size: 8, font: bold, color: rgb(1, 1, 1) }))
+    y = barTop + barH + 18
   }
 
   /** Recorta un texto para que quepa en el ancho de columna. */
@@ -72,10 +75,11 @@ export async function generarEmpleadosActivosPDF(empleados: EmpleadoExport[]): P
   nuevaPagina()
   for (const e of empleados) {
     if (y > H - 50) nuevaPagina()
-    T(cols[0].x + 6, y, fit(e.nombre, cols[0].w), 8.5)
-    T(cols[1].x + 6, y, fit(e.email, cols[1].w), 8.5)
-    T(cols[2].x + 6, y, fit(e.telefono || "—", cols[2].w), 8.5)
-    T(cols[3].x + 6, y, fit(e.direccion || "—", cols[3].w), 8.5)
+    T(cols[0].x + 6, y, fit(e.cedula, cols[0].w), 8.5)
+    T(cols[1].x + 6, y, fit(e.nombre, cols[1].w), 8.5)
+    T(cols[2].x + 6, y, fit(e.email, cols[2].w), 8.5)
+    T(cols[3].x + 6, y, fit(e.telefono || "—", cols[3].w), 8.5)
+    T(cols[4].x + 6, y, fit(e.direccion || "—", cols[4].w), 8.5)
     page.drawLine({ start: { x: M, y: H - y - 6 }, end: { x: W - M, y: H - y - 6 }, thickness: 0.4, color: rgb(0.9, 0.91, 0.93) })
     y += 20
   }

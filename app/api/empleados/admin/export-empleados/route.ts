@@ -14,7 +14,7 @@ export async function GET() {
 
   const empleados = (await listEmpleados())
     .filter((e) => e.estado === "activo")
-    .map((e) => ({ nombre: e.nombre, email: e.email, telefono: e.telefono, direccion: e.direccion }))
+    .map((e) => ({ cedula: e.cedula, nombre: e.nombre, email: e.email, telefono: e.telefono, direccion: e.direccion }))
 
   const bytes = await generarEmpleadosActivosPDF(empleados)
   const hoy = new Date().toLocaleDateString("en-CA", { timeZone: "America/Bogota" })
