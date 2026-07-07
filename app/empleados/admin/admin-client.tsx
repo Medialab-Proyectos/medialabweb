@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { useEffect, useMemo, useRef, useState } from "react"
 import {
-  UserPlus, Pencil, KeyRound, Ban, RotateCcw, Loader2, X, Copy, CheckCircle2, Users, FileText, FileSignature, Gift, PiggyBank, ArrowLeft, Plane, ChevronDown, PauseCircle, FileWarning, Receipt, Search, Upload,
+  UserPlus, Pencil, KeyRound, Ban, RotateCcw, Loader2, X, Copy, CheckCircle2, Users, FileText, FileSignature, Gift, PiggyBank, ArrowLeft, Plane, ChevronDown, PauseCircle, FileWarning, Receipt, Search, Upload, Download,
 } from "lucide-react"
 import type { Empleado, Rol, TipoVinculacion } from "@/lib/empleados/types"
 import { ROL_LABEL, esVinculacionPorFactura } from "@/lib/empleados/types"
@@ -331,6 +331,15 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
           >
             <Plane size={15} /> Vacaciones
           </Link>
+          <a
+            href="/api/empleados/admin/export-empleados"
+            target="_blank"
+            rel="noreferrer"
+            title="Exportar empleados activos a PDF"
+            className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-[#fff]/80 transition hover:bg-white/5"
+          >
+            <Download size={15} /> Exportar activos
+          </a>
           <button
             onClick={abrirNuevo}
             className="inline-flex items-center gap-2 rounded-full bg-[var(--cyan)] px-4 py-2 text-sm font-semibold text-[#04191b] transition hover:brightness-110"
