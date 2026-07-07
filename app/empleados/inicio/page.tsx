@@ -46,6 +46,16 @@ const secciones: Seccion[] = [
     laboral: true,
   },
   {
+    key: "convenio-freelance",
+    icon: FileSignature,
+    titulo: "Mi contrato",
+    desc: "Consulta tu pago acordado y descarga tu convenio de freelance.",
+    estado: "activo",
+    color: "var(--cyan)",
+    href: "/empleados/contrato",
+    soloFreelance: true,
+  },
+  {
     key: "desprendibles",
     icon: FileText,
     titulo: "Desprendibles",

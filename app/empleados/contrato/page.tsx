@@ -1,10 +1,12 @@
 import Link from "next/link"
-import { ArrowLeft, Download, FileSignature } from "lucide-react"
+import { ArrowLeft, Download, FileSignature, Wallet } from "lucide-react"
 import { requireEmpleado } from "@/lib/empleados/auth"
 import { getEmpleadoById } from "@/lib/empleados/queries"
 import { listContratos } from "@/lib/empleados/contrato-queries"
 import { condicionesVigentes, totalMensualContrato, inicioContrato, TIPO_VERSION_LABEL, type Contrato } from "@/lib/empleados/contrato"
 import { formatCOP } from "@/lib/empleados/desprendible"
+import { formatMoneda } from "@/lib/empleados/freelance"
+import { esVinculacionPorFactura, FREELANCE_MODO_LABEL } from "@/lib/empleados/types"
 import { PortalHeader } from "../portal-header"
 
 export const dynamic = "force-dynamic"
@@ -12,12 +14,16 @@ export const dynamic = "force-dynamic"
 export default async function ContratoEmpleadoPage() {
   const sesion = await requireEmpleado()
   const empleado = await getEmpleadoById(sesion.sub)
+  const esFreelance = empleado ? esVinculacionPorFactura(empleado.tipo_vinculacion) : false
+
   let contratos: Contrato[] = []
   let sinConfigurar = false
-  try {
-    contratos = await listContratos(sesion.sub)
-  } catch {
-    sinConfigurar = true
+  if (!esFreelance) {
+    try {
+      contratos = await listContratos(sesion.sub)
+    } catch {
+      sinConfigurar = true
+    }
   }
   const vigente = condicionesVigentes(contratos)
 
@@ -33,7 +39,43 @@ export default async function ContratoEmpleadoPage() {
           <h1 className="font-display text-2xl font-bold">Mi contrato</h1>
         </div>
 
-        {sinConfigurar ? (
+        {esFreelance ? (
+          <div className="flex flex-col gap-6">
+            {/* Pago acordado */}
+            <section className="rounded-2xl border border-[var(--cyan)]/25 bg-[var(--cyan)]/[0.05] p-6">
+              <div className="mb-4 flex items-center gap-2">
+                <Wallet size={16} className="text-[var(--cyan)]" />
+                <h2 className="text-sm font-semibold text-[#fff]/85">Pago acordado</h2>
+              </div>
+              {empleado?.freelance_modo ? (
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <Dato k="Modalidad" v={FREELANCE_MODO_LABEL[empleado.freelance_modo]} />
+                  <Dato
+                    k={empleado.freelance_modo === "por_hora" ? "Valor por hora" : empleado.freelance_modo === "por_mes" ? "Valor por mes" : "Valor fijo"}
+                    v={formatMoneda(Number(empleado.freelance_tarifa) || 0, empleado.freelance_moneda ?? "COP")}
+                  />
+                </div>
+              ) : (
+                <p className="text-sm text-[#fff]/55">Tu pago acordado aún no está definido en el portal. Consúltalo con administración.</p>
+              )}
+              {empleado?.freelance_modo === "por_hora" && (
+                <p className="mt-4 border-t border-white/10 pt-3 text-xs text-[#fff]/50">Al facturar, multiplica este valor por las horas trabajadas en el mes.</p>
+              )}
+            </section>
+
+            {/* Convenio / documento */}
+            <section className="rounded-2xl border border-white/10 bg-white/[0.04] p-6">
+              <h2 className="mb-3 text-sm font-semibold text-[#fff]/85">Convenio de freelance</h2>
+              {empleado?.convenio_path ? (
+                <a href="/api/empleados/convenio" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-lg border border-[var(--cyan)]/40 bg-[var(--cyan)]/10 px-4 py-2.5 text-sm font-semibold text-[var(--cyan)] transition hover:bg-[var(--cyan)]/20">
+                  <Download size={15} /> Descargar mi convenio
+                </a>
+              ) : (
+                <p className="text-sm text-[#fff]/55">Aún no se ha adjuntado tu convenio. Cuando administración lo cargue, podrás descargarlo aquí.</p>
+              )}
+            </section>
+          </div>
+        ) : sinConfigurar ? (
           <div className="rounded-2xl border border-amber-400/25 bg-amber-400/[0.07] px-6 py-10 text-center text-sm text-amber-200/90">
             La sección de contratos aún no está habilitada. (Falta correr la migración
             <code className="mx-1 rounded bg-black/30 px-1">schema-fase3-contratos.sql</code> en Supabase.)
