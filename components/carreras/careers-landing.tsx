@@ -11,10 +11,12 @@ import {
 } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 
-/* ── Job listing data ── */
-const POSITIONS = [
+/* ── Job listing data ──
+   Para reabrir una vacante, pon `active: true`. Solo se muestran las activas. */
+const ALL_POSITIONS = [
   {
     id: "frontend-fullstack-junior",
+    active: false,
     titleEs: "Desarrollador/a Front-End / FullStack Junior",
     titleEn: "Front-End / FullStack Junior Developer",
     locationEs: "Remoto · Bogotá, Colombia",
@@ -55,6 +57,9 @@ const POSITIONS = [
     ],
   },
 ]
+
+/* Solo se listan las vacantes activas. Actualmente no hay ninguna abierta. */
+const POSITIONS = ALL_POSITIONS.filter((p) => p.active)
 
 /* ── Benefits data ── */
 const BENEFITS_ES = [
@@ -561,6 +566,31 @@ export function CareersLanding() {
               </div>
             )
           })}
+
+          {/* Empty state — sin vacantes abiertas */}
+          {POSITIONS.length === 0 && (
+            <div className="text-center p-8 md:p-12 rounded-2xl border border-border bg-card">
+              <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-[var(--magenta)]/10 border border-[var(--magenta)]/20 mb-5">
+                <Briefcase size={24} className="text-[var(--magenta)]" />
+              </div>
+              <h3 className="font-bold text-xl text-foreground mb-3">
+                {t("Por ahora no tenemos vacantes abiertas", "No open positions right now")}
+              </h3>
+              <p className="text-muted-foreground max-w-md mx-auto mb-6">
+                {t(
+                  "Estamos entre convocatorias, pero siempre queremos conocer talento excepcional. Déjanos tu perfil y te escribimos cuando abramos una posición que encaje contigo.",
+                  "We're between openings, but we always want to meet exceptional talent. Send us your profile and we'll reach out when a role that fits you opens up."
+                )}
+              </p>
+              <button
+                onClick={() => handleApply(t("Candidatura espontánea", "Spontaneous application"))}
+                className="group inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-bold text-[15px] bg-[var(--magenta)] text-white transition-all hover:brightness-110 active:scale-95 shadow-lg shadow-[var(--magenta)]/25"
+              >
+                {t("Enviar mi perfil", "Send my profile")}
+                <Send size={16} className="group-hover:translate-x-1 transition-transform" />
+              </button>
+            </div>
+          )}
         </div>
       </section>
 
