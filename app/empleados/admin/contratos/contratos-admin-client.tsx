@@ -5,11 +5,12 @@ import Link from "next/link"
 import {
   ArrowLeft, Loader2, Plus, Trash2, Save, FileSignature, Upload, Download, History,
 } from "lucide-react"
-import type { Empleado } from "@/lib/empleados/types"
-import { ROL_LABEL } from "@/lib/empleados/types"
+import type { Empleado, Rol, TipoVinculacion, FreelanceModo } from "@/lib/empleados/types"
+import { ROL_LABEL, FREELANCE_MODO_LABEL, esVinculacionPorFactura } from "@/lib/empleados/types"
 import { formatCOP } from "@/lib/empleados/desprendible"
+import { formatMoneda, type Moneda } from "@/lib/empleados/freelance"
 import {
-  type Contrato, condicionesVigentes, totalMensualContrato, inicioContrato, TIPO_VERSION_LABEL,
+  type Contrato, condicionesVigentes, totalMensualContrato, inicioContrato, TIPO_VERSION_LABEL, contratoEsPorFactura,
 } from "@/lib/empleados/contrato"
 import { TIPOS_CONTRATO, JORNADAS } from "@/lib/empleados/catalogos-co"
 import { MoneyInput } from "../../money-input"
@@ -33,9 +34,14 @@ export function ContratosAdminClient({ empleados }: { empleados: Empleado[] }) {
 
   // Form de nueva versión
   const [vigenteDesde, setVigenteDesde] = useState(hoy)
+  const [rol, setRol] = useState<Rol>("empleado")
+  const [vinculacion, setVinculacion] = useState<TipoVinculacion>("empleado")
   const [basico, setBasico] = useState(0)
   const [auxilio, setAuxilio] = useState(0)
   const [otros, setOtros] = useState<Linea[]>([])
+  const [flModo, setFlModo] = useState<"" | FreelanceModo>("")
+  const [flTarifa, setFlTarifa] = useState(0)
+  const [flMoneda, setFlMoneda] = useState<Moneda>("COP")
   const [tipoContrato, setTipoContrato] = useState("")
   const [jornada, setJornada] = useState("")
   const [cargo, setCargo] = useState("")
@@ -59,9 +65,14 @@ export function ContratosAdminClient({ empleados }: { empleados: Empleado[] }) {
   function prefill(from: Contrato | null, emp?: Empleado) {
     // El contrato inicial arranca en la fecha de ingreso; un otrosí, hoy por defecto.
     setVigenteDesde(from ? hoy : (emp?.fecha_ingreso ?? hoy))
+    setRol(from?.rol ?? emp?.rol ?? "empleado")
+    setVinculacion(from?.tipo_vinculacion ?? emp?.tipo_vinculacion ?? "empleado")
     setBasico(from ? Number(from.salario_basico) || 0 : 0)
     setAuxilio(from ? Number(from.auxilio_transporte) || 0 : 0)
     setOtros(from ? (from.otros_devengos ?? []).map((l) => ({ concepto: l.concepto, valor: Number(l.valor) || 0 })) : [])
+    setFlModo(from?.freelance_modo ?? emp?.freelance_modo ?? "")
+    setFlTarifa(from ? Number(from.freelance_tarifa) || 0 : Number(emp?.freelance_tarifa) || 0)
+    setFlMoneda(from?.freelance_moneda ?? emp?.freelance_moneda ?? "COP")
     setTipoContrato(from?.tipo_contrato ?? "")
     setJornada(from?.jornada ?? "")
     setCargo(from?.cargo ?? emp?.cargo ?? "")
@@ -95,10 +106,13 @@ export function ContratosAdminClient({ empleados }: { empleados: Empleado[] }) {
 
   const totalNuevo = totalMensualContrato({ salario_basico: basico, auxilio_transporte: auxilio, otros_devengos: otros })
 
+  const porFactura = esVinculacionPorFactura(vinculacion)
+
   async function guardar() {
     if (!empleadoId) return setError("Selecciona un empleado.")
     if (esInicial && !fechaIngreso) return setError("Indica la fecha de ingreso.")
     if (!esInicial && !vigenteDesde) return setError("Indica la fecha de vigencia del ajuste.")
+    if (porFactura && !flModo) return setError("Elige el modo de pago del freelance (por hora, por mes o valor fijo).")
     if (!esInicial && !motivo.trim()) return setError("Describe el motivo del ajuste (otrosí).")
     if (!esInicial && !archivo) return setError("Adjunta el documento del otrosí (PDF). Es obligatorio para registrar un cambio.")
     setError(""); setMsg(""); setGuardando(true)
@@ -108,11 +122,16 @@ export function ContratosAdminClient({ empleados }: { empleados: Empleado[] }) {
         tipo: esInicial ? "inicial" : "otrosi",
         // En el inicial, la fecha de ingreso ES la vigencia; en un otrosí, la fecha del ajuste.
         vigente_desde: esInicial ? (fechaIngreso || hoy) : vigenteDesde,
-        salario_basico: Number(basico) || 0,
-        auxilio_transporte: Number(auxilio) || 0,
-        otros_devengos: otros.filter((l) => l.concepto.trim()).map((l) => ({ concepto: l.concepto, valor: Number(l.valor) || 0 })),
-        tipo_contrato: tipoContrato || null,
-        jornada: jornada || null,
+        rol,
+        tipo_vinculacion: vinculacion,
+        salario_basico: porFactura ? 0 : Number(basico) || 0,
+        auxilio_transporte: porFactura ? 0 : Number(auxilio) || 0,
+        otros_devengos: porFactura ? [] : otros.filter((l) => l.concepto.trim()).map((l) => ({ concepto: l.concepto, valor: Number(l.valor) || 0 })),
+        freelance_modo: porFactura ? (flModo || null) : null,
+        freelance_tarifa: porFactura ? (Number(flTarifa) || 0) : null,
+        freelance_moneda: porFactura ? flMoneda : null,
+        tipo_contrato: porFactura ? null : (tipoContrato || null),
+        jornada: porFactura ? null : (jornada || null),
         cargo: cargo || null,
         lider_id: liderId || null,
         fecha_ingreso: esInicial ? (fechaIngreso || null) : null,
@@ -187,11 +206,10 @@ export function ContratosAdminClient({ empleados }: { empleados: Empleado[] }) {
         <span className={lblCls}>Empleado</span>
         <select value={empleadoId} onChange={(e) => setEmpleadoId(e.target.value)} className={inputCls}>
           <option value="">— Selecciona —</option>
-          {empleados.filter((e) => e.tipo_vinculacion === "empleado").map((e) => <option key={e.id} value={e.id}>{e.nombre} · CC {e.cedula}</option>)}
+          {empleados.map((e) => <option key={e.id} value={e.id}>{e.nombre} · CC {e.cedula}</option>)}
         </select>
         <span className="text-[11px] text-[#fff]/40">
-          Solo empleados con vinculación laboral. El pago y el convenio de un <b className="text-[#fff]/60">freelance</b> o de <b className="text-[#fff]/60">prestación de servicios</b> se definen al editar su ficha en{" "}
-          <Link href="/empleados/admin" className="text-[var(--cyan)] hover:underline">Gestión de empleados</Link> (bloque «Pago acordado» y «Contrato / convenio»).
+          El contrato define el <b className="text-[#fff]/60">rol</b>, la <b className="text-[#fff]/60">vinculación</b> (laboral / freelance / prestación) y las condiciones de pago. Sin contrato, la persona es «empleado» básico.
         </span>
       </label>
 
@@ -212,23 +230,40 @@ export function ContratosAdminClient({ empleados }: { empleados: Empleado[] }) {
                   <h2 className="text-sm font-semibold text-[#fff]/85">Condiciones vigentes</h2>
                   <span className="text-[11px] text-[#fff]/45">desde {inicioContrato(vigente, fechaIngresoSel)}</span>
                 </div>
-                <div className="grid gap-3 sm:grid-cols-2">
-                  <Dato k="Salario básico" v={formatCOP(vigente.salario_basico)} />
-                  <Dato k="Auxilio de transporte" v={formatCOP(vigente.auxilio_transporte)} />
-                  <Dato k="Cargo" v={vigente.cargo || "—"} />
-                  <Dato k="Tipo de contrato" v={vigente.tipo_contrato || "—"} />
-                </div>
-                {(vigente.otros_devengos ?? []).length > 0 && (
-                  <div className="mt-3 border-t border-white/10 pt-3 text-sm text-[#fff]/70">
-                    {vigente.otros_devengos.map((l, i) => (
-                      <div key={i} className="flex justify-between"><span>{l.concepto}</span><span>{formatCOP(l.valor)}</span></div>
-                    ))}
-                  </div>
+                {contratoEsPorFactura(vigente) ? (
+                  <>
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      <Dato k="Vinculación" v={vigente.tipo_vinculacion === "freelance" ? "Freelance" : "Prestación de servicios"} />
+                      <Dato k="Rol" v={ROL_LABEL[vigente.rol ?? "empleado"]} />
+                      <Dato k="Cargo" v={vigente.cargo || "—"} />
+                      <Dato k="Modo de pago" v={vigente.freelance_modo ? FREELANCE_MODO_LABEL[vigente.freelance_modo] : "—"} />
+                    </div>
+                    <div className="mt-3 border-t border-white/10 pt-3">
+                      <p className="text-xs text-[#fff]/50">Pago acordado</p>
+                      <p className="font-display text-2xl font-bold text-[var(--cyan)]">{formatMoneda(Number(vigente.freelance_tarifa) || 0, vigente.freelance_moneda ?? "COP")}</p>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      <Dato k="Salario básico" v={formatCOP(vigente.salario_basico)} />
+                      <Dato k="Auxilio de transporte" v={formatCOP(vigente.auxilio_transporte)} />
+                      <Dato k="Cargo" v={vigente.cargo || "—"} />
+                      <Dato k="Tipo de contrato" v={vigente.tipo_contrato || "—"} />
+                    </div>
+                    {(vigente.otros_devengos ?? []).length > 0 && (
+                      <div className="mt-3 border-t border-white/10 pt-3 text-sm text-[#fff]/70">
+                        {vigente.otros_devengos.map((l, i) => (
+                          <div key={i} className="flex justify-between"><span>{l.concepto}</span><span>{formatCOP(l.valor)}</span></div>
+                        ))}
+                      </div>
+                    )}
+                    <div className="mt-3 border-t border-white/10 pt-3">
+                      <p className="text-xs text-[#fff]/50">Total mensual devengado</p>
+                      <p className="font-display text-2xl font-bold text-[var(--cyan)]">{formatCOP(totalMensualContrato(vigente))}</p>
+                    </div>
+                  </>
                 )}
-                <div className="mt-3 border-t border-white/10 pt-3">
-                  <p className="text-xs text-[#fff]/50">Total mensual devengado</p>
-                  <p className="font-display text-2xl font-bold text-[var(--cyan)]">{formatCOP(totalMensualContrato(vigente))}</p>
-                </div>
               </section>
             )}
 
@@ -259,46 +294,94 @@ export function ContratosAdminClient({ empleados }: { empleados: Empleado[] }) {
                   <Campo label="Vigente desde (fecha del ajuste)"><input type="date" value={vigenteDesde} onChange={(e) => setVigenteDesde(e.target.value)} className={inputCls} /></Campo>
                 )}
                 <Campo label="Cargo"><input value={cargo} onChange={(e) => setCargo(e.target.value)} className={inputCls} /></Campo>
-                <Campo label="Salario básico"><MoneyInput value={basico} onChange={setBasico} className={inputCls} /></Campo>
-                <Campo label="Auxilio de transporte"><MoneyInput value={auxilio} onChange={setAuxilio} className={inputCls} /></Campo>
-                <Campo label="Tipo de contrato"><input list="cat-tipos-contrato" value={tipoContrato} onChange={(e) => setTipoContrato(e.target.value)} placeholder="Elige o escribe…" className={inputCls} /></Campo>
-                <Campo label="Jornada"><input list="cat-jornadas" value={jornada} onChange={(e) => setJornada(e.target.value)} placeholder="Elige o escribe…" className={inputCls} /></Campo>
+                <Campo label="Vinculación">
+                  <select value={vinculacion} onChange={(e) => setVinculacion(e.target.value as TipoVinculacion)} className={inputCls}>
+                    <option value="empleado">Empleado (laboral)</option>
+                    <option value="freelance">Freelance (por factura)</option>
+                    <option value="prestacion_servicios">Prestación de servicios (factura + soporte)</option>
+                  </select>
+                </Campo>
+                <Campo label="Rol (acceso)">
+                  <select value={rol} onChange={(e) => setRol(e.target.value as Rol)} className={inputCls}>
+                    <option value="empleado">Empleado</option>
+                    <option value="lider">Líder</option>
+                    <option value="ceo">CEO</option>
+                  </select>
+                </Campo>
                 <Campo label="Líder (a quién reporta)">
                   <select value={liderId} onChange={(e) => setLiderId(e.target.value)} className={inputCls}>
                     <option value="">— Reporta al CEO —</option>
                     {posiblesLideres.map((l) => <option key={l.id} value={l.id}>{l.nombre} · {ROL_LABEL[l.rol]}</option>)}
                   </select>
                 </Campo>
-                <datalist id="cat-tipos-contrato">{TIPOS_CONTRATO.map((x) => <option key={x} value={x} />)}</datalist>
-                <datalist id="cat-jornadas">{JORNADAS.map((x) => <option key={x} value={x} />)}</datalist>
+                {!porFactura && (
+                  <>
+                    <Campo label="Salario básico"><MoneyInput value={basico} onChange={setBasico} className={inputCls} /></Campo>
+                    <Campo label="Auxilio de transporte"><MoneyInput value={auxilio} onChange={setAuxilio} className={inputCls} /></Campo>
+                    <Campo label="Tipo de contrato"><input list="cat-tipos-contrato" value={tipoContrato} onChange={(e) => setTipoContrato(e.target.value)} placeholder="Elige o escribe…" className={inputCls} /></Campo>
+                    <Campo label="Jornada"><input list="cat-jornadas" value={jornada} onChange={(e) => setJornada(e.target.value)} placeholder="Elige o escribe…" className={inputCls} /></Campo>
+                    <datalist id="cat-tipos-contrato">{TIPOS_CONTRATO.map((x) => <option key={x} value={x} />)}</datalist>
+                    <datalist id="cat-jornadas">{JORNADAS.map((x) => <option key={x} value={x} />)}</datalist>
+                  </>
+                )}
               </div>
-              <p className="mt-2 text-[11px] text-[#fff]/40">
-                El <b>auxilio de transporte</b> solo aplica a salarios ≤ 2 SMMLV y trabajo presencial.
-                En remoto o salarios mayores va en $0 (si otorgas conectividad, agrégala en “Otros devengos”).
-              </p>
 
-              {/* Otros devengos fijos */}
-              <div className="mt-4">
-                <span className={lblCls}>Otros devengos fijos</span>
-                <div className="mt-2 flex flex-col gap-2">
-                  {otros.length === 0 && <p className="text-xs text-[#fff]/35">Sin conceptos adicionales.</p>}
-                  {otros.map((l, i) => (
-                    <div key={i} className="flex items-center gap-2">
-                      <input value={l.concepto} onChange={(e) => setOtros(otros.map((x, j) => j === i ? { ...x, concepto: e.target.value } : x))} placeholder="Concepto" className={`${inputCls} min-w-0 flex-1`} />
-                      <div className="w-36 shrink-0">
-                        <MoneyInput value={l.valor} onChange={(n) => setOtros(otros.map((x, j) => j === i ? { ...x, valor: n } : x))} placeholder="Valor" className={inputCls} />
-                      </div>
-                      <button onClick={() => setOtros(otros.filter((_, j) => j !== i))} className="rounded-lg p-2 text-red-300/70 hover:bg-red-500/10 hover:text-red-300"><Trash2 size={15} /></button>
-                    </div>
-                  ))}
-                  <div className="flex flex-wrap gap-1.5">
-                    {OTROS_SUGERIDOS.filter((s) => !otros.some((l) => l.concepto.trim().toLowerCase() === s.toLowerCase())).map((s) => (
-                      <button key={s} onClick={() => setOtros([...otros, { concepto: s, valor: 0 }])} className="rounded-full border border-white/10 px-2.5 py-1 text-[11px] text-[#fff]/60 hover:bg-white/5">+ {s}</button>
-                    ))}
-                    <button onClick={() => setOtros([...otros, { concepto: "", valor: 0 }])} className="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-2.5 py-1 text-[11px] text-[#fff]/70 hover:bg-white/5"><Plus size={12} /> Línea</button>
+              {porFactura ? (
+                /* Pago acordado del freelance / prestación de servicios */
+                <div className="mt-4 rounded-lg border border-white/10 bg-white/[0.03] p-3">
+                  <p className="mb-1 text-[11px] font-semibold uppercase tracking-wide text-[var(--cyan)]">Pago acordado</p>
+                  <p className="mb-3 text-[11px] text-[#fff]/45">El freelance lo verá en su portal (solo lectura). Si es por mes o valor fijo, se le precarga al crear su factura.</p>
+                  <div className="grid gap-3 sm:grid-cols-3">
+                    <Campo label="Modo">
+                      <select value={flModo} onChange={(e) => setFlModo(e.target.value as "" | FreelanceModo)} className={inputCls}>
+                        <option value="">— Elige —</option>
+                        <option value="por_hora">{FREELANCE_MODO_LABEL.por_hora}</option>
+                        <option value="por_mes">{FREELANCE_MODO_LABEL.por_mes}</option>
+                        <option value="fijo">{FREELANCE_MODO_LABEL.fijo}</option>
+                      </select>
+                    </Campo>
+                    <Campo label={flModo === "por_hora" ? "Valor por hora" : flModo === "por_mes" ? "Valor por mes" : "Valor"}>
+                      <MoneyInput value={flTarifa} onChange={setFlTarifa} className={inputCls} />
+                    </Campo>
+                    <Campo label="Moneda">
+                      <select value={flMoneda} onChange={(e) => setFlMoneda(e.target.value as Moneda)} className={inputCls}>
+                        <option value="COP">COP</option>
+                        <option value="USD">USD</option>
+                      </select>
+                    </Campo>
                   </div>
                 </div>
-              </div>
+              ) : (
+                <>
+                  <p className="mt-2 text-[11px] text-[#fff]/40">
+                    El <b>auxilio de transporte</b> solo aplica a salarios ≤ 2 SMMLV y trabajo presencial.
+                    En remoto o salarios mayores va en $0 (si otorgas conectividad, agrégala en “Otros devengos”).
+                  </p>
+
+                  {/* Otros devengos fijos */}
+                  <div className="mt-4">
+                    <span className={lblCls}>Otros devengos fijos</span>
+                    <div className="mt-2 flex flex-col gap-2">
+                      {otros.length === 0 && <p className="text-xs text-[#fff]/35">Sin conceptos adicionales.</p>}
+                      {otros.map((l, i) => (
+                        <div key={i} className="flex items-center gap-2">
+                          <input value={l.concepto} onChange={(e) => setOtros(otros.map((x, j) => j === i ? { ...x, concepto: e.target.value } : x))} placeholder="Concepto" className={`${inputCls} min-w-0 flex-1`} />
+                          <div className="w-36 shrink-0">
+                            <MoneyInput value={l.valor} onChange={(n) => setOtros(otros.map((x, j) => j === i ? { ...x, valor: n } : x))} placeholder="Valor" className={inputCls} />
+                          </div>
+                          <button onClick={() => setOtros(otros.filter((_, j) => j !== i))} className="rounded-lg p-2 text-red-300/70 hover:bg-red-500/10 hover:text-red-300"><Trash2 size={15} /></button>
+                        </div>
+                      ))}
+                      <div className="flex flex-wrap gap-1.5">
+                        {OTROS_SUGERIDOS.filter((s) => !otros.some((l) => l.concepto.trim().toLowerCase() === s.toLowerCase())).map((s) => (
+                          <button key={s} onClick={() => setOtros([...otros, { concepto: s, valor: 0 }])} className="rounded-full border border-white/10 px-2.5 py-1 text-[11px] text-[#fff]/60 hover:bg-white/5">+ {s}</button>
+                        ))}
+                        <button onClick={() => setOtros([...otros, { concepto: "", valor: 0 }])} className="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-2.5 py-1 text-[11px] text-[#fff]/70 hover:bg-white/5"><Plus size={12} /> Línea</button>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
 
               {!esInicial && (
                 <div className="mt-4">
@@ -333,7 +416,11 @@ export function ContratosAdminClient({ empleados }: { empleados: Empleado[] }) {
                 <button onClick={guardar} disabled={guardando} className="inline-flex items-center justify-center gap-2 rounded-lg bg-[var(--cyan)] px-4 py-2.5 text-sm font-semibold text-[#04191b] transition hover:brightness-110 disabled:opacity-60">
                   {guardando ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />} {esInicial ? "Definir contrato" : "Registrar otrosí"}
                 </button>
-                <span className="text-sm text-[#fff]/50">Total mensual: <b className="text-[#fff]/80">{formatCOP(totalNuevo)}</b></span>
+                <span className="text-sm text-[#fff]/50">
+                  {porFactura
+                    ? <>Pago acordado: <b className="text-[#fff]/80">{formatMoneda(Number(flTarifa) || 0, flMoneda)}</b></>
+                    : <>Total mensual: <b className="text-[#fff]/80">{formatCOP(totalNuevo)}</b></>}
+                </span>
               </div>
             </section>
           </div>
@@ -356,8 +443,17 @@ export function ContratosAdminClient({ empleados }: { empleados: Empleado[] }) {
                         <button onClick={() => setConfirmarEliminar(c.id)} className="rounded p-1 text-red-300/60 hover:bg-red-500/10 hover:text-red-300"><Trash2 size={13} /></button>
                       </div>
                       <p className="mt-2 text-xs text-[#fff]/50">Vigente desde {inicioContrato(c, fechaIngresoSel)}</p>
-                      <p className="mt-1 text-sm text-[#fff]/85">{formatCOP(totalMensualContrato(c))} / mes</p>
-                      <p className="text-[11px] text-[#fff]/45">Básico {formatCOP(c.salario_basico)} · Aux. {formatCOP(c.auxilio_transporte)}</p>
+                      {contratoEsPorFactura(c) ? (
+                        <>
+                          <p className="mt-1 text-sm text-[#fff]/85">{formatMoneda(Number(c.freelance_tarifa) || 0, c.freelance_moneda ?? "COP")}</p>
+                          <p className="text-[11px] text-[#fff]/45">{c.tipo_vinculacion === "freelance" ? "Freelance" : "Prestación"} · {c.freelance_modo ? FREELANCE_MODO_LABEL[c.freelance_modo] : "—"}</p>
+                        </>
+                      ) : (
+                        <>
+                          <p className="mt-1 text-sm text-[#fff]/85">{formatCOP(totalMensualContrato(c))} / mes</p>
+                          <p className="text-[11px] text-[#fff]/45">Básico {formatCOP(c.salario_basico)} · Aux. {formatCOP(c.auxilio_transporte)}</p>
+                        </>
+                      )}
                       {c.motivo && <p className="mt-1 text-xs italic text-[#fff]/55">“{c.motivo}”</p>}
                       <div className="mt-2 border-t border-white/10 pt-2">
                         {c.archivo_path ? (

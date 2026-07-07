@@ -1,12 +1,13 @@
 import "server-only"
 import { getServiceClient } from "./db"
-import type { Contrato, PrimaDoc, CesantiasDoc } from "./contrato"
+import { condicionesVigentes, type Contrato, type PrimaDoc, type CesantiasDoc } from "./contrato"
+import { actualizarEmpleado } from "./queries"
 
 const BUCKET = "contratos"
 
 // ── Contratos ────────────────────────────────────────────────────────────────
 const COLS =
-  "id,empleado_id,tipo,vigente_desde,salario_basico,auxilio_transporte,otros_devengos,tipo_contrato,jornada,cargo,lider_id,fecha_ingreso,motivo,archivo_path,creado_por,creado_en"
+  "id,empleado_id,tipo,vigente_desde,rol,tipo_vinculacion,salario_basico,auxilio_transporte,otros_devengos,freelance_modo,freelance_tarifa,freelance_moneda,tipo_contrato,jornada,cargo,lider_id,fecha_ingreso,motivo,archivo_path,creado_por,creado_en"
 
 /** Historial completo de condiciones de un empleado (más reciente primero). */
 export async function listContratos(empleadoId: string) {
@@ -45,6 +46,38 @@ export async function eliminarContrato(id: string) {
   }
   const { error } = await sb.from("contratos").delete().eq("id", id)
   if (error) throw error
+}
+
+/**
+ * Sincroniza a la ficha del empleado los datos que ahora manda el contrato: rol,
+ * vinculación, líder, fecha de ingreso, cargo y pago (salario/pago acordado). Toma
+ * el contrato VIGENTE. El login usa empleados.rol, por eso se mantiene denormalizado.
+ * Sin contratos → el empleado vuelve a "empleado" básico.
+ */
+export async function sincronizarEmpleadoDesdeContratos(empleadoId: string) {
+  const contratos = await listContratos(empleadoId)
+  const vigente = condicionesVigentes(contratos)
+  if (!vigente) {
+    await actualizarEmpleado(empleadoId, {
+      rol: "empleado", tipo_vinculacion: "empleado",
+      freelance_modo: null, freelance_tarifa: null, freelance_moneda: null,
+    }).catch(() => {})
+    return
+  }
+  const porFactura = vigente.tipo_vinculacion === "freelance" || vigente.tipo_vinculacion === "prestacion_servicios"
+  // La fecha de ingreso la fija el contrato inicial (un otrosí no la trae).
+  const inicial = contratos.find((c) => c.tipo === "inicial") ?? contratos[contratos.length - 1]
+  await actualizarEmpleado(empleadoId, {
+    rol: vigente.rol ?? "empleado",
+    tipo_vinculacion: vigente.tipo_vinculacion ?? "empleado",
+    cargo: vigente.cargo ?? null,
+    tipo_contrato: vigente.tipo_contrato ?? null,
+    lider_id: vigente.lider_id ?? null,
+    fecha_ingreso: inicial?.fecha_ingreso ?? vigente.fecha_ingreso ?? null,
+    freelance_modo: porFactura ? vigente.freelance_modo ?? null : null,
+    freelance_tarifa: porFactura ? vigente.freelance_tarifa ?? null : null,
+    freelance_moneda: porFactura ? vigente.freelance_moneda ?? null : null,
+  }).catch(() => {})
 }
 
 /** ¿El empleado ya tiene al menos una versión de contrato? */

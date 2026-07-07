@@ -1,5 +1,7 @@
 // Tipos y utilidades de contratos y primas (puros, usables en cliente y servidor).
 import type { LineaNomina } from "./desprendible"
+import type { Rol, TipoVinculacion, FreelanceModo } from "./types"
+import type { Moneda } from "./freelance"
 
 export type TipoContratoVersion = "inicial" | "otrosi"
 
@@ -8,9 +10,16 @@ export type Contrato = {
   empleado_id: string
   tipo: TipoContratoVersion
   vigente_desde: string           // ISO date (YYYY-MM-DD)
+  // El contrato es la fuente de verdad de estos campos (se sincronizan a la ficha).
+  rol: Rol | null                 // rol de acceso; el login usa el del contrato vigente
+  tipo_vinculacion: TipoVinculacion | null   // laboral / freelance / prestación
   salario_basico: number
   auxilio_transporte: number
   otros_devengos: LineaNomina[]   // conceptos fijos adicionales { concepto, valor }
+  // Pago acordado (freelance / prestación de servicios): reemplaza al salario.
+  freelance_modo: FreelanceModo | null
+  freelance_tarifa: number | null
+  freelance_moneda: Moneda | null
   tipo_contrato: string | null    // término fijo / indefinido / obra o labor
   jornada: string | null
   cargo: string | null
@@ -20,6 +29,11 @@ export type Contrato = {
   archivo_path: string | null     // adjunto en Storage (contrato físico / otrosí)
   creado_por: string | null
   creado_en: string
+}
+
+/** ¿La vinculación del contrato cobra por factura (freelance / prestación)? */
+export function contratoEsPorFactura(c: Pick<Contrato, "tipo_vinculacion">): boolean {
+  return c.tipo_vinculacion === "freelance" || c.tipo_vinculacion === "prestacion_servicios"
 }
 
 export type PrimaDoc = {

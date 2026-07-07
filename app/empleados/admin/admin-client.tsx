@@ -5,9 +5,8 @@ import { useEffect, useMemo, useRef, useState } from "react"
 import {
   UserPlus, Pencil, KeyRound, Ban, RotateCcw, Loader2, X, Copy, CheckCircle2, Users, FileText, FileSignature, Gift, PiggyBank, ArrowLeft, Plane, ChevronDown, PauseCircle, FileWarning, Receipt, Search, Upload, Download,
 } from "lucide-react"
-import type { Empleado, Rol, TipoVinculacion, FreelanceModo } from "@/lib/empleados/types"
-import { ROL_LABEL, esVinculacionPorFactura, FREELANCE_MODO_LABEL } from "@/lib/empleados/types"
-import { MoneyInput } from "../money-input"
+import type { Empleado, Rol } from "@/lib/empleados/types"
+import { ROL_LABEL } from "@/lib/empleados/types"
 import type { Beneficio, TipoBeneficio } from "@/lib/empleados/beneficio"
 import { TIPO_BENEFICIO_LABEL, ESTADO_BENEFICIO_LABEL } from "@/lib/empleados/beneficio"
 import { EPS_CO, FONDOS_CESANTIAS, FONDOS_PENSION } from "@/lib/empleados/catalogos-co"
@@ -34,23 +33,12 @@ type FormState = {
   eps: string
   fondo_cesantias: string
   fondo_pension: string
-  rol: Rol
-  tipo_vinculacion: TipoVinculacion
-  freelance_modo: "" | FreelanceModo
-  freelance_tarifa: number
-  freelance_moneda: "COP" | "USD"
-  lider_id: string
-  fecha_ingreso: string
-  fecha_egreso: string
-  fecha_fin_probable: string
   convenio_path: string | null
 }
 
 const vacío: FormState = {
   cedula: "", nombre: "", email: "", telefono: "", direccion: "", eps: "", fondo_cesantias: "", fondo_pension: "",
-  rol: "empleado", tipo_vinculacion: "empleado",
-  freelance_modo: "", freelance_tarifa: 0, freelance_moneda: "COP",
-  lider_id: "", fecha_ingreso: "", fecha_egreso: "", fecha_fin_probable: "", convenio_path: null,
+  convenio_path: null,
 }
 
 const inputCls =
@@ -89,11 +77,6 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
     return m
   }, [empleados])
 
-  const posiblesLideres = useMemo(
-    () => empleados.filter((e) => e.rol === "lider" || e.rol === "ceo"),
-    [empleados],
-  )
-
   function abrirNuevo() { setError(""); setForm({ ...vacío }) }
   function abrirEditar(e: Empleado) {
     setError("")
@@ -101,10 +84,6 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
       id: e.id, cedula: e.cedula, nombre: e.nombre, email: e.email,
       telefono: e.telefono ?? "", direccion: e.direccion ?? "", eps: e.eps ?? "",
       fondo_cesantias: e.fondo_cesantias ?? "", fondo_pension: e.fondo_pension ?? "",
-      rol: e.rol, tipo_vinculacion: e.tipo_vinculacion ?? "empleado",
-      freelance_modo: e.freelance_modo ?? "", freelance_tarifa: Number(e.freelance_tarifa) || 0, freelance_moneda: e.freelance_moneda ?? "COP",
-      lider_id: e.lider_id ?? "", fecha_ingreso: e.fecha_ingreso ?? "",
-      fecha_egreso: e.fecha_egreso ?? "", fecha_fin_probable: e.fecha_fin_probable ?? "",
       convenio_path: e.convenio_path ?? null,
     })
   }
@@ -124,11 +103,6 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
     if (!form.id && !/^\d{5,}$/.test(form.cedula.trim())) {
       return setError("La cédula debe ser numérica (solo dígitos).")
     }
-    if (form.fecha_ingreso && form.fecha_egreso && form.fecha_egreso < form.fecha_ingreso) {
-      return setError("La fecha de egreso no puede ser anterior a la de ingreso.")
-    }
-    // Líder y fecha de ingreso: solo para vinculación por factura; en laboral los define el Contrato.
-    const porFactura = esVinculacionPorFactura(form.tipo_vinculacion)
     setError(""); setSaving(true)
     try {
       if (form.id) {
@@ -139,17 +113,9 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
             id: form.id, accion: "actualizar",
             nombre: form.nombre, email: form.email,
             telefono: form.telefono || null, direccion: form.direccion || null,
-            eps: porFactura ? null : (form.eps || null),
-            fondo_cesantias: porFactura ? null : (form.fondo_cesantias || null),
-            fondo_pension: porFactura ? null : (form.fondo_pension || null),
-            rol: form.rol, tipo_vinculacion: form.tipo_vinculacion,
-            freelance_modo: porFactura ? (form.freelance_modo || null) : null,
-            freelance_tarifa: porFactura && form.freelance_modo ? (form.freelance_tarifa || null) : null,
-            freelance_moneda: porFactura && form.freelance_modo ? form.freelance_moneda : null,
-            lider_id: porFactura ? (form.lider_id || null) : undefined,
-            fecha_ingreso: porFactura ? (form.fecha_ingreso || null) : undefined,
-            fecha_egreso: form.fecha_egreso || null,
-            fecha_fin_probable: porFactura ? (form.fecha_fin_probable || null) : null,
+            eps: form.eps || null,
+            fondo_cesantias: form.fondo_cesantias || null,
+            fondo_pension: form.fondo_pension || null,
           }),
         })
         const data = await res.json()
@@ -162,15 +128,9 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
           body: JSON.stringify({
             cedula: form.cedula, nombre: form.nombre, email: form.email,
             telefono: form.telefono || null, direccion: form.direccion || null,
-            eps: porFactura ? null : (form.eps || null),
-            fondo_cesantias: porFactura ? null : (form.fondo_cesantias || null),
-            fondo_pension: porFactura ? null : (form.fondo_pension || null),
-            rol: form.rol, tipo_vinculacion: form.tipo_vinculacion,
-            freelance_modo: porFactura ? (form.freelance_modo || null) : null,
-            freelance_tarifa: porFactura && form.freelance_modo ? (form.freelance_tarifa || null) : null,
-            freelance_moneda: porFactura && form.freelance_modo ? form.freelance_moneda : null,
-            lider_id: porFactura ? (form.lider_id || null) : undefined,
-            fecha_ingreso: porFactura ? (form.fecha_ingreso || null) : undefined,
+            eps: form.eps || null,
+            fondo_cesantias: form.fondo_cesantias || null,
+            fondo_pension: form.fondo_pension || null,
           }),
         })
         const data = await res.json()
@@ -504,106 +464,25 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
                 <span className={lblCls}>Dirección</span>
                 <input value={form.direccion} onChange={(e) => setForm({ ...form, direccion: e.target.value })} placeholder="Dirección de residencia" className={inputCls} />
               </label>
-              {form.tipo_vinculacion === "empleado" && (
-                <>
-                  <label className="flex flex-col gap-1.5">
-                    <span className={lblCls}>EPS (salud)</span>
-                    <input list="cat-eps" value={form.eps} onChange={(e) => setForm({ ...form, eps: e.target.value })} placeholder="Elige o escribe…" className={inputCls} />
-                    <datalist id="cat-eps">{EPS_CO.map((x) => <option key={x} value={x} />)}</datalist>
-                  </label>
-                  <label className="flex flex-col gap-1.5">
-                    <span className={lblCls}>Fondo de cesantías</span>
-                    <input list="cat-cesantias" value={form.fondo_cesantias} onChange={(e) => setForm({ ...form, fondo_cesantias: e.target.value })} placeholder="Elige o escribe…" className={inputCls} />
-                    <datalist id="cat-cesantias">{FONDOS_CESANTIAS.map((x) => <option key={x} value={x} />)}</datalist>
-                  </label>
-                  <label className="flex flex-col gap-1.5">
-                    <span className={lblCls}>Fondo de pensiones</span>
-                    <input list="cat-pension" value={form.fondo_pension} onChange={(e) => setForm({ ...form, fondo_pension: e.target.value })} placeholder="Elige o escribe…" className={inputCls} />
-                    <datalist id="cat-pension">{FONDOS_PENSION.map((x) => <option key={x} value={x} />)}</datalist>
-                  </label>
-                </>
-              )}
               <label className="flex flex-col gap-1.5">
-                <span className={lblCls}>Rol</span>
-                <select value={form.rol} onChange={(e) => setForm({ ...form, rol: e.target.value as Rol })} className={inputCls}>
-                  <option value="empleado">Empleado</option>
-                  <option value="lider">Líder</option>
-                  <option value="ceo">CEO</option>
-                </select>
+                <span className={lblCls}>EPS (salud)</span>
+                <input list="cat-eps" value={form.eps} onChange={(e) => setForm({ ...form, eps: e.target.value })} placeholder="Elige o escribe…" className={inputCls} />
+                <datalist id="cat-eps">{EPS_CO.map((x) => <option key={x} value={x} />)}</datalist>
               </label>
               <label className="flex flex-col gap-1.5">
-                <span className={lblCls}>Vinculación</span>
-                <select value={form.tipo_vinculacion} onChange={(e) => setForm({ ...form, tipo_vinculacion: e.target.value as TipoVinculacion })} className={inputCls}>
-                  <option value="empleado">Empleado (laboral)</option>
-                  <option value="freelance">Freelance (por factura)</option>
-                  <option value="prestacion_servicios">Prestación de servicios (factura + soporte)</option>
-                </select>
+                <span className={lblCls}>Fondo de cesantías</span>
+                <input list="cat-cesantias" value={form.fondo_cesantias} onChange={(e) => setForm({ ...form, fondo_cesantias: e.target.value })} placeholder="Elige o escribe…" className={inputCls} />
+                <datalist id="cat-cesantias">{FONDOS_CESANTIAS.map((x) => <option key={x} value={x} />)}</datalist>
               </label>
-              {form.tipo_vinculacion === "empleado" && (
-                <p className="rounded-lg bg-white/[0.03] px-3 py-2 text-[11px] text-[#fff]/45 sm:col-span-2">
-                  El <b className="text-[#fff]/70">cargo</b>, la <b className="text-[#fff]/70">modalidad</b> (indefinido/fijo/obra), el <b className="text-[#fff]/70">salario</b>, el <b className="text-[#fff]/70">líder</b> (a quién reporta) y la <b className="text-[#fff]/70">fecha de ingreso</b> se definen en <b className="text-[#fff]/70">Contratos</b> (no aquí).
-                </p>
-              )}
-              {esVinculacionPorFactura(form.tipo_vinculacion) && (
-                <>
-                  <label className="flex flex-col gap-1.5 sm:col-span-2">
-                    <span className={lblCls}>Líder (a quién reporta)</span>
-                    <select value={form.lider_id} onChange={(e) => setForm({ ...form, lider_id: e.target.value })} className={inputCls}>
-                      <option value="">— Sin líder (reporta al CEO) —</option>
-                      {posiblesLideres.filter((l) => l.id !== form.id).map((l) => (
-                        <option key={l.id} value={l.id}>{l.nombre} · {ROL_LABEL[l.rol]}</option>
-                      ))}
-                    </select>
-                  </label>
-                  <label className="flex flex-col gap-1.5">
-                    <span className={lblCls}>Fecha de ingreso</span>
-                    <input type="date" value={form.fecha_ingreso} onChange={(e) => setForm({ ...form, fecha_ingreso: e.target.value })} className={inputCls} />
-                  </label>
-                  <div className="rounded-lg border border-white/10 bg-white/[0.03] p-3 sm:col-span-2">
-                    <p className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-[var(--cyan)]">Pago acordado</p>
-                    <p className="mb-3 text-[11px] text-[#fff]/45">Lo verá el freelance en su portal (solo lectura). Si es por mes o valor fijo, se le precarga al crear su factura.</p>
-                    <div className="grid gap-3 sm:grid-cols-3">
-                      <label className="flex flex-col gap-1.5">
-                        <span className={lblCls}>Modo</span>
-                        <select value={form.freelance_modo} onChange={(e) => setForm({ ...form, freelance_modo: e.target.value as "" | FreelanceModo })} className={inputCls}>
-                          <option value="">— Sin definir —</option>
-                          <option value="por_hora">{FREELANCE_MODO_LABEL.por_hora}</option>
-                          <option value="por_mes">{FREELANCE_MODO_LABEL.por_mes}</option>
-                          <option value="fijo">{FREELANCE_MODO_LABEL.fijo}</option>
-                        </select>
-                      </label>
-                      {form.freelance_modo && (
-                        <>
-                          <label className="flex flex-col gap-1.5">
-                            <span className={lblCls}>{form.freelance_modo === "por_hora" ? "Valor por hora" : form.freelance_modo === "por_mes" ? "Valor por mes" : "Valor fijo"}</span>
-                            <MoneyInput value={form.freelance_tarifa} onChange={(v) => setForm({ ...form, freelance_tarifa: v })} className={inputCls} />
-                          </label>
-                          <label className="flex flex-col gap-1.5">
-                            <span className={lblCls}>Moneda</span>
-                            <select value={form.freelance_moneda} onChange={(e) => setForm({ ...form, freelance_moneda: e.target.value as "COP" | "USD" })} className={inputCls}>
-                              <option value="COP">COP</option>
-                              <option value="USD">USD</option>
-                            </select>
-                          </label>
-                        </>
-                      )}
-                    </div>
-                  </div>
-                </>
-              )}
+              <label className="flex flex-col gap-1.5">
+                <span className={lblCls}>Fondo de pensiones</span>
+                <input list="cat-pension" value={form.fondo_pension} onChange={(e) => setForm({ ...form, fondo_pension: e.target.value })} placeholder="Elige o escribe…" className={inputCls} />
+                <datalist id="cat-pension">{FONDOS_PENSION.map((x) => <option key={x} value={x} />)}</datalist>
+              </label>
+              <p className="rounded-lg bg-white/[0.03] px-3 py-2 text-[11px] text-[#fff]/45 sm:col-span-2">
+                El <b className="text-[#fff]/70">rol</b>, la <b className="text-[#fff]/70">vinculación</b> (laboral/freelance/prestación), el <b className="text-[#fff]/70">cargo</b>, el <b className="text-[#fff]/70">líder</b>, la <b className="text-[#fff]/70">fecha de ingreso</b> y las <b className="text-[#fff]/70">condiciones de pago</b> se definen en <b className="text-[#fff]/70">Contratos</b>. Aquí solo van los datos personales.
+              </p>
               {form.id && (
-                <label className="flex flex-col gap-1.5">
-                  <span className={lblCls}>Fecha de egreso</span>
-                  <input type="date" value={form.fecha_egreso} onChange={(e) => setForm({ ...form, fecha_egreso: e.target.value })} className={inputCls} />
-                </label>
-              )}
-              {esVinculacionPorFactura(form.tipo_vinculacion) && (
-                <label className="flex flex-col gap-1.5">
-                  <span className={lblCls}>Fecha probable de finalización</span>
-                  <input type="date" value={form.fecha_fin_probable} onChange={(e) => setForm({ ...form, fecha_fin_probable: e.target.value })} className={inputCls} />
-                </label>
-              )}
-              {esVinculacionPorFactura(form.tipo_vinculacion) && form.id && (
                 <div className="flex flex-col gap-1.5 sm:col-span-2">
                   <span className={lblCls}>Contrato / convenio (documento)</span>
                   <div className="flex flex-wrap items-center gap-2">

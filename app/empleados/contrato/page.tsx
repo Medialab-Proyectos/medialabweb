@@ -18,14 +18,13 @@ export default async function ContratoEmpleadoPage() {
 
   let contratos: Contrato[] = []
   let sinConfigurar = false
-  if (!esFreelance) {
-    try {
-      contratos = await listContratos(sesion.sub)
-    } catch {
-      sinConfigurar = true
-    }
+  try {
+    contratos = await listContratos(sesion.sub)
+  } catch {
+    sinConfigurar = true
   }
   const vigente = condicionesVigentes(contratos)
+  const conArchivo = contratos.filter((c) => c.archivo_path)
 
   return (
     <>
@@ -65,14 +64,22 @@ export default async function ContratoEmpleadoPage() {
 
             {/* Convenio / documento */}
             <section className="rounded-2xl border border-white/10 bg-white/[0.04] p-6">
-              <h2 className="mb-3 text-sm font-semibold text-[#fff]/85">Convenio de freelance</h2>
-              {empleado?.convenio_path ? (
-                <a href="/api/empleados/convenio" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-lg border border-[var(--cyan)]/40 bg-[var(--cyan)]/10 px-4 py-2.5 text-sm font-semibold text-[var(--cyan)] transition hover:bg-[var(--cyan)]/20">
-                  <Download size={15} /> Descargar mi convenio
-                </a>
-              ) : (
-                <p className="text-sm text-[#fff]/55">Aún no se ha adjuntado tu convenio. Cuando administración lo cargue, podrás descargarlo aquí.</p>
-              )}
+              <h2 className="mb-3 text-sm font-semibold text-[#fff]/85">Convenio / documento del contrato</h2>
+              <div className="flex flex-col gap-2">
+                {conArchivo.map((c) => (
+                  <a key={c.id} href={`/api/empleados/contratos/${c.id}/archivo`} className="inline-flex w-fit items-center gap-2 rounded-lg border border-[var(--cyan)]/40 bg-[var(--cyan)]/10 px-4 py-2.5 text-sm font-semibold text-[var(--cyan)] transition hover:bg-[var(--cyan)]/20">
+                    <Download size={15} /> {c.tipo === "inicial" ? "Contrato" : "Otrosí"} · {inicioContrato(c, empleado?.fecha_ingreso ?? null)}
+                  </a>
+                ))}
+                {empleado?.convenio_path && (
+                  <a href="/api/empleados/convenio" target="_blank" rel="noreferrer" className="inline-flex w-fit items-center gap-2 rounded-lg border border-white/15 px-4 py-2.5 text-sm text-[#fff]/80 transition hover:bg-white/5">
+                    <Download size={15} /> Convenio adjunto
+                  </a>
+                )}
+                {conArchivo.length === 0 && !empleado?.convenio_path && (
+                  <p className="text-sm text-[#fff]/55">Aún no se ha adjuntado tu documento. Cuando administración lo cargue, podrás descargarlo aquí.</p>
+                )}
+              </div>
             </section>
           </div>
         ) : sinConfigurar ? (
