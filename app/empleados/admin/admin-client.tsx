@@ -60,8 +60,6 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
   const [benefItems, setBenefItems] = useState<Beneficio[]>([])
   const [benefLoading, setBenefLoading] = useState(false)
   const [benefBusy, setBenefBusy] = useState<TipoBeneficio | null>(null)
-  const [subiendoConvenio, setSubiendoConvenio] = useState(false)
-  const convenioRef = useRef<HTMLInputElement>(null)
 
   const visibles = useMemo(() => {
     const t = q.trim().toLowerCase()
@@ -228,22 +226,6 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
     }
   }
 
-  async function subirConvenio(file: File) {
-    if (!form?.id) return
-    setError(""); setSubiendoConvenio(true)
-    const fd = new FormData(); fd.append("archivo", file)
-    try {
-      const res = await fetch(`/api/empleados/admin/empleado/${form.id}/convenio`, { method: "POST", body: fd })
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.error)
-      upsertLocal(data.empleado)
-      setForm((f) => (f ? { ...f, convenio_path: (data.empleado as Empleado).convenio_path } : f))
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Error al subir el convenio.")
-    } finally {
-      setSubiendoConvenio(false)
-    }
-  }
 
   // Acciones de fila (compartidas por la tabla y las tarjetas móviles).
   function acciones(e: Empleado) {
@@ -465,39 +447,23 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
                 <input value={form.direccion} onChange={(e) => setForm({ ...form, direccion: e.target.value })} placeholder="Dirección de residencia" className={inputCls} />
               </label>
               <label className="flex flex-col gap-1.5">
-                <span className={lblCls}>EPS (salud)</span>
-                <input list="cat-eps" value={form.eps} onChange={(e) => setForm({ ...form, eps: e.target.value })} placeholder="Elige o escribe…" className={inputCls} />
-                <datalist id="cat-eps">{EPS_CO.map((x) => <option key={x} value={x} />)}</datalist>
+                <span className={lblCls}>EPS (salud) · opcional</span>
+                <input list="cat-eps" value={form.eps} onChange={(e) => setForm({ ...form, eps: e.target.value })} placeholder="Elige, escribe o «No aplica»" className={inputCls} />
+                <datalist id="cat-eps"><option value="No aplica" />{EPS_CO.map((x) => <option key={x} value={x} />)}</datalist>
               </label>
               <label className="flex flex-col gap-1.5">
-                <span className={lblCls}>Fondo de cesantías</span>
-                <input list="cat-cesantias" value={form.fondo_cesantias} onChange={(e) => setForm({ ...form, fondo_cesantias: e.target.value })} placeholder="Elige o escribe…" className={inputCls} />
-                <datalist id="cat-cesantias">{FONDOS_CESANTIAS.map((x) => <option key={x} value={x} />)}</datalist>
+                <span className={lblCls}>Fondo de cesantías · opcional</span>
+                <input list="cat-cesantias" value={form.fondo_cesantias} onChange={(e) => setForm({ ...form, fondo_cesantias: e.target.value })} placeholder="Elige, escribe o «No aplica»" className={inputCls} />
+                <datalist id="cat-cesantias"><option value="No aplica" />{FONDOS_CESANTIAS.map((x) => <option key={x} value={x} />)}</datalist>
               </label>
               <label className="flex flex-col gap-1.5">
-                <span className={lblCls}>Fondo de pensiones</span>
-                <input list="cat-pension" value={form.fondo_pension} onChange={(e) => setForm({ ...form, fondo_pension: e.target.value })} placeholder="Elige o escribe…" className={inputCls} />
-                <datalist id="cat-pension">{FONDOS_PENSION.map((x) => <option key={x} value={x} />)}</datalist>
+                <span className={lblCls}>Fondo de pensiones · opcional</span>
+                <input list="cat-pension" value={form.fondo_pension} onChange={(e) => setForm({ ...form, fondo_pension: e.target.value })} placeholder="Elige, escribe o «No aplica»" className={inputCls} />
+                <datalist id="cat-pension"><option value="No aplica" />{FONDOS_PENSION.map((x) => <option key={x} value={x} />)}</datalist>
               </label>
               <p className="rounded-lg bg-white/[0.03] px-3 py-2 text-[11px] text-[#fff]/45 sm:col-span-2">
-                El <b className="text-[#fff]/70">rol</b>, la <b className="text-[#fff]/70">vinculación</b> (laboral/freelance/prestación), el <b className="text-[#fff]/70">cargo</b>, el <b className="text-[#fff]/70">líder</b>, la <b className="text-[#fff]/70">fecha de ingreso</b> y las <b className="text-[#fff]/70">condiciones de pago</b> se definen en <b className="text-[#fff]/70">Contratos</b>. Aquí solo van los datos personales.
+                El <b className="text-[#fff]/70">rol</b>, la <b className="text-[#fff]/70">vinculación</b> (laboral/freelance/prestación), el <b className="text-[#fff]/70">cargo</b>, el <b className="text-[#fff]/70">líder</b>, la <b className="text-[#fff]/70">fecha de ingreso</b>, las <b className="text-[#fff]/70">condiciones de pago</b> y el <b className="text-[#fff]/70">documento del contrato</b> se definen en <b className="text-[#fff]/70">Contratos</b>. Aquí solo van los datos personales.
               </p>
-              {form.id && (
-                <div className="flex flex-col gap-1.5 sm:col-span-2">
-                  <span className={lblCls}>Contrato / convenio (documento)</span>
-                  <div className="flex flex-wrap items-center gap-2">
-                    <input ref={convenioRef} type="file" accept="application/pdf,image/*" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) subirConvenio(f); e.target.value = "" }} />
-                    <button type="button" onClick={() => convenioRef.current?.click()} disabled={subiendoConvenio} className="inline-flex items-center gap-2 rounded-lg border border-white/15 px-3 py-2 text-sm text-[#fff]/80 hover:bg-white/5 disabled:opacity-60">
-                      {subiendoConvenio ? <Loader2 size={14} className="animate-spin" /> : <Upload size={14} />} {form.convenio_path ? "Reemplazar" : "Adjuntar"}
-                    </button>
-                    {form.convenio_path && (
-                      <a href={`/api/empleados/admin/empleado/${form.id}/convenio`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 rounded-lg border border-white/15 px-3 py-2 text-sm text-[#fff]/80 hover:bg-white/5">
-                        <FileSignature size={14} /> Ver convenio
-                      </a>
-                    )}
-                  </div>
-                </div>
-              )}
             </div>
 
             {error && <p className="mt-3 rounded-lg bg-red-500/10 px-3 py-2 text-sm text-red-300">{error}</p>}

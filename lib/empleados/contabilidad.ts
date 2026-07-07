@@ -45,9 +45,17 @@ export type Empresa = {
   nombre: string
   nit: string | null
   correo: string | null
+  pais: string | null
+  telefono: string | null
   creado_en: string
   actualizado_en: string
 }
+
+/** Países frecuentes para el selector de empresas (se puede escribir otro). */
+export const PAISES = [
+  "Colombia", "México", "Estados Unidos", "España", "Argentina", "Chile", "Perú",
+  "Ecuador", "Panamá", "Costa Rica", "Uruguay", "Brasil", "Canadá", "Reino Unido",
+]
 
 export type ModoFacturacion = "por_hora" | "por_mes"
 

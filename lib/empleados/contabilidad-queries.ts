@@ -72,7 +72,7 @@ export async function eliminarMovimiento(id: string) {
 }
 
 // ── Empresas ────────────────────────────────────────────────────────────────
-const EMPRESA_COLS = "id,nombre,nit,correo,creado_en,actualizado_en"
+const EMPRESA_COLS = "id,nombre,nit,correo,pais,telefono,creado_en,actualizado_en"
 const CONTRATO_EMPRESA_COLS = "id,empresa_id,nombre,modo,tarifa,moneda,activo,notas,creado_en,actualizado_en"
 
 export async function listEmpresas() {

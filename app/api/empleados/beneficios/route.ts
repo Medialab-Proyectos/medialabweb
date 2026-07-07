@@ -1,9 +1,7 @@
 import { NextResponse } from "next/server"
-import { z } from "zod"
 import { getSession } from "@/lib/empleados/auth"
 import { portalConfigurado } from "@/lib/empleados/db"
-import { listBeneficiosEmpleado, solicitarBeneficio } from "@/lib/empleados/beneficio-queries"
-import { PROVEEDOR_MEDICINA_PREPAGADA, MEDPLUS } from "@/lib/empleados/beneficio"
+import { listBeneficiosEmpleado } from "@/lib/empleados/beneficio-queries"
 
 export const runtime = "nodejs"
 
@@ -26,26 +24,11 @@ export async function GET() {
   }
 }
 
-const schema = z.object({ tipo: z.enum(["medicina_prepagada"]) })
-
-export async function POST(req: Request) {
-  if (!portalConfigurado()) return NextResponse.json({ error: "Portal sin configurar." }, { status: 503 })
-  const s = await getSession()
-  if (!s) return NextResponse.json({ error: "No autorizado." }, { status: 401 })
-
-  let b: z.infer<typeof schema>
-  try {
-    b = schema.parse(await req.json())
-  } catch {
-    return NextResponse.json({ error: "Datos inválidos." }, { status: 400 })
-  }
-
-  const proveedor = b.tipo === "medicina_prepagada" ? PROVEEDOR_MEDICINA_PREPAGADA : null
-  try {
-    const beneficio = await solicitarBeneficio(s.sub, b.tipo, proveedor, { plan: MEDPLUS.plan })
-    return NextResponse.json({ beneficio })
-  } catch (e) {
-    const f = faltaTabla(e)
-    return NextResponse.json({ error: f.msg }, { status: f.status })
-  }
+// La medicina prepagada la asigna únicamente el CEO (desde Gestión de empleados).
+// El empleado ya no puede auto-activarla desde su portal.
+export async function POST() {
+  return NextResponse.json(
+    { error: "La medicina prepagada la asigna la empresa. Consulta con administración." },
+    { status: 403 },
+  )
 }

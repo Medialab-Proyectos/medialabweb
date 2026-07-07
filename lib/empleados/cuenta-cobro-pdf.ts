@@ -146,8 +146,5 @@ export async function generarCuentaCobroPDF(cc: CuentaCobro, datos: DatosCuentaC
     if (datos.emisorPersonal?.cedula) T(M, firmaTop + 27, `C.C. ${datos.emisorPersonal.cedula}`, 8, font, gray)
   }
 
-  const generado = new Date().toLocaleString("es-CO", { timeZone: "America/Bogota" })
-  T(M, H - 34, `Documento generado por el Portal de MediaLab el ${generado}.`, 7, font, gray)
-
   return pdf.save()
 }

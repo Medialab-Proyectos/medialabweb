@@ -36,6 +36,8 @@ const schema = z.object({
   nombre: z.string().trim().min(1).max(160),
   nit: z.string().max(40).nullable().optional(),
   correo: z.string().max(160).nullable().optional(),
+  pais: z.string().max(80).nullable().optional(),
+  telefono: z.string().max(60).nullable().optional(),
 })
 
 export async function POST(req: Request) {
@@ -53,6 +55,7 @@ export async function POST(req: Request) {
     const empresa = await upsertEmpresa({
       ...(b.id ? { id: b.id } : {}),
       nombre: b.nombre, nit: b.nit ?? null, correo: b.correo ?? null,
+      pais: b.pais ?? null, telefono: b.telefono ?? null,
     })
     return NextResponse.json({ empresa })
   } catch (e) {

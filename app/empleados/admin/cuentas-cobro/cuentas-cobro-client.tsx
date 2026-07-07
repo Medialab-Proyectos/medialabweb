@@ -94,6 +94,23 @@ export function CuentasCobroClient() {
     } finally { setSaving(false) }
   }
 
+  async function cambiarEstado(cc: CuentaCobro, estado: EstadoCuentaCobro) {
+    setError("")
+    try {
+      const res = await fetch("/api/empleados/admin/cuentas-cobro", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: cc.id, numero: cc.numero, emisor: cc.emisor, empresa_id: cc.empresa_id,
+          contrato_empresa_id: cc.contrato_empresa_id, modo: cc.modo, cantidad: cc.cantidad, tarifa: cc.tarifa,
+          moneda: cc.moneda, mes_servicio: cc.mes_servicio, concepto: cc.concepto, cuenta_id: cc.cuenta_id,
+          fecha_emision: cc.fecha_emision, fecha_pago: cc.fecha_pago, observaciones: cc.observaciones, estado,
+        }),
+      })
+      const data = await res.json(); if (!res.ok) throw new Error(data.error)
+      setItems((prev) => prev.map((x) => (x.id === cc.id ? (data.cuentaCobro as CuentaCobro) : x)))
+    } catch (e) { setError(e instanceof Error ? e.message : "Error al cambiar el estado.") }
+  }
+
   async function eliminar(cc: CuentaCobro) {
     setConfirmLoading(true)
     try {
@@ -145,7 +162,9 @@ export function CuentasCobroClient() {
                 </p>
               </div>
               <div className="flex shrink-0 items-center gap-1">
-                <span className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${estadoStyle[cc.estado]}`}>{ESTADO_CC_LABEL[cc.estado]}</span>
+                <select value={cc.estado} onChange={(e) => cambiarEstado(cc, e.target.value as EstadoCuentaCobro)} title="Cambiar estado" className={`cursor-pointer rounded-full border-0 px-2.5 py-1 text-[11px] font-semibold outline-none ${estadoStyle[cc.estado]}`}>
+                  {(["borrador", "emitida", "pagada"] as EstadoCuentaCobro[]).map((s) => <option key={s} value={s} className="bg-[#12151c] text-[#fff]">{ESTADO_CC_LABEL[s]}</option>)}
+                </select>
                 <a href={`/api/empleados/admin/cuentas-cobro/${cc.id}/pdf`} target="_blank" rel="noreferrer" title="Descargar PDF" className="rounded-lg p-1.5 text-[#fff]/60 hover:bg-white/5 hover:text-[#fff]"><Download size={15} /></a>
                 <button onClick={() => { setError(""); setForm({ id: cc.id, numero: cc.numero ?? "", emisor: cc.emisor, empresa_id: cc.empresa_id ?? "", contrato_empresa_id: cc.contrato_empresa_id ?? "", modo: cc.modo, cantidad: Number(cc.cantidad) || 0, tarifa: Number(cc.tarifa) || 0, moneda: cc.moneda, mes_servicio: cc.mes_servicio ?? "", concepto: cc.concepto ?? "", cuenta_id: cc.cuenta_id ?? "", fecha_emision: cc.fecha_emision ?? "", fecha_pago: cc.fecha_pago ?? "", observaciones: cc.observaciones ?? "", estado: cc.estado }) }} className="rounded-lg p-1.5 text-[#fff]/60 hover:bg-white/5 hover:text-[#fff]"><Pencil size={15} /></button>
                 <button onClick={() => setConfirmar(cc)} className="rounded-lg p-1.5 text-red-300/70 hover:bg-red-500/10 hover:text-red-300"><Trash2 size={15} /></button>

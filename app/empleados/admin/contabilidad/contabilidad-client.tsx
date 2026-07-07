@@ -236,7 +236,7 @@ export function ContabilidadClient() {
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <Link href="/empleados/admin/empresas" className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-[#fff]/80 transition hover:bg-white/5">
-            <Building2 size={15} /> Empresas
+            <Building2 size={15} /> Gestionar empresas
           </Link>
           <Link href="/empleados/admin/cuentas-cobro" className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-[#fff]/80 transition hover:bg-white/5">
             <FileText size={15} /> Cuentas de cobro

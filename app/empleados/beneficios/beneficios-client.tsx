@@ -8,7 +8,6 @@ import { type Beneficio, ESTADO_BENEFICIO_LABEL, MEDPLUS } from "@/lib/empleados
 export function BeneficiosClient() {
   const [beneficios, setBeneficios] = useState<Beneficio[]>([])
   const [cargando, setCargando] = useState(true)
-  const [activando, setActivando] = useState(false)
   const [error, setError] = useState("")
 
   async function cargar() {
@@ -26,23 +25,6 @@ export function BeneficiosClient() {
 
   const medicina = beneficios.find((b) => b.tipo === "medicina_prepagada") ?? null
 
-  async function activarMedicina() {
-    setError(""); setActivando(true)
-    try {
-      const res = await fetch("/api/empleados/beneficios", {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ tipo: "medicina_prepagada" }),
-      })
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.error)
-      await cargar()
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Error al activar.")
-    } finally {
-      setActivando(false)
-    }
-  }
-
   return (
     <div>
       <Link href="/empleados/inicio" className="mb-6 inline-flex items-center gap-1.5 text-sm text-[#fff]/55 hover:text-[#fff]">
@@ -53,7 +35,7 @@ export function BeneficiosClient() {
         <h1 className="font-display text-xl font-bold">Beneficios</h1>
       </div>
       <p className="mb-6 text-sm text-[#fff]/55">
-        Beneficios que puedes activar o solicitar como parte de tu vinculación con MediaLab.
+        Beneficios de tu vinculación con MediaLab. La medicina prepagada la asigna la empresa; los permisos de media jornada los solicitas tú.
       </p>
 
       {error && <p className="mb-4 rounded-lg bg-red-500/10 px-3 py-2 text-sm text-red-300">{error}</p>}
@@ -62,7 +44,8 @@ export function BeneficiosClient() {
         <div className="flex items-center gap-2 py-10 text-[#fff]/60"><Loader2 size={16} className="animate-spin" /> Cargando…</div>
       ) : (
         <div className="grid gap-4">
-          {/* Medicina prepagada — MedPlus */}
+          {/* Medicina prepagada — MedPlus (solo si la empresa la asignó) */}
+          {medicina && (
           <section className="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03]">
             <div className="flex items-center justify-between gap-4 border-b border-white/10 px-5 py-4" style={{ background: `color-mix(in srgb, ${MEDPLUS.color} 10%, transparent)` }}>
               <MedPlusLogo />
@@ -78,7 +61,7 @@ export function BeneficiosClient() {
                 <div>
                   <h2 className="text-base font-semibold">Medicina prepagada · {MEDPLUS.plan}</h2>
                   <p className="mt-0.5 text-sm text-[#fff]/55">
-                    Cobertura de salud complementaria con {MEDPLUS.nombre}. Si aún no la tienes, actívala aquí y RRHH gestiona la afiliación.
+                    Cobertura de salud complementaria con {MEDPLUS.nombre}, asignada por la empresa.
                   </p>
                 </div>
               </div>
@@ -101,22 +84,17 @@ export function BeneficiosClient() {
                 ))}
               </div>
 
-              <div className="mt-4">
-                {medicina ? (
-                  <div className="flex flex-col gap-2">
-                    <EstadoBadge b={medicina} />
-                    {medicina.estado === "solicitado" && (
-                      <p className="text-xs text-[#fff]/45">Tu solicitud está en trámite. RRHH confirmará la afiliación con {medicina.proveedor || MEDPLUS.nombre}.</p>
-                    )}
-                  </div>
-                ) : (
-                  <button onClick={activarMedicina} disabled={activando} className="inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold text-[#0a1400] transition hover:brightness-110 disabled:opacity-60" style={{ background: MEDPLUS.color }}>
-                    {activando ? <Loader2 size={14} className="animate-spin" /> : <HeartPulse size={14} />} Activar medicina prepagada
-                  </button>
-                )}
-              </div>
+              {medicina && (
+                <div className="mt-4 flex flex-col gap-2">
+                  <EstadoBadge b={medicina} />
+                  {medicina.estado === "solicitado" && (
+                    <p className="text-xs text-[#fff]/45">La afiliación está en trámite con {medicina.proveedor || MEDPLUS.nombre}.</p>
+                  )}
+                </div>
+              )}
             </div>
           </section>
+          )}
 
           {/* Permisos de media jornada (se piden en Vacaciones y ausencias) */}
           <section className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
