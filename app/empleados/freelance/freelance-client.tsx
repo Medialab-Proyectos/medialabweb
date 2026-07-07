@@ -2,13 +2,16 @@
 
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
-import { ArrowLeft, Loader2, Save, Send, Upload, Paperclip, FileText, CheckCircle2, Clock, XCircle, Landmark, Download } from "lucide-react"
+import { ArrowLeft, Loader2, Save, Send, Upload, Paperclip, FileText, CheckCircle2, Clock, XCircle, Landmark, Download, Wallet } from "lucide-react"
 import {
   type FacturaFreelance, type PerfilFreelance, type Moneda,
   ESTADO_FACTURA_LABEL, MONEDAS, formatMoneda,
 } from "@/lib/empleados/freelance"
+import { type FreelanceModo, FREELANCE_MODO_LABEL } from "@/lib/empleados/types"
 import { MESES } from "@/lib/empleados/desprendible"
 import { MoneyInput } from "../money-input"
+
+type PagoAcordado = { modo: FreelanceModo; tarifa: number; moneda: Moneda }
 
 const inputCls = "w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm text-[#fff] outline-none transition focus:border-[var(--cyan)]/60"
 const lblCls = "text-[11px] font-semibold uppercase tracking-wide text-[#fff]/50"
@@ -26,6 +29,7 @@ const mesActual = new Date().getMonth() + 1
 export function FreelanceClient({ nombre, esPrestacion = false }: { nombre: string; esPrestacion?: boolean }) {
   const [perfil, setPerfil] = useState<PerfilFreelance | null>(null)
   const [facturas, setFacturas] = useState<FacturaFreelance[]>([])
+  const [pago, setPago] = useState<PagoAcordado | null>(null)
   const [cargando, setCargando] = useState(true)
   const [error, setError] = useState("")
   const [msg, setMsg] = useState("")
@@ -62,7 +66,16 @@ export function FreelanceClient({ nombre, esPrestacion = false }: { nombre: stri
     try {
       const res = await fetch("/api/empleados/freelance")
       const data = await res.json()
-      if (res.ok) { aplicarPerfil(data.perfil); setFacturas(data.facturas ?? []) }
+      if (res.ok) {
+        aplicarPerfil(data.perfil); setFacturas(data.facturas ?? [])
+        const p: PagoAcordado | null = data.pago ?? null
+        setPago(p)
+        // Precarga el valor de la factura cuando el pago es por mes o fijo.
+        if (p && (p.modo === "por_mes" || p.modo === "fijo")) {
+          setMoneda(p.moneda)
+          setValor((v) => v || p.tarifa)
+        }
+      }
       else setError(data.error || "Error al cargar.")
     } finally {
       setCargando(false)
@@ -156,6 +169,32 @@ export function FreelanceClient({ nombre, esPrestacion = false }: { nombre: stri
         <div className="flex items-center gap-2 py-10 text-[#fff]/60"><Loader2 size={16} className="animate-spin" /> Cargando…</div>
       ) : (
         <>
+          {/* Pago acordado (lo define el CEO — solo lectura) */}
+          {pago ? (
+            <div className="rounded-2xl border border-[var(--cyan)]/25 bg-[var(--cyan)]/[0.06] p-5">
+              <div className="mb-3 flex items-center gap-2">
+                <Wallet size={16} className="text-[var(--cyan)]" />
+                <h2 className="text-sm font-semibold text-[#fff]/80">Tu pago acordado</h2>
+              </div>
+              <div className="flex flex-wrap items-baseline gap-x-6 gap-y-1">
+                <span className="text-sm text-[#fff]/60">Modalidad: <b className="text-[#fff]/90">{FREELANCE_MODO_LABEL[pago.modo]}</b></span>
+                <span className="text-sm text-[#fff]/60">
+                  {pago.modo === "por_hora" ? "Valor por hora: " : pago.modo === "por_mes" ? "Valor por mes: " : "Valor fijo: "}
+                  <b className="font-display text-lg text-[var(--cyan)]">{formatMoneda(pago.tarifa, pago.moneda)}</b>
+                </span>
+              </div>
+              <p className="mt-2 text-[11px] text-[#fff]/45">
+                {pago.modo === "por_hora"
+                  ? "Al facturar, multiplica este valor por las horas trabajadas en el mes."
+                  : "Este valor se precarga al crear tu factura; puedes ajustarlo si el mes fue distinto."}
+              </p>
+            </div>
+          ) : (
+            <p className="rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-3 text-xs text-[#fff]/50">
+              Tu pago acordado aún no está definido en el portal. Consúltalo con administración.
+            </p>
+          )}
+
           {/* Perfil de pago */}
           <form onSubmit={guardarPerfil} className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
             <div className="mb-4 flex items-center gap-2">

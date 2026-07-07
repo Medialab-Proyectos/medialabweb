@@ -35,11 +35,7 @@ const schema = z.object({
   id: z.string().uuid().optional(),
   nombre: z.string().trim().min(1).max(160),
   nit: z.string().max(40).nullable().optional(),
-  contacto: z.string().max(200).nullable().optional(),
-  notas: z.string().max(1000).nullable().optional(),
-  modo: z.enum(["por_hora", "por_mes"]).nullable().optional(),
-  tarifa: z.number().min(0).default(0),
-  moneda: z.enum(["COP", "USD"]).default("COP"),
+  correo: z.string().max(160).nullable().optional(),
 })
 
 export async function POST(req: Request) {
@@ -56,8 +52,7 @@ export async function POST(req: Request) {
   try {
     const empresa = await upsertEmpresa({
       ...(b.id ? { id: b.id } : {}),
-      nombre: b.nombre, nit: b.nit ?? null, contacto: b.contacto ?? null, notas: b.notas ?? null,
-      modo: b.modo ?? null, tarifa: b.tarifa, moneda: b.moneda,
+      nombre: b.nombre, nit: b.nit ?? null, correo: b.correo ?? null,
     })
     return NextResponse.json({ empresa })
   } catch (e) {

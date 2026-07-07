@@ -1,6 +1,6 @@
 import "server-only"
 import { getServiceClient } from "./db"
-import type { Cuenta, Movimiento, Empresa, MetodoPago } from "./contabilidad"
+import type { Cuenta, Movimiento, Empresa, MetodoPago, ContratoEmpresa } from "./contabilidad"
 
 const CUENTA_COLS = "id,nombre,banco,plataforma,moneda,saldo_inicial,activa,orden,creado_en,actualizado_en"
 const MOV_COLS =
@@ -72,7 +72,8 @@ export async function eliminarMovimiento(id: string) {
 }
 
 // ── Empresas ────────────────────────────────────────────────────────────────
-const EMPRESA_COLS = "id,nombre,nit,contacto,notas,modo,tarifa,moneda,creado_en,actualizado_en"
+const EMPRESA_COLS = "id,nombre,nit,correo,creado_en,actualizado_en"
+const CONTRATO_EMPRESA_COLS = "id,empresa_id,nombre,modo,tarifa,moneda,activo,notas,creado_en,actualizado_en"
 
 export async function listEmpresas() {
   const sb = getServiceClient()
@@ -100,6 +101,36 @@ export async function upsertEmpresa(input: EmpresaInput) {
 export async function eliminarEmpresa(id: string) {
   const sb = getServiceClient()
   const { error } = await sb.from("empresas").delete().eq("id", id)
+  if (error) throw error
+}
+
+// ── Contratos con empresa (cliente) ───────────────────────────────────────────
+export async function listContratosEmpresa() {
+  const sb = getServiceClient()
+  const { data, error } = await sb.from("contratos_empresa").select(CONTRATO_EMPRESA_COLS).order("creado_en", { ascending: false })
+  if (error) throw error
+  return (data ?? []) as ContratoEmpresa[]
+}
+
+export async function getContratoEmpresa(id: string) {
+  const sb = getServiceClient()
+  const { data, error } = await sb.from("contratos_empresa").select(CONTRATO_EMPRESA_COLS).eq("id", id).maybeSingle()
+  if (error) throw error
+  return data as ContratoEmpresa | null
+}
+
+export type ContratoEmpresaInput = Omit<ContratoEmpresa, "id" | "creado_en" | "actualizado_en"> & { id?: string }
+
+export async function upsertContratoEmpresa(input: ContratoEmpresaInput) {
+  const sb = getServiceClient()
+  const { data, error } = await sb.from("contratos_empresa").upsert(input).select(CONTRATO_EMPRESA_COLS).single()
+  if (error) throw error
+  return data as ContratoEmpresa
+}
+
+export async function eliminarContratoEmpresa(id: string) {
+  const sb = getServiceClient()
+  const { error } = await sb.from("contratos_empresa").delete().eq("id", id)
   if (error) throw error
 }
 

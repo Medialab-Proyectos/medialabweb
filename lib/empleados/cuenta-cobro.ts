@@ -10,6 +10,7 @@ export type CuentaCobro = {
   numero: string | null
   emisor: EmisorCuentaCobro
   empresa_id: string | null
+  contrato_empresa_id: string | null
   modo: ModoCuentaCobro
   cantidad: number
   tarifa: number

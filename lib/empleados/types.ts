@@ -30,8 +30,20 @@ export type Empleado = {
   tipo_contrato: string | null
   convenio_path: string | null
   fecha_fin_probable: string | null
+  // Pago acordado para freelance / prestación de servicios (lo define el CEO).
+  freelance_modo: FreelanceModo | null
+  freelance_tarifa: number | null
+  freelance_moneda: "COP" | "USD" | null
   creado_en: string
   actualizado_en: string
+}
+
+export type FreelanceModo = "por_hora" | "por_mes" | "fijo"
+
+export const FREELANCE_MODO_LABEL: Record<FreelanceModo, string> = {
+  por_hora: "Por hora",
+  por_mes: "Por mes",
+  fijo: "Valor fijo",
 }
 
 /** Datos que viajan (firmados) en la cookie de sesión. */

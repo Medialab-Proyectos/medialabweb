@@ -44,12 +44,23 @@ export type Empresa = {
   id: string
   nombre: string
   nit: string | null
-  contacto: string | null
-  notas: string | null
-  // Condiciones de facturación (opcionales): las cuentas de cobro las heredan.
-  modo: "por_hora" | "por_mes" | null
+  correo: string | null
+  creado_en: string
+  actualizado_en: string
+}
+
+export type ModoFacturacion = "por_hora" | "por_mes"
+
+/** Contrato con una empresa (cliente): define cómo se le factura. */
+export type ContratoEmpresa = {
+  id: string
+  empresa_id: string
+  nombre: string | null
+  modo: ModoFacturacion
   tarifa: number
   moneda: Moneda
+  activo: boolean
+  notas: string | null
   creado_en: string
   actualizado_en: string
 }

@@ -40,7 +40,10 @@ export async function GET() {
       getPerfilFreelance(g.session!.sub),
       listFacturasEmpleado(g.session!.sub),
     ])
-    return NextResponse.json({ perfil, facturas })
+    const pago = g.empleado!.freelance_modo
+      ? { modo: g.empleado!.freelance_modo, tarifa: Number(g.empleado!.freelance_tarifa) || 0, moneda: g.empleado!.freelance_moneda ?? "COP" }
+      : null
+    return NextResponse.json({ perfil, facturas, pago })
   } catch (e) {
     const f = faltaTabla(e)
     return NextResponse.json({ error: f.msg, perfil: null, facturas: [] }, { status: f.status })

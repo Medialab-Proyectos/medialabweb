@@ -76,6 +76,9 @@ const crearSchema = z.object({
   lider_id: z.string().uuid().optional().nullable(),
   fecha_ingreso: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional().nullable(),
   particularidades: z.string().trim().max(2000).optional().nullable(),
+  freelance_modo: z.enum(["por_hora", "por_mes", "fijo"]).nullable().optional(),
+  freelance_tarifa: z.number().min(0).nullable().optional(),
+  freelance_moneda: z.enum(["COP", "USD"]).nullable().optional(),
 })
 
 export async function POST(req: Request) {
@@ -114,6 +117,9 @@ export async function POST(req: Request) {
     eps: body.eps ?? null,
     fondo_cesantias: body.fondo_cesantias ?? null,
     fondo_pension: body.fondo_pension ?? null,
+    freelance_modo: body.freelance_modo ?? null,
+    freelance_tarifa: body.freelance_tarifa ?? null,
+    freelance_moneda: body.freelance_moneda ?? null,
   })
 
   const correo = await enviarCredenciales(body.email, body.nombre, body.cedula, password)
@@ -142,6 +148,9 @@ const editarSchema = z.object({
   fecha_egreso: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullable().optional(),
   fecha_fin_probable: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullable().optional(),
   particularidades: z.string().trim().max(2000).nullable().optional(),
+  freelance_modo: z.enum(["por_hora", "por_mes", "fijo"]).nullable().optional(),
+  freelance_tarifa: z.number().min(0).nullable().optional(),
+  freelance_moneda: z.enum(["COP", "USD"]).nullable().optional(),
 })
 
 export async function PATCH(req: Request) {
@@ -192,7 +201,7 @@ export async function PATCH(req: Request) {
 
   // Actualizar datos generales
   const cambios: Record<string, unknown> = {}
-  for (const k of ["nombre", "email", "cargo", "caja_compensacion", "telefono", "direccion", "eps", "fondo_cesantias", "fondo_pension", "rol", "tipo_vinculacion", "tipo_contrato", "lider_id", "fecha_ingreso", "fecha_egreso", "fecha_fin_probable", "particularidades"] as const) {
+  for (const k of ["nombre", "email", "cargo", "caja_compensacion", "telefono", "direccion", "eps", "fondo_cesantias", "fondo_pension", "rol", "tipo_vinculacion", "tipo_contrato", "lider_id", "fecha_ingreso", "fecha_egreso", "fecha_fin_probable", "particularidades", "freelance_modo", "freelance_tarifa", "freelance_moneda"] as const) {
     if (body[k] !== undefined) cambios[k] = body[k]
   }
   const ingresoEf = (body.fecha_ingreso !== undefined ? body.fecha_ingreso : actual.fecha_ingreso) as string | null
