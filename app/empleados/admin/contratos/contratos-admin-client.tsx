@@ -189,7 +189,10 @@ export function ContratosAdminClient({ empleados }: { empleados: Empleado[] }) {
           <option value="">— Selecciona —</option>
           {empleados.filter((e) => e.tipo_vinculacion === "empleado").map((e) => <option key={e.id} value={e.id}>{e.nombre} · CC {e.cedula}</option>)}
         </select>
-        <span className="text-[11px] text-[#fff]/40">Solo empleados con vinculación laboral. Freelance y prestación de servicios facturan, no llevan contrato.</span>
+        <span className="text-[11px] text-[#fff]/40">
+          Solo empleados con vinculación laboral. El pago y el convenio de un <b className="text-[#fff]/60">freelance</b> o de <b className="text-[#fff]/60">prestación de servicios</b> se definen al editar su ficha en{" "}
+          <Link href="/empleados/admin" className="text-[var(--cyan)] hover:underline">Gestión de empleados</Link> (bloque «Pago acordado» y «Contrato / convenio»).
+        </span>
       </label>
 
       {!empleadoId ? (
