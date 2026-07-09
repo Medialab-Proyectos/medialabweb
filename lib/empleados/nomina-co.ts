@@ -6,6 +6,29 @@
 export const SMMLV_2026 = 1_750_905
 export const AUXILIO_TRANSPORTE_2026 = 249_095
 
+/**
+ * Salario mínimo legal (SMMLV) y auxilio de transporte por año en Colombia.
+ * Para reconstruir la historia salarial: cada otrosí de "incremento al mínimo"
+ * usa el valor del año correspondiente. Verifica cifras contra el decreto vigente.
+ */
+export const SMMLV_HISTORICO: Record<number, { smmlv: number; auxilio: number }> = {
+  2020: { smmlv: 877_803, auxilio: 102_854 },
+  2021: { smmlv: 908_526, auxilio: 106_454 },
+  2022: { smmlv: 1_000_000, auxilio: 117_172 },
+  2023: { smmlv: 1_160_000, auxilio: 140_606 },
+  2024: { smmlv: 1_300_000, auxilio: 162_000 },
+  2025: { smmlv: 1_423_500, auxilio: 200_000 },
+  2026: { smmlv: SMMLV_2026, auxilio: AUXILIO_TRANSPORTE_2026 },
+}
+
+/** Salario mínimo + auxilio del año dado (usa el más reciente conocido si falta). */
+export function salarioMinimoAnio(anio: number): { smmlv: number; auxilio: number } {
+  if (SMMLV_HISTORICO[anio]) return SMMLV_HISTORICO[anio]
+  const anios = Object.keys(SMMLV_HISTORICO).map(Number).sort((a, b) => a - b)
+  const usar = anios.filter((a) => a <= anio).at(-1) ?? anios.at(-1)!
+  return SMMLV_HISTORICO[usar]
+}
+
 /** Tope del IBC: 25 SMMLV. */
 export const IBC_TOPE = 25 * SMMLV_2026
 

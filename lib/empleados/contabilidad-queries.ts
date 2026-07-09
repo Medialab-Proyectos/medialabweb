@@ -1,8 +1,8 @@
 import "server-only"
 import { getServiceClient } from "./db"
-import type { Cuenta, Movimiento, Empresa, MetodoPago, ContratoEmpresa, GastoRecurrente } from "./contabilidad"
+import type { Cuenta, Movimiento, Empresa, MetodoPago, ContratoEmpresa, GastoRecurrente, Inversion } from "./contabilidad"
 
-const CUENTA_COLS = "id,nombre,banco,plataforma,moneda,saldo_inicial,activa,orden,creado_en,actualizado_en"
+const CUENTA_COLS = "id,nombre,banco,numero_cuenta,plataforma,moneda,saldo_inicial,activa,orden,creado_en,actualizado_en"
 const MOV_COLS =
   "id,cuenta_id,cuenta_destino_id,fecha,tipo,categoria,concepto,contraparte,empresa_id,empleado_id,valor,tasa,costo,valor_destino,iva_tipo,iva_valor,estado,referencia,creado_por,creado_en,actualizado_en"
 
@@ -47,6 +47,18 @@ export async function listMovimientos() {
     .order("creado_en", { ascending: false })
   if (error) throw error
   return (data ?? []) as Movimiento[]
+}
+
+/** Conteo de movimientos pendientes (por pagar = egresos, por cobrar = ingresos) — panel del CEO. */
+export async function contarPendientesFlujo(): Promise<{ porPagar: number; porCobrar: number }> {
+  const sb = getServiceClient()
+  const [pagar, cobrar] = await Promise.all([
+    sb.from("movimientos").select("id", { count: "exact", head: true }).eq("estado", "pendiente").eq("tipo", "egreso"),
+    sb.from("movimientos").select("id", { count: "exact", head: true }).eq("estado", "pendiente").eq("tipo", "ingreso"),
+  ])
+  if (pagar.error) throw pagar.error
+  if (cobrar.error) throw cobrar.error
+  return { porPagar: pagar.count ?? 0, porCobrar: cobrar.count ?? 0 }
 }
 
 export async function getMovimiento(id: string) {
@@ -97,8 +109,8 @@ export async function eliminarGastoRecurrente(id: string) {
 }
 
 // ── Empresas ────────────────────────────────────────────────────────────────
-const EMPRESA_COLS = "id,nombre,nit,correo,pais,telefono,creado_en,actualizado_en"
-const CONTRATO_EMPRESA_COLS = "id,empresa_id,nombre,modo,tarifa,moneda,activo,notas,creado_en,actualizado_en"
+const EMPRESA_COLS = "id,nombre,nit,correo,pais,telefono,direccion,ciudad,creado_en,actualizado_en"
+const CONTRATO_EMPRESA_COLS = "id,empresa_id,nombre,modo,tarifa,moneda,activo,requiere_cuenta_cobro,notas,creado_en,actualizado_en"
 
 export async function listEmpresas() {
   const sb = getServiceClient()
@@ -157,6 +169,46 @@ export async function eliminarContratoEmpresa(id: string) {
   const sb = getServiceClient()
   const { error } = await sb.from("contratos_empresa").delete().eq("id", id)
   if (error) throw error
+}
+
+// ── Inversiones (CDTs u otras) ────────────────────────────────────────────────
+const INVERSION_COLS =
+  "id,entidad,tipo,monto,moneda,tasa,rendimiento_esperado,rendimiento_real,fecha_apertura,fecha_vencimiento,cuenta_id,estado,notas,creado_por,creado_en,actualizado_en"
+
+export async function listInversiones() {
+  const sb = getServiceClient()
+  const { data, error } = await sb.from("inversiones").select(INVERSION_COLS).order("fecha_vencimiento", { ascending: true, nullsFirst: false }).order("creado_en", { ascending: false })
+  if (error) throw error
+  return (data ?? []) as Inversion[]
+}
+
+export type InversionInput = Omit<Inversion, "id" | "creado_en" | "actualizado_en"> & { id?: string }
+
+export async function upsertInversion(input: InversionInput) {
+  const sb = getServiceClient()
+  const { data, error } = await sb.from("inversiones").upsert(input).select(INVERSION_COLS).single()
+  if (error) throw error
+  return data as Inversion
+}
+
+export async function eliminarInversion(id: string) {
+  const sb = getServiceClient()
+  const { error } = await sb.from("inversiones").delete().eq("id", id)
+  if (error) throw error
+}
+
+/** Nº de inversiones abiertas que vencen en los próximos `dias` días — alerta del CEO. */
+export async function contarInversionesPorVencer(dias = 15) {
+  const sb = getServiceClient()
+  const limite = new Date(Date.now() + dias * 86_400_000).toISOString().slice(0, 10)
+  const { count, error } = await sb
+    .from("inversiones")
+    .select("id", { count: "exact", head: true })
+    .eq("estado", "abierta")
+    .not("fecha_vencimiento", "is", null)
+    .lte("fecha_vencimiento", limite)
+  if (error) throw error
+  return count ?? 0
 }
 
 // ── Métodos de pago (catálogo) ──────────────────────────────────────────────

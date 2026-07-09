@@ -5,7 +5,7 @@ import { redirect } from "next/navigation"
 import type { SessionPayload } from "./types"
 
 const COOKIE = "empleados_sesion"
-const MAX_AGE = 60 * 60 * 8 // 8 horas
+const MAX_AGE = 60 * 60 * 24 // 24 horas
 
 function secret(): string {
   const s = process.env.EMPLEADOS_SESSION_SECRET

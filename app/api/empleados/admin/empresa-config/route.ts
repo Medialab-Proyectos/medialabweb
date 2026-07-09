@@ -27,13 +27,14 @@ export async function GET() {
     return NextResponse.json({ config: await getConfigEmpresa() })
   } catch (e) {
     const f = faltaTabla(e)
-    return NextResponse.json({ error: f.msg, config: { caja_compensacion: null, arl: null } }, { status: f.status })
+    return NextResponse.json({ error: f.msg, config: { caja_compensacion: null, arl: null, fecha_fundacion: null } }, { status: f.status })
   }
 }
 
 const schema = z.object({
   caja_compensacion: z.string().max(120).nullable().optional(),
   arl: z.string().max(120).nullable().optional(),
+  fecha_fundacion: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullable().optional(),
 })
 
 export async function POST(req: Request) {
@@ -48,7 +49,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: msg }, { status: 400 })
   }
   try {
-    return NextResponse.json({ config: await setConfigEmpresa({ caja_compensacion: b.caja_compensacion ?? null, arl: b.arl ?? null }) })
+    return NextResponse.json({ config: await setConfigEmpresa({ caja_compensacion: b.caja_compensacion ?? null, arl: b.arl ?? null, fecha_fundacion: b.fecha_fundacion ?? null }) })
   } catch (e) {
     const f = faltaTabla(e)
     return NextResponse.json({ error: f.msg }, { status: f.status })

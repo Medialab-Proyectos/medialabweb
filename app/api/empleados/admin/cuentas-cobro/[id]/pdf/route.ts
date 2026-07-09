@@ -26,8 +26,8 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
   ])
 
   const datos: DatosCuentaCobroPDF = {
-    empresa: empresa ? { nombre: empresa.nombre, nit: empresa.nit } : null,
-    cuenta: cuenta ? { nombre: cuenta.nombre, plataforma: cuenta.plataforma, banco: cuenta.banco, moneda: cuenta.moneda } : null,
+    empresa: empresa ? { nombre: empresa.nombre, nit: empresa.nit, direccion: empresa.direccion, ciudad: empresa.ciudad } : null,
+    cuenta: cuenta ? { nombre: cuenta.nombre, plataforma: cuenta.plataforma, banco: cuenta.banco, numero_cuenta: cuenta.numero_cuenta, moneda: cuenta.moneda } : null,
     emisorPersonal: emisorEmp ? { nombre: emisorEmp.nombre, cedula: emisorEmp.cedula } : null,
   }
 

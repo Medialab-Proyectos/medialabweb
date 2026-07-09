@@ -7,7 +7,7 @@ const BUCKET = "contratos"
 
 // ── Contratos ────────────────────────────────────────────────────────────────
 const COLS =
-  "id,empleado_id,tipo,vigente_desde,rol,tipo_vinculacion,salario_basico,auxilio_transporte,otros_devengos,freelance_modo,freelance_tarifa,freelance_moneda,freelance_meses,tipo_contrato,jornada,cargo,descripcion,condiciones_adicionales,rol_funciones_id,lider_id,fecha_ingreso,fecha_fin_probable,fecha_fin,motivo,archivo_path,estado,firmado_por,firmado_en,creado_por,creado_en"
+  "id,empleado_id,tipo,vigente_desde,rol,tipo_vinculacion,salario_basico,auxilio_transporte,otros_devengos,freelance_modo,freelance_tarifa,freelance_moneda,freelance_meses,tipo_contrato,jornada,cargo,descripcion,condiciones_adicionales,rol_funciones_id,lider_id,fecha_ingreso,fecha_fin_probable,fecha_fin,motivo,ajustes,archivo_path,estado,enviado_en,firmado_por,firmado_en,creado_por,creado_en"
 
 /** Historial completo de condiciones de un empleado (más reciente primero). */
 export async function listContratos(empleadoId: string) {
@@ -34,6 +34,14 @@ export type ContratoInput = Omit<Contrato, "id" | "creado_en">
 export async function crearContrato(input: ContratoInput) {
   const sb = getServiceClient()
   const { data, error } = await sb.from("contratos").insert(input).select(COLS).single()
+  if (error) throw error
+  return data as Contrato
+}
+
+/** Marca un contrato como enviado al empleado para firma (sale del estado borrador). */
+export async function marcarEnviadoParaFirma(id: string) {
+  const sb = getServiceClient()
+  const { data, error } = await sb.from("contratos").update({ enviado_en: new Date().toISOString() }).eq("id", id).select(COLS).single()
   if (error) throw error
   return data as Contrato
 }

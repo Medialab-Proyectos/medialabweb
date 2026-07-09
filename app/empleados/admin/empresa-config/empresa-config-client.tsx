@@ -11,6 +11,7 @@ const lblCls = "text-[11px] font-semibold uppercase tracking-wide text-[#fff]/50
 export function EmpresaConfigClient() {
   const [caja, setCaja] = useState("")
   const [arl, setArl] = useState("")
+  const [fundacion, setFundacion] = useState("")
   const [cargando, setCargando] = useState(true)
   const [guardando, setGuardando] = useState(false)
   const [error, setError] = useState("")
@@ -23,7 +24,7 @@ export function EmpresaConfigClient() {
         const res = await fetch("/api/empleados/admin/empresa-config")
         const data = await res.json()
         if (cancel) return
-        if (res.ok) { setCaja(data.config?.caja_compensacion ?? ""); setArl(data.config?.arl ?? "") }
+        if (res.ok) { setCaja(data.config?.caja_compensacion ?? ""); setArl(data.config?.arl ?? ""); setFundacion(data.config?.fecha_fundacion ?? "") }
         else setError(data.error || "Error al cargar.")
       } finally {
         if (!cancel) setCargando(false)
@@ -38,7 +39,7 @@ export function EmpresaConfigClient() {
     try {
       const res = await fetch("/api/empleados/admin/empresa-config", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ caja_compensacion: caja || null, arl: arl || null }),
+        body: JSON.stringify({ caja_compensacion: caja || null, arl: arl || null, fecha_fundacion: fundacion || null }),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error)
@@ -73,6 +74,11 @@ export function EmpresaConfigClient() {
               <span className={lblCls}>ARL (riesgos laborales)</span>
               <input value={arl} onChange={(e) => setArl(e.target.value)} placeholder="Ej: SURA, Positiva, Colmena…" className={inputCls} />
               <span className="text-[11px] text-[#fff]/40">Aparece como parte del contrato de los empleados.</span>
+            </label>
+            <label className="flex flex-col gap-1.5">
+              <span className={lblCls}>Fecha de fundación</span>
+              <input type="date" value={fundacion} onChange={(e) => setFundacion(e.target.value)} className={inputCls} />
+              <span className="text-[11px] text-[#fff]/40">Referencia para la historia laboral.</span>
             </label>
           </div>
 

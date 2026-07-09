@@ -38,6 +38,8 @@ const schema = z.object({
   correo: z.string().max(160).nullable().optional(),
   pais: z.string().max(80).nullable().optional(),
   telefono: z.string().max(60).nullable().optional(),
+  direccion: z.string().max(200).nullable().optional(),
+  ciudad: z.string().max(120).nullable().optional(),
 })
 
 export async function POST(req: Request) {
@@ -56,6 +58,7 @@ export async function POST(req: Request) {
       ...(b.id ? { id: b.id } : {}),
       nombre: b.nombre, nit: b.nit ?? null, correo: b.correo ?? null,
       pais: b.pais ?? null, telefono: b.telefono ?? null,
+      direccion: b.direccion ?? null, ciudad: b.ciudad ?? null,
     })
     return NextResponse.json({ empresa })
   } catch (e) {

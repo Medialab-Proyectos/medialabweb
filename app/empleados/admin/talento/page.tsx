@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Receipt, Gift, ClipboardCheck, Target, ArrowRight, Wrench, Building2 } from "lucide-react"
+import { Receipt, Gift, ClipboardCheck, Target, ArrowRight, Building2, SmilePlus } from "lucide-react"
 import { requireCEO } from "@/lib/empleados/auth"
 import { getEmpleadoById } from "@/lib/empleados/queries"
 import { PortalHeader } from "../../portal-header"
@@ -13,7 +13,7 @@ const HERRAMIENTAS = [
   { href: "/empleados/admin/beneficios", icon: Gift, color: "#E8751A", titulo: "Beneficios", desc: "Medicina prepagada y activaciones de beneficios del equipo." },
   { href: "/empleados/aprobaciones", icon: ClipboardCheck, color: "var(--magenta)", titulo: "Aprobaciones de ausencias", desc: "Vacaciones, permisos y licencias por aprobar." },
   { href: "/empleados/evaluar", icon: Target, color: "#8b5cf6", titulo: "Evaluaciones de desempeño", desc: "Evalúa a tu equipo por periodo." },
-  { href: "/empleados/admin/herramientas", icon: Wrench, color: "#8b5cf6", titulo: "Herramientas", desc: "Cuentas compartidas y accesos del equipo; notifica al cambiar credenciales." },
+  { href: "/empleados/admin/satisfaccion", icon: SmilePlus, color: "#00BFA6", titulo: "Satisfacción", desc: "Encuesta a empleados, registro de empresas e indicadores." },
   { href: "/empleados/admin/empresa-config", icon: Building2, color: "var(--cyan)", titulo: "Datos de la empresa", desc: "Configuración común: caja de compensación de toda la empresa." },
 ]
 

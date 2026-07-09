@@ -3,7 +3,7 @@ import { getServiceClient } from "./db"
 import type { Empleado, Rol, EstadoEmpleado, TipoVinculacion, FreelanceModo } from "./types"
 
 const COLS =
-  "id,cedula,nombre,email,must_change_password,rol,lider_id,cargo,caja_compensacion,telefono,direccion,eps,fondo_cesantias,fondo_pension,fecha_ingreso,fecha_egreso,particularidades,estado,tipo_vinculacion,tipo_contrato,convenio_path,fecha_fin_probable,freelance_modo,freelance_tarifa,freelance_moneda,freelance_meses,creado_en,actualizado_en"
+  "id,cedula,nombre,email,email_empresarial,must_change_password,rol,lider_id,cargo,caja_compensacion,telefono,direccion,fecha_nacimiento,eps,fondo_cesantias,fondo_pension,cert_eps_path,cert_cesantias_path,cert_pension_path,fecha_ingreso,fecha_egreso,particularidades,estado,tipo_vinculacion,tipo_contrato,convenio_path,fecha_fin_probable,freelance_modo,freelance_tarifa,freelance_moneda,freelance_meses,creado_en,actualizado_en"
 
 export async function getEmpleadoByCedula(cedula: string) {
   const sb = getServiceClient()
@@ -42,6 +42,7 @@ export type NuevoEmpleado = {
   cedula: string
   nombre: string
   email: string
+  email_empresarial?: string | null
   password_hash: string
   rol: Rol
   lider_id: string | null
@@ -49,6 +50,7 @@ export type NuevoEmpleado = {
   caja_compensacion: string | null
   telefono?: string | null
   direccion?: string | null
+  fecha_nacimiento?: string | null
   eps?: string | null
   fondo_cesantias?: string | null
   fondo_pension?: string | null
@@ -75,12 +77,14 @@ export async function crearEmpleado(e: NuevoEmpleado) {
 export type CambiosEmpleado = Partial<{
   nombre: string
   email: string
+  email_empresarial: string | null
   rol: Rol
   lider_id: string | null
   cargo: string | null
   caja_compensacion: string | null
   telefono: string | null
   direccion: string | null
+  fecha_nacimiento: string | null
   eps: string | null
   fondo_cesantias: string | null
   fondo_pension: string | null
@@ -121,14 +125,38 @@ export async function subirConvenioEmpleado(empleadoId: string, bytes: Uint8Arra
   return data as Empleado
 }
 
+// ── Certificados de afiliación (EPS, cesantías, pensión) ───────────────────────
+export type TipoCertificado = "eps" | "cesantias" | "pension"
+const CERT_COL: Record<TipoCertificado, "cert_eps_path" | "cert_cesantias_path" | "cert_pension_path"> = {
+  eps: "cert_eps_path", cesantias: "cert_cesantias_path", pension: "cert_pension_path",
+}
+
+export async function subirCertificadoEmpleado(empleadoId: string, tipo: TipoCertificado, bytes: Uint8Array, mime: string) {
+  const sb = getServiceClient()
+  const ext = mime.includes("pdf") ? "pdf" : mime.includes("png") ? "png" : mime.includes("jpeg") ? "jpg" : "bin"
+  const path = `certificados/${empleadoId}-${tipo}.${ext}`
+  const { error: upErr } = await sb.storage.from(BUCKET_CONVENIO).upload(path, bytes, { contentType: mime, upsert: true })
+  if (upErr) throw upErr
+  const { data, error } = await sb.from("empleados").update({ [CERT_COL[tipo]]: path }).eq("id", empleadoId).select(COLS).single()
+  if (error) throw error
+  return data as Empleado
+}
+
+export async function getCertificadoEmpleado(path: string): Promise<{ bytes: Uint8Array; mime: string }> {
+  const sb = getServiceClient()
+  const { data, error } = await sb.storage.from(BUCKET_CONVENIO).download(path)
+  if (error) throw error
+  return { bytes: new Uint8Array(await data.arrayBuffer()), mime: data.type || "application/octet-stream" }
+}
+
 // ── Configuración de empresa (fila única) ─────────────────────────────────────
-export type ConfigEmpresa = { caja_compensacion: string | null; arl: string | null }
+export type ConfigEmpresa = { caja_compensacion: string | null; arl: string | null; fecha_fundacion: string | null }
 
 export async function getConfigEmpresa(): Promise<ConfigEmpresa> {
   const sb = getServiceClient()
-  const { data, error } = await sb.from("empresa_config").select("caja_compensacion,arl").eq("id", 1).maybeSingle()
+  const { data, error } = await sb.from("empresa_config").select("caja_compensacion,arl,fecha_fundacion").eq("id", 1).maybeSingle()
   if (error) throw error
-  return (data as ConfigEmpresa) ?? { caja_compensacion: null, arl: null }
+  return (data as ConfigEmpresa) ?? { caja_compensacion: null, arl: null, fecha_fundacion: null }
 }
 
 export async function setConfigEmpresa(cambios: Partial<ConfigEmpresa>) {
@@ -136,7 +164,7 @@ export async function setConfigEmpresa(cambios: Partial<ConfigEmpresa>) {
   const { data, error } = await sb
     .from("empresa_config")
     .upsert({ id: 1, ...cambios })
-    .select("caja_compensacion,arl")
+    .select("caja_compensacion,arl,fecha_fundacion")
     .single()
   if (error) throw error
   return data as ConfigEmpresa

@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic"
 export default async function ContratosAdminPage() {
   const sesion = await requireCEO()
   const [empleado, empleados] = await Promise.all([getEmpleadoById(sesion.sub), listEmpleados()])
-  const config = await getConfigEmpresa().catch(() => ({ caja_compensacion: null, arl: null }))
+  const config = await getConfigEmpresa().catch(() => ({ caja_compensacion: null, arl: null, fecha_fundacion: null }))
 
   return (
     <>

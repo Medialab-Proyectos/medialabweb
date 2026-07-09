@@ -25,15 +25,21 @@ type FormState = {
   cedula: string
   nombre: string
   email: string
+  email_empresarial: string
   telefono: string
   direccion: string
+  fecha_nacimiento: string
   eps: string
   fondo_cesantias: string
   fondo_pension: string
+  cert_eps_path: string | null
+  cert_cesantias_path: string | null
+  cert_pension_path: string | null
 }
 
 const vacío: FormState = {
-  cedula: "", nombre: "", email: "", telefono: "", direccion: "", eps: "", fondo_cesantias: "", fondo_pension: "",
+  cedula: "", nombre: "", email: "", email_empresarial: "", telefono: "", direccion: "", fecha_nacimiento: "", eps: "", fondo_cesantias: "", fondo_pension: "",
+  cert_eps_path: null, cert_cesantias_path: null, cert_pension_path: null,
 }
 
 const inputCls =
@@ -51,6 +57,7 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
   const [confirmLoading, setConfirmLoading] = useState(false)
   const [aviso, setAviso] = useState("")
   const [q, setQ] = useState("")
+  const [filtroEstado, setFiltroEstado] = useState<"activos" | "inactivos" | "todos">("activos")
   const [benefEmp, setBenefEmp] = useState<Empleado | null>(null)
   const [benefItems, setBenefItems] = useState<Beneficio[]>([])
   const [benefLoading, setBenefLoading] = useState(false)
@@ -67,11 +74,24 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
 
   const visibles = useMemo(() => {
     const t = q.trim().toLowerCase()
-    if (!t) return empleados
-    return empleados.filter((e) =>
-      e.nombre.toLowerCase().includes(t) || e.cedula.toLowerCase().includes(t) || (e.cargo ?? "").toLowerCase().includes(t),
-    )
-  }, [empleados, q])
+    const filtrados = empleados.filter((e) => {
+      if (filtroEstado === "activos" && e.estado !== "activo") return false
+      if (filtroEstado === "inactivos" && e.estado === "activo") return false
+      if (!t) return true
+      return e.nombre.toLowerCase().includes(t) || e.cedula.toLowerCase().includes(t) || (e.cargo ?? "").toLowerCase().includes(t)
+    })
+    // Activos primero; dentro de cada grupo, por nombre.
+    return [...filtrados].sort((a, b) => {
+      const av = a.estado === "activo" ? 0 : 1
+      const bv = b.estado === "activo" ? 0 : 1
+      return av !== bv ? av - bv : a.nombre.localeCompare(b.nombre)
+    })
+  }, [empleados, q, filtroEstado])
+
+  const conteos = useMemo(() => ({
+    activos: empleados.filter((e) => e.estado === "activo").length,
+    inactivos: empleados.filter((e) => e.estado !== "activo").length,
+  }), [empleados])
 
   const nombrePorId = useMemo(() => {
     const m = new Map<string, string>()
@@ -83,9 +103,10 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
   function abrirEditar(e: Empleado) {
     setError("")
     setForm({
-      id: e.id, cedula: e.cedula, nombre: e.nombre, email: e.email,
-      telefono: e.telefono ?? "", direccion: e.direccion ?? "", eps: e.eps ?? "",
+      id: e.id, cedula: e.cedula, nombre: e.nombre, email: e.email, email_empresarial: e.email_empresarial ?? "",
+      telefono: e.telefono ?? "", direccion: e.direccion ?? "", fecha_nacimiento: e.fecha_nacimiento ?? "", eps: e.eps ?? "",
       fondo_cesantias: e.fondo_cesantias ?? "", fondo_pension: e.fondo_pension ?? "",
+      cert_eps_path: e.cert_eps_path ?? null, cert_cesantias_path: e.cert_cesantias_path ?? null, cert_pension_path: e.cert_pension_path ?? null,
     })
   }
 
@@ -95,6 +116,22 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
       if (i === -1) return [...prev, e].sort((a, b) => a.nombre.localeCompare(b.nombre))
       const copy = [...prev]; copy[i] = e; return copy
     })
+  }
+
+  const [subiendoCert, setSubiendoCert] = useState<string | null>(null)
+  async function subirCertificado(tipo: "eps" | "cesantias" | "pension", file: File) {
+    if (!form?.id) return
+    setError(""); setSubiendoCert(tipo)
+    const fd = new FormData(); fd.append("archivo", file); fd.append("tipo", tipo)
+    try {
+      const res = await fetch(`/api/empleados/admin/empleado/${form.id}/certificado`, { method: "POST", body: fd })
+      const data = await res.json(); if (!res.ok) throw new Error(data.error)
+      const emp = data.empleado as Empleado
+      upsertLocal(emp)
+      setForm((f) => (f ? { ...f, cert_eps_path: emp.cert_eps_path, cert_cesantias_path: emp.cert_cesantias_path, cert_pension_path: emp.cert_pension_path } : f))
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Error al subir el certificado.")
+    } finally { setSubiendoCert(null) }
   }
 
   async function guardar(ev: React.FormEvent) {
@@ -113,7 +150,8 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
           body: JSON.stringify({
             id: form.id, accion: "actualizar",
             nombre: form.nombre, email: form.email,
-            telefono: form.telefono || null, direccion: form.direccion || null,
+            email_empresarial: form.email_empresarial || null,
+            telefono: form.telefono || null, direccion: form.direccion || null, fecha_nacimiento: form.fecha_nacimiento || null,
             eps: form.eps || null,
             fondo_cesantias: form.fondo_cesantias || null,
             fondo_pension: form.fondo_pension || null,
@@ -128,7 +166,8 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             cedula: form.cedula, nombre: form.nombre, email: form.email,
-            telefono: form.telefono || null, direccion: form.direccion || null,
+            email_empresarial: form.email_empresarial || null,
+            telefono: form.telefono || null, direccion: form.direccion || null, fecha_nacimiento: form.fecha_nacimiento || null,
             eps: form.eps || null,
             fondo_cesantias: form.fondo_cesantias || null,
             fondo_pension: form.fondo_pension || null,
@@ -306,15 +345,22 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
         </div>
       </div>
 
-      {/* Buscador */}
-      <div className="mb-4 relative">
-        <Search size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#fff]/40" />
-        <input
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-          placeholder="Buscar por nombre, cédula o cargo…"
-          className="w-full rounded-xl border border-white/10 bg-black/30 py-2.5 pl-9 pr-3 text-sm text-[#fff] outline-none transition focus:border-[var(--cyan)]/60"
-        />
+      {/* Buscador + filtro por estado */}
+      <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center">
+        <div className="relative flex-1">
+          <Search size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#fff]/40" />
+          <input
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            placeholder="Buscar por nombre, cédula o cargo…"
+            className="w-full rounded-xl border border-white/10 bg-black/30 py-2.5 pl-9 pr-3 text-sm text-[#fff] outline-none transition focus:border-[var(--cyan)]/60"
+          />
+        </div>
+        <div className="flex shrink-0 rounded-xl border border-white/10 bg-black/20 p-0.5 text-xs">
+          {([["activos", `Activos (${conteos.activos})`], ["inactivos", `Inactivos (${conteos.inactivos})`], ["todos", "Todos"]] as const).map(([k, label]) => (
+            <button key={k} onClick={() => setFiltroEstado(k)} className={`rounded-lg px-3 py-1.5 font-medium transition ${filtroEstado === k ? "bg-[var(--cyan)] text-[#04191b]" : "text-[#fff]/60 hover:text-[#fff]"}`}>{label}</button>
+          ))}
+        </div>
       </div>
 
       {/* Banner de contraseña temporal */}
@@ -437,9 +483,13 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
                 <span className={lblCls}>Nombre completo</span>
                 <input required value={form.nombre} onChange={(e) => setForm({ ...form, nombre: e.target.value })} placeholder="Nombre y apellido" className={inputCls} />
               </label>
-              <label className="flex flex-col gap-1.5 sm:col-span-2">
+              <label className="flex flex-col gap-1.5">
                 <span className={lblCls}>Correo electrónico</span>
                 <input required type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="correo@ejemplo.com" className={inputCls} />
+              </label>
+              <label className="flex flex-col gap-1.5">
+                <span className={lblCls}>Correo empresarial (opcional)</span>
+                <input type="email" value={form.email_empresarial} onChange={(e) => setForm({ ...form, email_empresarial: e.target.value })} placeholder="nombre@medialab.design" className={inputCls} />
               </label>
               <label className="flex flex-col gap-1.5">
                 <span className={lblCls}>Teléfono</span>
@@ -448,6 +498,10 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
               <label className="flex flex-col gap-1.5">
                 <span className={lblCls}>Dirección</span>
                 <input value={form.direccion} onChange={(e) => setForm({ ...form, direccion: e.target.value })} placeholder="Dirección de residencia" className={inputCls} />
+              </label>
+              <label className="flex flex-col gap-1.5">
+                <span className={lblCls}>Fecha de nacimiento</span>
+                <input type="date" value={form.fecha_nacimiento} onChange={(e) => setForm({ ...form, fecha_nacimiento: e.target.value })} className={inputCls} />
               </label>
               <label className="flex flex-col gap-1.5">
                 <span className={lblCls}>EPS (salud) · opcional</span>
@@ -464,6 +518,28 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
                 <input list="cat-pension" value={form.fondo_pension} onChange={(e) => setForm({ ...form, fondo_pension: e.target.value })} placeholder="Elige, escribe o «No aplica»" className={inputCls} />
                 <datalist id="cat-pension"><option value="No aplica" />{FONDOS_PENSION.map((x) => <option key={x} value={x} />)}</datalist>
               </label>
+              {form.id ? (
+                <div className="rounded-lg border border-white/10 bg-white/[0.03] p-3 sm:col-span-2">
+                  <p className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-[#fff]/55">Certificados de afiliación</p>
+                  <div className="grid gap-2 sm:grid-cols-3">
+                    {([["eps", "EPS", form.cert_eps_path], ["cesantias", "Cesantías", form.cert_cesantias_path], ["pension", "Pensión", form.cert_pension_path]] as const).map(([t, label, path]) => (
+                      <div key={t} className="flex flex-col gap-1">
+                        <span className="text-[11px] text-[#fff]/55">{label}</span>
+                        <label className="inline-flex w-fit cursor-pointer items-center gap-1.5 rounded-lg border border-white/15 px-2.5 py-1.5 text-xs text-[#fff]/80 hover:bg-white/5">
+                          {subiendoCert === t ? <Loader2 size={13} className="animate-spin" /> : <Upload size={13} />} {path ? "Reemplazar" : "Subir"}
+                          <input type="file" accept="application/pdf,image/*" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) subirCertificado(t, f); e.target.value = "" }} />
+                        </label>
+                        {path && <a href={`/api/empleados/admin/empleado/${form.id}/certificado?tipo=${t}`} target="_blank" rel="noreferrer" className="text-[11px] text-[var(--cyan)] hover:underline">Ver</a>}
+                      </div>
+                    ))}
+                  </div>
+                  <p className="mt-2 text-[11px] text-[#fff]/40">Adjunta los certificados de afiliación a EPS, cesantías y pensión.</p>
+                </div>
+              ) : (
+                <p className="rounded-lg bg-amber-400/[0.06] px-3 py-2 text-[11px] text-amber-200/80 sm:col-span-2">
+                  Los <b>certificados de afiliación</b> (EPS, cesantías, pensión) se adjuntan después de crear el empleado (edítalo y súbelos).
+                </p>
+              )}
               <p className="rounded-lg bg-white/[0.03] px-3 py-2 text-[11px] text-[#fff]/45 sm:col-span-2">
                 El <b className="text-[#fff]/70">rol</b>, la <b className="text-[#fff]/70">vinculación</b> (laboral/freelance/prestación), el <b className="text-[#fff]/70">cargo</b>, el <b className="text-[#fff]/70">líder</b>, la <b className="text-[#fff]/70">fecha de ingreso</b>, las <b className="text-[#fff]/70">condiciones de pago</b> y el <b className="text-[#fff]/70">documento del contrato</b> se definen en <b className="text-[#fff]/70">Contratos</b>. Aquí solo van los datos personales.
               </p>

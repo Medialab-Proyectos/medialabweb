@@ -74,6 +74,7 @@ const schema = z.object({
   generar: z.boolean().default(false),
   cuenta_id: z.string().uuid().nullable().optional(), // si viene al generar, registra el egreso en Contabilidad
   tipo_terminacion: z.enum(["justa_causa", "sin_justa_causa"]),
+  causa_terminacion: z.enum(["renuncia", "despido_sin_justa", "despido_justa", "mutuo_acuerdo", "fin_plazo_obra"]).nullable().optional(),
   motivo: z.string().max(1000).nullable().optional(),
   fecha_ingreso: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullable().optional(),
   fecha_egreso: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
@@ -82,6 +83,8 @@ const schema = z.object({
   base: z.number().min(0).default(0),
   tipo_contrato: z.string().max(60).nullable().optional(),
   fecha_fin_contrato: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullable().optional(),
+  salario_dias: z.number().min(0).default(0),
+  salario: z.number().min(0).default(0),
   cesantias_dias: z.number().min(0).default(0),
   cesantias: z.number().min(0).default(0),
   intereses_cesantias: z.number().min(0).default(0),
@@ -92,6 +95,9 @@ const schema = z.object({
   indemnizacion_dias: z.number().min(0).default(0),
   indemnizacion: z.number().min(0).default(0),
   otros_conceptos: z.array(linea).default([]),
+  salud_empleado: z.number().min(0).default(0),
+  pension_empleado: z.number().min(0).default(0),
+  retencion_fuente: z.number().min(0).default(0),
   seguridad_social_pagada: z.boolean().default(false),
   seguridad_social_saldo: z.number().min(0).default(0),
   observaciones: z.string().max(1000).nullable().optional(),
@@ -127,18 +133,23 @@ export async function POST(req: Request) {
 
   // El total lo recalcula el servidor (fuente de verdad), no el cliente.
   const total = totalLiquidacion({
+    salario: b.salario,
     cesantias: b.cesantias,
     intereses_cesantias: b.intereses_cesantias,
     prima: b.prima,
     vacaciones: b.vacaciones,
     indemnizacion: b.indemnizacion,
     otros_conceptos: b.otros_conceptos,
+    salud_empleado: b.salud_empleado,
+    pension_empleado: b.pension_empleado,
+    retencion_fuente: b.retencion_fuente,
   })
 
   try {
     let liquidacion = await upsertLiquidacion({
       empleado_id: b.empleado_id,
       tipo_terminacion: b.tipo_terminacion,
+      causa_terminacion: b.causa_terminacion ?? null,
       motivo: b.motivo ?? null,
       fecha_ingreso: b.fecha_ingreso ?? empleado.fecha_ingreso ?? null,
       fecha_egreso: b.fecha_egreso,
@@ -147,6 +158,8 @@ export async function POST(req: Request) {
       base: b.base,
       tipo_contrato: b.tipo_contrato ?? null,
       fecha_fin_contrato: b.fecha_fin_contrato ?? null,
+      salario_dias: b.salario_dias,
+      salario: b.salario,
       cesantias_dias: b.cesantias_dias,
       cesantias: b.cesantias,
       intereses_cesantias: b.intereses_cesantias,
@@ -157,6 +170,9 @@ export async function POST(req: Request) {
       indemnizacion_dias: b.indemnizacion_dias,
       indemnizacion: b.indemnizacion,
       otros_conceptos: b.otros_conceptos,
+      salud_empleado: b.salud_empleado,
+      pension_empleado: b.pension_empleado,
+      retencion_fuente: b.retencion_fuente,
       seguridad_social_pagada: b.seguridad_social_pagada,
       seguridad_social_saldo: b.seguridad_social_saldo,
       total,
@@ -203,7 +219,8 @@ export async function POST(req: Request) {
               valor_destino: null,
               iva_tipo: null,
               iva_valor: null,
-              estado: "realizado",
+              // Queda PENDIENTE (por pagar); en Contabilidad lo marcas «realizado» cuando lo pagues.
+              estado: "pendiente",
               referencia: null,
               creado_por: g.session!.sub,
             })

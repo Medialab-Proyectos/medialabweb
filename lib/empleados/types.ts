@@ -12,6 +12,7 @@ export type Empleado = {
   cedula: string
   nombre: string
   email: string
+  email_empresarial: string | null
   must_change_password: boolean
   rol: Rol
   lider_id: string | null
@@ -19,9 +20,13 @@ export type Empleado = {
   caja_compensacion: string | null
   telefono: string | null
   direccion: string | null
+  fecha_nacimiento: string | null
   eps: string | null
   fondo_cesantias: string | null
   fondo_pension: string | null
+  cert_eps_path: string | null
+  cert_cesantias_path: string | null
+  cert_pension_path: string | null
   fecha_ingreso: string | null
   fecha_egreso: string | null
   particularidades: string | null

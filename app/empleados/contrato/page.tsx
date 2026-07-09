@@ -1,9 +1,9 @@
 import Link from "next/link"
-import { ArrowLeft, Download, FileSignature, Wallet } from "lucide-react"
+import { ArrowLeft, FileSignature, Wallet } from "lucide-react"
 import { requireEmpleado } from "@/lib/empleados/auth"
 import { getEmpleadoById, getConfigEmpresa } from "@/lib/empleados/queries"
 import { listContratos } from "@/lib/empleados/contrato-queries"
-import { condicionesVigentesFirmadas, esFirmado, totalMensualContrato, inicioContrato, TIPO_VERSION_LABEL, type Contrato } from "@/lib/empleados/contrato"
+import { condicionesVigentesFirmadas, esEnviadoPendiente, totalMensualContrato, inicioContrato, TIPO_VERSION_LABEL, type Contrato } from "@/lib/empleados/contrato"
 import { formatCOP } from "@/lib/empleados/desprendible"
 import { formatMoneda } from "@/lib/empleados/freelance"
 import { esVinculacionPorFactura, FREELANCE_MODO_LABEL } from "@/lib/empleados/types"
@@ -26,9 +26,9 @@ export default async function ContratoEmpleadoPage() {
   }
   const vigente = condicionesVigentesFirmadas(contratos)
   const conArchivo = contratos.filter((c) => c.archivo_path)
-  // Versiones generadas que faltan por firmar (el empleado descarga y sube firmado).
-  const pendientesFirma = contratos.filter((c) => !esFirmado(c))
-  const config = await getConfigEmpresa().catch(() => ({ caja_compensacion: null, arl: null }))
+  // Solo los que el CEO ya ENVIÓ para firma (los borradores no los ve el empleado).
+  const pendientesFirma = contratos.filter((c) => esEnviadoPendiente(c))
+  const config = await getConfigEmpresa().catch(() => ({ caja_compensacion: null, arl: null, fecha_fundacion: null }))
   const modoLabelValor = (m: NonNullable<typeof empleado>["freelance_modo"]) =>
     m === "por_hora" ? "Valor por hora" : m === "por_mes" ? "Valor por mes" : m === "por_proyecto" ? "Valor del proyecto" : "Valor fijo"
 
@@ -98,32 +98,17 @@ export default async function ContratoEmpleadoPage() {
                   <p className="text-sm text-[#fff]/80">{vigente.descripcion}</p>
                 </div>
               )}
-              {(config.arl || config.caja_compensacion) && (
-                <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-1.5 border-t border-white/10 pt-3 text-[11px] text-[#fff]/55">
-                  {config.arl && <span>ARL: <b className="text-[#fff]/80">{config.arl}</b></span>}
-                  {config.caja_compensacion && <span>Caja: <b className="text-[#fff]/80">{config.caja_compensacion}</b></span>}
-                </div>
-              )}
+              {/* ARL y caja de compensación NO aplican a freelance / prestación de servicios. */}
             </section>
 
-            {/* Convenio / documento */}
+            {/* Documento del contrato (solo lectura; la descarga la gestiona la empresa) */}
             <section className="rounded-2xl border border-white/10 bg-white/[0.04] p-6">
-              <h2 className="mb-3 text-sm font-semibold text-[#fff]/85">Convenio / documento del contrato</h2>
-              <div className="flex flex-col gap-2">
-                {conArchivo.map((c) => (
-                  <a key={c.id} href={`/api/empleados/contratos/${c.id}/archivo`} className="inline-flex w-fit items-center gap-2 rounded-lg border border-[var(--cyan)]/40 bg-[var(--cyan)]/10 px-4 py-2.5 text-sm font-semibold text-[var(--cyan)] transition hover:bg-[var(--cyan)]/20">
-                    <Download size={15} /> {c.tipo === "inicial" ? "Contrato" : "Otrosí"} · {inicioContrato(c, empleado?.fecha_ingreso ?? null)}
-                  </a>
-                ))}
-                {empleado?.convenio_path && (
-                  <a href="/api/empleados/convenio" target="_blank" rel="noreferrer" className="inline-flex w-fit items-center gap-2 rounded-lg border border-white/15 px-4 py-2.5 text-sm text-[#fff]/80 transition hover:bg-white/5">
-                    <Download size={15} /> Convenio adjunto
-                  </a>
-                )}
-                {conArchivo.length === 0 && !empleado?.convenio_path && (
-                  <p className="text-sm text-[#fff]/55">Aún no se ha adjuntado tu documento. Cuando administración lo cargue, podrás descargarlo aquí.</p>
-                )}
-              </div>
+              <h2 className="mb-2 text-sm font-semibold text-[#fff]/85">Documento del contrato</h2>
+              <p className="text-sm text-[#fff]/55">
+                {conArchivo.length > 0
+                  ? "Tu contrato está firmado y archivado. La copia del documento la gestiona la empresa; solicítala a administración si la necesitas."
+                  : "Aquí verás el estado de tu contrato. La copia del documento la gestiona la empresa."}
+              </p>
             </section>
           </div>
         ) : sinConfigurar ? (
@@ -188,11 +173,7 @@ export default async function ContratoEmpleadoPage() {
                       <p className="mt-2 text-sm text-[#fff]/85">{formatCOP(totalMensualContrato(c))} / mes</p>
                       <p className="text-[11px] text-[#fff]/45">Básico {formatCOP(c.salario_basico)} · Aux. transporte {formatCOP(c.auxilio_transporte)}</p>
                       {c.motivo && <p className="mt-1 text-xs italic text-[#fff]/55">“{c.motivo}”</p>}
-                      {c.archivo_path && (
-                        <a href={`/api/empleados/contratos/${c.id}/archivo`} className="mt-2 inline-flex items-center gap-1.5 text-xs text-[var(--cyan)] hover:underline">
-                          <Download size={13} /> Descargar documento
-                        </a>
-                      )}
+                      {c.archivo_path && <p className="mt-1 text-[11px] text-emerald-300/70">Documento firmado y archivado</p>}
                     </li>
                   ))}
                 </ol>

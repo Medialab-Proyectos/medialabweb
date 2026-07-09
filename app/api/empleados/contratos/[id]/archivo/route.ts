@@ -5,18 +5,16 @@ import { getContrato, getArchivoContrato } from "@/lib/empleados/contrato-querie
 
 export const runtime = "nodejs"
 
-/** GET: descarga el adjunto (contrato físico / otrosí). Solo el dueño o el CEO. */
+/** GET: descarga el documento del contrato/otrosí. SOLO el CEO (el empleado no descarga). */
 export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   if (!portalConfigurado()) return NextResponse.json({ error: "Portal sin configurar." }, { status: 503 })
   const s = await getSession()
   if (!s) return NextResponse.json({ error: "No autorizado." }, { status: 401 })
+  if (s.rol !== "ceo") return NextResponse.json({ error: "Solo el CEO puede descargar el documento del contrato." }, { status: 403 })
 
   const { id } = await params
   const contrato = await getContrato(id)
   if (!contrato) return NextResponse.json({ error: "Contrato no encontrado." }, { status: 404 })
-  if (s.rol !== "ceo" && contrato.empleado_id !== s.sub) {
-    return NextResponse.json({ error: "No autorizado." }, { status: 403 })
-  }
   if (!contrato.archivo_path) return NextResponse.json({ error: "Sin adjunto." }, { status: 404 })
 
   const { bytes, mime } = await getArchivoContrato(contrato.archivo_path)

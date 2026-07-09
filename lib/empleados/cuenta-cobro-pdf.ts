@@ -35,8 +35,8 @@ const soft = rgb(0.96, 0.97, 0.98)
 const linec = rgb(0.85, 0.86, 0.88)
 
 export type DatosCuentaCobroPDF = {
-  empresa: { nombre: string; nit: string | null } | null
-  cuenta: { nombre: string; plataforma: string | null; banco: string | null; moneda: string } | null
+  empresa: { nombre: string; nit: string | null; direccion: string | null; ciudad: string | null } | null
+  cuenta: { nombre: string; plataforma: string | null; banco: string | null; numero_cuenta: string | null; moneda: string } | null
   emisorPersonal: { nombre: string; cedula: string } | null
 }
 
@@ -83,12 +83,14 @@ export async function generarCuentaCobroPDF(cc: CuentaCobro, datos: DatosCuentaC
   hline(100)
 
   // ── Destinatario ──────────────────────────────────────────────────────────
-  box(M, 108, W - 2 * M, 40)
+  const ubic = [datos.empresa?.ciudad, datos.empresa?.direccion].filter(Boolean).join(" - ")
+  box(M, 108, W - 2 * M, ubic ? 57 : 40)
   const colL = M + 14, valL = M + 92
   const lbl = (x: number, top: number, s: string) => T(x, top, s, 7.5, bold, gray)
   const val = (x: number, top: number, s: string) => T(x, top, s || "-", 9.5, bold, dark)
   lbl(colL, 126, "COBRAR A"); val(valL, 126, datos.empresa?.nombre || "-")
   lbl(colL, 143, "NIT"); val(valL, 143, datos.empresa?.nit || "-")
+  if (ubic) { lbl(colL, 160, "UBICACION"); val(valL, 160, ubic) }
 
   // ── Detalle ───────────────────────────────────────────────────────────────
   const total = totalCuentaCobro(cc)
@@ -131,6 +133,7 @@ export async function generarCuentaCobroPDF(cc: CuentaCobro, datos: DatosCuentaC
   if (datos.cuenta) {
     const partes = [datos.cuenta.plataforma, datos.cuenta.banco].filter(Boolean).join(" - ")
     T(M, y, `${datos.cuenta.nombre}${partes ? ` (${partes})` : ""} - ${datos.cuenta.moneda}`, 9, font, dark)
+    if (datos.cuenta.numero_cuenta) { y += 14; T(M, y, `Nro. de cuenta: ${datos.cuenta.numero_cuenta}`, 9, font, dark) }
   } else {
     T(M, y, "(cuenta por definir)", 9, font, gray)
   }

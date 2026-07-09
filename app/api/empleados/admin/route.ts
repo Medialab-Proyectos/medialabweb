@@ -63,10 +63,12 @@ const crearSchema = z.object({
   cedula: z.string().trim().min(3).max(30),
   nombre: z.string().trim().min(2).max(120),
   email: z.string().trim().email(),
+  email_empresarial: z.string().trim().email().optional().nullable().or(z.literal("")),
   cargo: z.string().trim().max(120).optional().nullable(),
   caja_compensacion: z.string().trim().max(120).optional().nullable(),
   telefono: z.string().trim().max(60).optional().nullable(),
   direccion: z.string().trim().max(200).optional().nullable(),
+  fecha_nacimiento: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional().nullable(),
   eps: z.string().trim().max(120).optional().nullable(),
   fondo_cesantias: z.string().trim().max(120).optional().nullable(),
   fondo_pension: z.string().trim().max(120).optional().nullable(),
@@ -103,6 +105,7 @@ export async function POST(req: Request) {
     cedula: body.cedula,
     nombre: body.nombre,
     email: body.email,
+    email_empresarial: body.email_empresarial || null,
     password_hash: hashPassword(password),
     rol: body.rol,
     lider_id: body.lider_id ?? null,
@@ -114,6 +117,7 @@ export async function POST(req: Request) {
     tipo_contrato: body.tipo_contrato ?? null,
     telefono: body.telefono ?? null,
     direccion: body.direccion ?? null,
+    fecha_nacimiento: body.fecha_nacimiento ?? null,
     eps: body.eps ?? null,
     fondo_cesantias: body.fondo_cesantias ?? null,
     fondo_pension: body.fondo_pension ?? null,
@@ -133,10 +137,12 @@ const editarSchema = z.object({
   accion: z.enum(["actualizar", "cerrar_contrato", "suspender", "reactivar", "resetear_clave"]).default("actualizar"),
   nombre: z.string().trim().min(2).max(120).optional(),
   email: z.string().trim().email().optional(),
+  email_empresarial: z.string().trim().email().nullable().optional().or(z.literal("")),
   cargo: z.string().trim().max(120).nullable().optional(),
   caja_compensacion: z.string().trim().max(120).nullable().optional(),
   telefono: z.string().trim().max(60).nullable().optional(),
   direccion: z.string().trim().max(200).nullable().optional(),
+  fecha_nacimiento: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullable().optional(),
   eps: z.string().trim().max(120).nullable().optional(),
   fondo_cesantias: z.string().trim().max(120).nullable().optional(),
   fondo_pension: z.string().trim().max(120).nullable().optional(),
@@ -201,8 +207,8 @@ export async function PATCH(req: Request) {
 
   // Actualizar datos generales
   const cambios: Record<string, unknown> = {}
-  for (const k of ["nombre", "email", "cargo", "caja_compensacion", "telefono", "direccion", "eps", "fondo_cesantias", "fondo_pension", "rol", "tipo_vinculacion", "tipo_contrato", "lider_id", "fecha_ingreso", "fecha_egreso", "fecha_fin_probable", "particularidades", "freelance_modo", "freelance_tarifa", "freelance_moneda"] as const) {
-    if (body[k] !== undefined) cambios[k] = body[k]
+  for (const k of ["nombre", "email", "email_empresarial", "cargo", "caja_compensacion", "telefono", "direccion", "fecha_nacimiento", "eps", "fondo_cesantias", "fondo_pension", "rol", "tipo_vinculacion", "tipo_contrato", "lider_id", "fecha_ingreso", "fecha_egreso", "fecha_fin_probable", "particularidades", "freelance_modo", "freelance_tarifa", "freelance_moneda"] as const) {
+    if (body[k] !== undefined) cambios[k] = body[k] === "" ? null : body[k]
   }
   const ingresoEf = (body.fecha_ingreso !== undefined ? body.fecha_ingreso : actual.fecha_ingreso) as string | null
   const egresoEf = (body.fecha_egreso !== undefined ? body.fecha_egreso : actual.fecha_egreso) as string | null

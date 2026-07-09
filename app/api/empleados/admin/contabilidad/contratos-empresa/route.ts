@@ -39,6 +39,7 @@ const schema = z.object({
   tarifa: z.number().min(0).default(0),
   moneda: z.enum(["COP", "USD"]).default("COP"),
   activo: z.boolean().default(true),
+  requiere_cuenta_cobro: z.boolean().default(true),
   notas: z.string().max(1000).nullable().optional(),
 })
 
@@ -57,7 +58,7 @@ export async function POST(req: Request) {
     const contrato = await upsertContratoEmpresa({
       ...(b.id ? { id: b.id } : {}),
       empresa_id: b.empresa_id, nombre: b.nombre ?? null, modo: b.modo, tarifa: b.tarifa,
-      moneda: b.moneda, activo: b.activo, notas: b.notas ?? null,
+      moneda: b.moneda, activo: b.activo, requiere_cuenta_cobro: b.requiere_cuenta_cobro, notas: b.notas ?? null,
     })
     return NextResponse.json({ contrato })
   } catch (e) {

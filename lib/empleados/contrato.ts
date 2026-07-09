@@ -5,6 +5,20 @@ import type { Moneda } from "./freelance"
 
 export type TipoContratoVersion = "inicial" | "otrosi"
 
+/** Conceptos que un otrosí puede ajustar (para decir qué cambia y qué no). */
+export type ConceptoAjuste = "salario" | "cargo" | "tipo_contrato" | "jornada" | "lider" | "rol" | "funciones" | "condiciones"
+
+export const CONCEPTO_AJUSTE_LABEL: Record<ConceptoAjuste, string> = {
+  salario: "Salario",
+  cargo: "Cargo",
+  tipo_contrato: "Tipo de contrato",
+  jornada: "Jornada",
+  lider: "Líder (a quién reporta)",
+  rol: "Rol",
+  funciones: "Funciones",
+  condiciones: "Condiciones adicionales",
+}
+
 export type Contrato = {
   id: string
   empleado_id: string
@@ -32,8 +46,10 @@ export type Contrato = {
   fecha_fin_probable: string | null // fecha probable de finalización (freelance / término fijo)
   fecha_fin: string | null        // finalización real del contrato (contrato finalizado)
   motivo: string | null
+  ajustes: ConceptoAjuste[] | null  // otrosí: conceptos que este ajuste modifica
   archivo_path: string | null     // documento FIRMADO en Storage (contrato / otrosí)
   estado: EstadoContrato | null   // 'pendiente_firma' hasta subir el firmado; luego 'firmado'
+  enviado_en: string | null       // null = borrador (aún no enviado al empleado)
   firmado_por: "empleado" | "ceo" | null
   firmado_en: string | null
   creado_por: string | null
@@ -51,8 +67,19 @@ export const ESTADO_CONTRATO_LABEL: Record<EstadoContrato, string> = {
  * ¿La versión está firmada (válida)? Los contratos antiguos sin `estado` (null) se
  * consideran firmados para no bloquear a quien ya tenía contrato.
  */
-export function esFirmado(c: Pick<Contrato, "estado">): boolean {
-  return c.estado !== "pendiente_firma"
+/** Firmado (válido/activo) ⟺ tiene el documento firmado subido. Sin documento no está firmado. */
+export function esFirmado(c: Pick<Contrato, "archivo_path">): boolean {
+  return !!c.archivo_path
+}
+
+/** Borrador: generado pero aún NO enviado al empleado (el CEO lo previsualiza/ajusta). */
+export function esBorrador(c: Pick<Contrato, "archivo_path" | "enviado_en">): boolean {
+  return !c.archivo_path && !c.enviado_en
+}
+
+/** Enviado y esperando la firma del empleado (no tiene aún el documento firmado). */
+export function esEnviadoPendiente(c: Pick<Contrato, "archivo_path" | "enviado_en">): boolean {
+  return !c.archivo_path && !!c.enviado_en
 }
 
 /** ¿La vinculación del contrato cobra por factura (freelance / prestación)? */

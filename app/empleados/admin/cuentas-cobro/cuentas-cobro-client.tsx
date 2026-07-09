@@ -212,7 +212,7 @@ export function CuentasCobroClient() {
                   className={inputCls}
                 >
                   <option value="">— Selecciona —</option>
-                  {contratos.filter((c) => c.activo || c.id === form.contrato_empresa_id).map((c) => {
+                  {contratos.filter((c) => (c.requiere_cuenta_cobro !== false && c.activo) || c.id === form.contrato_empresa_id).map((c) => {
                     const emp = empresas.find((x) => x.id === c.empresa_id)
                     return <option key={c.id} value={c.id}>{emp?.nombre ?? "Empresa"}{c.nombre ? ` · ${c.nombre}` : ""} · {c.modo === "por_hora" ? "x hora" : "x mes"} {formatMoneda(Number(c.tarifa) || 0, c.moneda)}</option>
                   })}

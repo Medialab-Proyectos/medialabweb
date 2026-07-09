@@ -7,7 +7,7 @@ import type { Liquidacion } from "./liquidacion"
 const BUCKET = "contratos"
 
 const COLS =
-  "id,empleado_id,tipo_terminacion,motivo,fecha_ingreso,fecha_egreso,salario_basico,auxilio_transporte,base,tipo_contrato,fecha_fin_contrato,cesantias_dias,cesantias,intereses_cesantias,prima_dias,prima,vacaciones_dias,vacaciones,indemnizacion_dias,indemnizacion,otros_conceptos,seguridad_social_pagada,seguridad_social_saldo,total,carta_path,observaciones,estado,generado_por,generado_en,creado_en,actualizado_en"
+  "id,empleado_id,tipo_terminacion,causa_terminacion,motivo,fecha_ingreso,fecha_egreso,salario_basico,auxilio_transporte,base,tipo_contrato,fecha_fin_contrato,salario_dias,salario,cesantias_dias,cesantias,intereses_cesantias,prima_dias,prima,vacaciones_dias,vacaciones,indemnizacion_dias,indemnizacion,otros_conceptos,salud_empleado,pension_empleado,retencion_fuente,seguridad_social_pagada,seguridad_social_saldo,total,carta_path,observaciones,estado,generado_por,generado_en,creado_en,actualizado_en"
 
 /** Liquidación de un empleado (hay como máximo una). */
 export async function getLiquidacionDeEmpleado(empleadoId: string) {

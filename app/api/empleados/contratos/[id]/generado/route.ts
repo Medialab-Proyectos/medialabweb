@@ -23,7 +23,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
 
   const [empleado, config, funcionesRol] = await Promise.all([
     getEmpleadoById(contrato.empleado_id),
-    getConfigEmpresa().catch(() => ({ caja_compensacion: null, arl: null })),
+    getConfigEmpresa().catch(() => ({ caja_compensacion: null, arl: null, fecha_fundacion: null })),
     contrato.rol_funciones_id ? getRolFunciones(contrato.rol_funciones_id).catch(() => null) : Promise.resolve(null),
   ])
   if (!empleado) return NextResponse.json({ error: "Empleado no encontrado." }, { status: 404 })

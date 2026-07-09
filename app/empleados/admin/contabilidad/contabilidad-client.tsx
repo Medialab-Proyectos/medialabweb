@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react"
 import Link from "next/link"
 import {
   ArrowLeft, Loader2, Plus, Pencil, Trash2, X, Wallet, ArrowDownCircle, ArrowUpCircle, ArrowLeftRight,
-  CheckCircle2, Clock, Landmark, Building2, FileText, AlertTriangle, BarChart3, Users, Repeat,
+  CheckCircle2, Clock, Landmark, Building2, FileText, AlertTriangle, BarChart3, Users, Repeat, TrendingUp,
 } from "lucide-react"
 import {
   type Cuenta, type Movimiento, type TipoMovimiento, type Moneda, type Empresa, type MetodoPago, type TipoIVA,
@@ -23,7 +23,7 @@ function hoyISO() {
   return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`
 }
 
-type CuentaForm = { id?: string; nombre: string; banco: string; plataforma: string; moneda: Moneda; saldo_inicial: number; activa: boolean }
+type CuentaForm = { id?: string; nombre: string; banco: string; numero_cuenta: string; plataforma: string; moneda: Moneda; saldo_inicial: number; activa: boolean }
 type MovForm = {
   id?: string; cuenta_id: string; cuenta_destino_id: string; fecha: string; tipo: TipoMovimiento
   categoria: string; concepto: string; contraparte: string; empresa_id: string
@@ -83,6 +83,47 @@ export function ContabilidadClient() {
   )
   const monedasUsadas = MONEDAS_ORDEN.filter((mo) => cuentas.some((c) => c.moneda === mo))
 
+  // Ingresos y egresos del AÑO seleccionado agrupados por categoría (COP), para la gráfica.
+  const porCategoria = useMemo(() => {
+    const ing = new Map<string, number>()
+    const egr = new Map<string, number>()
+    for (const m of movimientos) {
+      if (m.estado !== "realizado" || m.tipo === "traslado") continue
+      if (Number(m.fecha.slice(0, 4)) !== anio) continue
+      if (monedaCuenta.get(m.cuenta_id) !== "COP") continue
+      const cat = m.categoria || "otro"
+      const bucket = m.tipo === "ingreso" ? ing : egr
+      bucket.set(cat, (bucket.get(cat) ?? 0) + (Number(m.valor) || 0))
+    }
+    const arr = (mp: Map<string, number>) => [...mp.entries()].map(([cat, valor]) => ({ cat, valor })).sort((a, b) => b.valor - a.valor)
+    const ingArr = arr(ing), egrArr = arr(egr)
+    const totalIng = ingArr.reduce((a, x) => a + x.valor, 0)
+    const totalEgr = egrArr.reduce((a, x) => a + x.valor, 0)
+    return { ingArr, egrArr, totalIng, totalEgr, ganancia: totalIng - totalEgr }
+  }, [movimientos, monedaCuenta, anio])
+
+  // Serie de los últimos 6 meses (ingresos vs egresos realizados) por moneda, para las gráficas.
+  const serie6m = useMemo(() => {
+    const base = new Date(anio, mes - 1, 1)
+    const meses: { anio: number; mes: number; label: string }[] = []
+    for (let i = 5; i >= 0; i--) {
+      const d = new Date(base.getFullYear(), base.getMonth() - i, 1)
+      meses.push({ anio: d.getFullYear(), mes: d.getMonth() + 1, label: MESES[d.getMonth()].slice(0, 3) })
+    }
+    const porMoneda = new Map<Moneda, { label: string; ingresos: number; egresos: number }[]>()
+    for (const mo of monedasUsadas) porMoneda.set(mo, meses.map((m) => ({ label: m.label, ingresos: 0, egresos: 0 })))
+    for (const m of movimientos) {
+      if (m.estado !== "realizado" || m.tipo === "traslado") continue
+      const mo = monedaCuenta.get(m.cuenta_id); if (!mo) continue
+      const arr = porMoneda.get(mo); if (!arr) continue
+      const idx = meses.findIndex((x) => x.anio === Number(m.fecha.slice(0, 4)) && x.mes === Number(m.fecha.slice(5, 7)))
+      if (idx < 0) continue
+      if (m.tipo === "ingreso") arr[idx].ingresos += Number(m.valor) || 0
+      else if (m.tipo === "egreso") arr[idx].egresos += Number(m.valor) || 0
+    }
+    return porMoneda
+  }, [movimientos, monedaCuenta, monedasUsadas, anio, mes])
+
   // Analítica del dashboard: cuentas por pagar por categoría + ingresos/egresos del mes + alertas.
   const analitica = useMemo(() => {
     const num = (x: unknown) => Number(x) || 0
@@ -122,7 +163,7 @@ export function ContabilidadClient() {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...(formCuenta.id ? { id: formCuenta.id } : {}),
-          nombre: formCuenta.nombre, banco: formCuenta.banco || null, plataforma: formCuenta.plataforma || null,
+          nombre: formCuenta.nombre, banco: formCuenta.banco || null, numero_cuenta: formCuenta.numero_cuenta || null, plataforma: formCuenta.plataforma || null,
           moneda: formCuenta.moneda, saldo_inicial: formCuenta.saldo_inicial, activa: formCuenta.activa,
         }),
       })
@@ -195,8 +236,9 @@ export function ContabilidadClient() {
           fecha: formMov.fecha, tipo: formMov.tipo, categoria: formMov.categoria || null,
           concepto: formMov.concepto || null, contraparte: formMov.contraparte || null, empresa_id: formMov.empresa_id || null,
           valor: formMov.valor,
-          tasa: formMov.tipo === "traslado" ? (formMov.tasa || null) : null,
-          // El fee/comisión bancaria aplica a cualquier tipo de movimiento.
+          // TRM: aplica a traslados cross-moneda y a ingresos por transferencia (informativa).
+          tasa: formMov.tipo === "egreso" ? null : (formMov.tasa || null),
+          // El fee/comisión de transferencia aplica a cualquier tipo de movimiento.
           costo: formMov.costo || 0,
           valor_destino: valorDestino,
           iva_tipo: formMov.tipo === "traslado" ? null : formMov.iva_tipo,
@@ -283,6 +325,9 @@ export function ContabilidadClient() {
           <Link href="/empleados/admin/cuentas-cobro" className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-[#fff]/80 transition hover:bg-white/5">
             <FileText size={15} /> Cuentas de cobro
           </Link>
+          <Link href="/empleados/admin/contabilidad/inversiones" className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-[#fff]/80 transition hover:bg-white/5">
+            <TrendingUp size={15} /> Inversiones
+          </Link>
           <select value={mes} onChange={(e) => setMes(Number(e.target.value))} className={`${inputCls} w-auto`}>
             {MESES.map((m, i) => <option key={m} value={i + 1}>{m}</option>)}
           </select>
@@ -342,6 +387,52 @@ export function ContabilidadClient() {
                 </div>
               )
             })
+          )}
+
+          {/* Estado de la empresa · gráficas de los últimos 6 meses */}
+          {monedasUsadas.length > 0 && (
+            <section>
+              <h2 className="mb-3 text-sm font-semibold text-[#fff]/80">Estado de la empresa · últimos 6 meses</h2>
+              <div className="grid gap-3 lg:grid-cols-2">
+                {monedasUsadas.map((mo) => {
+                  const data = serie6m.get(mo) ?? []
+                  const r = res.porMoneda[mo]
+                  return (
+                    <div key={mo} className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+                      <div className="mb-2 flex items-center justify-between">
+                        <h3 className="text-xs font-semibold text-[#fff]/70">Ingresos vs egresos ({mo})</h3>
+                        <div className="flex items-center gap-3 text-[10px] text-[#fff]/55">
+                          <span className="inline-flex items-center gap-1"><i className="inline-block h-2 w-2 rounded-sm" style={{ background: "#34d399" }} /> Ingresos</span>
+                          <span className="inline-flex items-center gap-1"><i className="inline-block h-2 w-2 rounded-sm" style={{ background: "#f87171" }} /> Egresos</span>
+                        </div>
+                      </div>
+                      <MiniBarras data={data} moneda={mo} />
+                      <div className="mt-3 grid grid-cols-3 gap-2 text-[11px]">
+                        <span className="rounded-lg bg-[var(--cyan)]/10 px-2 py-1.5 text-[var(--cyan)]">Por cobrar<br /><b>{formatMoneda(r.porCobrar, mo)}</b></span>
+                        <span className="rounded-lg bg-red-400/10 px-2 py-1.5 text-red-300">Por pagar<br /><b>{formatMoneda(r.porPagar, mo)}</b></span>
+                        <span className="rounded-lg bg-amber-400/10 px-2 py-1.5 text-amber-300">Por trasladar<br /><b>{formatMoneda(r.porTrasladar, mo)}</b></span>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </section>
+          )}
+
+          {/* Categorización de ingresos y egresos (año) */}
+          {(porCategoria.ingArr.length > 0 || porCategoria.egrArr.length > 0) && (
+            <section>
+              <div className="mb-3 flex items-center justify-between">
+                <h2 className="text-sm font-semibold text-[#fff]/80">Ingresos y egresos por categoría · {anio} (COP)</h2>
+                <span className={`text-sm font-bold ${porCategoria.ganancia >= 0 ? "text-emerald-300" : "text-red-300"}`}>
+                  Ganancia: {formatMoneda(porCategoria.ganancia, "COP")}
+                </span>
+              </div>
+              <div className="grid gap-3 lg:grid-cols-2">
+                <CategoriaBarras titulo="Ingresos por categoría" data={porCategoria.ingArr} total={porCategoria.totalIng} color="#34d399" />
+                <CategoriaBarras titulo="Egresos por categoría" data={porCategoria.egrArr} total={porCategoria.totalEgr} color="#f87171" />
+              </div>
+            </section>
           )}
 
           {/* Dinero por método de pago */}
@@ -418,7 +509,7 @@ export function ContabilidadClient() {
           <section>
             <div className="mb-3 flex items-center justify-between">
               <h2 className="flex items-center gap-2 text-sm font-semibold text-[#fff]/80"><Landmark size={15} /> Cuentas</h2>
-              <button onClick={() => setFormCuenta({ nombre: "", banco: "", plataforma: "", moneda: "COP", saldo_inicial: 0, activa: true })} className="inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--cyan)] hover:underline">
+              <button onClick={() => setFormCuenta({ nombre: "", banco: "", numero_cuenta: "", plataforma: "", moneda: "COP", saldo_inicial: 0, activa: true })} className="inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--cyan)] hover:underline">
                 <Plus size={13} /> Nueva cuenta
               </button>
             </div>
@@ -430,11 +521,11 @@ export function ContabilidadClient() {
                   <div key={c.id} className="flex items-center justify-between rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3">
                     <div>
                       <p className="text-sm font-medium">{c.nombre} {!c.activa && <span className="text-[10px] text-[#fff]/40">(inactiva)</span>}</p>
-                      <p className="text-xs text-[#fff]/50">{[c.plataforma, c.banco].filter(Boolean).join(" · ") || "—"} · {c.moneda}</p>
+                      <p className="text-xs text-[#fff]/50">{[c.plataforma, c.banco, c.numero_cuenta].filter(Boolean).join(" · ") || "—"} · {c.moneda}</p>
                       <p className="mt-0.5 text-sm font-semibold text-[var(--cyan)]">{formatMoneda(saldoPorCuenta.get(c.id) ?? 0, c.moneda)}</p>
                     </div>
                     <div className="flex items-center gap-1">
-                      <button onClick={() => setFormCuenta({ id: c.id, nombre: c.nombre, banco: c.banco ?? "", plataforma: c.plataforma ?? "", moneda: c.moneda, saldo_inicial: Number(c.saldo_inicial) || 0, activa: c.activa })} className="rounded-lg p-1.5 text-[#fff]/60 hover:bg-white/5 hover:text-[#fff]"><Pencil size={14} /></button>
+                      <button onClick={() => setFormCuenta({ id: c.id, nombre: c.nombre, banco: c.banco ?? "", numero_cuenta: c.numero_cuenta ?? "", plataforma: c.plataforma ?? "", moneda: c.moneda, saldo_inicial: Number(c.saldo_inicial) || 0, activa: c.activa })} className="rounded-lg p-1.5 text-[#fff]/60 hover:bg-white/5 hover:text-[#fff]"><Pencil size={14} /></button>
                       <button onClick={() => pedirEliminarCuenta(c)} className="rounded-lg p-1.5 text-red-300/70 hover:bg-red-500/10 hover:text-red-300"><Trash2 size={14} /></button>
                     </div>
                   </div>
@@ -520,7 +611,9 @@ export function ContabilidadClient() {
                 <datalist id="cat-metodos">{metodos.map((m) => <option key={m.id} value={m.nombre} />)}</datalist>
               </label>
               <label className="flex flex-col gap-1.5"><span className={lblCls}>Banco / entidad</span>
-                <input value={formCuenta.banco} onChange={(e) => setFormCuenta({ ...formCuenta, banco: e.target.value })} className={inputCls} placeholder="Caja Social, Nº cuenta…" /></label>
+                <input value={formCuenta.banco} onChange={(e) => setFormCuenta({ ...formCuenta, banco: e.target.value })} className={inputCls} placeholder="Bancolombia, Caja Social…" /></label>
+              <label className="flex flex-col gap-1.5"><span className={lblCls}>Número de cuenta</span>
+                <input value={formCuenta.numero_cuenta} onChange={(e) => setFormCuenta({ ...formCuenta, numero_cuenta: e.target.value })} className={inputCls} placeholder="Ej: 123-456789-01" /></label>
               <label className="flex flex-col gap-1.5"><span className={lblCls}>Moneda</span>
                 <select value={formCuenta.moneda} onChange={(e) => setFormCuenta({ ...formCuenta, moneda: e.target.value as Moneda })} className={inputCls}>
                   {MONEDAS_ORDEN.map((m) => <option key={m} value={m}>{m}</option>)}
@@ -590,8 +683,17 @@ export function ContabilidadClient() {
                     <label className="flex flex-col gap-1.5"><span className={lblCls}>Valor del IVA</span>
                       <input type="number" step="0.01" min="0" value={formMov.iva_valor || ""} onChange={(e) => setFormMov({ ...formMov, iva_valor: Number(e.target.value) })} className={inputCls} placeholder="0" /></label>
                   )}
-                  <label className="flex flex-col gap-1.5"><span className={lblCls}>Fee / costo bancario</span>
+                  <label className="flex flex-col gap-1.5"><span className={lblCls}>{formMov.tipo === "ingreso" ? "Costo de transferencia" : "Fee / costo bancario"}</span>
                     <input type="number" step="0.01" min="0" value={formMov.costo || ""} onChange={(e) => setFormMov({ ...formMov, costo: Number(e.target.value) })} className={inputCls} placeholder="0" /></label>
+                  {formMov.tipo === "ingreso" && (
+                    <label className="flex flex-col gap-1.5"><span className={lblCls}>TRM (si el pago viene en otra moneda)</span>
+                      <input type="number" step="0.0001" min="0" value={formMov.tasa || ""} onChange={(e) => setFormMov({ ...formMov, tasa: Number(e.target.value) })} className={inputCls} placeholder="Ej: 4000 (opcional)" /></label>
+                  )}
+                  {formMov.tipo === "ingreso" && (
+                    <p className="sm:col-span-2 rounded-lg bg-[var(--cyan)]/10 px-3 py-2 text-[11px] text-[var(--cyan)]/90">
+                      Para pagos de cliente que aún no aterrizan, déjalo en <b>Pendiente</b> con la TRM estimada; cuando llegue, ajusta el valor real y márcalo <b>Realizado</b>. El neto que suma a la cuenta = valor − costo de transferencia.
+                    </p>
+                  )}
                 </>
               )}
 
@@ -655,5 +757,60 @@ export function ContabilidadClient() {
         onCancel={() => setConfirmar(null)}
       />
     </div>
+  )
+}
+
+/** Barras horizontales por categoría (participación sobre el total). */
+function CategoriaBarras({ titulo, data, total, color }: { titulo: string; data: { cat: string; valor: number }[]; total: number; color: string }) {
+  const max = Math.max(1, ...data.map((d) => d.valor))
+  return (
+    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+      <div className="mb-3 flex items-baseline justify-between">
+        <h3 className="text-xs font-semibold text-[#fff]/70">{titulo}</h3>
+        <span className="text-xs font-semibold" style={{ color }}>{formatMoneda(total, "COP")}</span>
+      </div>
+      {data.length === 0 ? (
+        <p className="text-xs text-[#fff]/40">Sin movimientos este año.</p>
+      ) : (
+        <div className="flex flex-col gap-2">
+          {data.map((d) => (
+            <div key={d.cat}>
+              <div className="mb-0.5 flex items-baseline justify-between text-[11px]">
+                <span className="text-[#fff]/70">{CATEGORIA_LABEL[d.cat] ?? d.cat}</span>
+                <span className="text-[#fff]/55">{formatMoneda(d.valor, "COP")}{total > 0 ? ` · ${Math.round((d.valor / total) * 100)}%` : ""}</span>
+              </div>
+              <div className="h-2 w-full overflow-hidden rounded-full bg-white/[0.06]">
+                <div className="h-full rounded-full" style={{ width: `${(d.valor / max) * 100}%`, background: color }} />
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+/** Barras de ingresos (verde) vs egresos (rojo) por mes. SVG puro, sin dependencias. */
+function MiniBarras({ data, moneda }: { data: { label: string; ingresos: number; egresos: number }[]; moneda: Moneda }) {
+  const max = Math.max(1, ...data.flatMap((d) => [d.ingresos, d.egresos]))
+  const W = 360, H = 120
+  const groupW = W / Math.max(1, data.length)
+  const barW = Math.min(16, (groupW - 8) / 2)
+  return (
+    <svg viewBox={`0 0 ${W} ${H + 16}`} className="w-full" role="img" aria-label={`Ingresos vs egresos por mes (${moneda})`}>
+      <line x1={0} y1={H} x2={W} y2={H} stroke="rgba(255,255,255,0.12)" strokeWidth={1} />
+      {data.map((d, i) => {
+        const gx = i * groupW + groupW / 2
+        const hi = (d.ingresos / max) * H
+        const he = (d.egresos / max) * H
+        return (
+          <g key={i}>
+            <rect x={gx - barW - 1} y={H - hi} width={barW} height={hi} rx={2} fill="#34d399" />
+            <rect x={gx + 1} y={H - he} width={barW} height={he} rx={2} fill="#f87171" />
+            <text x={gx} y={H + 12} textAnchor="middle" fontSize="9" fill="rgba(255,255,255,0.5)">{d.label}</text>
+          </g>
+        )
+      })}
+    </svg>
   )
 }

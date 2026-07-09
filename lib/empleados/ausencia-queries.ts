@@ -58,6 +58,21 @@ export async function listSolicitudesDeEmpleados(ids: string[], soloPendientes =
   return (data ?? []) as unknown as SolicitudConEmpleado[]
 }
 
+/** Empleados ausentes HOY (ausencia aprobada que cubre la fecha de hoy) — para el panel del CEO. */
+export async function listAusentesHoy(): Promise<{ nombre: string; tipo: TipoAusencia }[]> {
+  const sb = getServiceClient()
+  const hoy = new Date().toLocaleDateString("en-CA", { timeZone: "America/Bogota" })
+  const { data, error } = await sb
+    .from("solicitudes_ausencia")
+    .select(`tipo, empleado:empleados!empleado_id(nombre)`)
+    .eq("estado", "aprobada")
+    .lte("fecha_inicio", hoy)
+    .gte("fecha_fin", hoy)
+  if (error) throw error
+  const filas = (data ?? []) as unknown as { tipo: TipoAusencia; empleado: { nombre: string } | null }[]
+  return filas.map((r) => ({ nombre: r.empleado?.nombre ?? "—", tipo: r.tipo }))
+}
+
 /** Nº de solicitudes de ausencia pendientes (global) — para alertas del CEO. */
 export async function contarAusenciasPendientes() {
   const sb = getServiceClient()

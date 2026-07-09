@@ -32,6 +32,32 @@ export async function GET() {
   }
 }
 
+// PATCH: cambio rápido de estado (marcar un pago como realizado desde el panel del CEO).
+const patchSchema = z.object({ id: z.string().uuid(), estado: z.enum(["pendiente", "realizado"]) })
+
+export async function PATCH(req: Request) {
+  if (!portalConfigurado()) return NextResponse.json({ error: "Portal sin configurar." }, { status: 503 })
+  const g = await guardCEO()
+  if (g.error) return g.error
+  let b: z.infer<typeof patchSchema>
+  try {
+    b = patchSchema.parse(await req.json())
+  } catch {
+    return NextResponse.json({ error: "Datos inválidos." }, { status: 400 })
+  }
+  try {
+    const actual = await getMovimiento(b.id)
+    if (!actual) return NextResponse.json({ error: "Movimiento no encontrado." }, { status: 404 })
+    const { id, creado_en, actualizado_en, ...resto } = actual
+    void id; void creado_en; void actualizado_en
+    const movimiento = await upsertMovimiento({ id: b.id, ...resto, estado: b.estado })
+    return NextResponse.json({ movimiento })
+  } catch (e) {
+    const f = faltaTabla(e)
+    return NextResponse.json({ error: f.msg }, { status: f.status })
+  }
+}
+
 const schema = z.object({
   id: z.string().uuid().optional(),
   cuenta_id: z.string().uuid(),

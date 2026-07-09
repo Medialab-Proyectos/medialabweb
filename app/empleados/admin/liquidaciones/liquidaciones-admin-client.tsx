@@ -10,7 +10,7 @@ import type { LineaNomina } from "@/lib/empleados/desprendible"
 import { formatCOP } from "@/lib/empleados/desprendible"
 import { type Contrato, condicionesVigentes } from "@/lib/empleados/contrato"
 import {
-  type Liquidacion, type TipoTerminacion, precalcularLiquidacion, sumaOtros, categoriaContrato,
+  type Liquidacion, type TipoTerminacion, type CausaTerminacion, CAUSA_TERMINACION_LABEL, causaConIndemnizacion, precalcularLiquidacion, sumaOtros, categoriaContrato,
 } from "@/lib/empleados/liquidacion"
 import { TIPOS_CONTRATO } from "@/lib/empleados/catalogos-co"
 import type { Cuenta } from "@/lib/empleados/contabilidad"
@@ -42,7 +42,8 @@ export function LiquidacionesAdminClient({ empleados, empleadoInicial = "" }: { 
   const fileRef = useRef<HTMLInputElement>(null)
 
   // Terminación + fechas
-  const [tipoTerminacion, setTipoTerminacion] = useState<TipoTerminacion>("sin_justa_causa")
+  const [causa, setCausa] = useState<CausaTerminacion>("renuncia")
+  const tipoTerminacion: TipoTerminacion = causaConIndemnizacion(causa) ? "sin_justa_causa" : "justa_causa"
   const [motivo, setMotivo] = useState("")
   const [fechaIngreso, setFechaIngreso] = useState("")
   const [fechaEgreso, setFechaEgreso] = useState(hoyISO())
@@ -54,6 +55,8 @@ export function LiquidacionesAdminClient({ empleados, empleadoInicial = "" }: { 
   const [auxilio, setAuxilio] = useState(0)
 
   // Rubros
+  const [salarioDias, setSalarioDias] = useState(0)
+  const [salario, setSalario] = useState(0)
   const [cesantiasDias, setCesantiasDias] = useState(0)
   const [cesantias, setCesantias] = useState(0)
   const [intereses, setIntereses] = useState(0)
@@ -64,6 +67,10 @@ export function LiquidacionesAdminClient({ empleados, empleadoInicial = "" }: { 
   const [indemDias, setIndemDias] = useState(0)
   const [indem, setIndem] = useState(0)
   const [otros, setOtros] = useState<LineaNomina[]>([])
+  // Deducciones de ley
+  const [saludEmpleado, setSaludEmpleado] = useState(0)
+  const [pensionEmpleado, setPensionEmpleado] = useState(0)
+  const [retencionFuente, setRetencionFuente] = useState(0)
 
   // Seguridad social + notas
   const [ssPagada, setSsPagada] = useState(false)
@@ -74,8 +81,9 @@ export function LiquidacionesAdminClient({ empleados, empleadoInicial = "" }: { 
   const esObraOFijo = categoriaContrato(tipoContrato) !== "indefinido"
 
   const total = useMemo(
-    () => cesantias + intereses + prima + vacaciones + (tipoTerminacion === "sin_justa_causa" ? indem : 0) + sumaOtros(otros),
-    [cesantias, intereses, prima, vacaciones, indem, otros, tipoTerminacion],
+    () => salario + cesantias + intereses + prima + vacaciones + (tipoTerminacion === "sin_justa_causa" ? indem : 0) + sumaOtros(otros)
+      - saludEmpleado - pensionEmpleado - retencionFuente,
+    [salario, cesantias, intereses, prima, vacaciones, indem, otros, tipoTerminacion, saludEmpleado, pensionEmpleado, retencionFuente],
   )
 
   // Cuentas COP de Contabilidad (para registrar el egreso al generar).
@@ -93,28 +101,32 @@ export function LiquidacionesAdminClient({ empleados, empleadoInicial = "" }: { 
 
   function resetRubros(ingreso: string) {
     setExistingId(null); setEstado("borrador"); setCartaPath(null)
-    setTipoTerminacion("sin_justa_causa"); setMotivo("")
+    setCausa("renuncia"); setMotivo("")
     setFechaIngreso(ingreso); setFechaEgreso(hoyISO())
     setTipoContrato(""); setFechaFinContrato("")
     setSalarioBasico(0); setAuxilio(0)
+    setSalarioDias(0); setSalario(0)
     setCesantiasDias(0); setCesantias(0); setIntereses(0)
     setPrimaDias(0); setPrima(0); setVacDias(vacSugerido ?? 0); setVacaciones(0)
     setIndemDias(0); setIndem(0); setOtros([])
+    setSaludEmpleado(0); setPensionEmpleado(0); setRetencionFuente(0)
     setSsPagada(false); setSsSaldo(0); setObs("")
   }
 
   function cargarDesde(l: Liquidacion) {
     setExistingId(l.id); setEstado(l.estado); setCartaPath(l.carta_path)
-    setTipoTerminacion(l.tipo_terminacion); setMotivo(l.motivo ?? "")
+    setCausa(l.causa_terminacion ?? (l.tipo_terminacion === "sin_justa_causa" ? "despido_sin_justa" : "renuncia")); setMotivo(l.motivo ?? "")
     setFechaIngreso(l.fecha_ingreso ?? ""); setFechaEgreso(l.fecha_egreso)
     setTipoContrato(l.tipo_contrato ?? ""); setFechaFinContrato(l.fecha_fin_contrato ?? "")
     setSalarioBasico(Number(l.salario_basico) || 0); setAuxilio(Number(l.auxilio_transporte) || 0)
+    setSalarioDias(Number(l.salario_dias) || 0); setSalario(Number(l.salario) || 0)
     setCesantiasDias(Number(l.cesantias_dias) || 0); setCesantias(Number(l.cesantias) || 0)
     setIntereses(Number(l.intereses_cesantias) || 0)
     setPrimaDias(Number(l.prima_dias) || 0); setPrima(Number(l.prima) || 0)
     setVacDias(Number(l.vacaciones_dias) || 0); setVacaciones(Number(l.vacaciones) || 0)
     setIndemDias(Number(l.indemnizacion_dias) || 0); setIndem(Number(l.indemnizacion) || 0)
     setOtros(l.otros_conceptos ?? [])
+    setSaludEmpleado(Number(l.salud_empleado) || 0); setPensionEmpleado(Number(l.pension_empleado) || 0); setRetencionFuente(Number(l.retencion_fuente) || 0)
     setSsPagada(l.seguridad_social_pagada); setSsSaldo(Number(l.seguridad_social_saldo) || 0)
     setObs(l.observaciones ?? "")
   }
@@ -163,12 +175,14 @@ export function LiquidacionesAdminClient({ empleados, empleadoInicial = "" }: { 
       const pre = precalcularLiquidacion({
         tipoTerminacion, salarioBasico: basico, auxilioTransporte: aux,
         fechaIngreso, fechaEgreso, tipoContrato: tipoC, fechaFinContrato: fechaFinContrato || null,
-        diasVacacionesPendientes: vacDias,
+        diasVacacionesPendientes: vacDias, diasSalarioPendiente: salarioDias,
       })
+      setSalario(pre.salario)
       setCesantiasDias(pre.cesantiasDias); setCesantias(pre.cesantias); setIntereses(pre.interesesCesantias)
       setPrimaDias(pre.primaDias); setPrima(pre.prima)
-      setVacaciones(pre.vacaciones)
+      setVacDias(pre.vacacionesDias); setVacaciones(pre.vacaciones)
       setIndemDias(pre.indemnizacionDias); setIndem(pre.indemnizacion)
+      setSaludEmpleado(pre.saludEmpleado); setPensionEmpleado(pre.pensionEmpleado)
       setMsg("✓ Pre-calculado desde el contrato vigente. Revisa y ajusta cada rubro antes de generar.")
     } catch (e) {
       setError(e instanceof Error ? e.message : "Error al calcular.")
@@ -179,15 +193,17 @@ export function LiquidacionesAdminClient({ empleados, empleadoInicial = "" }: { 
     return {
       empleado_id: empleadoId, generar,
       cuenta_id: generar ? (cuentaEgreso || null) : null,
-      tipo_terminacion: tipoTerminacion, motivo: motivo || null,
+      tipo_terminacion: tipoTerminacion, causa_terminacion: causa, motivo: motivo || null,
       fecha_ingreso: fechaIngreso || null, fecha_egreso: fechaEgreso,
       salario_basico: salarioBasico, auxilio_transporte: auxilio, base: salarioBasico + auxilio,
       tipo_contrato: tipoContrato || null, fecha_fin_contrato: fechaFinContrato || null,
+      salario_dias: salarioDias, salario,
       cesantias_dias: cesantiasDias, cesantias, intereses_cesantias: intereses,
       prima_dias: primaDias, prima, vacaciones_dias: vacDias, vacaciones,
       indemnizacion_dias: tipoTerminacion === "sin_justa_causa" ? indemDias : 0,
       indemnizacion: tipoTerminacion === "sin_justa_causa" ? indem : 0,
       otros_conceptos: otros.filter((o) => o.concepto?.trim()),
+      salud_empleado: saludEmpleado, pension_empleado: pensionEmpleado, retencion_fuente: retencionFuente,
       seguridad_social_pagada: ssPagada, seguridad_social_saldo: ssPagada ? 0 : ssSaldo,
       observaciones: obs || null,
     }
@@ -257,10 +273,11 @@ export function LiquidacionesAdminClient({ empleados, empleadoInicial = "" }: { 
         <span className={lblCls}>Empleado</span>
         <select value={empleadoId} onChange={(e) => setEmpleadoId(e.target.value)} className={inputCls}>
           <option value="">— Selecciona —</option>
-          {empleados.map((e) => (
+          {empleados.filter((e) => e.tipo_vinculacion === "empleado").map((e) => (
             <option key={e.id} value={e.id}>{e.nombre} · CC {e.cedula}{e.estado === "terminado" ? " · terminado" : ""}</option>
           ))}
         </select>
+        <span className="text-[11px] text-[#fff]/40">Solo vinculación laboral. Freelance y prestación de servicios no llevan liquidación (cobran por factura).</span>
       </label>
 
       {!empleadoId ? (
@@ -282,15 +299,17 @@ export function LiquidacionesAdminClient({ empleados, empleadoInicial = "" }: { 
             <h2 className="mb-4 text-sm font-semibold text-[#fff]/80">Terminación</h2>
             <div className="grid gap-3 sm:grid-cols-2">
               <label className="flex flex-col gap-1.5">
-                <span className={lblCls}>Tipo de terminación</span>
-                <select disabled={bloqueado} value={tipoTerminacion} onChange={(e) => setTipoTerminacion(e.target.value as TipoTerminacion)} className={inputCls}>
-                  <option value="sin_justa_causa">Sin justa causa (con indemnización)</option>
-                  <option value="justa_causa">Con justa causa</option>
+                <span className={lblCls}>Causa de terminación</span>
+                <select disabled={bloqueado} value={causa} onChange={(e) => setCausa(e.target.value as CausaTerminacion)} className={inputCls}>
+                  {(Object.keys(CAUSA_TERMINACION_LABEL) as CausaTerminacion[]).map((c) => (
+                    <option key={c} value={c}>{CAUSA_TERMINACION_LABEL[c]}</option>
+                  ))}
                 </select>
+                <span className="text-[11px] text-[#fff]/40">Solo el despido sin justa causa genera indemnización.</span>
               </label>
               <label className="flex flex-col gap-1.5">
-                <span className={lblCls}>Motivo / causa</span>
-                <input disabled={bloqueado} value={motivo} onChange={(e) => setMotivo(e.target.value)} placeholder="Renuncia voluntaria, mutuo acuerdo…" className={inputCls} />
+                <span className={lblCls}>Observación de la causa (opcional)</span>
+                <input disabled={bloqueado} value={motivo} onChange={(e) => setMotivo(e.target.value)} placeholder="Detalle interno del retiro…" className={inputCls} />
               </label>
               <label className="flex flex-col gap-1.5">
                 <span className={lblCls}>Fecha de ingreso</span>
@@ -333,7 +352,7 @@ export function LiquidacionesAdminClient({ empleados, empleadoInicial = "" }: { 
               </label>
             </div>
             {vacSugerido !== null && (
-              <p className="mt-3 text-xs text-[#fff]/45">Vacaciones pendientes según el módulo de ausencias: <b className="text-[#fff]/70">{vacSugerido} días hábiles</b>.</p>
+              <p className="mt-3 text-xs text-[#fff]/45">Al calcular, las vacaciones se llenan con el <b className="text-[#fff]/70">acumulado legal</b> (15 días por año, en días 360). Si el empleado ya tomó vacaciones, réstalas. Según ausencias, pendientes: <b className="text-[#fff]/70">{vacSugerido} días</b>.</p>
             )}
           </div>
 
@@ -341,10 +360,11 @@ export function LiquidacionesAdminClient({ empleados, empleadoInicial = "" }: { 
           <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
             <h2 className="mb-4 text-sm font-semibold text-[#fff]/80">Rubros de la liquidación</h2>
             <div className="space-y-3">
+              <RubroRow label="Salario del último periodo (días no pagados)" dias={salarioDias} setDias={setSalarioDias} valor={salario} setValor={setSalario} disabled={bloqueado} />
               <RubroRow label="Cesantías" dias={cesantiasDias} setDias={setCesantiasDias} valor={cesantias} setValor={setCesantias} disabled={bloqueado} />
               <RubroRow label="Intereses a las cesantías (12%)" valor={intereses} setValor={setIntereses} disabled={bloqueado} />
               <RubroRow label="Prima de servicios proporcional" dias={primaDias} setDias={setPrimaDias} valor={prima} setValor={setPrima} disabled={bloqueado} />
-              <RubroRow label="Vacaciones compensadas (días hábiles)" dias={vacDias} setDias={setVacDias} valor={vacaciones} setValor={setVacaciones} disabled={bloqueado} />
+              <RubroRow label="Vacaciones compensadas (días acumulados, 15/año)" dias={vacDias} setDias={setVacDias} valor={vacaciones} setValor={setVacaciones} disabled={bloqueado} />
               {tipoTerminacion === "sin_justa_causa" && (
                 <RubroRow label="Indemnización por despido (art. 64 CST)" dias={indemDias} setDias={setIndemDias} valor={indem} setValor={setIndem} disabled={bloqueado} />
               )}
@@ -365,6 +385,17 @@ export function LiquidacionesAdminClient({ empleados, empleadoInicial = "" }: { 
                   <button onClick={() => setOtros(otros.filter((_, j) => j !== i))} disabled={bloqueado} className="rounded-lg p-2 text-red-300/70 hover:bg-red-500/10 disabled:opacity-40"><Trash2 size={14} /></button>
                 </div>
               ))}
+            </div>
+
+            {/* Deducciones de ley (se restan del neto) */}
+            <div className="mt-4 border-t border-white/10 pt-4">
+              <span className={lblCls}>Deducciones de ley (se restan del neto)</span>
+              <p className="mb-3 mt-1 text-[11px] text-[#fff]/45">Salud y pensión = 4% sobre el salario del periodo (editables). La retención en la fuente la ajustas según el procedimiento.</p>
+              <div className="space-y-3">
+                <RubroRow label="Salud empleado (4%)" valor={saludEmpleado} setValor={setSaludEmpleado} disabled={bloqueado} />
+                <RubroRow label="Pensión empleado (4%)" valor={pensionEmpleado} setValor={setPensionEmpleado} disabled={bloqueado} />
+                <RubroRow label="Retención en la fuente" valor={retencionFuente} setValor={setRetencionFuente} disabled={bloqueado} />
+              </div>
             </div>
           </div>
 

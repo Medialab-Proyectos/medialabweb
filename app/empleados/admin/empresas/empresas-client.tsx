@@ -12,8 +12,8 @@ import { ConfirmDialog } from "../../confirm-dialog"
 const inputCls = "w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm text-[#fff] outline-none transition focus:border-[var(--cyan)]/60"
 const lblCls = "text-[11px] font-semibold uppercase tracking-wide text-[#fff]/50"
 
-type EmpresaForm = { id?: string; nombre: string; nit: string; correo: string; pais: string; telefono: string }
-type ContratoForm = { id?: string; empresa_id: string; nombre: string; modo: ModoFacturacion; tarifa: number; moneda: Moneda; activo: boolean }
+type EmpresaForm = { id?: string; nombre: string; nit: string; correo: string; pais: string; telefono: string; direccion: string; ciudad: string }
+type ContratoForm = { id?: string; empresa_id: string; nombre: string; modo: ModoFacturacion; tarifa: number; moneda: Moneda; activo: boolean; requiere_cuenta_cobro: boolean }
 
 export function EmpresasClient() {
   const [empresas, setEmpresas] = useState<Empresa[]>([])
@@ -53,7 +53,7 @@ export function EmpresasClient() {
     try {
       const res = await fetch("/api/empleados/admin/contabilidad/empresas", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...(formEmpresa.id ? { id: formEmpresa.id } : {}), nombre: formEmpresa.nombre, nit: formEmpresa.nit || null, correo: formEmpresa.correo || null, pais: formEmpresa.pais || null, telefono: formEmpresa.telefono || null }),
+        body: JSON.stringify({ ...(formEmpresa.id ? { id: formEmpresa.id } : {}), nombre: formEmpresa.nombre, nit: formEmpresa.nit || null, correo: formEmpresa.correo || null, pais: formEmpresa.pais || null, telefono: formEmpresa.telefono || null, direccion: formEmpresa.direccion || null, ciudad: formEmpresa.ciudad || null }),
       })
       const data = await res.json(); if (!res.ok) throw new Error(data.error)
       await cargar(); setFormEmpresa(null)
@@ -71,6 +71,7 @@ export function EmpresasClient() {
           ...(formContrato.id ? { id: formContrato.id } : {}),
           empresa_id: formContrato.empresa_id, nombre: formContrato.nombre || null,
           modo: formContrato.modo, tarifa: formContrato.tarifa, moneda: formContrato.moneda, activo: formContrato.activo,
+          requiere_cuenta_cobro: formContrato.requiere_cuenta_cobro,
         }),
       })
       const data = await res.json(); if (!res.ok) throw new Error(data.error)
@@ -113,11 +114,11 @@ export function EmpresasClient() {
           <h1 className="font-display text-xl font-bold">Gestionar empresas</h1>
           <span className="rounded-full bg-white/5 px-2 py-0.5 text-xs text-[#fff]/50">{empresas.length}</span>
         </div>
-        <button onClick={() => { setError(""); setFormEmpresa({ nombre: "", nit: "", correo: "", pais: "Colombia", telefono: "" }) }} className="inline-flex items-center gap-2 rounded-full bg-[var(--cyan)] px-4 py-2 text-sm font-semibold text-[#04191b] transition hover:brightness-110">
+        <button onClick={() => { setError(""); setFormEmpresa({ nombre: "", nit: "", correo: "", pais: "Colombia", telefono: "", direccion: "", ciudad: "" }) }} className="inline-flex items-center gap-2 rounded-full bg-[var(--cyan)] px-4 py-2 text-sm font-semibold text-[#04191b] transition hover:brightness-110">
           <Plus size={15} /> Nueva empresa
         </button>
       </div>
-      <p className="mb-4 text-sm text-[#fff]/55">La empresa lleva solo nombre, NIT y correo. Sus <b className="text-[#fff]/75">contratos</b> definen cómo se le factura (por hora o por mes). Las cuentas de cobro se emiten sobre un contrato.</p>
+      <p className="mb-4 text-sm text-[#fff]/55">La empresa lleva sus datos (nombre, NIT, correo, país, ciudad, dirección, teléfono). Sus <b className="text-[#fff]/75">contratos</b> definen cómo se le factura (por hora o por mes) y si <b className="text-[#fff]/75">requiere cuenta de cobro</b>. Las cuentas de cobro se emiten sobre un contrato.</p>
 
       {error && <p className="mb-4 rounded-lg bg-red-500/10 px-3 py-2 text-sm text-red-300">{error}</p>}
 
@@ -137,8 +138,8 @@ export function EmpresasClient() {
                     <p className="text-xs text-[#fff]/50">{x.nit ? `NIT ${x.nit}` : "Sin NIT"}{x.pais ? ` · ${x.pais}` : ""}{x.correo ? ` · ${x.correo}` : ""}{x.telefono ? ` · ${x.telefono}` : ""}</p>
                   </div>
                   <div className="flex shrink-0 items-center gap-1">
-                    <button onClick={() => { setError(""); setFormContrato({ empresa_id: x.id, nombre: "", modo: "por_mes", tarifa: 0, moneda: "COP", activo: true }) }} className="inline-flex items-center gap-1 rounded-lg border border-[var(--cyan)]/40 bg-[var(--cyan)]/10 px-2.5 py-1.5 text-xs font-semibold text-[var(--cyan)] hover:bg-[var(--cyan)]/20"><Plus size={12} /> Contrato</button>
-                    <button onClick={() => { setError(""); setFormEmpresa({ id: x.id, nombre: x.nombre, nit: x.nit ?? "", correo: x.correo ?? "", pais: x.pais ?? "", telefono: x.telefono ?? "" }) }} className="rounded-lg p-1.5 text-[#fff]/60 hover:bg-white/5 hover:text-[#fff]"><Pencil size={14} /></button>
+                    <button onClick={() => { setError(""); setFormContrato({ empresa_id: x.id, nombre: "", modo: "por_mes", tarifa: 0, moneda: "COP", activo: true, requiere_cuenta_cobro: true }) }} className="inline-flex items-center gap-1 rounded-lg border border-[var(--cyan)]/40 bg-[var(--cyan)]/10 px-2.5 py-1.5 text-xs font-semibold text-[var(--cyan)] hover:bg-[var(--cyan)]/20"><Plus size={12} /> Contrato</button>
+                    <button onClick={() => { setError(""); setFormEmpresa({ id: x.id, nombre: x.nombre, nit: x.nit ?? "", correo: x.correo ?? "", pais: x.pais ?? "", telefono: x.telefono ?? "", direccion: x.direccion ?? "", ciudad: x.ciudad ?? "" }) }} className="rounded-lg p-1.5 text-[#fff]/60 hover:bg-white/5 hover:text-[#fff]"><Pencil size={14} /></button>
                     <button onClick={() => pedirEliminarEmpresa(x)} className="rounded-lg p-1.5 text-red-300/70 hover:bg-red-500/10 hover:text-red-300"><Trash2 size={14} /></button>
                   </div>
                 </div>
@@ -150,9 +151,10 @@ export function EmpresasClient() {
                           <FileSignature size={12} className="text-[var(--cyan)]" />
                           {c.nombre || "Contrato"} · <b className="text-[var(--cyan)]">{modoTxt(c)}</b>
                           {!c.activo && <span className="text-[10px] text-[#fff]/40">(inactivo)</span>}
+                          {c.requiere_cuenta_cobro === false && <span className="rounded-full bg-white/5 px-1.5 py-0.5 text-[9px] text-[#fff]/45">sin cuenta de cobro</span>}
                         </span>
                         <span className="flex items-center gap-1">
-                          <button onClick={() => { setError(""); setFormContrato({ id: c.id, empresa_id: c.empresa_id, nombre: c.nombre ?? "", modo: c.modo, tarifa: Number(c.tarifa) || 0, moneda: c.moneda, activo: c.activo }) }} className="rounded-lg p-1 text-[#fff]/60 hover:bg-white/5 hover:text-[#fff]"><Pencil size={13} /></button>
+                          <button onClick={() => { setError(""); setFormContrato({ id: c.id, empresa_id: c.empresa_id, nombre: c.nombre ?? "", modo: c.modo, tarifa: Number(c.tarifa) || 0, moneda: c.moneda, activo: c.activo, requiere_cuenta_cobro: c.requiere_cuenta_cobro !== false }) }} className="rounded-lg p-1 text-[#fff]/60 hover:bg-white/5 hover:text-[#fff]"><Pencil size={13} /></button>
                           <button onClick={() => pedirEliminarContrato(c)} className="rounded-lg p-1 text-red-300/70 hover:bg-red-500/10 hover:text-red-300"><Trash2 size={13} /></button>
                         </span>
                       </div>
@@ -187,6 +189,10 @@ export function EmpresasClient() {
                 </label>
                 <label className="flex flex-col gap-1.5"><span className={lblCls}>Teléfono (si tiene)</span>
                   <input value={formEmpresa.telefono} onChange={(e) => setFormEmpresa({ ...formEmpresa, telefono: e.target.value })} className={inputCls} placeholder="+57 ..." /></label>
+                <label className="flex flex-col gap-1.5"><span className={lblCls}>Ciudad</span>
+                  <input value={formEmpresa.ciudad} onChange={(e) => setFormEmpresa({ ...formEmpresa, ciudad: e.target.value })} className={inputCls} placeholder="Bogotá" /></label>
+                <label className="flex flex-col gap-1.5"><span className={lblCls}>Dirección</span>
+                  <input value={formEmpresa.direccion} onChange={(e) => setFormEmpresa({ ...formEmpresa, direccion: e.target.value })} className={inputCls} placeholder="Cra 00 # 00-00" /></label>
               </div>
             </div>
             <div className="mt-5 flex justify-end gap-2">
@@ -223,6 +229,10 @@ export function EmpresasClient() {
                 <MoneyInput value={formContrato.tarifa} onChange={(n) => setFormContrato({ ...formContrato, tarifa: n })} className={inputCls} /></label>
               <label className="flex items-center gap-2 text-sm text-[#fff]/75 sm:col-span-2">
                 <input type="checkbox" checked={formContrato.activo} onChange={(e) => setFormContrato({ ...formContrato, activo: e.target.checked })} className="h-4 w-4 accent-[var(--cyan)]" /> Contrato activo
+              </label>
+              <label className="flex items-start gap-2 text-sm text-[#fff]/75 sm:col-span-2">
+                <input type="checkbox" checked={formContrato.requiere_cuenta_cobro} onChange={(e) => setFormContrato({ ...formContrato, requiere_cuenta_cobro: e.target.checked })} className="mt-0.5 h-4 w-4 accent-[var(--cyan)]" />
+                <span>Requiere cuenta de cobro<br /><span className="text-[11px] text-[#fff]/45">Desmárcalo si la empresa paga por contrato mensual firmado (no aparecerá al emitir cuentas de cobro).</span></span>
               </label>
             </div>
             <div className="mt-5 flex justify-end gap-2">

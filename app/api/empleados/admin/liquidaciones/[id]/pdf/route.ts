@@ -21,7 +21,10 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
   const empleado = await getEmpleadoById(l.empleado_id)
   if (!empleado) return NextResponse.json({ error: "Empleado no encontrado." }, { status: 404 })
 
-  const bytes = await generarLiquidacionPDF(l, { nombre: empleado.nombre, cedula: empleado.cedula, cargo: empleado.cargo })
+  const bytes = await generarLiquidacionPDF(l, {
+    nombre: empleado.nombre, cedula: empleado.cedula, cargo: empleado.cargo,
+    eps: empleado.eps, fondo_pension: empleado.fondo_pension, fondo_cesantias: empleado.fondo_cesantias,
+  })
   const nombreArchivo = `liquidacion-${empleado.cedula}.pdf`
 
   return new Response(Buffer.from(bytes), {

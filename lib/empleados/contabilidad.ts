@@ -18,6 +18,7 @@ export type Cuenta = {
   id: string
   nombre: string
   banco: string | null
+  numero_cuenta: string | null   // número de la cuenta bancaria
   plataforma: string | null   // método de pago (Bancolombia, Payoneer, Global66…)
   moneda: Moneda
   saldo_inicial: number
@@ -58,6 +59,8 @@ export type Empresa = {
   correo: string | null
   pais: string | null
   telefono: string | null
+  direccion: string | null
+  ciudad: string | null
   creado_en: string
   actualizado_en: string
 }
@@ -79,12 +82,35 @@ export type ContratoEmpresa = {
   tarifa: number
   moneda: Moneda
   activo: boolean
+  requiere_cuenta_cobro: boolean   // false = paga por contrato mensual, no se emite cuenta de cobro
   notas: string | null
   creado_en: string
   actualizado_en: string
 }
 
 export type MetodoPago = { id: string; nombre: string; creado_en: string }
+
+export type EstadoInversion = "abierta" | "cerrada"
+
+/** Inversión de la empresa (CDT, fondo, etc.). Su rendimiento cuenta como ingreso al cerrar. */
+export type Inversion = {
+  id: string
+  entidad: string
+  tipo: string | null
+  monto: number
+  moneda: Moneda
+  tasa: number | null              // % E.A.
+  rendimiento_esperado: number
+  rendimiento_real: number | null
+  fecha_apertura: string
+  fecha_vencimiento: string | null
+  cuenta_id: string | null
+  estado: EstadoInversion
+  notas: string | null
+  creado_por: string | null
+  creado_en: string
+  actualizado_en: string
+}
 
 export const TIPO_MOV_LABEL: Record<TipoMovimiento, string> = {
   ingreso: "Ingreso",
@@ -144,7 +170,8 @@ export function saldoCuenta(cuenta: Cuenta, movimientos: Movimiento[]): number {
   let saldo = n(cuenta.saldo_inicial)
   for (const m of movimientos) {
     if (m.estado !== "realizado") continue
-    if (m.tipo === "ingreso" && m.cuenta_id === cuenta.id) saldo += n(m.valor)
+    // Ingreso: lo que aterriza = valor − costo de transferencia (comisión de la plataforma).
+    if (m.tipo === "ingreso" && m.cuenta_id === cuenta.id) saldo += n(m.valor) - n(m.costo)
     else if (m.tipo === "egreso" && m.cuenta_id === cuenta.id) saldo -= n(m.valor)
     else if (m.tipo === "traslado") {
       // El origen se debita en su moneda; el destino se acredita en la suya (valor_destino).
@@ -218,7 +245,7 @@ export function resumen(
       else if (m.tipo === "egreso") r.porPagar += n(m.valor)
       else r.porTrasladar += n(m.valor)
     } else if (enPeriodo(m)) {
-      if (m.tipo === "ingreso") r.ingresosMes += n(m.valor)
+      if (m.tipo === "ingreso") r.ingresosMes += n(m.valor) - n(m.costo)
       else if (m.tipo === "egreso") r.egresosMes += n(m.valor)
     }
   }

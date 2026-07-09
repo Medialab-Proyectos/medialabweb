@@ -135,11 +135,11 @@ export async function generarContratoPDF(
     y += 8
   }
 
-  // ── Encabezado con logo ───────────────────────────────────────────────────
-  const logoW = 44
+  // ── Encabezado con logo centrado ──────────────────────────────────────────
+  const logoW = 46
   const logoH = (logo.height / logo.width) * logoW
-  page.drawImage(logo, { x: M, y: H - 40 - logoH, width: logoW, height: logoH })
-  y = 40 + logoH + 6
+  page.drawImage(logo, { x: (W - logoW) / 2, y: H - 38 - logoH, width: logoW, height: logoH })
+  y = 38 + logoH + 10
 
   const porFactura = contratoEsPorFactura(contrato)
   const esOtrosi = contrato.tipo === "otrosi"
@@ -271,8 +271,43 @@ export async function generarContratoPDF(
     firmas("EL TRABAJADOR", empleado.nombre, "EL EMPLEADOR")
   }
 
+  // El acuerdo de confidencialidad se anexa al contrato inicial (todas las vinculaciones).
+  acuerdoConfidencialidad()
+
   footer(page)
   return pdf.save()
+
+  // ── ACUERDO DE CONFIDENCIALIDAD (anexo del contrato) ─────────────────────────
+  function acuerdoConfidencialidad() {
+    footer(page)
+    page = pdf.addPage([W, H]); y = 56
+    page.drawImage(logo, { x: (W - logoW) / 2, y: H - 38 - logoH, width: logoW, height: logoH })
+    y = 38 + logoH + 12
+    const receptorLbl = porFactura ? "EL COLABORADOR" : "EL EMPLEADO"
+    centro("ACUERDO DE CONFIDENCIALIDAD Y NO DIVULGACIÓN", 12.5, bold, cyan)
+    y += 6
+    parrafo(`Celebrado entre las partes, ${EMISOR.nombre}, identificada con NIT No. ${EMISOR.nit}, representada por ${REP_LEGAL}, en calidad de EMPLEADOR/TITULAR, y ${empleado.nombre}, identificado(a) con C.C. No. ${formatCedula(empleado.cedula)}, en calidad de ${receptorLbl}/RECEPTOR; hemos decidido suscribir este acuerdo de confidencialidad y no divulgación para salvaguardar la información intercambiada entre las partes, principalmente la que el empleador entregue al receptor, propia y de los clientes de la compañía.`)
+    clausula("DEFINICIONES.", undefined, [
+      "Titular: quien entrega la información considerada confidencial, tanto propia como de sus clientes.",
+      "Receptor: colaborador que recibe la información considerada confidencial.",
+      "Información Confidencial: toda información revelada por el titular al receptor que: (a) no sea de conocimiento público ni de fácil obtención por fuentes externas; (b) trate sobre la operación y proyectos internos de la empresa (comercial, financiera, tecnológica); (c) sea información de los clientes con los que trabaja la empresa (personal, financiera, tecnológica, comercial y de negocio); o (d) sea entregada por el titular con marca de confidencial.",
+    ])
+    clausula("OBJETO.", "El receptor tendrá, entre otras, las siguientes obligaciones:", [
+      "Mantener en secreto toda la información confidencial a la que, por el ejercicio de sus funciones, tenga acceso.",
+      "No divulgar la información confidencial durante ni después del vínculo con la compañía.",
+      "No usar la información confidencial para su beneficio personal, ni para establecer relación laboral o personal con los clientes de la empresa.",
+      "Toda información confidencial nueva que el receptor genere dentro del vínculo se entiende propiedad del titular.",
+      "Mantener absoluta reserva de los documentos internos de la compañía y no divulgar información a los clientes sin previa autorización.",
+      "No reproducir, copiar, vender, intercambiar, comercializar ni publicar la información confidencial.",
+      "Devolver al titular toda información física y digital en su poder, incluidas copias, al finalizar el contrato.",
+      "Informar cualquier evento que pueda poner en riesgo la confidencialidad de la información de la compañía.",
+    ])
+    clausula("PROPIEDAD DE LA INFORMACIÓN.", "La entrega de la información confidencial del titular al receptor, en ningún caso, transfiere la propiedad de la misma. El titular es y será el dueño de la información suministrada.")
+    clausula("INCUMPLIMIENTO.", "Cuando el titular considere que cualquiera de las cláusulas fue incumplida total o parcialmente, el receptor entiende que ello causa perjuicio continuo e irreparable al titular y se obliga a indemnizarlo por los daños causados, aceptando que el pago del dinero no constituye reparación suficiente; el titular podrá iniciar las acciones que la ley prevea.")
+    clausula("VIGENCIA.", "Este acuerdo entra en vigencia a partir de la fecha de firma de ambas partes.")
+    parrafo(`Se firma en la ciudad de ${EMISOR.ciudad}, el ${fechaLarga(contrato.vigente_desde)}.`, 9.5)
+    firmas("TITULAR", empleado.nombre, "RECEPTOR", true)
+  }
 
   // ── OTRO SÍ ─────────────────────────────────────────────────────────────────
   async function generarOtrosi(): Promise<Uint8Array> {
@@ -288,7 +323,18 @@ export async function generarContratoPDF(
     const objeto = contrato.motivo || contrato.descripcion || `actualizar las condiciones de ${trabajadorLbl}`
     clausula("PRIMERA - OBJETO.", `El presente documento tiene como propósito ${objeto}. Las partes acuerdan que la vigencia de este OTRO SÍ es a partir del ${fechaLarga(contrato.vigente_desde)}, aunque la firma se realice en fecha posterior.`)
 
-    if (!porFactura && totalMensualContrato(contrato) > 0) {
+    // Solo se incluyen los conceptos efectivamente ajustados. Si no se especificó
+    // (otrosíes antiguos), se muestran todos por compatibilidad.
+    const aj = contrato.ajustes ?? []
+    const ajusta = (c: string) => aj.length === 0 || aj.includes(c as never)
+
+    const cambiosCond: string[] = []
+    if (ajusta("cargo") && cargo) cambiosCond.push(`Nuevo cargo: ${cargo}`)
+    if (ajusta("tipo_contrato") && contrato.tipo_contrato) cambiosCond.push(`Tipo de contrato: ${contrato.tipo_contrato}`)
+    if (ajusta("jornada") && contrato.jornada) cambiosCond.push(`Jornada: ${contrato.jornada}`)
+    if (cambiosCond.length) clausula("MODIFICACIÓN DE CARGO Y CONDICIONES.", `A partir del ${fechaLarga(contrato.vigente_desde)} se ajusta:`, cambiosCond)
+
+    if (ajusta("salario") && !porFactura && totalMensualContrato(contrato) > 0) {
       const items: string[] = [`Nuevo salario base: ${formatCOP(Number(contrato.salario_basico) || 0)}`]
       if ((Number(contrato.auxilio_transporte) || 0) > 0) items.push(`Auxilio de transporte / conectividad: ${formatCOP(Number(contrato.auxilio_transporte) || 0)}`)
       for (const l of contrato.otros_devengos ?? []) if (Number(l.valor) > 0) items.push(`${l.concepto}: ${formatCOP(Number(l.valor) || 0)}`)
@@ -296,13 +342,13 @@ export async function generarContratoPDF(
       clausula("SEGUNDA - MODIFICACIÓN SALARIAL.", `A partir del ${fechaLarga(contrato.vigente_desde)}, la remuneración de ${trabajadorLbl} será:`, items)
       parrafo("Las bonificaciones y otros conceptos que se establezcan no constituyen factor salarial para efectos de liquidación de prestaciones ni aportes a seguridad social, conforme al artículo 128 del Código Sustantivo del Trabajo.", 8, font, gray)
     }
-    if (porFactura && (Number(contrato.freelance_tarifa) || 0) > 0) {
+    if (ajusta("salario") && porFactura && (Number(contrato.freelance_tarifa) || 0) > 0) {
       clausula("SEGUNDA - MODIFICACIÓN DE LA CONTRAPRESTACIÓN.", `A partir del ${fechaLarga(contrato.vigente_desde)}, la contraprestación de ${trabajadorLbl} será de ${formatMoneda(Number(contrato.freelance_tarifa) || 0, contrato.freelance_moneda ?? "COP")}${contrato.freelance_modo === "por_hora" ? " por hora" : contrato.freelance_modo === "por_mes" ? " mensuales" : ""}.`)
     }
-    if (funciones.length) {
+    if (ajusta("funciones") && funciones.length) {
       clausula(`FUNCIONES Y RESPONSABILIDADES DEL CARGO${cargo ? ` (${cargo})` : ""}.`, "En su nuevo cargo, y dentro de la jornada pactada, tendrá entre otras las siguientes funciones:", funciones)
     }
-    if (contrato.condiciones_adicionales && contrato.condiciones_adicionales.trim()) {
+    if (ajusta("condiciones") && contrato.condiciones_adicionales && contrato.condiciones_adicionales.trim()) {
       clausula("CONDICIONES ADICIONALES.", contrato.condiciones_adicionales)
     }
 

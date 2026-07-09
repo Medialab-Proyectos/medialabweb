@@ -2,7 +2,7 @@ import { NextResponse } from "next/server"
 import { z } from "zod"
 import { getSession } from "@/lib/empleados/auth"
 import { portalConfigurado } from "@/lib/empleados/db"
-import { listContratos, crearContrato, actualizarContrato, finalizarContrato, eliminarContrato, getContrato, sincronizarEmpleadoDesdeContratos } from "@/lib/empleados/contrato-queries"
+import { listContratos, crearContrato, actualizarContrato, finalizarContrato, eliminarContrato, getContrato, marcarEnviadoParaFirma, sincronizarEmpleadoDesdeContratos } from "@/lib/empleados/contrato-queries"
 import { getEmpleadoById } from "@/lib/empleados/queries"
 import { notificarEmpleado } from "@/lib/empleados/notificar"
 
@@ -44,6 +44,7 @@ const schema = z.object({
   fecha_fin_probable: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullable().optional(),
   fecha_fin: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullable().optional(),
   motivo: z.string().max(500).nullable().optional(),
+  ajustes: z.array(z.enum(["salario", "cargo", "tipo_contrato", "jornada", "lider", "rol", "funciones", "condiciones"])).nullable().optional(),
   // Si es true, se avisa al empleado para que descargue, firme y suba el contrato.
   enviar_para_firma: z.boolean().optional(),
 })
@@ -108,10 +109,12 @@ export async function POST(req: Request) {
       fecha_fin_probable: b.fecha_fin_probable ?? null,
       fecha_fin: b.fecha_fin ?? null,
       motivo: b.motivo ?? null,
+      ajustes: b.tipo === "otrosi" ? (b.ajustes ?? null) : null,
       archivo_path: null,
       // Nace pendiente de firma; se activa cuando se sube el documento firmado
       // (por el empleado, o por el CEO al adjuntarlo). No cambia el estado hasta entonces.
       estado: "pendiente_firma",
+      enviado_en: null,
       firmado_por: null,
       firmado_en: null,
       creado_por: g.session!.sub,
@@ -119,17 +122,8 @@ export async function POST(req: Request) {
     // El contrato manda: al firmar se sincronizan rol, vinculación, etc. (aquí aún es
     // pendiente, así que no altera la ficha; la sync se hace efectiva al subir el firmado).
     await sincronizarEmpleadoDesdeContratos(b.empleado_id)
-    // Aviso al empleado para que descargue, firme y suba su contrato.
-    if (b.enviar_para_firma) {
-      const emp = await getEmpleadoById(b.empleado_id)
-      if (emp) {
-        await notificarEmpleado(
-          emp.email,
-          `Tienes un ${b.tipo === "inicial" ? "contrato" : "otrosí"} por firmar`,
-          `Hola ${emp.nombre},\n\nSe generó tu ${b.tipo === "inicial" ? "contrato" : "otrosí"} en el portal. Ingresa a /empleados/contrato, descárgalo, fírmalo y súbelo firmado. Hasta entonces no queda activo.\n\nMediaLab`,
-        )
-      }
-    }
+    // Se crea como BORRADOR: el CEO lo previsualiza y luego lo "Envía para firma"
+    // (acción PATCH 'enviar'), o sube el documento ya firmado. No se avisa aún.
     return NextResponse.json({ contrato })
   } catch (e) {
     const msg = e instanceof Error ? e.message : "Error"
@@ -150,6 +144,8 @@ const patchSchema = z.discriminatedUnion("accion", [
   schema.partial().extend({ accion: z.literal("editar"), id: z.string().uuid() }),
   // Finalizar (o reabrir) un contrato con una fecha de finalización real.
   z.object({ accion: z.literal("finalizar"), id: z.string().uuid(), fecha_fin: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullable() }),
+  // Enviar el borrador al empleado para firma (le avisa por correo).
+  z.object({ accion: z.literal("enviar"), id: z.string().uuid() }),
 ])
 
 export async function PATCH(req: Request) {
@@ -171,6 +167,19 @@ export async function PATCH(req: Request) {
 
     if (b.accion === "finalizar") {
       const contrato = await finalizarContrato(b.id, b.fecha_fin)
+      return NextResponse.json({ contrato })
+    }
+
+    if (b.accion === "enviar") {
+      const contrato = await marcarEnviadoParaFirma(b.id)
+      const emp = await getEmpleadoById(previo.empleado_id)
+      if (emp) {
+        await notificarEmpleado(
+          emp.email,
+          `Tienes un ${previo.tipo === "inicial" ? "contrato" : "otrosí"} por firmar`,
+          `Hola ${emp.nombre},\n\nSe generó tu ${previo.tipo === "inicial" ? "contrato" : "otrosí"} en el portal. Ingresa a /empleados/contrato, descárgalo, fírmalo y devuélvelo firmado. Hasta entonces no queda activo.\n\nMediaLab`,
+        )
+      }
       return NextResponse.json({ contrato })
     }
 
@@ -198,6 +207,7 @@ export async function PATCH(req: Request) {
       ...(b.fecha_ingreso !== undefined ? { fecha_ingreso: b.fecha_ingreso } : {}),
       ...(b.fecha_fin_probable !== undefined ? { fecha_fin_probable: b.fecha_fin_probable } : {}),
       ...(b.motivo !== undefined ? { motivo: b.motivo } : {}),
+      ...(b.ajustes !== undefined ? { ajustes: b.ajustes } : {}),
     })
     await sincronizarEmpleadoDesdeContratos(previo.empleado_id)
     return NextResponse.json({ contrato })
