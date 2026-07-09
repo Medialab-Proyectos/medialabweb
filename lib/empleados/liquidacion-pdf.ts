@@ -102,12 +102,13 @@ export async function generarLiquidacionPDF(l: Liquidacion, empleado: EmpleadoLi
   // ── Tabla de conceptos (devengados / deducidos) ─────────────────────────────
   y += 12
   const cantR = W * 0.52, devR = W * 0.72, dedR = W - M
-  page.drawRectangle({ x: M, y: H - y - 4, width: W - 2 * M, height: 16, color: rgb(0.10, 0.11, 0.14) })
-  Tat(colL + 4, y + 7, "DESCRIPCIÓN", 8, bold, rgb(1, 1, 1))
-  TR(cantR, y + 7, "CANT.", 8, bold, rgb(1, 1, 1))
-  TR(devR, y + 7, "DEVENGADOS", 8, bold, rgb(1, 1, 1))
-  TR(dedR, y + 7, "DEDUCIDOS", 8, bold, rgb(1, 1, 1))
-  y += 22
+  // Barra que envuelve por completo el texto (baseline centrado dentro de los 16 px).
+  page.drawRectangle({ x: M, y: H - y - 16, width: W - 2 * M, height: 16, color: rgb(0.10, 0.11, 0.14) })
+  Tat(colL + 4, y + 11, "DESCRIPCIÓN", 8, bold, rgb(1, 1, 1))
+  TR(cantR, y + 11, "CANT.", 8, bold, rgb(1, 1, 1))
+  TR(devR, y + 11, "DEVENGADOS", 8, bold, rgb(1, 1, 1))
+  TR(dedR, y + 11, "DEDUCIDOS", 8, bold, rgb(1, 1, 1))
+  y += 26
 
   type Fila = { desc: string; cant?: number; dev?: number; ded?: number }
   const filas: Fila[] = []
@@ -146,11 +147,11 @@ export async function generarLiquidacionPDF(l: Liquidacion, empleado: EmpleadoLi
   TR(dedR, y, formatCOP(totDed), 9, bold)
   y += 22
 
-  // Neto a pagar
-  page.drawRectangle({ x: M, y: H - y - 6, width: W - 2 * M, height: 26, color: rgb(0.06, 0.16, 0.17) })
-  Tat(colL + 8, y + 6, "NETO A PAGAR", 10.5, bold, rgb(1, 1, 1))
-  TR(W - M - 8, y + 7, formatCOP(l.total), 14, bold, rgb(0.55, 0.9, 0.93))
-  y += 30
+  // Neto a pagar — barra de 26 px con los textos centrados verticalmente dentro de ella.
+  page.drawRectangle({ x: M, y: H - y - 26, width: W - 2 * M, height: 26, color: rgb(0.06, 0.16, 0.17) })
+  Tat(colL + 8, y + 17, "NETO A PAGAR", 10.5, bold, rgb(1, 1, 1))
+  TR(W - M - 8, y + 18, formatCOP(l.total), 14, bold, rgb(0.55, 0.9, 0.93))
+  y += 38
   T(M, `SON: ${numeroALetras(l.total).toUpperCase()}`, 8.5, font, gray)
   y += 22
 

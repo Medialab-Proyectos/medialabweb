@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { FileText, FileSignature, BadgeCheck, GraduationCap, Gift, Clock, ArrowRight, Plane, ClipboardCheck, Target, Receipt, Wrench, SmilePlus } from "lucide-react"
+import { FileText, FileSignature, BadgeCheck, GraduationCap, Gift, Clock, ArrowRight, Plane, ClipboardCheck, Target, Receipt, Wrench, SmilePlus, Timer } from "lucide-react"
 import type { Rol, TipoVinculacion } from "@/lib/empleados/types"
 import { esVinculacionPorFactura } from "@/lib/empleados/types"
 
@@ -27,6 +27,7 @@ const secciones: Seccion[] = [
   { key: "ingresos-retenciones", icon: FileText, titulo: "Ingresos y retenciones", desc: "Descarga tu certificado de ingresos y retenciones (DIAN) por año.", estado: "activo", color: "#8b5cf6", href: "/empleados/ingresos-retenciones", laboral: true },
   { key: "encuesta", icon: SmilePlus, titulo: "Encuesta de satisfacción", desc: "Cuéntanos cómo te sientes en la empresa. Tu opinión ayuda a mejorar.", estado: "activo", color: "#00BFA6", href: "/empleados/satisfaccion" },
   { key: "vacaciones", icon: Plane, titulo: "Vacaciones y ausencias", desc: "Solicita vacaciones, permisos o licencias y consulta tu saldo.", estado: "activo", color: "#00BFA6", href: "/empleados/ausencias", laboral: true },
+  { key: "horas-extras", icon: Timer, titulo: "Horas extra", desc: "Reporta las horas extra que trabajaste; tu líder las aprueba.", estado: "activo", color: "#00BFA6", href: "/empleados/horas-extras", laboral: true },
   { key: "cursos", icon: GraduationCap, titulo: "Cursos", desc: "Formaciones y rutas de estudio asignadas.", estado: "deshabilitado", color: "#8b5cf6" },
   { key: "beneficios", icon: Gift, titulo: "Beneficios", desc: "Activa medicina prepagada y pide tus permisos de media jornada.", estado: "activo", color: "#E8751A", href: "/empleados/beneficios" },
   { key: "herramientas", icon: Wrench, titulo: "Herramientas", desc: "Accesos y credenciales de las herramientas del equipo.", estado: "deshabilitado", color: "#8b5cf6" },
@@ -44,7 +45,7 @@ export function PortalGrid({ rol, tipoVinculacion }: { rol: Rol; tipoVinculacion
           <Link href="/empleados/aprobaciones" className="flex items-center justify-between rounded-2xl border border-[var(--magenta)]/25 bg-[var(--magenta)]/[0.06] px-5 py-4 transition hover:bg-[var(--magenta)]/[0.1]">
             <div className="flex items-center gap-3">
               <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--magenta)]/15"><ClipboardCheck size={18} className="text-[var(--magenta)]" /></span>
-              <div><p className="text-sm font-semibold">Aprobaciones de ausencias</p><p className="text-xs text-[#fff]/55">Revisa y decide las solicitudes de tu equipo.</p></div>
+              <div><p className="text-sm font-semibold">Aprobaciones</p><p className="text-xs text-[#fff]/55">Revisa ausencias y horas extra de tu equipo.</p></div>
             </div>
             <ArrowRight size={16} className="text-[var(--magenta)]" />
           </Link>

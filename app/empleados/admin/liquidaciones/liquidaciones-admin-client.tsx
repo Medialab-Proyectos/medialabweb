@@ -10,12 +10,16 @@ import type { LineaNomina } from "@/lib/empleados/desprendible"
 import { formatCOP } from "@/lib/empleados/desprendible"
 import { type Contrato, condicionesVigentes } from "@/lib/empleados/contrato"
 import {
-  type Liquidacion, type TipoTerminacion, type CausaTerminacion, CAUSA_TERMINACION_LABEL, causaConIndemnizacion, precalcularLiquidacion, sumaOtros, categoriaContrato,
+  type Liquidacion, type TipoTerminacion, type CausaTerminacion, CAUSA_TERMINACION_LABEL, causaConIndemnizacion, precalcularLiquidacion, sumaOtros, categoriaContrato, descansoFinDeSemana,
 } from "@/lib/empleados/liquidacion"
 import { TIPOS_CONTRATO } from "@/lib/empleados/catalogos-co"
 import type { Cuenta } from "@/lib/empleados/contabilidad"
+import type { HoraExtra } from "@/lib/empleados/horas-extras"
 import { MoneyInput } from "../../money-input"
 import { ConfirmDialog } from "../../confirm-dialog"
+
+/** Concepto de la línea auto de horas extra (para poder refrescarla sin duplicar). */
+const HX_CONCEPTO = "Horas extra aprobadas del período"
 
 const inputCls = "w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm text-[#fff] outline-none transition focus:border-[var(--cyan)]/60"
 const lblCls = "text-[11px] font-semibold uppercase tracking-wide text-[#fff]/50"
@@ -67,6 +71,7 @@ export function LiquidacionesAdminClient({ empleados, empleadoInicial = "" }: { 
   const [indemDias, setIndemDias] = useState(0)
   const [indem, setIndem] = useState(0)
   const [otros, setOtros] = useState<LineaNomina[]>([])
+  const [horasExtraIds, setHorasExtraIds] = useState<string[]>([])
   // Deducciones de ley
   const [saludEmpleado, setSaludEmpleado] = useState(0)
   const [pensionEmpleado, setPensionEmpleado] = useState(0)
@@ -76,6 +81,11 @@ export function LiquidacionesAdminClient({ empleados, empleadoInicial = "" }: { 
   const [ssPagada, setSsPagada] = useState(false)
   const [ssSaldo, setSsSaldo] = useState(0)
   const [obs, setObs] = useState("")
+
+  // Dispara el auto-cálculo cuando se carga una liquidación nueva (sin guardar).
+  const [autoCalcTick, setAutoCalcTick] = useState(0)
+  const [reabriendo, setReabriendo] = useState(false)
+  const [confirmarReabrir, setConfirmarReabrir] = useState(false)
 
   const empleado = useMemo(() => empleados.find((e) => e.id === empleadoId) ?? null, [empleados, empleadoId])
   const esObraOFijo = categoriaContrato(tipoContrato) !== "indefinido"
@@ -147,6 +157,7 @@ export function LiquidacionesAdminClient({ empleados, empleadoInicial = "" }: { 
         else {
           resetRubros(empleado?.fecha_ingreso ?? "")
           if (typeof data.vacacionesPendientes === "number") setVacDias(data.vacacionesPendientes)
+          setAutoCalcTick((t) => t + 1) // liquidación nueva: calcular solo
         }
       } finally {
         if (!cancel) setCargando(false)
@@ -156,9 +167,9 @@ export function LiquidacionesAdminClient({ empleados, empleadoInicial = "" }: { 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [empleadoId])
 
-  async function calcular() {
-    if (!empleadoId) return setError("Selecciona un empleado.")
-    if (!fechaIngreso) return setError("Falta la fecha de ingreso del empleado.")
+  async function calcular(silent = false) {
+    if (!empleadoId) { if (!silent) setError("Selecciona un empleado."); return }
+    if (!fechaIngreso) { if (!silent) setError("Falta la fecha de ingreso del empleado."); return }
     setError(""); setMsg("")
     try {
       const res = await fetch(`/api/empleados/admin/contratos?empleado_id=${empleadoId}`)
@@ -172,22 +183,72 @@ export function LiquidacionesAdminClient({ empleados, empleadoInicial = "" }: { 
       const tipoC = vigente.tipo_contrato ?? tipoContrato
       setSalarioBasico(basico); setAuxilio(aux); setTipoContrato(tipoC)
 
+      // Horas extra aprobadas del empleado (para promediar en la base y pagar las pendientes).
+      let horasExtras: HoraExtra[] = []
+      try {
+        const rhx = await fetch(`/api/empleados/admin/horas-extras?empleado_id=${empleadoId}`)
+        const dhx = await rhx.json()
+        if (rhx.ok) horasExtras = (dhx.horas ?? []) as HoraExtra[]
+      } catch { /* horas extra opcionales */ }
+
       const pre = precalcularLiquidacion({
         tipoTerminacion, salarioBasico: basico, auxilioTransporte: aux,
         fechaIngreso, fechaEgreso, tipoContrato: tipoC, fechaFinContrato: fechaFinContrato || null,
-        diasVacacionesPendientes: vacDias, diasSalarioPendiente: salarioDias,
+        // Vacaciones: el saldo FRESCO del módulo de Vacaciones (no un valor viejo guardado).
+        // Salario: sin diasSalarioPendiente, precalc asume nómina a mes vencido (días del mes de egreso).
+        diasVacacionesPendientes: vacSugerido ?? vacDias,
+        horasExtras,
       })
-      setSalario(pre.salario)
+      setSalarioDias(pre.salarioDias); setSalario(pre.salario)
       setCesantiasDias(pre.cesantiasDias); setCesantias(pre.cesantias); setIntereses(pre.interesesCesantias)
       setPrimaDias(pre.primaDias); setPrima(pre.prima)
       setVacDias(pre.vacacionesDias); setVacaciones(pre.vacaciones)
       setIndemDias(pre.indemnizacionDias); setIndem(pre.indemnizacion)
       setSaludEmpleado(pre.saludEmpleado); setPensionEmpleado(pre.pensionEmpleado)
-      setMsg("✓ Pre-calculado desde el contrato vigente. Revisa y ajusta cada rubro antes de generar.")
+      // Horas extra aprobadas y no pagadas → línea de devengado (se marcan pagadas al generar).
+      setHorasExtraIds(pre.extrasHorasExtraIds ?? [])
+      setOtros((prev) => {
+        const rest = prev.filter((o) => o.concepto !== HX_CONCEPTO)
+        return pre.extrasHorasExtra > 0 ? [...rest, { concepto: HX_CONCEPTO, valor: pre.extrasHorasExtra }] : rest
+      })
+      if (!silent) setMsg("✓ Pre-calculado desde el contrato vigente. Revisa y ajusta cada rubro antes de generar.")
     } catch (e) {
       setError(e instanceof Error ? e.message : "Error al calcular.")
     }
   }
+
+  // Reliquidar: reabre una liquidación GENERADA a borrador (anula el egreso en contabilidad y
+  // reactiva al empleado), y deja los rubros recalculados para revisarlos y volver a generar.
+  async function reabrir() {
+    if (!existingId) return
+    setError(""); setMsg(""); setReabriendo(true)
+    try {
+      const res = await fetch(`/api/empleados/admin/liquidaciones/${existingId}/reabrir`, { method: "POST" })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || "No se pudo reabrir.")
+      setConfirmarReabrir(false)
+      setEstado("borrador")
+      await calcular(true)
+      setMsg(`✓ Liquidación reabierta a borrador${data.aviso ? ` · ${data.aviso}` : ". Revisa los rubros y vuelve a generarla."}`)
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "No se pudo reabrir.")
+    } finally {
+      setReabriendo(false)
+    }
+  }
+
+  // Auto-cálculo: recalcula solo (silencioso) al cargar una liquidación nueva y cada vez que
+  // cambian los datos que mueven toda la cuenta (fecha de egreso o causa). Nunca toca una
+  // liquidación ya guardada/generada — ahí el CEO usa el botón "Calcular" a propósito.
+  const calcularRef = useRef(calcular)
+  calcularRef.current = calcular
+  useEffect(() => {
+    if (existingId !== null || estado === "generada") return
+    if (!empleadoId || !fechaIngreso || !/^\d{4}-\d{2}-\d{2}$/.test(fechaEgreso)) return
+    const t = setTimeout(() => { calcularRef.current(true) }, 120)
+    return () => clearTimeout(t)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoCalcTick, fechaEgreso, causa])
 
   function payload(generar: boolean) {
     return {
@@ -206,6 +267,8 @@ export function LiquidacionesAdminClient({ empleados, empleadoInicial = "" }: { 
       salud_empleado: saludEmpleado, pension_empleado: pensionEmpleado, retencion_fuente: retencionFuente,
       seguridad_social_pagada: ssPagada, seguridad_social_saldo: ssPagada ? 0 : ssSaldo,
       observaciones: obs || null,
+      // Horas extra incluidas: al generar se marcan como pagadas para no volver a liquidarlas.
+      horas_extra_ids: horasExtraIds,
     }
   }
 
@@ -289,8 +352,15 @@ export function LiquidacionesAdminClient({ empleados, empleadoInicial = "" }: { 
       ) : (
         <section className="space-y-5">
           {bloqueado && (
-            <div className="flex items-center gap-2 rounded-xl border border-amber-400/25 bg-amber-400/[0.07] px-4 py-3 text-sm text-amber-200">
-              <CheckCircle2 size={15} /> Esta liquidación ya fue generada. Puedes descargar el PDF; para cambios crea un ajuste manual.
+            <div className="flex flex-col gap-2 rounded-xl border border-amber-400/25 bg-amber-400/[0.07] px-4 py-3 text-sm text-amber-200 sm:flex-row sm:items-center sm:justify-between">
+              <span className="flex items-center gap-2"><CheckCircle2 size={15} /> Esta liquidación ya fue generada. Puedes descargar el PDF o reliquidarla si hay un error.</span>
+              <button
+                onClick={() => setConfirmarReabrir(true)}
+                disabled={reabriendo}
+                className="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-amber-300/40 bg-amber-400/10 px-3 py-1.5 text-xs font-semibold text-amber-100 transition hover:bg-amber-400/20 disabled:opacity-50"
+              >
+                {reabriendo ? <Loader2 size={13} className="animate-spin" /> : <Calculator size={13} />} Reliquidar
+              </button>
             </div>
           )}
 
@@ -337,8 +407,8 @@ export function LiquidacionesAdminClient({ empleados, empleadoInicial = "" }: { 
           <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
             <div className="mb-4 flex items-center justify-between">
               <h2 className="text-sm font-semibold text-[#fff]/80">Base salarial</h2>
-              <button onClick={calcular} disabled={bloqueado} className="inline-flex items-center gap-1.5 rounded-full border border-[var(--cyan)]/40 bg-[var(--cyan)]/10 px-3 py-1.5 text-xs font-semibold text-[var(--cyan)] hover:bg-[var(--cyan)]/20 disabled:opacity-40">
-                <Calculator size={12} /> Calcular desde contrato
+              <button onClick={() => calcular()} disabled={bloqueado} className="inline-flex items-center gap-1.5 rounded-full border border-[var(--cyan)]/40 bg-[var(--cyan)]/10 px-3 py-1.5 text-xs font-semibold text-[var(--cyan)] hover:bg-[var(--cyan)]/20 disabled:opacity-40">
+                <Calculator size={12} /> Recalcular
               </button>
             </div>
             <div className="grid gap-3 sm:grid-cols-2">
@@ -352,7 +422,7 @@ export function LiquidacionesAdminClient({ empleados, empleadoInicial = "" }: { 
               </label>
             </div>
             {vacSugerido !== null && (
-              <p className="mt-3 text-xs text-[#fff]/45">Al calcular, las vacaciones se llenan con el <b className="text-[#fff]/70">acumulado legal</b> (15 días por año, en días 360). Si el empleado ya tomó vacaciones, réstalas. Según ausencias, pendientes: <b className="text-[#fff]/70">{vacSugerido} días</b>.</p>
+              <p className="mt-3 text-xs text-[#fff]/45">Las vacaciones se llenan con el <b className="text-[#fff]/70">saldo pendiente</b> del módulo de Vacaciones (días acumulados antes del corte + causadas − tomadas): <b className="text-[#fff]/70">{vacSugerido} días</b>. Puedes ajustarlo (admite decimales).</p>
             )}
           </div>
 
@@ -360,7 +430,23 @@ export function LiquidacionesAdminClient({ empleados, empleadoInicial = "" }: { 
           <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
             <h2 className="mb-4 text-sm font-semibold text-[#fff]/80">Rubros de la liquidación</h2>
             <div className="space-y-3">
-              <RubroRow label="Salario del último periodo (días no pagados)" dias={salarioDias} setDias={setSalarioDias} valor={salario} setValor={setSalario} disabled={bloqueado} />
+              <RubroRow
+                label="Salario del último periodo (días no pagados)"
+                dias={salarioDias}
+                setDias={(d) => {
+                  setSalarioDias(d)
+                  const v = Math.round((salarioBasico * d) / 30)
+                  setSalario(v); setSaludEmpleado(Math.round(v * 0.04)); setPensionEmpleado(Math.round(v * 0.04))
+                }}
+                valor={salario}
+                setValor={(v) => { setSalario(v); setSaludEmpleado(Math.round(v * 0.04)); setPensionEmpleado(Math.round(v * 0.04)) }}
+                disabled={bloqueado}
+              />
+              {fechaEgreso && descansoFinDeSemana(fechaEgreso) > 0 && (
+                <p className="-mt-1 pl-1 text-[11px] text-[#fff]/45">
+                  Incluye <b className="text-[#fff]/70">{descansoFinDeSemana(fechaEgreso)} día(s) de descanso dominical remunerado</b>: el egreso completa la semana laboral, así que se paga el fin de semana ganado.
+                </p>
+              )}
               <RubroRow label="Cesantías" dias={cesantiasDias} setDias={setCesantiasDias} valor={cesantias} setValor={setCesantias} disabled={bloqueado} />
               <RubroRow label="Intereses a las cesantías (12%)" valor={intereses} setValor={setIntereses} disabled={bloqueado} />
               <RubroRow label="Prima de servicios proporcional" dias={primaDias} setDias={setPrimaDias} valor={prima} setValor={setPrima} disabled={bloqueado} />
@@ -390,7 +476,7 @@ export function LiquidacionesAdminClient({ empleados, empleadoInicial = "" }: { 
             {/* Deducciones de ley (se restan del neto) */}
             <div className="mt-4 border-t border-white/10 pt-4">
               <span className={lblCls}>Deducciones de ley (se restan del neto)</span>
-              <p className="mb-3 mt-1 text-[11px] text-[#fff]/45">Salud y pensión = 4% sobre el salario del periodo (editables). La retención en la fuente la ajustas según el procedimiento.</p>
+              <p className="mb-3 mt-1 text-[11px] text-[#fff]/45">Salud y pensión = 4% sobre el salario del periodo (editables). <b>Retención en la fuente:</b> normalmente queda en $0 — solo aplica si el pago total del mes supera ~$7.000.000 (≈95 UVT). Un pago alto de vacaciones puede empujar el mes por encima de ese umbral; en ese caso el contador calcula el valor y lo pones aquí.</p>
               <div className="space-y-3">
                 <RubroRow label="Salud empleado (4%)" valor={saludEmpleado} setValor={setSaludEmpleado} disabled={bloqueado} />
                 <RubroRow label="Pensión empleado (4%)" valor={pensionEmpleado} setValor={setPensionEmpleado} disabled={bloqueado} />
@@ -481,7 +567,38 @@ export function LiquidacionesAdminClient({ empleados, empleadoInicial = "" }: { 
         onConfirm={() => guardar(true)}
         onCancel={() => setConfirmar(false)}
       />
+
+      <ConfirmDialog
+        abierto={confirmarReabrir}
+        titulo="Reliquidar"
+        mensaje={`Se reabrirá la liquidación de ${empleado?.nombre ?? "el empleado"} a borrador: se anulará el egreso registrado en contabilidad y el empleado volverá a estar activo. Después podrás recalcular y volver a generarla. ¿Continuar?`}
+        confirmLabel="Sí, reliquidar"
+        tone="danger"
+        cargando={reabriendo}
+        onConfirm={reabrir}
+        onCancel={() => setConfirmarReabrir(false)}
+      />
     </div>
+  )
+}
+
+/** Campo de días con separador flexible (coma o punto) y sin stepper. */
+function DiasInput({ dias, setDias, disabled }: { dias: number; setDias: (n: number) => void; disabled?: boolean }) {
+  const [str, setStr] = useState(String(dias))
+  useEffect(() => {
+    // Solo se sincroniza desde afuera (p. ej. al "Calcular"); no interrumpe lo que se está escribiendo.
+    if (Number(str.replace(",", ".")) !== dias) setStr(String(dias))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dias])
+  return (
+    <label className="flex w-24 flex-col gap-1.5">
+      <span className={lblCls}>Días</span>
+      <input
+        disabled={disabled} type="text" inputMode="decimal" value={str}
+        onChange={(e) => { const raw = e.target.value.replace(/[^\d.,]/g, ""); setStr(raw); setDias(Number(raw.replace(",", ".")) || 0) }}
+        placeholder="0" className={inputCls}
+      />
+    </label>
   )
 }
 
@@ -501,12 +618,7 @@ function RubroRow({
         <span className={lblCls}>{label}</span>
         <MoneyInput value={valor} onChange={setValor} className={inputCls} />
       </label>
-      {setDias && (
-        <label className="flex w-24 flex-col gap-1.5">
-          <span className={lblCls}>Días</span>
-          <input disabled={disabled} type="number" value={dias ?? 0} onChange={(e) => setDias(Number(e.target.value))} className={inputCls} />
-        </label>
-      )}
+      {setDias && <DiasInput dias={dias ?? 0} setDias={setDias} disabled={disabled} />}
     </div>
   )
 }

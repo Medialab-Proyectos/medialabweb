@@ -58,6 +58,22 @@ export async function marcarGenerada(id: string, generadoPor: string) {
   return data as Liquidacion
 }
 
+/**
+ * Reabre una liquidación generada: vuelve a 'borrador' y limpia el sello de generación.
+ * El egreso en contabilidad y la reactivación del empleado se manejan en el endpoint.
+ */
+export async function reabrirLiquidacion(id: string) {
+  const sb = getServiceClient()
+  const { data, error } = await sb
+    .from("liquidaciones")
+    .update({ estado: "borrador", generado_por: null, generado_en: null })
+    .eq("id", id)
+    .select(COLS)
+    .single()
+  if (error) throw error
+  return data as Liquidacion
+}
+
 // ── Adjunto: carta de renuncia / certificado de finalización ──────────────────
 export async function subirCartaLiquidacion(l: Liquidacion, bytes: Uint8Array, mime: string) {
   const sb = getServiceClient()

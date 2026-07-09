@@ -25,10 +25,10 @@ export default async function AprobacionesPage() {
         </Link>
         <div className="mb-2 flex items-center gap-2.5">
           <ClipboardCheck size={20} className="text-[var(--magenta)]" />
-          <h1 className="font-display text-2xl font-bold">Aprobaciones de ausencias</h1>
+          <h1 className="font-display text-2xl font-bold">Aprobaciones</h1>
         </div>
         <p className="mb-8 text-sm text-[#fff]/55">
-          Revisa y decide las solicitudes de {esCEO ? "todo el equipo" : "las personas a tu cargo"}.
+          Revisa y decide las solicitudes de ausencia y las horas extra de {esCEO ? "todo el equipo" : "las personas a tu cargo"}.
         </p>
 
         {sinEquipo ? (

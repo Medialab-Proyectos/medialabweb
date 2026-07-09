@@ -4,6 +4,14 @@
 import type { LineaNomina } from "./desprendible"
 import { calcularCesantias, calcularInteresesCesantias, calcularPrima } from "./contrato"
 import { SMMLV_2026 } from "./nomina-co"
+import { promedioMensualVariables, type HoraExtra } from "./horas-extras"
+
+/** Fecha ISO un año antes (para la ventana del promedio de variables de cesantías/vacaciones). */
+function fechaMenosUnAnio(iso: string): string {
+  const d = new Date(`${iso}T00:00:00Z`)
+  d.setUTCFullYear(d.getUTCFullYear() - 1)
+  return d.toISOString().slice(0, 10)
+}
 
 export type TipoTerminacion = "justa_causa" | "sin_justa_causa"
 export type EstadoLiquidacion = "borrador" | "generada"
@@ -129,6 +137,27 @@ export function calcularSalarioPeriodo(salarioBasico: number, dias: number): num
   return Math.round(((Number(salarioBasico) || 0) * (Number(dias) || 0)) / 30)
 }
 
+/**
+ * Días de descanso dominical remunerado que se ganan al terminar la semana laboral: quien
+ * trabaja toda la semana tiene derecho a que le paguen el fin de semana (CST art. 173-174).
+ * Egreso el viernes → sábado + domingo (2); el sábado → domingo (1); entre semana → 0.
+ */
+export function descansoFinDeSemana(fechaEgresoISO: string): number {
+  const dow = new Date(`${fechaEgresoISO}T00:00:00Z`).getUTCDay() // 0=dom, 1=lun … 5=vie, 6=sáb
+  return dow === 5 ? 2 : dow === 6 ? 1 : 0
+}
+
+/**
+ * Días de salario pendientes por defecto: como la nómina se paga a mes vencido, los días
+ * trabajados del mes de egreso quedan por pagar. Si el egreso completa la semana (viernes o
+ * sábado), se suma el descanso dominical remunerado del fin de semana ganado.
+ * Ej.: egreso viernes 3 → 3 trabajados + 2 de descanso = 5. Año comercial (mes de 30 días).
+ */
+export function diasSalarioMesEgreso(fechaEgresoISO: string): number {
+  const dd = Math.min(Math.max(Number((fechaEgresoISO || "").slice(8, 10)) || 0, 0), 30)
+  return Math.min(dd + descansoFinDeSemana(fechaEgresoISO), 30)
+}
+
 /** Aporte del empleado (4% salud o 4% pensión) sobre la base salarial del periodo. */
 export function aporteEmpleado4(baseSalarial: number): number {
   return Math.round((Number(baseSalarial) || 0) * 0.04)
@@ -187,15 +216,27 @@ export function precalcularLiquidacion(input: {
   fechaFinContrato: string | null
   diasVacacionesPendientes?: number   // opcional: días ya tomados a restar del acumulado
   diasSalarioPendiente?: number       // días del último periodo de nómina no pagados
+  horasExtras?: HoraExtra[]           // horas extra aprobadas (para promediar en la base y pagar las pendientes)
   smmlv?: number
 }) {
-  const base = (Number(input.salarioBasico) || 0) + (Number(input.auxilioTransporte) || 0)
+  const basico = Number(input.salarioBasico) || 0
+  const base = basico + (Number(input.auxilioTransporte) || 0)
   // Todo se cuenta con el año comercial de 360 días (norma laboral colombiana).
   const diasTotales = dias360(input.fechaIngreso, input.fechaEgreso)
 
+  // Promedio mensual de las horas extra (constitutivas de salario) → entra a la base de
+  // cesantías/vacaciones (promedio del último año) y de la prima (promedio del semestre).
+  const hx = input.horasExtras ?? []
+  const inicioAnioVar = fechaMenosUnAnio(input.fechaEgreso)
+  const desdeAnio = input.fechaIngreso > inicioAnioVar ? input.fechaIngreso : inicioAnioVar
+  const promAnio = promedioMensualVariables(hx, desdeAnio, input.fechaEgreso)
+
   // Salario del último periodo no pagado + aportes del empleado (4% salud / 4% pensión)
   // sobre esa base salarial. La retención en la fuente la ajusta el CEO (empieza en 0).
-  const salarioDias = Number(input.diasSalarioPendiente) || 0
+  // Si no se indica, se asume nómina a mes vencido: los días del mes de egreso quedan por pagar.
+  const salarioDias = input.diasSalarioPendiente != null
+    ? Number(input.diasSalarioPendiente)
+    : diasSalarioMesEgreso(input.fechaEgreso)
   const salario = calcularSalarioPeriodo(input.salarioBasico, salarioDias)
   const saludEmpleado = aporteEmpleado4(salario)
   const pensionEmpleado = aporteEmpleado4(salario)
@@ -204,18 +245,31 @@ export function precalcularLiquidacion(input: {
   // ingresó ese mismo año) hasta el egreso, en días 360.
   const corteCesantias = input.fechaIngreso > inicioAnio(input.fechaEgreso) ? input.fechaIngreso : inicioAnio(input.fechaEgreso)
   const cesantiasDias = dias360(corteCesantias, input.fechaEgreso)
-  const cesantias = calcularCesantias(base, cesantiasDias)
+  // Base cesantías = salario + auxilio + promedio anual de variables.
+  const baseCesantias = base + promAnio
+  const cesantias = calcularCesantias(baseCesantias, cesantiasDias)
   const interesesCesantias = calcularInteresesCesantias(cesantias, cesantiasDias)
 
-  // Prima proporcional del semestre en curso (base = básico + auxilio), en días 360.
+  // Prima proporcional del semestre en curso (base = básico + auxilio + promedio del semestre), en días 360.
   const corteSemestre = input.fechaIngreso > inicioSemestre(input.fechaEgreso) ? input.fechaIngreso : inicioSemestre(input.fechaEgreso)
   const primaDias = dias360(corteSemestre, input.fechaEgreso)
-  const prima = calcularPrima({ basico: input.salarioBasico, auxilio: input.auxilioTransporte, dias: primaDias })
+  const promSemestre = promedioMensualVariables(hx, corteSemestre, input.fechaEgreso)
+  const basePrima = base + promSemestre
+  const prima = Math.round((basePrima * primaDias) / 360)
 
-  // Vacaciones: 15 días por año trabajado (proporción sobre 360). Cada día = salario básico ÷ 30.
-  // Es el acumulado; si el empleado ya tomó vacaciones, el CEO resta esos días al revisar.
-  const vacacionesDias = Math.round((15 * diasTotales / 360) * 100) / 100
-  const vacaciones = calcularVacaciones(input.salarioBasico, vacacionesDias)
+  // Vacaciones pendientes: el SALDO disponible que el CEO lleva en el módulo de Vacaciones
+  // (días acumulados antes del corte + causadas − tomadas). Ese es el valor de la liquidación.
+  // Si no viene, se estima con el acumulado legal (15 días/año sobre 360). Cada día = (básico + promedio) ÷ 30.
+  const vacacionesDias = input.diasVacacionesPendientes != null
+    ? Math.round((Number(input.diasVacacionesPendientes) || 0) * 100) / 100
+    : Math.round((15 * diasTotales / 360) * 100) / 100
+  const baseVacaciones = basico + promAnio
+  const vacaciones = calcularVacaciones(baseVacaciones, vacacionesDias)
+
+  // Horas extra APROBADAS y aún no pagadas: se pagan directamente en la liquidación.
+  const extrasPendientes = hx.filter((h) => h.estado === "aprobada")
+  const extrasHorasExtra = extrasPendientes.reduce((a, h) => a + (Number(h.valor) || 0), 0)
+  const extrasHorasExtraIds = extrasPendientes.map((h) => h.id)
 
   // Indemnización solo si es sin justa causa.
   let indemnizacionDias = 0
@@ -235,13 +289,17 @@ export function precalcularLiquidacion(input: {
   }
 
   return {
-    base, diasTotales,
+    // Bases (ya con el promedio de variables sumado) para mostrar/validar.
+    base: baseCesantias, baseCesantias, basePrima, baseVacaciones, promedioVariables: promAnio,
+    diasTotales,
     salarioDias, salario,
     cesantiasDias, cesantias, interesesCesantias,
     primaDias, prima,
     vacacionesDias, vacaciones,
     indemnizacionDias, indemnizacion,
     saludEmpleado, pensionEmpleado, retencionFuente: 0,
+    // Horas extra aprobadas pendientes de pago (se agregan como devengado y se marcan pagadas al generar).
+    extrasHorasExtra, extrasHorasExtraIds,
   }
 }
 

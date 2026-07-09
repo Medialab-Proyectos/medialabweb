@@ -12,6 +12,7 @@ const lblCls = "text-[11px] font-semibold uppercase tracking-wide text-[#fff]/50
 export function VacacionesAdminClient({ empleados }: { empleados: Empleado[] }) {
   const [empleadoId, setEmpleadoId] = useState("")
   const [saldoInicial, setSaldoInicial] = useState(0)
+  const [saldoStr, setSaldoStr] = useState("0") // texto del input (permite coma o punto mientras escribe)
   const [corte, setCorte] = useState("")
   const [fechaIngreso, setFechaIngreso] = useState<string | null>(null)
   const [yaConfigurado, setYaConfigurado] = useState(false)
@@ -34,6 +35,7 @@ export function VacacionesAdminClient({ empleados }: { empleados: Empleado[] }) 
         if (!res.ok) { setError(data.error || "Error al cargar."); setSaldo(null); return }
         const cfgCorte = data.config?.corte ?? null
         setSaldoInicial(Number(data.config?.saldo_inicial) || 0)
+        setSaldoStr(String(Number(data.config?.saldo_inicial) || 0))
         setFechaIngreso(data.config?.fecha_ingreso ?? null)
         setYaConfigurado(!!cfgCorte)
         // Si nunca se configuró el corte, prellenamos con la fecha de ingreso como sugerencia.
@@ -118,10 +120,15 @@ export function VacacionesAdminClient({ empleados }: { empleados: Empleado[] }) 
               <label className="flex flex-col gap-1.5">
                 <span className={lblCls}>Días acumulados antes del corte</span>
                 <input
-                  type="number" inputMode="numeric" min={0} max={365} value={saldoInicial}
-                  onChange={(e) => setSaldoInicial(Number(e.target.value))} className={inputCls}
+                  type="text" inputMode="decimal" value={saldoStr}
+                  onChange={(e) => {
+                    const raw = e.target.value.replace(/[^\d.,]/g, "")
+                    setSaldoStr(raw)
+                    setSaldoInicial(Number(raw.replace(",", ".")) || 0)
+                  }}
+                  placeholder="Ej: 56,38" className={inputCls}
                 />
-                <span className="text-[11px] text-[#fff]/40">Saldo que el empleado traía a la fecha de corte (0 si arranca desde cero).</span>
+                <span className="text-[11px] text-[#fff]/40">Días de vacaciones que el empleado traía acumulados a la fecha de corte (admite decimales, ej. 56,38). Este es el saldo que entra a la liquidación.</span>
               </label>
               <label className="flex flex-col gap-1.5">
                 <span className={lblCls}>Fecha de corte</span>

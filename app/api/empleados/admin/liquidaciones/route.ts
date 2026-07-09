@@ -10,6 +10,7 @@ import {
 } from "@/lib/empleados/liquidacion-queries"
 import { totalLiquidacion } from "@/lib/empleados/liquidacion"
 import { upsertMovimiento, getCuenta } from "@/lib/empleados/contabilidad-queries"
+import { marcarHorasExtrasPagadas } from "@/lib/empleados/horas-extras-queries"
 import { getEmpleadoVacacion, listSolicitudes } from "@/lib/empleados/ausencia-queries"
 import { calcularSaldoVacaciones } from "@/lib/empleados/ausencia"
 
@@ -101,6 +102,7 @@ const schema = z.object({
   seguridad_social_pagada: z.boolean().default(false),
   seguridad_social_saldo: z.number().min(0).default(0),
   observaciones: z.string().max(1000).nullable().optional(),
+  horas_extra_ids: z.array(z.string().uuid()).default([]),
 })
 
 export async function POST(req: Request) {
@@ -192,6 +194,10 @@ export async function POST(req: Request) {
           estado: "terminado",
           fecha_egreso: b.fecha_egreso,
         })
+      }
+      // Las horas extra incluidas quedan pagadas (no se vuelven a liquidar). Best-effort.
+      if (b.horas_extra_ids.length > 0) {
+        try { await marcarHorasExtrasPagadas(b.horas_extra_ids) } catch { /* no crítico */ }
       }
 
       // Auto-registro del egreso en Contabilidad (la liquidación se paga en COP).

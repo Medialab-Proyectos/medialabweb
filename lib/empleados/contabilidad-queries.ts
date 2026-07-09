@@ -83,6 +83,28 @@ export async function eliminarMovimiento(id: string) {
   if (error) throw error
 }
 
+/**
+ * Anula (elimina) el egreso de liquidación registrado para un empleado. Se usa al reliquidar:
+ * borra el movimiento de contabilidad que se creó al generar. Devuelve cuántos borró y si
+ * alguno ya estaba pagado (realizado) para avisar al CEO.
+ */
+export async function anularEgresoLiquidacion(empleadoId: string): Promise<{ borrados: number; habiaPagado: boolean }> {
+  const sb = getServiceClient()
+  const { data: movs, error } = await sb
+    .from("movimientos")
+    .select("id,estado")
+    .eq("empleado_id", empleadoId)
+    .eq("categoria", "liquidacion")
+    .eq("tipo", "egreso")
+  if (error) throw error
+  const lista = (movs ?? []) as { id: string; estado: string }[]
+  if (lista.length === 0) return { borrados: 0, habiaPagado: false }
+  const habiaPagado = lista.some((m) => m.estado === "realizado")
+  const { error: delErr } = await sb.from("movimientos").delete().in("id", lista.map((m) => m.id))
+  if (delErr) throw delErr
+  return { borrados: lista.length, habiaPagado }
+}
+
 // ── Gastos recurrentes (catálogo) ─────────────────────────────────────────────
 const GASTO_COLS = "id,nombre,categoria,proveedor,moneda,valor,cuenta_id,activo,orden,creado_en"
 
