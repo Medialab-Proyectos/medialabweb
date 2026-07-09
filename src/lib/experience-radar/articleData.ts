@@ -11655,7 +11655,73 @@ const JULY7_RADAR_INPUTS: RadarArticleInput[] = [
   }),
 ]
 
-export const RADAR_ARTICLE_SEED: RadarArticle[] = [...ARTICLE_INPUTS, ...JULY2_RADAR_INPUTS, ...JULY3_RADAR_INPUTS, ...JULY4_RADAR_INPUTS, ...JULY5_RADAR_INPUTS, ...JULY6_RADAR_INPUTS, ...JULY7_RADAR_INPUTS].map(generateRadarArticle)
+const JULY9_RADAR_INPUTS: RadarArticleInput[] = [
+  analyzedUpcomingMatch({
+    date: "2026-07-09",
+    kickoffAt: "2026-07-09T20:00:00.000Z",
+    slug: "francia-marruecos-mundial-2026",
+    teams: ["Francia", "Marruecos"],
+    group: "Cuartos de final",
+    seoTitle: "Francia vs Marruecos: previa y radar emocional de la revancha Mbappe-Hakimi en Boston",
+    hook: "Francia abre los cuartos con aura de favorita; Marruecos llega invicto, con Hakimi como simbolo y una hinchada que convierte la prudencia en presion emocional.",
+    quickSummary: "Francia vs Marruecos se juega este jueves 9 de julio a las 3:00 p. m. de Colombia / 4:00 p. m. ET / 20:00 UTC en Boston Stadium.",
+    whatHappened: "ESPN y SBNation ubican Francia-Marruecos como el primer cuarto de final del Mundial 2026. Al Jazeera centra la previa en la rivalidad Hakimi-Mbappe, la memoria de la semifinal de 2022 y el reto de Marruecos como equipo invicto. The Analyst da a Francia favoritismo fuerte con 62.2% de probabilidad, mientras Latingoles recoge el clima marroqui de optimismo y prudencia antes del duelo.",
+    uxFinding: "Cuando una revancha combina memoria historica, amistad entre figuras y favoritismo estadistico, la audiencia necesita separar emocion de evidencia para no convertir deseo en certeza.",
+    keyPlays: [
+      "15:00 Bogota / 16:00 ET / 20:00 UTC: inicio en Boston Stadium.",
+      "Francia llega tras eliminar 1-0 a Paraguay con penal de Mbappe.",
+      "Marruecos llega tras vencer 3-0 a Canada y mantener viva la narrativa de sorpresa global.",
+      "Hakimi vs Mbappe concentra la conversacion emocional y social de la previa.",
+      "El ganador avanzara a semifinales del Mundial 2026.",
+    ],
+    statements: [
+      "ESPN lista Francia vs Marruecos para el jueves 9 de julio a las 4:00 p. m. ET.",
+      "Al Jazeera destaca la rivalidad Hakimi-Mbappe y la revancha de 2022.",
+      "The Analyst/Opta proyecta favoritismo frances y advierte que Marruecos llega invicto.",
+      "Latingoles describe a Marruecos entre optimismo y prudencia en la cuenta atras.",
+      "The Guardian enmarca los cuartos alrededor de Mbappe, Messi, Haaland y el peso de los favoritos.",
+    ],
+    sources: [
+      { name: "ESPN - World Cup 2026 schedule", url: "https://www.espn.com/soccer/story/_/id/48939282/2026-fifa-world-cup-fixtures-results-match-schedule-group-stage-knockout-rounds-bracket", kind: "referencia" },
+      { name: "Al Jazeera - France vs Morocco preview", url: "https://www.aljazeera.com/news/2026/7/9/world-cup-france-vs-morocco-prediction-schedule-hakimi-vs-mbappe-rivalry", kind: "referencia" },
+      { name: "The Analyst - France vs Morocco prediction", url: "https://theanalyst.com/articles/france-vs-morocco-prediction-world-cup-2026-match-preview", kind: "referencia" },
+      { name: "Latingoles - Marruecos ante Francia", url: "https://latingoles.com/marruecos-vive-entre-optimismo-y-prudencia-la-cuenta-atras-del-duelo-ante-francia/", kind: "referencia" },
+      { name: "The Guardian - World Cup quarter-final predictions", url: "https://www.theguardian.com/football/2026/jul/09/world-cup-2026-quarter-final-predictions-france-spain-argentina-england-messi-mbappe-haaland", kind: "referencia" },
+      { name: "Instagram - France vs Morocco social reel", url: "https://www.instagram.com/reel/DakBcdbERQ4/", kind: "conversacion" },
+      { name: "YouTube - ESPN FC Morocco massive test for France", url: "https://www.youtube.com/watch?v=-LPFro46ucI", kind: "conversacion" },
+    ],
+    imageUrl: "/images/experience-radar/mundial-2026/francia-marruecos-previa.jpg",
+    imageAlt: "Hinchas de Marruecos celebran antes del cuarto de final ante Francia",
+    imageCredit: "Latingoles / EFE",
+    imageSourceUrl: "https://latingoles.com/marruecos-vive-entre-optimismo-y-prudencia-la-cuenta-atras-del-duelo-ante-francia/",
+    emotionalRadar: { euforia: 86, confianza: 74, ansiedad: 78, frustracion: 10, incertidumbre: 56, optimismo: 84 },
+    analyzedAt: "2026-07-09T14:20:00.000Z",
+    teamsData: [
+      {
+        team: "Francia",
+        expectedEmotion: "Confianza de favorita con ansiedad por que el 1-0 ante Paraguay haya mostrado mas friccion que autoridad.",
+        dominantConversation: "Mbappe, Deschamps, Tchouameni, Doue, revancha de 2022 y obligacion de controlar la energia marroqui.",
+        fanConfidence: "Alta, pero menos relajada que antes de octavos.",
+        mainNarrative: "La seleccion que debe demostrar que su favoritismo no depende solo de un penal o de un pico individual de Mbappe.",
+        userExperience: {
+          expectativa: "La audiencia francesa busca once, estado fisico, sanciones, regreso de Tchouameni y senales de que el partido no se convertira en una encerrona emocional.",
+        },
+      },
+      {
+        team: "Marruecos",
+        expectedEmotion: "Euforia prudente: orgullo por estar invicto y ansiedad por repetir o superar la memoria de 2022.",
+        dominantConversation: "Hakimi, Bono, Ounahi, Saibari, la revancha ante Francia y la hinchada global marroqui.",
+        fanConfidence: "Alta emocionalmente, cautelosa por el favoritismo frances.",
+        mainNarrative: "La seleccion que quiere convertir una revancha historica en prueba de madurez y no solo de resistencia.",
+        userExperience: {
+          expectativa: "La comunidad marroqui consume la previa desde pertenencia, orgullo migrante y comparaciones inevitables con Qatar 2022.",
+        },
+      },
+    ],
+  }),
+]
+
+export const RADAR_ARTICLE_SEED: RadarArticle[] = [...ARTICLE_INPUTS, ...JULY2_RADAR_INPUTS, ...JULY3_RADAR_INPUTS, ...JULY4_RADAR_INPUTS, ...JULY5_RADAR_INPUTS, ...JULY6_RADAR_INPUTS, ...JULY7_RADAR_INPUTS, ...JULY9_RADAR_INPUTS].map(generateRadarArticle)
 const LOCKED_SEED_IMAGES = RADAR_ARTICLE_SEED
   .filter((article) => Boolean(article.imageUrl))
   .reduce((map, article) => {
