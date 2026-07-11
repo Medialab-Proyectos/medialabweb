@@ -5,6 +5,7 @@ import { getEmpleadoById } from "@/lib/empleados/queries"
 import { listCesantiasEmpleado } from "@/lib/empleados/contrato-queries"
 import { formatCOP } from "@/lib/empleados/desprendible"
 import { PortalHeader } from "../portal-header"
+import { CesantiasRetiroClient } from "./cesantias-retiro-client"
 
 export const dynamic = "force-dynamic"
 
@@ -59,6 +60,8 @@ export default async function CesantiasEmpleadoPage() {
             ))}
           </div>
         )}
+
+        {!sinConfigurar && empleado?.estado === "activo" && <CesantiasRetiroClient />}
       </main>
     </>
   )

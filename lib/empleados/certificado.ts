@@ -52,6 +52,66 @@ export function fraseVinculacion(vinc: string | null): string {
 }
 
 /**
+ * Último contrato (otrosí o inicial) que fijó un CARGO real, buscando hacia atrás:
+ * si el último otrosí solo cambió el salario y dejó el cargo vacío, el cargo vigente
+ * es el del otrosí anterior que sí lo definió. Sirve para tomar el último rol + su descripción.
+ */
+export function ultimoContratoConCargo(contratos: Contrato[]): Contrato | null {
+  const hist = [...contratos]
+    .filter((c) => c.vigente_desde && (c.cargo ?? "").trim())
+    .sort((a, b) => b.vigente_desde.localeCompare(a.vigente_desde))
+  return hist[0] ?? null
+}
+
+/**
+ * Narrativa del RECORRIDO de cargos con sus fechas: "el cargo de X desde el {f1} y de Y
+ * desde el {f2}". Solo cuenta los CAMBIOS reales de cargo (ignora otrosíes de solo salario).
+ * El primer cargo arranca en la fecha de ingreso; los siguientes, en la vigencia del otrosí.
+ * Devuelve además la descripción del último rol (si algún otrosí la trae).
+ */
+export function narrativaCargos(
+  contratos: Contrato[],
+  fechaIngreso: string | null,
+): { texto: string; descripcion: string; ultimoCargo: string } {
+  const inicio = (c: Contrato): string => (c.tipo === "inicial" && fechaIngreso ? fechaIngreso : c.vigente_desde)
+  // Orden por fecha de vigencia; dentro del MISMO día, por orden de creación (el último creado
+  // representa la decisión final de ese día).
+  const hist = [...contratos]
+    .filter((c) => c.vigente_desde)
+    .map((c) => ({ ...c, _inicio: inicio(c) }))
+    .sort((a, b) =>
+      a._inicio.localeCompare(b._inicio) ||
+      (a.creado_en ?? "").localeCompare(b.creado_en ?? "") ||
+      (a.id ?? "").localeCompare(b.id ?? ""),
+    )
+
+  // Timeline de cargos: si varias versiones caen el MISMO día, gana el estado final de ese día
+  // (evita "de X desde el 9 y de Y desde el 9" cuando los otrosíes quedaron con fecha = hoy).
+  const entries: { cargo: string; fechaISO: string }[] = []
+  for (const c of hist) {
+    const cargo = (c.cargo ?? "").trim()
+    if (!cargo) continue
+    const last = entries[entries.length - 1]
+    if (last && last.fechaISO === c._inicio) last.cargo = cargo
+    else if (!last || last.cargo !== cargo) entries.push({ cargo, fechaISO: c._inicio })
+  }
+  // Colapsa cargos iguales consecutivos (p.ej. A→B→A el mismo día queda en A).
+  const cambios = entries.filter((e, i) => i === 0 || e.cargo !== entries[i - 1].cargo)
+  if (cambios.length === 0) return { texto: "", descripcion: "", ultimoCargo: "" }
+
+  const ultimoCargo = cambios[cambios.length - 1].cargo
+  const descripcion =
+    [...hist].reverse().find((c) => (c.cargo ?? "").trim() === ultimoCargo && (c.descripcion ?? "").trim())?.descripcion?.trim() || ""
+
+  // "el cargo de X desde el {f1} y como Y desde el {f2} y como Z desde el {f3}".
+  const partes = cambios.map((x, i) => `${i === 0 ? "el cargo de" : "como"} ${x.cargo} desde el ${fechaLarga(x.fechaISO)}`)
+  const texto = partes.length === 1
+    ? partes[0]
+    : `${partes.slice(0, -1).join(", ")} y ${partes[partes.length - 1]}`
+  return { texto, descripcion, ultimoCargo }
+}
+
+/**
  * Narrativa de vinculación desde el historial de contratos (ordenado por fecha).
  * Ej: "vinculado a MediaLab Ingeniería con contrato de prestación de servicios desde el
  *      1 de septiembre de 2023, con contrato de obra o labor desde el 3 de enero de 2024 y

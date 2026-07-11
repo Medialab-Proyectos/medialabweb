@@ -4,10 +4,13 @@ import { useEffect, useMemo, useState } from "react"
 import { Loader2, Check, X, Clock, CheckCircle2, XCircle } from "lucide-react"
 import { type SolicitudAusencia, TIPO_AUSENCIA_LABEL, ESTADO_AUSENCIA_LABEL } from "@/lib/empleados/ausencia"
 import { type HoraExtra, RECARGO, ESTADO_HORA_EXTRA_LABEL } from "@/lib/empleados/horas-extras"
+import { type SolicitudCesantias, CAUSAL_CESANTIAS_LABEL, ESTADO_SOLICITUD_CESANTIAS_LABEL } from "@/lib/empleados/cesantias-solicitud"
 import { formatCOP } from "@/lib/empleados/desprendible"
+import { Download } from "lucide-react"
 
 type Sol = SolicitudAusencia & { empleado: { nombre: string; cedula: string } | null }
 type Hx = HoraExtra & { empleado: { nombre: string; cedula: string } | null }
+type Ces = SolicitudCesantias & { empleado: { nombre: string; cedula: string } | null }
 
 const estadoStyle: Record<string, string> = {
   pendiente: "bg-amber-400/10 text-amber-300",
@@ -16,9 +19,10 @@ const estadoStyle: Record<string, string> = {
 }
 const EstadoIcon = { pendiente: Clock, aprobada: CheckCircle2, rechazada: XCircle }
 
-export function AprobacionesClient() {
+export function AprobacionesClient({ esCEO = false }: { esCEO?: boolean }) {
   const [sols, setSols] = useState<Sol[]>([])
   const [hxs, setHxs] = useState<Hx[]>([])
+  const [cess, setCess] = useState<Ces[]>([])
   const [cargando, setCargando] = useState(true)
   const [error, setError] = useState("")
   const [procesando, setProcesando] = useState<string | null>(null)
@@ -30,7 +34,7 @@ export function AprobacionesClient() {
     try {
       const res = await fetch("/api/empleados/aprobaciones")
       const data = await res.json()
-      if (res.ok) { setSols(data.solicitudes ?? []); setHxs(data.horasExtras ?? []) }
+      if (res.ok) { setSols(data.solicitudes ?? []); setHxs(data.horasExtras ?? []); setCess(data.cesantias ?? []) }
       else setError(data.error || "Error al cargar.")
     } finally { setCargando(false) }
   }
@@ -40,6 +44,8 @@ export function AprobacionesClient() {
   const decididas = useMemo(() => sols.filter((s) => s.estado !== "pendiente"), [sols])
   const hxPendientes = useMemo(() => hxs.filter((h) => h.estado === "pendiente"), [hxs])
   const hxDecididas = useMemo(() => hxs.filter((h) => h.estado !== "pendiente"), [hxs])
+  const cesPendientes = useMemo(() => cess.filter((c) => c.estado === "pendiente"), [cess])
+  const cesDecididas = useMemo(() => cess.filter((c) => c.estado !== "pendiente"), [cess])
 
   function abrirDecision(id: string, estado: "aprobada" | "rechazada") {
     setError("")
@@ -82,6 +88,22 @@ export function AprobacionesClient() {
       const data = await res.json()
       if (!res.ok) throw new Error(data.error)
       setHxDecision(null); setHxComentario("")
+      await cargar()
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Error al guardar la decisión.")
+    } finally { setProcesando(null) }
+  }
+
+  // Decisión de solicitudes de retiro de cesantías.
+  async function decidirCes(id: string, estado: "aprobada" | "rechazada") {
+    setProcesando(id)
+    try {
+      const res = await fetch(`/api/empleados/cesantias-retiro/${id}`, {
+        method: "PATCH", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ estado, comentario: null }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error)
       await cargar()
     } catch (e) {
       setError(e instanceof Error ? e.message : "Error al guardar la decisión.")
@@ -234,6 +256,65 @@ export function AprobacionesClient() {
                   <span className={`inline-flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold ${estadoStyle[h.estado] ?? "bg-white/10 text-[#fff]/70"}`}>
                     <Icon size={11} /> {ESTADO_HORA_EXTRA_LABEL[h.estado]}
                   </span>
+                </div>
+              )
+            })}
+          </div>
+        </section>
+      )}
+
+      {/* ── Retiro de cesantías ─────────────────────────────────────── */}
+      <section>
+        <h2 className="mb-3 text-sm font-semibold text-[#fff]/80">Retiro de cesantías pendientes ({cesPendientes.length})</h2>
+        {cargando ? null : cesPendientes.length === 0 ? (
+          <p className="rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-8 text-center text-sm text-[#fff]/50">No hay solicitudes de cesantías pendientes.</p>
+        ) : (
+          <div className="flex flex-col gap-2">
+            {cesPendientes.map((c) => (
+              <div key={c.id} className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div>
+                    <p className="text-sm font-semibold">{c.empleado?.nombre ?? "—"}</p>
+                    <p className="text-xs text-[#fff]/55">{CAUSAL_CESANTIAS_LABEL[c.causal]} · <b className="text-[#fff]/75">{formatCOP(Number(c.valor) || 0)}</b></p>
+                    {c.detalle && <p className="mt-1 text-xs text-[#fff]/45">Detalle: {c.detalle}</p>}
+                  </div>
+                  <div className="flex gap-2">
+                    <button onClick={() => decidirCes(c.id, "aprobada")} disabled={!!procesando} className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-500/15 px-3 py-2 text-xs font-semibold text-emerald-300 hover:bg-emerald-500/25 disabled:opacity-50">
+                      {procesando === c.id ? <Loader2 size={13} className="animate-spin" /> : <Check size={13} />} Aprobar
+                    </button>
+                    <button onClick={() => decidirCes(c.id, "rechazada")} disabled={!!procesando} className="inline-flex items-center gap-1.5 rounded-lg bg-red-500/15 px-3 py-2 text-xs font-semibold text-red-300 hover:bg-red-500/25 disabled:opacity-50">
+                      <X size={13} /> Rechazar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
+
+      {cesDecididas.length > 0 && (
+        <section>
+          <h2 className="mb-3 text-sm font-semibold text-[#fff]/80">Retiro de cesantías decididas</h2>
+          <div className="flex flex-col gap-2">
+            {cesDecididas.map((c) => {
+              const Icon = EstadoIcon[c.estado as "aprobada" | "rechazada"] ?? CheckCircle2
+              return (
+                <div key={c.id} className="flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/[0.02] px-4 py-3">
+                  <div>
+                    <p className="text-sm">{c.empleado?.nombre ?? "—"} · {CAUSAL_CESANTIAS_LABEL[c.causal]}</p>
+                    <p className="text-xs text-[#fff]/45">{formatCOP(Number(c.valor) || 0)}{c.detalle ? ` · ${c.detalle}` : ""}</p>
+                  </div>
+                  <div className="flex shrink-0 items-center gap-2">
+                    {esCEO && c.estado === "aprobada" && (
+                      <a href={`/api/empleados/admin/cesantias-retiro/${c.id}/carta`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--cyan)]/40 bg-[var(--cyan)]/10 px-2.5 py-1.5 text-[11px] font-semibold text-[var(--cyan)] hover:bg-[var(--cyan)]/20" title="Descargar carta para el fondo">
+                        <Download size={12} /> Carta
+                      </a>
+                    )}
+                    <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold ${estadoStyle[c.estado] ?? "bg-white/10 text-[#fff]/70"}`}>
+                      <Icon size={11} /> {ESTADO_SOLICITUD_CESANTIAS_LABEL[c.estado]}
+                    </span>
+                  </div>
                 </div>
               )
             })}

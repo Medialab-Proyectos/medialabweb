@@ -5,7 +5,13 @@ import { PDFDocument, StandardFonts, rgb, type PDFFont } from "pdf-lib"
 import type { Contrato } from "./contrato"
 import { condicionesVigentes, totalMensualContrato } from "./contrato"
 import { formatCOP } from "./desprendible"
-import { narrativaVinculacion, montoEnLetras, formatCedula, clausulaExpedicion, fechaLarga } from "./certificado"
+import { narrativaVinculacion, montoEnLetras, formatCedula, clausulaExpedicion, fechaLarga, fraseTipoContrato, fraseVinculacion, narrativaCargos } from "./certificado"
+
+/** Une frases con comas y "y" final: [a,b,c] → "a, b y c". */
+function unirConY(items: string[]): string {
+  if (items.length <= 1) return items[0] ?? ""
+  return `${items.slice(0, -1).join(", ")} y ${items[items.length - 1]}`
+}
 
 let logoCache: Buffer | null = null
 function logoBytes(): Buffer {
@@ -102,20 +108,47 @@ export async function generarCertificadoPDF(
   // ── Cuerpo ──────────────────────────────────────────────────────────────────
   const vigente = condicionesVigentes(contratos)
   const cargo = vigente?.cargo || empleado.cargo || "colaborador"
-  // Asignación mensual = TOTAL a pagar (básico + auxilio de transporte + otros devengos fijos).
+  // Asignación mensual = TOTAL a pagar (básico + auxilio de transporte + otros devengos fijos = bonificaciones).
   const monto = vigente ? totalMensualContrato(vigente) : 0
   const activo = empleado.estado !== "terminado"
-  const narrativa = narrativaVinculacion(contratos, empleado.fecha_ingreso)
 
-  let cuerpo =
-    `Que ${empleado.nombre}, identificado(a) con la cédula de ciudadanía No. ${formatCedula(empleado.cedula)} de ${ciudad}, ` +
-    `${activo ? "está" : "estuvo"} ${narrativa}`
-  if (!activo && empleado.fecha_egreso) cuerpo += ` hasta el ${fechaLarga(empleado.fecha_egreso)}`
-  cuerpo += `, ${activo ? "desempeñando" : "donde desempeñó"} el cargo de ${cargo}`
-  if (opciones.conValor && monto > 0) {
-    cuerpo += `, con una asignación mensual de ${montoEnLetras(monto)} (${formatCOP(monto)})`
+  let cuerpo: string
+  if (!activo) {
+    // Certificación de FINALIZACIÓN: periodo + tipo de vinculación + ÚLTIMO cargo real (puede
+    // venir de un otrosí anterior si el último solo cambió salario) con su descripción, y el
+    // desglose del pago: salario básico + cada auxilio/bonificación nombrado con su valor.
+    const tipoVinc = vigente ? (fraseTipoContrato(vigente.tipo_contrato) || fraseVinculacion(vigente.tipo_vinculacion)) : ""
+    const cargos = narrativaCargos(contratos, empleado.fecha_ingreso)
+
+    const basico = Number(vigente?.salario_basico) || 0
+    const extras: string[] = []
+    if (Number(vigente?.auxilio_transporte) > 0) extras.push(`un auxilio de transporte de ${formatCOP(Number(vigente!.auxilio_transporte))}`)
+    for (const l of vigente?.otros_devengos ?? []) {
+      const v = Number(l.valor) || 0
+      if (v > 0) extras.push(`${l.concepto?.trim() || "una bonificación"} de ${formatCOP(v)}`)
+    }
+
+    cuerpo = `Que ${empleado.nombre}, identificado(a) con la cédula de ciudadanía No. ${formatCedula(empleado.cedula)} de ${ciudad}, estuvo vinculado(a) a MediaLab Ingeniería`
+    if (tipoVinc) cuerpo += ` mediante contrato ${tipoVinc}`
+    if (empleado.fecha_ingreso) cuerpo += ` desde el ${fechaLarga(empleado.fecha_ingreso)}`
+    if (empleado.fecha_egreso) cuerpo += ` hasta el ${fechaLarga(empleado.fecha_egreso)}`
+    // Recorrido de cargos con fechas (o el cargo único si no hubo cambios).
+    // La descripción/motivo del otrosí NO va en la certificación: solo interesan cargo y fecha.
+    cuerpo += `, con ${cargos.texto || `el cargo de ${empleado.cargo || "colaborador"}`}`
+    if (basico > 0) {
+      cuerpo += `, con un salario mensual de ${montoEnLetras(basico)} (${formatCOP(basico)})`
+      if (extras.length) cuerpo += `, más ${unirConY(extras)}`
+    }
+    cuerpo += "."
+  } else {
+    const narrativa = narrativaVinculacion(contratos, empleado.fecha_ingreso)
+    cuerpo = `Que ${empleado.nombre}, identificado(a) con la cédula de ciudadanía No. ${formatCedula(empleado.cedula)} de ${ciudad}, está ${narrativa}`
+    cuerpo += `, desempeñando el cargo de ${cargo}`
+    if (opciones.conValor && monto > 0) {
+      cuerpo += `, con una asignación mensual de ${montoEnLetras(monto)} (${formatCOP(monto)})`
+    }
+    cuerpo += "."
   }
-  cuerpo += "."
 
   const bodySize = 11.5
   const lineH = 19

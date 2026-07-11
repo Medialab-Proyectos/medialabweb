@@ -58,6 +58,8 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
   const [aviso, setAviso] = useState("")
   const [q, setQ] = useState("")
   const [filtroEstado, setFiltroEstado] = useState<"activos" | "inactivos" | "todos">("activos")
+  // Menú de documentos: guardamos id + posición (fixed) para que no lo recorte el overflow de la tabla.
+  const [docsAbierto, setDocsAbierto] = useState<{ id: string; top: number; right: number } | null>(null)
   const [benefEmp, setBenefEmp] = useState<Empleado | null>(null)
   const [benefItems, setBenefItems] = useState<Beneficio[]>([])
   const [benefLoading, setBenefLoading] = useState(false)
@@ -271,11 +273,37 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
 
   // Acciones de fila (compartidas por la tabla y las tarjetas móviles).
   function acciones(e: Empleado) {
+    const itemCls = "flex items-center gap-2 rounded-lg px-2.5 py-2 text-xs text-[#fff]/80 hover:bg-white/5"
     return (
       <div className="flex items-center gap-1">
         <button onClick={() => abrirEditar(e)} title="Editar" className="rounded-lg p-1.5 text-[#fff]/60 hover:bg-white/5 hover:text-[#fff]"><Pencil size={15} /></button>
         <button onClick={() => abrirBeneficios(e)} title="Beneficios" className="rounded-lg p-1.5 text-[#E8751A]/80 hover:bg-[#E8751A]/10 hover:text-[#E8751A]"><Gift size={15} /></button>
         <Link href={`/empleados/admin/liquidaciones?empleado=${e.id}`} title="Liquidar" className="rounded-lg p-1.5 text-[#fff]/60 hover:bg-white/5 hover:text-[#fff]"><FileWarning size={15} /></Link>
+        {e.estado === "terminado" && (
+          <>
+            <button
+              onClick={(ev) => {
+                const r = ev.currentTarget.getBoundingClientRect()
+                setDocsAbierto(docsAbierto?.id === e.id ? null : { id: e.id, top: r.bottom + 6, right: window.innerWidth - r.right })
+              }}
+              title="Documentos de finalización"
+              className="rounded-lg p-1.5 text-[var(--cyan)]/80 hover:bg-[var(--cyan)]/10 hover:text-[var(--cyan)]"
+            >
+              <Download size={15} />
+            </button>
+            {docsAbierto?.id === e.id && (
+              <>
+                <button className="fixed inset-0 z-40 cursor-default" onClick={() => setDocsAbierto(null)} aria-label="Cerrar menú" />
+                <div style={{ top: docsAbierto.top, right: docsAbierto.right }} className="fixed z-50 w-60 rounded-xl border border-white/10 bg-[#0e1013] p-1 shadow-2xl">
+                  <p className="px-2.5 pb-1 pt-1.5 text-[10px] font-semibold uppercase tracking-wide text-[#fff]/40">Documentos de finalización</p>
+                  <a href={`/api/empleados/admin/empleado/${e.id}/liquidacion-pdf`} target="_blank" rel="noreferrer" onClick={() => setDocsAbierto(null)} className={itemCls}><FileWarning size={14} className="text-[#fff]/50" /> Liquidación</a>
+                  <a href={`/api/empleados/certificado?empleado_id=${e.id}`} target="_blank" rel="noreferrer" onClick={() => setDocsAbierto(null)} className={itemCls}><FileSignature size={14} className="text-[#fff]/50" /> Certificación de finalización</a>
+                  <a href={`/api/empleados/admin/empleado/${e.id}/carta-cesantias`} target="_blank" rel="noreferrer" onClick={() => setDocsAbierto(null)} className={itemCls}><PiggyBank size={14} className="text-[#fff]/50" /> Carta de retiro de cesantías</a>
+                </div>
+              </>
+            )}
+          </>
+        )}
         <button onClick={() => accion(e.id, "resetear_clave", e)} title="Resetear contraseña" className="rounded-lg p-1.5 text-[#fff]/60 hover:bg-white/5 hover:text-[#fff]"><KeyRound size={15} /></button>
         {e.estado === "activo" && (
           <button onClick={() => accion(e.id, "suspender", e)} disabled={e.id === ceoId} title="Suspender acceso" className="rounded-lg p-1.5 text-amber-300/70 hover:bg-amber-500/10 hover:text-amber-300 disabled:opacity-30"><PauseCircle size={15} /></button>

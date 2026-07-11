@@ -40,7 +40,7 @@ export default async function AprobacionesPage() {
             </p>
           </div>
         ) : (
-          <AprobacionesClient />
+          <AprobacionesClient esCEO={esCEO} />
         )}
       </main>
     </>
