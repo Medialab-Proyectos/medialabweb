@@ -5,12 +5,18 @@ import { Loader2, Check, X, Clock, CheckCircle2, XCircle } from "lucide-react"
 import { type SolicitudAusencia, TIPO_AUSENCIA_LABEL, ESTADO_AUSENCIA_LABEL } from "@/lib/empleados/ausencia"
 import { type HoraExtra, RECARGO, ESTADO_HORA_EXTRA_LABEL } from "@/lib/empleados/horas-extras"
 import { type SolicitudCesantias, CAUSAL_CESANTIAS_LABEL, ESTADO_SOLICITUD_CESANTIAS_LABEL } from "@/lib/empleados/cesantias-solicitud"
+import { type Horario, DIAS_SEMANA, DIA_LABEL } from "@/lib/empleados/horario"
 import { formatCOP } from "@/lib/empleados/desprendible"
 import { Download } from "lucide-react"
 
 type Sol = SolicitudAusencia & { empleado: { nombre: string; cedula: string } | null }
 type Hx = HoraExtra & { empleado: { nombre: string; cedula: string } | null }
 type Ces = SolicitudCesantias & { empleado: { nombre: string; cedula: string } | null }
+type Hor = { id: string; empleado_id: string; horario: Horario; horas_semana: number; estado: string; empleado: { nombre: string; cedula: string } | null }
+
+function resumenHorario(h: Horario): string {
+  return DIAS_SEMANA.filter((d) => h[d]?.activo).map((d) => `${DIA_LABEL[d].slice(0, 3)} ${h[d].entrada}–${h[d].salida}`).join(" · ")
+}
 
 const estadoStyle: Record<string, string> = {
   pendiente: "bg-amber-400/10 text-amber-300",
@@ -23,6 +29,7 @@ export function AprobacionesClient({ esCEO = false }: { esCEO?: boolean }) {
   const [sols, setSols] = useState<Sol[]>([])
   const [hxs, setHxs] = useState<Hx[]>([])
   const [cess, setCess] = useState<Ces[]>([])
+  const [hors, setHors] = useState<Hor[]>([])
   const [cargando, setCargando] = useState(true)
   const [error, setError] = useState("")
   const [procesando, setProcesando] = useState<string | null>(null)
@@ -34,7 +41,7 @@ export function AprobacionesClient({ esCEO = false }: { esCEO?: boolean }) {
     try {
       const res = await fetch("/api/empleados/aprobaciones")
       const data = await res.json()
-      if (res.ok) { setSols(data.solicitudes ?? []); setHxs(data.horasExtras ?? []); setCess(data.cesantias ?? []) }
+      if (res.ok) { setSols(data.solicitudes ?? []); setHxs(data.horasExtras ?? []); setCess(data.cesantias ?? []); setHors(data.horarios ?? []) }
       else setError(data.error || "Error al cargar.")
     } finally { setCargando(false) }
   }
@@ -46,6 +53,7 @@ export function AprobacionesClient({ esCEO = false }: { esCEO?: boolean }) {
   const hxDecididas = useMemo(() => hxs.filter((h) => h.estado !== "pendiente"), [hxs])
   const cesPendientes = useMemo(() => cess.filter((c) => c.estado === "pendiente"), [cess])
   const cesDecididas = useMemo(() => cess.filter((c) => c.estado !== "pendiente"), [cess])
+  const horPendientes = useMemo(() => hors.filter((h) => h.estado === "pendiente"), [hors])
 
   function abrirDecision(id: string, estado: "aprobada" | "rechazada") {
     setError("")
@@ -99,6 +107,22 @@ export function AprobacionesClient({ esCEO = false }: { esCEO?: boolean }) {
     setProcesando(id)
     try {
       const res = await fetch(`/api/empleados/cesantias-retiro/${id}`, {
+        method: "PATCH", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ estado, comentario: null }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error)
+      await cargar()
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Error al guardar la decisión.")
+    } finally { setProcesando(null) }
+  }
+
+  // Decisión de horarios (aprobado = entra en vigencia).
+  async function decidirHor(id: string, estado: "aprobado" | "rechazado") {
+    setProcesando(id)
+    try {
+      const res = await fetch(`/api/empleados/horario/${id}`, {
         method: "PATCH", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ estado, comentario: null }),
       })
@@ -262,6 +286,35 @@ export function AprobacionesClient({ esCEO = false }: { esCEO?: boolean }) {
           </div>
         </section>
       )}
+
+      {/* ── Horarios ────────────────────────────────────────────────── */}
+      <section>
+        <h2 className="mb-3 text-sm font-semibold text-[#fff]/80">Horarios pendientes ({horPendientes.length})</h2>
+        {cargando ? null : horPendientes.length === 0 ? (
+          <p className="rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-8 text-center text-sm text-[#fff]/50">No hay horarios pendientes.</p>
+        ) : (
+          <div className="flex flex-col gap-2">
+            {horPendientes.map((h) => (
+              <div key={h.id} className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold">{h.empleado?.nombre ?? "—"} · <span className="text-[#fff]/60">{Number(h.horas_semana).toFixed(1)} h/semana</span></p>
+                    <p className="mt-0.5 text-xs text-[#fff]/50">{resumenHorario(h.horario)}</p>
+                  </div>
+                  <div className="flex gap-2">
+                    <button onClick={() => decidirHor(h.id, "aprobado")} disabled={!!procesando} className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-500/15 px-3 py-2 text-xs font-semibold text-emerald-300 hover:bg-emerald-500/25 disabled:opacity-50">
+                      {procesando === h.id ? <Loader2 size={13} className="animate-spin" /> : <Check size={13} />} Aprobar
+                    </button>
+                    <button onClick={() => decidirHor(h.id, "rechazado")} disabled={!!procesando} className="inline-flex items-center gap-1.5 rounded-lg bg-red-500/15 px-3 py-2 text-xs font-semibold text-red-300 hover:bg-red-500/25 disabled:opacity-50">
+                      <X size={13} /> Rechazar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
 
       {/* ── Retiro de cesantías ─────────────────────────────────────── */}
       <section>

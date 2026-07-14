@@ -61,8 +61,17 @@ export type SolicitudAusencia = {
   estado: EstadoAusencia
   aprobado_por: string | null
   comentario: string | null
+  /** Permiso por horas (solo tipos que NO son vacaciones): rango del día. */
+  por_horas?: boolean
+  hora_inicio?: string | null
+  hora_fin?: string | null
   creado_en: string
   decidido_en: string | null
+}
+
+/** ¿El tipo permite pedirse por horas? (todo lo que no descuenta vacaciones). */
+export function permitexPorHoras(tipo: TipoAusencia): boolean {
+  return !TIPOS_VACACIONALES.includes(tipo)
 }
 
 // Vacaciones en Colombia: 15 días hábiles por año.

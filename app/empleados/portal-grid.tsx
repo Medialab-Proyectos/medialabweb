@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { FileText, FileSignature, BadgeCheck, GraduationCap, Gift, Clock, ArrowRight, Plane, ClipboardCheck, Target, Receipt, Wrench, SmilePlus, Timer } from "lucide-react"
+import { FileText, FileSignature, BadgeCheck, GraduationCap, Gift, Clock, ArrowRight, Plane, ClipboardCheck, Target, Receipt, Wrench, SmilePlus, Timer, CalendarClock } from "lucide-react"
 import type { Rol, TipoVinculacion } from "@/lib/empleados/types"
 import { esVinculacionPorFactura } from "@/lib/empleados/types"
 
@@ -28,6 +28,7 @@ const secciones: Seccion[] = [
   { key: "encuesta", icon: SmilePlus, titulo: "Encuesta de satisfacción", desc: "Cuéntanos cómo te sientes en la empresa. Tu opinión ayuda a mejorar.", estado: "activo", color: "#00BFA6", href: "/empleados/satisfaccion" },
   { key: "vacaciones", icon: Plane, titulo: "Vacaciones y ausencias", desc: "Solicita vacaciones, permisos o licencias y consulta tu saldo.", estado: "activo", color: "#00BFA6", href: "/empleados/ausencias", laboral: true },
   { key: "horas-extras", icon: Timer, titulo: "Horas extra", desc: "Reporta las horas extra que trabajaste; tu líder las aprueba.", estado: "activo", color: "#00BFA6", href: "/empleados/horas-extras", laboral: true },
+  { key: "horario", icon: CalendarClock, titulo: "Mi horario", desc: "Registra tu horario de lunes a viernes; tu líder lo aprueba.", estado: "activo", color: "#00BFA6", href: "/empleados/horario", laboral: true },
   { key: "cursos", icon: GraduationCap, titulo: "Cursos", desc: "Formaciones y rutas de estudio asignadas.", estado: "deshabilitado", color: "#8b5cf6" },
   { key: "beneficios", icon: Gift, titulo: "Beneficios", desc: "Activa medicina prepagada y pide tus permisos de media jornada.", estado: "activo", color: "#E8751A", href: "/empleados/beneficios" },
   { key: "herramientas", icon: Wrench, titulo: "Herramientas", desc: "Accesos y credenciales de las herramientas del equipo.", estado: "deshabilitado", color: "#8b5cf6" },

@@ -31,6 +31,9 @@ export function AusenciasClient() {
   const [inicio, setInicio] = useState("")
   const [fin, setFin] = useState("")
   const [motivo, setMotivo] = useState("")
+  const [porHoras, setPorHoras] = useState(false)
+  const [horaInicio, setHoraInicio] = useState("")
+  const [horaFin, setHoraFin] = useState("")
   const [enviando, setEnviando] = useState(false)
   const [error, setError] = useState("")
   const [msg, setMsg] = useState("")
@@ -50,6 +53,8 @@ export function AusenciasClient() {
 
   const media = esMediaJornada(tipo)
   const esVacacional = tipo === "vacaciones" || tipo === "adelanto_vacaciones"
+  const puedePorHoras = !esVacacional && !media   // permisos/licencias se pueden pedir por horas
+  const usaPorHoras = puedePorHoras && porHoras
 
   // La media jornada se pide sobre un solo día: mantenemos fin = inicio.
   useEffect(() => {
@@ -64,6 +69,12 @@ export function AusenciasClient() {
 
   // Validaciones de la solicitud (espejo de las del servidor)
   const validacion = useMemo(() => {
+    if (usaPorHoras) {
+      if (!inicio) return { ok: false, aviso: "" as string | null }
+      if (!horaInicio || !horaFin) return { ok: false, aviso: "" as string | null }
+      if (horaInicio >= horaFin) return { ok: false, aviso: "La hora de fin debe ser posterior a la de inicio." }
+      return { ok: true, aviso: null as string | null }
+    }
     if (media) return { ok: !!inicio, aviso: null as string | null }
     if (!inicio || !fin) return { ok: false, aviso: "" as string | null }
     if (fin < inicio) return { ok: false, aviso: "La fecha final no puede ser anterior a la inicial." }
@@ -78,7 +89,7 @@ export function AusenciasClient() {
       }
     }
     return { ok: true, aviso: null }
-  }, [inicio, fin, tipo, preview, saldo, media])
+  }, [inicio, fin, tipo, preview, saldo, media, usaPorHoras, horaInicio, horaFin])
 
   async function enviar(e: React.FormEvent) {
     e.preventDefault()
@@ -87,12 +98,19 @@ export function AusenciasClient() {
     try {
       const res = await fetch("/api/empleados/ausencias", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ tipo, fecha_inicio: inicio, fecha_fin: fin, motivo: motivo || null }),
+        body: JSON.stringify({
+          tipo, fecha_inicio: inicio,
+          fecha_fin: usaPorHoras ? inicio : fin,
+          motivo: motivo || null,
+          por_horas: usaPorHoras,
+          hora_inicio: usaPorHoras ? horaInicio : null,
+          hora_fin: usaPorHoras ? horaFin : null,
+        }),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error)
       setMsg("✓ Solicitud enviada. Tu líder la revisará.")
-      setInicio(""); setFin(""); setMotivo("")
+      setInicio(""); setFin(""); setMotivo(""); setHoraInicio(""); setHoraFin(""); setPorHoras(false)
       await cargar()
     } catch (e) {
       setError(e instanceof Error ? e.message : "Error al enviar.")
@@ -139,15 +157,33 @@ export function AusenciasClient() {
               {TIPOS.map((t) => <option key={t} value={t}>{TIPO_AUSENCIA_LABEL[t]}</option>)}
             </select>
           </label>
+          {puedePorHoras && (
+            <label className="flex items-center gap-2 text-sm text-[#fff]/75 sm:col-span-2">
+              <input type="checkbox" checked={porHoras} onChange={(e) => setPorHoras(e.target.checked)} className="h-4 w-4 accent-[var(--cyan)]" />
+              Pedir por <b>horas</b> (un solo día) en vez de días completos
+            </label>
+          )}
           <label className="flex flex-col gap-1.5">
-            <span className={lblCls}>{media ? "Día" : "Desde"}</span>
+            <span className={lblCls}>{media || usaPorHoras ? "Día" : "Desde"}</span>
             <input type="date" value={inicio} onChange={(e) => setInicio(e.target.value)} required className={inputCls} />
           </label>
-          {!media && (
+          {!media && !usaPorHoras && (
             <label className="flex flex-col gap-1.5">
               <span className={lblCls}>Hasta</span>
               <input type="date" value={fin} min={inicio} onChange={(e) => setFin(e.target.value)} required className={inputCls} />
             </label>
+          )}
+          {usaPorHoras && (
+            <>
+              <label className="flex flex-col gap-1.5">
+                <span className={lblCls}>Hora desde</span>
+                <input type="time" value={horaInicio} onChange={(e) => setHoraInicio(e.target.value)} required className={inputCls} />
+              </label>
+              <label className="flex flex-col gap-1.5">
+                <span className={lblCls}>Hora hasta</span>
+                <input type="time" value={horaFin} min={horaInicio} onChange={(e) => setHoraFin(e.target.value)} required className={inputCls} />
+              </label>
+            </>
           )}
           <label className="flex flex-col gap-1.5 sm:col-span-2">
             <span className={lblCls}>Motivo (opcional)</span>

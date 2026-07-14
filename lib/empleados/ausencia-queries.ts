@@ -4,6 +4,8 @@ import type { SolicitudAusencia, TipoAusencia, EstadoAusencia } from "./ausencia
 
 const COLS =
   "id,empleado_id,tipo,fecha_inicio,fecha_fin,dias_habiles,dias_calendario,motivo,estado,aprobado_por,comentario,creado_en,decidido_en"
+// Columnas de permiso por horas (fase 42). Se leen con fallback por si la migración no está.
+const COLS_HORAS = `${COLS},por_horas,hora_inicio,hora_fin`
 
 export type EmpleadoVacacion = {
   id: string
@@ -46,14 +48,15 @@ export type SolicitudConEmpleado = SolicitudAusencia & {
 export async function listSolicitudesDeEmpleados(ids: string[], soloPendientes = false) {
   if (ids.length === 0) return []
   const sb = getServiceClient()
-  let q = sb
-    .from("solicitudes_ausencia")
-    // Desambiguar la FK: solicitudes_ausencia tiene dos referencias a empleados
-    // (empleado_id y aprobado_por); sin el hint el embed es ambiguo y falla.
-    .select(`${COLS}, empleado:empleados!empleado_id(nombre,cedula)`)
-    .in("empleado_id", ids)
-  if (soloPendientes) q = q.eq("estado", "pendiente")
-  const { data, error } = await q.order("creado_en", { ascending: false })
+  // Desambiguar la FK: solicitudes_ausencia tiene dos referencias a empleados
+  // (empleado_id y aprobado_por); sin el hint el embed es ambiguo y falla.
+  const run = (cols: string) => {
+    let q = sb.from("solicitudes_ausencia").select(`${cols}, empleado:empleados!empleado_id(nombre,cedula)`).in("empleado_id", ids)
+    if (soloPendientes) q = q.eq("estado", "pendiente")
+    return q.order("creado_en", { ascending: false })
+  }
+  let { data, error } = await run(COLS_HORAS)
+  if (error) ({ data, error } = await run(COLS)) // fallback si aún no está la migración fase 42
   if (error) throw error
   return (data ?? []) as unknown as SolicitudConEmpleado[]
 }
@@ -99,15 +102,18 @@ export type NuevaSolicitud = {
   dias_habiles: number
   dias_calendario: number
   motivo: string | null
+  por_horas?: boolean
+  hora_inicio?: string | null
+  hora_fin?: string | null
 }
 
 export async function crearSolicitud(input: NuevaSolicitud) {
   const sb = getServiceClient()
-  const { data, error } = await sb
-    .from("solicitudes_ausencia")
-    .insert({ ...input, estado: "pendiente" })
-    .select(COLS)
-    .single()
+  const { por_horas, hora_inicio, hora_fin, ...base } = input
+  const row: Record<string, unknown> = { ...base, estado: "pendiente" }
+  // Solo se escriben las columnas de fase 42 cuando es un permiso por horas.
+  if (por_horas) { row.por_horas = true; row.hora_inicio = hora_inicio ?? null; row.hora_fin = hora_fin ?? null }
+  const { data, error } = await sb.from("solicitudes_ausencia").insert(row).select(COLS).single()
   if (error) throw error
   return data as SolicitudAusencia
 }

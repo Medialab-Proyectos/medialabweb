@@ -3,7 +3,7 @@ import { z } from "zod"
 import { getSession } from "@/lib/empleados/auth"
 import { portalConfigurado } from "@/lib/empleados/db"
 import { getEmpleadoVacacion, listSolicitudes, crearSolicitud } from "@/lib/empleados/ausencia-queries"
-import { calcularSaldoVacaciones, DIAS_ADELANTO, esMediaJornada, DIAS_MEDIA_JORNADA, TIPO_AUSENCIA_LABEL } from "@/lib/empleados/ausencia"
+import { calcularSaldoVacaciones, DIAS_ADELANTO, esMediaJornada, DIAS_MEDIA_JORNADA, TIPO_AUSENCIA_LABEL, permitexPorHoras } from "@/lib/empleados/ausencia"
 import { contarDiasHabiles, contarDiasCalendario } from "@/lib/empleados/festivos-co"
 import { notificarCEO } from "@/lib/empleados/notificar"
 
@@ -39,6 +39,9 @@ const schema = z.object({
   fecha_inicio: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   fecha_fin: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   motivo: z.string().max(500).optional().nullable(),
+  por_horas: z.boolean().optional().default(false),
+  hora_inicio: z.string().regex(/^\d{1,2}:\d{2}$/).optional().nullable(),
+  hora_fin: z.string().regex(/^\d{1,2}:\d{2}$/).optional().nullable(),
 })
 
 export async function POST(req: Request) {
@@ -55,10 +58,19 @@ export async function POST(req: Request) {
   }
   if (b.fecha_fin < b.fecha_inicio) return NextResponse.json({ error: "La fecha final no puede ser anterior a la inicial." }, { status: 400 })
 
+  // Permiso por HORAS: solo tipos que no son vacaciones; queda en un solo día.
+  if (b.por_horas) {
+    if (!permitexPorHoras(b.tipo)) return NextResponse.json({ error: "Las vacaciones no se piden por horas, solo por días." }, { status: 400 })
+    if (!b.hora_inicio || !b.hora_fin || b.hora_inicio >= b.hora_fin) {
+      return NextResponse.json({ error: "Indica hora de inicio y fin válidas (inicio antes que fin)." }, { status: 400 })
+    }
+  }
+
   // Media jornada (beneficio): 0.5 día hábil fijo, sobre un solo día.
   const media = esMediaJornada(b.tipo)
-  const diasHabiles = media ? DIAS_MEDIA_JORNADA : contarDiasHabiles(b.fecha_inicio, b.fecha_fin)
-  const diasCalendario = media ? 1 : contarDiasCalendario(b.fecha_inicio, b.fecha_fin)
+  const fechaFin = b.por_horas ? b.fecha_inicio : b.fecha_fin
+  const diasHabiles = b.por_horas ? 0 : media ? DIAS_MEDIA_JORNADA : contarDiasHabiles(b.fecha_inicio, fechaFin)
+  const diasCalendario = b.por_horas ? 1 : media ? 1 : contarDiasCalendario(b.fecha_inicio, fechaFin)
 
   try {
     const emp = await getEmpleadoVacacion(s.sub)
@@ -94,10 +106,13 @@ export async function POST(req: Request) {
       empleado_id: s.sub,
       tipo: b.tipo,
       fecha_inicio: b.fecha_inicio,
-      fecha_fin: b.fecha_fin,
+      fecha_fin: fechaFin,
       dias_habiles: diasHabiles,
       dias_calendario: diasCalendario,
       motivo: b.motivo ?? null,
+      por_horas: b.por_horas,
+      hora_inicio: b.por_horas ? b.hora_inicio : null,
+      hora_fin: b.por_horas ? b.hora_fin : null,
     })
     // Aviso al CEO de que hay una solicitud por aprobar (best-effort).
     await notificarCEO(
