@@ -33,7 +33,7 @@ export async function GET() {
 
 const schema = z.object({
   tipo: z.enum([
-    "vacaciones", "adelanto_vacaciones", "permiso_no_remunerado", "licencia_maternidad", "licencia_paternidad",
+    "vacaciones", "adelanto_vacaciones", "permiso_remunerado", "permiso_no_remunerado", "licencia_maternidad", "licencia_paternidad",
     "licencia_luto", "dia_familia", "dia_votacion", "media_jornada_cumpleanos", "media_jornada_evento", "otra",
   ]),
   fecha_inicio: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),

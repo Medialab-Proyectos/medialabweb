@@ -28,4 +28,12 @@ alter table solicitudes_ausencia add column if not exists por_horas boolean not 
 alter table solicitudes_ausencia add column if not exists hora_inicio text; -- "14:00" (solo si por_horas)
 alter table solicitudes_ausencia add column if not exists hora_fin    text; -- "16:00"
 
+-- Nuevo tipo "permiso_remunerado" (horas pagadas por no-disponibilidad). Se recrea el CHECK completo.
+alter table solicitudes_ausencia drop constraint if exists solicitudes_ausencia_tipo_check;
+alter table solicitudes_ausencia add constraint solicitudes_ausencia_tipo_check
+  check (tipo in (
+    'vacaciones','adelanto_vacaciones','permiso_remunerado','permiso_no_remunerado','licencia_maternidad',
+    'licencia_paternidad','licencia_luto','dia_familia','dia_votacion',
+    'media_jornada_cumpleanos','media_jornada_evento','otra'));
+
 notify pgrst, 'reload schema';

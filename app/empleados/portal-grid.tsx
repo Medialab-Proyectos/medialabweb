@@ -37,7 +37,13 @@ const secciones: Seccion[] = [
 /** Grilla del portal personal del colaborador (accesos a su contrato, pagos, beneficios…). */
 export function PortalGrid({ rol, tipoVinculacion }: { rol: Rol; tipoVinculacion: TipoVinculacion }) {
   const esFreelance = esVinculacionPorFactura(tipoVinculacion)
-  const seccionesVisibles = secciones.filter((s) => (esFreelance ? !s.laboral : !s.soloFreelance))
+  const seccionesVisibles = secciones.filter((s) => {
+    if (esFreelance ? s.laboral : s.soloFreelance) return false
+    // Los módulos deshabilitados / "pronto" solo los ve el CEO; el empleado solo ve los ACTIVOS
+    // (los demás se dejan ver únicamente cuando ya tienen contenido y se marcan activos).
+    if (rol !== "ceo" && s.estado !== "activo") return false
+    return true
+  })
 
   return (
     <>

@@ -12,7 +12,7 @@ const inputCls = "w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2
 const lblCls = "text-[11px] font-semibold uppercase tracking-wide text-[#fff]/50"
 
 const TIPOS: TipoAusencia[] = [
-  "vacaciones", "adelanto_vacaciones", "permiso_no_remunerado", "licencia_maternidad", "licencia_paternidad",
+  "vacaciones", "adelanto_vacaciones", "permiso_remunerado", "permiso_no_remunerado", "licencia_maternidad", "licencia_paternidad",
   "licencia_luto", "dia_familia", "dia_votacion", "media_jornada_cumpleanos", "media_jornada_evento", "otra",
 ]
 

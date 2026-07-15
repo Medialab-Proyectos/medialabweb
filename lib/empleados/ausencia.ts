@@ -3,6 +3,7 @@
 export type TipoAusencia =
   | "vacaciones"
   | "adelanto_vacaciones"
+  | "permiso_remunerado"
   | "permiso_no_remunerado"
   | "licencia_maternidad"
   | "licencia_paternidad"
@@ -18,6 +19,7 @@ export type EstadoAusencia = "pendiente" | "aprobada" | "rechazada"
 export const TIPO_AUSENCIA_LABEL: Record<TipoAusencia, string> = {
   vacaciones: "Vacaciones",
   adelanto_vacaciones: "Adelanto de vacaciones",
+  permiso_remunerado: "Permiso remunerado",
   permiso_no_remunerado: "Permiso no remunerado",
   licencia_maternidad: "Licencia de maternidad",
   licencia_paternidad: "Licencia de paternidad",
