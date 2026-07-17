@@ -4,6 +4,9 @@ import { portalConfigurado } from "@/lib/empleados/db"
 import { getPanelActividad } from "@/lib/empleados/actividad-queries"
 
 export const runtime = "nodejs"
+// Estado en tiempo real: nunca se cachea del lado del servidor (Next no debe reutilizar respuestas).
+export const dynamic = "force-dynamic"
+export const revalidate = 0
 
 /** Panel "quién está activo ahora". Solo el CEO. */
 export async function GET() {

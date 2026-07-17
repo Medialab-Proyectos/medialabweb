@@ -28,7 +28,7 @@ export function ActividadWidget() {
 
   async function cargar() {
     try {
-      const res = await fetch("/api/empleados/admin/actividad", { cache: "no-store" })
+      const res = await fetch(`/api/empleados/admin/actividad?t=${Date.now()}`, { cache: "no-store" })
       const data = await res.json()
       if (!res.ok) { setError(data.error || "Error"); return }
       setError(""); setPanel(data)

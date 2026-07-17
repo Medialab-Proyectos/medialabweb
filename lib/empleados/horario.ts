@@ -123,9 +123,9 @@ export function validarHorario(h: Horario, opts?: { conNorma?: boolean; fechaISO
 // Beneficio: algunos empleados rotan su horario cada semana. Se guardan 2 horarios;
 // el registrado es el de ESA semana (A) y desde ahí se turna solo (A, B, A, B…).
 
-/** Lunes (ISO) de la semana que contiene la fecha dada. */
+/** Lunes (ISO) de la semana que contiene la fecha dada. Acepta fecha o timestamp completo. */
 export function lunesISO(iso: string): string {
-  const d = new Date(`${iso}T12:00:00Z`)
+  const d = new Date(`${iso.slice(0, 10)}T12:00:00Z`)
   const dow = d.getUTCDay() // 0=dom … 6=sáb
   d.setUTCDate(d.getUTCDate() + (dow === 0 ? -6 : 1 - dow))
   return d.toISOString().slice(0, 10)
