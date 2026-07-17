@@ -16,15 +16,16 @@ export type EmpleadoVacacion = {
   fecha_ingreso: string | null
   vacaciones_saldo_inicial: number
   vacaciones_corte: string | null
+  tipo_vinculacion: string | null
+  horario_habilitado?: boolean | null
 }
 
 export async function getEmpleadoVacacion(id: string) {
   const sb = getServiceClient()
-  const { data, error } = await sb
-    .from("empleados")
-    .select("id,nombre,cedula,cargo,lider_id,fecha_ingreso,vacaciones_saldo_inicial,vacaciones_corte")
-    .eq("id", id)
-    .maybeSingle()
+  const BASE = "id,nombre,cedula,cargo,lider_id,fecha_ingreso,vacaciones_saldo_inicial,vacaciones_corte,tipo_vinculacion"
+  // Intenta con horario_habilitado (fase42); si la columna no existe, cae a la base.
+  let { data, error } = await sb.from("empleados").select(`${BASE},horario_habilitado`).eq("id", id).maybeSingle()
+  if (error) ({ data, error } = await sb.from("empleados").select(BASE).eq("id", id).maybeSingle())
   if (error) throw error
   return data as EmpleadoVacacion | null
 }

@@ -35,6 +35,7 @@ export type Contrato = {
   freelance_tarifa: number | null
   freelance_moneda: Moneda | null
   freelance_meses: number | null  // pago por proyecto: nº de meses (1 = pago único)
+  freelance_max_horas_mes?: number | null  // máximo de horas al mes pactado (freelance)
   tipo_contrato: string | null    // término fijo / indefinido / obra o labor
   jornada: string | null
   cargo: string | null

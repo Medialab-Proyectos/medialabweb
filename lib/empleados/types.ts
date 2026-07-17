@@ -27,6 +27,12 @@ export type Empleado = {
   cert_eps_path: string | null
   cert_cesantias_path: string | null
   cert_pension_path: string | null
+  nda_path?: string | null
+  nda_firmado_en?: string | null
+  horario_habilitado?: boolean
+  suspension_motivo?: string | null
+  suspension_hasta?: string | null
+  suspension_carta_path?: string | null
   fecha_ingreso: string | null
   fecha_egreso: string | null
   particularidades: string | null

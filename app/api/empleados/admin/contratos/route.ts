@@ -3,7 +3,7 @@ import { z } from "zod"
 import { getSession } from "@/lib/empleados/auth"
 import { portalConfigurado } from "@/lib/empleados/db"
 import { listContratos, crearContrato, actualizarContrato, finalizarContrato, eliminarContrato, getContrato, marcarEnviadoParaFirma, sincronizarEmpleadoDesdeContratos } from "@/lib/empleados/contrato-queries"
-import { getEmpleadoById } from "@/lib/empleados/queries"
+import { getEmpleadoById, actualizarEmpleado } from "@/lib/empleados/queries"
 import { notificarEmpleado } from "@/lib/empleados/notificar"
 
 export const runtime = "nodejs"
@@ -33,6 +33,8 @@ const schema = z.object({
   freelance_tarifa: z.number().min(0).nullable().optional(),
   freelance_moneda: z.enum(["COP", "USD"]).nullable().optional(),
   freelance_meses: z.number().int().min(1).max(120).nullable().optional(),
+  freelance_max_horas_mes: z.number().min(0).max(744).nullable().optional(),
+  horario_habilitado: z.boolean().optional(),
   tipo_contrato: z.string().max(60).nullable().optional(),
   jornada: z.string().max(60).nullable().optional(),
   cargo: z.string().max(120).nullable().optional(),
@@ -98,6 +100,7 @@ export async function POST(req: Request) {
       freelance_tarifa: porFactura ? b.freelance_tarifa ?? null : null,
       freelance_moneda: porFactura ? b.freelance_moneda ?? null : null,
       freelance_meses: porFactura && b.freelance_modo === "por_proyecto" ? b.freelance_meses ?? null : null,
+      freelance_max_horas_mes: porFactura ? (b.freelance_max_horas_mes ?? null) : null,
       tipo_contrato: b.tipo_contrato ?? null,
       jornada: b.jornada ?? null,
       cargo: b.cargo ?? null,
@@ -122,6 +125,10 @@ export async function POST(req: Request) {
     // El contrato manda: al firmar se sincronizan rol, vinculación, etc. (aquí aún es
     // pendiente, así que no altera la ficha; la sync se hace efectiva al subir el firmado).
     await sincronizarEmpleadoDesdeContratos(b.empleado_id)
+    // El CEO decide si el freelance/prestación tiene horario (laboral siempre lo tiene).
+    if (b.horario_habilitado !== undefined) {
+      try { await actualizarEmpleado(b.empleado_id, { horario_habilitado: !porFactura || b.horario_habilitado }) } catch { /* columna opcional */ }
+    }
     // Se crea como BORRADOR: el CEO lo previsualiza y luego lo "Envía para firma"
     // (acción PATCH 'enviar'), o sube el documento ya firmado. No se avisa aún.
     return NextResponse.json({ contrato })
@@ -197,6 +204,7 @@ export async function PATCH(req: Request) {
       freelance_tarifa: porFactura ? b.freelance_tarifa ?? previo.freelance_tarifa : null,
       freelance_moneda: porFactura ? b.freelance_moneda ?? previo.freelance_moneda : null,
       freelance_meses: porFactura && modo === "por_proyecto" ? b.freelance_meses ?? previo.freelance_meses : null,
+      ...(b.freelance_max_horas_mes !== undefined ? { freelance_max_horas_mes: porFactura ? b.freelance_max_horas_mes : null } : {}),
       ...(b.tipo_contrato !== undefined ? { tipo_contrato: b.tipo_contrato } : {}),
       ...(b.jornada !== undefined ? { jornada: b.jornada } : {}),
       ...(b.cargo !== undefined ? { cargo: b.cargo } : {}),
@@ -210,6 +218,10 @@ export async function PATCH(req: Request) {
       ...(b.ajustes !== undefined ? { ajustes: b.ajustes } : {}),
     })
     await sincronizarEmpleadoDesdeContratos(previo.empleado_id)
+    // Aplica al empleado si el CEO habilitó/deshabilitó el horario (laboral siempre habilitado).
+    if (b.horario_habilitado !== undefined) {
+      try { await actualizarEmpleado(previo.empleado_id, { horario_habilitado: !porFactura || b.horario_habilitado }) } catch { /* columna opcional */ }
+    }
     return NextResponse.json({ contrato })
   } catch (e) {
     const msg = e instanceof Error ? e.message : "Error"

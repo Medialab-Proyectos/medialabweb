@@ -37,19 +37,29 @@ export function AusenciasClient() {
   const [enviando, setEnviando] = useState(false)
   const [error, setError] = useState("")
   const [msg, setMsg] = useState("")
+  const [esLaboral, setEsLaboral] = useState(true)
+  const [permitido, setPermitido] = useState(true)
 
   async function cargar() {
     setCargando(true)
     try {
       const res = await fetch("/api/empleados/ausencias")
       const data = await res.json()
-      if (res.ok) { setSaldo(data.saldo); setSolicitudes(data.solicitudes ?? []) }
+      if (res.ok) { setSaldo(data.saldo); setSolicitudes(data.solicitudes ?? []); setEsLaboral(data.esLaboral !== false); setPermitido(data.permitido !== false) }
       else setError(data.error || "Error al cargar.")
     } finally {
       setCargando(false)
     }
   }
   useEffect(() => { cargar() }, [])
+
+  // Freelance/prestación: SOLO permiso no remunerado (esas horas se descuentan de la facturación).
+  // Empleados laborales: todos los tipos.
+  const tiposVisibles = esLaboral
+    ? TIPOS
+    : (["permiso_no_remunerado"] as TipoAusencia[])
+  // Si el tipo seleccionado ya no aplica, cae al primero visible.
+  useEffect(() => { if (!tiposVisibles.includes(tipo)) setTipo(tiposVisibles[0]) }, [esLaboral]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const media = esMediaJornada(tipo)
   const esVacacional = tipo === "vacaciones" || tipo === "adelanto_vacaciones"
@@ -121,8 +131,8 @@ export function AusenciasClient() {
 
   return (
     <div className="flex flex-col gap-6">
-      {/* Saldo de vacaciones */}
-      {saldo && (
+      {/* Saldo de vacaciones (solo empleados laborales; freelance no tiene) */}
+      {saldo && esLaboral && (
         <div className="rounded-2xl border border-[var(--cyan)]/25 bg-[var(--cyan)]/[0.05] p-5">
           <div className="flex items-center gap-2">
             <Plane size={16} className="text-[var(--cyan)]" />
@@ -147,14 +157,27 @@ export function AusenciasClient() {
         </div>
       )}
 
+      {/* Freelance/prestación sin registro de horario habilitado: no pueden pedir permisos. */}
+      {!permitido && (
+        <div className="rounded-2xl border border-amber-400/25 bg-amber-400/[0.06] p-5 text-sm text-[#fff]/75">
+          Los permisos y ausencias se habilitan solo si tu contrato tiene activado el registro de horario. Si lo necesitas, contacta a RRHH.
+        </div>
+      )}
+
       {/* Formulario de solicitud */}
+      {permitido && (
       <form onSubmit={enviar} className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
         <h2 className="mb-4 text-sm font-semibold text-[#fff]/80">Nueva solicitud</h2>
+        {!esLaboral && (
+          <p className="mb-4 rounded-lg border border-amber-400/25 bg-amber-400/[0.06] px-3 py-2.5 text-xs leading-relaxed text-amber-200/90">
+            Por tu vínculo (freelance / prestación de servicios) solo aplica el <b>permiso no remunerado</b>. Las horas que solicites se <b>descuentan de tu facturación del mes</b>: si es por horas, son las que indiques; si es un día completo, son las horas que tengas registradas en tu horario para ese día.
+          </p>
+        )}
         <div className="grid gap-3 sm:grid-cols-2">
           <label className="flex flex-col gap-1.5 sm:col-span-2">
             <span className={lblCls}>Tipo</span>
             <select value={tipo} onChange={(e) => setTipo(e.target.value as TipoAusencia)} className={inputCls}>
-              {TIPOS.map((t) => <option key={t} value={t}>{TIPO_AUSENCIA_LABEL[t]}</option>)}
+              {tiposVisibles.map((t) => <option key={t} value={t}>{TIPO_AUSENCIA_LABEL[t]}</option>)}
             </select>
           </label>
           {puedePorHoras && (
@@ -217,6 +240,7 @@ export function AusenciasClient() {
           {enviando ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} />} Enviar solicitud
         </button>
       </form>
+      )}
 
       {/* Historial */}
       <div>

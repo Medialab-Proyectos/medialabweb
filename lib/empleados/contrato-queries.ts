@@ -8,32 +8,37 @@ const BUCKET = "contratos"
 // ── Contratos ────────────────────────────────────────────────────────────────
 const COLS =
   "id,empleado_id,tipo,vigente_desde,rol,tipo_vinculacion,salario_basico,auxilio_transporte,otros_devengos,freelance_modo,freelance_tarifa,freelance_moneda,freelance_meses,tipo_contrato,jornada,cargo,descripcion,condiciones_adicionales,rol_funciones_id,lider_id,fecha_ingreso,fecha_fin_probable,fecha_fin,motivo,ajustes,archivo_path,estado,enviado_en,firmado_por,firmado_en,creado_por,creado_en"
+// Columna de fase 42; se lee con fallback por si la migración aún no está.
+const COLS_EXT = `${COLS},freelance_max_horas_mes`
 
 /** Historial completo de condiciones de un empleado (más reciente primero). */
 export async function listContratos(empleadoId: string) {
   const sb = getServiceClient()
-  const { data, error } = await sb
-    .from("contratos")
-    .select(COLS)
-    .eq("empleado_id", empleadoId)
-    .order("vigente_desde", { ascending: false })
-    .order("creado_en", { ascending: false })
+  const q = (cols: string) => sb.from("contratos").select(cols).eq("empleado_id", empleadoId).order("vigente_desde", { ascending: false }).order("creado_en", { ascending: false })
+  let { data, error } = await q(COLS_EXT)
+  if (error) ({ data, error } = await q(COLS))
   if (error) throw error
-  return (data ?? []) as Contrato[]
+  return (data ?? []) as unknown as Contrato[]
 }
 
 export async function getContrato(id: string) {
   const sb = getServiceClient()
-  const { data, error } = await sb.from("contratos").select(COLS).eq("id", id).maybeSingle()
+  let { data, error } = await sb.from("contratos").select(COLS_EXT).eq("id", id).maybeSingle()
+  if (error) ({ data, error } = await sb.from("contratos").select(COLS).eq("id", id).maybeSingle())
   if (error) throw error
-  return data as Contrato | null
+  return data as unknown as Contrato | null
 }
 
 export type ContratoInput = Omit<Contrato, "id" | "creado_en">
 
 export async function crearContrato(input: ContratoInput) {
   const sb = getServiceClient()
-  const { data, error } = await sb.from("contratos").insert(input).select(COLS).single()
+  // Inserta con la columna de fase 42; si aún no existe, reintenta sin ella.
+  let { data, error } = await sb.from("contratos").insert(input).select(COLS).single()
+  if (error && /freelance_max_horas_mes|column/i.test(String((error as { message?: string })?.message ?? ""))) {
+    const rest = { ...input } as Record<string, unknown>; delete rest.freelance_max_horas_mes
+    ;({ data, error } = await sb.from("contratos").insert(rest).select(COLS).single())
+  }
   if (error) throw error
   return data as Contrato
 }
@@ -49,7 +54,12 @@ export async function marcarEnviadoParaFirma(id: string) {
 /** Edita una versión existente del contrato (corregir el inicial o un otrosí). */
 export async function actualizarContrato(id: string, cambios: Partial<ContratoInput>) {
   const sb = getServiceClient()
-  const { data, error } = await sb.from("contratos").update(cambios).eq("id", id).select(COLS).single()
+  let { data, error } = await sb.from("contratos").update(cambios).eq("id", id).select(COLS).single()
+  // Si la columna opcional freelance_max_horas_mes aún no existe, reintenta sin ella.
+  if (error && /freelance_max_horas_mes|column/i.test(String((error as { message?: string })?.message ?? ""))) {
+    const rest = { ...cambios } as Record<string, unknown>; delete rest.freelance_max_horas_mes
+    ;({ data, error } = await sb.from("contratos").update(rest).eq("id", id).select(COLS).single())
+  }
   if (error) throw error
   return data as Contrato
 }

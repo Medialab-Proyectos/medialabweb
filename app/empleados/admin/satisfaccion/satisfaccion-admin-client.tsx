@@ -20,15 +20,31 @@ export function SatisfaccionAdminClient() {
   const [enviando, setEnviando] = useState(false)
   const [form, setForm] = useState<{ empresa: string; periodo: string; puntaje: number; comentario: string } | null>(null)
   const [saving, setSaving] = useState(false)
+  const [habilitada, setHabilitada] = useState(false)
+  const [togHab, setTogHab] = useState(false)
 
   async function cargar() {
     setCargando(true)
     try {
-      const r = await fetch("/api/empleados/admin/satisfaccion")
+      const [r, rc] = await Promise.all([
+        fetch("/api/empleados/admin/satisfaccion"),
+        fetch("/api/empleados/admin/empresa-config"),
+      ])
       const data = await r.json(); if (r.ok) setD(data); else setError(data.error || "Error al cargar.")
+      try { const c = await rc.json(); setHabilitada(c?.config?.encuesta_habilitada === true) } catch { /* config opcional */ }
     } finally { setCargando(false) }
   }
   useEffect(() => { cargar() }, [])
+
+  async function toggleHabilitada() {
+    setTogHab(true); setError("")
+    try {
+      const r = await fetch("/api/empleados/admin/empresa-config", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ encuesta_habilitada: !habilitada }) })
+      const data = await r.json(); if (!r.ok) throw new Error(data.error)
+      setHabilitada(data?.config?.encuesta_habilitada === true)
+    } catch (e) { setError(e instanceof Error ? e.message : "Error al cambiar.") }
+    finally { setTogHab(false) }
+  }
 
   async function enviarEncuesta() {
     setEnviando(true); setError(""); setMsg("")
@@ -65,6 +81,17 @@ export function SatisfaccionAdminClient() {
 
       {error && <p className="mb-4 rounded-lg bg-red-500/10 px-3 py-2 text-sm text-red-300">{error}</p>}
       {msg && <p className="mb-4 rounded-lg bg-emerald-400/10 px-3 py-2 text-sm text-emerald-200">{msg}</p>}
+
+      {/* Habilitar la encuesta para los empleados (arranca deshabilitada). */}
+      <div className="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3">
+        <div>
+          <p className="text-sm font-semibold">Encuesta de empleados en el portal</p>
+          <p className="text-xs text-[#fff]/55">{habilitada ? "Habilitada: los empleados ven la tarjeta y pueden responder." : "Deshabilitada: los empleados no la ven hasta que la actives."}</p>
+        </div>
+        <button onClick={toggleHabilitada} disabled={togHab} className={`inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold transition disabled:opacity-50 ${habilitada ? "border border-white/15 text-[#fff]/80 hover:bg-white/5" : "bg-[#00BFA6] text-[#04191b] hover:brightness-110"}`}>
+          {togHab ? "…" : habilitada ? "Deshabilitar" : "Habilitar encuesta"}
+        </button>
+      </div>
 
       {cargando ? (
         <div className="flex items-center gap-2 py-10 text-[#fff]/60"><Loader2 size={16} className="animate-spin" /> Cargando…</div>

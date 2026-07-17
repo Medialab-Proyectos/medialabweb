@@ -60,6 +60,13 @@ export async function PATCH(req: Request) {
 
   // Estado previo (para no duplicar el egreso si ya estaba pagada).
   const previa = await getFactura(b.id)
+  // Prestación de servicios: no se puede pagar sin el soporte de seguridad social (planilla).
+  if (b.estado === "pagada" && previa && !previa.soporte_path) {
+    const emp = await getEmpleadoById(previa.empleado_id)
+    if (emp?.tipo_vinculacion === "prestacion_servicios") {
+      return NextResponse.json({ error: "Esta factura es de prestación de servicios y no tiene el soporte de seguridad social (planilla). Pídele al proveedor que lo adjunte antes de pagarla." }, { status: 400 })
+    }
+  }
   const factura = await setEstadoFactura(b.id, { estado: b.estado, observaciones: b.observaciones })
 
   // Auto-registro del egreso en Contabilidad (solo en la transición → pagada).

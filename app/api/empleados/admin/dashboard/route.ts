@@ -7,6 +7,9 @@ import { listSolicitudesDeEmpleados, listAusentesHoy } from "@/lib/empleados/aus
 import { contarFacturasPorPagar } from "@/lib/empleados/freelance-queries"
 import { contarCuentasCobroPorPasar } from "@/lib/empleados/cuenta-cobro-queries"
 import { promedioSatisfaccion } from "@/lib/empleados/satisfaccion-queries"
+import { contarHorariosPendientes } from "@/lib/empleados/horario-queries"
+import { listFechasEspeciales } from "@/lib/empleados/fechas-queries"
+import { getSatisfaccionOperaciones } from "@/lib/empleados/operaciones"
 import { resumen, type Moneda } from "@/lib/empleados/contabilidad"
 import type { Cuenta, Movimiento, Inversion } from "@/lib/empleados/contabilidad"
 import { MESES } from "@/lib/empleados/desprendible"
@@ -25,7 +28,7 @@ export async function GET() {
   const anio = Number(hoy.slice(0, 4))
   const mes = Number(hoy.slice(5, 7))
 
-  const [empleados, cuentas, movimientos, inversiones, ausentesHoy, facturasFreelance, cuentasCobroPorPasar, satEmpleados, satEmpresas] = await Promise.all([
+  const [empleados, cuentas, movimientos, inversiones, ausentesHoy, facturasFreelance, cuentasCobroPorPasar, satEmpleados, satEmpresas, horariosPendientes] = await Promise.all([
     listEmpleados().catch(() => []),
     listCuentas().catch(() => [] as Cuenta[]),
     listMovimientos().catch(() => [] as Movimiento[]),
@@ -35,7 +38,10 @@ export async function GET() {
     contarCuentasCobroPorPasar().catch(() => 0),
     promedioSatisfaccion("empleado").catch(() => null),
     promedioSatisfaccion("empresa").catch(() => null),
+    contarHorariosPendientes().catch(() => 0),
   ])
+  const satisfaccionProyectos = (await getSatisfaccionOperaciones().catch(() => ({ promedio100: null }))).promedio100
+  const fechasRaw = await listFechasEspeciales().catch(() => [])
 
   // Solicitudes de ausencia pendientes (de todos, para aprobar en línea).
   let solicitudes: { id: string; nombre: string; tipo: string; fecha_inicio: string; fecha_fin: string; dias_habiles: number }[] = []
@@ -87,23 +93,47 @@ export async function GET() {
     .map((i) => ({ id: i.id, entidad: i.entidad, monto: Number(i.monto) || 0, moneda: i.moneda, fecha: i.fecha_vencimiento!, dias: Math.ceil((Date.parse(i.fecha_vencimiento!) - Date.now()) / 86_400_000) }))
     .filter((i) => i.dias <= 30).sort((a, b) => a.dias - b.dias)
 
+  // Días hasta la próxima ocurrencia anual de un mes-día (para cumpleaños/aniversarios/recurrentes).
+  const ahoraD = new Date(hoy)
+  const diasHastaMMDD = (mm: number, dd: number) => {
+    const base = new Date(anio, mm - 1, dd)
+    if (base < new Date(ahoraD.getFullYear(), ahoraD.getMonth(), ahoraD.getDate())) base.setFullYear(anio + 1)
+    return { base, dias: Math.round((base.getTime() - Date.parse(hoy)) / 86_400_000) }
+  }
+
   // Cumpleaños próximos (30 días).
   const cumpleanos = empleados.filter((e) => e.estado === "activo" && e.fecha_nacimiento).map((e) => {
     const [, mm, dd] = e.fecha_nacimiento!.split("-").map(Number)
-    const base = new Date(anio, mm - 1, dd)
-    const ahora = new Date(hoy)
-    if (base < new Date(ahora.getFullYear(), ahora.getMonth(), ahora.getDate())) base.setFullYear(anio + 1)
-    const dias = Math.round((base.getTime() - Date.parse(hoy)) / 86_400_000)
+    const { base, dias } = diasHastaMMDD(mm, dd)
     return { nombre: e.nombre, fecha: `${String(base.getMonth() + 1).padStart(2, "0")}-${String(base.getDate()).padStart(2, "0")}`, dias }
   }).filter((c) => c.dias <= 30).sort((a, b) => a.dias - b.dias)
+
+  // Aniversarios de ingreso próximos (30 días) — con los años que cumple en la empresa.
+  const aniversarios = empleados.filter((e) => e.estado === "activo" && e.fecha_ingreso).map((e) => {
+    const [yy, mm, dd] = e.fecha_ingreso!.split("-").map(Number)
+    const { base, dias } = diasHastaMMDD(mm, dd)
+    return { nombre: e.nombre, fecha: `${String(mm).padStart(2, "0")}-${String(dd).padStart(2, "0")}`, anos: base.getFullYear() - yy, dias }
+  }).filter((a) => a.dias <= 30 && a.anos >= 1).sort((a, b) => a.dias - b.dias)
+
+  // Fechas especiales de Talento Humano (recurrentes anuales o puntuales), próximas 30 días.
+  const fechasEspeciales = fechasRaw.map((f) => {
+    const [yy, mm, dd] = f.fecha.split("-").map(Number)
+    if (f.recurrente) {
+      const { base, dias } = diasHastaMMDD(mm, dd)
+      return { id: f.id, titulo: f.titulo, nota: f.nota, fecha: `${String(base.getMonth() + 1).padStart(2, "0")}-${String(base.getDate()).padStart(2, "0")}`, dias, recurrente: true }
+    }
+    const base = new Date(yy, mm - 1, dd)
+    const dias = Math.round((base.getTime() - Date.parse(hoy)) / 86_400_000)
+    return { id: f.id, titulo: f.titulo, nota: f.nota, fecha: `${String(mm).padStart(2, "0")}-${String(dd).padStart(2, "0")}`, dias, recurrente: false }
+  }).filter((f) => f.dias >= 0 && f.dias <= 30).sort((a, b) => a.dias - b.dias)
 
   return NextResponse.json({
     kpis, gananciaAnio,
     ausentesHoy, solicitudes,
     pagosPendientes, porCobrarLista,
-    facturasFreelance, cuentasCobroPorPasar,
-    inversionesPorVencer, cumpleanos,
+    facturasFreelance, cuentasCobroPorPasar, horariosPendientes,
+    inversionesPorVencer, cumpleanos, aniversarios, fechasEspeciales,
     serie6m, categorias: { ingresos: arr(catIng), egresos: arr(catEgr) },
-    satisfaccionEmpleados: satEmpleados, satisfaccionEmpresas: satEmpresas,
+    satisfaccionEmpleados: satEmpleados, satisfaccionEmpresas: satEmpresas, satisfaccionProyectos,
   })
 }

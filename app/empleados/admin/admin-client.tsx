@@ -64,6 +64,28 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
   const [benefItems, setBenefItems] = useState<Beneficio[]>([])
   const [benefLoading, setBenefLoading] = useState(false)
   const [benefBusy, setBenefBusy] = useState<TipoBeneficio | null>(null)
+  const [suspEmp, setSuspEmp] = useState<Empleado | null>(null)
+  const [suspMotivo, setSuspMotivo] = useState("")
+  const [suspHasta, setSuspHasta] = useState("")
+  const [suspSinFecha, setSuspSinFecha] = useState(true)
+  const [suspFile, setSuspFile] = useState<File | null>(null)
+  const [suspBusy, setSuspBusy] = useState(false)
+
+  async function suspenderContrato() {
+    if (!suspEmp || !suspMotivo.trim()) { setError("Indica el motivo de la suspensión."); return }
+    setSuspBusy(true); setError("")
+    try {
+      const fd = new FormData()
+      fd.append("motivo", suspMotivo.trim())
+      if (!suspSinFecha && suspHasta) fd.append("hasta", suspHasta)
+      if (suspFile) fd.append("file", suspFile)
+      const r = await fetch(`/api/empleados/admin/empleado/${suspEmp.id}/suspender`, { method: "POST", body: fd })
+      const d = await r.json(); if (!r.ok) throw new Error(d.error)
+      setEmpleados((prev) => prev.map((x) => (x.id === suspEmp.id ? { ...x, estado: "suspendido" } : x)))
+      setSuspEmp(null); setSuspMotivo(""); setSuspHasta(""); setSuspSinFecha(true); setSuspFile(null)
+    } catch (e) { setError(e instanceof Error ? e.message : "Error al suspender.") }
+    finally { setSuspBusy(false) }
+  }
   const [catalogo, setCatalogo] = useState<BeneficioTipo[]>([])
 
   // Catálogo de tipos de beneficio (para asignar desde la fila del empleado).
@@ -278,7 +300,10 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
       <div className="flex items-center gap-1">
         <button onClick={() => abrirEditar(e)} title="Editar" className="rounded-lg p-1.5 text-[#fff]/60 hover:bg-white/5 hover:text-[#fff]"><Pencil size={15} /></button>
         <button onClick={() => abrirBeneficios(e)} title="Beneficios" className="rounded-lg p-1.5 text-[#E8751A]/80 hover:bg-[#E8751A]/10 hover:text-[#E8751A]"><Gift size={15} /></button>
-        <Link href={`/empleados/admin/liquidaciones?empleado=${e.id}`} title="Liquidar" className="rounded-lg p-1.5 text-[#fff]/60 hover:bg-white/5 hover:text-[#fff]"><FileWarning size={15} /></Link>
+        {/* Liquidación: solo vinculación laboral (freelance/prestación cobran por factura, no llevan liquidación). */}
+        {e.tipo_vinculacion === "empleado" && (
+          <Link href={`/empleados/admin/liquidaciones?empleado=${e.id}`} title="Liquidar" className="rounded-lg p-1.5 text-[#fff]/60 hover:bg-white/5 hover:text-[#fff]"><FileWarning size={15} /></Link>
+        )}
         {e.estado === "terminado" && (
           <>
             <button
@@ -306,11 +331,15 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
         )}
         <button onClick={() => accion(e.id, "resetear_clave", e)} title="Resetear contraseña" className="rounded-lg p-1.5 text-[#fff]/60 hover:bg-white/5 hover:text-[#fff]"><KeyRound size={15} /></button>
         {e.estado === "activo" && (
-          <button onClick={() => accion(e.id, "suspender", e)} disabled={e.id === ceoId} title="Suspender acceso" className="rounded-lg p-1.5 text-amber-300/70 hover:bg-amber-500/10 hover:text-amber-300 disabled:opacity-30"><PauseCircle size={15} /></button>
+          <button onClick={() => { setSuspEmp(e); setSuspMotivo(""); setSuspHasta(""); setSuspSinFecha(true); setSuspFile(null) }} disabled={e.id === ceoId} title="Suspender contrato" className="rounded-lg p-1.5 text-amber-300/70 hover:bg-amber-500/10 hover:text-amber-300 disabled:opacity-30"><PauseCircle size={15} /></button>
         )}
-        {e.estado === "activo"
-          ? <button onClick={() => accion(e.id, "cerrar_contrato", e)} disabled={e.id === ceoId} title="Cerrar contrato" className="rounded-lg p-1.5 text-red-300/70 hover:bg-red-500/10 hover:text-red-300 disabled:opacity-30"><Ban size={15} /></button>
-          : <button onClick={() => accion(e.id, "reactivar", e)} title="Reactivar acceso" className="rounded-lg p-1.5 text-emerald-300/70 hover:bg-emerald-500/10 hover:text-emerald-300"><RotateCcw size={15} /></button>}
+        {e.estado === "activo" && (
+          <button onClick={() => accion(e.id, "cerrar_contrato", e)} disabled={e.id === ceoId} title="Cerrar contrato" className="rounded-lg p-1.5 text-red-300/70 hover:bg-red-500/10 hover:text-red-300 disabled:opacity-30"><Ban size={15} /></button>
+        )}
+        {/* Solo un contrato SUSPENDIDO se reactiva; uno TERMINADO (cerrado) no se reabre: requiere nuevo contrato. */}
+        {e.estado === "suspendido" && (
+          <button onClick={() => accion(e.id, "reactivar", e)} title="Reactivar (fin de suspensión)" className="rounded-lg p-1.5 text-emerald-300/70 hover:bg-emerald-500/10 hover:text-emerald-300"><RotateCcw size={15} /></button>
+        )}
       </div>
     )
   }
@@ -633,6 +662,44 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
                 <p className="mt-2 text-[11px] text-[#fff]/40">Solo el CEO activa beneficios. El empleado solo los ve en su portal cuando quedan activos.</p>
               </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* Modal de suspensión de contrato */}
+      {suspEmp && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <button className="absolute inset-0 bg-black/60" onClick={() => setSuspEmp(null)} aria-label="Cerrar" />
+          <div className="relative w-full max-w-md rounded-2xl border border-white/10 bg-[#0e1013] p-5 shadow-2xl">
+            <h3 className="mb-1 text-sm font-semibold">Suspender contrato · {suspEmp.nombre}</h3>
+            <p className="mb-4 text-xs text-[#fff]/50">Durante la suspensión solo se paga seguridad social (pensión). Queda constancia como otrosí y se adjunta la carta del empleado.</p>
+            <div className="flex flex-col gap-3">
+              <label className="flex flex-col gap-1.5">
+                <span className={lblCls}>Motivo de la suspensión</span>
+                <textarea rows={2} value={suspMotivo} onChange={(e) => setSuspMotivo(e.target.value)} placeholder="Causa (la aporta el empleado en su carta)" className={inputCls} />
+              </label>
+              <label className="flex items-center gap-2 text-sm text-[#fff]/75">
+                <input type="checkbox" checked={suspSinFecha} onChange={(e) => setSuspSinFecha(e.target.checked)} className="h-4 w-4 accent-[var(--cyan)]" />
+                Sin fecha estimada de retorno
+              </label>
+              {!suspSinFecha && (
+                <label className="flex flex-col gap-1.5">
+                  <span className={lblCls}>Fecha estimada de retorno</span>
+                  <input type="date" value={suspHasta} onChange={(e) => setSuspHasta(e.target.value)} className={inputCls} />
+                </label>
+              )}
+              <label className="flex flex-col gap-1.5">
+                <span className={lblCls}>Carta de suspensión (del empleado)</span>
+                <input type="file" accept="application/pdf,image/*" onChange={(e) => setSuspFile(e.target.files?.[0] ?? null)} className="text-xs text-[#fff]/70 file:mr-2 file:rounded-md file:border-0 file:bg-white/10 file:px-2 file:py-1 file:text-[#fff]" />
+                {suspFile && <span className="text-[11px] text-[#fff]/45">{suspFile.name}</span>}
+              </label>
+            </div>
+            <div className="mt-4 flex justify-end gap-2">
+              <button onClick={() => setSuspEmp(null)} className="rounded-lg border border-white/15 px-4 py-2 text-sm text-[#fff]/75 hover:bg-white/5">Cancelar</button>
+              <button onClick={suspenderContrato} disabled={suspBusy || !suspMotivo.trim()} className="inline-flex items-center gap-2 rounded-lg bg-amber-400 px-4 py-2 text-sm font-semibold text-[#1a1205] transition hover:brightness-110 disabled:opacity-50">
+                {suspBusy ? <Loader2 size={14} className="animate-spin" /> : <PauseCircle size={14} />} Suspender
+              </button>
+            </div>
           </div>
         </div>
       )}

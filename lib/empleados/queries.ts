@@ -4,6 +4,15 @@ import type { Empleado, Rol, EstadoEmpleado, TipoVinculacion, FreelanceModo } fr
 
 const COLS =
   "id,cedula,nombre,email,email_empresarial,must_change_password,rol,lider_id,cargo,caja_compensacion,telefono,direccion,fecha_nacimiento,eps,fondo_cesantias,fondo_pension,cert_eps_path,cert_cesantias_path,cert_pension_path,fecha_ingreso,fecha_egreso,particularidades,estado,tipo_vinculacion,tipo_contrato,convenio_path,fecha_fin_probable,freelance_modo,freelance_tarifa,freelance_moneda,freelance_meses,creado_en,actualizado_en"
+// Columnas de fase 42 (nda/horario_habilitado): se leen con fallback por si la migración no está.
+const COLS_EXT = `${COLS},nda_path,nda_firmado_en,horario_habilitado,suspension_motivo,suspension_hasta,suspension_carta_path`
+
+/** Select resiliente: intenta con las columnas de fase 42; si no existen, cae a COLS. */
+async function selectEmpleados(build: (cols: string) => PromiseLike<{ data: unknown; error: unknown }>) {
+  let r = await build(COLS_EXT)
+  if (r.error) r = await build(COLS)
+  return r
+}
 
 export async function getEmpleadoByCedula(cedula: string) {
   const sb = getServiceClient()
@@ -18,14 +27,14 @@ export async function getEmpleadoByCedula(cedula: string) {
 
 export async function getEmpleadoById(id: string) {
   const sb = getServiceClient()
-  const { data, error } = await sb.from("empleados").select(COLS).eq("id", id).maybeSingle()
+  const { data, error } = await selectEmpleados((cols) => sb.from("empleados").select(cols).eq("id", id).maybeSingle())
   if (error) throw error
   return data as Empleado | null
 }
 
 export async function listEmpleados() {
   const sb = getServiceClient()
-  const { data, error } = await sb.from("empleados").select(COLS).order("nombre")
+  const { data, error } = await selectEmpleados((cols) => sb.from("empleados").select(cols).order("nombre"))
   if (error) throw error
   return (data ?? []) as Empleado[]
 }
@@ -33,7 +42,7 @@ export async function listEmpleados() {
 /** Empleados a cargo de un líder (para su evaluación / equipo). */
 export async function listReportes(liderId: string) {
   const sb = getServiceClient()
-  const { data, error } = await sb.from("empleados").select(COLS).eq("lider_id", liderId).order("nombre")
+  const { data, error } = await selectEmpleados((cols) => sb.from("empleados").select(cols).eq("lider_id", liderId).order("nombre"))
   if (error) throw error
   return (data ?? []) as Empleado[]
 }
@@ -100,6 +109,12 @@ export type CambiosEmpleado = Partial<{
   freelance_tarifa: number | null
   freelance_moneda: "COP" | "USD" | null
   freelance_meses: number | null
+  horario_habilitado: boolean
+  nda_path: string | null
+  nda_firmado_en: string | null
+  suspension_motivo: string | null
+  suspension_hasta: string | null
+  suspension_carta_path: string | null
   password_hash: string
   must_change_password: boolean
 }>
@@ -150,24 +165,50 @@ export async function getCertificadoEmpleado(path: string): Promise<{ bytes: Uin
 }
 
 // ── Configuración de empresa (fila única) ─────────────────────────────────────
-export type ConfigEmpresa = { caja_compensacion: string | null; arl: string | null; fecha_fundacion: string | null }
+export type ConfigEmpresa = { caja_compensacion: string | null; arl: string | null; fecha_fundacion: string | null; encuesta_habilitada?: boolean }
+const CONFIG_COLS = "caja_compensacion,arl,fecha_fundacion,encuesta_habilitada"
+// Columnas que agregan migraciones POSTERIORES a fase19 (pueden faltar): arl (fase24),
+// fecha_fundacion (fase35), encuesta_habilitada (fase42). Solo caja_compensacion es de fase19.
+const CONFIG_COLS_OPCIONALES = ["encuesta_habilitada", "fecha_fundacion", "arl"]
+
+const quitarCol = (cols: string, bad: string) => cols.split(",").map((c) => c.trim()).filter((c) => c !== bad).join(",")
+const colFaltante = (e: unknown) => {
+  const msg = String((e as { message?: string })?.message ?? "")
+  return /column|schema cache|does not exist|find the/i.test(msg) ? (CONFIG_COLS_OPCIONALES.find((c) => msg.includes(c)) ?? null) : null
+}
 
 export async function getConfigEmpresa(): Promise<ConfigEmpresa> {
   const sb = getServiceClient()
-  const { data, error } = await sb.from("empresa_config").select("caja_compensacion,arl,fecha_fundacion").eq("id", 1).maybeSingle()
-  if (error) throw error
-  return (data as ConfigEmpresa) ?? { caja_compensacion: null, arl: null, fecha_fundacion: null }
+  const def: ConfigEmpresa = { caja_compensacion: null, arl: null, fecha_fundacion: null, encuesta_habilitada: false }
+  // Va quitando columnas opcionales que aún no existen (migraciones fase24/35/42 pendientes).
+  let cols = CONFIG_COLS
+  for (let i = 0; i <= CONFIG_COLS_OPCIONALES.length; i++) {
+    const r = await sb.from("empresa_config").select(cols).eq("id", 1).maybeSingle()
+    if (!r.error) return { ...def, ...(r.data as Partial<ConfigEmpresa> | null) }
+    const bad = colFaltante(r.error)
+    if (!bad) break
+    cols = quitarCol(cols, bad)
+  }
+  return def
 }
 
 export async function setConfigEmpresa(cambios: Partial<ConfigEmpresa>) {
   const sb = getServiceClient()
-  const { data, error } = await sb
-    .from("empresa_config")
-    .upsert({ id: 1, ...cambios })
-    .select("caja_compensacion,arl,fecha_fundacion")
-    .single()
-  if (error) throw error
-  return data as ConfigEmpresa
+  // Guarda lo que exista: si una columna opcional aún no está en la BD, la quita del payload y
+  // del select y reintenta (así los datos base se guardan aunque falte una migración).
+  let payload: Record<string, unknown> = { id: 1, ...cambios }
+  let cols = CONFIG_COLS
+  for (let i = 0; i <= CONFIG_COLS_OPCIONALES.length; i++) {
+    const { data, error } = await sb.from("empresa_config").upsert(payload).select(cols).single()
+    if (!error) return data as unknown as ConfigEmpresa
+    const bad = colFaltante(error)
+    if (!bad) throw error
+    const { [bad]: _drop, ...rest } = payload
+    void _drop
+    payload = rest
+    cols = quitarCol(cols, bad)
+  }
+  throw new Error("No se pudo guardar la configuración de empresa.")
 }
 
 export async function getConvenioEmpleado(path: string): Promise<{ bytes: Uint8Array; mime: string }> {

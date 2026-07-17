@@ -2,12 +2,13 @@ import { redirect } from "next/navigation"
 import Link from "next/link"
 import { FileSignature, ArrowRight } from "lucide-react"
 import { requireEmpleado } from "@/lib/empleados/auth"
-import { getEmpleadoById } from "@/lib/empleados/queries"
+import { getEmpleadoById, getConfigEmpresa } from "@/lib/empleados/queries"
 import { listContratos } from "@/lib/empleados/contrato-queries"
 import { tieneContratoFirmado } from "@/lib/empleados/contrato"
 import { ModuleNav } from "../admin/module-nav"
 import { PortalHeader } from "../portal-header"
 import { CambiarClaveCard } from "../cambiar-clave-card"
+import { NdaAlert } from "../nda-alert"
 import { PanelCEO } from "../panel-ceo"
 import { PortalGrid } from "../portal-grid"
 
@@ -43,6 +44,9 @@ export default async function InicioPage() {
     bloqueadoPorFirma = contratos.length > 0 && !tieneContratoFirmado(contratos)
   } catch { /* sin tabla de contratos: no bloquear */ }
 
+  let encuestaHabilitada = false
+  try { encuestaHabilitada = (await getConfigEmpresa()).encuesta_habilitada === true } catch { /* config opcional */ }
+
   return (
     <>
       <PortalHeader nombre={empleado.nombre} rol={empleado.rol} />
@@ -62,6 +66,7 @@ export default async function InicioPage() {
         </div>
 
         <CambiarClaveCard obligatorio={empleado.must_change_password} />
+        {empleado.estado === "activo" && <NdaAlert />}
 
         {bloqueadoPorFirma ? (
           <Link
@@ -80,7 +85,7 @@ export default async function InicioPage() {
             <ArrowRight size={18} className="text-[var(--magenta)]" />
           </Link>
         ) : (
-          <PortalGrid rol={empleado.rol} tipoVinculacion={empleado.tipo_vinculacion} />
+          <PortalGrid rol={empleado.rol} tipoVinculacion={empleado.tipo_vinculacion} encuestaHabilitada={encuestaHabilitada} horarioHabilitado={empleado.horario_habilitado === true} />
         )}
 
         <p className="mt-10 text-center text-xs text-[#fff]/35">

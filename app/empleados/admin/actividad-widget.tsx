@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
-import { Loader2, Radio, CircleCheck, Utensils, CalendarClock, Plane, Moon, CircleHelp } from "lucide-react"
+import { Loader2, Radio, CircleCheck, Utensils, CalendarClock, Plane, Moon, CircleHelp, RefreshCw } from "lucide-react"
 import { type EstadoActual } from "@/lib/empleados/horario"
 
 type Item = { id: string; nombre: string; cargo: string | null; estado: EstadoActual; entrada?: string; salida?: string }
@@ -28,7 +28,7 @@ export function ActividadWidget() {
 
   async function cargar() {
     try {
-      const res = await fetch("/api/empleados/admin/actividad")
+      const res = await fetch("/api/empleados/admin/actividad", { cache: "no-store" })
       const data = await res.json()
       if (!res.ok) { setError(data.error || "Error"); return }
       setError(""); setPanel(data)
@@ -51,8 +51,22 @@ export function ActividadWidget() {
     return panel.empleados.filter((e) => NO_DISP.includes(e.estado))
   }, [panel, filtro])
 
-  if (cargando) return <div className="mb-6 flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-4 text-sm text-[#fff]/55"><Loader2 size={15} className="animate-spin" /> Cargando actividad…</div>
-  if (error || !panel || total === 0) return null
+  if (cargando) return <div className="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-4 text-sm text-[#fff]/55"><Loader2 size={15} className="animate-spin" /> Cargando actividad…</div>
+
+  // Ante error o sin datos, NO se oculta: se muestra el encabezado con un mensaje (para el CEO
+  // siempre visible "quién está activo hoy").
+  if (error || !panel || total === 0) {
+    return (
+      <section className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 sm:p-5">
+        <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#fff]/85">
+          <Radio size={15} className="text-emerald-400" /> Actividad ahora
+        </span>
+        <p className="mt-3 rounded-lg border border-white/[0.06] bg-black/20 px-4 py-6 text-center text-sm text-[#fff]/45">
+          {error ? "No se pudo cargar la actividad ahora mismo. Reintentando…" : "Aún no hay empleados con horario para mostrar. Registra y aprueba horarios para ver quién está activo."}
+        </p>
+      </section>
+    )
+  }
 
   const tabs: [Filtro, string, number][] = [
     ["disponibles", "Disponibles", disponibles],
@@ -61,15 +75,18 @@ export function ActividadWidget() {
   ]
 
   return (
-    <section className="mb-6 rounded-2xl border border-white/10 bg-white/[0.03] p-4 sm:p-5">
+    <section className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 sm:p-5">
       <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
         <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#fff]/85">
           <Radio size={15} className="text-emerald-400" /> Actividad ahora
           <span className="ml-1 font-normal text-[#fff]/40">· {panel.ahora}</span>
         </span>
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-400/10 px-2.5 py-1 text-xs font-semibold text-emerald-300">
-          <CircleCheck size={13} /> {disponibles} de {total} disponibles
-        </span>
+        <div className="flex items-center gap-2">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-400/10 px-2.5 py-1 text-xs font-semibold text-emerald-300">
+            <CircleCheck size={13} /> {disponibles} de {total} disponibles
+          </span>
+          <button onClick={() => cargar()} className="rounded-lg border border-white/10 p-1.5 text-[#fff]/50 hover:bg-white/5 hover:text-[#fff]/80" title="Actualizar ahora"><RefreshCw size={13} /></button>
+        </div>
       </div>
 
       {/* Filtro dentro de la cajita */}

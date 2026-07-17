@@ -4,6 +4,7 @@ import { getSession } from "@/lib/empleados/auth"
 import { portalConfigurado } from "@/lib/empleados/db"
 import { getEmpleadoVacacion, listSolicitudes, crearSolicitud } from "@/lib/empleados/ausencia-queries"
 import { calcularSaldoVacaciones, DIAS_ADELANTO, esMediaJornada, DIAS_MEDIA_JORNADA, TIPO_AUSENCIA_LABEL, permitexPorHoras } from "@/lib/empleados/ausencia"
+import { esVinculacionPorFactura } from "@/lib/empleados/types"
 import { contarDiasHabiles, contarDiasCalendario } from "@/lib/empleados/festivos-co"
 import { notificarCEO } from "@/lib/empleados/notificar"
 
@@ -21,7 +22,10 @@ export async function GET() {
     const [emp, solicitudes] = await Promise.all([getEmpleadoVacacion(s.sub), listSolicitudes(s.sub)])
     const corte = emp?.vacaciones_corte ?? emp?.fecha_ingreso ?? null
     const saldo = calcularSaldoVacaciones(Number(emp?.vacaciones_saldo_inicial) || 0, corte, solicitudes)
-    return NextResponse.json({ solicitudes, saldo, tieneLider: !!emp?.lider_id })
+    const esLaboral = !esVinculacionPorFactura((emp?.tipo_vinculacion as never) ?? "empleado")
+    // Freelance/prestación: solo pueden pedir permisos si el CEO habilitó su registro de horario.
+    const permitido = esLaboral || emp?.horario_habilitado === true
+    return NextResponse.json({ solicitudes, saldo, tieneLider: !!emp?.lider_id, esLaboral, permitido })
   } catch (e) {
     const msg = e instanceof Error ? e.message : "Error"
     return NextResponse.json(
@@ -76,6 +80,15 @@ export async function POST(req: Request) {
     const emp = await getEmpleadoVacacion(s.sub)
     if (!emp?.lider_id && s.rol !== "ceo") {
       return NextResponse.json({ error: "No tienes un líder asignado para aprobar la solicitud. Contacta a RRHH." }, { status: 400 })
+    }
+    // Freelance/prestación: los permisos solo se habilitan si el CEO habilitó su registro de horario.
+    const esLaboral = !esVinculacionPorFactura((emp?.tipo_vinculacion as never) ?? "empleado")
+    if (!esLaboral && emp?.horario_habilitado !== true) {
+      return NextResponse.json({ error: "Los permisos y ausencias se habilitan solo si tu contrato tiene activado el registro de horario. Contacta a RRHH." }, { status: 403 })
+    }
+    // Freelance/prestación: SOLO permiso no remunerado (esas horas se descuentan de la facturación).
+    if (!esLaboral && b.tipo !== "permiso_no_remunerado") {
+      return NextResponse.json({ error: "Tu vínculo (prestación de servicios/freelance) solo aplica para permiso no remunerado. Esas horas se descuentan de tu facturación del mes." }, { status: 400 })
     }
 
     if (b.tipo === "adelanto_vacaciones") {

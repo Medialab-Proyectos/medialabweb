@@ -21,15 +21,18 @@ export async function GET() {
     } else {
       ids = (await listReportes(s.sub)).map((e) => e.id)
     }
-    if (ids.length === 0) return NextResponse.json({ solicitudes: [], horasExtras: [], cesantias: [], horarios: [] })
-    const solicitudes = await listSolicitudesDeEmpleados(ids, false)
+    // El horario del propio CEO también debe aprobarlo el CEO (no tiene un superior). Se incluye
+    // en SU cola de horarios (los demás módulos siguen excluyendo lo propio).
+    const idsHorario = s.rol === "ceo" ? [...ids, s.sub] : ids
+    if (ids.length === 0 && idsHorario.length === 0) return NextResponse.json({ solicitudes: [], horasExtras: [], cesantias: [], horarios: [] })
+    const solicitudes = ids.length ? await listSolicitudesDeEmpleados(ids, false) : []
     // Módulos opcionales (fases 40/41): si falta la migración, no rompemos el resto.
     let horasExtras: Awaited<ReturnType<typeof listHorasExtrasDeEmpleados>> = []
-    try { horasExtras = await listHorasExtrasDeEmpleados(ids, false) } catch { horasExtras = [] }
+    try { horasExtras = ids.length ? await listHorasExtrasDeEmpleados(ids, false) : [] } catch { horasExtras = [] }
     let cesantias: Awaited<ReturnType<typeof listSolicitudesCesantiasDeEmpleados>> = []
-    try { cesantias = await listSolicitudesCesantiasDeEmpleados(ids, false) } catch { cesantias = [] }
+    try { cesantias = ids.length ? await listSolicitudesCesantiasDeEmpleados(ids, false) : [] } catch { cesantias = [] }
     let horarios: Awaited<ReturnType<typeof listHorariosDeEmpleados>> = []
-    try { horarios = await listHorariosDeEmpleados(ids, false) } catch { horarios = [] }
+    try { horarios = await listHorariosDeEmpleados(idsHorario, false) } catch { horarios = [] }
     return NextResponse.json({ solicitudes, horasExtras, cesantias, horarios })
   } catch (e) {
     const msg = e instanceof Error ? e.message : "Error"

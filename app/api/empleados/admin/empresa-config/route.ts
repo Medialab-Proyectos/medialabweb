@@ -14,7 +14,8 @@ async function guardCEO() {
 }
 
 function faltaTabla(e: unknown) {
-  const msg = e instanceof Error ? e.message : "Error"
+  // Los errores de Supabase son objetos planos con .message (no instancias de Error).
+  const msg = e instanceof Error ? e.message : String((e as { message?: string })?.message ?? "Error")
   const falta = /schema cache|does not exist|relation|column|PGRST205/i.test(msg)
   return { msg: falta ? "Falta correr schema-fase19-datos-personales.sql en Supabase." : msg, status: falta ? 409 : 500 }
 }
@@ -35,6 +36,7 @@ const schema = z.object({
   caja_compensacion: z.string().max(120).nullable().optional(),
   arl: z.string().max(120).nullable().optional(),
   fecha_fundacion: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullable().optional(),
+  encuesta_habilitada: z.boolean().optional(),
 })
 
 export async function POST(req: Request) {
@@ -49,7 +51,13 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: msg }, { status: 400 })
   }
   try {
-    return NextResponse.json({ config: await setConfigEmpresa({ caja_compensacion: b.caja_compensacion ?? null, arl: b.arl ?? null, fecha_fundacion: b.fecha_fundacion ?? null }) })
+    // Solo actualiza los campos enviados (para no pisar otros con nulls al togglear la encuesta).
+    const cambios: Record<string, unknown> = {}
+    if ("caja_compensacion" in b) cambios.caja_compensacion = b.caja_compensacion ?? null
+    if ("arl" in b) cambios.arl = b.arl ?? null
+    if ("fecha_fundacion" in b) cambios.fecha_fundacion = b.fecha_fundacion ?? null
+    if (b.encuesta_habilitada !== undefined) cambios.encuesta_habilitada = b.encuesta_habilitada
+    return NextResponse.json({ config: await setConfigEmpresa(cambios) })
   } catch (e) {
     const f = faltaTabla(e)
     return NextResponse.json({ error: f.msg }, { status: f.status })

@@ -26,7 +26,9 @@ const OTROS_SUGERIDOS = ["Auxilio conectividad", "Auxilio de rodamiento", "Bonif
 const inputCls = "w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm text-[#fff] outline-none transition focus:border-[var(--cyan)]/60"
 const lblCls = "text-[11px] font-semibold uppercase tracking-wide text-[#fff]/50"
 
-export function ContratosAdminClient({ empleados, config }: { empleados: Empleado[]; config: { caja_compensacion: string | null; arl: string | null } }) {
+export function ContratosAdminClient({ empleados: empleadosProp, config }: { empleados: Empleado[]; config: { caja_compensacion: string | null; arl: string | null } }) {
+  // Copia local para reflejar cambios (p.ej. horario_habilitado) sin recargar la página.
+  const [empleados, setEmpleados] = useState<Empleado[]>(empleadosProp)
   const [empleadoId, setEmpleadoId] = useState("")
   const [contratos, setContratos] = useState<Contrato[]>([])
   const [cargando, setCargando] = useState(false)
@@ -46,6 +48,8 @@ export function ContratosAdminClient({ empleados, config }: { empleados: Emplead
   const [flTarifa, setFlTarifa] = useState(0)
   const [flMoneda, setFlMoneda] = useState<Moneda>("COP")
   const [flMeses, setFlMeses] = useState(1)
+  const [flMaxHoras, setFlMaxHoras] = useState(0)      // máximo de horas al mes (freelance)
+  const [horarioHab, setHorarioHab] = useState(false)  // el CEO habilita el horario del freelance/prestación
   const [tipoContrato, setTipoContrato] = useState("")
   const [jornada, setJornada] = useState("")
   const [cargo, setCargo] = useState("")
@@ -132,6 +136,8 @@ export function ContratosAdminClient({ empleados, config }: { empleados: Emplead
     setFlTarifa(from ? Number(from.freelance_tarifa) || 0 : Number(emp?.freelance_tarifa) || 0)
     setFlMoneda(from?.freelance_moneda ?? emp?.freelance_moneda ?? "COP")
     setFlMeses(from?.freelance_meses ?? 1)
+    setFlMaxHoras(Number(from?.freelance_max_horas_mes) || 0)
+    setHorarioHab(emp?.horario_habilitado === true)
     setTipoContrato(from?.tipo_contrato ?? "")
     setJornada(from?.jornada ?? "")
     setCargo(from?.cargo ?? emp?.cargo ?? "")
@@ -167,6 +173,8 @@ export function ContratosAdminClient({ empleados, config }: { empleados: Emplead
     setFlTarifa(Number(c.freelance_tarifa) || 0)
     setFlMoneda(c.freelance_moneda ?? "COP")
     setFlMeses(c.freelance_meses ?? 1)
+    setFlMaxHoras(Number(c.freelance_max_horas_mes) || 0)
+    setHorarioHab(empSel?.horario_habilitado === true) // el horario es del empleado, no de la versión
     setTipoContrato(c.tipo_contrato ?? "")
     setJornada(c.jornada ?? "")
     setCargo(c.cargo ?? "")
@@ -228,6 +236,8 @@ export function ContratosAdminClient({ empleados, config }: { empleados: Emplead
     freelance_tarifa: porFactura ? (Number(flTarifa) || 0) : null,
     freelance_moneda: porFactura ? flMoneda : null,
     freelance_meses: porFactura && flModo === "por_proyecto" ? (Number(flMeses) || 1) : null,
+    freelance_max_horas_mes: porFactura ? (Number(flMaxHoras) || null) : null,
+    horario_habilitado: porFactura ? horarioHab : true, // laboral siempre tiene horario
     tipo_contrato: porFactura ? null : (tipoContrato || null),
     jornada: porFactura ? null : (jornada || null),
     cargo: cargo || null,
@@ -269,6 +279,9 @@ export function ContratosAdminClient({ empleados, config }: { empleados: Emplead
         if (!res.ok) throw new Error(data.error)
         if (archivo) await subirArchivoA(editId)
         setArchivo(null); if (archivoRef.current) archivoRef.current.value = ""
+        // Refleja el horario habilitado del empleado en el estado local (el prop no se recarga).
+        const hh = porFactura ? horarioHab : true
+        setEmpleados((prev) => prev.map((e) => (e.id === empleadoId ? { ...e, horario_habilitado: hh } : e)))
         setEditId(null)
         setMsg("✓ Contrato actualizado.")
         await cargar(empleadoId)
@@ -301,6 +314,9 @@ export function ContratosAdminClient({ empleados, config }: { empleados: Emplead
       if (firmaMetodo === "subir" && archivo && data.contrato?.id) await subirArchivoA(data.contrato.id)
       setArchivo(null)
       if (archivoRef.current) archivoRef.current.value = ""
+      // Refleja el horario habilitado del empleado en el estado local (el prop no se recarga).
+      const hhNuevo = porFactura ? horarioHab : true
+      setEmpleados((prev) => prev.map((e) => (e.id === empleadoId ? { ...e, horario_habilitado: hhNuevo } : e)))
       setMsg(
         firmaMetodo === "subir" && archivo
           ? "✓ Contrato registrado y firmado (activo)."
@@ -604,14 +620,13 @@ export function ContratosAdminClient({ empleados, config }: { empleados: Emplead
                 /* Pago acordado del freelance / prestación de servicios */
                 <div className="mt-4 rounded-lg border border-white/10 bg-white/[0.03] p-3">
                   <p className="mb-1 text-[11px] font-semibold uppercase tracking-wide text-[var(--cyan)]">Pago acordado</p>
-                  <p className="mb-3 text-[11px] text-[#fff]/45">El freelance lo verá en su portal (solo lectura). Si es por mes o valor fijo, se le precarga al crear su factura; por hora, factura las horas × tarifa.</p>
+                  <p className="mb-3 text-[11px] text-[#fff]/45">El freelance lo verá en su portal (solo lectura). Por mes o por proyecto se le precarga al crear su factura; por hora, factura las horas × tarifa.</p>
                   <div className="grid gap-3 sm:grid-cols-3">
                     <Campo label="Modo">
                       <select value={flModo} onChange={(e) => setFlModo(e.target.value as "" | FreelanceModo)} className={inputCls}>
                         <option value="">— Elige —</option>
-                        <option value="por_hora">{FREELANCE_MODO_LABEL.por_hora}</option>
+                        {vinculacion !== "prestacion_servicios" && <option value="por_hora">{FREELANCE_MODO_LABEL.por_hora}</option>}
                         <option value="por_mes">{FREELANCE_MODO_LABEL.por_mes}</option>
-                        <option value="fijo">{FREELANCE_MODO_LABEL.fijo}</option>
                         <option value="por_proyecto">{FREELANCE_MODO_LABEL.por_proyecto}</option>
                       </select>
                     </Campo>
@@ -637,6 +652,16 @@ export function ContratosAdminClient({ empleados, config }: { empleados: Emplead
                       </p>
                     </div>
                   )}
+                  <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                    <Campo label="Máximo de horas al mes (opcional)">
+                      <input type="number" min={0} max={744} value={flMaxHoras || ""} onChange={(e) => setFlMaxHoras(Number(e.target.value) || 0)} className={inputCls} placeholder="Ej: 80" />
+                    </Campo>
+                    <label className="flex items-center gap-2 self-end pb-2 text-sm text-[#fff]/75">
+                      <input type="checkbox" checked={horarioHab} onChange={(e) => setHorarioHab(e.target.checked)} className="h-4 w-4 accent-[var(--cyan)]" />
+                      Habilitar registro de horario
+                    </label>
+                  </div>
+                  <p className="mt-1 text-[11px] text-[#fff]/45">Si habilitas el horario, el freelance/prestación podrá registrarlo en su portal (referencial, sin tope de ley) y aparecerá en «Actividad ahora».</p>
                 </div>
               ) : (
                 <>

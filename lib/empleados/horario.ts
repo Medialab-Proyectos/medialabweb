@@ -39,11 +39,14 @@ export function hhmmAMin(s: string): number {
   return Math.min(23, Number(m[1])) * 60 + Math.min(59, Number(m[2]))
 }
 
+/** Jornada estándar de MediaLab: 42 h/semana (ya alineada con el destino de la Ley 2101). */
+export const JORNADA_MEDIALAB = 42
+
 /**
- * Tope semanal de la jornada ordinaria según Ley 2101 de 2021 (reducción gradual).
+ * Tope semanal LEGAL de la jornada ordinaria según Ley 2101 de 2021 (reducción gradual).
  * Cambia solo con la fecha: 47h (2023) → 46h (2024) → 44h (2025) → 42h (16-jul-2026).
  */
-export function capSemanalHoras(fechaISO?: string): number {
+export function capLegalSemanal(fechaISO?: string): number {
   const hoy = fechaISO ? `${fechaISO}` : new Date().toLocaleDateString("en-CA", { timeZone: "America/Bogota" })
   if (hoy >= "2026-07-16") return 42
   if (hoy >= "2025-07-16") return 44
@@ -52,10 +55,21 @@ export function capSemanalHoras(fechaISO?: string): number {
   return 48
 }
 
+/**
+ * Tope que se valida: el MENOR entre el legal vigente y la jornada de MediaLab (42 h).
+ * Así se exige 42 h desde ya y nunca se supera el máximo de ley.
+ */
+export function capSemanalHoras(fechaISO?: string): number {
+  return Math.min(capLegalSemanal(fechaISO), JORNADA_MEDIALAB)
+}
+
 /** Texto de la norma para mostrar al pie del formulario. */
 export function normaJornada(fechaISO?: string): string {
-  const cap = capSemanalHoras(fechaISO)
-  return `Ley 2101 de 2021: la jornada ordinaria máxima es de ${cap} horas semanales${cap > 42 ? " (baja a 42 h desde el 16 de julio de 2026)" : ""}. El tiempo de almuerzo no cuenta dentro de la jornada.`
+  const legal = capLegalSemanal(fechaISO)
+  const nota = legal > JORNADA_MEDIALAB
+    ? ` El máximo legal hoy es de ${legal} h y baja a 42 h el 16 de julio de 2026.`
+    : ""
+  return `En MediaLab la jornada es de ${JORNADA_MEDIALAB} horas semanales (Ley 2101 de 2021).${nota} El tiempo de almuerzo no cuenta dentro de la jornada.`
 }
 
 /** Minutos trabajados en un día = (salida − entrada) − almuerzo. */
@@ -72,9 +86,14 @@ export function horasSemana(h: Horario): number {
   return Math.round((minutosSemana(h) / 60) * 100) / 100
 }
 
-/** Valida el horario contra la norma (semanal por fecha + máximo diario). */
-export function validarHorario(h: Horario, fechaISO?: string): { ok: boolean; error?: string; horasSemana: number; cap: number } {
-  const cap = capSemanalHoras(fechaISO)
+/**
+ * Valida el horario. Siempre revisa la coherencia (salida > entrada, almuerzo dentro de la
+ * jornada). Con `conNorma` (empleados laborales) además exige el máximo diario y el tope
+ * semanal de ley; para freelance/prestación (`conNorma:false`) el horario es referencial.
+ */
+export function validarHorario(h: Horario, opts?: { conNorma?: boolean; fechaISO?: string }): { ok: boolean; error?: string; horasSemana: number; cap: number } {
+  const conNorma = opts?.conNorma ?? true
+  const cap = conNorma ? capSemanalHoras(opts?.fechaISO) : Infinity
   for (const dia of DIAS_SEMANA) {
     const d = h[dia]
     if (!d || !d.activo) continue
@@ -89,15 +108,52 @@ export function validarHorario(h: Horario, fechaISO?: string): { ok: boolean; er
         return { ok: false, error: `${DIA_LABEL[dia]}: el almuerzo debe quedar dentro de la jornada (entrada–salida).`, horasSemana: horasSemana(h), cap }
       }
     }
-    if (minutosDia(d) > MAX_DIARIO_HORAS * 60) {
+    if (conNorma && minutosDia(d) > MAX_DIARIO_HORAS * 60) {
       return { ok: false, error: `${DIA_LABEL[dia]}: ${(minutosDia(d) / 60).toFixed(1)} h excede el máximo diario de ${MAX_DIARIO_HORAS} h.`, horasSemana: horasSemana(h), cap }
     }
   }
   const hs = horasSemana(h)
-  if (hs > cap) {
-    return { ok: false, error: `La jornada semanal (${hs.toFixed(1)} h) supera el máximo legal de ${cap} h (Ley 2101 de 2021). El almuerzo no cuenta.`, horasSemana: hs, cap }
+  if (conNorma && hs > cap) {
+    return { ok: false, error: `La jornada semanal (${hs.toFixed(1)} h) supera el máximo de ${cap} h (Ley 2101 de 2021). El almuerzo no cuenta.`, horasSemana: hs, cap }
   }
   return { ok: true, horasSemana: hs, cap }
+}
+
+// ─── Horario alternado quincenal (Semana A / Semana B) ──────────────────────
+// Beneficio: algunos empleados rotan su horario cada semana. Se guardan 2 horarios;
+// el registrado es el de ESA semana (A) y desde ahí se turna solo (A, B, A, B…).
+
+/** Lunes (ISO) de la semana que contiene la fecha dada. */
+export function lunesISO(iso: string): string {
+  const d = new Date(`${iso}T12:00:00Z`)
+  const dow = d.getUTCDay() // 0=dom … 6=sáb
+  d.setUTCDate(d.getUTCDate() + (dow === 0 ? -6 : 1 - dow))
+  return d.toISOString().slice(0, 10)
+}
+
+/** Nº de semanas completas entre los lunes de dos fechas (puede ser negativo). */
+export function semanasEntre(anclaISO: string, hoyISO: string): number {
+  const a = Date.parse(`${lunesISO(anclaISO)}T00:00:00Z`)
+  const b = Date.parse(`${lunesISO(hoyISO)}T00:00:00Z`)
+  return Math.round((b - a) / (7 * 86_400_000))
+}
+
+/** Qué semana rige hoy respecto a la de registro (ancla): par → A, impar → B. */
+export function semanaActual(anclaISO: string, hoyISO: string): "A" | "B" {
+  return (((semanasEntre(anclaISO, hoyISO) % 2) + 2) % 2) === 0 ? "A" : "B"
+}
+
+/** Horario que rige esta semana (resuelve la alternancia). */
+export function horarioVigenteSemana(
+  a: Horario,
+  b: Horario | null,
+  alterna: boolean,
+  anclaISO: string,
+  hoyISO: string,
+): { horario: Horario; semana: "A" | "B" } {
+  if (!alterna || !b) return { horario: a, semana: "A" }
+  const s = semanaActual(anclaISO, hoyISO)
+  return { horario: s === "A" ? a : b, semana: s }
 }
 
 // ─── Estado actual (¿quién está activo ahora?) ──────────────────────────────

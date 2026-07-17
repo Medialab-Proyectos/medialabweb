@@ -81,6 +81,7 @@ const crearSchema = z.object({
   freelance_modo: z.enum(["por_hora", "por_mes", "fijo"]).nullable().optional(),
   freelance_tarifa: z.number().min(0).nullable().optional(),
   freelance_moneda: z.enum(["COP", "USD"]).nullable().optional(),
+  horario_habilitado: z.boolean().optional(),
 })
 
 export async function POST(req: Request) {
@@ -157,6 +158,7 @@ const editarSchema = z.object({
   freelance_modo: z.enum(["por_hora", "por_mes", "fijo"]).nullable().optional(),
   freelance_tarifa: z.number().min(0).nullable().optional(),
   freelance_moneda: z.enum(["COP", "USD"]).nullable().optional(),
+  horario_habilitado: z.boolean().optional(),
 })
 
 export async function PATCH(req: Request) {
@@ -199,15 +201,15 @@ export async function PATCH(req: Request) {
     return NextResponse.json({ empleado })
   }
 
-  // Reactivar (desde terminado o suspendido)
+  // Reactivar (fin de suspensión): vuelve a activo y limpia los datos de suspensión.
   if (body.accion === "reactivar") {
-    const empleado = await actualizarEmpleado(body.id, { estado: "activo", fecha_egreso: null })
+    const empleado = await actualizarEmpleado(body.id, { estado: "activo", fecha_egreso: null, suspension_motivo: null, suspension_hasta: null, suspension_carta_path: null })
     return NextResponse.json({ empleado })
   }
 
   // Actualizar datos generales
   const cambios: Record<string, unknown> = {}
-  for (const k of ["nombre", "email", "email_empresarial", "cargo", "caja_compensacion", "telefono", "direccion", "fecha_nacimiento", "eps", "fondo_cesantias", "fondo_pension", "rol", "tipo_vinculacion", "tipo_contrato", "lider_id", "fecha_ingreso", "fecha_egreso", "fecha_fin_probable", "particularidades", "freelance_modo", "freelance_tarifa", "freelance_moneda"] as const) {
+  for (const k of ["nombre", "email", "email_empresarial", "cargo", "caja_compensacion", "telefono", "direccion", "fecha_nacimiento", "eps", "fondo_cesantias", "fondo_pension", "rol", "tipo_vinculacion", "tipo_contrato", "lider_id", "fecha_ingreso", "fecha_egreso", "fecha_fin_probable", "particularidades", "freelance_modo", "freelance_tarifa", "freelance_moneda", "horario_habilitado"] as const) {
     if (body[k] !== undefined) cambios[k] = body[k] === "" ? null : body[k]
   }
   const ingresoEf = (body.fecha_ingreso !== undefined ? body.fecha_ingreso : actual.fecha_ingreso) as string | null

@@ -13,7 +13,8 @@ export async function GET() {
   if (s.rol !== "ceo") return NextResponse.json({ error: "Solo el CEO." }, { status: 403 })
   try {
     const panel = await getPanelActividad()
-    return NextResponse.json(panel)
+    // Estado en tiempo real: nunca se cachea (si no, el navegador muestra un estado viejo).
+    return NextResponse.json(panel, { headers: { "Cache-Control": "no-store, max-age=0" } })
   } catch (e) {
     const msg = e instanceof Error ? e.message : "Error"
     return NextResponse.json({ error: msg, empleados: [], resumen: {}, ahora: "" }, { status: 500 })

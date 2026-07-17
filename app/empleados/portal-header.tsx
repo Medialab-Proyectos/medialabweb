@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { LogOut, ShieldCheck } from "lucide-react"
+import { LogOut, ShieldCheck, Contact, LayoutDashboard } from "lucide-react"
 import type { Rol } from "@/lib/empleados/types"
 import { ROL_LABEL } from "@/lib/empleados/types"
 
@@ -20,6 +20,14 @@ export function PortalHeader({ nombre, rol }: { nombre: string; rol: Rol }) {
           <span className="hidden text-sm font-semibold text-[#fff]/80 sm:inline">Portal de Empleados</span>
         </Link>
         <div className="flex items-center gap-3">
+          {rol === "ceo" && (
+            <Link href="/empleados/inicio" title="Mi dashboard" aria-label="Mi dashboard" className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/10 text-[#fff]/70 transition hover:bg-white/5 hover:text-[#fff]">
+              <LayoutDashboard size={15} />
+            </Link>
+          )}
+          <Link href="/empleados/directorio" title="Directorio de contactos" aria-label="Directorio de contactos" className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/10 text-[#fff]/70 transition hover:bg-white/5 hover:text-[#fff]">
+            <Contact size={15} />
+          </Link>
           {rol === "ceo" && (
             <Link
               href="/empleados/admin"

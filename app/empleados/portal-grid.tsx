@@ -23,10 +23,10 @@ const secciones: Seccion[] = [
   { key: "convenio-freelance", icon: FileSignature, titulo: "Mi contrato", desc: "Consulta tu pago acordado y descarga tu convenio de freelance.", estado: "activo", color: "var(--cyan)", href: "/empleados/contrato", soloFreelance: true },
   { key: "desprendibles", icon: FileText, titulo: "Desprendibles", desc: "Desprendibles de pago, prima de servicios y cesantías en un solo lugar.", estado: "activo", color: "var(--cyan)", href: "/empleados/pagos", laboral: true },
   { key: "evaluaciones", icon: Target, titulo: "Mis evaluaciones", desc: "Consulta tus evaluaciones de desempeño trimestrales.", estado: "activo", color: "#8b5cf6", href: "/empleados/evaluaciones", laboral: true },
-  { key: "certificado", icon: BadgeCheck, titulo: "Certificado laboral", desc: "Genera tu certificación laboral con tus fechas y cargo.", estado: "activo", color: "var(--magenta)", href: "/empleados/certificado", laboral: true },
+  { key: "certificado", icon: BadgeCheck, titulo: "Certificado laboral", desc: "Genera tu certificación con tus fechas y cargo (los freelance, sin valor salarial).", estado: "activo", color: "var(--magenta)", href: "/empleados/certificado" },
   { key: "ingresos-retenciones", icon: FileText, titulo: "Ingresos y retenciones", desc: "Descarga tu certificado de ingresos y retenciones (DIAN) por año.", estado: "activo", color: "#8b5cf6", href: "/empleados/ingresos-retenciones", laboral: true },
   { key: "encuesta", icon: SmilePlus, titulo: "Encuesta de satisfacción", desc: "Cuéntanos cómo te sientes en la empresa. Tu opinión ayuda a mejorar.", estado: "activo", color: "#00BFA6", href: "/empleados/satisfaccion" },
-  { key: "vacaciones", icon: Plane, titulo: "Vacaciones y ausencias", desc: "Solicita vacaciones, permisos o licencias y consulta tu saldo.", estado: "activo", color: "#00BFA6", href: "/empleados/ausencias", laboral: true },
+  { key: "vacaciones", icon: Plane, titulo: "Permisos y ausencias", desc: "Solicita permisos, licencias o vacaciones (según tu vínculo).", estado: "activo", color: "#00BFA6", href: "/empleados/ausencias" },
   { key: "horas-extras", icon: Timer, titulo: "Horas extra", desc: "Reporta las horas extra que trabajaste; tu líder las aprueba.", estado: "activo", color: "#00BFA6", href: "/empleados/horas-extras", laboral: true },
   { key: "horario", icon: CalendarClock, titulo: "Mi horario", desc: "Registra tu horario de lunes a viernes; tu líder lo aprueba.", estado: "activo", color: "#00BFA6", href: "/empleados/horario", laboral: true },
   { key: "cursos", icon: GraduationCap, titulo: "Cursos", desc: "Formaciones y rutas de estudio asignadas.", estado: "deshabilitado", color: "#8b5cf6" },
@@ -35,13 +35,18 @@ const secciones: Seccion[] = [
 ]
 
 /** Grilla del portal personal del colaborador (accesos a su contrato, pagos, beneficios…). */
-export function PortalGrid({ rol, tipoVinculacion }: { rol: Rol; tipoVinculacion: TipoVinculacion }) {
+export function PortalGrid({ rol, tipoVinculacion, encuestaHabilitada = false, horarioHabilitado = false }: { rol: Rol; tipoVinculacion: TipoVinculacion; encuestaHabilitada?: boolean; horarioHabilitado?: boolean }) {
   const esFreelance = esVinculacionPorFactura(tipoVinculacion)
   const seccionesVisibles = secciones.filter((s) => {
+    // Horario y Permisos/ausencias: laborales siempre; freelance/prestación solo si el CEO
+    // habilitó el registro de horario en su contrato.
+    if (s.key === "horario" || s.key === "vacaciones") return esFreelance ? horarioHabilitado : true
     if (esFreelance ? s.laboral : s.soloFreelance) return false
     // Los módulos deshabilitados / "pronto" solo los ve el CEO; el empleado solo ve los ACTIVOS
     // (los demás se dejan ver únicamente cuando ya tienen contenido y se marcan activos).
     if (rol !== "ceo" && s.estado !== "activo") return false
+    // La encuesta de satisfacción solo aparece si el CEO la habilitó (o si eres el CEO).
+    if (s.key === "encuesta" && rol !== "ceo" && !encuestaHabilitada) return false
     return true
   })
 
