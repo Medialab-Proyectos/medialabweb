@@ -50,14 +50,20 @@ export type Empleado = {
   actualizado_en: string
 }
 
-export type FreelanceModo = "por_hora" | "por_mes" | "fijo" | "por_proyecto"
+// "aprendizaje" = vínculo sin remuneración (el valor siempre es 0): la persona entra solo a
+// aprender. Registra horario y máximo de horas como cualquier otro, pero no genera pago.
+export type FreelanceModo = "por_hora" | "por_mes" | "fijo" | "por_proyecto" | "aprendizaje"
 
 export const FREELANCE_MODO_LABEL: Record<FreelanceModo, string> = {
   por_hora: "Por hora",
   por_mes: "Por mes",
   fijo: "Valor fijo",
   por_proyecto: "Por proyecto",
+  aprendizaje: "Por aprendizaje (sin valor)",
 }
+
+/** ¿El modo es sin remuneración? (aprendizaje: tarifa siempre 0, no se factura) */
+export const esModoSinValor = (m: FreelanceModo | null | undefined) => m === "aprendizaje"
 
 /** Datos que viajan (firmados) en la cookie de sesión. */
 export type SessionPayload = {

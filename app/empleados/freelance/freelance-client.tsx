@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
-import { ArrowLeft, Loader2, Save, Send, Upload, Paperclip, FileText, CheckCircle2, Clock, XCircle, Landmark, Download, Wallet } from "lucide-react"
+import { ArrowLeft, Loader2, Save, Send, Upload, Paperclip, FileText, CheckCircle2, Clock, XCircle, Landmark, Download, Wallet, Info } from "lucide-react"
 import {
   type FacturaFreelance, type PerfilFreelance, type Moneda,
   ESTADO_FACTURA_LABEL, MONEDAS, formatMoneda,
@@ -288,6 +288,11 @@ export function FreelanceClient({ nombre, esPrestacion = false }: { nombre: stri
               <input type="checkbox" checked={firma} onChange={(e) => setFirma(e.target.checked)} className="mt-0.5 h-4 w-4 accent-[var(--cyan)]" />
               <span>Firmo digitalmente esta factura como <b className="text-[#fff]">{nombre}</b> y confirmo que los datos son correctos.</span>
             </label>
+
+            <p className="mt-3 flex items-start gap-2 rounded-lg border border-[var(--cyan)]/25 bg-[var(--cyan)]/[0.06] px-3 py-2.5 text-xs leading-relaxed text-[#fff]/75">
+              <Info size={14} className="mt-0.5 shrink-0 text-[var(--cyan)]" />
+              Recuerda: los pagos por <b className="text-[#fff]">prestación de servicios y freelance</b> se realizan dentro de los <b className="text-[#fff]">cinco (5) primeros días de cada mes</b>.
+            </p>
 
             <button type="submit" disabled={enviando} className="mt-4 inline-flex items-center gap-2 rounded-lg bg-[var(--cyan)] px-5 py-2.5 text-sm font-semibold text-[#04191b] transition hover:brightness-110 disabled:opacity-60">
               {enviando ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} />} Enviar factura firmada

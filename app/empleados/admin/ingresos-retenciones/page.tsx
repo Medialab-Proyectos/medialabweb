@@ -2,7 +2,6 @@ import { requireCEO } from "@/lib/empleados/auth"
 import { getEmpleadoById, listEmpleados } from "@/lib/empleados/queries"
 import { esVinculacionPorFactura } from "@/lib/empleados/types"
 import { PortalHeader } from "../../portal-header"
-import { ModuleNav } from "../module-nav"
 import { IngresosRetencionesAdminClient } from "./ingresos-retenciones-client"
 
 export const dynamic = "force-dynamic"
@@ -16,8 +15,7 @@ export default async function IngresosRetencionesAdminPage() {
   return (
     <>
       <PortalHeader nombre={ceo?.nombre ?? sesion.nombre} rol="ceo" />
-      <main className="mx-auto max-w-3xl px-4 py-8 sm:px-6 sm:py-10">
-        <ModuleNav active="empleados" />
+      <main className="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-10">
         <IngresosRetencionesAdminClient empleados={laborales} />
       </main>
     </>

@@ -3,7 +3,7 @@ import { z } from "zod"
 import { getSession } from "@/lib/empleados/auth"
 import { portalConfigurado } from "@/lib/empleados/db"
 import { getEmpleadoById } from "@/lib/empleados/queries"
-import { esVinculacionPorFactura } from "@/lib/empleados/types"
+import { esVinculacionPorFactura, esModoSinValor } from "@/lib/empleados/types"
 import {
   getPerfilFreelance, upsertPerfilFreelance, listFacturasEmpleado, crearFactura,
 } from "@/lib/empleados/freelance-queries"
@@ -105,6 +105,11 @@ export async function POST(req: Request) {
         notas: b.notas ?? null,
       })
       return NextResponse.json({ perfil })
+    }
+
+    // Vínculo por aprendizaje: sin remuneración, no genera facturas.
+    if (esModoSinValor(g.empleado!.freelance_modo)) {
+      return NextResponse.json({ error: "Tu vínculo es por aprendizaje (sin remuneración): no genera facturas." }, { status: 403 })
     }
 
     // Factura: se firma dentro de la plataforma al enviarla.

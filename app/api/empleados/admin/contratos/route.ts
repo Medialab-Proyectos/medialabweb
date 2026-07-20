@@ -29,7 +29,7 @@ const schema = z.object({
   salario_basico: z.number().min(0).default(0),
   auxilio_transporte: z.number().min(0).default(0),
   otros_devengos: z.array(linea).default([]),
-  freelance_modo: z.enum(["por_hora", "por_mes", "fijo", "por_proyecto"]).nullable().optional(),
+  freelance_modo: z.enum(["por_hora", "por_mes", "fijo", "por_proyecto", "aprendizaje"]).nullable().optional(),
   freelance_tarifa: z.number().min(0).nullable().optional(),
   freelance_moneda: z.enum(["COP", "USD"]).nullable().optional(),
   freelance_meses: z.number().int().min(1).max(120).nullable().optional(),
@@ -97,7 +97,8 @@ export async function POST(req: Request) {
       auxilio_transporte: porFactura ? 0 : b.auxilio_transporte,
       otros_devengos: porFactura ? [] : b.otros_devengos,
       freelance_modo: porFactura ? b.freelance_modo ?? null : null,
-      freelance_tarifa: porFactura ? b.freelance_tarifa ?? null : null,
+      // "Por aprendizaje" es sin remuneración: la tarifa siempre queda en 0.
+      freelance_tarifa: porFactura ? (b.freelance_modo === "aprendizaje" ? 0 : b.freelance_tarifa ?? null) : null,
       freelance_moneda: porFactura ? b.freelance_moneda ?? null : null,
       freelance_meses: porFactura && b.freelance_modo === "por_proyecto" ? b.freelance_meses ?? null : null,
       freelance_max_horas_mes: porFactura ? (b.freelance_max_horas_mes ?? null) : null,
@@ -201,7 +202,8 @@ export async function PATCH(req: Request) {
       auxilio_transporte: porFactura ? 0 : b.auxilio_transporte ?? previo.auxilio_transporte,
       otros_devengos: porFactura ? [] : b.otros_devengos ?? previo.otros_devengos,
       freelance_modo: porFactura ? modo : null,
-      freelance_tarifa: porFactura ? b.freelance_tarifa ?? previo.freelance_tarifa : null,
+      // "Por aprendizaje" es sin remuneración: la tarifa siempre queda en 0.
+      freelance_tarifa: porFactura ? (modo === "aprendizaje" ? 0 : b.freelance_tarifa ?? previo.freelance_tarifa) : null,
       freelance_moneda: porFactura ? b.freelance_moneda ?? previo.freelance_moneda : null,
       freelance_meses: porFactura && modo === "por_proyecto" ? b.freelance_meses ?? previo.freelance_meses : null,
       ...(b.freelance_max_horas_mes !== undefined ? { freelance_max_horas_mes: porFactura ? b.freelance_max_horas_mes : null } : {}),

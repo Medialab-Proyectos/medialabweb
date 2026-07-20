@@ -14,7 +14,7 @@ export default async function SatisfaccionPage() {
   return (
     <>
       <PortalHeader nombre={empleado.nombre} rol={empleado.rol} />
-      <main className="mx-auto max-w-2xl px-4 py-8 sm:px-6 sm:py-10">
+      <main className="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-10">
         <SatisfaccionClient nombre={empleado.nombre} />
       </main>
     </>

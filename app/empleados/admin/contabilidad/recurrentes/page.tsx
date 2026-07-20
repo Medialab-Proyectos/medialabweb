@@ -13,7 +13,7 @@ export default async function RecurrentesPage() {
   return (
     <>
       <PortalHeader nombre={ceo?.nombre ?? sesion.nombre} rol="ceo" />
-      <main className="mx-auto max-w-3xl px-4 py-8 sm:px-6 sm:py-10">
+      <main className="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-10">
         <RecurrentesClient cuentas={cuentas} />
       </main>
     </>

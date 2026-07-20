@@ -330,9 +330,9 @@ export function PanelCEO() {
 
       {/* ══ SATISFACCIÓN (y el Centro de Operaciones, donde vive la de proyectos) ══ */}
       <Grupo icon={SmilePlus} titulo="Satisfacción">
-        <div className="grid gap-4 sm:grid-cols-2">
-          <Link href="/empleados/admin/satisfaccion" className="block transition hover:brightness-110"><Satisfaccion icon={SmilePlus} titulo="Satisfacción de empleados" valor={d.satisfaccionEmpleados} nota="Toca para ver respuestas o enviar la encuesta." /></Link>
-          <a href="https://uxia-one.vercel.app/" target="_blank" rel="noopener noreferrer" className="block transition hover:brightness-110"><Satisfaccion icon={Building2} titulo="Satisfacción empresarial" valor={d.satisfaccionProyectos} nota="Promedio de satisfacción de los proyectos, en vivo desde el Centro de Operaciones." /></a>
+        <div className="grid items-stretch gap-4 sm:grid-cols-2">
+          <Link href="/empleados/admin/satisfaccion" className="block h-full transition hover:brightness-110"><Satisfaccion icon={SmilePlus} titulo="Satisfacción de empleados" valor={d.satisfaccionEmpleados} nota="Toca para ver respuestas o enviar la encuesta." /></Link>
+          <a href="https://uxia-one.vercel.app/" target="_blank" rel="noopener noreferrer" className="block h-full transition hover:brightness-110"><Satisfaccion icon={Building2} titulo="Satisfacción empresarial" valor={d.satisfaccionProyectos} nota="Promedio de satisfacción de los proyectos, en vivo desde el Centro de Operaciones." /></a>
         </div>
         {/* La satisfacción empresarial y el estado de todos los proyectos viven en el Centro de Operaciones. */}
         <a href="https://uxia-one.vercel.app/" target="_blank" rel="noopener noreferrer" className="flex items-center justify-between gap-3 rounded-2xl border border-[var(--cyan)]/25 bg-[var(--cyan)]/[0.06] px-5 py-4 transition hover:bg-[var(--cyan)]/[0.1]">
@@ -439,18 +439,22 @@ function GaugeSemi({ valor }: { valor: number }) {
   )
 }
 
+/** Tarjeta de satisfacción. Altura uniforme: el gauge ocupa una franja fija y la nota va al pie,
+ *  así ambas tarjetas (empleados / empresarial) miden igual aunque una no tenga datos. */
 function Satisfaccion({ icon: Icon, titulo, valor, nota }: { icon: React.ElementType; titulo: string; valor: number | null; nota: string }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+    <div className="flex h-full flex-col rounded-2xl border border-white/10 bg-white/[0.03] p-4">
       <h3 className="mb-2 flex items-center gap-2 text-sm font-semibold text-[#fff]/80"><Icon size={15} className="text-[#00BFA6]" /> {titulo}</h3>
-      {valor != null ? (
-        <GaugeSemi valor={valor} />
-      ) : (
-        <div className="flex items-center justify-between gap-2 py-3">
-          <span className="text-sm text-[#fff]/40">Sin datos aún</span>
-          <span className="rounded-full bg-white/5 px-2.5 py-1 text-[10px] font-semibold text-[#fff]/50">Próximamente</span>
-        </div>
-      )}
+      <div className="flex min-h-[104px] flex-1 items-center justify-center">
+        {valor != null ? (
+          <GaugeSemi valor={valor} />
+        ) : (
+          <div className="flex flex-col items-center gap-2">
+            <span className="text-sm text-[#fff]/40">Sin datos aún</span>
+            <span className="rounded-full bg-white/5 px-2.5 py-1 text-[10px] font-semibold text-[#fff]/50">Próximamente</span>
+          </div>
+        )}
+      </div>
       <p className="mt-2 text-center text-[11px] text-[#fff]/40">{nota}</p>
     </div>
   )

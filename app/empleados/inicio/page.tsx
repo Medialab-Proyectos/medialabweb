@@ -85,7 +85,7 @@ export default async function InicioPage() {
             <ArrowRight size={18} className="text-[var(--magenta)]" />
           </Link>
         ) : (
-          <PortalGrid rol={empleado.rol} tipoVinculacion={empleado.tipo_vinculacion} encuestaHabilitada={encuestaHabilitada} horarioHabilitado={empleado.horario_habilitado === true} />
+          <PortalGrid rol={empleado.rol} tipoVinculacion={empleado.tipo_vinculacion} encuestaHabilitada={encuestaHabilitada} horarioHabilitado={empleado.horario_habilitado === true} freelanceModo={empleado.freelance_modo} />
         )}
 
         <p className="mt-10 text-center text-xs text-[#fff]/35">

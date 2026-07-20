@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { FileText, FileSignature, BadgeCheck, GraduationCap, Gift, Clock, ArrowRight, Plane, ClipboardCheck, Target, Receipt, Wrench, SmilePlus, Timer, CalendarClock } from "lucide-react"
-import type { Rol, TipoVinculacion } from "@/lib/empleados/types"
-import { esVinculacionPorFactura } from "@/lib/empleados/types"
+import type { Rol, TipoVinculacion, FreelanceModo } from "@/lib/empleados/types"
+import { esVinculacionPorFactura, esModoSinValor } from "@/lib/empleados/types"
 
 type Seccion = {
   key: string
@@ -35,9 +35,12 @@ const secciones: Seccion[] = [
 ]
 
 /** Grilla del portal personal del colaborador (accesos a su contrato, pagos, beneficios…). */
-export function PortalGrid({ rol, tipoVinculacion, encuestaHabilitada = false, horarioHabilitado = false }: { rol: Rol; tipoVinculacion: TipoVinculacion; encuestaHabilitada?: boolean; horarioHabilitado?: boolean }) {
+export function PortalGrid({ rol, tipoVinculacion, encuestaHabilitada = false, horarioHabilitado = false, freelanceModo = null }: { rol: Rol; tipoVinculacion: TipoVinculacion; encuestaHabilitada?: boolean; horarioHabilitado?: boolean; freelanceModo?: FreelanceModo | null }) {
   const esFreelance = esVinculacionPorFactura(tipoVinculacion)
+  const esAprendizaje = esModoSinValor(freelanceModo)
   const seccionesVisibles = secciones.filter((s) => {
+    // Vínculo por aprendizaje: no hay remuneración, así que no factura.
+    if (s.key === "freelance" && esAprendizaje) return false
     // Horario y Permisos/ausencias: laborales siempre; freelance/prestación solo si el CEO
     // habilitó el registro de horario en su contrato.
     if (s.key === "horario" || s.key === "vacaciones") return esFreelance ? horarioHabilitado : true

@@ -23,7 +23,7 @@ export default async function CesantiasEmpleadoPage() {
   return (
     <>
       <PortalHeader nombre={empleado?.nombre ?? sesion.nombre} rol={sesion.rol} />
-      <main className="mx-auto max-w-3xl px-4 py-8 sm:px-6 sm:py-10">
+      <main className="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-10">
         <Link href="/empleados/pagos" className="mb-6 inline-flex items-center gap-1.5 text-sm text-[#fff]/55 hover:text-[#fff]">
           <ArrowLeft size={15} /> Volver a Desprendibles
         </Link>

@@ -222,6 +222,8 @@ export function ContratosAdminClient({ empleados: empleadosProp, config }: { emp
   const totalNuevo = totalMensualContrato({ salario_basico: basico, auxilio_transporte: auxilio, otros_devengos: otros })
 
   const porFactura = esVinculacionPorFactura(vinculacion)
+  // Aprendizaje: vínculo sin remuneración (valor 0, no factura); sí lleva horario y tope de horas.
+  const esAprendizaje = porFactura && flModo === "aprendizaje"
   // La fecha probable de finalización solo aplica a freelance/prestación o a término fijo/obra
   // (un contrato laboral a término indefinido no tiene fecha de fin).
   const mostrarFechaFin = porFactura || /fij|obra|labor/i.test(tipoContrato)
@@ -233,7 +235,7 @@ export function ContratosAdminClient({ empleados: empleadosProp, config }: { emp
     auxilio_transporte: porFactura ? 0 : Number(auxilio) || 0,
     otros_devengos: porFactura ? [] : otros.filter((l) => l.concepto.trim()).map((l) => ({ concepto: l.concepto, valor: Number(l.valor) || 0 })),
     freelance_modo: porFactura ? (flModo || null) : null,
-    freelance_tarifa: porFactura ? (Number(flTarifa) || 0) : null,
+    freelance_tarifa: porFactura ? (esAprendizaje ? 0 : Number(flTarifa) || 0) : null,
     freelance_moneda: porFactura ? flMoneda : null,
     freelance_meses: porFactura && flModo === "por_proyecto" ? (Number(flMeses) || 1) : null,
     freelance_max_horas_mes: porFactura ? (Number(flMaxHoras) || null) : null,
@@ -259,7 +261,7 @@ export function ContratosAdminClient({ empleados: empleadosProp, config }: { emp
 
   async function guardar() {
     if (!empleadoId) return setError("Selecciona un empleado.")
-    if (porFactura && !flModo) return setError("Elige el modo de pago (por hora, por mes, valor fijo o por proyecto).")
+    if (porFactura && !flModo) return setError("Elige el modo de pago (por hora, por mes, por proyecto o por aprendizaje).")
 
     // El motivo del otrosí ES la lista de conceptos ajustados (las píldoras).
     const motivoOtrosi = esVersionOtrosi && ajustes.length
@@ -621,25 +623,35 @@ export function ContratosAdminClient({ empleados: empleadosProp, config }: { emp
                 <div className="mt-4 rounded-lg border border-white/10 bg-white/[0.03] p-3">
                   <p className="mb-1 text-[11px] font-semibold uppercase tracking-wide text-[var(--cyan)]">Pago acordado</p>
                   <p className="mb-3 text-[11px] text-[#fff]/45">El freelance lo verá en su portal (solo lectura). Por mes o por proyecto se le precarga al crear su factura; por hora, factura las horas × tarifa.</p>
-                  <div className="grid gap-3 sm:grid-cols-3">
+                  <div className={`grid gap-3 ${esAprendizaje ? "sm:grid-cols-1" : "sm:grid-cols-3"}`}>
                     <Campo label="Modo">
-                      <select value={flModo} onChange={(e) => setFlModo(e.target.value as "" | FreelanceModo)} className={inputCls}>
+                      <select value={flModo} onChange={(e) => { const m = e.target.value as "" | FreelanceModo; setFlModo(m); if (m === "aprendizaje") setFlTarifa(0) }} className={inputCls}>
                         <option value="">— Elige —</option>
                         {vinculacion !== "prestacion_servicios" && <option value="por_hora">{FREELANCE_MODO_LABEL.por_hora}</option>}
                         <option value="por_mes">{FREELANCE_MODO_LABEL.por_mes}</option>
                         <option value="por_proyecto">{FREELANCE_MODO_LABEL.por_proyecto}</option>
+                        <option value="aprendizaje">{FREELANCE_MODO_LABEL.aprendizaje}</option>
                       </select>
                     </Campo>
-                    <Campo label={flModo === "por_hora" ? "Valor por hora" : flModo === "por_mes" ? "Valor por mes" : flModo === "por_proyecto" ? "Valor total del proyecto" : "Valor"}>
-                      <MoneyInput value={flTarifa} onChange={setFlTarifa} className={inputCls} />
-                    </Campo>
-                    <Campo label="Moneda">
-                      <select value={flMoneda} onChange={(e) => setFlMoneda(e.target.value as Moneda)} className={inputCls}>
-                        <option value="COP">COP</option>
-                        <option value="USD">USD</option>
-                      </select>
-                    </Campo>
+                    {!esAprendizaje && (
+                      <>
+                        <Campo label={flModo === "por_hora" ? "Valor por hora" : flModo === "por_mes" ? "Valor por mes" : flModo === "por_proyecto" ? "Valor total del proyecto" : "Valor"}>
+                          <MoneyInput value={flTarifa} onChange={setFlTarifa} className={inputCls} />
+                        </Campo>
+                        <Campo label="Moneda">
+                          <select value={flMoneda} onChange={(e) => setFlMoneda(e.target.value as Moneda)} className={inputCls}>
+                            <option value="COP">COP</option>
+                            <option value="USD">USD</option>
+                          </select>
+                        </Campo>
+                      </>
+                    )}
                   </div>
+                  {esAprendizaje && (
+                    <p className="mt-2 rounded-lg border border-amber-400/25 bg-amber-400/[0.06] px-3 py-2 text-[11px] leading-relaxed text-amber-200/90">
+                      Vínculo <b>por aprendizaje</b>: sin remuneración (valor $0). No genera facturas ni cuentas de cobro. Sí registra horario y máximo de horas.
+                    </p>
+                  )}
                   {flModo === "por_proyecto" && (
                     <div className="mt-3">
                       <Campo label="Dividir el proyecto en (nº de meses)">

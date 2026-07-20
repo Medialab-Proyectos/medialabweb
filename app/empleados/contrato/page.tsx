@@ -30,12 +30,12 @@ export default async function ContratoEmpleadoPage() {
   const pendientesFirma = contratos.filter((c) => esEnviadoPendiente(c))
   const config = await getConfigEmpresa().catch(() => ({ caja_compensacion: null, arl: null, fecha_fundacion: null }))
   const modoLabelValor = (m: NonNullable<typeof empleado>["freelance_modo"]) =>
-    m === "por_hora" ? "Valor por hora" : m === "por_mes" ? "Valor por mes" : m === "por_proyecto" ? "Valor del proyecto" : "Valor fijo"
+    m === "por_hora" ? "Valor por hora" : m === "por_mes" ? "Valor por mes" : m === "por_proyecto" ? "Valor del proyecto" : m === "aprendizaje" ? "Valor" : "Valor fijo"
 
   return (
     <>
       <PortalHeader nombre={empleado?.nombre ?? sesion.nombre} rol={sesion.rol} />
-      <main className="mx-auto max-w-3xl px-4 py-8 sm:px-6 sm:py-10">
+      <main className="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-10">
         <Link href="/empleados/inicio" className="mb-6 inline-flex items-center gap-1.5 text-sm text-[#fff]/55 hover:text-[#fff]">
           <ArrowLeft size={15} /> Volver
         </Link>
@@ -74,15 +74,22 @@ export default async function ContratoEmpleadoPage() {
               {empleado?.freelance_modo ? (
                 <div className="grid gap-4 sm:grid-cols-2">
                   <Dato k="Modalidad" v={FREELANCE_MODO_LABEL[empleado.freelance_modo]} />
-                  <Dato
-                    k={modoLabelValor(empleado.freelance_modo)}
-                    v={formatMoneda(Number(empleado.freelance_tarifa) || 0, empleado.freelance_moneda ?? "COP")}
-                  />
+                  {empleado.freelance_modo !== "aprendizaje" && (
+                    <Dato
+                      k={modoLabelValor(empleado.freelance_modo)}
+                      v={formatMoneda(Number(empleado.freelance_tarifa) || 0, empleado.freelance_moneda ?? "COP")}
+                    />
+                  )}
                   {empleado.fecha_ingreso && <Dato k="Fecha de ingreso" v={empleado.fecha_ingreso} />}
                   {empleado.fecha_fin_probable && <Dato k="Fecha posible de terminación" v={empleado.fecha_fin_probable} />}
                 </div>
               ) : (
                 <p className="text-sm text-[#fff]/55">Tu pago acordado aún no está definido en el portal. Consúltalo con administración.</p>
+              )}
+              {empleado?.freelance_modo === "aprendizaje" && (
+                <p className="mt-4 border-t border-white/10 pt-3 text-xs text-[#fff]/50">
+                  Tu vínculo es <b className="text-[#fff]/70">por aprendizaje</b>: no tiene remuneración ni facturación. Registras tu horario y tus permisos como cualquier otro colaborador.
+                </p>
               )}
               {empleado?.freelance_modo === "por_hora" && (
                 <p className="mt-4 border-t border-white/10 pt-3 text-xs text-[#fff]/50">Al facturar, indica las horas trabajadas del mes: se multiplican por este valor.</p>

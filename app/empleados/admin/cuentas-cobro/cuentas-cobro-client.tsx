@@ -281,6 +281,10 @@ export function CuentasCobroClient() {
               )}
             </div>
 
+            <p className="mt-3 rounded-lg border border-[var(--cyan)]/25 bg-[var(--cyan)]/[0.06] px-3 py-2.5 text-xs leading-relaxed text-[#fff]/75">
+              Recuerda: los pagos por <b className="text-[#fff]">prestación de servicios y freelance</b> se realizan dentro de los <b className="text-[#fff]">cinco (5) primeros días de cada mes</b>.
+            </p>
+
             <div className="mt-4 flex justify-end gap-2">
               <button type="button" onClick={() => setForm(null)} className="rounded-lg px-4 py-2 text-sm text-[#fff]/60 hover:text-[#fff]">Cancelar</button>
               <button type="submit" disabled={saving} className="inline-flex items-center gap-2 rounded-lg bg-[var(--cyan)] px-5 py-2 text-sm font-semibold text-[#04191b] transition hover:brightness-110 disabled:opacity-60">

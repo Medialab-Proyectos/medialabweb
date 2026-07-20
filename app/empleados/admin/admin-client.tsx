@@ -364,23 +364,25 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
       <Link href="/empleados/inicio" className="mb-6 inline-flex items-center gap-1.5 text-sm text-[#fff]/55 hover:text-[#fff]">
         <ArrowLeft size={15} /> Volver al inicio
       </Link>
-      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex items-center gap-2.5">
+      {/* Título compacto ("Empleados (10)") para que las acciones quepan en una sola línea. */}
+      <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <div className="flex shrink-0 items-center gap-2.5">
           <Users size={20} className="text-[var(--cyan)]" />
-          <h1 className="font-display text-xl font-bold">Gestión de empleados</h1>
-          <span className="rounded-full bg-white/5 px-2 py-0.5 text-xs text-[#fff]/50">{empleados.length}</span>
+          <h1 className="font-display text-xl font-bold whitespace-nowrap">
+            Empleados <span className="font-medium text-[#fff]/45">({empleados.length})</span>
+          </h1>
         </div>
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-1.5 lg:flex-nowrap">
           <Link
             href="/empleados/admin/contratos"
-            className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-[#fff]/80 transition hover:bg-white/5"
+            className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border border-white/15 px-3 py-2 text-sm font-medium text-[#fff]/80 transition hover:bg-white/5"
           >
             <FileSignature size={15} /> Contratos
           </Link>
           <DesprendiblesMenu />
           <Link
             href="/empleados/admin/vacaciones"
-            className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-[#fff]/80 transition hover:bg-white/5"
+            className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border border-white/15 px-3 py-2 text-sm font-medium text-[#fff]/80 transition hover:bg-white/5"
           >
             <Plane size={15} /> Vacaciones
           </Link>
@@ -389,15 +391,15 @@ export function AdminClient({ inicial, ceoId }: { inicial: Empleado[]; ceoId: st
             target="_blank"
             rel="noreferrer"
             title="Exportar empleados activos a PDF"
-            className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-[#fff]/80 transition hover:bg-white/5"
+            className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border border-white/15 px-3 py-2 text-sm font-medium text-[#fff]/80 transition hover:bg-white/5"
           >
-            <Download size={15} /> Exportar activos
+            <Download size={15} /> Exportar
           </a>
           <button
             onClick={abrirNuevo}
-            className="inline-flex items-center gap-2 rounded-full bg-[var(--cyan)] px-4 py-2 text-sm font-semibold text-[#04191b] transition hover:brightness-110"
+            className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-[var(--cyan)] px-3 py-2 text-sm font-semibold text-[#04191b] transition hover:brightness-110"
           >
-            <UserPlus size={15} /> Nuevo empleado
+            <UserPlus size={15} /> Nuevo
           </button>
         </div>
       </div>
@@ -747,7 +749,7 @@ function DesprendiblesMenu() {
         onClick={() => setOpen((v) => !v)}
         aria-haspopup="menu"
         aria-expanded={open}
-        className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-[#fff]/80 transition hover:bg-white/5"
+        className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border border-white/15 px-3 py-2 text-sm font-medium text-[#fff]/80 transition hover:bg-white/5"
       >
         <FileText size={15} /> Desprendibles
         <ChevronDown size={14} className={`transition ${open ? "rotate-180" : ""}`} />
