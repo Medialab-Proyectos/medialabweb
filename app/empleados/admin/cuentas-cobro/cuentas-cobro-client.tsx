@@ -34,6 +34,15 @@ const vacio: Form = {
   iva_tipo: "na", iva_valor: 0, fee: 0, estado: "borrador",
 }
 
+/** Consecutivo automático: toma el mayor número existente y suma 1 (CC-001, CC-002…). */
+function siguienteNumero(items: { numero: string | null }[]): string {
+  const max = items.reduce((acc, it) => {
+    const n = Number(String(it.numero ?? "").match(/(\d+)\s*$/)?.[1] ?? 0)
+    return n > acc ? n : acc
+  }, 0)
+  return `CC-${String(max + 1).padStart(3, "0")}`
+}
+
 const estadoStyle: Record<EstadoCuentaCobro, string> = {
   borrador: "bg-white/5 text-[#fff]/55",
   emitida: "bg-amber-400/10 text-amber-300",
@@ -135,17 +144,16 @@ export function CuentasCobroClient() {
       <Link href="/empleados/admin/contabilidad" className="mb-6 inline-flex items-center gap-1.5 text-sm text-[#fff]/55 hover:text-[#fff]">
         <ArrowLeft size={15} /> Volver a Contabilidad
       </Link>
-      <div className="mb-4 flex items-center justify-between">
-        <div className="flex items-center gap-2.5">
-          <FileText size={20} className="text-[var(--cyan)]" />
-          <h1 className="font-display text-xl font-bold">Cuentas de cobro</h1>
-          <span className="rounded-full bg-white/5 px-2 py-0.5 text-xs text-[#fff]/50">{items.length}</span>
-        </div>
-        <button onClick={() => { setError(""); setForm({ ...vacio }) }} disabled={contratos.length === 0} className="inline-flex items-center gap-2 rounded-full bg-[var(--cyan)] px-4 py-2 text-sm font-semibold text-[#04191b] transition hover:brightness-110 disabled:opacity-40">
-          <Plus size={15} /> Nueva
-        </button>
+      <div className="mb-3 flex items-center gap-2.5">
+        <FileText size={20} className="text-[var(--cyan)]" />
+        <h1 className="font-display text-xl font-bold">Cuentas de cobro</h1>
+        <span className="rounded-full bg-white/5 px-2 py-0.5 text-xs text-[#fff]/50">{items.length}</span>
       </div>
       <p className="mb-4 text-sm text-[#fff]/55">La cuenta de cobro se emite sobre un <b className="text-[#fff]/75">contrato con una empresa</b>: al elegirlo se heredan su modo, tarifa y moneda; tú solo pones la cantidad.</p>
+      {/* En móvil el botón va debajo del título y la descripción, a todo el ancho. */}
+      <button onClick={() => { setError(""); setForm({ ...vacio, numero: siguienteNumero(items) }) }} disabled={contratos.length === 0} className="mb-4 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[var(--cyan)] px-4 py-2.5 text-sm font-semibold text-[#04191b] transition hover:brightness-110 disabled:opacity-40 sm:w-auto sm:py-2">
+        <Plus size={15} /> Nueva cuenta de cobro
+      </button>
       {contratos.length === 0 && <p className="mb-4 rounded-lg bg-amber-400/10 px-3 py-2 text-xs text-amber-200">Primero crea una empresa y un contrato en <b>Empresas y contratos</b> para poder emitir cuentas de cobro.</p>}
 
       {error && <p className="mb-4 rounded-lg bg-red-500/10 px-3 py-2 text-sm text-red-300">{error}</p>}
@@ -195,8 +203,9 @@ export function CuentasCobroClient() {
                   <option value="empresa">{EMISOR_LABEL.empresa}</option>
                   <option value="personal">{EMISOR_LABEL.personal}</option>
                 </select></label>
-              <label className="flex flex-col gap-1.5"><span className={lblCls}>N.º (opcional)</span>
-                <input value={form.numero} onChange={(e) => setForm({ ...form, numero: e.target.value })} className={inputCls} placeholder="CC-001" /></label>
+              <label className="flex flex-col gap-1.5"><span className={lblCls}>N.º (automático)</span>
+                <input value={form.numero} onChange={(e) => setForm({ ...form, numero: e.target.value })} className={inputCls} placeholder="CC-001" />
+                <span className="text-[10px] text-[#fff]/40">Se numera solo (consecutivo). Puedes editarlo si lo necesitas.</span></label>
               <label className="flex flex-col gap-1.5 sm:col-span-2"><span className={lblCls}>Contrato (empresa)</span>
                 <select
                   value={form.contrato_empresa_id}
@@ -280,10 +289,6 @@ export function CuentasCobroClient() {
                 </div>
               )}
             </div>
-
-            <p className="mt-3 rounded-lg border border-[var(--cyan)]/25 bg-[var(--cyan)]/[0.06] px-3 py-2.5 text-xs leading-relaxed text-[#fff]/75">
-              Recuerda: los pagos por <b className="text-[#fff]">prestación de servicios y freelance</b> se realizan dentro de los <b className="text-[#fff]">cinco (5) primeros días de cada mes</b>.
-            </p>
 
             <div className="mt-4 flex justify-end gap-2">
               <button type="button" onClick={() => setForm(null)} className="rounded-lg px-4 py-2 text-sm text-[#fff]/60 hover:text-[#fff]">Cancelar</button>

@@ -43,6 +43,8 @@ const guardarSchema = z.object({
   valor: z.number().min(0).default(0),
   cuenta_id: z.string().uuid().nullable().optional(),
   activo: z.boolean().default(true),
+  dia_cobro: z.number().int().min(1).max(31).nullable().optional(),
+  debito_automatico: z.boolean().default(false),
 })
 
 // Registrar el pago del mes de un gasto recurrente → crea un egreso.
@@ -102,6 +104,7 @@ export async function POST(req: Request) {
       ...(b.id ? { id: b.id } : {}),
       nombre: b.nombre, categoria: b.categoria ?? null, proveedor: b.proveedor ?? null,
       moneda: b.moneda, valor: b.valor, cuenta_id: b.cuenta_id ?? null, activo: b.activo, orden: 0,
+      dia_cobro: b.dia_cobro ?? null, debito_automatico: b.debito_automatico,
     })
     return NextResponse.json({ gasto })
   } catch (e) {

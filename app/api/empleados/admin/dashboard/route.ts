@@ -2,7 +2,7 @@ import { NextResponse } from "next/server"
 import { getSession } from "@/lib/empleados/auth"
 import { portalConfigurado } from "@/lib/empleados/db"
 import { listEmpleados } from "@/lib/empleados/queries"
-import { listCuentas, listMovimientos, listInversiones } from "@/lib/empleados/contabilidad-queries"
+import { listCuentas, listMovimientos, listInversiones, listGastosRecurrentes } from "@/lib/empleados/contabilidad-queries"
 import { listSolicitudesDeEmpleados, listAusentesHoy } from "@/lib/empleados/ausencia-queries"
 import { contarFacturasPorPagar } from "@/lib/empleados/freelance-queries"
 import { contarCuentasCobroPorPasar } from "@/lib/empleados/cuenta-cobro-queries"
@@ -42,6 +42,12 @@ export async function GET() {
   ])
   const satisfaccionProyectos = (await getSatisfaccionOperaciones().catch(() => ({ promedio100: null }))).promedio100
   const fechasRaw = await listFechasEspeciales().catch(() => [])
+  // Servicios recurrentes que NO se debitan solos: hay que pagarlos a mano cada mes.
+  const recurrentesRaw = await listGastosRecurrentes().catch(() => [])
+  const recurrentesManuales = recurrentesRaw
+    .filter((g) => g.activo && g.debito_automatico !== true)
+    .map((g) => ({ id: g.id, nombre: g.nombre, valor: Number(g.valor) || 0, moneda: g.moneda as Moneda, dia: g.dia_cobro ?? null }))
+    .sort((a, b) => (a.dia ?? 99) - (b.dia ?? 99))
 
   // Solicitudes de ausencia pendientes (de todos, para aprobar en línea).
   let solicitudes: { id: string; nombre: string; tipo: string; fecha_inicio: string; fecha_fin: string; dias_habiles: number }[] = []
@@ -132,7 +138,7 @@ export async function GET() {
     ausentesHoy, solicitudes,
     pagosPendientes, porCobrarLista,
     facturasFreelance, cuentasCobroPorPasar, horariosPendientes,
-    inversionesPorVencer, cumpleanos, aniversarios, fechasEspeciales,
+    inversionesPorVencer, cumpleanos, aniversarios, fechasEspeciales, recurrentesManuales,
     serie6m, categorias: { ingresos: arr(catIng), egresos: arr(catEgr) },
     satisfaccionEmpleados: satEmpleados, satisfaccionEmpresas: satEmpresas, satisfaccionProyectos,
   })

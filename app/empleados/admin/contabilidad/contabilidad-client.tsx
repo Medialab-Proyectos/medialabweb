@@ -8,10 +8,11 @@ import {
 } from "lucide-react"
 import {
   type Cuenta, type Movimiento, type TipoMovimiento, type Moneda, type Empresa, type MetodoPago, type TipoIVA,
-  CATEGORIAS, CATEGORIA_LABEL, TIPO_MOV_LABEL, IVA_LABEL, MONEDAS_ORDEN, formatMoneda, resumen, saldosPorPlataforma,
+  CATEGORIAS, CATEGORIA_LABEL, TIPO_MOV_LABEL, IVA_LABEL, MONEDAS_ORDEN, formatMoneda, resumen,
 } from "@/lib/empleados/contabilidad"
 import { MESES } from "@/lib/empleados/desprendible"
 import { ConfirmDialog } from "../../confirm-dialog"
+import { MoneyInput } from "../../money-input"
 
 const inputCls = "w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm text-[#fff] outline-none transition focus:border-[var(--cyan)]/60"
 const lblCls = "text-[11px] font-semibold uppercase tracking-wide text-[#fff]/50"
@@ -71,7 +72,6 @@ export function ContabilidadClient() {
   useEffect(() => { cargar() }, [])
 
   const nombreEmpresa = useMemo(() => new Map(empresas.map((x) => [x.id, x.nombre])), [empresas])
-  const porPlataforma = useMemo(() => saldosPorPlataforma(cuentas, movimientos), [cuentas, movimientos])
 
   const res = useMemo(() => resumen(cuentas, movimientos, { anio, mes }), [cuentas, movimientos, anio, mes])
   const saldoPorCuenta = useMemo(() => new Map(res.porCuenta.map((p) => [p.cuenta.id, p.saldo])), [res])
@@ -307,32 +307,37 @@ export function ContabilidadClient() {
       <Link href="/empleados/admin" className="mb-6 inline-flex items-center gap-1.5 text-sm text-[#fff]/55 hover:text-[#fff]">
         <ArrowLeft size={15} /> Volver al panel
       </Link>
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-2.5">
-          <Wallet size={20} className="text-[var(--cyan)]" />
-          <h1 className="font-display text-xl font-bold">Contabilidad</h1>
+      <div className="mb-4 flex items-center gap-2.5">
+        <Wallet size={20} className="text-[var(--cyan)]" />
+        <h1 className="font-display text-xl font-bold">Contabilidad</h1>
+      </div>
+
+      {/* Submódulos: en móvil se deslizan en carrusel horizontal; en escritorio van en fila. */}
+      <div className="-mx-4 mb-3 overflow-x-auto px-4 pb-1 sm:mx-0 sm:px-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="flex w-max items-center gap-2 sm:w-auto sm:flex-wrap">
+          {[
+            { href: "/empleados/admin/contabilidad/nomina", icon: Users, label: "Pagos a empleados" },
+            { href: "/empleados/admin/contabilidad/recurrentes", icon: Repeat, label: "Gastos recurrentes" },
+            { href: "/empleados/admin/empresas", icon: Building2, label: "Gestionar empresas" },
+            { href: "/empleados/admin/cuentas-cobro", icon: FileText, label: "Cuentas de cobro" },
+            { href: "/empleados/admin/contabilidad/inversiones", icon: TrendingUp, label: "Inversiones" },
+          ].map((s) => {
+            const Icon = s.icon
+            return (
+              <Link key={s.href} href={s.href} className="inline-flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-[#fff]/80 transition hover:bg-white/5">
+                <Icon size={15} /> {s.label}
+              </Link>
+            )
+          })}
         </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <Link href="/empleados/admin/contabilidad/nomina" className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-[#fff]/80 transition hover:bg-white/5">
-            <Users size={15} /> Pagos a empleados
-          </Link>
-          <Link href="/empleados/admin/contabilidad/recurrentes" className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-[#fff]/80 transition hover:bg-white/5">
-            <Repeat size={15} /> Gastos recurrentes
-          </Link>
-          <Link href="/empleados/admin/empresas" className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-[#fff]/80 transition hover:bg-white/5">
-            <Building2 size={15} /> Gestionar empresas
-          </Link>
-          <Link href="/empleados/admin/cuentas-cobro" className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-[#fff]/80 transition hover:bg-white/5">
-            <FileText size={15} /> Cuentas de cobro
-          </Link>
-          <Link href="/empleados/admin/contabilidad/inversiones" className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-[#fff]/80 transition hover:bg-white/5">
-            <TrendingUp size={15} /> Inversiones
-          </Link>
-          <select value={mes} onChange={(e) => setMes(Number(e.target.value))} className={`${inputCls} w-auto`}>
-            {MESES.map((m, i) => <option key={m} value={i + 1}>{m}</option>)}
-          </select>
-          <input type="number" value={anio} onChange={(e) => setAnio(Number(e.target.value))} className={`${inputCls} w-24`} />
-        </div>
+      </div>
+
+      {/* Periodo */}
+      <div className="mb-6 flex items-center gap-2">
+        <select value={mes} onChange={(e) => setMes(Number(e.target.value))} className={`${inputCls} w-auto`}>
+          {MESES.map((m, i) => <option key={m} value={i + 1}>{m}</option>)}
+        </select>
+        <input type="number" value={anio} onChange={(e) => setAnio(Number(e.target.value))} className={`${inputCls} w-24`} />
       </div>
 
       {error && <p className="mb-4 rounded-lg bg-red-500/10 px-3 py-2 text-sm text-red-300">{error}</p>}
@@ -431,21 +436,6 @@ export function ContabilidadClient() {
               <div className="grid gap-3 lg:grid-cols-2">
                 <CategoriaBarras titulo="Ingresos por categoría" data={porCategoria.ingArr} total={porCategoria.totalIng} color="#34d399" />
                 <CategoriaBarras titulo="Egresos por categoría" data={porCategoria.egrArr} total={porCategoria.totalEgr} color="#f87171" />
-              </div>
-            </section>
-          )}
-
-          {/* Dinero por método de pago */}
-          {porPlataforma.length > 0 && (
-            <section>
-              <h2 className="mb-3 text-sm font-semibold text-[#fff]/80">Dinero por método de pago</h2>
-              <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-                {porPlataforma.map((p) => (
-                  <div key={`${p.plataforma}-${p.moneda}`} className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3">
-                    <p className="text-xs text-[#fff]/50">{p.plataforma} · {p.moneda}</p>
-                    <p className="text-sm font-semibold text-[var(--cyan)]">{formatMoneda(p.saldo, p.moneda)}</p>
-                  </div>
-                ))}
               </div>
             </section>
           )}
@@ -619,7 +609,7 @@ export function ContabilidadClient() {
                   {MONEDAS_ORDEN.map((m) => <option key={m} value={m}>{m}</option>)}
                 </select></label>
               <label className="flex flex-col gap-1.5 sm:col-span-2"><span className={lblCls}>Saldo inicial (punto de partida)</span>
-                <input type="number" step="0.01" value={formCuenta.saldo_inicial || ""} onChange={(e) => setFormCuenta({ ...formCuenta, saldo_inicial: Number(e.target.value) })} className={inputCls} placeholder="0" /></label>
+                <MoneyInput value={formCuenta.saldo_inicial} onChange={(n) => setFormCuenta({ ...formCuenta, saldo_inicial: n })} className={inputCls} /></label>
               <label className="flex items-center gap-2 text-sm text-[#fff]/75 sm:col-span-2">
                 <input type="checkbox" checked={formCuenta.activa} onChange={(e) => setFormCuenta({ ...formCuenta, activa: e.target.checked })} className="h-4 w-4 accent-[var(--cyan)]" /> Cuenta activa
               </label>
@@ -663,7 +653,7 @@ export function ContabilidadClient() {
                   </select></label>
               )}
               <label className="flex flex-col gap-1.5"><span className={lblCls}>Valor {movMonedaOrigen ? `(${movMonedaOrigen})` : ""}</span>
-                <input type="number" step="0.01" min="0" value={formMov.valor || ""} onChange={(e) => setFormMov({ ...formMov, valor: Number(e.target.value) })} className={inputCls} placeholder="0" /></label>
+                <MoneyInput value={formMov.valor} onChange={(n) => setFormMov({ ...formMov, valor: n })} className={inputCls} /></label>
               {formMov.tipo !== "traslado" && (
                 <label className="flex flex-col gap-1.5"><span className={lblCls}>Categoría</span>
                   <select value={formMov.categoria} onChange={(e) => setFormMov({ ...formMov, categoria: e.target.value })} className={inputCls}>
@@ -681,17 +671,17 @@ export function ContabilidadClient() {
                     </select></label>
                   {formMov.iva_tipo === "incluido" && (
                     <label className="flex flex-col gap-1.5"><span className={lblCls}>Valor del IVA</span>
-                      <input type="number" step="0.01" min="0" value={formMov.iva_valor || ""} onChange={(e) => setFormMov({ ...formMov, iva_valor: Number(e.target.value) })} className={inputCls} placeholder="0" /></label>
+                      <MoneyInput value={formMov.iva_valor} onChange={(n) => setFormMov({ ...formMov, iva_valor: n })} className={inputCls} /></label>
                   )}
                   <label className="flex flex-col gap-1.5"><span className={lblCls}>{formMov.tipo === "ingreso" ? "Costo de transferencia" : "Fee / costo bancario"}</span>
-                    <input type="number" step="0.01" min="0" value={formMov.costo || ""} onChange={(e) => setFormMov({ ...formMov, costo: Number(e.target.value) })} className={inputCls} placeholder="0" /></label>
+                    <MoneyInput value={formMov.costo} onChange={(n) => setFormMov({ ...formMov, costo: n })} className={inputCls} /></label>
                   {formMov.tipo === "ingreso" && (
-                    <label className="flex flex-col gap-1.5"><span className={lblCls}>TRM (si el pago viene en otra moneda)</span>
+                    <label className="flex flex-col gap-1.5"><span className={lblCls}>TRM del día (la escribes tú)</span>
                       <input type="number" step="0.0001" min="0" value={formMov.tasa || ""} onChange={(e) => setFormMov({ ...formMov, tasa: Number(e.target.value) })} className={inputCls} placeholder="Ej: 4000 (opcional)" /></label>
                   )}
                   {formMov.tipo === "ingreso" && (
                     <p className="sm:col-span-2 rounded-lg bg-[var(--cyan)]/10 px-3 py-2 text-[11px] text-[var(--cyan)]/90">
-                      Para pagos de cliente que aún no aterrizan, déjalo en <b>Pendiente</b> con la TRM estimada; cuando llegue, ajusta el valor real y márcalo <b>Realizado</b>. El neto que suma a la cuenta = valor − costo de transferencia.
+                      La <b>TRM no se descarga automáticamente</b>: la escribes tú al registrar el movimiento y queda guardada en ese movimiento (no se recalcula después). Para pagos de cliente que aún no aterrizan, déjalo en <b>Pendiente</b> con la TRM estimada; cuando llegue, ajusta el valor real y la TRM efectiva y márcalo <b>Realizado</b>. El neto que suma a la cuenta = valor − costo de transferencia.
                     </p>
                   )}
                 </>
@@ -701,15 +691,15 @@ export function ContabilidadClient() {
               {formMov.tipo === "traslado" && (
                 <>
                   <label className="flex flex-col gap-1.5"><span className={lblCls}>Costo / comisión plataforma</span>
-                    <input type="number" step="0.01" min="0" value={formMov.costo || ""} onChange={(e) => setFormMov({ ...formMov, costo: Number(e.target.value) })} className={inputCls} placeholder="0" /></label>
+                    <MoneyInput value={formMov.costo} onChange={(n) => setFormMov({ ...formMov, costo: n })} className={inputCls} /></label>
                   {trasladoCrossMoneda && (
                     <>
                       <label className="flex flex-col gap-1.5"><span className={lblCls}>Tasa {movMonedaOrigen}→{movMonedaDestino} (del día)</span>
                         <input type="number" step="0.0001" min="0" value={formMov.tasa || ""} onChange={(e) => setFormMov({ ...formMov, tasa: Number(e.target.value) })} className={inputCls} placeholder="Ej: 4000" /></label>
                       <label className="flex flex-col gap-1.5"><span className={lblCls}>Llega al destino ({movMonedaDestino})</span>
-                        <input type="number" step="0.01" min="0"
-                          value={formMov.valor_destino || (formMov.valor && formMov.tasa ? Math.round((formMov.valor * formMov.tasa - (formMov.costo || 0)) * 100) / 100 : "") }
-                          onChange={(e) => setFormMov({ ...formMov, valor_destino: Number(e.target.value) })}
+                        <MoneyInput
+                          value={formMov.valor_destino || (formMov.valor && formMov.tasa ? Math.round(formMov.valor * formMov.tasa - (formMov.costo || 0)) : 0)}
+                          onChange={(n) => setFormMov({ ...formMov, valor_destino: n })}
                           className={inputCls} placeholder="valor × tasa − costo" /></label>
                     </>
                   )}

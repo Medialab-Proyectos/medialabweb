@@ -90,17 +90,16 @@ export function InversionesClient() {
       <Link href="/empleados/admin/contabilidad" className="mb-6 inline-flex items-center gap-1.5 text-sm text-[#fff]/55 hover:text-[#fff]">
         <ArrowLeft size={15} /> Volver a Contabilidad
       </Link>
-      <div className="mb-4 flex items-center justify-between">
-        <div className="flex items-center gap-2.5">
-          <TrendingUp size={20} className="text-[var(--cyan)]" />
-          <h1 className="font-display text-xl font-bold">Inversiones</h1>
-          <span className="rounded-full bg-white/5 px-2 py-0.5 text-xs text-[#fff]/50">{items.length}</span>
-        </div>
-        <button onClick={() => { setError(""); setForm({ ...vacio }) }} className="inline-flex items-center gap-2 rounded-full bg-[var(--cyan)] px-4 py-2 text-sm font-semibold text-[#04191b] transition hover:brightness-110">
-          <Plus size={15} /> Nueva inversión
-        </button>
+      <div className="mb-3 flex items-center gap-2.5">
+        <TrendingUp size={20} className="text-[var(--cyan)]" />
+        <h1 className="font-display text-xl font-bold">Inversiones</h1>
+        <span className="rounded-full bg-white/5 px-2 py-0.5 text-xs text-[#fff]/50">{items.length}</span>
       </div>
       <p className="mb-4 text-sm text-[#fff]/55">CDTs y otras inversiones. Al cerrarlas, registra el rendimiento real (cuéntalo como ingreso en Movimientos). Total abierto: <b className="text-[var(--cyan)]">{formatMoneda(totalInvertido, "COP")}</b> en {abiertas.length} inversión(es).</p>
+      {/* En móvil el botón va debajo del título y la descripción, a todo el ancho. */}
+      <button onClick={() => { setError(""); setForm({ ...vacio }) }} className="mb-4 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[var(--cyan)] px-4 py-2.5 text-sm font-semibold text-[#04191b] transition hover:brightness-110 sm:w-auto sm:py-2">
+        <Plus size={15} /> Nueva inversión
+      </button>
 
       {error && <p className="mb-4 rounded-lg bg-red-500/10 px-3 py-2 text-sm text-red-300">{error}</p>}
 
@@ -121,7 +120,7 @@ export function InversionesClient() {
                     {x.estado === "cerrada" && <span className="ml-2 rounded-full bg-white/5 px-2 py-0.5 text-[10px] text-[#fff]/50">cerrada</span>}
                   </p>
                   <p className="text-xs text-[#fff]/50">
-                    {x.tasa ? `${x.tasa}% E.A. · ` : ""}Rend. esperado {formatMoneda(Number(x.rendimiento_esperado) || 0, x.moneda)}
+                    {x.tasa ? `${x.tasa}% E.A. · ` : ""}Intereses esperados {formatMoneda(Number(x.rendimiento_esperado) || 0, x.moneda)}
                     {x.fecha_vencimiento ? ` · vence ${x.fecha_vencimiento}` : ""}
                     {x.estado === "cerrada" && x.rendimiento_real != null ? ` · rend. real ${formatMoneda(Number(x.rendimiento_real) || 0, x.moneda)}` : ""}
                   </p>
@@ -157,8 +156,12 @@ export function InversionesClient() {
                 </select></label>
               <label className="flex flex-col gap-1.5"><span className={lblCls}>Tasa (% E.A.)</span>
                 <input type="number" step="0.01" min="0" value={form.tasa || ""} onChange={(e) => setForm({ ...form, tasa: Number(e.target.value) })} className={inputCls} placeholder="0" /></label>
-              <label className="flex flex-col gap-1.5"><span className={lblCls}>Rendimiento esperado</span>
-                <MoneyInput value={form.rendimiento_esperado} onChange={(n) => setForm({ ...form, rendimiento_esperado: n })} className={inputCls} /></label>
+              <label className="flex flex-col gap-1.5"><span className={lblCls}>Intereses que esperas ganar</span>
+                <MoneyInput value={form.rendimiento_esperado} onChange={(n) => setForm({ ...form, rendimiento_esperado: n })} className={inputCls} />
+                <span className="text-[10px] leading-relaxed text-[#fff]/40">
+                  Cuánto dinero <b className="text-[#fff]/60">extra</b> esperas recibir al vencimiento, aparte del monto invertido.
+                  Ej.: si inviertes $10.000.000 al 10% E.A. a un año, aquí van $1.000.000 (al final recibes $11.000.000).
+                </span></label>
               <label className="flex flex-col gap-1.5"><span className={lblCls}>Fecha de apertura</span>
                 <input type="date" value={form.fecha_apertura} onChange={(e) => setForm({ ...form, fecha_apertura: e.target.value })} className={inputCls} /></label>
               <label className="flex flex-col gap-1.5"><span className={lblCls}>Fecha de vencimiento</span>

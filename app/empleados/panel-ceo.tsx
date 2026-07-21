@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import {
-  Loader2, Check, X, Wallet, TrendingUp, TrendingDown, ArrowDownCircle, ArrowUpCircle, ClipboardCheck,
-  Receipt, FileText, Cake, UserX, CalendarClock, Gauge, ArrowRight, SmilePlus, Building2,
+  Loader2, Check, X, Wallet, TrendingUp, ArrowDownCircle, ArrowUpCircle, ClipboardCheck,
+  Receipt, Cake, UserX, CalendarClock, ArrowRight, SmilePlus, Building2,
   Users, LayoutDashboard, ExternalLink, Award, Star, Plus, Trash2, Loader2 as Spin,
 } from "lucide-react"
 import { formatMoneda } from "@/lib/empleados/contabilidad"
@@ -26,6 +26,8 @@ type Data = {
   cumpleanos: { nombre: string; fecha: string; dias: number }[]
   aniversarios: { nombre: string; fecha: string; anos: number; dias: number }[]
   fechasEspeciales: { id: string; titulo: string; nota: string | null; fecha: string; dias: number; recurrente: boolean }[]
+  /** Servicios recurrentes que NO se debitan solos: recordatorio de pago manual. */
+  recurrentesManuales: { id: string; nombre: string; valor: number; moneda: "COP" | "USD"; dia: number | null }[]
   serie6m: { label: string; ingresos: number; egresos: number }[]
   categorias: { ingresos: { cat: string; valor: number }[]; egresos: { cat: string; valor: number }[] }
   satisfaccionEmpleados: number | null
@@ -128,7 +130,6 @@ export function PanelCEO() {
   )
   if (!d) return null
 
-  const maxBar = Math.max(1, ...d.serie6m.flatMap((x) => [x.ingresos, x.egresos]))
 
   return (
     <div className="flex flex-col gap-7">
@@ -234,17 +235,9 @@ export function PanelCEO() {
         </div>
       </Grupo>
 
-      {/* ══ ECONOMÍA ══ */}
+      {/* ══ ECONOMÍA ══ (solo lo accionable: qué debo pagar y qué debo cobrar) */}
       <Grupo icon={Wallet} titulo="Economía">
-        <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-          <Kpi label="Saldo total" valor={cop(d.kpis.saldoCOP)} sub={d.kpis.saldoUSD ? formatMoneda(d.kpis.saldoUSD, "USD") : undefined} icon={Wallet} tone="cyan" />
-          <Kpi label={`Ganancia ${new Date().getFullYear()}`} valor={cop(d.gananciaAnio)} icon={d.gananciaAnio >= 0 ? TrendingUp : TrendingDown} tone={d.gananciaAnio >= 0 ? "emerald" : "red"} />
-          <Kpi label="Por cobrar" valor={cop(d.kpis.porCobrar)} icon={ArrowDownCircle} tone="emerald" />
-          <Kpi label="Por pagar" valor={cop(d.kpis.porPagar)} icon={ArrowUpCircle} tone="red" />
-        </div>
-
-        {/* Por pagar · por cobrar · otros pendientes: 3 columnas para no dejar hueco. */}
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-2">
         {/* Cuentas por pagar (marcar pagado en línea) */}
         <Bloque icon={ArrowUpCircle} titulo="Cuentas por pagar" contador={d.pagosPendientes.length} tone="red" href="/empleados/admin/contabilidad">
           {d.pagosPendientes.length === 0 ? (
@@ -261,6 +254,23 @@ export function PanelCEO() {
               </div>
             </div>
           ))}
+
+          {/* Recordatorio: servicios recurrentes que NO se debitan solos (hay que pagarlos a mano). */}
+          {d.recurrentesManuales.length > 0 && (
+            <div className="mt-1 rounded-xl border border-amber-400/20 bg-amber-400/[0.05] px-3 py-2">
+              <p className="mb-1 text-[11px] font-semibold text-amber-200">Recurrentes de pago manual (no son débito automático)</p>
+              {d.recurrentesManuales.slice(0, 5).map((g) => (
+                <div key={g.id} className="flex items-center justify-between gap-2 py-0.5 text-[11px]">
+                  <span className="min-w-0 truncate text-[#fff]/70">{g.nombre}{g.dia ? ` · día ${g.dia}` : ""}</span>
+                  <span className="shrink-0 font-semibold text-amber-200/90">{formatMoneda(g.valor, g.moneda)}</span>
+                </div>
+              ))}
+              <Link href="/empleados/admin/contabilidad/recurrentes" className="mt-1 inline-block text-[11px] font-semibold text-[var(--cyan)] hover:underline">Ver todos y registrar pago →</Link>
+            </div>
+          )}
+
+          {/* Otros pagos pendientes registrados fuera de movimientos. */}
+          <MiniAccion icon={Receipt} label="Facturas de freelance por pagar" valor={d.facturasFreelance} href="/empleados/admin/freelance" />
         </Bloque>
 
         {/* Cuentas por cobrar (marcar recibido) */}
@@ -279,53 +289,20 @@ export function PanelCEO() {
               </div>
             </div>
           ))}
-        </Bloque>
 
-        {/* Otros pendientes (enlaces rápidos) */}
-        <Bloque icon={Gauge} titulo="Otros pendientes" tone="cyan">
-          <MiniAccion icon={Receipt} label="Facturas freelance por pagar" valor={d.facturasFreelance} href="/empleados/admin/freelance" />
-          <MiniAccion icon={FileText} label="Cuentas de cobro por enviar" valor={d.cuentasCobroPorPasar} href="/empleados/admin/cuentas-cobro" />
-          <MiniAccion icon={TrendingUp} label="Inversiones por vencer" valor={d.inversionesPorVencer.length} href="/empleados/admin/contabilidad/inversiones" />
+          {/* Las cuentas de cobro se emiten a fin de mes y se repiten mientras el contrato esté vigente. */}
+          <div className="mt-1 rounded-xl border border-[var(--cyan)]/20 bg-[var(--cyan)]/[0.05] px-3 py-2">
+            <p className="text-[11px] leading-relaxed text-[#fff]/70">
+              Las <b className="text-[#fff]/85">cuentas de cobro</b> se envían al <b className="text-[#fff]/85">final de cada mes</b> y se repiten
+              mientras el <b className="text-[#fff]/85">contrato con la empresa siga vigente</b>. Revisa cuáles quedan por emitir este mes.
+            </p>
+            <Link href="/empleados/admin/cuentas-cobro" className="mt-1 inline-block text-[11px] font-semibold text-[var(--cyan)] hover:underline">
+              Cuentas de cobro por enviar: {d.cuentasCobroPorPasar} →
+            </Link>
+          </div>
         </Bloque>
       </div>
 
-      {/* ── Gráfica ingresos vs egresos + agenda ── */}
-      <div className="grid gap-4 lg:grid-cols-[1.4fr_1fr]">
-        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
-          <div className="mb-2 flex items-center justify-between">
-            <h3 className="text-sm font-semibold text-[#fff]/80">Ingresos vs egresos · 6 meses (COP)</h3>
-            <div className="flex items-center gap-3 text-[10px] text-[#fff]/55">
-              <span className="inline-flex items-center gap-1"><i className="inline-block h-2 w-2 rounded-sm" style={{ background: "#34d399" }} /> Ingresos</span>
-              <span className="inline-flex items-center gap-1"><i className="inline-block h-2 w-2 rounded-sm" style={{ background: "#f87171" }} /> Egresos</span>
-            </div>
-          </div>
-          <svg viewBox="0 0 360 136" className="w-full" role="img" aria-label="Ingresos vs egresos por mes">
-            <line x1={0} y1={120} x2={360} y2={120} stroke="rgba(255,255,255,0.12)" />
-            {d.serie6m.map((m, i) => {
-              const gw = 360 / d.serie6m.length; const gx = i * gw + gw / 2; const bw = Math.min(16, (gw - 8) / 2)
-              const hi = (m.ingresos / maxBar) * 120; const he = (m.egresos / maxBar) * 120
-              return (
-                <g key={i}>
-                  <rect x={gx - bw - 1} y={120 - hi} width={bw} height={hi} rx={2} fill="#34d399" />
-                  <rect x={gx + 1} y={120 - he} width={bw} height={he} rx={2} fill="#f87171" />
-                  <text x={gx} y={132} textAnchor="middle" fontSize="9" fill="rgba(255,255,255,0.5)">{m.label}</text>
-                </g>
-              )
-            })}
-          </svg>
-        </div>
-
-        {/* Vencimientos financieros */}
-        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
-          <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-[#fff]/80"><TrendingUp size={15} className="text-[var(--cyan)]" /> Inversiones por vencer</h3>
-          <div className="flex flex-col gap-2">
-            {d.inversionesPorVencer.slice(0, 5).map((iv) => (
-              <Fila key={`inv-${iv.id}`} icon={TrendingUp} color="var(--cyan)" titulo={iv.entidad} detalle={`Vence · ${cop(iv.monto)}`} etiqueta={iv.dias < 0 ? "Vencida" : `${iv.dias}d`} />
-            ))}
-            {d.inversionesPorVencer.length === 0 && <Vacio texto="Sin inversiones próximas a vencer." />}
-          </div>
-        </div>
-        </div>
       </Grupo>
 
       {/* ══ SATISFACCIÓN (y el Centro de Operaciones, donde vive la de proyectos) ══ */}
@@ -364,19 +341,6 @@ function Grupo({ icon: Icon, titulo, children }: { icon: React.ElementType; titu
 
 const TONE: Record<string, string> = {
   cyan: "text-[var(--cyan)]", emerald: "text-emerald-300", red: "text-red-300", magenta: "text-[var(--magenta)]", amber: "text-amber-300",
-}
-
-function Kpi({ label, valor, sub, icon: Icon, tone }: { label: string; valor: string; sub?: string; icon: React.ElementType; tone: string }) {
-  return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-3.5">
-      <div className="mb-1 flex items-center justify-between">
-        <span className="text-[11px] font-medium text-[#fff]/55">{label}</span>
-        <Icon size={15} className={TONE[tone]} />
-      </div>
-      <p className="font-display text-lg font-bold sm:text-xl">{valor}</p>
-      {sub && <p className="text-[11px] text-[#fff]/45">{sub}</p>}
-    </div>
-  )
 }
 
 function Bloque({ icon: Icon, titulo, contador, tone = "cyan", href, children }: { icon: React.ElementType; titulo: string; contador?: number; tone?: string; href?: string; children: React.ReactNode }) {

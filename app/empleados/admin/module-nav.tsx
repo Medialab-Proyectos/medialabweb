@@ -13,7 +13,8 @@ const MODULOS: { key: Modulo; href: string; icon: React.ElementType; label: stri
 /** Navegación de los 4 módulos grandes del panel del CEO. Cada uno con su color propio. */
 export function ModuleNav({ active }: { active?: Modulo }) {
   return (
-    <div className="mb-6 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+    // En móvil estos módulos viven en el menú hamburguesa del header.
+    <div className="mb-6 hidden gap-2 md:grid md:grid-cols-2 lg:grid-cols-4">
       {MODULOS.map((m) => {
         const Icon = m.icon
         const on = m.key === active

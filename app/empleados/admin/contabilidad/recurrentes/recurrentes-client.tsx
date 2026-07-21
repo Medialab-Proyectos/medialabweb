@@ -16,8 +16,8 @@ function hoyISO() {
   return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`
 }
 
-type Form = { id?: string; nombre: string; categoria: string; proveedor: string; moneda: Moneda; valor: number; cuenta_id: string; activo: boolean }
-const vacio: Form = { nombre: "", categoria: "suscripcion", proveedor: "", moneda: "COP", valor: 0, cuenta_id: "", activo: true }
+type Form = { id?: string; nombre: string; categoria: string; proveedor: string; moneda: Moneda; valor: number; cuenta_id: string; activo: boolean; dia_cobro: number; debito_automatico: boolean }
+const vacio: Form = { nombre: "", categoria: "suscripcion", proveedor: "", moneda: "COP", valor: 0, cuenta_id: "", activo: true, dia_cobro: 0, debito_automatico: false }
 
 // Sugerencias frecuentes (el CEO puede crear cualquier otro).
 const SUGERIDOS = ["Google Workspace", "Dominio", "ChatGPT", "Claude", "Figma", "Contador"]
@@ -61,6 +61,7 @@ export function RecurrentesClient({ cuentas }: { cuentas: Cuenta[] }) {
           accion: "guardar", ...(form.id ? { id: form.id } : {}),
           nombre: form.nombre, categoria: form.categoria || null, proveedor: form.proveedor || null,
           moneda: form.moneda, valor: form.valor, cuenta_id: form.cuenta_id || null, activo: form.activo,
+          dia_cobro: Number(form.dia_cobro) || null, debito_automatico: form.debito_automatico,
         }),
       })
       const data = await res.json(); if (!res.ok) throw new Error(data.error)
@@ -105,17 +106,16 @@ export function RecurrentesClient({ cuentas }: { cuentas: Cuenta[] }) {
       <Link href="/empleados/admin/contabilidad" className="mb-6 inline-flex items-center gap-1.5 text-sm text-[#fff]/55 hover:text-[#fff]">
         <ArrowLeft size={15} /> Volver a Contabilidad
       </Link>
-      <div className="mb-4 flex items-center justify-between">
-        <div className="flex items-center gap-2.5">
-          <Repeat size={20} className="text-[var(--cyan)]" />
-          <h1 className="font-display text-xl font-bold">Gastos recurrentes</h1>
-          <span className="rounded-full bg-white/5 px-2 py-0.5 text-xs text-[#fff]/50">{items.length}</span>
-        </div>
-        <button onClick={() => { setError(""); setForm({ ...vacio }) }} className="inline-flex items-center gap-2 rounded-full bg-[var(--cyan)] px-4 py-2 text-sm font-semibold text-[#04191b] transition hover:brightness-110">
-          <Plus size={15} /> Nuevo gasto
-        </button>
+      <div className="mb-3 flex items-center gap-2.5">
+        <Repeat size={20} className="text-[var(--cyan)]" />
+        <h1 className="font-display text-xl font-bold">Gastos recurrentes</h1>
+        <span className="rounded-full bg-white/5 px-2 py-0.5 text-xs text-[#fff]/50">{items.length}</span>
       </div>
       <p className="mb-4 text-sm text-[#fff]/55">Suscripciones y servicios que se pagan cada mes (Google, dominio, ChatGPT, Claude, Figma, contador…). Crea cada uno y usa <b className="text-[#fff]/75">Registrar pago</b> cada mes para crear el egreso.</p>
+      {/* En móvil el botón va debajo del título y la descripción, a todo el ancho. */}
+      <button onClick={() => { setError(""); setForm({ ...vacio }) }} className="mb-4 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[var(--cyan)] px-4 py-2.5 text-sm font-semibold text-[#04191b] transition hover:brightness-110 sm:w-auto sm:py-2">
+        <Plus size={15} /> Nuevo gasto
+      </button>
 
       {error && <p className="mb-4 rounded-lg bg-red-500/10 px-3 py-2 text-sm text-red-300">{error}</p>}
       {msg && <p className="mb-4 rounded-lg bg-emerald-400/10 px-3 py-2 text-sm text-emerald-200">{msg}</p>}
@@ -134,10 +134,19 @@ export function RecurrentesClient({ cuentas }: { cuentas: Cuenta[] }) {
                   {formatMoneda(Number(g.valor) || 0, g.moneda)}{g.categoria ? ` · ${CATEGORIA_LABEL[g.categoria] ?? g.categoria}` : ""}
                   {g.cuenta_id ? ` · ${nombreCuenta.get(g.cuenta_id) ?? ""}` : ""}
                 </p>
+                {/* Fecha de cobro y si se debita solo (los manuales hay que pagarlos a mano). */}
+                <p className="mt-0.5 text-[11px]">
+                  <span className="text-[#fff]/45">
+                    {g.dia_cobro ? `Se cobra el día ${g.dia_cobro} de cada mes` : "Sin fecha de cobro definida"}
+                  </span>
+                  {g.debito_automatico
+                    ? <span className="ml-1.5 rounded-full bg-emerald-400/10 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-300">Débito automático</span>
+                    : <span className="ml-1.5 rounded-full bg-amber-400/10 px-1.5 py-0.5 text-[10px] font-semibold text-amber-300">Pago manual</span>}
+                </p>
               </div>
               <div className="flex shrink-0 items-center gap-1">
                 <button onClick={() => abrirPago(g)} className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--cyan)]/40 bg-[var(--cyan)]/10 px-2.5 py-1.5 text-xs font-semibold text-[var(--cyan)] hover:bg-[var(--cyan)]/20"><CircleDollarSign size={13} /> Registrar pago</button>
-                <button onClick={() => { setError(""); setForm({ id: g.id, nombre: g.nombre, categoria: g.categoria ?? "", proveedor: g.proveedor ?? "", moneda: g.moneda, valor: Number(g.valor) || 0, cuenta_id: g.cuenta_id ?? "", activo: g.activo }) }} className="rounded-lg p-1.5 text-[#fff]/60 hover:bg-white/5 hover:text-[#fff]"><Pencil size={14} /></button>
+                <button onClick={() => { setError(""); setForm({ id: g.id, nombre: g.nombre, categoria: g.categoria ?? "", proveedor: g.proveedor ?? "", moneda: g.moneda, valor: Number(g.valor) || 0, cuenta_id: g.cuenta_id ?? "", activo: g.activo, dia_cobro: Number(g.dia_cobro) || 0, debito_automatico: g.debito_automatico === true }) }} className="rounded-lg p-1.5 text-[#fff]/60 hover:bg-white/5 hover:text-[#fff]"><Pencil size={14} /></button>
                 <button onClick={() => setConfirmar(g)} className="rounded-lg p-1.5 text-red-300/70 hover:bg-red-500/10 hover:text-red-300"><Trash2 size={14} /></button>
               </div>
             </div>
@@ -177,6 +186,13 @@ export function RecurrentesClient({ cuentas }: { cuentas: Cuenta[] }) {
                   <option value="">— Elegir al pagar —</option>
                   {cuentas.map((c) => <option key={c.id} value={c.id}>{c.nombre} ({c.moneda})</option>)}
                 </select></label>
+              <label className="flex flex-col gap-1.5"><span className={lblCls}>Día de cobro del mes</span>
+                <input type="number" min={1} max={31} value={form.dia_cobro || ""} onChange={(e) => setForm({ ...form, dia_cobro: Number(e.target.value) || 0 })} className={inputCls} placeholder="Ej: 5" /></label>
+              <label className="flex items-center gap-2 self-end pb-2 text-sm text-[#fff]/75">
+                <input type="checkbox" checked={form.debito_automatico} onChange={(e) => setForm({ ...form, debito_automatico: e.target.checked })} className="h-4 w-4 accent-[var(--cyan)]" />
+                Se debita automáticamente
+              </label>
+              <p className="text-[11px] text-[#fff]/45 sm:col-span-2">Si <b className="text-[#fff]/65">no</b> es débito automático, aparecerá como recordatorio de pago manual en el dashboard del CEO.</p>
               <label className="flex items-center gap-2 text-sm text-[#fff]/75 sm:col-span-2">
                 <input type="checkbox" checked={form.activo} onChange={(e) => setForm({ ...form, activo: e.target.checked })} className="h-4 w-4 accent-[var(--cyan)]" /> Activo
               </label>

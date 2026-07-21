@@ -3,7 +3,7 @@ import { ArrowLeft, FileSignature, Wallet } from "lucide-react"
 import { requireEmpleado } from "@/lib/empleados/auth"
 import { getEmpleadoById, getConfigEmpresa } from "@/lib/empleados/queries"
 import { listContratos } from "@/lib/empleados/contrato-queries"
-import { condicionesVigentesFirmadas, esEnviadoPendiente, totalMensualContrato, inicioContrato, TIPO_VERSION_LABEL, type Contrato } from "@/lib/empleados/contrato"
+import { condicionesVigentesFirmadas, esEnviadoPendiente, totalMensualContrato, inicioContrato, nombreDocumento, type Contrato } from "@/lib/empleados/contrato"
 import { formatCOP } from "@/lib/empleados/desprendible"
 import { formatMoneda } from "@/lib/empleados/freelance"
 import { esVinculacionPorFactura, FREELANCE_MODO_LABEL } from "@/lib/empleados/types"
@@ -174,7 +174,7 @@ export default async function ContratoEmpleadoPage() {
                   {contratos.map((c) => (
                     <li key={c.id} className="rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-4">
                       <div className="flex items-center justify-between">
-                        <span className="rounded-full bg-white/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[#fff]/70">{TIPO_VERSION_LABEL[c.tipo]}</span>
+                        <span className="rounded-full bg-white/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[#fff]/70">{nombreDocumento(c)}</span>
                         <span className="text-xs text-[#fff]/45">desde {inicioContrato(c, empleado?.fecha_ingreso ?? null)}</span>
                       </div>
                       <p className="mt-2 text-sm text-[#fff]/85">{formatCOP(totalMensualContrato(c))} / mes</p>

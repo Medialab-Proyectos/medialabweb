@@ -135,6 +135,10 @@ export async function POST(req: Request) {
     return NextResponse.json({ contrato })
   } catch (e) {
     const msg = e instanceof Error ? e.message : "Error"
+    // El modo 'aprendizaje' requiere ampliar el CHECK de freelance_modo (fase43).
+    if (/freelance_modo_check/i.test(msg)) {
+      return NextResponse.json({ error: "Falta correr schema-fase43-aprendizaje-cursos.sql en Supabase para habilitar el vínculo «por aprendizaje»." }, { status: 409 })
+    }
     const falta = /schema cache|does not exist|relation|column|PGRST205/i.test(msg)
     return NextResponse.json(
       {

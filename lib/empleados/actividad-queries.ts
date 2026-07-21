@@ -2,7 +2,7 @@ import "server-only"
 import { getServiceClient } from "./db"
 import { listEmpleados } from "./queries"
 import { getHorariosVigentesMap, type HorarioVigenteInfo } from "./horario-queries"
-import { ahoraBogota, estadoActual, hhmmAMin, horarioVigenteSemana, type EstadoActual } from "./horario"
+import { ahoraBogota, estadoActual, hhmmAMin, horarioVigenteSemana, type EstadoActual, type Horario } from "./horario"
 import { TIPOS_VACACIONALES } from "./ausencia"
 import { esVinculacionPorFactura } from "./types"
 
@@ -13,6 +13,11 @@ export type ActividadEmpleado = {
   estado: EstadoActual
   entrada?: string
   salida?: string
+  /** Horario aprobado que rige esta semana (para desplegarlo en el panel, con almuerzo). */
+  horario?: Horario | null
+  /** Semana vigente cuando el horario es alternado ("A" | "B"). */
+  semana?: "A" | "B"
+  alterna?: boolean
 }
 
 type AusHoy = { empleado_id: string; tipo: string; por_horas?: boolean; hora_inicio?: string | null; hora_fin?: string | null }
@@ -66,11 +71,17 @@ export async function getPanelActividad(): Promise<{ ahora: string; empleados: A
     try {
       const info = horarios.get(e.id) ?? null
       // Resuelve la alternancia quincenal: qué horario rige esta semana.
-      const h = info ? horarioVigenteSemana(info.horario, info.horario_b, info.alterna, info.creado_en, hoyISO).horario : null
+      const vig = info ? horarioVigenteSemana(info.horario, info.horario_b, info.alterna, info.creado_en, hoyISO) : null
+      const h = vig?.horario ?? null
       const est = estadoActual(h, dia, minutos, coberturaDe(e.id))
       resumen[est]++
       const day = h && dia ? h[dia] : null
-      return { id: e.id, nombre: e.nombre, cargo: e.cargo, estado: est, entrada: day?.activo ? day.entrada : undefined, salida: day?.activo ? day.salida : undefined }
+      return {
+        id: e.id, nombre: e.nombre, cargo: e.cargo, estado: est,
+        entrada: day?.activo ? day.entrada : undefined,
+        salida: day?.activo ? day.salida : undefined,
+        horario: h, semana: vig?.semana, alterna: !!info?.alterna,
+      }
     } catch {
       resumen.no_configurado++
       return { id: e.id, nombre: e.nombre, cargo: e.cargo, estado: "no_configurado" as EstadoActual }

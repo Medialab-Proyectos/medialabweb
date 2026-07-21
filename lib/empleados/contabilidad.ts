@@ -155,6 +155,10 @@ export type GastoRecurrente = {
   cuenta_id: string | null
   activo: boolean
   orden: number
+  /** Día del mes en que se cobra (1–31). Null = sin fecha definida. */
+  dia_cobro?: number | null
+  /** Si se debita solo. Los que NO lo son requieren pago manual y se recuerdan al CEO. */
+  debito_automatico?: boolean
   creado_en: string
 }
 

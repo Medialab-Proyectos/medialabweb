@@ -151,6 +151,49 @@ export async function generarContratoPDF(
     return generarOtrosi()
   }
 
+  // ── ACUERDO DE PARTICIPACIÓN (vínculo por aprendizaje, sin remuneración) ──
+  // No es contrato laboral ni de prestación de servicios: MediaLab NO adquiere
+  // obligación de pago alguna. Solo formaliza la participación, el horario y la PI.
+  if (porFactura && contrato.freelance_modo === "aprendizaje") {
+    const P = "EL PARTICIPANTE"
+    const maxHoras = Number(contrato.freelance_max_horas_mes) || 0
+
+    centro("Acuerdo de Participación por Aprendizaje", 13, bold)
+    centro("Sin remuneración ni obligaciones de pago", 10.5, bold, gray)
+    y += 6
+    tabla("DATOS DEL PARTICIPANTE", [
+      ["Nombre completo", empleado.nombre],
+      ["Cédula de ciudadanía", formatCedula(empleado.cedula)],
+      ["Dirección", empleado.direccion ?? ""],
+      ["Teléfono", empleado.telefono ?? ""],
+      ["Correo electrónico", empleado.email ?? ""],
+      ["Rol de aprendizaje", cargo],
+      ["Modalidad", empleado.modalidad || "Trabajo Remoto"],
+      ["Remuneración", "Ninguna — participación formativa sin contraprestación"],
+      ["Dedicación máxima", maxHoras > 0 ? `${maxHoras} horas al mes` : "Según horario acordado"],
+    ])
+    y += 10
+    parrafo(`Entre los suscritos, por una parte, la Empresa ${EMISOR.nombre}, identificada con NIT número ${EMISOR.nit}, en adelante LA EMPRESA, y por la otra ${empleado.nombre}, identificado(a) con cédula de ciudadanía número ${formatCedula(empleado.cedula)}, en adelante ${P}, hemos decidido suscribir el presente ACUERDO DE PARTICIPACIÓN con fines exclusivamente formativos y de aprendizaje, el cual NO constituye contrato de trabajo ni contrato de prestación de servicios, y que se regirá por las siguientes cláusulas:`)
+    y += 4
+    centro("CLÁUSULAS", 11, bold, cyan)
+
+    clausula("1. OBJETO.", `${P} participará de manera voluntaria en las actividades, proyectos y espacios formativos de LA EMPRESA en el rol de ${cargo}${contrato.descripcion ? ` — ${contrato.descripcion}` : ""}, con el propósito exclusivo de adquirir experiencia y conocimiento práctico. La participación es libre y no está sujeta a metas de productividad exigibles.`)
+    clausula("2. AUSENCIA DE REMUNERACIÓN Y DE OBLIGACIONES DE PAGO.", `El presente acuerdo es a título gratuito. LA EMPRESA NO adquiere obligación económica alguna con ${P}: no habrá salario, honorarios, viáticos, auxilios, bonificaciones, comisiones ni contraprestación de ninguna naturaleza, presente o futura. ${P} declara que participa por su propio interés formativo y renuncia expresamente a reclamar cualquier pago derivado de esta participación.`)
+    clausula("3. AUSENCIA DE RELACIÓN LABORAL Y DE PRESTACIÓN DE SERVICIOS.", `Las partes reconocen que este acuerdo no genera relación laboral, contrato realidad, ni vínculo de prestación de servicios. No existe subordinación jurídica con fines lucrativos, ni exclusividad, ni disponibilidad exigible. En consecuencia, no se causan prestaciones sociales, aportes parafiscales, cesantías, primas, vacaciones ni indemnizaciones de ninguna clase.`)
+    clausula("4. SEGURIDAD SOCIAL.", `${P} manifiesta contar con afiliación vigente al Sistema General de Seguridad Social en Salud (o ser beneficiario) y asume por su cuenta cualquier cobertura adicional que requiera. LA EMPRESA no asume aportes al sistema de seguridad social por razón de este acuerdo.`)
+    clausula("5. DURACIÓN.", `El presente acuerdo regirá desde el ${fechaLarga(inicio)}${contrato.fecha_fin_probable ? ` hasta el ${fechaLarga(contrato.fecha_fin_probable)}` : ", por el tiempo que las partes estimen conveniente"}. Cualquiera de las partes podrá darlo por terminado en cualquier momento, sin necesidad de preaviso, sin expresión de causa y sin que ello genere indemnización o compensación alguna.`)
+    clausula("6. DEDICACIÓN Y HORARIO.", `${P} acordará con LA EMPRESA un horario de participación que quedará registrado y aprobado en el Portal de Empleados${maxHoras > 0 ? `, sin exceder ${maxHoras} horas al mes` : ""}. Este horario es de referencia para la coordinación del equipo y no implica jornada laboral ni disponibilidad obligatoria.`)
+    if (funciones.length) clausula("7. ACTIVIDADES DE APRENDIZAJE.", `${P} podrá participar, entre otras, en las siguientes actividades:`, funciones)
+    clausula("8. PROPIEDAD INTELECTUAL.", `Todo material, desarrollo, obra o creación que ${P} produzca en el marco de este acuerdo (código, software, diseños, prototipos, textos, piezas gráficas y en general cualquier obra protegida por propiedad intelectual, industrial o derechos de autor) es y será propiedad exclusiva de LA EMPRESA, entendiéndose cedidos los derechos patrimoniales en este acto como obra por encargo, conforme a la Ley 23 de 1982, la Decisión Andina 351 y el artículo 28 de la Ley 1450 de 2011. Esta cláusula subsiste a la terminación del acuerdo.`)
+    clausula("9. USO EN PORTAFOLIO.", `${P} podrá exhibir en su portafolio personal únicamente fragmentos parciales de los productos en los que participó, sin revelar información confidencial y sin infringir los derechos del cliente final. Para ello deberá informar previamente al correo hello@medialab.design y esperar la autorización escrita de LA EMPRESA sobre las piezas que podrá divulgar.`)
+    clausula("10. CONFIDENCIALIDAD.", `${P} mantendrá en reserva toda información a la que acceda (técnica, comercial, de clientes o estratégica) y no la usará ni revelará a terceros sin autorización escrita de LA EMPRESA. Esta obligación se mantendrá hasta por cinco (5) años posteriores a la terminación del acuerdo.`)
+    clausula("11. PROTECCIÓN DE DATOS PERSONALES.", "Cada parte autoriza el tratamiento de sus datos personales para los fines administrativos propios de este acuerdo, conforme a la Ley 1581 de 2012 y demás normas aplicables.")
+    clausula("12. ACUERDO TOTAL.", `Este documento constituye el acuerdo íntegro entre las partes respecto de la participación formativa y deja sin efecto entendimientos previos. Cualquier modificación deberá constar por escrito y firmada por ambas partes. La invalidez de una cláusula no afecta a las demás.`)
+    parrafo(`Las partes firman el presente acuerdo expresando su plena conformidad y declarando que, después de haberlo leído, entienden su alcance y contenido legal, y en particular que la participación NO genera remuneración ni vínculo laboral, en ${EMISOR.ciudad}, el ${fechaLarga(contrato.vigente_desde)}.`, 9.5)
+    firmas("LA EMPRESA", "MediaLab Ingeniería", "EL PARTICIPANTE", true)
+    return pdf.save()
+  }
+
   // ── CONTRATO INICIAL ──────────────────────────────────────────────────────
   if (porFactura) {
     // Freelance y prestación comparten el cuerpo de servicios, pero difieren en

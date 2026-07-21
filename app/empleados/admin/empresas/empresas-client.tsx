@@ -108,17 +108,16 @@ export function EmpresasClient() {
       <Link href="/empleados/admin/contabilidad" className="mb-6 inline-flex items-center gap-1.5 text-sm text-[#fff]/55 hover:text-[#fff]">
         <ArrowLeft size={15} /> Volver a Contabilidad
       </Link>
-      <div className="mb-4 flex items-center justify-between">
-        <div className="flex items-center gap-2.5">
-          <Building2 size={20} className="text-[var(--cyan)]" />
-          <h1 className="font-display text-xl font-bold">Gestionar empresas</h1>
-          <span className="rounded-full bg-white/5 px-2 py-0.5 text-xs text-[#fff]/50">{empresas.length}</span>
-        </div>
-        <button onClick={() => { setError(""); setFormEmpresa({ nombre: "", nit: "", correo: "", pais: "Colombia", telefono: "", direccion: "", ciudad: "" }) }} className="inline-flex items-center gap-2 rounded-full bg-[var(--cyan)] px-4 py-2 text-sm font-semibold text-[#04191b] transition hover:brightness-110">
-          <Plus size={15} /> Nueva empresa
-        </button>
+      <div className="mb-3 flex items-center gap-2.5">
+        <Building2 size={20} className="text-[var(--cyan)]" />
+        <h1 className="font-display text-xl font-bold">Gestionar empresas</h1>
+        <span className="rounded-full bg-white/5 px-2 py-0.5 text-xs text-[#fff]/50">{empresas.length}</span>
       </div>
       <p className="mb-4 text-sm text-[#fff]/55">La empresa lleva sus datos (nombre, NIT, correo, país, ciudad, dirección, teléfono). Sus <b className="text-[#fff]/75">contratos</b> definen cómo se le factura (por hora o por mes) y si <b className="text-[#fff]/75">requiere cuenta de cobro</b>. Las cuentas de cobro se emiten sobre un contrato.</p>
+      {/* En móvil el botón va debajo del título y la descripción, a todo el ancho. */}
+      <button onClick={() => { setError(""); setFormEmpresa({ nombre: "", nit: "", correo: "", pais: "Colombia", telefono: "", direccion: "", ciudad: "" }) }} className="mb-4 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[var(--cyan)] px-4 py-2.5 text-sm font-semibold text-[#04191b] transition hover:brightness-110 sm:w-auto sm:py-2">
+        <Plus size={15} /> Nueva empresa
+      </button>
 
       {error && <p className="mb-4 rounded-lg bg-red-500/10 px-3 py-2 text-sm text-red-300">{error}</p>}
 

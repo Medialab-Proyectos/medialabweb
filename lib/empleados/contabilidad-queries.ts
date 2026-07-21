@@ -106,22 +106,35 @@ export async function anularEgresoLiquidacion(empleadoId: string): Promise<{ bor
 }
 
 // ── Gastos recurrentes (catálogo) ─────────────────────────────────────────────
-const GASTO_COLS = "id,nombre,categoria,proveedor,moneda,valor,cuenta_id,activo,orden,creado_en"
+const GASTO_BASE = "id,nombre,categoria,proveedor,moneda,valor,cuenta_id,activo,orden,creado_en"
+// dia_cobro y debito_automatico llegan en fase43: si aún no existen, se cae a las base.
+const GASTO_COLS = `${GASTO_BASE},dia_cobro,debito_automatico`
+const faltaFase43 = (e: unknown) => /dia_cobro|debito_automatico|column|schema cache|find the/i.test(String((e as { message?: string })?.message ?? ""))
 
 export async function listGastosRecurrentes() {
   const sb = getServiceClient()
-  const { data, error } = await sb.from("gastos_recurrentes").select(GASTO_COLS).order("orden").order("nombre")
+  let data: unknown = null
+  let error: unknown = null
+  ;({ data, error } = await sb.from("gastos_recurrentes").select(GASTO_COLS).order("orden").order("nombre"))
+  if (error && faltaFase43(error)) {
+    ;({ data, error } = await sb.from("gastos_recurrentes").select(GASTO_BASE).order("orden").order("nombre"))
+  }
   if (error) throw error
-  return (data ?? []) as GastoRecurrente[]
+  return ((data ?? []) as GastoRecurrente[])
 }
 
 export type GastoRecurrenteInput = Omit<GastoRecurrente, "id" | "creado_en"> & { id?: string }
 
 export async function upsertGastoRecurrente(input: GastoRecurrenteInput) {
   const sb = getServiceClient()
-  const { data, error } = await sb.from("gastos_recurrentes").upsert(input).select(GASTO_COLS).single()
+  let { data, error } = await sb.from("gastos_recurrentes").upsert(input).select(GASTO_COLS).single()
+  if (error && faltaFase43(error)) {
+    const { dia_cobro: _d, debito_automatico: _b, ...base } = input as Record<string, unknown>
+    void _d; void _b
+    ;({ data, error } = await sb.from("gastos_recurrentes").upsert(base).select(GASTO_BASE).single())
+  }
   if (error) throw error
-  return data as GastoRecurrente
+  return data as unknown as GastoRecurrente
 }
 
 export async function eliminarGastoRecurrente(id: string) {

@@ -10,7 +10,7 @@ import { ROL_LABEL, FREELANCE_MODO_LABEL, esVinculacionPorFactura } from "@/lib/
 import { formatCOP } from "@/lib/empleados/desprendible"
 import { formatMoneda, type Moneda } from "@/lib/empleados/freelance"
 import {
-  type Contrato, type ConceptoAjuste, condicionesVigentes, condicionesVigentesFirmadas, esFirmado, esBorrador, esEnviadoPendiente, totalMensualContrato, inicioContrato, TIPO_VERSION_LABEL, ESTADO_CONTRATO_LABEL, CONCEPTO_AJUSTE_LABEL, contratoEsPorFactura,
+  type Contrato, type ConceptoAjuste, condicionesVigentes, condicionesVigentesFirmadas, esFirmado, esBorrador, esEnviadoPendiente, totalMensualContrato, inicioContrato, nombreDocumento, ESTADO_CONTRATO_LABEL, CONCEPTO_AJUSTE_LABEL, contratoEsPorFactura,
 } from "@/lib/empleados/contrato"
 import { TIPOS_CONTRATO, JORNADAS } from "@/lib/empleados/catalogos-co"
 import { salarioMinimoAnio, aportesEmpleado } from "@/lib/empleados/nomina-co"
@@ -833,7 +833,7 @@ export function ContratosAdminClient({ empleados: empleadosProp, config }: { emp
                     <li key={c.id} className="rounded-xl border border-white/10 bg-black/20 p-3">
                       <div className="flex items-center justify-between">
                         <span className="flex items-center gap-1.5">
-                          <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${editId === c.id ? "bg-amber-400/20 text-amber-200" : "bg-white/10 text-[#fff]/70"}`}>{TIPO_VERSION_LABEL[c.tipo]}</span>
+                          <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${editId === c.id ? "bg-amber-400/20 text-amber-200" : "bg-white/10 text-[#fff]/70"}`}>{nombreDocumento(c)}</span>
                           {esFirmado(c) ? (
                             <span className="inline-flex items-center gap-1 rounded-full bg-emerald-400/10 px-1.5 py-0.5 text-[9px] font-semibold text-emerald-300"><CheckCircle2 size={9} /> Firmado</span>
                           ) : esEnviadoPendiente(c) ? (

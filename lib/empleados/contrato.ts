@@ -122,6 +122,12 @@ export const TIPO_VERSION_LABEL: Record<TipoContratoVersion, string> = {
   otrosi: "Otrosí / ajuste",
 }
 
+/** Nombre del documento según el vínculo: el de aprendizaje no es contrato sino acuerdo. */
+export function nombreDocumento(c: { freelance_modo?: string | null; tipo?: TipoContratoVersion } | null | undefined): string {
+  if (c?.freelance_modo === "aprendizaje") return c.tipo === "otrosi" ? "Ajuste al acuerdo" : "Acuerdo de participación"
+  return c?.tipo === "otrosi" ? "Otrosí / ajuste" : "Contrato inicial"
+}
+
 /** Semestre 1 = enero-junio (se paga en junio); semestre 2 = julio-diciembre (se paga en diciembre). */
 export const SEMESTRE_LABEL: Record<1 | 2, string> = {
   1: "Primer semestre (junio)",

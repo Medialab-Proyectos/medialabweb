@@ -112,12 +112,13 @@ export function BeneficiosAdminClient() {
         <div className="flex flex-col gap-8">
           {/* Catálogo de beneficios */}
           <section>
-            <div className="mb-3 flex items-center justify-between">
+            {/* En móvil el botón va debajo del título y la descripción, a todo el ancho. */}
+            <div className="mb-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <h2 className="text-sm font-semibold text-[#fff]/85">Catálogo de beneficios</h2>
                 <p className="text-xs text-[#fff]/50">Crea los beneficios que la empresa ofrece. Solo tú los activas por empleado.</p>
               </div>
-              <button onClick={() => { setError(""); setForm({ nombre: "", descripcion: "", proveedor: "", activo: true }) }} className="inline-flex items-center gap-2 rounded-full bg-[#E8751A] px-4 py-2 text-sm font-semibold text-[#1a0f04] transition hover:brightness-110">
+              <button onClick={() => { setError(""); setForm({ nombre: "", descripcion: "", proveedor: "", activo: true }) }} className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-full bg-[#E8751A] px-4 py-2.5 text-sm font-semibold text-[#1a0f04] transition hover:brightness-110 sm:w-auto sm:py-2">
                 <Plus size={15} /> Nuevo beneficio
               </button>
             </div>
