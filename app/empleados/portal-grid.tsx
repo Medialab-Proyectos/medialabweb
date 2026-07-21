@@ -29,13 +29,13 @@ const secciones: Seccion[] = [
   { key: "vacaciones", icon: Plane, titulo: "Permisos y ausencias", desc: "Solicita permisos, licencias o vacaciones (según tu vínculo).", estado: "activo", color: "#00BFA6", href: "/empleados/ausencias" },
   { key: "horas-extras", icon: Timer, titulo: "Horas extra", desc: "Reporta las horas extra que trabajaste; tu líder las aprueba.", estado: "activo", color: "#00BFA6", href: "/empleados/horas-extras", laboral: true },
   { key: "horario", icon: CalendarClock, titulo: "Mi horario", desc: "Registra tu horario de lunes a viernes; tu líder lo aprueba.", estado: "activo", color: "#00BFA6", href: "/empleados/horario", laboral: true },
-  { key: "cursos", icon: GraduationCap, titulo: "Cursos", desc: "Formaciones y rutas de estudio asignadas.", estado: "deshabilitado", color: "#8b5cf6" },
+  { key: "cursos", icon: GraduationCap, titulo: "Cursos", desc: "Formaciones y rutas de estudio en plataformas externas, abiertas a todo el equipo.", estado: "activo", color: "#8b5cf6", href: "/empleados/cursos" },
   { key: "beneficios", icon: Gift, titulo: "Beneficios", desc: "Activa medicina prepagada y pide tus permisos de media jornada.", estado: "activo", color: "#E8751A", href: "/empleados/beneficios" },
   { key: "herramientas", icon: Wrench, titulo: "Herramientas", desc: "Accesos y credenciales de las herramientas del equipo.", estado: "deshabilitado", color: "#8b5cf6" },
 ]
 
 /** Grilla del portal personal del colaborador (accesos a su contrato, pagos, beneficios…). */
-export function PortalGrid({ rol, tipoVinculacion, encuestaHabilitada = false, horarioHabilitado = false, freelanceModo = null }: { rol: Rol; tipoVinculacion: TipoVinculacion; encuestaHabilitada?: boolean; horarioHabilitado?: boolean; freelanceModo?: FreelanceModo | null }) {
+export function PortalGrid({ rol, tipoVinculacion, encuestaHabilitada = false, evaluacionesHabilitadas = false, horarioHabilitado = false, freelanceModo = null }: { rol: Rol; tipoVinculacion: TipoVinculacion; encuestaHabilitada?: boolean; evaluacionesHabilitadas?: boolean; horarioHabilitado?: boolean; freelanceModo?: FreelanceModo | null }) {
   const esFreelance = esVinculacionPorFactura(tipoVinculacion)
   const esAprendizaje = esModoSinValor(freelanceModo)
   const seccionesVisibles = secciones.filter((s) => {
@@ -50,6 +50,8 @@ export function PortalGrid({ rol, tipoVinculacion, encuestaHabilitada = false, h
     if (rol !== "ceo" && s.estado !== "activo") return false
     // La encuesta de satisfacción solo aparece si el CEO la habilitó (o si eres el CEO).
     if (s.key === "encuesta" && rol !== "ceo" && !encuestaHabilitada) return false
+    // Las evaluaciones solo aparecen si el CEO las habilitó (o si eres el CEO).
+    if (s.key === "evaluaciones" && rol !== "ceo" && !evaluacionesHabilitadas) return false
     return true
   })
 
@@ -64,13 +66,15 @@ export function PortalGrid({ rol, tipoVinculacion, encuestaHabilitada = false, h
             </div>
             <ArrowRight size={16} className="text-[var(--magenta)]" />
           </Link>
-          <Link href="/empleados/evaluar" className="flex items-center justify-between rounded-2xl border border-[#8b5cf6]/25 bg-[#8b5cf6]/[0.06] px-5 py-4 transition hover:bg-[#8b5cf6]/[0.1]">
-            <div className="flex items-center gap-3">
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#8b5cf6]/15"><Target size={18} className="text-[#8b5cf6]" /></span>
-              <div><p className="text-sm font-semibold">Evaluar a mi equipo</p><p className="text-xs text-[#fff]/55">Evaluación de desempeño trimestral de tu equipo.</p></div>
-            </div>
-            <ArrowRight size={16} className="text-[#8b5cf6]" />
-          </Link>
+          {evaluacionesHabilitadas && (
+            <Link href="/empleados/evaluar" className="flex items-center justify-between rounded-2xl border border-[#8b5cf6]/25 bg-[#8b5cf6]/[0.06] px-5 py-4 transition hover:bg-[#8b5cf6]/[0.1]">
+              <div className="flex items-center gap-3">
+                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#8b5cf6]/15"><Target size={18} className="text-[#8b5cf6]" /></span>
+                <div><p className="text-sm font-semibold">Evaluar a mi equipo</p><p className="text-xs text-[#fff]/55">Evaluación de desempeño trimestral de tu equipo.</p></div>
+              </div>
+              <ArrowRight size={16} className="text-[#8b5cf6]" />
+            </Link>
+          )}
         </div>
       )}
 

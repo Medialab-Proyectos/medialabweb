@@ -61,6 +61,10 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: msg }, { status: 400 })
   }
   if (b.fecha_fin < b.fecha_inicio) return NextResponse.json({ error: "La fecha final no puede ser anterior a la inicial." }, { status: 400 })
+  // Los permisos (remunerado / no remunerado) exigen motivo por obligación.
+  if ((b.tipo === "permiso_remunerado" || b.tipo === "permiso_no_remunerado") && !b.motivo?.trim()) {
+    return NextResponse.json({ error: "Un permiso remunerado o no remunerado requiere indicar el motivo." }, { status: 400 })
+  }
 
   // Permiso por HORAS: solo tipos que no son vacaciones; queda en un solo día.
   if (b.por_horas) {

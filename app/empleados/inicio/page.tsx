@@ -45,7 +45,12 @@ export default async function InicioPage() {
   } catch { /* sin tabla de contratos: no bloquear */ }
 
   let encuestaHabilitada = false
-  try { encuestaHabilitada = (await getConfigEmpresa()).encuesta_habilitada === true } catch { /* config opcional */ }
+  let evaluacionesHabilitadas = false
+  try {
+    const cfg = await getConfigEmpresa()
+    encuestaHabilitada = cfg.encuesta_habilitada === true
+    evaluacionesHabilitadas = cfg.evaluaciones_habilitadas === true
+  } catch { /* config opcional */ }
 
   return (
     <>
@@ -85,7 +90,7 @@ export default async function InicioPage() {
             <ArrowRight size={18} className="text-[var(--magenta)]" />
           </Link>
         ) : (
-          <PortalGrid rol={empleado.rol} tipoVinculacion={empleado.tipo_vinculacion} encuestaHabilitada={encuestaHabilitada} horarioHabilitado={empleado.horario_habilitado === true} freelanceModo={empleado.freelance_modo} />
+          <PortalGrid rol={empleado.rol} tipoVinculacion={empleado.tipo_vinculacion} encuestaHabilitada={encuestaHabilitada} evaluacionesHabilitadas={evaluacionesHabilitadas} horarioHabilitado={empleado.horario_habilitado === true} freelanceModo={empleado.freelance_modo} />
         )}
 
         <p className="mt-10 text-center text-xs text-[#fff]/35">

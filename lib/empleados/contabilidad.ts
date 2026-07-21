@@ -47,6 +47,9 @@ export type Movimiento = {
   iva_valor: number | null
   estado: EstadoMovimiento
   referencia: string | null
+  /** Moneda en la que ocurrió el movimiento. Puede diferir de la moneda de la cuenta
+   *  (ej. cuenta en COP que paga/recibe en USD). Null/ausente = misma moneda de la cuenta. */
+  moneda?: Moneda | null
   /** Solo si está pendiente: fecha probable de pago/cobro (recordatorio del dashboard). */
   fecha_estimada?: string | null
   /** TRM real que aplicó el banco al liquidar (suele ser menor que la TRM del día). */
@@ -175,14 +178,26 @@ export function valorDestino(m: Movimiento): number {
   return m.valor_destino != null ? n(m.valor_destino) : n(m.valor)
 }
 
+/**
+ * Valor del movimiento EXPRESADO EN LA MONEDA DE LA CUENTA. Si el movimiento ocurrió en otra
+ * moneda (ej. cuenta COP que recibe USD), se usa lo realmente liquidado: `valor_real` si viene,
+ * si no `valor × (tasa_real | tasa)`. Si es la misma moneda (o no se registró), es el `valor`.
+ */
+export function valorEnCuenta(m: Movimiento, monedaCuenta: Moneda): number {
+  if (!m.moneda || m.moneda === monedaCuenta) return n(m.valor)
+  if (m.valor_real != null) return n(m.valor_real)
+  const tasa = n(m.tasa_real) || n(m.tasa)
+  return tasa > 0 ? n(m.valor) * tasa : n(m.valor)
+}
+
 /** Saldo REALIZADO actual de una cuenta (acumulado, todas las fechas). */
 export function saldoCuenta(cuenta: Cuenta, movimientos: Movimiento[]): number {
   let saldo = n(cuenta.saldo_inicial)
   for (const m of movimientos) {
     if (m.estado !== "realizado") continue
-    // Ingreso: lo que aterriza = valor − costo de transferencia (comisión de la plataforma).
-    if (m.tipo === "ingreso" && m.cuenta_id === cuenta.id) saldo += n(m.valor) - n(m.costo)
-    else if (m.tipo === "egreso" && m.cuenta_id === cuenta.id) saldo -= n(m.valor)
+    // Ingreso: lo que aterriza = valor (en moneda de la cuenta) − costo de transferencia.
+    if (m.tipo === "ingreso" && m.cuenta_id === cuenta.id) saldo += valorEnCuenta(m, cuenta.moneda) - n(m.costo)
+    else if (m.tipo === "egreso" && m.cuenta_id === cuenta.id) saldo -= valorEnCuenta(m, cuenta.moneda)
     else if (m.tipo === "traslado") {
       // El origen se debita en su moneda; el destino se acredita en la suya (valor_destino).
       if (m.cuenta_id === cuenta.id) saldo -= n(m.valor)

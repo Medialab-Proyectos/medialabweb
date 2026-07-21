@@ -5,10 +5,10 @@ import type { Cuenta, Movimiento, Empresa, MetodoPago, ContratoEmpresa, GastoRec
 const CUENTA_COLS = "id,nombre,banco,numero_cuenta,plataforma,moneda,saldo_inicial,activa,orden,creado_en,actualizado_en"
 const MOV_BASE =
   "id,cuenta_id,cuenta_destino_id,fecha,tipo,categoria,concepto,contraparte,empresa_id,empleado_id,valor,tasa,costo,valor_destino,iva_tipo,iva_valor,estado,referencia,creado_por,creado_en,actualizado_en"
-// fecha_estimada / tasa_real / valor_real llegan en fase43 (resiliente si aún no está).
-const MOV_COLS = `${MOV_BASE},fecha_estimada,tasa_real,valor_real`
+// fecha_estimada / tasa_real / valor_real / moneda llegan en fase43 (resiliente si aún no está).
+const MOV_COLS = `${MOV_BASE},fecha_estimada,tasa_real,valor_real,moneda`
 const faltaMovFase43 = (e: unknown) =>
-  /fecha_estimada|tasa_real|valor_real|column|schema cache|find the/i.test(String((e as { message?: string })?.message ?? ""))
+  /fecha_estimada|tasa_real|valor_real|moneda|column|schema cache|find the/i.test(String((e as { message?: string })?.message ?? ""))
 
 // ── Cuentas ───────────────────────────────────────────────────────────────────
 export async function listCuentas() {
@@ -87,7 +87,8 @@ export async function upsertMovimiento(input: MovimientoInput) {
   let error: unknown = null
   ;({ data, error } = await sb.from("movimientos").upsert(input).select(MOV_COLS).single())
   if (error && faltaMovFase43(error)) {
-    const { fecha_estimada: _f, tasa_real: _t, valor_real: _v, ...base } = input as Record<string, unknown>
+    const { fecha_estimada: _f, tasa_real: _t, valor_real: _v, moneda: _mo, ...base } = input as Record<string, unknown>
+    void _mo
     void _f; void _t; void _v
     ;({ data, error } = await sb.from("movimientos").upsert(base).select(MOV_BASE).single())
   }

@@ -65,6 +65,8 @@ export function AusenciasClient() {
   const esVacacional = tipo === "vacaciones" || tipo === "adelanto_vacaciones"
   const puedePorHoras = !esVacacional && !media   // permisos/licencias se pueden pedir por horas
   const usaPorHoras = puedePorHoras && porHoras
+  // Los permisos (remunerado / no remunerado) exigen justificar el motivo por obligación.
+  const motivoObligatorio = tipo === "permiso_remunerado" || tipo === "permiso_no_remunerado"
 
   // La media jornada se pide sobre un solo día: mantenemos fin = inicio.
   useEffect(() => {
@@ -104,6 +106,7 @@ export function AusenciasClient() {
   async function enviar(e: React.FormEvent) {
     e.preventDefault()
     if (!validacion.ok) { setError(validacion.aviso || "Revisa los datos de la solicitud."); return }
+    if (motivoObligatorio && !motivo.trim()) { setError("Para un permiso remunerado o no remunerado debes escribir el motivo."); return }
     setError(""); setMsg(""); setEnviando(true)
     try {
       const res = await fetch("/api/empleados/ausencias", {
@@ -209,8 +212,8 @@ export function AusenciasClient() {
             </>
           )}
           <label className="flex flex-col gap-1.5 sm:col-span-2">
-            <span className={lblCls}>Motivo (opcional)</span>
-            <input value={motivo} onChange={(e) => setMotivo(e.target.value)} placeholder="Breve descripción" className={inputCls} />
+            <span className={lblCls}>Motivo {motivoObligatorio ? <span className="text-red-300">*</span> : "(opcional)"}</span>
+            <input value={motivo} onChange={(e) => setMotivo(e.target.value)} placeholder={motivoObligatorio ? "Obligatorio para permisos: explica el motivo" : "Breve descripción"} className={inputCls} required={motivoObligatorio} />
           </label>
         </div>
 

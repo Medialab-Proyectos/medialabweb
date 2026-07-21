@@ -165,11 +165,11 @@ export async function getCertificadoEmpleado(path: string): Promise<{ bytes: Uin
 }
 
 // ── Configuración de empresa (fila única) ─────────────────────────────────────
-export type ConfigEmpresa = { caja_compensacion: string | null; arl: string | null; fecha_fundacion: string | null; encuesta_habilitada?: boolean }
-const CONFIG_COLS = "caja_compensacion,arl,fecha_fundacion,encuesta_habilitada"
+export type ConfigEmpresa = { caja_compensacion: string | null; arl: string | null; fecha_fundacion: string | null; encuesta_habilitada?: boolean; evaluaciones_habilitadas?: boolean }
+const CONFIG_COLS = "caja_compensacion,arl,fecha_fundacion,encuesta_habilitada,evaluaciones_habilitadas"
 // Columnas que agregan migraciones POSTERIORES a fase19 (pueden faltar): arl (fase24),
-// fecha_fundacion (fase35), encuesta_habilitada (fase42). Solo caja_compensacion es de fase19.
-const CONFIG_COLS_OPCIONALES = ["encuesta_habilitada", "fecha_fundacion", "arl"]
+// fecha_fundacion (fase35), encuesta_habilitada (fase42), evaluaciones_habilitadas (fase43).
+const CONFIG_COLS_OPCIONALES = ["evaluaciones_habilitadas", "encuesta_habilitada", "fecha_fundacion", "arl"]
 
 const quitarCol = (cols: string, bad: string) => cols.split(",").map((c) => c.trim()).filter((c) => c !== bad).join(",")
 const colFaltante = (e: unknown) => {
@@ -179,7 +179,7 @@ const colFaltante = (e: unknown) => {
 
 export async function getConfigEmpresa(): Promise<ConfigEmpresa> {
   const sb = getServiceClient()
-  const def: ConfigEmpresa = { caja_compensacion: null, arl: null, fecha_fundacion: null, encuesta_habilitada: false }
+  const def: ConfigEmpresa = { caja_compensacion: null, arl: null, fecha_fundacion: null, encuesta_habilitada: false, evaluaciones_habilitadas: false }
   // Va quitando columnas opcionales que aún no existen (migraciones fase24/35/42 pendientes).
   let cols = CONFIG_COLS
   for (let i = 0; i <= CONFIG_COLS_OPCIONALES.length; i++) {

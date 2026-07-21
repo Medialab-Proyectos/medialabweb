@@ -1,10 +1,11 @@
 import Link from "next/link"
-import { Receipt, Gift, ClipboardCheck, Target, ArrowRight, Building2, SmilePlus } from "lucide-react"
+import { Receipt, Gift, ClipboardCheck, Target, ArrowRight, Building2, SmilePlus, GraduationCap } from "lucide-react"
 import { requireCEO } from "@/lib/empleados/auth"
 import { getEmpleadoById } from "@/lib/empleados/queries"
 import { PortalHeader } from "../../portal-header"
 import { ModuleNav } from "../module-nav"
 import { AlertBoxes } from "../alert-boxes"
+import { EvaluacionesToggle } from "./evaluaciones-toggle"
 
 export const dynamic = "force-dynamic"
 
@@ -13,7 +14,8 @@ const HERRAMIENTAS = [
   { href: "/empleados/admin/beneficios", icon: Gift, color: "#E8751A", titulo: "Beneficios", desc: "Medicina prepagada y activaciones de beneficios del equipo." },
   { href: "/empleados/aprobaciones", icon: ClipboardCheck, color: "var(--magenta)", titulo: "Aprobaciones de ausencias", desc: "Vacaciones, permisos y licencias por aprobar." },
   { href: "/empleados/evaluar", icon: Target, color: "#8b5cf6", titulo: "Evaluaciones de desempeño", desc: "Evalúa a tu equipo por periodo." },
-  { href: "/empleados/admin/satisfaccion", icon: SmilePlus, color: "#00BFA6", titulo: "Satisfacción", desc: "Encuesta a empleados, registro de empresas e indicadores." },
+  { href: "/empleados/admin/satisfaccion", icon: SmilePlus, color: "#00BFA6", titulo: "Satisfacción", desc: "Encuesta a empleados e indicadores (la empresarial viene de Operaciones)." },
+  { href: "/empleados/cursos", icon: GraduationCap, color: "#8b5cf6", titulo: "Cursos y formación", desc: "Publica enlaces a cursos externos, abiertos para todo el equipo." },
   { href: "/empleados/admin/empresa-config", icon: Building2, color: "var(--cyan)", titulo: "Datos de la empresa", desc: "Configuración común: caja de compensación de toda la empresa." },
 ]
 
@@ -29,6 +31,8 @@ export default async function TalentoHumanoPage() {
         <AlertBoxes />
         <h1 className="mb-1 font-display text-xl font-bold">Talento Humano</h1>
         <p className="mb-6 text-sm text-[#fff]/55">Freelance, beneficios, aprobaciones y evaluaciones del equipo.</p>
+
+        <EvaluacionesToggle />
 
         <div className="grid gap-4 sm:grid-cols-2">
           {HERRAMIENTAS.map((h) => {

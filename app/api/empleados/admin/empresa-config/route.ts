@@ -37,6 +37,7 @@ const schema = z.object({
   arl: z.string().max(120).nullable().optional(),
   fecha_fundacion: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullable().optional(),
   encuesta_habilitada: z.boolean().optional(),
+  evaluaciones_habilitadas: z.boolean().optional(),
 })
 
 export async function POST(req: Request) {
@@ -57,6 +58,7 @@ export async function POST(req: Request) {
     if ("arl" in b) cambios.arl = b.arl ?? null
     if ("fecha_fundacion" in b) cambios.fecha_fundacion = b.fecha_fundacion ?? null
     if (b.encuesta_habilitada !== undefined) cambios.encuesta_habilitada = b.encuesta_habilitada
+    if (b.evaluaciones_habilitadas !== undefined) cambios.evaluaciones_habilitadas = b.evaluaciones_habilitadas
     return NextResponse.json({ config: await setConfigEmpresa(cambios) })
   } catch (e) {
     const f = faltaTabla(e)

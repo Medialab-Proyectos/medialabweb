@@ -44,5 +44,7 @@ alter table gastos_recurrentes add column if not exists debito_automatico boolea
 alter table movimientos add column if not exists fecha_estimada date;
 alter table movimientos add column if not exists tasa_real numeric;   -- TRM que aplicó el banco
 alter table movimientos add column if not exists valor_real numeric;  -- lo que realmente entró/salió
+-- Moneda del movimiento (puede diferir de la de la cuenta: COP que paga/recibe USD).
+alter table movimientos add column if not exists moneda text check (moneda is null or moneda in ('COP','USD'));
 
 notify pgrst, 'reload schema';

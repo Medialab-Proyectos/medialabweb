@@ -8,7 +8,7 @@ import {
 } from "lucide-react"
 import {
   type Cuenta, type Movimiento, type TipoMovimiento, type Moneda, type Empresa, type MetodoPago, type TipoIVA,
-  CATEGORIAS, CATEGORIA_LABEL, TIPO_MOV_LABEL, IVA_LABEL, MONEDAS_ORDEN, formatMoneda, resumen,
+  CATEGORIAS, CATEGORIA_LABEL, TIPO_MOV_LABEL, IVA_LABEL, MONEDAS_ORDEN, formatMoneda, resumen, valorEnCuenta,
 } from "@/lib/empleados/contabilidad"
 import { MESES } from "@/lib/empleados/desprendible"
 import { ConfirmDialog } from "../../confirm-dialog"
@@ -55,6 +55,7 @@ type MovForm = {
   valor: number; tasa: number; costo: number; valor_destino: number
   iva_tipo: TipoIVA; iva_valor: number
   estado: "pendiente" | "realizado"; referencia: string; fecha_estimada: string; tasa_real: number; valor_real: number
+  moneda: "" | Moneda   // moneda del movimiento; "" = la misma de la cuenta
 }
 
 export function ContabilidadClient() {
@@ -221,7 +222,7 @@ export function ContabilidadClient() {
     setFormMov({
       cuenta_id: cuentas[0]?.id ?? "", cuenta_destino_id: "", fecha: hoyISO(), tipo: "ingreso",
       categoria: "", concepto: "", contraparte: "", empresa_id: "",
-      valor: 0, tasa: 0, costo: 0, valor_destino: 0, iva_tipo: "na", iva_valor: 0, estado: "realizado", referencia: "", fecha_estimada: "", tasa_real: 0, valor_real: 0,
+      valor: 0, tasa: 0, costo: 0, valor_destino: 0, iva_tipo: "na", iva_valor: 0, estado: "realizado", referencia: "", fecha_estimada: "", tasa_real: 0, valor_real: 0, moneda: "",
     })
   }
   function editarMov(m: Movimiento) {
@@ -231,7 +232,7 @@ export function ContabilidadClient() {
       categoria: m.categoria ?? "", concepto: m.concepto ?? "", contraparte: m.contraparte ?? "", empresa_id: m.empresa_id ?? "",
       valor: Number(m.valor) || 0, tasa: Number(m.tasa) || 0, costo: Number(m.costo) || 0, valor_destino: Number(m.valor_destino) || 0,
       iva_tipo: (m.iva_tipo ?? "na") as TipoIVA, iva_valor: Number(m.iva_valor) || 0,
-      estado: m.estado, referencia: m.referencia ?? "", fecha_estimada: m.fecha_estimada ?? "", tasa_real: Number(m.tasa_real) || 0, valor_real: Number(m.valor_real) || 0,
+      estado: m.estado, referencia: m.referencia ?? "", fecha_estimada: m.fecha_estimada ?? "", tasa_real: Number(m.tasa_real) || 0, valor_real: Number(m.valor_real) || 0, moneda: (m.moneda as Moneda) ?? "",
     })
   }
 
@@ -239,6 +240,10 @@ export function ContabilidadClient() {
   const movMonedaOrigen = formMov ? cuentas.find((c) => c.id === formMov.cuenta_id)?.moneda : undefined
   const movMonedaDestino = formMov ? cuentas.find((c) => c.id === formMov.cuenta_destino_id)?.moneda : undefined
   const trasladoCrossMoneda = !!formMov && formMov.tipo === "traslado" && !!movMonedaDestino && movMonedaOrigen !== movMonedaDestino
+  // Moneda del MOVIMIENTO (ingreso/egreso): por defecto la de la cuenta, pero se puede cambiar.
+  const monedaMov = (formMov?.moneda || movMonedaOrigen) as Moneda | undefined
+  // Cross-moneda en ingreso/egreso: el movimiento va en una moneda distinta a la de la cuenta.
+  const movCrossMoneda = !!formMov && formMov.tipo !== "traslado" && !!movMonedaOrigen && !!monedaMov && monedaMov !== movMonedaOrigen
 
   async function guardarMov(e: React.FormEvent) {
     e.preventDefault(); if (!formMov) return
@@ -260,14 +265,16 @@ export function ContabilidadClient() {
           fecha: formMov.fecha, tipo: formMov.tipo, categoria: formMov.categoria || null,
           concepto: formMov.concepto || null, contraparte: formMov.contraparte || null, empresa_id: formMov.empresa_id || null,
           valor: formMov.valor,
-          // TRM: aplica a traslados cross-moneda y a ingresos por transferencia (informativa).
-          tasa: formMov.tipo === "egreso" ? null : (formMov.tasa || null),
+          // TRM: aplica a traslados cross-moneda y a ingresos/egresos en otra moneda que la cuenta.
+          tasa: (formMov.tipo === "traslado" || movCrossMoneda) ? (formMov.tasa || null) : null,
           // El fee/comisión de transferencia aplica a cualquier tipo de movimiento.
           costo: formMov.costo || 0,
           valor_destino: valorDestino,
           iva_tipo: formMov.tipo === "traslado" ? null : formMov.iva_tipo,
           iva_valor: formMov.tipo === "traslado" ? null : (formMov.iva_valor || null),
           estado: formMov.estado, referencia: formMov.referencia || null,
+          // Solo se guarda moneda si difiere de la cuenta (si es igual, queda null = misma de la cuenta).
+          moneda: movCrossMoneda ? monedaMov : null,
           fecha_estimada: formMov.estado === "pendiente" ? (formMov.fecha_estimada || null) : null,
           tasa_real: formMov.tasa_real || null, valor_real: formMov.valor_real || null,
         }),
@@ -564,7 +571,10 @@ export function ContabilidadClient() {
               <div className="flex flex-col gap-2">
                 {movMes.map((m) => {
                   const Icon = TipoIcon[m.tipo]
-                  const mo = monedaCuenta.get(m.cuenta_id) ?? "COP"
+                  const moCuenta = monedaCuenta.get(m.cuenta_id) ?? "COP"
+                  // El valor va en la moneda del movimiento (si tiene una propia distinta a la cuenta).
+                  const mo = (m.moneda as Moneda | undefined) ?? moCuenta
+                  const enCuenta = mo !== moCuenta ? valorEnCuenta(m, moCuenta) : null
                   return (
                     <div key={m.id} className="flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3">
                       <div className="flex items-center gap-3">
@@ -585,6 +595,7 @@ export function ContabilidadClient() {
                       <div className="flex items-center gap-2">
                         <span className={`text-right text-sm font-semibold ${tipoColor[m.tipo]}`}>
                           {m.tipo === "egreso" ? "−" : m.tipo === "ingreso" ? "+" : ""}{formatMoneda(m.valor, mo)}
+                          {enCuenta != null && <span className="block text-[10px] font-normal text-[#fff]/45">≈ {formatMoneda(enCuenta, moCuenta)} en la cuenta</span>}
                           {m.tipo === "traslado" && (() => {
                             const md = monedaCuenta.get(m.cuenta_destino_id ?? "") ?? mo
                             const vd = m.valor_destino != null ? Number(m.valor_destino) : Number(m.valor)
@@ -678,8 +689,20 @@ export function ContabilidadClient() {
                     {cuentas.filter((c) => c.id !== formMov.cuenta_id).map((c) => <option key={c.id} value={c.id}>{c.nombre} ({c.moneda})</option>)}
                   </select></label>
               )}
-              <label className="flex flex-col gap-1.5"><span className={lblCls}>Valor {movMonedaOrigen ? `(${movMonedaOrigen})` : ""}</span>
+              <label className="flex flex-col gap-1.5"><span className={lblCls}>Valor {monedaMov ? `(${monedaMov})` : ""}</span>
                 <MoneyInput value={formMov.valor} onChange={(n) => setFormMov({ ...formMov, valor: n })} className={inputCls} /></label>
+              {/* Moneda del movimiento: por defecto la de la cuenta; se puede cambiar (COP que paga/recibe USD). */}
+              {formMov.tipo !== "traslado" && (
+                <label className="flex flex-col gap-1.5">
+                  <span className={`${lblCls} flex items-center gap-1.5`}>
+                    Moneda del movimiento
+                    <Ayuda texto="Por defecto es la moneda de la cuenta. Cámbiala si el movimiento ocurrió en otra moneda (ej. una cuenta en COP que paga o recibe en USD). Si difiere, indica la TRM para convertirlo al saldo de la cuenta." />
+                  </span>
+                  <select value={monedaMov ?? "COP"} onChange={(e) => setFormMov({ ...formMov, moneda: e.target.value as Moneda })} className={inputCls}>
+                    {MONEDAS_ORDEN.map((m) => <option key={m} value={m}>{m}{movMonedaOrigen && m === movMonedaOrigen ? " · (moneda de la cuenta)" : ""}</option>)}
+                  </select>
+                </label>
+              )}
               {formMov.tipo !== "traslado" && (
                 <label className="flex flex-col gap-1.5"><span className={lblCls}>Categoría</span>
                   <select value={formMov.categoria} onChange={(e) => setFormMov({ ...formMov, categoria: e.target.value })} className={inputCls}>
@@ -701,18 +724,18 @@ export function ContabilidadClient() {
                   )}
                   <label className="flex flex-col gap-1.5"><span className={lblCls}>{formMov.tipo === "ingreso" ? "Costo de transferencia" : "Fee / costo bancario"}</span>
                     <MoneyInput value={formMov.costo} onChange={(n) => setFormMov({ ...formMov, costo: n })} className={inputCls} /></label>
-                  {/* La TRM solo tiene sentido si el movimiento NO está en pesos colombianos. */}
-                  {formMov.tipo === "ingreso" && movMonedaOrigen !== "COP" && (
+                  {/* La TRM aparece cuando el movimiento está en otra moneda que la cuenta. */}
+                  {movCrossMoneda && (
                     <label className="flex flex-col gap-1.5">
                       <span className={`${lblCls} flex items-center gap-1.5`}>
-                        TRM del día
-                        <Ayuda texto="La TRM no se descarga automáticamente ni se actualiza sola: la escribes tú y queda congelada en este movimiento. Si el pago aún no llega, déjalo Pendiente con la TRM estimada; al hacerse efectivo registra la TRM real que aplicó el banco (suele ser menor) y el valor realmente recibido." />
+                        TRM {monedaMov}→{movMonedaOrigen} (del día)
+                        <Ayuda texto="La TRM no se descarga automáticamente ni se actualiza sola: la escribes tú y queda congelada en este movimiento. Convierte el valor a la moneda de la cuenta para el saldo. Si el pago aún no llega, déjalo Pendiente con la TRM estimada; al hacerse efectivo registra la TRM real que aplicó el banco (suele ser menor) y el valor realmente recibido." />
                       </span>
                       <input type="number" step="0.0001" min="0" value={formMov.tasa || ""} onChange={(e) => setFormMov({ ...formMov, tasa: Number(e.target.value) })} className={inputCls} placeholder="Ej: 4000" /></label>
                   )}
 
                   {/* Liquidación real: al hacerse efectivo, lo recibido puede diferir por costos y TRM del banco. */}
-                  {formMov.tipo === "ingreso" && formMov.estado === "realizado" && movMonedaOrigen !== "COP" && (
+                  {movCrossMoneda && formMov.estado === "realizado" && (
                     <>
                       <label className="flex flex-col gap-1.5">
                         <span className={`${lblCls} flex items-center gap-1.5`}>
