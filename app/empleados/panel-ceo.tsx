@@ -15,7 +15,7 @@ type Solicitud = { id: string; nombre: string; tipo: string; fecha_inicio: strin
 type Data = {
   kpis: { saldoCOP: number; saldoUSD: number; ingresosMes: number; egresosMes: number; porCobrar: number; porPagar: number }
   gananciaAnio: number
-  ausentesHoy: { nombre: string; tipo: string }[]
+  ausentesHoy: { nombre: string; tipo: string; motivo: string | null; fecha_fin: string }[]
   solicitudes: Solicitud[]
   pagosPendientes: MoneyMov[]
   porCobrarLista: MoneyMov[]
@@ -195,7 +195,8 @@ export function PanelCEO() {
 
           <div className="flex flex-col gap-2">
             {d.ausentesHoy.map((a, i) => (
-              <Fila key={`aus-${i}`} icon={UserX} color="#fbbf24" titulo={a.nombre} detalle={`Ausente hoy · ${TIPO_AUS[a.tipo] ?? a.tipo}`} etiqueta="Hoy" ampliado={`${a.nombre} está ausente hoy por ${TIPO_AUS[a.tipo] ?? a.tipo}. Ténlo en cuenta para asignaciones y entregas del día.`} />
+              <Fila key={`aus-${i}`} icon={UserX} color="#fbbf24" titulo={a.nombre} detalle={`Ausente hoy · ${TIPO_AUS[a.tipo] ?? a.tipo}`} etiqueta="Hoy"
+                ampliado={`Tipo: ${TIPO_AUS[a.tipo] ?? a.tipo}\nMotivo: ${a.motivo?.trim() ? a.motivo : "— (sin motivo registrado)"}\nRegresa: ${a.fecha_fin}\nTénlo en cuenta para asignaciones y entregas del día.`} />
             ))}
             {d.fechasEspeciales.map((f) => (
               <Fila
@@ -368,7 +369,7 @@ export function PanelCEO() {
       <Grupo icon={SmilePlus} titulo="Satisfacción">
         <div className="grid items-stretch gap-4 sm:grid-cols-2">
           <Link href="/empleados/admin/satisfaccion" className="block h-full transition hover:brightness-110"><Satisfaccion icon={SmilePlus} titulo="Satisfacción de empleados" valor={d.satisfaccionEmpleados} nota="Toca para ver respuestas o enviar la encuesta." /></Link>
-          <a href="https://uxia-one.vercel.app/" target="_blank" rel="noopener noreferrer" className="block h-full transition hover:brightness-110"><Satisfaccion icon={Building2} titulo="Satisfacción empresarial" valor={d.satisfaccionProyectos} nota={d.satisfaccionProyectosFecha ? `Satisfacción de proyectos, en vivo desde Operaciones · validado el ${d.satisfaccionProyectosFecha}` : "Promedio de satisfacción de los proyectos, en vivo desde el Centro de Operaciones."} /></a>
+          <a href="https://uxia-one.vercel.app/" target="_blank" rel="noopener noreferrer" className="block h-full transition hover:brightness-110"><Satisfaccion icon={Building2} titulo="Satisfacción empresarial" valor={d.satisfaccionProyectos} nota={d.satisfaccionProyectosFecha ? `Índice general de cómo van los proyectos (satisfacción + cumplimiento + flujo), en vivo desde Operaciones · validado el ${d.satisfaccionProyectosFecha}` : "Índice general de cómo van los proyectos (no solo lo que dicen los clientes), en vivo desde el Centro de Operaciones."} /></a>
         </div>
         {/* La satisfacción empresarial y el estado de todos los proyectos viven en el Centro de Operaciones. */}
         <a href="https://uxia-one.vercel.app/" target="_blank" rel="noopener noreferrer" className="flex items-center justify-between gap-3 rounded-2xl border border-[var(--cyan)]/25 bg-[var(--cyan)]/[0.06] px-5 py-4 transition hover:bg-[var(--cyan)]/[0.1]">
