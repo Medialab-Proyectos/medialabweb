@@ -41,7 +41,9 @@ export async function GET() {
     promedioSatisfaccion("empresa").catch(() => null),
     contarHorariosPendientes().catch(() => 0),
   ])
-  const satisfaccionProyectos = (await getSatisfaccionOperaciones().catch(() => ({ promedio100: null }))).promedio100
+  const opsSat = await getSatisfaccionOperaciones().catch(() => ({ promedio100: null, validadoEn: null }))
+  const satisfaccionProyectos = opsSat.promedio100
+  const satisfaccionProyectosFecha = opsSat.validadoEn ?? null
   const fechasRaw = await listFechasEspeciales().catch(() => [])
   // Servicios recurrentes que NO se debitan solos: hay que pagarlos a mano cada mes.
   const recurrentesRaw = await listGastosRecurrentes().catch(() => [])
@@ -160,6 +162,6 @@ export async function GET() {
     facturasFreelance, cuentasCobroPorPasar, horariosPendientes,
     inversionesPorVencer, cumpleanos, aniversarios, fechasEspeciales, recurrentesManuales, nominaPendiente,
     serie6m, categorias: { ingresos: arr(catIng), egresos: arr(catEgr) },
-    satisfaccionEmpleados: satEmpleados, satisfaccionEmpresas: satEmpresas, satisfaccionProyectos,
+    satisfaccionEmpleados: satEmpleados, satisfaccionEmpresas: satEmpresas, satisfaccionProyectos, satisfaccionProyectosFecha,
   })
 }

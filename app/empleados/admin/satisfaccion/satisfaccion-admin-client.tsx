@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
-import { ArrowLeft, SmilePlus, Building2, Loader2, Send, Plus, Trash2, X } from "lucide-react"
-import { periodoActual, nivelSatisfaccion } from "@/lib/empleados/satisfaccion"
+import { ArrowLeft, SmilePlus, Building2, Loader2, Send, ExternalLink } from "lucide-react"
+import { nivelSatisfaccion } from "@/lib/empleados/satisfaccion"
 
 const inputCls = "w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm text-[#fff] outline-none transition focus:border-[var(--cyan)]/60"
 const lblCls = "text-[11px] font-semibold uppercase tracking-wide text-[#fff]/50"
@@ -18,8 +18,6 @@ export function SatisfaccionAdminClient() {
   const [error, setError] = useState("")
   const [msg, setMsg] = useState("")
   const [enviando, setEnviando] = useState(false)
-  const [form, setForm] = useState<{ empresa: string; periodo: string; puntaje: number; comentario: string } | null>(null)
-  const [saving, setSaving] = useState(false)
   const [habilitada, setHabilitada] = useState(false)
   const [togHab, setTogHab] = useState(false)
 
@@ -56,21 +54,6 @@ export function SatisfaccionAdminClient() {
     finally { setEnviando(false) }
   }
 
-  async function guardarEmpresa(e: React.FormEvent) {
-    e.preventDefault(); if (!form) return
-    setSaving(true); setError("")
-    try {
-      const r = await fetch("/api/empleados/admin/satisfaccion", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ accion: "empresa", empresa: form.empresa, periodo: form.periodo, puntaje: form.puntaje, comentario: form.comentario || null }) })
-      const data = await r.json(); if (!r.ok) throw new Error(data.error)
-      await cargar(); setForm(null)
-    } catch (e) { setError(e instanceof Error ? e.message : "Error al guardar.") }
-    finally { setSaving(false) }
-  }
-
-  async function eliminar(id: string) {
-    try { const r = await fetch(`/api/empleados/admin/satisfaccion?id=${id}`, { method: "DELETE" }); if (r.ok) await cargar() } catch { /* noop */ }
-  }
-
   return (
     <div>
       <Link href="/empleados/admin/talento" className="mb-6 inline-flex items-center gap-1.5 text-sm text-[#fff]/55 hover:text-[#fff]"><ArrowLeft size={15} /> Volver a Talento Humano</Link>
@@ -100,7 +83,9 @@ export function SatisfaccionAdminClient() {
           {/* Indicadores */}
           <div className="grid gap-3 sm:grid-cols-2">
             <Indicador icon={SmilePlus} titulo="Satisfacción de empleados" valor={d?.promEmpleados ?? null} nota={`${d?.totalEmpleados ?? 0} respuesta(s) este periodo`} />
-            <Indicador icon={Building2} titulo="Satisfacción empresarial" valor={d?.promEmpresas ?? null} nota={`${d?.empresas.length ?? 0} registro(s)`} />
+            <a href="https://uxia-one.vercel.app/" target="_blank" rel="noopener noreferrer" className="block transition hover:brightness-110">
+              <Indicador icon={Building2} titulo="Satisfacción empresarial" valor={null} nota="Viene del Centro de Operaciones (satisfacción de proyectos). Toca para abrirlo." />
+            </a>
           </div>
 
           {/* Empleados */}
@@ -126,58 +111,21 @@ export function SatisfaccionAdminClient() {
             )}
           </section>
 
-          {/* Empresas */}
-          <section className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-            <div className="mb-3 flex items-center justify-between">
-              <h2 className="flex items-center gap-2 text-sm font-semibold text-[#fff]/80"><Building2 size={15} className="text-[var(--cyan)]" /> Satisfacción de empresas</h2>
-              <button onClick={() => { setError(""); setForm({ empresa: "", periodo: periodoActual(), puntaje: 80, comentario: "" }) }} className="inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--cyan)] hover:underline"><Plus size={13} /> Registrar</button>
-            </div>
-            <p className="mb-3 text-[11px] text-[#fff]/40">Las encuestas a empresas se envían por fuera de este sistema. Aquí solo registras el resultado.</p>
-            {(!d || d.empresas.length === 0) ? (
-              <p className="text-sm text-[#fff]/45">Sin registros todavía.</p>
-            ) : (
-              <div className="flex flex-col gap-2">
-                {d.empresas.map((r) => (
-                  <div key={r.id} className="flex items-start justify-between gap-2 rounded-xl bg-white/[0.03] px-3 py-2">
-                    <div className="min-w-0">
-                      <p className="text-sm font-medium">{r.empresa} · <span className="text-[var(--cyan)]">{Math.round(r.puntaje)}/100</span></p>
-                      <p className="text-[11px] text-[#fff]/45">{r.periodo}{r.comentario ? ` · “${r.comentario}”` : ""}</p>
-                    </div>
-                    <button onClick={() => eliminar(r.id)} className="rounded-lg p-1.5 text-red-300/70 hover:bg-red-500/10 hover:text-red-300"><Trash2 size={13} /></button>
-                  </div>
-                ))}
-              </div>
-            )}
+          {/* La satisfacción empresarial NO se registra aquí: se calcula en vivo desde el
+              Centro de Operaciones (promedio de satisfacción de proyectos). */}
+          <section className="rounded-2xl border border-[var(--cyan)]/25 bg-[var(--cyan)]/[0.05] p-5">
+            <h2 className="mb-1 flex items-center gap-2 text-sm font-semibold text-[#fff]/80"><Building2 size={15} className="text-[var(--cyan)]" /> Satisfacción empresarial</h2>
+            <p className="text-[11px] leading-relaxed text-[#fff]/55">
+              Ya no se registra a mano: la satisfacción de las empresas <b className="text-[#fff]/75">es la satisfacción de los proyectos</b>,
+              que se mide en el <b className="text-[#fff]/75">Centro de Operaciones</b> y llega en vivo al dashboard del CEO.
+            </p>
+            <a href="https://uxia-one.vercel.app/" target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--cyan)] hover:underline">
+              Abrir Centro de Operaciones <ExternalLink size={12} />
+            </a>
           </section>
         </div>
       )}
 
-      {form && (
-        <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/70 p-4 py-10">
-          <form onSubmit={guardarEmpresa} className="w-full max-w-md rounded-2xl border border-white/10 bg-[#12151c] p-6">
-            <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-lg font-semibold">Registrar satisfacción de empresa</h2>
-              <button type="button" onClick={() => setForm(null)} className="text-[#fff]/50 hover:text-[#fff]"><X size={18} /></button>
-            </div>
-            <div className="grid gap-3">
-              <label className="flex flex-col gap-1.5"><span className={lblCls}>Empresa</span>
-                <input required value={form.empresa} onChange={(e) => setForm({ ...form, empresa: e.target.value })} className={inputCls} placeholder="Cliente S.A.S" /></label>
-              <div className="grid grid-cols-2 gap-3">
-                <label className="flex flex-col gap-1.5"><span className={lblCls}>Periodo</span>
-                  <input value={form.periodo} onChange={(e) => setForm({ ...form, periodo: e.target.value })} className={inputCls} placeholder="2026-07" /></label>
-                <label className="flex flex-col gap-1.5"><span className={lblCls}>Puntaje (0–100)</span>
-                  <input type="number" min="0" max="100" value={form.puntaje} onChange={(e) => setForm({ ...form, puntaje: Number(e.target.value) })} className={inputCls} /></label>
-              </div>
-              <label className="flex flex-col gap-1.5"><span className={lblCls}>Comentario</span>
-                <textarea rows={2} value={form.comentario} onChange={(e) => setForm({ ...form, comentario: e.target.value })} className={inputCls} placeholder="Opcional" /></label>
-            </div>
-            <div className="mt-5 flex justify-end gap-2">
-              <button type="button" onClick={() => setForm(null)} className="rounded-lg px-4 py-2 text-sm text-[#fff]/60 hover:text-[#fff]">Cancelar</button>
-              <button type="submit" disabled={saving} className="inline-flex items-center gap-2 rounded-lg bg-[var(--cyan)] px-5 py-2 text-sm font-semibold text-[#04191b] transition hover:brightness-110 disabled:opacity-60">{saving ? <Loader2 size={14} className="animate-spin" /> : null} Guardar</button>
-            </div>
-          </form>
-        </div>
-      )}
     </div>
   )
 }

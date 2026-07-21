@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import Link from "next/link"
 import {
   Loader2, Check, X, Wallet, TrendingUp, ArrowDownCircle, ArrowUpCircle, ClipboardCheck,
-  Receipt, Cake, UserX, CalendarClock, ArrowRight, SmilePlus, Building2,
+  Receipt, Cake, UserX, CalendarClock, ArrowRight, SmilePlus, Building2, Repeat, FileText,
   Users, LayoutDashboard, ExternalLink, Award, Star, Plus, Trash2, ChevronDown, Loader2 as Spin,
 } from "lucide-react"
 import { formatMoneda } from "@/lib/empleados/contabilidad"
@@ -35,6 +35,7 @@ type Data = {
   satisfaccionEmpleados: number | null
   satisfaccionEmpresas: number | null
   satisfaccionProyectos: number | null
+  satisfaccionProyectosFecha: string | null
 }
 
 const TIPO_AUS: Record<string, string> = {
@@ -194,7 +195,7 @@ export function PanelCEO() {
 
           <div className="flex flex-col gap-2">
             {d.ausentesHoy.map((a, i) => (
-              <Fila key={`aus-${i}`} icon={UserX} color="#fbbf24" titulo={a.nombre} detalle={`Ausente hoy · ${TIPO_AUS[a.tipo] ?? a.tipo}`} etiqueta="Hoy" />
+              <Fila key={`aus-${i}`} icon={UserX} color="#fbbf24" titulo={a.nombre} detalle={`Ausente hoy · ${TIPO_AUS[a.tipo] ?? a.tipo}`} etiqueta="Hoy" ampliado={`${a.nombre} está ausente hoy por ${TIPO_AUS[a.tipo] ?? a.tipo}. Ténlo en cuenta para asignaciones y entregas del día.`} />
             ))}
             {d.fechasEspeciales.map((f) => (
               <Fila
@@ -259,22 +260,31 @@ export function PanelCEO() {
       <Grupo icon={Wallet} titulo="Economía">
         <div className="grid gap-4 md:grid-cols-2">
         {/* Cuentas por pagar (marcar pagado en línea) */}
-        <Bloque icon={ArrowUpCircle} titulo="Cuentas por pagar" contador={d.pagosPendientes.length} tone="red" href="/empleados/admin/contabilidad">
-          {/* Solo se dice "nada pendiente" si de verdad no hay NADA (ni nómina ni recurrentes). */}
-          {d.pagosPendientes.length === 0 && !d.nominaPendiente && d.recurrentesManuales.length === 0 && d.facturasFreelance === 0 && (
+        <Bloque icon={ArrowUpCircle} titulo="Cuentas por pagar" contador={d.pagosPendientes.length + (d.nominaPendiente ? 1 : 0) + d.recurrentesManuales.length + (d.facturasFreelance > 0 ? 1 : 0)} tone="red" href="/empleados/admin/contabilidad">
+          {d.pagosPendientes.length === 0 && !d.nominaPendiente && d.recurrentesManuales.length === 0 && d.facturasFreelance === 0 ? (
             <Vacio texto="Nada pendiente por pagar." />
-          )}
-          {d.pagosPendientes.length > 0 && (
+          ) : (
             <ListaScroll>
+              {/* Nómina del mes: aparece al acercarse fin de mes y sale sola al registrar el pago. */}
+              {d.nominaPendiente && (
+                <ItemPendiente
+                  abierto={itemAbierto === "nomina"} onToggle={() => setItemAbierto(itemAbierto === "nomina" ? null : "nomina")}
+                  icon={Users} iconColor="#f87171"
+                  titulo={`Nómina de ${d.nominaPendiente.mes}`}
+                  subtitulo={`${d.nominaPendiente.empleados} empleado(s) · ${d.nominaPendiente.dias === 0 ? "el mes termina hoy" : `faltan ${d.nominaPendiente.dias} día(s)`}`}
+                  detalle={`Pago de nómina de ${d.nominaPendiente.mes} a ${d.nominaPendiente.empleados} empleado(s) laborales.\n${d.nominaPendiente.dias === 0 ? "El mes termina hoy." : `Faltan ${d.nominaPendiente.dias} día(s) para fin de mes.`}\nRegistra el pago en «Pagos a empleados» para quitarlo de esta lista.`}
+                  accion={<Link href="/empleados/admin/contabilidad/nomina" onClick={(e) => e.stopPropagation()} className="flex h-8 shrink-0 items-center gap-1 rounded-lg bg-red-400/15 px-2 text-xs font-semibold text-red-300 transition hover:bg-red-400/25">Pagar</Link>}
+                />
+              )}
+
+              {/* Movimientos pendientes de egreso. */}
               {d.pagosPendientes.map((m) => (
                 <ItemPendiente
                   key={m.id}
-                  abierto={itemAbierto === m.id}
-                  onToggle={() => setItemAbierto(itemAbierto === m.id ? null : m.id)}
+                  abierto={itemAbierto === m.id} onToggle={() => setItemAbierto(itemAbierto === m.id ? null : m.id)}
                   titulo={m.concepto}
                   subtitulo={`${m.contraparte ? `${m.contraparte} · ` : ""}${m.cuenta} · ${fechaCorta(m.fecha)}`}
-                  valor={formatMoneda(m.valor, m.moneda)}
-                  valorClase="text-red-300"
+                  valor={formatMoneda(m.valor, m.moneda)} valorClase="text-red-300"
                   detalle={`Concepto: ${m.concepto}\nContraparte: ${m.contraparte || "—"}\nCuenta: ${m.cuenta}\nFecha: ${m.fecha}\nValor: ${formatMoneda(m.valor, m.moneda)}`}
                   accion={
                     <button disabled={busy === m.id} onClick={(e) => { e.stopPropagation(); marcarPago(m.id, "pagosPendientes") }} title="Marcar pagado" className="flex h-8 shrink-0 items-center gap-1 rounded-lg bg-emerald-400/15 px-2 text-xs font-semibold text-emerald-300 transition hover:bg-emerald-400/25 disabled:opacity-50">
@@ -283,55 +293,62 @@ export function PanelCEO() {
                   }
                 />
               ))}
+
+              {/* Recurrentes de pago manual (no son débito automático). */}
+              {d.recurrentesManuales.map((g) => (
+                <ItemPendiente
+                  key={g.id}
+                  abierto={itemAbierto === g.id} onToggle={() => setItemAbierto(itemAbierto === g.id ? null : g.id)}
+                  icon={Repeat} iconColor="#fbbf24"
+                  titulo={g.nombre}
+                  subtitulo={`Recurrente · ${g.dia ? `se cobra el día ${g.dia}` : "sin día"} · pago manual`}
+                  valor={formatMoneda(g.valor, g.moneda)} valorClase="text-amber-200/90"
+                  detalle={`Servicio recurrente de pago MANUAL (no se debita solo).\n${g.dia ? `Se cobra el día ${g.dia} de cada mes.` : "Sin día de cobro definido."}\nValor: ${formatMoneda(g.valor, g.moneda)}\nRegistra el pago en «Gastos recurrentes» cada mes.`}
+                  accion={<Link href="/empleados/admin/contabilidad/recurrentes" onClick={(e) => e.stopPropagation()} className="flex h-8 shrink-0 items-center rounded-lg bg-amber-400/15 px-2 text-xs font-semibold text-amber-200 transition hover:bg-amber-400/25">Ver</Link>}
+                />
+              ))}
+
+              {/* Facturas de freelance por pagar. */}
+              {d.facturasFreelance > 0 && (
+                <ItemPendiente
+                  abierto={itemAbierto === "freelance"} onToggle={() => setItemAbierto(itemAbierto === "freelance" ? null : "freelance")}
+                  icon={Receipt} iconColor="var(--cyan)"
+                  titulo="Facturas de freelance por pagar"
+                  subtitulo={`${d.facturasFreelance} factura(s) pendiente(s)`}
+                  detalle={`${d.facturasFreelance} factura(s) de freelance/prestación por pagar.\nRecuerda: se pagan dentro de los 5 primeros días del mes.\nRevisa y márcalas pagadas en «Freelance».`}
+                  accion={<Link href="/empleados/admin/freelance" onClick={(e) => e.stopPropagation()} className="flex h-8 shrink-0 items-center rounded-lg bg-[var(--cyan)]/15 px-2 text-xs font-semibold text-[var(--cyan)] transition hover:bg-[var(--cyan)]/25">Ver</Link>}
+                />
+              )}
             </ListaScroll>
           )}
-
-          {/* Nómina del mes: aparece al acercarse fin de mes y sale sola al registrar el pago. */}
-          {d.nominaPendiente && (
-            <Link href="/empleados/admin/contabilidad/nomina" className="mt-1 block rounded-xl border border-red-400/25 bg-red-400/[0.06] px-3 py-2 transition hover:bg-red-400/[0.1]">
-              <p className="text-[11px] font-semibold text-red-200">
-                Nómina de {d.nominaPendiente.mes}: {d.nominaPendiente.empleados} empleado(s) por pagar
-              </p>
-              <p className="text-[11px] text-[#fff]/60">
-                {d.nominaPendiente.dias === 0 ? "El mes termina hoy." : `Faltan ${d.nominaPendiente.dias} día(s) para fin de mes.`} Registra el pago para quitarlo de esta lista →
-              </p>
-            </Link>
-          )}
-
-          {/* Recordatorio: servicios recurrentes que NO se debitan solos (hay que pagarlos a mano). */}
-          {d.recurrentesManuales.length > 0 && (
-            <div className="mt-1 rounded-xl border border-amber-400/20 bg-amber-400/[0.05] px-3 py-2">
-              <p className="mb-1 text-[11px] font-semibold text-amber-200">Recurrentes de pago manual (no son débito automático)</p>
-              {d.recurrentesManuales.slice(0, 5).map((g) => (
-                <div key={g.id} className="flex items-center justify-between gap-2 py-0.5 text-[11px]">
-                  <span className="min-w-0 truncate text-[#fff]/70">{g.nombre}{g.dia ? ` · día ${g.dia}` : ""}</span>
-                  <span className="shrink-0 font-semibold text-amber-200/90">{formatMoneda(g.valor, g.moneda)}</span>
-                </div>
-              ))}
-              <Link href="/empleados/admin/contabilidad/recurrentes" className="mt-1 inline-block text-[11px] font-semibold text-[var(--cyan)] hover:underline">Ver todos y registrar pago →</Link>
-            </div>
-          )}
-
-          {/* Otros pagos pendientes registrados fuera de movimientos. */}
-          <MiniAccion icon={Receipt} label="Facturas de freelance por pagar" valor={d.facturasFreelance} href="/empleados/admin/freelance" />
         </Bloque>
 
         {/* Cuentas por cobrar (marcar recibido) */}
-        <Bloque icon={ArrowDownCircle} titulo="Cuentas por cobrar" contador={d.porCobrarLista.length} tone="emerald" href="/empleados/admin/contabilidad">
-          {d.porCobrarLista.length === 0 && d.cuentasCobroPorPasar === 0 && (
+        <Bloque icon={ArrowDownCircle} titulo="Cuentas por cobrar" contador={d.porCobrarLista.length + (d.cuentasCobroPorPasar > 0 ? 1 : 0)} tone="emerald" href="/empleados/admin/contabilidad">
+          {d.porCobrarLista.length === 0 && d.cuentasCobroPorPasar === 0 ? (
             <Vacio texto="Sin ingresos por confirmar." />
-          )}
-          {d.porCobrarLista.length > 0 && (
+          ) : (
             <ListaScroll>
+              {/* Cuentas de cobro por enviar (recurrentes a fin de mes mientras el contrato siga vigente). */}
+              {d.cuentasCobroPorPasar > 0 && (
+                <ItemPendiente
+                  abierto={itemAbierto === "cxc"} onToggle={() => setItemAbierto(itemAbierto === "cxc" ? null : "cxc")}
+                  icon={FileText} iconColor="var(--cyan)"
+                  titulo="Cuentas de cobro por enviar"
+                  subtitulo={`${d.cuentasCobroPorPasar} por emitir este mes`}
+                  detalle={"Las cuentas de cobro se envían al final de cada mes y se repiten mientras el contrato con la empresa siga vigente.\nRevisa cuáles quedan por emitir este mes en «Cuentas de cobro»."}
+                  accion={<Link href="/empleados/admin/cuentas-cobro" onClick={(e) => e.stopPropagation()} className="flex h-8 shrink-0 items-center rounded-lg bg-[var(--cyan)]/15 px-2 text-xs font-semibold text-[var(--cyan)] transition hover:bg-[var(--cyan)]/25">Emitir</Link>}
+                />
+              )}
+
+              {/* Ingresos pendientes de confirmar. */}
               {d.porCobrarLista.map((m) => (
                 <ItemPendiente
                   key={m.id}
-                  abierto={itemAbierto === m.id}
-                  onToggle={() => setItemAbierto(itemAbierto === m.id ? null : m.id)}
+                  abierto={itemAbierto === m.id} onToggle={() => setItemAbierto(itemAbierto === m.id ? null : m.id)}
                   titulo={m.concepto}
                   subtitulo={`${m.contraparte ? `${m.contraparte} · ` : ""}${m.cuenta} · ${fechaCorta(m.fecha)}`}
-                  valor={formatMoneda(m.valor, m.moneda)}
-                  valorClase="text-emerald-300"
+                  valor={formatMoneda(m.valor, m.moneda)} valorClase="text-emerald-300"
                   detalle={`Concepto: ${m.concepto}\nContraparte: ${m.contraparte || "—"}\nCuenta: ${m.cuenta}\nFecha: ${m.fecha}\nValor: ${formatMoneda(m.valor, m.moneda)}`}
                   accion={
                     <button disabled={busy === m.id} onClick={(e) => { e.stopPropagation(); marcarPago(m.id, "porCobrarLista") }} title="Marcar recibido" className="flex h-8 shrink-0 items-center gap-1 rounded-lg bg-[var(--cyan)]/15 px-2 text-xs font-semibold text-[var(--cyan)] transition hover:bg-[var(--cyan)]/25 disabled:opacity-50">
@@ -342,17 +359,6 @@ export function PanelCEO() {
               ))}
             </ListaScroll>
           )}
-
-          {/* Las cuentas de cobro se emiten a fin de mes y se repiten mientras el contrato esté vigente. */}
-          <div className="mt-1 rounded-xl border border-[var(--cyan)]/20 bg-[var(--cyan)]/[0.05] px-3 py-2">
-            <p className="text-[11px] leading-relaxed text-[#fff]/70">
-              Las <b className="text-[#fff]/85">cuentas de cobro</b> se envían al <b className="text-[#fff]/85">final de cada mes</b> y se repiten
-              mientras el <b className="text-[#fff]/85">contrato con la empresa siga vigente</b>. Revisa cuáles quedan por emitir este mes.
-            </p>
-            <Link href="/empleados/admin/cuentas-cobro" className="mt-1 inline-block text-[11px] font-semibold text-[var(--cyan)] hover:underline">
-              Cuentas de cobro por enviar: {d.cuentasCobroPorPasar} →
-            </Link>
-          </div>
         </Bloque>
       </div>
 
@@ -362,7 +368,7 @@ export function PanelCEO() {
       <Grupo icon={SmilePlus} titulo="Satisfacción">
         <div className="grid items-stretch gap-4 sm:grid-cols-2">
           <Link href="/empleados/admin/satisfaccion" className="block h-full transition hover:brightness-110"><Satisfaccion icon={SmilePlus} titulo="Satisfacción de empleados" valor={d.satisfaccionEmpleados} nota="Toca para ver respuestas o enviar la encuesta." /></Link>
-          <a href="https://uxia-one.vercel.app/" target="_blank" rel="noopener noreferrer" className="block h-full transition hover:brightness-110"><Satisfaccion icon={Building2} titulo="Satisfacción empresarial" valor={d.satisfaccionProyectos} nota="Promedio de satisfacción de los proyectos, en vivo desde el Centro de Operaciones." /></a>
+          <a href="https://uxia-one.vercel.app/" target="_blank" rel="noopener noreferrer" className="block h-full transition hover:brightness-110"><Satisfaccion icon={Building2} titulo="Satisfacción empresarial" valor={d.satisfaccionProyectos} nota={d.satisfaccionProyectosFecha ? `Satisfacción de proyectos, en vivo desde Operaciones · validado el ${d.satisfaccionProyectosFecha}` : "Promedio de satisfacción de los proyectos, en vivo desde el Centro de Operaciones."} /></a>
         </div>
         {/* La satisfacción empresarial y el estado de todos los proyectos viven en el Centro de Operaciones. */}
         <a href="https://uxia-one.vercel.app/" target="_blank" rel="noopener noreferrer" className="flex items-center justify-between gap-3 rounded-2xl border border-[var(--cyan)]/25 bg-[var(--cyan)]/[0.06] px-5 py-4 transition hover:bg-[var(--cyan)]/[0.1]">
@@ -412,14 +418,15 @@ function ListaScroll({ children }: { children: React.ReactNode }) {
  * Elemento de pendiente: máximo 2 líneas (título + subtítulo) y se despliega para ver
  * el detalle completo. El acordeón lo controla el padre, así solo hay uno abierto.
  */
-function ItemPendiente({ abierto, onToggle, titulo, subtitulo, valor, valorClase, detalle, accion }: {
-  abierto: boolean; onToggle: () => void; titulo: string; subtitulo: string
-  valor: string; valorClase: string; detalle: string; accion?: React.ReactNode
+function ItemPendiente({ abierto, onToggle, icon: Icon, iconColor, titulo, subtitulo, valor, valorClase = "text-[#fff]/80", detalle, accion }: {
+  abierto: boolean; onToggle: () => void; icon?: React.ElementType; iconColor?: string
+  titulo: string; subtitulo: string; valor?: string; valorClase?: string; detalle: string; accion?: React.ReactNode
 }) {
   return (
     <div className="shrink-0 rounded-xl bg-white/[0.03]">
       <div className="flex items-center justify-between gap-2 px-3 py-2">
         <button onClick={onToggle} aria-expanded={abierto} className="flex min-w-0 flex-1 items-center gap-2 text-left">
+          {Icon && <Icon size={15} className="shrink-0" style={{ color: iconColor }} />}
           <span className="min-w-0 flex-1">
             <span className="block truncate text-sm font-medium">{titulo}</span>
             <span className="block truncate text-[11px] text-[#fff]/50">{subtitulo}</span>
@@ -427,7 +434,7 @@ function ItemPendiente({ abierto, onToggle, titulo, subtitulo, valor, valorClase
           <ChevronDown size={13} className={`shrink-0 text-[#fff]/35 transition ${abierto ? "rotate-180" : ""}`} />
         </button>
         <div className="flex shrink-0 items-center gap-2">
-          <span className={`text-sm font-semibold ${valorClase}`}>{valor}</span>
+          {valor && <span className={`text-sm font-semibold ${valorClase}`}>{valor}</span>}
           {accion}
         </div>
       </div>
