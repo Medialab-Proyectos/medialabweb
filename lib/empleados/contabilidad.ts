@@ -128,7 +128,8 @@ export const TIPO_MOV_LABEL: Record<TipoMovimiento, string> = {
 }
 
 export const CATEGORIAS = [
-  "salario", "seguridad_social", "liquidacion", "honorarios", "factura_freelance", "servicio",
+  "salario", "seguridad_social", "prima", "cesantias", "intereses_cesantias", "liquidacion",
+  "honorarios", "factura_freelance", "servicio",
   "suscripcion", "dominio", "contador", "impuesto", "arriendo", "evento", "reparacion",
   "venta", "reembolso", "software", "otro",
 ] as const
@@ -136,6 +137,9 @@ export const CATEGORIAS = [
 export const CATEGORIA_LABEL: Record<string, string> = {
   salario: "Salario / nómina",
   seguridad_social: "Seguridad social",
+  prima: "Prima de servicios",
+  cesantias: "Cesantías",
+  intereses_cesantias: "Intereses de cesantías",
   liquidacion: "Liquidación",
   honorarios: "Honorarios",
   factura_freelance: "Factura freelance",

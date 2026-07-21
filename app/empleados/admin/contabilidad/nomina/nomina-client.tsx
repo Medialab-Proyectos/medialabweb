@@ -2,12 +2,30 @@
 
 import { useEffect, useMemo, useState } from "react"
 import Link from "next/link"
-import { ArrowLeft, Loader2, Users, CheckCircle2, ShieldCheck, Plus } from "lucide-react"
+import { ArrowLeft, Loader2, Users, CheckCircle2, ShieldCheck, Plus, Gift, PiggyBank } from "lucide-react"
 import type { Empleado } from "@/lib/empleados/types"
 import type { Cuenta, Movimiento } from "@/lib/empleados/contabilidad"
 import { formatMoneda } from "@/lib/empleados/contabilidad"
+import { calcularPrima, calcularCesantias, calcularInteresesCesantias } from "@/lib/empleados/contrato"
+import { dias360 } from "@/lib/empleados/liquidacion"
 import { MESES } from "@/lib/empleados/desprendible"
 import { MoneyInput } from "../../../money-input"
+
+/** Datos por empleado para sugerir el valor a pagar y estimar prima/cesantías. */
+export type SugeridoNomina = {
+  id: string; salarioBasico: number; auxilio: number; devengado: number
+  seguridadSocial: number; neto: number; fechaIngreso: string | null
+}
+
+/** Obligación prestacional del MES seleccionado (prima en jun/dic, cesantías/intereses en ene/feb). */
+type Prestacional = { key: "prima" | "cesantias" | "intereses_cesantias"; titulo: string; nota: string; icon: typeof Gift }
+function prestacionalDelMes(mes: number): Prestacional | null {
+  if (mes === 6) return { key: "prima", titulo: "Prima de servicios · primer semestre", nota: "Se paga a más tardar el 30 de junio (ene–jun).", icon: Gift }
+  if (mes === 12) return { key: "prima", titulo: "Prima de servicios · segundo semestre", nota: "Se paga a más tardar el 20 de diciembre (jul–dic).", icon: Gift }
+  if (mes === 2) return { key: "cesantias", titulo: "Cesantías al fondo (año anterior)", nota: "Se consignan al fondo a más tardar el 14 de febrero.", icon: PiggyBank }
+  if (mes === 1) return { key: "intereses_cesantias", titulo: "Intereses de cesantías (año anterior)", nota: "Se pagan al empleado a más tardar el 31 de enero.", icon: PiggyBank }
+  return null
+}
 
 const inputCls = "w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm text-[#fff] outline-none transition focus:border-[var(--cyan)]/60"
 const lblCls = "text-[11px] font-semibold uppercase tracking-wide text-[#fff]/50"
@@ -19,7 +37,8 @@ function hoyISO() {
   return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`
 }
 
-export function NominaClient({ empleados, cuentas }: { empleados: Empleado[]; cuentas: Cuenta[] }) {
+export function NominaClient({ empleados, cuentas, sugeridos }: { empleados: Empleado[]; cuentas: Cuenta[]; sugeridos: SugeridoNomina[] }) {
+  const sugMap = useMemo(() => new Map(sugeridos.map((s) => [s.id, s])), [sugeridos])
   const [movimientos, setMovimientos] = useState<Movimiento[]>([])
   const [cargando, setCargando] = useState(true)
   const [error, setError] = useState("")
@@ -72,10 +91,39 @@ export function NominaClient({ empleados, cuentas }: { empleados: Empleado[]; cu
   )
   const ssPagado = ssDelMes.reduce((a, m) => a + (Number(m.valor) || 0), 0)
 
-  async function registrarPago(empleadoId: string | null, valor: number, cuentaId: string, categoria: "salario" | "seguridad_social", concepto: string) {
+  // Prestación social del mes seleccionado (prima/cesantías/intereses), con valor estimado por empleado.
+  const prestacional = useMemo(() => prestacionalDelMes(mes), [mes])
+  /** Valor estimado de la prestación del mes para un empleado (0 si no aplica o sin datos). */
+  function estimarPrestacion(s: SugeridoNomina | undefined): number {
+    if (!s || !prestacional || !s.fechaIngreso) return 0
+    const base = s.salarioBasico + s.auxilio
+    const p = (a: string, b: string) => dias360(s.fechaIngreso! > a ? s.fechaIngreso! : a, b)
+    if (prestacional.key === "prima") {
+      // Semestre según el mes: junio → ene-jun del año; diciembre → jul-dic del año.
+      const [ini, fin] = mes === 6 ? [`${anio}-01-01`, `${anio}-06-30`] : [`${anio}-07-01`, `${anio}-12-31`]
+      return calcularPrima({ basico: s.salarioBasico, auxilio: s.auxilio, dias: p(ini, fin) })
+    }
+    // Cesantías e intereses: sobre el AÑO ANTERIOR (ene-dic).
+    const y = anio - 1
+    const ces = calcularCesantias(base, p(`${y}-01-01`, `${y}-12-31`))
+    return prestacional.key === "cesantias" ? ces : calcularInteresesCesantias(ces, p(`${y}-01-01`, `${y}-12-31`))
+  }
+  // Pagos prestacionales ya registrados este mes (para marcar "Pagado").
+  const prestacionPorEmpleado = useMemo(() => {
+    const map = new Map<string, number>()
+    if (!prestacional) return map
+    for (const m of movimientos) {
+      if (m.tipo !== "egreso" || m.categoria !== prestacional.key || !m.empleado_id || !delMes(m)) continue
+      map.set(m.empleado_id, (map.get(m.empleado_id) ?? 0) + (Number(m.valor) || 0))
+    }
+    return map
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [movimientos, anio, mes, prestacional])
+
+  async function registrarPago(empleadoId: string | null, valor: number, cuentaId: string, categoria: "salario" | "seguridad_social" | "prima" | "cesantias" | "intereses_cesantias", concepto: string, busyKey?: string) {
     if (!cuentaId) return setError("Elige la cuenta de la que sale el dinero.")
     if (!valor || valor <= 0) return setError("Indica el valor del pago.")
-    setError(""); setMsg(""); setBusy(empleadoId ?? "ss")
+    setError(""); setMsg(""); setBusy(busyKey ?? empleadoId ?? "ss")
     try {
       const res = await fetch("/api/empleados/admin/contabilidad/movimientos", {
         method: "POST", headers: { "Content-Type": "application/json" },
@@ -164,6 +212,11 @@ export function NominaClient({ empleados, cuentas }: { empleados: Empleado[]; cu
                       <div className="flex flex-wrap items-center justify-between gap-2">
                         <div>
                           <p className="text-sm font-medium">{e.nombre} <span className="text-[#fff]/45">· {e.cargo || "—"}</span></p>
+                          {(() => { const s = sugMap.get(e.id); return s && s.devengado > 0 ? (
+                            <p className="mt-0.5 text-[11px] text-[#fff]/45">
+                              Según contrato: devengado {formatMoneda(s.devengado, "COP")} − seg. social {formatMoneda(s.seguridadSocial, "COP")} = <b className="text-[var(--cyan)]/90">neto {formatMoneda(s.neto, "COP")}</b>
+                            </p>
+                          ) : null })()}
                           {pagado > 0 && (
                             <p className="mt-0.5 text-xs text-emerald-300/90">
                               Pagado {formatMoneda(pagado, "COP")}
@@ -175,14 +228,14 @@ export function NominaClient({ empleados, cuentas }: { empleados: Empleado[]; cu
                       </div>
                       <div className="mt-2 flex flex-wrap items-end gap-2 border-t border-white/[0.06] pt-2">
                         <label className="flex flex-col gap-1"><span className={lblCls}>Valor</span>
-                          <div className="w-36"><MoneyInput value={montos[e.id] ?? 0} onChange={(n) => setMontos({ ...montos, [e.id]: n })} className={inputCls} /></div></label>
+                          <div className="w-36"><MoneyInput value={montos[e.id] ?? sugMap.get(e.id)?.neto ?? 0} onChange={(n) => setMontos({ ...montos, [e.id]: n })} className={inputCls} /></div></label>
                         <label className="flex flex-col gap-1"><span className={lblCls}>Sale de la cuenta</span>
                           <select value={cuentaSel[e.id] ?? cuentaCOP} onChange={(ev) => setCuentaSel({ ...cuentaSel, [e.id]: ev.target.value })} className={`${inputCls} w-48`}>
                             <option value="">— Elige —</option>
                             {cuentas.map((c) => <option key={c.id} value={c.id}>{c.nombre} ({c.moneda})</option>)}
                           </select></label>
                         <button
-                          onClick={() => registrarPago(e.id, montos[e.id] ?? 0, cuentaSel[e.id] ?? cuentaCOP, "salario", `Salario ${e.nombre} · ${MESES[mes - 1]} ${anio}`)}
+                          onClick={() => registrarPago(e.id, montos[e.id] ?? sugMap.get(e.id)?.neto ?? 0, cuentaSel[e.id] ?? cuentaCOP, "salario", `Salario ${e.nombre} · ${MESES[mes - 1]} ${anio}`)}
                           disabled={busy === e.id}
                           className="inline-flex items-center gap-2 rounded-lg bg-[var(--cyan)] px-3 py-2 text-xs font-semibold text-[#04191b] transition hover:brightness-110 disabled:opacity-60"
                         >
@@ -195,6 +248,54 @@ export function NominaClient({ empleados, cuentas }: { empleados: Empleado[]; cu
               </div>
             )}
           </section>
+
+          {/* Prestaciones sociales: solo aparece en su mes de ley (prima jun/dic, cesantías/intereses ene/feb). */}
+          {prestacional && empleados.length > 0 && (
+            <section className="rounded-2xl border border-[#8b5cf6]/25 bg-[#8b5cf6]/[0.05] p-5">
+              <div className="mb-1 flex items-center gap-2">
+                <prestacional.icon size={16} className="text-[#8b5cf6]" />
+                <h2 className="text-sm font-semibold text-[#fff]/85">{prestacional.titulo}</h2>
+              </div>
+              <p className="mb-3 text-[11px] text-[#fff]/45">{prestacional.nota} El valor es un estimado por contrato (base salarial × días ÷ 360); ajústalo si tienes variables (comisiones, horas extra).</p>
+              <div className="flex flex-col gap-2">
+                {empleados.map((e) => {
+                  const s = sugMap.get(e.id)
+                  const sugerido = estimarPrestacion(s)
+                  const pagado = prestacionPorEmpleado.get(e.id) ?? 0
+                  const busyKey = `prest-${e.id}`
+                  const concepto = `${prestacional.titulo} · ${e.nombre} · ${anio}`
+                  return (
+                    <div key={e.id} className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <div>
+                          <p className="text-sm font-medium">{e.nombre} <span className="text-[#fff]/45">· {e.cargo || "—"}</span></p>
+                          <p className="mt-0.5 text-[11px] text-[#fff]/45">Estimado: <b className="text-[#8b5cf6]">{formatMoneda(sugerido, "COP")}</b>{!s?.fechaIngreso ? " · falta fecha de ingreso" : ""}</p>
+                          {pagado > 0 && <p className="mt-0.5 text-xs text-emerald-300/90">Pagado {formatMoneda(pagado, "COP")}</p>}
+                        </div>
+                        {pagado > 0 && <CheckCircle2 size={16} className="text-emerald-300" />}
+                      </div>
+                      <div className="mt-2 flex flex-wrap items-end gap-2 border-t border-white/[0.06] pt-2">
+                        <label className="flex flex-col gap-1"><span className={lblCls}>Valor</span>
+                          <div className="w-36"><MoneyInput value={montos[busyKey] ?? sugerido} onChange={(n) => setMontos({ ...montos, [busyKey]: n })} className={inputCls} /></div></label>
+                        <label className="flex flex-col gap-1"><span className={lblCls}>Sale de la cuenta</span>
+                          <select value={cuentaSel[busyKey] ?? cuentaCOP} onChange={(ev) => setCuentaSel({ ...cuentaSel, [busyKey]: ev.target.value })} className={`${inputCls} w-48`}>
+                            <option value="">— Elige —</option>
+                            {cuentas.map((c) => <option key={c.id} value={c.id}>{c.nombre} ({c.moneda})</option>)}
+                          </select></label>
+                        <button
+                          onClick={() => registrarPago(e.id, montos[busyKey] ?? sugerido, cuentaSel[busyKey] ?? cuentaCOP, prestacional.key, concepto, busyKey)}
+                          disabled={busy === busyKey}
+                          className="inline-flex items-center gap-2 rounded-lg bg-[#8b5cf6] px-3 py-2 text-xs font-semibold text-[#0d0a1a] transition hover:brightness-110 disabled:opacity-60"
+                        >
+                          {busy === busyKey ? <Loader2 size={13} className="animate-spin" /> : <Plus size={13} />} Registrar
+                        </button>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </section>
+          )}
         </div>
       )}
     </div>
