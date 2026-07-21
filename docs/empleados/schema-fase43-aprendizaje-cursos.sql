@@ -38,4 +38,11 @@ alter table empresa_config add column if not exists evaluaciones_habilitadas boo
 alter table gastos_recurrentes add column if not exists dia_cobro int check (dia_cobro is null or (dia_cobro between 1 and 31));
 alter table gastos_recurrentes add column if not exists debito_automatico boolean not null default false;
 
+-- 5) Movimientos: fecha probable de pago/cobro (recordatorio) y liquidación real.
+--    Un ingreso en USD puede llegar distinto por costos de transferencia y por la TRM que
+--    aplica el banco (normalmente MENOR a la TRM del día): se registra al hacerse efectivo.
+alter table movimientos add column if not exists fecha_estimada date;
+alter table movimientos add column if not exists tasa_real numeric;   -- TRM que aplicó el banco
+alter table movimientos add column if not exists valor_real numeric;  -- lo que realmente entró/salió
+
 notify pgrst, 'reload schema';

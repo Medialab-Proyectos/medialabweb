@@ -80,6 +80,30 @@ export function esHabil(fechaISO: string): boolean {
   return !festivosDe(d.getFullYear()).has(fechaISO)
 }
 
+/**
+ * Fecha (ISO) hasta la que llegan los próximos N días HÁBILES contados desde hoy
+ * (hoy incluido si es hábil). Sirve para "qué viene en los próximos 3 días hábiles"
+ * respetando fines de semana y festivos colombianos.
+ */
+export function horizonteDiasHabiles(desdeISO: string, habiles: number): string {
+  const d = parse(desdeISO)
+  let contados = esHabil(desdeISO) ? 1 : 0
+  let guard = 0
+  while (contados < habiles && guard < 60) {
+    d.setDate(d.getDate() + 1)
+    guard++
+    const iso = d.toISOString().slice(0, 10)
+    if (esHabil(iso)) contados++
+  }
+  return d.toISOString().slice(0, 10)
+}
+
+/** Días de calendario entre hoy y el horizonte de N días hábiles (para filtrar listas por "dias"). */
+export function diasHastaHorizonteHabil(desdeISO: string, habiles: number): number {
+  const fin = horizonteDiasHabiles(desdeISO, habiles)
+  return Math.round((Date.parse(`${fin}T00:00:00Z`) - Date.parse(`${desdeISO}T00:00:00Z`)) / 86_400_000)
+}
+
 /** Cuenta días hábiles entre dos fechas ISO (ambas inclusive). */
 export function contarDiasHabiles(inicioISO: string, finISO: string): number {
   const start = parse(inicioISO)

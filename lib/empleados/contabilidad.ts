@@ -47,6 +47,12 @@ export type Movimiento = {
   iva_valor: number | null
   estado: EstadoMovimiento
   referencia: string | null
+  /** Solo si está pendiente: fecha probable de pago/cobro (recordatorio del dashboard). */
+  fecha_estimada?: string | null
+  /** TRM real que aplicó el banco al liquidar (suele ser menor que la TRM del día). */
+  tasa_real?: number | null
+  /** Valor que realmente entró/salió tras costos y conversión (si difiere del esperado). */
+  valor_real?: number | null
   creado_por: string | null
   creado_en: string
   actualizado_en: string

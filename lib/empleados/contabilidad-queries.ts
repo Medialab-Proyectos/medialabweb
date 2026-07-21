@@ -3,8 +3,12 @@ import { getServiceClient } from "./db"
 import type { Cuenta, Movimiento, Empresa, MetodoPago, ContratoEmpresa, GastoRecurrente, Inversion } from "./contabilidad"
 
 const CUENTA_COLS = "id,nombre,banco,numero_cuenta,plataforma,moneda,saldo_inicial,activa,orden,creado_en,actualizado_en"
-const MOV_COLS =
+const MOV_BASE =
   "id,cuenta_id,cuenta_destino_id,fecha,tipo,categoria,concepto,contraparte,empresa_id,empleado_id,valor,tasa,costo,valor_destino,iva_tipo,iva_valor,estado,referencia,creado_por,creado_en,actualizado_en"
+// fecha_estimada / tasa_real / valor_real llegan en fase43 (resiliente si aún no está).
+const MOV_COLS = `${MOV_BASE},fecha_estimada,tasa_real,valor_real`
+const faltaMovFase43 = (e: unknown) =>
+  /fecha_estimada|tasa_real|valor_real|column|schema cache|find the/i.test(String((e as { message?: string })?.message ?? ""))
 
 // ── Cuentas ───────────────────────────────────────────────────────────────────
 export async function listCuentas() {
@@ -40,13 +44,17 @@ export async function eliminarCuenta(id: string) {
 /** Todos los movimientos (se necesitan completos para calcular saldos acumulados). */
 export async function listMovimientos() {
   const sb = getServiceClient()
-  const { data, error } = await sb
+  const q = (cols: string) => sb
     .from("movimientos")
-    .select(MOV_COLS)
+    .select(cols)
     .order("fecha", { ascending: false })
     .order("creado_en", { ascending: false })
+  let data: unknown = null
+  let error: unknown = null
+  ;({ data, error } = await q(MOV_COLS))
+  if (error && faltaMovFase43(error)) ({ data, error } = await q(MOV_BASE))
   if (error) throw error
-  return (data ?? []) as Movimiento[]
+  return ((data ?? []) as Movimiento[])
 }
 
 /** Conteo de movimientos pendientes (por pagar = egresos, por cobrar = ingresos) — panel del CEO. */
@@ -63,7 +71,10 @@ export async function contarPendientesFlujo(): Promise<{ porPagar: number; porCo
 
 export async function getMovimiento(id: string) {
   const sb = getServiceClient()
-  const { data, error } = await sb.from("movimientos").select(MOV_COLS).eq("id", id).maybeSingle()
+  let data: unknown = null
+  let error: unknown = null
+  ;({ data, error } = await sb.from("movimientos").select(MOV_COLS).eq("id", id).maybeSingle())
+  if (error && faltaMovFase43(error)) ({ data, error } = await sb.from("movimientos").select(MOV_BASE).eq("id", id).maybeSingle())
   if (error) throw error
   return data as Movimiento | null
 }
@@ -72,7 +83,14 @@ export type MovimientoInput = Omit<Movimiento, "id" | "creado_en" | "actualizado
 
 export async function upsertMovimiento(input: MovimientoInput) {
   const sb = getServiceClient()
-  const { data, error } = await sb.from("movimientos").upsert(input).select(MOV_COLS).single()
+  let data: unknown = null
+  let error: unknown = null
+  ;({ data, error } = await sb.from("movimientos").upsert(input).select(MOV_COLS).single())
+  if (error && faltaMovFase43(error)) {
+    const { fecha_estimada: _f, tasa_real: _t, valor_real: _v, ...base } = input as Record<string, unknown>
+    void _f; void _t; void _v
+    ;({ data, error } = await sb.from("movimientos").upsert(base).select(MOV_BASE).single())
+  }
   if (error) throw error
   return data as Movimiento
 }

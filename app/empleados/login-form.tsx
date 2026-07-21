@@ -2,11 +2,12 @@
 
 import { useState } from "react"
 import Image from "next/image"
-import { Lock, User, Loader2, ShieldCheck } from "lucide-react"
+import { Lock, User, Loader2, ShieldCheck, Eye, EyeOff } from "lucide-react"
 
 export function LoginForm({ configurado }: { configurado: boolean }) {
   const [cedula, setCedula] = useState("")
   const [password, setPassword] = useState("")
+  const [verClave, setVerClave] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
 
@@ -79,14 +80,23 @@ export function LoginForm({ configurado }: { configurado: boolean }) {
               <Lock size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#fff]/40" />
               <input
                 id="password"
-                type="password"
+                type={verClave ? "text" : "password"}
                 autoComplete="current-password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full rounded-xl border border-white/10 bg-black/30 py-3 pl-9 pr-3 text-sm text-[#fff] outline-none transition focus:border-[var(--cyan)]/60"
+                className="w-full rounded-xl border border-white/10 bg-black/30 py-3 pl-9 pr-11 text-sm text-[#fff] outline-none transition focus:border-[var(--cyan)]/60"
                 placeholder="Tu contraseña"
               />
+              <button
+                type="button"
+                onClick={() => setVerClave((v) => !v)}
+                aria-label={verClave ? "Ocultar contraseña" : "Mostrar contraseña"}
+                title={verClave ? "Ocultar contraseña" : "Mostrar contraseña"}
+                className="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg p-1.5 text-[#fff]/45 transition hover:bg-white/5 hover:text-[#fff]/80"
+              >
+                {verClave ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
             </div>
 
             {error && <p className="mb-4 rounded-lg bg-red-500/10 px-3 py-2 text-sm text-red-300">{error}</p>}

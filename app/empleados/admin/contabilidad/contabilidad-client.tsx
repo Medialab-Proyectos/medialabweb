@@ -17,6 +17,30 @@ import { MoneyInput } from "../../money-input"
 const inputCls = "w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm text-[#fff] outline-none transition focus:border-[var(--cyan)]/60"
 const lblCls = "text-[11px] font-semibold uppercase tracking-wide text-[#fff]/50"
 
+/** Icono "?" con tooltip: explica un campo sin ocupar espacio en el formulario. */
+function Ayuda({ texto }: { texto: string }) {
+  const [ver, setVer] = useState(false)
+  return (
+    <span className="relative inline-flex">
+      <button
+        type="button"
+        onClick={() => setVer((v) => !v)}
+        onMouseEnter={() => setVer(true)}
+        onMouseLeave={() => setVer(false)}
+        aria-label="Ayuda"
+        className="inline-flex h-4 w-4 items-center justify-center rounded-full border border-white/25 text-[9px] font-bold text-[#fff]/60 transition hover:border-[var(--cyan)]/60 hover:text-[var(--cyan)]"
+      >
+        ?
+      </button>
+      {ver && (
+        <span role="tooltip" className="absolute bottom-full left-1/2 z-50 mb-1.5 w-64 -translate-x-1/2 rounded-lg border border-white/15 bg-[#12151c] px-3 py-2 text-[11px] font-normal normal-case leading-relaxed tracking-normal text-[#fff]/80 shadow-2xl">
+          {texto}
+        </span>
+      )}
+    </span>
+  )
+}
+
 const anioActual = new Date().getFullYear()
 const mesActual = new Date().getMonth() + 1
 function hoyISO() {
@@ -30,7 +54,7 @@ type MovForm = {
   categoria: string; concepto: string; contraparte: string; empresa_id: string
   valor: number; tasa: number; costo: number; valor_destino: number
   iva_tipo: TipoIVA; iva_valor: number
-  estado: "pendiente" | "realizado"; referencia: string
+  estado: "pendiente" | "realizado"; referencia: string; fecha_estimada: string; tasa_real: number; valor_real: number
 }
 
 export function ContabilidadClient() {
@@ -197,7 +221,7 @@ export function ContabilidadClient() {
     setFormMov({
       cuenta_id: cuentas[0]?.id ?? "", cuenta_destino_id: "", fecha: hoyISO(), tipo: "ingreso",
       categoria: "", concepto: "", contraparte: "", empresa_id: "",
-      valor: 0, tasa: 0, costo: 0, valor_destino: 0, iva_tipo: "na", iva_valor: 0, estado: "realizado", referencia: "",
+      valor: 0, tasa: 0, costo: 0, valor_destino: 0, iva_tipo: "na", iva_valor: 0, estado: "realizado", referencia: "", fecha_estimada: "", tasa_real: 0, valor_real: 0,
     })
   }
   function editarMov(m: Movimiento) {
@@ -207,7 +231,7 @@ export function ContabilidadClient() {
       categoria: m.categoria ?? "", concepto: m.concepto ?? "", contraparte: m.contraparte ?? "", empresa_id: m.empresa_id ?? "",
       valor: Number(m.valor) || 0, tasa: Number(m.tasa) || 0, costo: Number(m.costo) || 0, valor_destino: Number(m.valor_destino) || 0,
       iva_tipo: (m.iva_tipo ?? "na") as TipoIVA, iva_valor: Number(m.iva_valor) || 0,
-      estado: m.estado, referencia: m.referencia ?? "",
+      estado: m.estado, referencia: m.referencia ?? "", fecha_estimada: m.fecha_estimada ?? "", tasa_real: Number(m.tasa_real) || 0, valor_real: Number(m.valor_real) || 0,
     })
   }
 
@@ -244,6 +268,8 @@ export function ContabilidadClient() {
           iva_tipo: formMov.tipo === "traslado" ? null : formMov.iva_tipo,
           iva_valor: formMov.tipo === "traslado" ? null : (formMov.iva_valor || null),
           estado: formMov.estado, referencia: formMov.referencia || null,
+          fecha_estimada: formMov.estado === "pendiente" ? (formMov.fecha_estimada || null) : null,
+          tasa_real: formMov.tasa_real || null, valor_real: formMov.valor_real || null,
         }),
       })
       const data = await res.json()
@@ -675,14 +701,32 @@ export function ContabilidadClient() {
                   )}
                   <label className="flex flex-col gap-1.5"><span className={lblCls}>{formMov.tipo === "ingreso" ? "Costo de transferencia" : "Fee / costo bancario"}</span>
                     <MoneyInput value={formMov.costo} onChange={(n) => setFormMov({ ...formMov, costo: n })} className={inputCls} /></label>
-                  {formMov.tipo === "ingreso" && (
-                    <label className="flex flex-col gap-1.5"><span className={lblCls}>TRM del día (la escribes tú)</span>
-                      <input type="number" step="0.0001" min="0" value={formMov.tasa || ""} onChange={(e) => setFormMov({ ...formMov, tasa: Number(e.target.value) })} className={inputCls} placeholder="Ej: 4000 (opcional)" /></label>
+                  {/* La TRM solo tiene sentido si el movimiento NO está en pesos colombianos. */}
+                  {formMov.tipo === "ingreso" && movMonedaOrigen !== "COP" && (
+                    <label className="flex flex-col gap-1.5">
+                      <span className={`${lblCls} flex items-center gap-1.5`}>
+                        TRM del día
+                        <Ayuda texto="La TRM no se descarga automáticamente ni se actualiza sola: la escribes tú y queda congelada en este movimiento. Si el pago aún no llega, déjalo Pendiente con la TRM estimada; al hacerse efectivo registra la TRM real que aplicó el banco (suele ser menor) y el valor realmente recibido." />
+                      </span>
+                      <input type="number" step="0.0001" min="0" value={formMov.tasa || ""} onChange={(e) => setFormMov({ ...formMov, tasa: Number(e.target.value) })} className={inputCls} placeholder="Ej: 4000" /></label>
                   )}
-                  {formMov.tipo === "ingreso" && (
-                    <p className="sm:col-span-2 rounded-lg bg-[var(--cyan)]/10 px-3 py-2 text-[11px] text-[var(--cyan)]/90">
-                      La <b>TRM no se descarga automáticamente</b>: la escribes tú al registrar el movimiento y queda guardada en ese movimiento (no se recalcula después). Para pagos de cliente que aún no aterrizan, déjalo en <b>Pendiente</b> con la TRM estimada; cuando llegue, ajusta el valor real y la TRM efectiva y márcalo <b>Realizado</b>. El neto que suma a la cuenta = valor − costo de transferencia.
-                    </p>
+
+                  {/* Liquidación real: al hacerse efectivo, lo recibido puede diferir por costos y TRM del banco. */}
+                  {formMov.tipo === "ingreso" && formMov.estado === "realizado" && movMonedaOrigen !== "COP" && (
+                    <>
+                      <label className="flex flex-col gap-1.5">
+                        <span className={`${lblCls} flex items-center gap-1.5`}>
+                          TRM real del banco
+                          <Ayuda texto="Tasa que realmente aplicó el banco o la plataforma al convertir. Casi siempre es MENOR a la TRM del día (spread). Si no la conoces, un estimado prudente es entre 2% y 4% por debajo de la TRM del día." />
+                        </span>
+                        <input type="number" step="0.0001" min="0" value={formMov.tasa_real || ""} onChange={(e) => setFormMov({ ...formMov, tasa_real: Number(e.target.value) })} className={inputCls} placeholder={formMov.tasa ? `Sug. ${Math.round(formMov.tasa * 0.97)}` : "Ej: 3880"} /></label>
+                      <label className="flex flex-col gap-1.5">
+                        <span className={`${lblCls} flex items-center gap-1.5`}>
+                          Valor realmente recibido
+                          <Ayuda texto="Lo que efectivamente entró a la cuenta después de costos de transferencia y conversión. Si lo dejas vacío se asume valor − costo." />
+                        </span>
+                        <MoneyInput value={formMov.valor_real} onChange={(n) => setFormMov({ ...formMov, valor_real: n })} className={inputCls} /></label>
+                    </>
                   )}
                 </>
               )}
@@ -694,8 +738,18 @@ export function ContabilidadClient() {
                     <MoneyInput value={formMov.costo} onChange={(n) => setFormMov({ ...formMov, costo: n })} className={inputCls} /></label>
                   {trasladoCrossMoneda && (
                     <>
-                      <label className="flex flex-col gap-1.5"><span className={lblCls}>Tasa {movMonedaOrigen}→{movMonedaDestino} (del día)</span>
+                      <label className="flex flex-col gap-1.5">
+                        <span className={`${lblCls} flex items-center gap-1.5`}>
+                          Tasa {movMonedaOrigen}→{movMonedaDestino} (del día)
+                          <Ayuda texto="TRM de referencia del día. La escribes tú; no se descarga automáticamente." />
+                        </span>
                         <input type="number" step="0.0001" min="0" value={formMov.tasa || ""} onChange={(e) => setFormMov({ ...formMov, tasa: Number(e.target.value) })} className={inputCls} placeholder="Ej: 4000" /></label>
+                      <label className="flex flex-col gap-1.5">
+                        <span className={`${lblCls} flex items-center gap-1.5`}>
+                          Tasa real que aplicó la empresa
+                          <Ayuda texto="La plataforma o banco que hace la transferencia suele liquidar a una tasa MENOR que la TRM del día. Si no la conoces, usa entre 2% y 4% por debajo de la TRM (el sugerido ya viene calculado)." />
+                        </span>
+                        <input type="number" step="0.0001" min="0" value={formMov.tasa_real || ""} onChange={(e) => setFormMov({ ...formMov, tasa_real: Number(e.target.value) })} className={inputCls} placeholder={formMov.tasa ? `Sug. ${Math.round(formMov.tasa * 0.97)}` : "Ej: 3880"} /></label>
                       <label className="flex flex-col gap-1.5"><span className={lblCls}>Llega al destino ({movMonedaDestino})</span>
                         <MoneyInput
                           value={formMov.valor_destino || (formMov.valor && formMov.tasa ? Math.round(formMov.valor * formMov.tasa - (formMov.costo || 0)) : 0)}
@@ -710,21 +764,23 @@ export function ContabilidadClient() {
               )}
 
               <label className="flex flex-col gap-1.5 sm:col-span-2"><span className={lblCls}>Concepto</span>
-                <input value={formMov.concepto} onChange={(e) => setFormMov({ ...formMov, concepto: e.target.value })} className={inputCls} placeholder="Descripción" /></label>
+                <textarea rows={3} value={formMov.concepto} onChange={(e) => setFormMov({ ...formMov, concepto: e.target.value })} className={inputCls} placeholder="Describe el movimiento con el detalle que necesites…" /></label>
               <label className="flex flex-col gap-1.5"><span className={lblCls}>Contraparte</span>
-                <input value={formMov.contraparte} onChange={(e) => setFormMov({ ...formMov, contraparte: e.target.value })} className={inputCls} placeholder="De quién / a quién" /></label>
-              <label className="flex flex-col gap-1.5"><span className={lblCls}>Empresa</span>
-                <select value={formMov.empresa_id} onChange={(e) => setFormMov({ ...formMov, empresa_id: e.target.value })} className={inputCls}>
-                  <option value="">— Ninguna —</option>
-                  {empresas.map((x) => <option key={x.id} value={x.id}>{x.nombre}{x.nit ? ` · NIT ${x.nit}` : ""}</option>)}
-                </select></label>
-              <label className="flex flex-col gap-1.5 sm:col-span-2"><span className={lblCls}>Referencia</span>
+                <input value={formMov.contraparte} onChange={(e) => setFormMov({ ...formMov, contraparte: e.target.value })} className={inputCls} placeholder="De quién / a quién (texto libre)" /></label>
+              <label className="flex flex-col gap-1.5"><span className={lblCls}>Referencia (opcional)</span>
                 <input value={formMov.referencia} onChange={(e) => setFormMov({ ...formMov, referencia: e.target.value })} className={inputCls} placeholder="N.º transferencia / factura" /></label>
               <label className="flex flex-col gap-1.5 sm:col-span-2"><span className={lblCls}>Estado</span>
                 <select value={formMov.estado} onChange={(e) => setFormMov({ ...formMov, estado: e.target.value as "pendiente" | "realizado" })} className={inputCls}>
                   <option value="realizado">Realizado</option>
                   <option value="pendiente">Pendiente (por cobrar / pagar / trasladar)</option>
                 </select></label>
+
+              {/* Pendiente: fecha probable de pago → sirve de recordatorio en Cuentas por pagar/cobrar. */}
+              {formMov.estado === "pendiente" && (
+                <label className="flex flex-col gap-1.5 sm:col-span-2"><span className={lblCls}>Fecha probable de {formMov.tipo === "ingreso" ? "cobro" : "pago"}</span>
+                  <input type="date" value={formMov.fecha_estimada} onChange={(e) => setFormMov({ ...formMov, fecha_estimada: e.target.value })} className={inputCls} />
+                  <span className="text-[10px] text-[#fff]/45">Se usa como recordatorio en <b className="text-[#fff]/65">Cuentas por {formMov.tipo === "ingreso" ? "cobrar" : "pagar"}</b> del dashboard. Al marcarlo como realizado, desaparece de la lista.</span></label>
+              )}
             </div>
             <div className="mt-5 flex justify-end gap-2">
               <button type="button" onClick={() => setFormMov(null)} className="rounded-lg px-4 py-2 text-sm text-[#fff]/60 hover:text-[#fff]">Cancelar</button>

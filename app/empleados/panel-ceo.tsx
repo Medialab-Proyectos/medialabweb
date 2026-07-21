@@ -5,7 +5,7 @@ import Link from "next/link"
 import {
   Loader2, Check, X, Wallet, TrendingUp, ArrowDownCircle, ArrowUpCircle, ClipboardCheck,
   Receipt, Cake, UserX, CalendarClock, ArrowRight, SmilePlus, Building2,
-  Users, LayoutDashboard, ExternalLink, Award, Star, Plus, Trash2, Loader2 as Spin,
+  Users, LayoutDashboard, ExternalLink, Award, Star, Plus, Trash2, ChevronDown, Loader2 as Spin,
 } from "lucide-react"
 import { formatMoneda } from "@/lib/empleados/contabilidad"
 import { ActividadWidget } from "./admin/actividad-widget"
@@ -28,6 +28,8 @@ type Data = {
   fechasEspeciales: { id: string; titulo: string; nota: string | null; fecha: string; dias: number; recurrente: boolean }[]
   /** Servicios recurrentes que NO se debitan solos: recordatorio de pago manual. */
   recurrentesManuales: { id: string; nombre: string; valor: number; moneda: "COP" | "USD"; dia: number | null }[]
+  /** Recordatorio de nómina: solo los últimos días del mes y si aún no se ha pagado. */
+  nominaPendiente: { empleados: number; dias: number; mes: string } | null
   serie6m: { label: string; ingresos: number; egresos: number }[]
   categorias: { ingresos: { cat: string; valor: number }[]; egresos: { cat: string; valor: number }[] }
   satisfaccionEmpleados: number | null
@@ -46,6 +48,8 @@ export function PanelCEO() {
   const [d, setD] = useState<Data | null>(null)
   const [cargando, setCargando] = useState(true)
   const [busy, setBusy] = useState<string | null>(null)
+  // Acordeón de pendientes: solo un elemento desplegado a la vez (en ambas listas).
+  const [itemAbierto, setItemAbierto] = useState<string | null>(null)
   // Gestión de fechas especiales (Talento Humano / CEO).
   const [fechaForm, setFechaForm] = useState({ titulo: "", fecha: "", recurrente: true, nota: "" })
   const [fechaAbierto, setFechaAbierto] = useState(false)
@@ -139,7 +143,7 @@ export function PanelCEO() {
         {/* Agenda: ausentes hoy + cumpleaños + aniversarios + fechas de Talento Humano */}
         <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
           <div className="mb-3 flex items-center justify-between gap-2">
-            <h3 className="flex items-center gap-2 text-sm font-semibold text-[#fff]/80"><CalendarClock size={15} className="text-[var(--cyan)]" /> Próximas fechas</h3>
+            <h3 className="flex items-center gap-2 text-sm font-semibold text-[#fff]/80"><CalendarClock size={15} className="text-[var(--cyan)]" /> Próximas fechas <span className="font-normal text-[#fff]/40">· 3 días hábiles</span></h3>
             <button onClick={toggleGestorFechas} className="inline-flex items-center gap-1 rounded-lg border border-white/10 px-2 py-1 text-[11px] font-semibold text-[#fff]/70 hover:bg-white/5" title="Ver / agregar fechas especiales">
               <Plus size={12} /> {fechaAbierto ? "Cerrar" : "Fechas"}
             </button>
@@ -193,15 +197,31 @@ export function PanelCEO() {
               <Fila key={`aus-${i}`} icon={UserX} color="#fbbf24" titulo={a.nombre} detalle={`Ausente hoy · ${TIPO_AUS[a.tipo] ?? a.tipo}`} etiqueta="Hoy" />
             ))}
             {d.fechasEspeciales.map((f) => (
-              <Fila key={`fe-${f.id}`} icon={Star} color="#22d3ee" titulo={f.titulo} detalle={`${f.nota ? f.nota + " · " : ""}${f.fecha}${f.recurrente ? " · anual" : ""}`} etiqueta={f.dias === 0 ? "Hoy" : `${f.dias}d`} onDelete={() => eliminarFecha(f.id)} borrando={busy === f.id} />
+              <Fila
+                key={`fe-${f.id}`} icon={Star} color="#22d3ee" titulo={f.titulo}
+                detalle={`${f.nota ? f.nota + " · " : ""}${f.fecha}${f.recurrente ? " · anual" : ""}`}
+                etiqueta={f.dias === 0 ? "Hoy" : `${f.dias}d`}
+                ampliado={`${f.nota ? `${f.nota}\n` : ""}Fecha: ${f.fecha}. ${f.recurrente ? "Se repite cada año." : "Fecha puntual (no se repite)."} ${f.dias === 0 ? "Es hoy." : `Faltan ${f.dias} día(s).`}`}
+                onDelete={() => eliminarFecha(f.id)} borrando={busy === f.id}
+              />
             ))}
             {d.aniversarios.slice(0, 4).map((a, i) => (
-              <Fila key={`ani-${i}`} icon={Award} color="#a78bfa" titulo={a.nombre} detalle={`Aniversario · ${a.anos} ${a.anos === 1 ? "año" : "años"} · ${a.fecha}`} etiqueta={a.dias === 0 ? "Hoy" : `${a.dias}d`} />
+              <Fila
+                key={`ani-${i}`} icon={Award} color="#a78bfa" titulo={a.nombre}
+                detalle={`Aniversario · ${a.anos} ${a.anos === 1 ? "año" : "años"} · ${a.fecha}`}
+                etiqueta={a.dias === 0 ? "Hoy" : `${a.dias}d`}
+                ampliado={`${a.nombre} cumple ${a.anos} ${a.anos === 1 ? "año" : "años"} en MediaLab el ${a.fecha}. Buen momento para reconocer su trayectoria en el equipo.`}
+              />
             ))}
             {d.cumpleanos.slice(0, 4).map((c, i) => (
-              <Fila key={`cum-${i}`} icon={Cake} color="#E8751A" titulo={c.nombre} detalle={`Cumpleaños · ${c.fecha}`} etiqueta={c.dias === 0 ? "Hoy" : `${c.dias}d`} />
+              <Fila
+                key={`cum-${i}`} icon={Cake} color="#E8751A" titulo={c.nombre}
+                detalle={`Cumpleaños · ${c.fecha}`}
+                etiqueta={c.dias === 0 ? "Hoy" : `${c.dias}d`}
+                ampliado={`${c.nombre} cumple años el ${c.fecha}. Recuerda que tiene derecho a media jornada de cumpleaños como beneficio.`}
+              />
             ))}
-            {d.ausentesHoy.length === 0 && d.cumpleanos.length === 0 && d.aniversarios.length === 0 && d.fechasEspeciales.length === 0 && <Vacio texto="Sin ausencias, cumpleaños, aniversarios ni fechas próximas." />}
+            {d.ausentesHoy.length === 0 && d.cumpleanos.length === 0 && d.aniversarios.length === 0 && d.fechasEspeciales.length === 0 && <Vacio texto="Sin eventos en los próximos 3 días hábiles." />}
           </div>
         </div>
       </Grupo>
@@ -240,20 +260,43 @@ export function PanelCEO() {
         <div className="grid gap-4 md:grid-cols-2">
         {/* Cuentas por pagar (marcar pagado en línea) */}
         <Bloque icon={ArrowUpCircle} titulo="Cuentas por pagar" contador={d.pagosPendientes.length} tone="red" href="/empleados/admin/contabilidad">
-          {d.pagosPendientes.length === 0 ? (
+          {/* Solo se dice "nada pendiente" si de verdad no hay NADA (ni nómina ni recurrentes). */}
+          {d.pagosPendientes.length === 0 && !d.nominaPendiente && d.recurrentesManuales.length === 0 && d.facturasFreelance === 0 && (
             <Vacio texto="Nada pendiente por pagar." />
-          ) : d.pagosPendientes.slice(0, 5).map((m) => (
-            <div key={m.id} className="flex items-center justify-between gap-2 rounded-xl bg-white/[0.03] px-3 py-2">
-              <div className="min-w-0">
-                <p className="truncate text-sm font-medium">{m.concepto}</p>
-                <p className="text-[11px] text-[#fff]/50">{m.contraparte ? `${m.contraparte} · ` : ""}{m.cuenta} · {fechaCorta(m.fecha)}</p>
-              </div>
-              <div className="flex shrink-0 items-center gap-2">
-                <span className="text-sm font-semibold text-red-300">{formatMoneda(m.valor, m.moneda)}</span>
-                <button disabled={busy === m.id} onClick={() => marcarPago(m.id, "pagosPendientes")} title="Marcar pagado" className="flex h-8 items-center gap-1 rounded-lg bg-emerald-400/15 px-2 text-xs font-semibold text-emerald-300 transition hover:bg-emerald-400/25 disabled:opacity-50">{busy === m.id ? <Loader2 size={13} className="animate-spin" /> : <Check size={14} />} Pagué</button>
-              </div>
-            </div>
-          ))}
+          )}
+          {d.pagosPendientes.length > 0 && (
+            <ListaScroll>
+              {d.pagosPendientes.map((m) => (
+                <ItemPendiente
+                  key={m.id}
+                  abierto={itemAbierto === m.id}
+                  onToggle={() => setItemAbierto(itemAbierto === m.id ? null : m.id)}
+                  titulo={m.concepto}
+                  subtitulo={`${m.contraparte ? `${m.contraparte} · ` : ""}${m.cuenta} · ${fechaCorta(m.fecha)}`}
+                  valor={formatMoneda(m.valor, m.moneda)}
+                  valorClase="text-red-300"
+                  detalle={`Concepto: ${m.concepto}\nContraparte: ${m.contraparte || "—"}\nCuenta: ${m.cuenta}\nFecha: ${m.fecha}\nValor: ${formatMoneda(m.valor, m.moneda)}`}
+                  accion={
+                    <button disabled={busy === m.id} onClick={(e) => { e.stopPropagation(); marcarPago(m.id, "pagosPendientes") }} title="Marcar pagado" className="flex h-8 shrink-0 items-center gap-1 rounded-lg bg-emerald-400/15 px-2 text-xs font-semibold text-emerald-300 transition hover:bg-emerald-400/25 disabled:opacity-50">
+                      {busy === m.id ? <Loader2 size={13} className="animate-spin" /> : <Check size={14} />} Pagué
+                    </button>
+                  }
+                />
+              ))}
+            </ListaScroll>
+          )}
+
+          {/* Nómina del mes: aparece al acercarse fin de mes y sale sola al registrar el pago. */}
+          {d.nominaPendiente && (
+            <Link href="/empleados/admin/contabilidad/nomina" className="mt-1 block rounded-xl border border-red-400/25 bg-red-400/[0.06] px-3 py-2 transition hover:bg-red-400/[0.1]">
+              <p className="text-[11px] font-semibold text-red-200">
+                Nómina de {d.nominaPendiente.mes}: {d.nominaPendiente.empleados} empleado(s) por pagar
+              </p>
+              <p className="text-[11px] text-[#fff]/60">
+                {d.nominaPendiente.dias === 0 ? "El mes termina hoy." : `Faltan ${d.nominaPendiente.dias} día(s) para fin de mes.`} Registra el pago para quitarlo de esta lista →
+              </p>
+            </Link>
+          )}
 
           {/* Recordatorio: servicios recurrentes que NO se debitan solos (hay que pagarlos a mano). */}
           {d.recurrentesManuales.length > 0 && (
@@ -275,20 +318,30 @@ export function PanelCEO() {
 
         {/* Cuentas por cobrar (marcar recibido) */}
         <Bloque icon={ArrowDownCircle} titulo="Cuentas por cobrar" contador={d.porCobrarLista.length} tone="emerald" href="/empleados/admin/contabilidad">
-          {d.porCobrarLista.length === 0 ? (
+          {d.porCobrarLista.length === 0 && d.cuentasCobroPorPasar === 0 && (
             <Vacio texto="Sin ingresos por confirmar." />
-          ) : d.porCobrarLista.slice(0, 5).map((m) => (
-            <div key={m.id} className="flex items-center justify-between gap-2 rounded-xl bg-white/[0.03] px-3 py-2">
-              <div className="min-w-0">
-                <p className="truncate text-sm font-medium">{m.concepto}</p>
-                <p className="text-[11px] text-[#fff]/50">{m.contraparte ? `${m.contraparte} · ` : ""}{m.cuenta} · {fechaCorta(m.fecha)}</p>
-              </div>
-              <div className="flex shrink-0 items-center gap-2">
-                <span className="text-sm font-semibold text-emerald-300">{formatMoneda(m.valor, m.moneda)}</span>
-                <button disabled={busy === m.id} onClick={() => marcarPago(m.id, "porCobrarLista")} title="Marcar recibido" className="flex h-8 items-center gap-1 rounded-lg bg-[var(--cyan)]/15 px-2 text-xs font-semibold text-[var(--cyan)] transition hover:bg-[var(--cyan)]/25 disabled:opacity-50">{busy === m.id ? <Loader2 size={13} className="animate-spin" /> : <Check size={14} />} Llegó</button>
-              </div>
-            </div>
-          ))}
+          )}
+          {d.porCobrarLista.length > 0 && (
+            <ListaScroll>
+              {d.porCobrarLista.map((m) => (
+                <ItemPendiente
+                  key={m.id}
+                  abierto={itemAbierto === m.id}
+                  onToggle={() => setItemAbierto(itemAbierto === m.id ? null : m.id)}
+                  titulo={m.concepto}
+                  subtitulo={`${m.contraparte ? `${m.contraparte} · ` : ""}${m.cuenta} · ${fechaCorta(m.fecha)}`}
+                  valor={formatMoneda(m.valor, m.moneda)}
+                  valorClase="text-emerald-300"
+                  detalle={`Concepto: ${m.concepto}\nContraparte: ${m.contraparte || "—"}\nCuenta: ${m.cuenta}\nFecha: ${m.fecha}\nValor: ${formatMoneda(m.valor, m.moneda)}`}
+                  accion={
+                    <button disabled={busy === m.id} onClick={(e) => { e.stopPropagation(); marcarPago(m.id, "porCobrarLista") }} title="Marcar recibido" className="flex h-8 shrink-0 items-center gap-1 rounded-lg bg-[var(--cyan)]/15 px-2 text-xs font-semibold text-[var(--cyan)] transition hover:bg-[var(--cyan)]/25 disabled:opacity-50">
+                      {busy === m.id ? <Loader2 size={13} className="animate-spin" /> : <Check size={14} />} Llegó
+                    </button>
+                  }
+                />
+              ))}
+            </ListaScroll>
+          )}
 
           {/* Las cuentas de cobro se emiten a fin de mes y se repiten mientras el contrato esté vigente. */}
           <div className="mt-1 rounded-xl border border-[var(--cyan)]/20 bg-[var(--cyan)]/[0.05] px-3 py-2">
@@ -343,6 +396,48 @@ const TONE: Record<string, string> = {
   cyan: "text-[var(--cyan)]", emerald: "text-emerald-300", red: "text-red-300", magenta: "text-[var(--magenta)]", amber: "text-amber-300",
 }
 
+/**
+ * Lista con altura máxima de ~5 elementos; el resto se ve con scroll. Los pendientes
+ * siguen visibles hasta que se cumplen (no se recortan de la lista).
+ */
+function ListaScroll({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="flex max-h-[19rem] flex-col gap-1.5 overflow-y-auto pr-1 [scrollbar-width:thin]">
+      {children}
+    </div>
+  )
+}
+
+/**
+ * Elemento de pendiente: máximo 2 líneas (título + subtítulo) y se despliega para ver
+ * el detalle completo. El acordeón lo controla el padre, así solo hay uno abierto.
+ */
+function ItemPendiente({ abierto, onToggle, titulo, subtitulo, valor, valorClase, detalle, accion }: {
+  abierto: boolean; onToggle: () => void; titulo: string; subtitulo: string
+  valor: string; valorClase: string; detalle: string; accion?: React.ReactNode
+}) {
+  return (
+    <div className="shrink-0 rounded-xl bg-white/[0.03]">
+      <div className="flex items-center justify-between gap-2 px-3 py-2">
+        <button onClick={onToggle} aria-expanded={abierto} className="flex min-w-0 flex-1 items-center gap-2 text-left">
+          <span className="min-w-0 flex-1">
+            <span className="block truncate text-sm font-medium">{titulo}</span>
+            <span className="block truncate text-[11px] text-[#fff]/50">{subtitulo}</span>
+          </span>
+          <ChevronDown size={13} className={`shrink-0 text-[#fff]/35 transition ${abierto ? "rotate-180" : ""}`} />
+        </button>
+        <div className="flex shrink-0 items-center gap-2">
+          <span className={`text-sm font-semibold ${valorClase}`}>{valor}</span>
+          {accion}
+        </div>
+      </div>
+      {abierto && (
+        <p className="whitespace-pre-line border-t border-white/[0.06] px-3 py-2 text-[11px] leading-relaxed text-[#fff]/60">{detalle}</p>
+      )}
+    </div>
+  )
+}
+
 function Bloque({ icon: Icon, titulo, contador, tone = "cyan", href, children }: { icon: React.ElementType; titulo: string; contador?: number; tone?: string; href?: string; children: React.ReactNode }) {
   return (
     <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
@@ -364,21 +459,41 @@ function MiniAccion({ icon: Icon, label, valor, href }: { icon: React.ElementTyp
   )
 }
 
-function Fila({ icon: Icon, color, titulo, detalle, etiqueta, onDelete, borrando }: { icon: React.ElementType; color: string; titulo: string; detalle: string; etiqueta: string; onDelete?: () => void; borrando?: boolean }) {
+/**
+ * Fila de "Próximas fechas". Si recibe `ampliado`, la tarjeta se puede desplegar para leer
+ * la descripción completa (mismo patrón que "Actividad ahora").
+ */
+function Fila({ icon: Icon, color, titulo, detalle, etiqueta, ampliado, onDelete, borrando }: { icon: React.ElementType; color: string; titulo: string; detalle: string; etiqueta: string; ampliado?: string; onDelete?: () => void; borrando?: boolean }) {
+  const [abierto, setAbierto] = useState(false)
+  const desplegable = !!ampliado
   return (
-    <div className="flex items-center justify-between gap-2 rounded-xl bg-white/[0.03] px-3 py-2">
-      <div className="flex min-w-0 items-center gap-2.5">
-        <Icon size={15} style={{ color }} className="shrink-0" />
-        <div className="min-w-0"><p className="truncate text-sm font-medium">{titulo}</p><p className="truncate text-[11px] text-[#fff]/50">{detalle}</p></div>
+    <div className="min-w-0 rounded-xl bg-white/[0.03]">
+      <div className="flex items-center justify-between gap-2 px-3 py-2">
+        <button
+          onClick={() => desplegable && setAbierto((v) => !v)}
+          disabled={!desplegable}
+          aria-expanded={desplegable ? abierto : undefined}
+          className="flex min-w-0 flex-1 items-center gap-2.5 text-left enabled:hover:opacity-90 disabled:cursor-default"
+        >
+          <Icon size={15} style={{ color }} className="shrink-0" />
+          <span className="min-w-0 flex-1">
+            <span className="block truncate text-sm font-medium">{titulo}</span>
+            <span className="block truncate text-[11px] text-[#fff]/50">{detalle}</span>
+          </span>
+          {desplegable && <ChevronDown size={13} className={`shrink-0 text-[#fff]/35 transition ${abierto ? "rotate-180" : ""}`} />}
+        </button>
+        <div className="flex shrink-0 items-center gap-1.5">
+          <span className="rounded-full bg-white/5 px-2 py-0.5 text-[10px] font-semibold text-[#fff]/60">{etiqueta}</span>
+          {onDelete && (
+            <button onClick={onDelete} disabled={borrando} className="rounded-md p-1 text-[#fff]/35 hover:bg-red-500/10 hover:text-red-300 disabled:opacity-40" title="Eliminar fecha">
+              <Trash2 size={12} />
+            </button>
+          )}
+        </div>
       </div>
-      <div className="flex shrink-0 items-center gap-1.5">
-        <span className="rounded-full bg-white/5 px-2 py-0.5 text-[10px] font-semibold text-[#fff]/60">{etiqueta}</span>
-        {onDelete && (
-          <button onClick={onDelete} disabled={borrando} className="rounded-md p-1 text-[#fff]/35 hover:bg-red-500/10 hover:text-red-300 disabled:opacity-40" title="Eliminar fecha">
-            <Trash2 size={12} />
-          </button>
-        )}
-      </div>
+      {abierto && ampliado && (
+        <p className="border-t border-white/[0.06] px-3 py-2 text-[11px] leading-relaxed text-[#fff]/60">{ampliado}</p>
+      )}
     </div>
   )
 }

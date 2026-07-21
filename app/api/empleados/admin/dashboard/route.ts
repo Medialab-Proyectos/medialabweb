@@ -13,6 +13,7 @@ import { getSatisfaccionOperaciones } from "@/lib/empleados/operaciones"
 import { resumen, type Moneda } from "@/lib/empleados/contabilidad"
 import type { Cuenta, Movimiento, Inversion } from "@/lib/empleados/contabilidad"
 import { MESES } from "@/lib/empleados/desprendible"
+import { diasHastaHorizonteHabil } from "@/lib/empleados/festivos-co"
 
 export const runtime = "nodejs"
 
@@ -48,6 +49,21 @@ export async function GET() {
     .filter((g) => g.activo && g.debito_automatico !== true)
     .map((g) => ({ id: g.id, nombre: g.nombre, valor: Number(g.valor) || 0, moneda: g.moneda as Moneda, dia: g.dia_cobro ?? null }))
     .sort((a, b) => (a.dia ?? 99) - (b.dia ?? 99))
+
+  // ── Recordatorio de NÓMINA ────────────────────────────────────────────────
+  // Aparece en "Cuentas por pagar" los últimos 5 días del mes y desaparece cuando ya
+  // existe un egreso de nómina realizado en el mes (es decir, cuando se pagó).
+  const ultimoDiaMes = new Date(anio, mes, 0).getDate()
+  const diaHoy = Number(hoy.slice(8, 10))
+  const diasParaFinDeMes = ultimoDiaMes - diaHoy
+  const nominaPagada = movimientos.some(
+    (m) => m.tipo === "egreso" && m.estado === "realizado" && (m.categoria === "nomina" || /n[oó]mina/i.test(m.concepto ?? "")) &&
+      Number(m.fecha.slice(0, 4)) === anio && Number(m.fecha.slice(5, 7)) === mes,
+  )
+  const laborales = empleados.filter((e) => e.estado === "activo" && e.tipo_vinculacion === "empleado")
+  const nominaPendiente = !nominaPagada && diasParaFinDeMes <= 5 && laborales.length > 0
+    ? { empleados: laborales.length, dias: Math.max(0, diasParaFinDeMes), mes: MESES[mes - 1] }
+    : null
 
   // Solicitudes de ausencia pendientes (de todos, para aprobar en línea).
   let solicitudes: { id: string; nombre: string; tipo: string; fecha_inicio: string; fecha_fin: string; dias_habiles: number }[] = []
@@ -99,6 +115,10 @@ export async function GET() {
     .map((i) => ({ id: i.id, entidad: i.entidad, monto: Number(i.monto) || 0, moneda: i.moneda, fecha: i.fecha_vencimiento!, dias: Math.ceil((Date.parse(i.fecha_vencimiento!) - Date.now()) / 86_400_000) }))
     .filter((i) => i.dias <= 30).sort((a, b) => a.dias - b.dias)
 
+  // Ventana de "Próximas fechas": los 3 días HÁBILES siguientes según el calendario
+  // colombiano (salta fines de semana y festivos), no 30 días corridos.
+  const VENTANA = diasHastaHorizonteHabil(hoy, 3)
+
   // Días hasta la próxima ocurrencia anual de un mes-día (para cumpleaños/aniversarios/recurrentes).
   const ahoraD = new Date(hoy)
   const diasHastaMMDD = (mm: number, dd: number) => {
@@ -112,14 +132,14 @@ export async function GET() {
     const [, mm, dd] = e.fecha_nacimiento!.split("-").map(Number)
     const { base, dias } = diasHastaMMDD(mm, dd)
     return { nombre: e.nombre, fecha: `${String(base.getMonth() + 1).padStart(2, "0")}-${String(base.getDate()).padStart(2, "0")}`, dias }
-  }).filter((c) => c.dias <= 30).sort((a, b) => a.dias - b.dias)
+  }).filter((c) => c.dias <= VENTANA).sort((a, b) => a.dias - b.dias)
 
   // Aniversarios de ingreso próximos (30 días) — con los años que cumple en la empresa.
   const aniversarios = empleados.filter((e) => e.estado === "activo" && e.fecha_ingreso).map((e) => {
     const [yy, mm, dd] = e.fecha_ingreso!.split("-").map(Number)
     const { base, dias } = diasHastaMMDD(mm, dd)
     return { nombre: e.nombre, fecha: `${String(mm).padStart(2, "0")}-${String(dd).padStart(2, "0")}`, anos: base.getFullYear() - yy, dias }
-  }).filter((a) => a.dias <= 30 && a.anos >= 1).sort((a, b) => a.dias - b.dias)
+  }).filter((a) => a.dias <= VENTANA && a.anos >= 1).sort((a, b) => a.dias - b.dias)
 
   // Fechas especiales de Talento Humano (recurrentes anuales o puntuales), próximas 30 días.
   const fechasEspeciales = fechasRaw.map((f) => {
@@ -131,14 +151,14 @@ export async function GET() {
     const base = new Date(yy, mm - 1, dd)
     const dias = Math.round((base.getTime() - Date.parse(hoy)) / 86_400_000)
     return { id: f.id, titulo: f.titulo, nota: f.nota, fecha: `${String(mm).padStart(2, "0")}-${String(dd).padStart(2, "0")}`, dias, recurrente: false }
-  }).filter((f) => f.dias >= 0 && f.dias <= 30).sort((a, b) => a.dias - b.dias)
+  }).filter((f) => f.dias >= 0 && f.dias <= VENTANA).sort((a, b) => a.dias - b.dias)
 
   return NextResponse.json({
     kpis, gananciaAnio,
     ausentesHoy, solicitudes,
     pagosPendientes, porCobrarLista,
     facturasFreelance, cuentasCobroPorPasar, horariosPendientes,
-    inversionesPorVencer, cumpleanos, aniversarios, fechasEspeciales, recurrentesManuales,
+    inversionesPorVencer, cumpleanos, aniversarios, fechasEspeciales, recurrentesManuales, nominaPendiente,
     serie6m, categorias: { ingresos: arr(catIng), egresos: arr(catEgr) },
     satisfaccionEmpleados: satEmpleados, satisfaccionEmpresas: satEmpresas, satisfaccionProyectos,
   })

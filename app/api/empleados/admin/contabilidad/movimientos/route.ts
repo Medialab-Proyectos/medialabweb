@@ -77,6 +77,9 @@ const schema = z.object({
   iva_valor: z.number().min(0).nullable().optional(),
   estado: z.enum(["pendiente", "realizado"]).default("realizado"),
   referencia: z.string().max(120).nullable().optional(),
+  fecha_estimada: z.string().regex(/^d{4}-d{2}-d{2}$/).nullable().optional(),
+  tasa_real: z.number().min(0).nullable().optional(),
+  valor_real: z.number().min(0).nullable().optional(),
 })
 
 export async function POST(req: Request) {
@@ -122,6 +125,9 @@ export async function POST(req: Request) {
       iva_valor: esTraslado ? null : b.iva_valor ?? null,
       estado: b.estado,
       referencia: b.referencia ?? null,
+      fecha_estimada: b.fecha_estimada ?? null,
+      tasa_real: b.tasa_real ?? null,
+      valor_real: b.valor_real ?? null,
       creado_por: creadoPor,
     })
     return NextResponse.json({ movimiento })
