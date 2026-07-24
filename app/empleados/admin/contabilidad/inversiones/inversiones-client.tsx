@@ -8,6 +8,7 @@ import { formatMoneda } from "@/lib/empleados/contabilidad"
 import type { Moneda } from "@/lib/empleados/freelance"
 import { MoneyInput } from "../../../money-input"
 import { ConfirmDialog } from "../../../confirm-dialog"
+import { EstrategiaPanel, type DatosEstrategia } from "./estrategia-panel"
 
 const inputCls = "w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm text-[#fff] outline-none transition focus:border-[var(--cyan)]/60"
 const lblCls = "text-[11px] font-semibold uppercase tracking-wide text-[#fff]/50"
@@ -28,7 +29,7 @@ const vacio: Form = {
   fecha_apertura: hoyISO(), fecha_vencimiento: "", cuenta_id: "", estado: "abierta", notas: "",
 }
 
-export function InversionesClient() {
+export function InversionesClient({ estrategia }: { estrategia?: DatosEstrategia }) {
   const [items, setItems] = useState<Inversion[]>([])
   const [cuentas, setCuentas] = useState<Cuenta[]>([])
   const [cargando, setCargando] = useState(true)
@@ -96,6 +97,9 @@ export function InversionesClient() {
         <span className="rounded-full bg-white/5 px-2 py-0.5 text-xs text-[#fff]/50">{items.length}</span>
       </div>
       <p className="mb-4 text-sm text-[#fff]/55">CDTs y otras inversiones. Al cerrarlas, registra el rendimiento real (cuéntalo como ingreso en Movimientos). Total abierto: <b className="text-[var(--cyan)]">{formatMoneda(totalInvertido, "COP")}</b> en {abiertas.length} inversión(es).</p>
+
+      {/* Estrategia de tesorería: qué corresponde hacer ANTES de invertir, con datos reales. */}
+      {estrategia && <EstrategiaPanel datos={estrategia} />}
       {/* En móvil el botón va debajo del título y la descripción, a todo el ancho. */}
       <button onClick={() => { setError(""); setForm({ ...vacio }) }} className="mb-4 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[var(--cyan)] px-4 py-2.5 text-sm font-semibold text-[#04191b] transition hover:brightness-110 sm:w-auto sm:py-2">
         <Plus size={15} /> Nueva inversión
