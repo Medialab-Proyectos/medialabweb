@@ -3,7 +3,8 @@ import { readFileSync } from "node:fs"
 import path from "node:path"
 import { PDFDocument, StandardFonts, rgb, type PDFFont } from "pdf-lib"
 import type { Contrato } from "./contrato"
-import { condicionesVigentes, totalMensualContrato } from "./contrato"
+import { condicionesVigentes, totalMensualContrato, esFirmado, contratoEsPorFactura } from "./contrato"
+import { ajustarSalarioMinimoLegal } from "./nomina-co"
 import { formatCOP } from "./desprendible"
 import { narrativaVinculacion, montoEnLetras, formatCedula, clausulaExpedicion, fechaLarga, fraseTipoContrato, fraseVinculacion, narrativaCargos } from "./certificado"
 
@@ -106,11 +107,27 @@ export async function generarCertificadoPDF(
   TC(210, "CERTIFICA", 14, bold, cyan)
 
   // ── Cuerpo ──────────────────────────────────────────────────────────────────
-  const vigente = condicionesVigentes(contratos)
-  const cargo = vigente?.cargo || empleado.cargo || "colaborador"
+  // Una certificación laboral SOLO debe reflejar contratos FIRMADOS: un otrosí pendiente de
+  // firma aún no rige y no puede aparecer en un documento oficial.
+  const firmados = contratos.filter(esFirmado)
+  const vigenteRaw = condicionesVigentes(firmados)
+  const cargo = (vigenteRaw?.cargo || empleado.cargo || "colaborador").trim()
+  const activo = empleado.estado !== "terminado"
+
+  // Ajuste legal del salario mínimo: si el contrato está VIGENTE (activo) y es laboral, el básico
+  // no puede quedar por debajo del mínimo del año en curso, aunque no haya un otrosí que lo suba.
+  // Para contratos terminados el salario es histórico y NO se ajusta.
+  const vigente = (() => {
+    if (!vigenteRaw || !activo || contratoEsPorFactura(vigenteRaw)) return vigenteRaw
+    const aj = ajustarSalarioMinimoLegal({
+      salarioBasico: Number(vigenteRaw.salario_basico) || 0,
+      auxilioTransporte: Number(vigenteRaw.auxilio_transporte) || 0,
+    })
+    return aj.ajustado ? { ...vigenteRaw, salario_basico: aj.salarioBasico, auxilio_transporte: aj.auxilioTransporte } : vigenteRaw
+  })()
+
   // Asignación mensual = TOTAL a pagar (básico + auxilio de transporte + otros devengos fijos = bonificaciones).
   const monto = vigente ? totalMensualContrato(vigente) : 0
-  const activo = empleado.estado !== "terminado"
 
   let cuerpo: string
   if (!activo) {
@@ -118,7 +135,7 @@ export async function generarCertificadoPDF(
     // venir de un otrosí anterior si el último solo cambió salario) con su descripción, y el
     // desglose del pago: salario básico + cada auxilio/bonificación nombrado con su valor.
     const tipoVinc = vigente ? (fraseTipoContrato(vigente.tipo_contrato) || fraseVinculacion(vigente.tipo_vinculacion)) : ""
-    const cargos = narrativaCargos(contratos, empleado.fecha_ingreso)
+    const cargos = narrativaCargos(firmados, empleado.fecha_ingreso)
 
     const basico = Number(vigente?.salario_basico) || 0
     const extras: string[] = []
@@ -128,22 +145,27 @@ export async function generarCertificadoPDF(
       if (v > 0) extras.push(`${l.concepto?.trim() || "una bonificación"} de ${formatCOP(v)}`)
     }
 
-    cuerpo = `Que ${empleado.nombre}, identificado(a) con la cédula de ciudadanía No. ${formatCedula(empleado.cedula)} de ${ciudad}, estuvo vinculado(a) a MediaLab Ingeniería`
+    cuerpo = `Que ${empleado.nombre}, identificado(a) con la cédula de ciudadanía No. ${formatCedula(empleado.cedula)}, estuvo vinculado(a) a MediaLab Ingeniería`
     if (tipoVinc) cuerpo += ` mediante contrato ${tipoVinc}`
     if (empleado.fecha_ingreso) cuerpo += ` desde el ${fechaLarga(empleado.fecha_ingreso)}`
     if (empleado.fecha_egreso) cuerpo += ` hasta el ${fechaLarga(empleado.fecha_egreso)}`
     // Recorrido de cargos con fechas (o el cargo único si no hubo cambios).
     // La descripción/motivo del otrosí NO va en la certificación: solo interesan cargo y fecha.
-    cuerpo += `, con ${cargos.texto || `el cargo de ${empleado.cargo || "colaborador"}`}`
+    cuerpo += `, con ${cargos.texto || `el cargo de ${(empleado.cargo || "colaborador").trim()}`}`
     if (basico > 0) {
       cuerpo += `, con un salario mensual de ${montoEnLetras(basico)} (${formatCOP(basico)})`
       if (extras.length) cuerpo += `, más ${unirConY(extras)}`
     }
     cuerpo += "."
   } else {
-    const narrativa = narrativaVinculacion(contratos, empleado.fecha_ingreso)
-    cuerpo = `Que ${empleado.nombre}, identificado(a) con la cédula de ciudadanía No. ${formatCedula(empleado.cedula)} de ${ciudad}, está ${narrativa}`
-    cuerpo += `, desempeñando el cargo de ${cargo}`
+    const narrativa = narrativaVinculacion(firmados, empleado.fecha_ingreso)
+    cuerpo = `Que ${empleado.nombre}, identificado(a) con la cédula de ciudadanía No. ${formatCedula(empleado.cedula)}, está ${narrativa}`
+    // Si hubo cambios de rol, se muestra el recorrido con fechas (X desde el …, como Y desde el …);
+    // si el cargo nunca cambió, solo el cargo actual (la fecha de vínculo ya está en la narrativa).
+    const cargos = narrativaCargos(firmados, empleado.fecha_ingreso)
+    cuerpo += cargos.cambios > 1
+      ? `, desempeñando ${cargos.texto}`
+      : `, desempeñando el cargo de ${cargo}`
     if (opciones.conValor && monto > 0) {
       cuerpo += `, con una asignación mensual de ${montoEnLetras(monto)} (${formatCOP(monto)})`
     }

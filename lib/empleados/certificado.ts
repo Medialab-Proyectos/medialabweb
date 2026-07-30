@@ -72,7 +72,7 @@ export function ultimoContratoConCargo(contratos: Contrato[]): Contrato | null {
 export function narrativaCargos(
   contratos: Contrato[],
   fechaIngreso: string | null,
-): { texto: string; descripcion: string; ultimoCargo: string } {
+): { texto: string; descripcion: string; ultimoCargo: string; cambios: number } {
   const inicio = (c: Contrato): string => (c.tipo === "inicial" && fechaIngreso ? fechaIngreso : c.vigente_desde)
   // Orden por fecha de vigencia; dentro del MISMO día, por orden de creación (el último creado
   // representa la decisión final de ese día).
@@ -97,7 +97,7 @@ export function narrativaCargos(
   }
   // Colapsa cargos iguales consecutivos (p.ej. A→B→A el mismo día queda en A).
   const cambios = entries.filter((e, i) => i === 0 || e.cargo !== entries[i - 1].cargo)
-  if (cambios.length === 0) return { texto: "", descripcion: "", ultimoCargo: "" }
+  if (cambios.length === 0) return { texto: "", descripcion: "", ultimoCargo: "", cambios: 0 }
 
   const ultimoCargo = cambios[cambios.length - 1].cargo
   const descripcion =
@@ -108,7 +108,7 @@ export function narrativaCargos(
   const texto = partes.length === 1
     ? partes[0]
     : `${partes.slice(0, -1).join(", ")} y ${partes[partes.length - 1]}`
-  return { texto, descripcion, ultimoCargo }
+  return { texto, descripcion, ultimoCargo, cambios: cambios.length }
 }
 
 /**
@@ -131,11 +131,15 @@ export function narrativaVinculacion(contratos: Contrato[], fechaIngreso: string
 
   if (hist.length === 0) {
     return fechaIngreso
-      ? `vinculado a MediaLab Ingeniería desde el ${fechaLarga(fechaIngreso)}`
-      : "vinculado a MediaLab Ingeniería"
+      ? `vinculado(a) a MediaLab Ingeniería desde el ${fechaLarga(fechaIngreso)}`
+      : "vinculado(a) a MediaLab Ingeniería"
   }
 
-  const items = hist.map((c) => ({ frase: fraseTipoContrato(c.tipo_contrato) || fraseVinculacion(c.tipo_vinculacion), fecha: fechaLarga(c._inicio) }))
+  const raw = hist.map((c) => ({ frase: fraseTipoContrato(c.tipo_contrato) || fraseVinculacion(c.tipo_vinculacion), fecha: fechaLarga(c._inicio) }))
+  // Colapsa versiones consecutivas del MISMO tipo de contrato: un otrosí que solo ajusta el
+  // salario NO cambia el tipo, así que cada tipo se menciona una vez con la fecha en que empezó.
+  // (Evita "a término indefinido desde X, a término indefinido desde Y, …" cuando nunca cambió.)
+  const items = raw.filter((x, i) => i === 0 || x.frase !== raw[i - 1].frase)
   let texto: string
   if (items.length === 1) {
     texto = `con contrato ${items[0].frase} desde el ${items[0].fecha}`
@@ -144,5 +148,5 @@ export function narrativaVinculacion(contratos: Contrato[], fechaIngreso: string
     const ultimo = items[items.length - 1]
     texto = `${primeros} y desde el ${ultimo.fecha} con contrato ${ultimo.frase}`
   }
-  return `vinculado a MediaLab Ingeniería ${texto}`.replace(/\s{2,}/g, " ")
+  return `vinculado(a) a MediaLab Ingeniería ${texto}`.replace(/\s{2,}/g, " ")
 }

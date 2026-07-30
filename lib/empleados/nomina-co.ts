@@ -29,6 +29,32 @@ export function salarioMinimoAnio(anio: number): { smmlv: number; auxilio: numbe
   return SMMLV_HISTORICO[usar]
 }
 
+/**
+ * Ajuste legal por salario mínimo: por ley el básico de un contrato laboral VIGENTE no puede
+ * quedar por debajo del salario mínimo del año en curso, aunque no exista un otrosí que lo
+ * actualice (el incremento anual del mínimo aplica de pleno derecho). Devuelve el básico y el
+ * auxilio efectivos del año actual.
+ *
+ * Solo debe usarse con contratos ACTIVOS y laborales. Para contratos terminados, el salario
+ * es histórico (el que tenía al egreso) y NO se ajusta.
+ */
+export function ajustarSalarioMinimoLegal(input: {
+  salarioBasico: number
+  auxilioTransporte: number
+  anioActual?: number
+}): { salarioBasico: number; auxilioTransporte: number; ajustado: boolean } {
+  const anio = input.anioActual ?? new Date().getFullYear()
+  const basicoOrig = Number(input.salarioBasico) || 0
+  const auxOrig = Number(input.auxilioTransporte) || 0
+  const min = salarioMinimoAnio(anio)
+  // El básico nunca puede ser inferior al mínimo legal del año.
+  const salarioBasico = Math.max(basicoOrig, min.smmlv)
+  // El auxilio de transporte solo aplica a salarios ≤ 2 SMMLV; si el contrato ya lo tenía (> 0),
+  // se sube al mínimo del año. Un empleado remoto sin auxilio se mantiene en $0.
+  const auxilioTransporte = auxOrig > 0 && salarioBasico <= 2 * min.smmlv ? Math.max(auxOrig, min.auxilio) : auxOrig
+  return { salarioBasico, auxilioTransporte, ajustado: salarioBasico !== basicoOrig || auxilioTransporte !== auxOrig }
+}
+
 /** Tope del IBC: 25 SMMLV. */
 export const IBC_TOPE = 25 * SMMLV_2026
 
