@@ -142,7 +142,8 @@ export const metadata: Metadata = {
     shortcut: '/favicon.ico',
     apple: [{ url: '/apple-icon.png', sizes: '180x180', type: 'image/png' }],
   },
-  manifest: '/manifest.webmanifest',
+  // Sin manifest global: la PWA instalable es solo el Centro de Empleados.
+  // El manifest scoped se enlaza en app/empleados/layout.tsx.
   robots: {
     index: true,
     follow: true,
